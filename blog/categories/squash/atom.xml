@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: squash | All About Performance]]></title>
-  <link href="http://tarasglek.github.com/blog/categories/squash/atom.xml" rel="self"/>
-  <link href="http://tarasglek.github.com/"/>
-  <updated>2012-12-16T13:22:11-08:00</updated>
-  <id>http://tarasglek.github.com/</id>
+  <link href="http://taras.glek.net/blog/categories/squash/atom.xml" rel="self"/>
+  <link href="http://taras.glek.net/"/>
+  <updated>2012-12-16T14:17:41-08:00</updated>
+  <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Dehydra, prcheck, squash - in mercurial]]></title>
-    <link href="http://tarasglek.github.com/blog/2007/07/13/dehydra-prcheck-squash-in-mercurial/"/>
+    <link href="http://taras.glek.net/blog/2007/07/13/dehydra-prcheck-squash-in-mercurial/"/>
     <updated>2007-07-13T01:54:08-07:00</updated>
-    <id>http://tarasglek.github.com/blog/2007/07/13/dehydra-prcheck-squash-in-mercurial</id>
+    <id>http://taras.glek.net/blog/2007/07/13/dehydra-prcheck-squash-in-mercurial</id>
     <content type="html"><![CDATA[<p><strong>New Repository</strong></p>
 
 <p>Since I do not yet have write access to oink svn, I have been doing all of my development in ad-hoc repositories within the svn checkout. This made it rather hard to collaborate with others. I finally got sick of the situation (and stumbled upon <a href="http://cheeseshop.python.org/pypi/hgsvn/">hgsvn</a>) and converted all 11 svn repositories to mercurial. To my surprise, mercurial even let me merge my repositories while preserving history (hg has yet to fail me!).</p>
@@ -57,9 +57,9 @@
   
   <entry>
     <title type="html"><![CDATA[Undoing CPP Expansion in 3 simple steps. Say "Hello" to easier C++ rewriting.]]></title>
-    <link href="http://tarasglek.github.com/blog/2007/06/12/undoing-cpp-expansion-in-3-simple-steps-say-hello-to-easier-c-rewriting/"/>
+    <link href="http://taras.glek.net/blog/2007/06/12/undoing-cpp-expansion-in-3-simple-steps-say-hello-to-easier-c-rewriting/"/>
     <updated>2007-06-12T03:26:01-07:00</updated>
-    <id>http://tarasglek.github.com/blog/2007/06/12/undoing-cpp-expansion-in-3-simple-steps-say-hello-to-easier-c-rewriting</id>
+    <id>http://taras.glek.net/blog/2007/06/12/undoing-cpp-expansion-in-3-simple-steps-say-hello-to-easier-c-rewriting</id>
     <content type="html"><![CDATA[<p>This is incredibly exciting: I believe that I finally solved the messy and mind-numbingly boring CPP/C++ integration problem! Having code displaced or generated due to CPP-expansion should no longer be a fatal problem for <a href="http://wiki.mozilla.org/Squash">Squash</a>. I believe macro-expansion is (or was) the single biggest problem between me and large-scale automated refactoring of the Mozilla codebase.</p>
 
 <p>What's even more exciting is that I think my solution is both incredibly simple to implement and more general than prior work. Most other tools combine the CPP expansion &amp; C parsing into a single step and then integrate (or should I say violently shove?) CPP constructs into the AST. This results in complete lack of separation between preprocessing and program analysis. For example, due to this tight coupling existing solutions were useless to me because the fancy CPP logic could not be separated from the C parser. I would also have a hard time submitting a more convoluted C++ parser upstream to the Elsa maintainer.</p>
@@ -114,9 +114,9 @@ Preprocessed version
   
   <entry>
     <title type="html"><![CDATA[CPP Strikes Back]]></title>
-    <link href="http://tarasglek.github.com/blog/2007/05/11/cpp-strikes-back/"/>
+    <link href="http://taras.glek.net/blog/2007/05/11/cpp-strikes-back/"/>
     <updated>2007-05-11T09:07:26-07:00</updated>
-    <id>http://tarasglek.github.com/blog/2007/05/11/cpp-strikes-back</id>
+    <id>http://taras.glek.net/blog/2007/05/11/cpp-strikes-back</id>
     <content type="html"><![CDATA[<p>I have gotten used to dodging CPP-expansion issues by fudging column &amp; line information until the position info in squash mostly matches the source positions in the original source code. That sufficed for rewriting declarations, but I have finally hit a brick wall.</p>
 
 <p><strong>CPP Fun</strong></p>
@@ -145,9 +145,9 @@ Preprocessed version
   
   <entry>
     <title type="html"><![CDATA[Nicely rewriting outparams]]></title>
-    <link href="http://tarasglek.github.com/blog/2007/05/10/nicely-rewriting-outparams/"/>
+    <link href="http://taras.glek.net/blog/2007/05/10/nicely-rewriting-outparams/"/>
     <updated>2007-05-10T07:52:07-07:00</updated>
-    <id>http://tarasglek.github.com/blog/2007/05/10/nicely-rewriting-outparams</id>
+    <id>http://taras.glek.net/blog/2007/05/10/nicely-rewriting-outparams</id>
     <content type="html"><![CDATA[<p>Automatic code rewriting business can be a little depressing sometimes. I tend to run into funny issues caused by CPP, oink limitations or just unpleasant-to-rewrite parts of C++. After banging my head against the wall due to all these issues I finally arrived at a workable approach for the easy part of the outparam rewrite.</p>
 
 <p>Currently I have a dehydra script that finds all non-virtual getters that return either NS_OK or <em>NS_SOMETHING_IS_WRONG</em>. The script then outputs data for squash to base the rewrites on. Then squash takes over.</p>
@@ -162,9 +162,9 @@ Preprocessed version
   
   <entry>
     <title type="html"><![CDATA[Status Update: Outparam work]]></title>
-    <link href="http://tarasglek.github.com/blog/2007/05/07/status-update-outparam-work/"/>
+    <link href="http://taras.glek.net/blog/2007/05/07/status-update-outparam-work/"/>
     <updated>2007-05-07T02:58:43-07:00</updated>
-    <id>http://tarasglek.github.com/blog/2007/05/07/status-update-outparam-work</id>
+    <id>http://taras.glek.net/blog/2007/05/07/status-update-outparam-work</id>
     <content type="html"><![CDATA[<p><strong>Squash Outparams</strong></p>
 
 <p>The following took me a few days to achieve.</p>

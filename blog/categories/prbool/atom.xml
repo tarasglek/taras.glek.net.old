@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: prbool | All About Performance]]></title>
-  <link href="http://tarasglek.github.com/blog/categories/prbool/atom.xml" rel="self"/>
-  <link href="http://tarasglek.github.com/"/>
-  <updated>2012-12-16T13:22:11-08:00</updated>
-  <id>http://tarasglek.github.com/</id>
+  <link href="http://taras.glek.net/blog/categories/prbool/atom.xml" rel="self"/>
+  <link href="http://taras.glek.net/"/>
+  <updated>2012-12-16T14:17:41-08:00</updated>
+  <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Semantic Rewriting of Code with Pork - A bitter recap]]></title>
-    <link href="http://tarasglek.github.com/blog/2009/01/28/semantic-rewriting-of-code-with-pork-a-bitter-recap/"/>
+    <link href="http://taras.glek.net/blog/2009/01/28/semantic-rewriting-of-code-with-pork-a-bitter-recap/"/>
     <updated>2009-01-28T16:17:47-08:00</updated>
-    <id>http://tarasglek.github.com/blog/2009/01/28/semantic-rewriting-of-code-with-pork-a-bitter-recap</id>
+    <id>http://taras.glek.net/blog/2009/01/28/semantic-rewriting-of-code-with-pork-a-bitter-recap</id>
     <content type="html"><![CDATA[<p>LWN <a href="http://lwn.net/Articles/315686/">published</a> an article about a tool that does refactoring of C code. Guess what, it's yet another tool on top of a crappy C-parser that will never grok C well or even hope to support C++. To my great disappointment the author was not aware of my work on Pork. Clearly I have failed in letting people know that complex C and C++ can be refactored with (somewhat raw, but powerful) open source tools.</p>
 
 <p>In addition to <a href="https://developer.mozilla.org/En/Dehydra">Dehydra</a> (which is even mentioned in the first comment, yay!), I also maintain <a href="https://developer.mozilla.org/En/Pork">Pork</a> - a fork of oink that is well suited to large-scale refactoring of real-world C/C++ code.</p>
@@ -44,9 +44,9 @@ For any questions regarding Pork feel free to post on the <a href="https://lists
   
   <entry>
     <title type="html"><![CDATA[Enabling prcheck email notifications]]></title>
-    <link href="http://tarasglek.github.com/blog/2008/11/07/enabling-prcheck-email-notifications/"/>
+    <link href="http://taras.glek.net/blog/2008/11/07/enabling-prcheck-email-notifications/"/>
     <updated>2008-11-07T07:58:08-08:00</updated>
-    <id>http://tarasglek.github.com/blog/2008/11/07/enabling-prcheck-email-notifications</id>
+    <id>http://taras.glek.net/blog/2008/11/07/enabling-prcheck-email-notifications</id>
     <content type="html"><![CDATA[<p>I've been running my prbool checker with nightly notifications for about a year now. There are some false positivies, but mostly it picks up real bugs. The checker pulls the blame source to try to guess who is responsible for the error, but so far it has only been emailing me.</p>
 
 <p>I'm going to make it emailed the hg blamed person starting this weekend, so if you commit something and get an email from me complaining about it don't take it too personally. Hopefully this will keep the amount of new detectable prbool bugs at 0. If you do get an email and decide you don't want to get these in the future, please complain and we'll try to come up with a better notification solution.</p>
@@ -55,9 +55,9 @@ For any questions regarding Pork feel free to post on the <a href="https://lists
   
   <entry>
     <title type="html"><![CDATA[Outparamdelling this way comes]]></title>
-    <link href="http://tarasglek.github.com/blog/2008/09/19/outparamdelling-this-way-comes/"/>
+    <link href="http://taras.glek.net/blog/2008/09/19/outparamdelling-this-way-comes/"/>
     <updated>2008-09-19T07:06:08-07:00</updated>
-    <id>http://tarasglek.github.com/blog/2008/09/19/outparamdelling-this-way-comes</id>
+    <id>http://taras.glek.net/blog/2008/09/19/outparamdelling-this-way-comes</id>
     <content type="html"><![CDATA[<p>Recently I dusted off outparamdel to see if I can get some refactorings landed. About a year ago, with the great QueryInterface outparamdelling experiment we ended up with a smaller binary footprint and tiny performance gain, but that never landed due to us not wanting to break compatability yet. Ever since, outparamdel has been patiently bitrotting within <a href="http://developer.mozilla.org/en/docs/Pork">Pork</a> waiting for the day it's allowed to break APIs.</p>
 
 <p>Recently jst <a href="http://wiki.mozilla.org/Gecko:DeCOMtamination">listed</a> some private API candidates for deCOMtamination and I have been letting outparamdel loose on them for the past week. So far only one such <a href="http://hg.mozilla.org/mozilla-central/raw-rev/ec4733eb1bd8">change</a> has been committed, the rest are sitting in jst's review queue. It's exciting, as it's the first ever application of outparamdel that didn't get canned. For the whole list see the most recent bugs blocking my <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=430328">analysis metabug</a>.</p>
@@ -96,9 +96,9 @@ This is a huge improvement over the ad-hoc workflow prior to hg switch when I wa
   
   <entry>
     <title type="html"><![CDATA[Multiple Degrees of Correctness]]></title>
-    <link href="http://tarasglek.github.com/blog/2007/10/04/multiple-degrees-of-correctness/"/>
+    <link href="http://taras.glek.net/blog/2007/10/04/multiple-degrees-of-correctness/"/>
     <updated>2007-10-04T10:05:05-07:00</updated>
-    <id>http://tarasglek.github.com/blog/2007/10/04/multiple-degrees-of-correctness</id>
+    <id>http://taras.glek.net/blog/2007/10/04/multiple-degrees-of-correctness</id>
     <content type="html"><![CDATA[<p><strong>Prcheck</strong></p>
 
 <p>The trouble with prcheck and the automated <a href="http://taras.glek.net/blog/2007/06/26/status-report-recent-work/">prbool validation</a> is that one can't attach the giant patch it produces to bugzilla and expect it to get committed. So I am spending this week combing through prcheck output  and patch-bombing bugzilla with per-module patches.</p>
@@ -117,9 +117,9 @@ This is a huge improvement over the ad-hoc workflow prior to hg switch when I wa
   
   <entry>
     <title type="html"><![CDATA[Superity Complex & Static Analysis]]></title>
-    <link href="http://tarasglek.github.com/blog/2007/07/27/superity-complex-static-analysis/"/>
+    <link href="http://taras.glek.net/blog/2007/07/27/superity-complex-static-analysis/"/>
     <updated>2007-07-27T07:57:23-07:00</updated>
-    <id>http://tarasglek.github.com/blog/2007/07/27/superity-complex-static-analysis</id>
+    <id>http://taras.glek.net/blog/2007/07/27/superity-complex-static-analysis</id>
     <content type="html"><![CDATA[<p>It is always frustrating to see a compiler complain about something trivial. It is especially annoying since most of the trivial complaints are trivial to fix automatically (eg. superfluous semicolon).</p>
 
 <p>I think this is a bigger problem in the static analysis industry. Vendors/researchers ship their tools with a superiority complex built-in. Most of the error messages produced by error checking tools can be paraphrased as "Gee look, I found some trivial to fix bugs in your code, but I ain't gonna do nothing about them! Neeener! Go worker-human!"</p>

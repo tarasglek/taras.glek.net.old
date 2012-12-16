@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: DeCOMtamination | All About Performance]]></title>
-  <link href="http://tarasglek.github.com/blog/categories/decomtamination/atom.xml" rel="self"/>
-  <link href="http://tarasglek.github.com/"/>
-  <updated>2012-12-16T13:22:11-08:00</updated>
-  <id>http://tarasglek.github.com/</id>
+  <link href="http://taras.glek.net/blog/categories/decomtamination/atom.xml" rel="self"/>
+  <link href="http://taras.glek.net/"/>
+  <updated>2012-12-16T14:17:41-08:00</updated>
+  <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Outparamdelling this way comes]]></title>
-    <link href="http://tarasglek.github.com/blog/2008/09/19/outparamdelling-this-way-comes/"/>
+    <link href="http://taras.glek.net/blog/2008/09/19/outparamdelling-this-way-comes/"/>
     <updated>2008-09-19T07:06:08-07:00</updated>
-    <id>http://tarasglek.github.com/blog/2008/09/19/outparamdelling-this-way-comes</id>
+    <id>http://taras.glek.net/blog/2008/09/19/outparamdelling-this-way-comes</id>
     <content type="html"><![CDATA[<p>Recently I dusted off outparamdel to see if I can get some refactorings landed. About a year ago, with the great QueryInterface outparamdelling experiment we ended up with a smaller binary footprint and tiny performance gain, but that never landed due to us not wanting to break compatability yet. Ever since, outparamdel has been patiently bitrotting within <a href="http://developer.mozilla.org/en/docs/Pork">Pork</a> waiting for the day it's allowed to break APIs.</p>
 
 <p>Recently jst <a href="http://wiki.mozilla.org/Gecko:DeCOMtamination">listed</a> some private API candidates for deCOMtamination and I have been letting outparamdel loose on them for the past week. So far only one such <a href="http://hg.mozilla.org/mozilla-central/raw-rev/ec4733eb1bd8">change</a> has been committed, the rest are sitting in jst's review queue. It's exciting, as it's the first ever application of outparamdel that didn't get canned. For the whole list see the most recent bugs blocking my <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=430328">analysis metabug</a>.</p>
@@ -56,9 +56,9 @@ This is a huge improvement over the ad-hoc workflow prior to hg switch when I wa
   
   <entry>
     <title type="html"><![CDATA[Recent Progress]]></title>
-    <link href="http://tarasglek.github.com/blog/2007/12/28/recent-progress/"/>
+    <link href="http://taras.glek.net/blog/2007/12/28/recent-progress/"/>
     <updated>2007-12-28T05:39:45-08:00</updated>
-    <id>http://tarasglek.github.com/blog/2007/12/28/recent-progress</id>
+    <id>http://taras.glek.net/blog/2007/12/28/recent-progress</id>
     <content type="html"><![CDATA[<p>Looks like <a href="http://wiki.mozilla.org/Pork">pork</a> is slowly going to get merged back into oink. This makes me happy as it will result in decreased merging headaches and gives more visibility to my work outside of Mozilla. My elkhound changes are already in!</p>
 
 <p>Recently I added support for retaining gnu attributes to elsa and corresponding features dehydra and garburator. Now dehydra can verify things based on attributes and  garburator gained a way to rewrite special cases like classes that are always <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=409088">allocated on the stack</a>. Elsa still drops most attributes, but at least classes, methods and variable declarations are covered.</p>
@@ -71,9 +71,9 @@ This is a huge improvement over the ad-hoc workflow prior to hg switch when I wa
   
   <entry>
     <title type="html"><![CDATA[Switching to Exceptions: Makes Head Spin]]></title>
-    <link href="http://tarasglek.github.com/blog/2007/12/11/switching-to-exceptions-makes-head-spin/"/>
+    <link href="http://taras.glek.net/blog/2007/12/11/switching-to-exceptions-makes-head-spin/"/>
     <updated>2007-12-11T04:10:19-08:00</updated>
-    <id>http://tarasglek.github.com/blog/2007/12/11/switching-to-exceptions-makes-head-spin</id>
+    <id>http://taras.glek.net/blog/2007/12/11/switching-to-exceptions-makes-head-spin</id>
     <content type="html"><![CDATA[<p><strong>Typical</strong></p>
 
 <p>It seems that there are 3 stages to doing a rewrite in Moz:</p>
@@ -102,9 +102,9 @@ Usually stage 3 is a few times harder than 2. For garburator rewriting got reall
   
   <entry>
     <title type="html"><![CDATA[Exceptional Circumstances]]></title>
-    <link href="http://tarasglek.github.com/blog/2007/12/05/exceptional-circumstances/"/>
+    <link href="http://taras.glek.net/blog/2007/12/05/exceptional-circumstances/"/>
     <updated>2007-12-05T06:23:38-08:00</updated>
-    <id>http://tarasglek.github.com/blog/2007/12/05/exceptional-circumstances</id>
+    <id>http://taras.glek.net/blog/2007/12/05/exceptional-circumstances</id>
     <content type="html"><![CDATA[<p>My previous post on outparam rewriting <a href="http://taras.glek.net/blog/2007/11/28/volume-of-refactoring-ahead/">described</a> the wealth of functions that can be rewritten. Unfortunately, most functions in Mozilla are declared in XPIDL interfaces.</p>
 
 <p>I have been convinced that my plan to rewrite xpidlgen to avoid outparameters wont be possible because most XPIDLinterfaces can be implemented by JavaScript in a few different ways. That is problematic because in addition to return values, JavaScript can also have an exception thrown at any point and have that converted to an nsresult error code by XPConnect. That means that the getters implemented in JavaScript are not in the set of functions that only return NS_OK+outparam/someerror. I wouldn't be at all disappointed if someone proved me wrong here.</p>
@@ -139,9 +139,9 @@ Usually stage 3 is a few times harder than 2. For garburator rewriting got reall
   
   <entry>
     <title type="html"><![CDATA[Rewriting Tools for Mozilla 2: Moving Forward as Planned]]></title>
-    <link href="http://tarasglek.github.com/blog/2007/10/12/rewriting-tools-for-mozilla-2-moving-forward-as-planned/"/>
+    <link href="http://taras.glek.net/blog/2007/10/12/rewriting-tools-for-mozilla-2-moving-forward-as-planned/"/>
     <updated>2007-10-12T08:31:35-07:00</updated>
-    <id>http://tarasglek.github.com/blog/2007/10/12/rewriting-tools-for-mozilla-2-moving-forward-as-planned</id>
+    <id>http://taras.glek.net/blog/2007/10/12/rewriting-tools-for-mozilla-2-moving-forward-as-planned</id>
     <content type="html"><![CDATA[<p><strong>In the Beginning There Was a Void</strong></p>
 
 <p>Approximately a year ago, Brendan discussed with me the crazy possibility of rewriting most of the Mozilla code automatically to modernize the codebase. The benefits were huge. Gecko would use the C++ standard library to improve code readability and reducing size, XPCOM would be ripped out of the core to improve performance and decrease footprint, etc.</p>

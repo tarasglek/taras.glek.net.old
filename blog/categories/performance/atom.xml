@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: performance | All About Performance]]></title>
-  <link href="http://tarasglek.github.com/blog/categories/performance/atom.xml" rel="self"/>
-  <link href="http://tarasglek.github.com/"/>
-  <updated>2012-12-16T13:22:11-08:00</updated>
-  <id>http://tarasglek.github.com/</id>
+  <link href="http://taras.glek.net/blog/categories/performance/atom.xml" rel="self"/>
+  <link href="http://taras.glek.net/"/>
+  <updated>2012-12-16T14:17:41-08:00</updated>
+  <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[FOSDEM Anyone?]]></title>
-    <link href="http://tarasglek.github.com/blog/2011/12/20/fosdem-anyone/"/>
+    <link href="http://taras.glek.net/blog/2011/12/20/fosdem-anyone/"/>
     <updated>2011-12-20T06:57:10-08:00</updated>
-    <id>http://tarasglek.github.com/blog/2011/12/20/fosdem-anyone</id>
+    <id>http://taras.glek.net/blog/2011/12/20/fosdem-anyone</id>
     <content type="html"><![CDATA[<p>Team Perf and a significant number of other Mozillians will be attending <a href="http://fosdem.org/2012/">FOSDEM</a> this year. My team will be giving talks on android linkers, IO, toolchain stuff, other TBD stuff. This will be my first FOSDEM, I'm really excited about it. There are a lot of European open sourcers to meet that don't make it to this side of the pond much.</p>
 
 <p>Team perf &amp; other snappy people (10+ people) plan to spend the week before FOSDEM hacking on <a href="http://taras.glek.net/blog/category/snappy/">Snappy</a> and other perf projects. Does anyone have suggestions on a cool hackerspace (I sent an email to hackerspaces.be folks) or a coworking facility that could host us in Brussels?</p>
@@ -28,9 +28,9 @@
   
   <entry>
     <title type="html"><![CDATA[Windows Sucks At Memory-Mapped IO During Startup]]></title>
-    <link href="http://tarasglek.github.com/blog/2010/04/19/windows-sucks-at-memory-mapped-io-during-startup/"/>
+    <link href="http://taras.glek.net/blog/2010/04/19/windows-sucks-at-memory-mapped-io-during-startup/"/>
     <updated>2010-04-19T07:00:00-07:00</updated>
-    <id>http://tarasglek.github.com/blog/2010/04/19/windows-sucks-at-memory-mapped-io-during-startup</id>
+    <id>http://taras.glek.net/blog/2010/04/19/windows-sucks-at-memory-mapped-io-during-startup</id>
     <content type="html"><![CDATA[<p>Last week I learned about how Windows handles page faults backed by files (specifically xul.dll). I already knew that Linux was <a href="http://taras.glek.net/blog/2010/04/12/squeezing-every-last-bit-of-performance-out-of-the-linux-toolchain/">suboptimal</a> in this area, perhaps the clever people at Redmond did better.</p>
 
 <p>Shaver pointed me at <a href="https://developer.mozilla.org/En/Profiling_with_Xperf">xperf</a>, which is sort of like the new Linux perf tools. Xperf rocks in that it can capture the relevant data and it can export it as .csv.</p>
@@ -66,9 +66,9 @@ People seem to prefer to comment on <a href="http://www.reddit.com/r/programming
   
   <entry>
     <title type="html"><![CDATA[Studying Fennec Performance]]></title>
-    <link href="http://tarasglek.github.com/blog/2009/06/26/studying-fennec-performance/"/>
+    <link href="http://taras.glek.net/blog/2009/06/26/studying-fennec-performance/"/>
     <updated>2009-06-26T07:31:36-07:00</updated>
-    <id>http://tarasglek.github.com/blog/2009/06/26/studying-fennec-performance</id>
+    <id>http://taras.glek.net/blog/2009/06/26/studying-fennec-performance</id>
     <content type="html"><![CDATA[<p>Working on Fennec performance N810 has been very educational. I have been learning more and more about performance profiling on crappy platforms. I define a platform as crap if it has poor development tools, limited OS or other significant limitations. Linux is a crappy platform in this case because it's running on ARM where oprofile barely does anything and there are no other performance tools for N810 (more modern ARM cpus should user-space perf counters and be more useful for instrumentation).</p>
 
 <p><strong>JSD Secret Sauce for JS Optimization</strong></p>

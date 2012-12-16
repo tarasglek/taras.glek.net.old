@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: startup | All About Performance]]></title>
-  <link href="http://tarasglek.github.com/blog/categories/startup/atom.xml" rel="self"/>
-  <link href="http://tarasglek.github.com/"/>
-  <updated>2012-12-16T13:22:11-08:00</updated>
-  <id>http://tarasglek.github.com/</id>
+  <link href="http://taras.glek.net/blog/categories/startup/atom.xml" rel="self"/>
+  <link href="http://taras.glek.net/"/>
+  <updated>2012-12-16T14:17:41-08:00</updated>
+  <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Firefox 7: Cheating the Operating System to Start Faster]]></title>
-    <link href="http://tarasglek.github.com/blog/2011/09/20/firefox-7-cheating-the-operating-system-to-start-faster/"/>
+    <link href="http://taras.glek.net/blog/2011/09/20/firefox-7-cheating-the-operating-system-to-start-faster/"/>
     <updated>2011-09-20T07:54:07-07:00</updated>
-    <id>http://tarasglek.github.com/blog/2011/09/20/firefox-7-cheating-the-operating-system-to-start-faster</id>
+    <id>http://taras.glek.net/blog/2011/09/20/firefox-7-cheating-the-operating-system-to-start-faster</id>
     <content type="html"><![CDATA[<p>****Firefox 7 features improved startup speed. Our research has shown that most OSes are not capable of starting large programs efficiently (see my older blog entries). As a result, Firefox 7 will explicitly tell the OS to aggressively preload our xul.dll/libxul.so/XUL library before passing it on to the runtime linker. This marks the productization of the approach explored in "20-line patch that doubles Firefox startup" that got people so excited. See <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=552864">bug 552864</a> and dependent bugs for exciting technical details.</p>
 
 <p><strong>Do Not Try this at Home: Ugly Windows</strong></p>
@@ -42,9 +42,9 @@ Above helps populate the Windows Prefetch in a less counter-productive way. Expl
   
   <entry>
     <title type="html"><![CDATA[Measuring Startup Speed Correctly]]></title>
-    <link href="http://tarasglek.github.com/blog/2011/04/26/measuring-startup-speed-correctly/"/>
+    <link href="http://taras.glek.net/blog/2011/04/26/measuring-startup-speed-correctly/"/>
     <updated>2011-04-26T07:34:02-07:00</updated>
-    <id>http://tarasglek.github.com/blog/2011/04/26/measuring-startup-speed-correctly</id>
+    <id>http://taras.glek.net/blog/2011/04/26/measuring-startup-speed-correctly</id>
     <content type="html"><![CDATA[<p>Until recently our state of the art method for measuring startup was to subtract a timestamp passed via commandline from a
 <code>
 new Date()
@@ -69,9 +69,9 @@ This is why AMO's [complicated method](http://xulforge.com/blog/2011/04/testing-
   
   <entry>
     <title type="html"><![CDATA[Magic patch that halves Windows startup]]></title>
-    <link href="http://tarasglek.github.com/blog/2011/02/09/magic-patch-that-doubles-windows-startup/"/>
+    <link href="http://taras.glek.net/blog/2011/02/09/magic-patch-that-doubles-windows-startup/"/>
     <updated>2011-02-09T08:38:38-08:00</updated>
-    <id>http://tarasglek.github.com/blog/2011/02/09/magic-patch-that-doubles-windows-startup</id>
+    <id>http://taras.glek.net/blog/2011/02/09/magic-patch-that-doubles-windows-startup</id>
     <content type="html"><![CDATA[<p>Internet as of late have been obsessing over magically short patches that improve performance _ times(probably as a result of LKML cgroups patch from a few weeks ago). So my work in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=627591">bug 627591</a> got picked up in all kinds of news sources(mostly due to @limi's <a href="http://twitter.com/#!/limi/status/28983240966541312">manlove</a>). Apparently all that internet fame is good for is getting script-kiddies to upload viruses as bugzilla attachments. Dear Internet, please do not interrupt me in the middle of an investigation.</p>
 
 <p>To crux of the optimization lies in trading waiting for random io for fast sequential IO. Turned out that my patch worked great if windows prefetch wasn't trying to help (ie firefox ran faster without prefetch on my test systems). With prefetch on, the patch was either a smaller win or a downright loss. When I dug in deeper, it turned that the Windows Prefetch helpfully spends 3-6 seconds doing IO before any Firefox code gets to run. It also doesn't read in a very clever pattern, resulting in a very small speed up for Firefox, but preventing my exciting optimization.</p>
@@ -84,9 +84,9 @@ This is why AMO's [complicated method](http://xulforge.com/blog/2011/04/testing-
   
   <entry>
     <title type="html"><![CDATA[Faster Plugin Enumeration + Help Wanted]]></title>
-    <link href="http://tarasglek.github.com/blog/2010/12/29/faster-plugin-enumeration-help-wanted/"/>
+    <link href="http://taras.glek.net/blog/2010/12/29/faster-plugin-enumeration-help-wanted/"/>
     <updated>2010-12-29T09:08:47-08:00</updated>
-    <id>http://tarasglek.github.com/blog/2010/12/29/faster-plugin-enumeration-help-wanted</id>
+    <id>http://taras.glek.net/blog/2010/12/29/faster-plugin-enumeration-help-wanted</id>
     <content type="html"><![CDATA[<p>In addition to slow <a href="http://taras.glek.net/blog/">font enumeration</a>, we were suffering from a similar problem: slow plugin enumeration. Just as with fonts, the plugin enumeration code is different on every platform. Unlike the font situation, plugin enumeration is done completely within our code(ie easy to fix).</p>
 
 <p>Plugin enumeration is often triggered by JavaScript code (for example by checking if a Java handler is present). This means that enumeration is a blocking operation that must happen quickly. XPerf made me wonder why so many plugin-like .dll files were being read. This lead me to a fun set of perf fixes.</p>
@@ -117,9 +117,9 @@ This was a rare fix that resulted in seconds saved on crapware-loaded computers.
   
   <entry>
     <title type="html"><![CDATA[Rude Surprise: Startup Overhead of Windows Font APIs]]></title>
-    <link href="http://tarasglek.github.com/blog/2010/12/21/rude-surprise-startup-overhead-of-windows-font-apis/"/>
+    <link href="http://taras.glek.net/blog/2010/12/21/rude-surprise-startup-overhead-of-windows-font-apis/"/>
     <updated>2010-12-21T05:33:14-08:00</updated>
-    <id>http://tarasglek.github.com/blog/2010/12/21/rude-surprise-startup-overhead-of-windows-font-apis</id>
+    <id>http://taras.glek.net/blog/2010/12/21/rude-surprise-startup-overhead-of-windows-font-apis</id>
     <content type="html"><![CDATA[<p>Imagine a typical Firefox user who starts their Windows computer in order to surf the web. First app they launch is Firefox 4. Turned out that on systems that support hardware-acceleration for 2D graphics, Firefox 4 takes minutes to startup. WTF? XPerf-aided investigation showed that, the Windows font enumeration code causes us to do 30x more disk IO (~300MB) than the rest of Firefox code.</p>
 
 <p>In order to hardware accelerate Firefox, we switched from GDI to using DirectWrite for font stuffs. Apparently, DirectWrite is a wonderful api, but the implementation has some teething issues. DirectWrite opens a connection to the Font Service (and starts it if it isn't already running), however if service fails to respond DirectWrite proceeds to enumerate all of the system fonts on the client-side. This isn't cool for multiple reasons: a) it is <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=602792">slow as hell</a> b) it causes Firefox to <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=617266">run out of memory</a>(installing IE9 helps!) sooner.  This means that currently Firefox 4 starts up a lot slower than 3.6. <a href="http://blog.mozilla.org/nattokirai/">John Daggett</a> is busy working on a workaround by using older GDI APIs to enumerate fonts. Firefox is one of the first popular Windows applications to switch to DirectWrite, so we get to suffer the consequences.</p>

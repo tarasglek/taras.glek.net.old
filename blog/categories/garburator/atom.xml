@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: garburator | All About Performance]]></title>
-  <link href="http://tarasglek.github.com/blog/categories/garburator/atom.xml" rel="self"/>
-  <link href="http://tarasglek.github.com/"/>
-  <updated>2012-12-16T13:22:11-08:00</updated>
-  <id>http://tarasglek.github.com/</id>
+  <link href="http://taras.glek.net/blog/categories/garburator/atom.xml" rel="self"/>
+  <link href="http://taras.glek.net/"/>
+  <updated>2012-12-16T14:17:41-08:00</updated>
+  <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Recent Progress]]></title>
-    <link href="http://tarasglek.github.com/blog/2007/12/28/recent-progress/"/>
+    <link href="http://taras.glek.net/blog/2007/12/28/recent-progress/"/>
     <updated>2007-12-28T05:39:45-08:00</updated>
-    <id>http://tarasglek.github.com/blog/2007/12/28/recent-progress</id>
+    <id>http://taras.glek.net/blog/2007/12/28/recent-progress</id>
     <content type="html"><![CDATA[<p>Looks like <a href="http://wiki.mozilla.org/Pork">pork</a> is slowly going to get merged back into oink. This makes me happy as it will result in decreased merging headaches and gives more visibility to my work outside of Mozilla. My elkhound changes are already in!</p>
 
 <p>Recently I added support for retaining gnu attributes to elsa and corresponding features dehydra and garburator. Now dehydra can verify things based on attributes and  garburator gained a way to rewrite special cases like classes that are always <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=409088">allocated on the stack</a>. Elsa still drops most attributes, but at least classes, methods and variable declarations are covered.</p>
@@ -30,9 +30,9 @@
   
   <entry>
     <title type="html"><![CDATA[Exceptions]]></title>
-    <link href="http://tarasglek.github.com/blog/2007/12/19/exceptions/"/>
+    <link href="http://taras.glek.net/blog/2007/12/19/exceptions/"/>
     <updated>2007-12-19T07:26:30-08:00</updated>
-    <id>http://tarasglek.github.com/blog/2007/12/19/exceptions</id>
+    <id>http://taras.glek.net/blog/2007/12/19/exceptions</id>
     <content type="html"><![CDATA[<p>Often there are two ways to write code. One way is to design an API and have code patterns adhere to how the API is supposed to be used. Another way is to rely on language features to accomplish the same thing. Typically API-pattern approaches are chosen because compilers are too immature or just don't provide the necessary features. Sometimes compilers do catch up and the possibility of utilizing newer language features appears.</p>
 
 <p>In the case of the exception rewrite the task is to rewrite code from a pattern-based (compiler in your head) approach to a more strict C++ construct-based exception paradigm. Unfortunately APIs don't enforce their usage as much as a compiler (in part because we don't have <a href="http://taras.glek.net/blog/2007/11/29/gcc-plugins-under-my-xmas-tree/">app-spefic compiler plugins</a>) so transforming that into a strict compiler-friendly form automatically isn't always realistic (<a href="http://lxr.mozilla.org/seamonkey/source/xpcom/glue/nsIInterfaceRequestorUtils.cpp#43">example</a>). See my previous post for more examples.</p>
@@ -69,9 +69,9 @@ I think the best bet with exceptions would be to start working on them during th
   
   <entry>
     <title type="html"><![CDATA[Garburator works!]]></title>
-    <link href="http://tarasglek.github.com/blog/2007/11/02/garburator-works/"/>
+    <link href="http://taras.glek.net/blog/2007/11/02/garburator-works/"/>
     <updated>2007-11-02T09:02:15-07:00</updated>
-    <id>http://tarasglek.github.com/blog/2007/11/02/garburator-works</id>
+    <id>http://taras.glek.net/blog/2007/11/02/garburator-works</id>
     <content type="html"><![CDATA[<p>A <a href="http://taras.glek.net/blog/2007/10/12/rewriting-tools-for-mozilla-2-moving-forward-as-planned/">few weeks</a> ago I convinced myself that is possible to rewrite Mozilla to avoid COMPtrs on the stack. Since then I've changed my mind a few times and felt like I may not be able to get this rewrite working. However, after three or four false starts, I finally managed to work out a metal model of the stack nsCOMPtr usage. With a combination of automatic blacklisting of tricky code, manual demacroing and lots of help from <a href="http://benjamin.smedbergs.us/">Benjamin</a> I got the generated 3.2MB patch to compile.</p>
 
 <p>I am sure that there are lots of bugs to be found still, but at least we've discovered the pattern that the code follows. I am also sure that there are lots of unpleasant surprises to be discovered and dealt with in the near future.</p>
@@ -84,9 +84,9 @@ I think the best bet with exceptions would be to start working on them during th
   
   <entry>
     <title type="html"><![CDATA[Rewriting Tools for Mozilla 2: Moving Forward as Planned]]></title>
-    <link href="http://tarasglek.github.com/blog/2007/10/12/rewriting-tools-for-mozilla-2-moving-forward-as-planned/"/>
+    <link href="http://taras.glek.net/blog/2007/10/12/rewriting-tools-for-mozilla-2-moving-forward-as-planned/"/>
     <updated>2007-10-12T08:31:35-07:00</updated>
-    <id>http://tarasglek.github.com/blog/2007/10/12/rewriting-tools-for-mozilla-2-moving-forward-as-planned</id>
+    <id>http://taras.glek.net/blog/2007/10/12/rewriting-tools-for-mozilla-2-moving-forward-as-planned</id>
     <content type="html"><![CDATA[<p><strong>In the Beginning There Was a Void</strong></p>
 
 <p>Approximately a year ago, Brendan discussed with me the crazy possibility of rewriting most of the Mozilla code automatically to modernize the codebase. The benefits were huge. Gecko would use the C++ standard library to improve code readability and reducing size, XPCOM would be ripped out of the core to improve performance and decrease footprint, etc.</p>
