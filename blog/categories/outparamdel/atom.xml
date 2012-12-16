@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: outparamdel | All About Performance]]></title>
-  <link href="http://tarasglek.github.com/taras/blog/categories/outparamdel/atom.xml" rel="self"/>
-  <link href="http://tarasglek.github.com/taras/"/>
-  <updated>2012-12-16T12:35:28-08:00</updated>
-  <id>http://tarasglek.github.com/taras/</id>
+  <link href="http://tarasglek.github.com/blog/categories/outparamdel/atom.xml" rel="self"/>
+  <link href="http://tarasglek.github.com/"/>
+  <updated>2012-12-16T13:07:16-08:00</updated>
+  <id>http://tarasglek.github.com/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Semantic Rewriting of Code with Pork - A bitter recap]]></title>
-    <link href="http://tarasglek.github.com/taras/blog/2009/01/28/semantic-rewriting-of-code-with-pork-a-bitter-recap/"/>
+    <link href="http://tarasglek.github.com/blog/2009/01/28/semantic-rewriting-of-code-with-pork-a-bitter-recap/"/>
     <updated>2009-01-28T16:17:47-08:00</updated>
-    <id>http://tarasglek.github.com/taras/blog/2009/01/28/semantic-rewriting-of-code-with-pork-a-bitter-recap</id>
+    <id>http://tarasglek.github.com/blog/2009/01/28/semantic-rewriting-of-code-with-pork-a-bitter-recap</id>
     <content type="html"><![CDATA[<p>LWN <a href="http://lwn.net/Articles/315686/">published</a> an article about a tool that does refactoring of C code. Guess what, it's yet another tool on top of a crappy C-parser that will never grok C well or even hope to support C++. To my great disappointment the author was not aware of my work on Pork. Clearly I have failed in letting people know that complex C and C++ can be refactored with (somewhat raw, but powerful) open source tools.</p>
 
 <p>In addition to <a href="https://developer.mozilla.org/En/Dehydra">Dehydra</a> (which is even mentioned in the first comment, yay!), I also maintain <a href="https://developer.mozilla.org/En/Pork">Pork</a> - a fork of oink that is well suited to large-scale refactoring of real-world C/C++ code.</p>
@@ -44,9 +44,9 @@ For any questions regarding Pork feel free to post on the <a href="https://lists
   
   <entry>
     <title type="html"><![CDATA[Outparamdelling this way comes]]></title>
-    <link href="http://tarasglek.github.com/taras/blog/2008/09/19/outparamdelling-this-way-comes/"/>
+    <link href="http://tarasglek.github.com/blog/2008/09/19/outparamdelling-this-way-comes/"/>
     <updated>2008-09-19T07:06:08-07:00</updated>
-    <id>http://tarasglek.github.com/taras/blog/2008/09/19/outparamdelling-this-way-comes</id>
+    <id>http://tarasglek.github.com/blog/2008/09/19/outparamdelling-this-way-comes</id>
     <content type="html"><![CDATA[<p>Recently I dusted off outparamdel to see if I can get some refactorings landed. About a year ago, with the great QueryInterface outparamdelling experiment we ended up with a smaller binary footprint and tiny performance gain, but that never landed due to us not wanting to break compatability yet. Ever since, outparamdel has been patiently bitrotting within <a href="http://developer.mozilla.org/en/docs/Pork">Pork</a> waiting for the day it's allowed to break APIs.</p>
 
 <p>Recently jst <a href="http://wiki.mozilla.org/Gecko:DeCOMtamination">listed</a> some private API candidates for deCOMtamination and I have been letting outparamdel loose on them for the past week. So far only one such <a href="http://hg.mozilla.org/mozilla-central/raw-rev/ec4733eb1bd8">change</a> has been committed, the rest are sitting in jst's review queue. It's exciting, as it's the first ever application of outparamdel that didn't get canned. For the whole list see the most recent bugs blocking my <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=430328">analysis metabug</a>.</p>
@@ -85,9 +85,9 @@ This is a huge improvement over the ad-hoc workflow prior to hg switch when I wa
   
   <entry>
     <title type="html"><![CDATA[Exceptions]]></title>
-    <link href="http://tarasglek.github.com/taras/blog/2007/12/19/exceptions/"/>
+    <link href="http://tarasglek.github.com/blog/2007/12/19/exceptions/"/>
     <updated>2007-12-19T07:26:30-08:00</updated>
-    <id>http://tarasglek.github.com/taras/blog/2007/12/19/exceptions</id>
+    <id>http://tarasglek.github.com/blog/2007/12/19/exceptions</id>
     <content type="html"><![CDATA[<p>Often there are two ways to write code. One way is to design an API and have code patterns adhere to how the API is supposed to be used. Another way is to rely on language features to accomplish the same thing. Typically API-pattern approaches are chosen because compilers are too immature or just don't provide the necessary features. Sometimes compilers do catch up and the possibility of utilizing newer language features appears.</p>
 
 <p>In the case of the exception rewrite the task is to rewrite code from a pattern-based (compiler in your head) approach to a more strict C++ construct-based exception paradigm. Unfortunately APIs don't enforce their usage as much as a compiler (in part because we don't have <a href="http://tarasglek.github.com/taras/2007/11/29/gcc-plugins-under-my-xmas-tree/">app-spefic compiler plugins</a>) so transforming that into a strict compiler-friendly form automatically isn't always realistic (<a href="http://lxr.mozilla.org/seamonkey/source/xpcom/glue/nsIInterfaceRequestorUtils.cpp#43">example</a>). See my previous post for more examples.</p>
@@ -124,9 +124,9 @@ I think the best bet with exceptions would be to start working on them during th
   
   <entry>
     <title type="html"><![CDATA[Exceptional Circumstances]]></title>
-    <link href="http://tarasglek.github.com/taras/blog/2007/12/05/exceptional-circumstances/"/>
+    <link href="http://tarasglek.github.com/blog/2007/12/05/exceptional-circumstances/"/>
     <updated>2007-12-05T06:23:38-08:00</updated>
-    <id>http://tarasglek.github.com/taras/blog/2007/12/05/exceptional-circumstances</id>
+    <id>http://tarasglek.github.com/blog/2007/12/05/exceptional-circumstances</id>
     <content type="html"><![CDATA[<p>My previous post on outparam rewriting <a href="http://tarasglek.github.com/taras/2007/11/28/volume-of-refactoring-ahead/">described</a> the wealth of functions that can be rewritten. Unfortunately, most functions in Mozilla are declared in XPIDL interfaces.</p>
 
 <p>I have been convinced that my plan to rewrite xpidlgen to avoid outparameters wont be possible because most XPIDLinterfaces can be implemented by JavaScript in a few different ways. That is problematic because in addition to return values, JavaScript can also have an exception thrown at any point and have that converted to an nsresult error code by XPConnect. That means that the getters implemented in JavaScript are not in the set of functions that only return NS_OK+outparam/someerror. I wouldn't be at all disappointed if someone proved me wrong here.</p>
@@ -161,9 +161,9 @@ I think the best bet with exceptions would be to start working on them during th
   
   <entry>
     <title type="html"><![CDATA[Volume of Refactoring Ahead]]></title>
-    <link href="http://tarasglek.github.com/taras/blog/2007/11/28/volume-of-refactoring-ahead/"/>
+    <link href="http://tarasglek.github.com/blog/2007/11/28/volume-of-refactoring-ahead/"/>
     <updated>2007-11-28T09:53:42-08:00</updated>
-    <id>http://tarasglek.github.com/taras/blog/2007/11/28/volume-of-refactoring-ahead</id>
+    <id>http://tarasglek.github.com/blog/2007/11/28/volume-of-refactoring-ahead</id>
     <content type="html"><![CDATA[<p>In the previous post, I described the simple rewriting case that I am working on at the moment. Someone was quick to point out that the approach wouldn't work for all methods (XPIDL Arrays were the example). Indeed, anything more complicated than simple getters can't be rewritten to "Succeeded/Failed" pattern without switching to C++ exceptions. However, in the codebase the size of Mozilla there are several megabytes worth outparam getters to be rewritten.</p>
 
 <p>Currently my wimpy little <a href="http://hg.mozilla.org/oink/?file/0ab46e97549e/dehydra_scripts/outparams.js">outparams.js</a> script identifies 100 methods that can be rewritten by outparamdel without any manual intervention. However doing a search for ::Get with a ** parameter yields over 2700 candidates, of which most look like they can be rewritten. Reason for the laughable detection rate is that the detection script currently refuses to flag methods that are defined in XPIDL interface or are implemented by more than one class. Soon the script will make heavier use of the class hierarchy and we will probably change XPIDL to support more efficient getters.</p>

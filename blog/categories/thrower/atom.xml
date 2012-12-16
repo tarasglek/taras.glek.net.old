@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: thrower | All About Performance]]></title>
-  <link href="http://tarasglek.github.com/taras/blog/categories/thrower/atom.xml" rel="self"/>
-  <link href="http://tarasglek.github.com/taras/"/>
-  <updated>2012-12-16T12:35:28-08:00</updated>
-  <id>http://tarasglek.github.com/taras/</id>
+  <link href="http://tarasglek.github.com/blog/categories/thrower/atom.xml" rel="self"/>
+  <link href="http://tarasglek.github.com/"/>
+  <updated>2012-12-16T13:07:16-08:00</updated>
+  <id>http://tarasglek.github.com/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Exceptions]]></title>
-    <link href="http://tarasglek.github.com/taras/blog/2007/12/19/exceptions/"/>
+    <link href="http://tarasglek.github.com/blog/2007/12/19/exceptions/"/>
     <updated>2007-12-19T07:26:30-08:00</updated>
-    <id>http://tarasglek.github.com/taras/blog/2007/12/19/exceptions</id>
+    <id>http://tarasglek.github.com/blog/2007/12/19/exceptions</id>
     <content type="html"><![CDATA[<p>Often there are two ways to write code. One way is to design an API and have code patterns adhere to how the API is supposed to be used. Another way is to rely on language features to accomplish the same thing. Typically API-pattern approaches are chosen because compilers are too immature or just don't provide the necessary features. Sometimes compilers do catch up and the possibility of utilizing newer language features appears.</p>
 
 <p>In the case of the exception rewrite the task is to rewrite code from a pattern-based (compiler in your head) approach to a more strict C++ construct-based exception paradigm. Unfortunately APIs don't enforce their usage as much as a compiler (in part because we don't have <a href="http://tarasglek.github.com/taras/2007/11/29/gcc-plugins-under-my-xmas-tree/">app-spefic compiler plugins</a>) so transforming that into a strict compiler-friendly form automatically isn't always realistic (<a href="http://lxr.mozilla.org/seamonkey/source/xpcom/glue/nsIInterfaceRequestorUtils.cpp#43">example</a>). See my previous post for more examples.</p>
@@ -54,9 +54,9 @@ I think the best bet with exceptions would be to start working on them during th
   
   <entry>
     <title type="html"><![CDATA[Switching to Exceptions: Makes Head Spin]]></title>
-    <link href="http://tarasglek.github.com/taras/blog/2007/12/11/switching-to-exceptions-makes-head-spin/"/>
+    <link href="http://tarasglek.github.com/blog/2007/12/11/switching-to-exceptions-makes-head-spin/"/>
     <updated>2007-12-11T04:10:19-08:00</updated>
-    <id>http://tarasglek.github.com/taras/blog/2007/12/11/switching-to-exceptions-makes-head-spin</id>
+    <id>http://tarasglek.github.com/blog/2007/12/11/switching-to-exceptions-makes-head-spin</id>
     <content type="html"><![CDATA[<p><strong>Typical</strong></p>
 
 <p>It seems that there are 3 stages to doing a rewrite in Moz:</p>
@@ -85,9 +85,9 @@ Usually stage 3 is a few times harder than 2. For garburator rewriting got reall
   
   <entry>
     <title type="html"><![CDATA[Exceptional Circumstances]]></title>
-    <link href="http://tarasglek.github.com/taras/blog/2007/12/05/exceptional-circumstances/"/>
+    <link href="http://tarasglek.github.com/blog/2007/12/05/exceptional-circumstances/"/>
     <updated>2007-12-05T06:23:38-08:00</updated>
-    <id>http://tarasglek.github.com/taras/blog/2007/12/05/exceptional-circumstances</id>
+    <id>http://tarasglek.github.com/blog/2007/12/05/exceptional-circumstances</id>
     <content type="html"><![CDATA[<p>My previous post on outparam rewriting <a href="http://tarasglek.github.com/taras/2007/11/28/volume-of-refactoring-ahead/">described</a> the wealth of functions that can be rewritten. Unfortunately, most functions in Mozilla are declared in XPIDL interfaces.</p>
 
 <p>I have been convinced that my plan to rewrite xpidlgen to avoid outparameters wont be possible because most XPIDLinterfaces can be implemented by JavaScript in a few different ways. That is problematic because in addition to return values, JavaScript can also have an exception thrown at any point and have that converted to an nsresult error code by XPConnect. That means that the getters implemented in JavaScript are not in the set of functions that only return NS_OK+outparam/someerror. I wouldn't be at all disappointed if someone proved me wrong here.</p>

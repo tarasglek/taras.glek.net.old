@@ -1,1147 +1,1093 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2006/12/05/static-analysis/</loc>
+        <loc>http://tarasglek.github.com/blog/2006/12/05/static-analysis/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2006/12/21/oink-meet-squash/</loc>
+        <loc>http://tarasglek.github.com/blog/2006/12/21/oink-meet-squash/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2007/01/03/squashed-and-compiled/</loc>
+        <loc>http://tarasglek.github.com/blog/2007/01/03/squashed-and-compiled/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2007/01/11/squash-progress-and-plans/</loc>
+        <loc>http://tarasglek.github.com/blog/2007/01/11/squash-progress-and-plans/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>
-            http://tarasglek.github.com/taras/blog/2007/01/24/will-rename-class-members-for-food/
-        </loc>
+        <loc>http://tarasglek.github.com/blog/2007/01/24/will-rename-class-members-for-food/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tarasglek.github.com/taras/blog/2007/02/01/lossy-ast-traversals-for-good-code-health/
+            http://tarasglek.github.com/blog/2007/02/01/lossy-ast-traversals-for-good-code-health/
         </loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2007/02/07/dotting-pretty-graphs/</loc>
+        <loc>http://tarasglek.github.com/blog/2007/02/07/dotting-pretty-graphs/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2007/02/28/websquash/</loc>
+        <loc>http://tarasglek.github.com/blog/2007/02/28/websquash/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2007/03/02/uno-dos-dehydra/</loc>
+        <loc>http://tarasglek.github.com/blog/2007/03/02/uno-dos-dehydra/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2007/03/07/dehydra-01/</loc>
+        <loc>http://tarasglek.github.com/blog/2007/03/07/dehydra-01/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2007/04/02/automated-code-refactoring/</loc>
+        <loc>http://tarasglek.github.com/blog/2007/04/02/automated-code-refactoring/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>
-            http://tarasglek.github.com/taras/blog/2007/04/04/what-about-javascript-in-dehydra/
-        </loc>
+        <loc>http://tarasglek.github.com/blog/2007/04/04/what-about-javascript-in-dehydra/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2007/04/23/mozilla-class-browser/</loc>
+        <loc>http://tarasglek.github.com/blog/2007/04/23/mozilla-class-browser/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2007/05/01/status-report/</loc>
+        <loc>http://tarasglek.github.com/blog/2007/05/01/status-report/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2007/05/07/status-update-outparam-work/</loc>
+        <loc>http://tarasglek.github.com/blog/2007/05/07/status-update-outparam-work/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2007/05/10/nicely-rewriting-outparams/</loc>
+        <loc>http://tarasglek.github.com/blog/2007/05/10/nicely-rewriting-outparams/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2007/05/11/cpp-strikes-back/</loc>
+        <loc>http://tarasglek.github.com/blog/2007/05/11/cpp-strikes-back/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tarasglek.github.com/taras/blog/2007/05/17/undoing-cpp-deep-in-enemy-territory/
+            http://tarasglek.github.com/blog/2007/05/17/undoing-cpp-deep-in-enemy-territory/
         </loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2007/05/29/cpp-integration-progress/</loc>
+        <loc>http://tarasglek.github.com/blog/2007/05/29/cpp-integration-progress/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tarasglek.github.com/taras/blog/2007/06/12/undoing-cpp-expansion-in-3-simple-steps-say-hello-to-easier-c-rewriting/
+            http://tarasglek.github.com/blog/2007/06/12/undoing-cpp-expansion-in-3-simple-steps-say-hello-to-easier-c-rewriting/
         </loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2007/06/19/it-works/</loc>
+        <loc>http://tarasglek.github.com/blog/2007/06/19/it-works/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2007/06/26/status-report-recent-work/</loc>
+        <loc>http://tarasglek.github.com/blog/2007/06/26/status-report-recent-work/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tarasglek.github.com/taras/blog/2007/07/13/dehydra-prcheck-squash-in-mercurial/
+            http://tarasglek.github.com/blog/2007/07/13/dehydra-prcheck-squash-in-mercurial/
         </loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tarasglek.github.com/taras/blog/2007/07/13/pondering-prepost-conditions-to-enforce-software-correctness/
+            http://tarasglek.github.com/blog/2007/07/13/pondering-prepost-conditions-to-enforce-software-correctness/
         </loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>
-            http://tarasglek.github.com/taras/blog/2007/07/18/cpp-aware-c-rewriting-can-be-fun/
-        </loc>
+        <loc>http://tarasglek.github.com/blog/2007/07/18/cpp-aware-c-rewriting-can-be-fun/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>
-            http://tarasglek.github.com/taras/blog/2007/07/27/superity-complex-static-analysis/
-        </loc>
+        <loc>http://tarasglek.github.com/blog/2007/07/27/superity-complex-static-analysis/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2007/08/06/outparams-take-2/</loc>
+        <loc>http://tarasglek.github.com/blog/2007/08/06/outparams-take-2/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2007/08/30/pork-the-brave-new-world/</loc>
+        <loc>http://tarasglek.github.com/blog/2007/08/30/pork-the-brave-new-world/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tarasglek.github.com/taras/blog/2007/09/10/automatic-decomtamination-roadmap-for-automated-refactorings/
+            http://tarasglek.github.com/blog/2007/09/10/automatic-decomtamination-roadmap-for-automated-refactorings/
         </loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tarasglek.github.com/taras/blog/2007/09/12/garburator-another-day-another-rewrite-tool/
+            http://tarasglek.github.com/blog/2007/09/12/garburator-another-day-another-rewrite-tool/
         </loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>
-            http://tarasglek.github.com/taras/blog/2007/10/04/multiple-degrees-of-correctness/
-        </loc>
+        <loc>http://tarasglek.github.com/blog/2007/10/04/multiple-degrees-of-correctness/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tarasglek.github.com/taras/blog/2007/10/12/rewriting-tools-for-mozilla-2-moving-forward-as-planned/
+            http://tarasglek.github.com/blog/2007/10/12/rewriting-tools-for-mozilla-2-moving-forward-as-planned/
         </loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2007/10/24/rewriting-javascript/</loc>
+        <loc>http://tarasglek.github.com/blog/2007/10/24/rewriting-javascript/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2007/11/02/garburator-works/</loc>
+        <loc>http://tarasglek.github.com/blog/2007/11/02/garburator-works/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2007/11/12/cleaning-up-my-act/</loc>
+        <loc>http://tarasglek.github.com/blog/2007/11/12/cleaning-up-my-act/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2007/11/26/mozilla-2-outparamdel/</loc>
+        <loc>http://tarasglek.github.com/blog/2007/11/26/mozilla-2-outparamdel/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2007/11/28/volume-of-refactoring-ahead/</loc>
+        <loc>http://tarasglek.github.com/blog/2007/11/28/volume-of-refactoring-ahead/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>
-            http://tarasglek.github.com/taras/blog/2007/11/29/gcc-plugins-under-my-xmas-tree/
-        </loc>
+        <loc>http://tarasglek.github.com/blog/2007/11/29/gcc-plugins-under-my-xmas-tree/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2007/12/05/exceptional-circumstances/</loc>
+        <loc>http://tarasglek.github.com/blog/2007/12/05/exceptional-circumstances/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tarasglek.github.com/taras/blog/2007/12/11/switching-to-exceptions-makes-head-spin/
+            http://tarasglek.github.com/blog/2007/12/11/switching-to-exceptions-makes-head-spin/
         </loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2007/12/19/exceptions/</loc>
+        <loc>http://tarasglek.github.com/blog/2007/12/19/exceptions/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2007/12/28/recent-progress/</loc>
+        <loc>http://tarasglek.github.com/blog/2007/12/28/recent-progress/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2008/01/08/dehydra-as-a-gcc-plugin/</loc>
+        <loc>http://tarasglek.github.com/blog/2008/01/08/dehydra-as-a-gcc-plugin/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2008/01/17/gcc-spidermonkey-gcc-dehydra/</loc>
+        <loc>http://tarasglek.github.com/blog/2008/01/17/gcc-spidermonkey-gcc-dehydra/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2008/01/25/dehydra-progress/</loc>
+        <loc>http://tarasglek.github.com/blog/2008/01/25/dehydra-progress/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2008/02/06/gcc4-elsa-together-at-last/</loc>
+        <loc>http://tarasglek.github.com/blog/2008/02/06/gcc4-elsa-together-at-last/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>
-            http://tarasglek.github.com/taras/blog/2008/03/03/random-news-in-the-dehydra-corner/
-        </loc>
+        <loc>http://tarasglek.github.com/blog/2008/03/03/random-news-in-the-dehydra-corner/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2008/03/11/dehydra-as-pesticide/</loc>
+        <loc>http://tarasglek.github.com/blog/2008/03/11/dehydra-as-pesticide/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tarasglek.github.com/taras/blog/2008/03/12/recipe-how-many-classes-are-instantiated-in-mozilla/
+            http://tarasglek.github.com/blog/2008/03/12/recipe-how-many-classes-are-instantiated-in-mozilla/
         </loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2008/03/17/dehydra-world-tour/</loc>
+        <loc>http://tarasglek.github.com/blog/2008/03/17/dehydra-world-tour/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2008/04/14/mozillafisl08/</loc>
+        <loc>http://tarasglek.github.com/blog/2008/04/14/mozillafisl08/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tarasglek.github.com/taras/blog/2008/04/22/static-analyses-gadgets-of-mozilla-2-james-bonds/
+            http://tarasglek.github.com/blog/2008/04/22/static-analyses-gadgets-of-mozilla-2-james-bonds/
         </loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>
-            http://tarasglek.github.com/taras/blog/2008/04/29/counting-down-to-a-dehydra-release/
-        </loc>
+        <loc>http://tarasglek.github.com/blog/2008/04/29/counting-down-to-a-dehydra-release/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tarasglek.github.com/taras/blog/2008/05/16/my-other-job-as-a-rolling-billboard/
+            http://tarasglek.github.com/blog/2008/05/16/my-other-job-as-a-rolling-billboard/
         </loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2008/05/27/treehydra-goes-push-and-pop/</loc>
+        <loc>http://tarasglek.github.com/blog/2008/05/27/treehydra-goes-push-and-pop/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2008/06/09/dehydra-09-its-alive/</loc>
+        <loc>http://tarasglek.github.com/blog/2008/06/09/dehydra-09-its-alive/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2008/06/18/gcc-summit/</loc>
+        <loc>http://tarasglek.github.com/blog/2008/06/18/gcc-summit/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tarasglek.github.com/taras/blog/2008/06/24/status-report-nearterm-plans-for-pork-dehydra/
+            http://tarasglek.github.com/blog/2008/06/24/status-report-nearterm-plans-for-pork-dehydra/
         </loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2008/06/30/pork-09-in-the-wild/</loc>
+        <loc>http://tarasglek.github.com/blog/2008/06/30/pork-09-in-the-wild/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tarasglek.github.com/taras/blog/2008/07/08/where-is-the-sanity-in-the-c-std-library/
+            http://tarasglek.github.com/blog/2008/07/08/where-is-the-sanity-in-the-c-std-library/
         </loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tarasglek.github.com/taras/blog/2008/07/09/static-analysis-and-refactoring-tooling-updates/
+            http://tarasglek.github.com/blog/2008/07/09/static-analysis-and-refactoring-tooling-updates/
         </loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tarasglek.github.com/taras/blog/2008/07/18/pork-mcpp-oink-and-elsawhats-going-on/
+            http://tarasglek.github.com/blog/2008/07/18/pork-mcpp-oink-and-elsawhats-going-on/
         </loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2008/07/22/dogfooding-pork-oscon/</loc>
+        <loc>http://tarasglek.github.com/blog/2008/07/22/dogfooding-pork-oscon/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2008/07/25/pull-pork-with-care/</loc>
+        <loc>http://tarasglek.github.com/blog/2008/07/25/pull-pork-with-care/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2008/08/04/summit/</loc>
+        <loc>http://tarasglek.github.com/blog/2008/08/04/summit/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>
-            http://tarasglek.github.com/taras/blog/2008/08/11/oink-testsuite-within-pork-passes/
-        </loc>
+        <loc>http://tarasglek.github.com/blog/2008/08/11/oink-testsuite-within-pork-passes/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tarasglek.github.com/taras/blog/2008/08/13/this-week-in-the-static-analysis-corner/
+            http://tarasglek.github.com/blog/2008/08/13/this-week-in-the-static-analysis-corner/
         </loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>
-            http://tarasglek.github.com/taras/blog/2008/08/14/meanwhile-in-a-parallel-universe/
-        </loc>
+        <loc>http://tarasglek.github.com/blog/2008/08/14/meanwhile-in-a-parallel-universe/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2008/09/02/converging-elsa-strains/</loc>
+        <loc>http://tarasglek.github.com/blog/2008/09/02/converging-elsa-strains/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2008/09/03/error-presentation/</loc>
+        <loc>http://tarasglek.github.com/blog/2008/09/03/error-presentation/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2008/09/08/must_flow_throughlabel/</loc>
+        <loc>http://tarasglek.github.com/blog/2008/09/08/must_flow_throughlabel/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>
-            http://tarasglek.github.com/taras/blog/2008/09/19/outparamdelling-this-way-comes/
-        </loc>
+        <loc>http://tarasglek.github.com/blog/2008/09/19/outparamdelling-this-way-comes/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2008/09/26/living-dead-code/</loc>
+        <loc>http://tarasglek.github.com/blog/2008/09/26/living-dead-code/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tarasglek.github.com/taras/blog/2008/10/07/note-this-is-not-called-yet-its-just-a-placeholder-for-future-changes/
+            http://tarasglek.github.com/blog/2008/10/07/note-this-is-not-called-yet-its-just-a-placeholder-for-future-changes/
         </loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2008/10/09/cool-stuff-in-foreign-realms/</loc>
+        <loc>http://tarasglek.github.com/blog/2008/10/09/cool-stuff-in-foreign-realms/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tarasglek.github.com/taras/blog/2008/11/07/enabling-prcheck-email-notifications/
+            http://tarasglek.github.com/blog/2008/11/07/enabling-prcheck-email-notifications/
         </loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2008/12/23/fennec-a2-performance/</loc>
+        <loc>http://tarasglek.github.com/blog/2008/12/23/fennec-a2-performance/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tarasglek.github.com/taras/blog/2009/01/13/seven-things-you-may-not-know-about-me/
+            http://tarasglek.github.com/blog/2009/01/13/seven-things-you-may-not-know-about-me/
         </loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2009/01/27/gcc-plugins-are-a-go/</loc>
+        <loc>http://tarasglek.github.com/blog/2009/01/27/gcc-plugins-are-a-go/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tarasglek.github.com/taras/blog/2009/01/28/semantic-rewriting-of-code-with-pork-a-bitter-recap/
+            http://tarasglek.github.com/blog/2009/01/28/semantic-rewriting-of-code-with-pork-a-bitter-recap/
         </loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2009/02/16/security-with-dehydra/</loc>
+        <loc>http://tarasglek.github.com/blog/2009/02/16/security-with-dehydra/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2009/02/19/quickfix-model-of-develoment/</loc>
+        <loc>http://tarasglek.github.com/blog/2009/02/19/quickfix-model-of-develoment/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2009/03/17/fennec-beta-1-need-for-speed/</loc>
+        <loc>http://tarasglek.github.com/blog/2009/03/17/fennec-beta-1-need-for-speed/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2009/03/31/nsresult-analysis/</loc>
+        <loc>http://tarasglek.github.com/blog/2009/03/31/nsresult-analysis/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tarasglek.github.com/taras/blog/2009/04/15/misc-static-analysis-news-smmgcstatic-codecon-piglet/
+            http://tarasglek.github.com/blog/2009/04/15/misc-static-analysis-news-smmgcstatic-codecon-piglet/
         </loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tarasglek.github.com/taras/blog/2009/04/23/benchmarks-and-instrumentation-for-fennecetc/
+            http://tarasglek.github.com/blog/2009/04/23/benchmarks-and-instrumentation-for-fennecetc/
         </loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2009/04/30/gcc-rant-progress/</loc>
+        <loc>http://tarasglek.github.com/blog/2009/04/30/gcc-rant-progress/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2009/05/11/dehydra-updates/</loc>
+        <loc>http://tarasglek.github.com/blog/2009/05/11/dehydra-updates/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tarasglek.github.com/taras/blog/2009/05/14/gcc-45-dehydra-is-a-go-and-other-updates/
+            http://tarasglek.github.com/blog/2009/05/14/gcc-45-dehydra-is-a-go-and-other-updates/
         </loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2009/06/17/dehydratreehydra-c-support/</loc>
+        <loc>http://tarasglek.github.com/blog/2009/06/17/dehydratreehydra-c-support/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2009/06/25/dehydra-pork-sources-moved/</loc>
+        <loc>http://tarasglek.github.com/blog/2009/06/25/dehydra-pork-sources-moved/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2009/06/26/studying-fennec-performance/</loc>
+        <loc>http://tarasglek.github.com/blog/2009/06/26/studying-fennec-performance/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tarasglek.github.com/taras/blog/2009/06/29/dxr-the-most-impressive-code-navigation-tool-ever/
+            http://tarasglek.github.com/blog/2009/06/29/dxr-the-most-impressive-code-navigation-tool-ever/
         </loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2009/07/01/python-gdb-logging-file-io/</loc>
+        <loc>http://tarasglek.github.com/blog/2009/07/01/python-gdb-logging-file-io/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2009/07/14/virtualbox-rocks/</loc>
+        <loc>http://tarasglek.github.com/blog/2009/07/14/virtualbox-rocks/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>
-            http://tarasglek.github.com/taras/blog/2009/07/21/those-crazy-comm-central-guys/
-        </loc>
+        <loc>http://tarasglek.github.com/blog/2009/07/21/those-crazy-comm-central-guys/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2009/07/22/chasewamu-fraud-friendlyness/</loc>
+        <loc>http://tarasglek.github.com/blog/2009/07/22/chasewamu-fraud-friendlyness/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>
-            http://tarasglek.github.com/taras/blog/2009/08/03/this-month-in-static-analysis/
-        </loc>
+        <loc>http://tarasglek.github.com/blog/2009/08/03/this-month-in-static-analysis/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tarasglek.github.com/taras/blog/2009/08/14/there-is-nothing-exciting-about-filesystems/
+            http://tarasglek.github.com/blog/2009/08/14/there-is-nothing-exciting-about-filesystems/
         </loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2009/08/20/cleaning-up-startup-disk-io/</loc>
+        <loc>http://tarasglek.github.com/blog/2009/08/20/cleaning-up-startup-disk-io/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2009/08/27/moving-files-into-jars/</loc>
+        <loc>http://tarasglek.github.com/blog/2009/08/27/moving-files-into-jars/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2009/09/18/enforcing-inheritance-rules/</loc>
+        <loc>http://tarasglek.github.com/blog/2009/09/18/enforcing-inheritance-rules/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>
-            http://tarasglek.github.com/taras/blog/2009/09/30/corrupting-innocent-minds-with-gcc/
-        </loc>
+        <loc>http://tarasglek.github.com/blog/2009/09/30/corrupting-innocent-minds-with-gcc/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2009/10/08/restless-bug-fixing/</loc>
+        <loc>http://tarasglek.github.com/blog/2009/10/08/restless-bug-fixing/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>
-            http://tarasglek.github.com/taras/blog/2009/10/20/large-apps-just-have-to-start-slow/
-        </loc>
+        <loc>http://tarasglek.github.com/blog/2009/10/20/large-apps-just-have-to-start-slow/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tarasglek.github.com/taras/blog/2009/10/23/studying-library-io-systemtap-style/
+            http://tarasglek.github.com/blog/2009/10/23/studying-library-io-systemtap-style/
         </loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2009/11/06/fsoss-dehydra-update/</loc>
+        <loc>http://tarasglek.github.com/blog/2009/11/06/fsoss-dehydra-update/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tarasglek.github.com/taras/blog/2009/11/20/dehydra-testsuite-passes-on-gcc-4-5/
+            http://tarasglek.github.com/blog/2009/11/20/dehydra-testsuite-passes-on-gcc-4-5/
         </loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2009/12/17/javascript-dom/</loc>
+        <loc>http://tarasglek.github.com/blog/2009/12/17/javascript-dom/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>
-            http://tarasglek.github.com/taras/blog/2010/01/04/windows-7-startup-exploration/
-        </loc>
+        <loc>http://tarasglek.github.com/blog/2010/01/04/windows-7-startup-exploration/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tarasglek.github.com/taras/blog/2010/01/04/some-developers-manually-grope-around-in-the-dark/
+            http://tarasglek.github.com/blog/2010/01/04/some-developers-manually-grope-around-in-the-dark/
         </loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tarasglek.github.com/taras/blog/2010/01/19/chromium-vs-minefield-cold-startup-performance-comparison/
+            http://tarasglek.github.com/blog/2010/01/19/chromium-vs-minefield-cold-startup-performance-comparison/
         </loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tarasglek.github.com/taras/blog/2010/01/21/state-of-static-analysis-at-mozilla/
+            http://tarasglek.github.com/blog/2010/01/21/state-of-static-analysis-at-mozilla/
         </loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2010/02/09/static-analysis-articles/</loc>
+        <loc>http://tarasglek.github.com/blog/2010/02/09/static-analysis-articles/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tarasglek.github.com/taras/blog/2010/02/19/teaching-ld-to-optimize-binaries-for-startup/
+            http://tarasglek.github.com/blog/2010/02/19/teaching-ld-to-optimize-binaries-for-startup/
         </loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tarasglek.github.com/taras/blog/2010/02/26/updated-dehydra-installation-instructions/
+            http://tarasglek.github.com/blog/2010/02/26/updated-dehydra-installation-instructions/
         </loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tarasglek.github.com/taras/blog/2010/03/05/mirror-mirror-on-the-wall-why-is-my-binary-slow/
+            http://tarasglek.github.com/blog/2010/03/05/mirror-mirror-on-the-wall-why-is-my-binary-slow/
         </loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2010/03/11/extensions-startup/</loc>
+        <loc>http://tarasglek.github.com/blog/2010/03/11/extensions-startup/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>
-            http://tarasglek.github.com/taras/blog/2010/03/23/when-in-trouble-draw-a-picture/
-        </loc>
+        <loc>http://tarasglek.github.com/blog/2010/03/23/when-in-trouble-draw-a-picture/</loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tarasglek.github.com/taras/blog/2010/03/24/linux-why-loading-binaries-from-disk-sucks/
+            http://tarasglek.github.com/blog/2010/03/24/linux-why-loading-binaries-from-disk-sucks/
         </loc>
         <lastmod>2012-12-16T12:35:13-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2010/03/25/madvise-prelink-update/</loc>
+        <loc>http://tarasglek.github.com/blog/2010/03/25/madvise-prelink-update/</loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2010/03/29/linux-startup-inefficiency/</loc>
+        <loc>http://tarasglek.github.com/blog/2010/03/29/linux-startup-inefficiency/</loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tarasglek.github.com/taras/blog/2010/03/31/how-to-get-reviews-fast-delete-code/
+            http://tarasglek.github.com/blog/2010/03/31/how-to-get-reviews-fast-delete-code/
         </loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tarasglek.github.com/taras/blog/2010/04/05/linux-how-to-make-startup-suck-less-and-reduce-memory-usage/
+            http://tarasglek.github.com/blog/2010/04/05/linux-how-to-make-startup-suck-less-and-reduce-memory-usage/
         </loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tarasglek.github.com/taras/blog/2010/04/07/icegrind-valgrind-plugin-for-optimizing-cold-startup/
+            http://tarasglek.github.com/blog/2010/04/07/icegrind-valgrind-plugin-for-optimizing-cold-startup/
         </loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tarasglek.github.com/taras/blog/2010/04/12/squeezing-every-last-bit-of-performance-out-of-the-linux-toolchain/
+            http://tarasglek.github.com/blog/2010/04/12/squeezing-every-last-bit-of-performance-out-of-the-linux-toolchain/
         </loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tarasglek.github.com/taras/blog/2010/04/19/windows-sucks-at-memory-mapped-io-during-startup/
+            http://tarasglek.github.com/blog/2010/04/19/windows-sucks-at-memory-mapped-io-during-startup/
         </loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2010/04/20/mozillaservices/</loc>
+        <loc>http://tarasglek.github.com/blog/2010/04/20/mozillaservices/</loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tarasglek.github.com/taras/blog/2010/05/24/teethig-troubles-assigning-blame-for-pagefaults/
+            http://tarasglek.github.com/blog/2010/05/24/teethig-troubles-assigning-blame-for-pagefaults/
         </loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
-        <loc>
-            http://tarasglek.github.com/taras/blog/2010/05/27/startup-backward-constructors/
-        </loc>
+        <loc>http://tarasglek.github.com/blog/2010/05/27/startup-backward-constructors/</loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2010/06/09/galois-talk/</loc>
+        <loc>http://tarasglek.github.com/blog/2010/06/09/galois-talk/</loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2010/07/14/my-startup-summary/</loc>
+        <loc>http://tarasglek.github.com/blog/2010/07/14/my-startup-summary/</loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2010/07/22/file-fragmentation/</loc>
+        <loc>http://tarasglek.github.com/blog/2010/07/22/file-fragmentation/</loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tarasglek.github.com/taras/blog/2010/07/30/msvc-static-initializers-decent-stuff/
+            http://tarasglek.github.com/blog/2010/07/30/msvc-static-initializers-decent-stuff/
         </loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
-        <loc>
-            http://tarasglek.github.com/taras/blog/2010/09/07/fighting-fragmentation-sqlite/
-        </loc>
+        <loc>http://tarasglek.github.com/blog/2010/09/07/fighting-fragmentation-sqlite/</loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tarasglek.github.com/taras/blog/2010/09/09/help-wanted-does-fcntlf_preallocate-work-as-advertised-on-osx/
+            http://tarasglek.github.com/blog/2010/09/09/help-wanted-does-fcntlf_preallocate-work-as-advertised-on-osx/
         </loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2010/09/14/firefox-4-jar-jar-jar/</loc>
+        <loc>http://tarasglek.github.com/blog/2010/09/14/firefox-4-jar-jar-jar/</loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2010/10/04/diagnosing-slow-startup/</loc>
+        <loc>http://tarasglek.github.com/blog/2010/10/04/diagnosing-slow-startup/</loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2010/11/16/performance-progress/</loc>
+        <loc>http://tarasglek.github.com/blog/2010/11/16/performance-progress/</loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2010/11/23/of-linkers-and-avoiding-suck/</loc>
+        <loc>http://tarasglek.github.com/blog/2010/11/23/of-linkers-and-avoiding-suck/</loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2010/11/30/crapware-and-firefox/</loc>
+        <loc>http://tarasglek.github.com/blog/2010/11/30/crapware-and-firefox/</loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tarasglek.github.com/taras/blog/2010/12/21/rude-surprise-startup-overhead-of-windows-font-apis/
+            http://tarasglek.github.com/blog/2010/12/21/rude-surprise-startup-overhead-of-windows-font-apis/
         </loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tarasglek.github.com/taras/blog/2010/12/29/faster-plugin-enumeration-help-wanted/
+            http://tarasglek.github.com/blog/2010/12/29/faster-plugin-enumeration-help-wanted/
         </loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2011/01/14/builtin-startup-measurement/</loc>
+        <loc>http://tarasglek.github.com/blog/2011/01/14/builtin-startup-measurement/</loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tarasglek.github.com/taras/blog/2011/02/09/magic-patch-that-doubles-windows-startup/
+            http://tarasglek.github.com/blog/2011/02/09/magic-patch-that-doubles-windows-startup/
         </loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2011/03/10/start-faster-addon/</loc>
+        <loc>http://tarasglek.github.com/blog/2011/03/10/start-faster-addon/</loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tarasglek.github.com/taras/blog/2011/04/14/arguing-about-startup-communicating-performance/
+            http://tarasglek.github.com/blog/2011/04/14/arguing-about-startup-communicating-performance/
         </loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
-        <loc>
-            http://tarasglek.github.com/taras/blog/2011/04/26/measuring-startup-speed-correctly/
-        </loc>
+        <loc>http://tarasglek.github.com/blog/2011/04/26/measuring-startup-speed-correctly/</loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2011/05/13/firefox-telemetry/</loc>
+        <loc>http://tarasglek.github.com/blog/2011/05/13/firefox-telemetry/</loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2011/06/01/telemetry-updates/</loc>
+        <loc>http://tarasglek.github.com/blog/2011/06/01/telemetry-updates/</loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tarasglek.github.com/taras/blog/2011/06/22/developers-how-to-submit-telemetry-data/
+            http://tarasglek.github.com/blog/2011/06/22/developers-how-to-submit-telemetry-data/
         </loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tarasglek.github.com/taras/blog/2011/06/27/telemetry-is-on-in-nightly-firefox-builds/
+            http://tarasglek.github.com/blog/2011/06/27/telemetry-is-on-in-nightly-firefox-builds/
         </loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tarasglek.github.com/taras/blog/2011/06/30/dehyratreehydra-static-analysis-thoughts/
+            http://tarasglek.github.com/blog/2011/06/30/dehyratreehydra-static-analysis-thoughts/
         </loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2011/07/01/telemetry-status/</loc>
+        <loc>http://tarasglek.github.com/blog/2011/07/01/telemetry-status/</loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2011/08/03/effective-static-analysis/</loc>
+        <loc>http://tarasglek.github.com/blog/2011/08/03/effective-static-analysis/</loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2011/08/09/ride-to-the-coast/</loc>
+        <loc>http://tarasglek.github.com/blog/2011/08/09/ride-to-the-coast/</loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tarasglek.github.com/taras/blog/2011/09/20/firefox-7-cheating-the-operating-system-to-start-faster/
+            http://tarasglek.github.com/blog/2011/09/20/firefox-7-cheating-the-operating-system-to-start-faster/
         </loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
-        <loc>
-            http://tarasglek.github.com/taras/blog/2011/09/20/firefox-7-telemetry-faster-startup/
-        </loc>
+        <loc>http://tarasglek.github.com/blog/2011/09/20/firefox-7-telemetry-faster-startup/</loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2011/10/10/misc/</loc>
+        <loc>http://tarasglek.github.com/blog/2011/10/10/misc/</loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tarasglek.github.com/taras/blog/2011/10/18/alternative-to-the-indignity-of-dealing-with-the-error-console/
+            http://tarasglek.github.com/blog/2011/10/18/alternative-to-the-indignity-of-dealing-with-the-error-console/
         </loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2011/10/20/emacs-cmd-exe/</loc>
+        <loc>http://tarasglek.github.com/blog/2011/10/20/emacs-cmd-exe/</loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2011/12/01/introducing-project-snappy/</loc>
+        <loc>http://tarasglek.github.com/blog/2011/12/01/introducing-project-snappy/</loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2011/12/05/24-hour-reviews/</loc>
+        <loc>http://tarasglek.github.com/blog/2011/12/05/24-hour-reviews/</loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2011/12/13/snappy-summary-for-dec-8/</loc>
+        <loc>http://tarasglek.github.com/blog/2011/12/13/snappy-summary-for-dec-8/</loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2011/12/13/slow-sql-tracking/</loc>
+        <loc>http://tarasglek.github.com/blog/2011/12/13/slow-sql-tracking/</loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2011/12/16/snappy-update-for-dec-15/</loc>
+        <loc>http://tarasglek.github.com/blog/2011/12/16/snappy-update-for-dec-15/</loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2011/12/20/fosdem-anyone/</loc>
+        <loc>http://tarasglek.github.com/blog/2011/12/20/fosdem-anyone/</loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2011/12/22/snappy-dec-22/</loc>
+        <loc>http://tarasglek.github.com/blog/2011/12/22/snappy-dec-22/</loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2011/12/22/growing-reviewers/</loc>
+        <loc>http://tarasglek.github.com/blog/2011/12/22/growing-reviewers/</loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2012/01/05/snappy-jan-5/</loc>
+        <loc>http://tarasglek.github.com/blog/2012/01/05/snappy-jan-5/</loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tarasglek.github.com/taras/blog/2012/01/11/call-for-snappy-help-looking-for-a-lots-of-tabs-sessions-with-lag/
+            http://tarasglek.github.com/blog/2012/01/11/call-for-snappy-help-looking-for-a-lots-of-tabs-sessions-with-lag/
         </loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2012/01/12/snappy-jan12/</loc>
+        <loc>http://tarasglek.github.com/blog/2012/01/12/snappy-jan12/</loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tarasglek.github.com/taras/blog/2012/01/20/snappy-january-19-brought-you-by-ironic-js/
+            http://tarasglek.github.com/blog/2012/01/20/snappy-january-19-brought-you-by-ironic-js/
         </loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2012/01/26/snappy-january-26/</loc>
+        <loc>http://tarasglek.github.com/blog/2012/01/26/snappy-january-26/</loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tarasglek.github.com/taras/blog/2012/01/29/at-hackerspace-be-getting-ready-for-fosdem/
+            http://tarasglek.github.com/blog/2012/01/29/at-hackerspace-be-getting-ready-for-fosdem/
         </loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2012/01/31/fast-dxr/</loc>
+        <loc>http://tarasglek.github.com/blog/2012/01/31/fast-dxr/</loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2012/02/01/at-betagroup-in-brussels/</loc>
+        <loc>http://tarasglek.github.com/blog/2012/02/01/at-betagroup-in-brussels/</loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
-        <loc>
-            http://tarasglek.github.com/taras/blog/2012/02/07/snappy-feb-2nd-fosdem-help-wanted/
-        </loc>
+        <loc>http://tarasglek.github.com/blog/2012/02/07/snappy-feb-2nd-fosdem-help-wanted/</loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2012/02/09/snappy-feb-9-blame-canada/</loc>
+        <loc>http://tarasglek.github.com/blog/2012/02/09/snappy-feb-9-blame-canada/</loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2012/02/16/snappy-feb-16/</loc>
+        <loc>http://tarasglek.github.com/blog/2012/02/16/snappy-feb-16/</loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tarasglek.github.com/taras/blog/2012/02/22/psa-dom-local-storage-considered-harmful/
+            http://tarasglek.github.com/blog/2012/02/22/psa-dom-local-storage-considered-harmful/
         </loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2012/02/27/snappy-feb-23rd/</loc>
+        <loc>http://tarasglek.github.com/blog/2012/02/27/snappy-feb-23rd/</loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tarasglek.github.com/taras/blog/2012/03/01/24hour-code-reviews-still-aiming-for-it/
+            http://tarasglek.github.com/blog/2012/03/01/24hour-code-reviews-still-aiming-for-it/
         </loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2012/03/05/snappy-march-1st/</loc>
+        <loc>http://tarasglek.github.com/blog/2012/03/05/snappy-march-1st/</loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2012/03/07/planet-should-be-technical/</loc>
+        <loc>http://tarasglek.github.com/blog/2012/03/07/planet-should-be-technical/</loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2012/03/09/snappy-march-8/</loc>
+        <loc>http://tarasglek.github.com/blog/2012/03/09/snappy-march-8/</loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
-        <loc>
-            http://tarasglek.github.com/taras/blog/2012/03/14/abouttelemetry-diff-mode-search/
-        </loc>
+        <loc>http://tarasglek.github.com/blog/2012/03/14/abouttelemetry-diff-mode-search/</loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2012/03/16/localstorage-pageload-perf/</loc>
+        <loc>http://tarasglek.github.com/blog/2012/03/16/localstorage-pageload-perf/</loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2012/03/16/snappy-march-15th/</loc>
+        <loc>http://tarasglek.github.com/blog/2012/03/16/snappy-march-15th/</loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
-        <loc>
-            http://tarasglek.github.com/taras/blog/2012/04/05/snappy-apr-5-snappy-goals-for-q2/
-        </loc>
+        <loc>http://tarasglek.github.com/blog/2012/04/05/snappy-apr-5-snappy-goals-for-q2/</loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tarasglek.github.com/taras/blog/2012/04/05/snappy-april-5-change-in-meeting-format/
+            http://tarasglek.github.com/blog/2012/04/05/snappy-april-5-change-in-meeting-format/
         </loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tarasglek.github.com/taras/blog/2012/04/10/argh-at-our-unresponsive-tab-strip-settimeoutfoo-0-can-be-very-harmful/
+            http://tarasglek.github.com/blog/2012/04/10/argh-at-our-unresponsive-tab-strip-settimeoutfoo-0-can-be-very-harmful/
         </loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2012/04/16/snappy-april-12/</loc>
+        <loc>http://tarasglek.github.com/blog/2012/04/16/snappy-april-12/</loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tarasglek.github.com/taras/blog/2012/04/18/web-2-0-a-collection-of-settimeouts/
+            http://tarasglek.github.com/blog/2012/04/18/web-2-0-a-collection-of-settimeouts/
         </loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2012/04/19/snappy-april-19/</loc>
+        <loc>http://tarasglek.github.com/blog/2012/04/19/snappy-april-19/</loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2012/04/26/snappy-april-26/</loc>
+        <loc>http://tarasglek.github.com/blog/2012/04/26/snappy-april-26/</loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tarasglek.github.com/taras/blog/2012/05/01/pushing-the-borders-out-of-firefox-performance/
+            http://tarasglek.github.com/blog/2012/05/01/pushing-the-borders-out-of-firefox-performance/
         </loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tarasglek.github.com/taras/blog/2012/05/03/snappy-may-3rd-faint-hope-of-handling-mousedown-events-without-a-settimeout/
+            http://tarasglek.github.com/blog/2012/05/03/snappy-may-3rd-faint-hope-of-handling-mousedown-events-without-a-settimeout/
         </loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tarasglek.github.com/taras/blog/2012/05/14/snappy-may-10-suspending-activity-in-background-tabs/
+            http://tarasglek.github.com/blog/2012/05/14/snappy-may-10-suspending-activity-in-background-tabs/
         </loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2012/05/21/snappy-workweek/</loc>
+        <loc>http://tarasglek.github.com/blog/2012/05/21/snappy-workweek/</loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tarasglek.github.com/taras/blog/2012/05/21/snappy-may-17-physical-room-edition/
+            http://tarasglek.github.com/blog/2012/05/21/snappy-may-17-physical-room-edition/
         </loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2012/05/22/give-dxr-a-try/</loc>
+        <loc>http://tarasglek.github.com/blog/2012/05/22/give-dxr-a-try/</loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2012/05/29/snappy-may-24-meetingless/</loc>
+        <loc>http://tarasglek.github.com/blog/2012/05/29/snappy-may-24-meetingless/</loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2012/06/04/snappy-may-31st-less-lag/</loc>
+        <loc>http://tarasglek.github.com/blog/2012/06/04/snappy-may-31st-less-lag/</loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2012/06/11/snappy-june-7/</loc>
+        <loc>http://tarasglek.github.com/blog/2012/06/11/snappy-june-7/</loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tarasglek.github.com/taras/blog/2012/06/14/snappy-june-14th-telemetry-investigations/
+            http://tarasglek.github.com/blog/2012/06/14/snappy-june-14th-telemetry-investigations/
         </loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2012/06/18/40-60-of-startups-are-warm/</loc>
+        <loc>http://tarasglek.github.com/blog/2012/06/18/40-60-of-startups-are-warm/</loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
-        <loc>
-            http://tarasglek.github.com/taras/blog/2012/06/25/slow-startup-logging-help-wanted/
-        </loc>
+        <loc>http://tarasglek.github.com/blog/2012/06/25/slow-startup-logging-help-wanted/</loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2012/07/02/snappy-june-21-28/</loc>
+        <loc>http://tarasglek.github.com/blog/2012/07/02/snappy-june-21-28/</loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
-        <loc>
-            http://tarasglek.github.com/taras/blog/2012/07/09/snappy-update-for-week-of-july-5th/
-        </loc>
+        <loc>http://tarasglek.github.com/blog/2012/07/09/snappy-update-for-week-of-july-5th/</loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2012/07/12/snappy-july-12-2012/</loc>
+        <loc>http://tarasglek.github.com/blog/2012/07/12/snappy-july-12-2012/</loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tarasglek.github.com/taras/blog/2012/07/23/snappy-july-19-telemetry-experiments/
+            http://tarasglek.github.com/blog/2012/07/23/snappy-july-19-telemetry-experiments/
         </loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tarasglek.github.com/taras/blog/2012/07/25/telemetry-and-what-it-is-good-for-part-1-nuts-and-bolts/
+            http://tarasglek.github.com/blog/2012/07/25/telemetry-and-what-it-is-good-for-part-1-nuts-and-bolts/
         </loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tarasglek.github.com/taras/blog/2012/07/25/telemetry-and-what-it-is-good-for-part-2-telemetry-achievements/
+            http://tarasglek.github.com/blog/2012/07/25/telemetry-and-what-it-is-good-for-part-2-telemetry-achievements/
         </loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tarasglek.github.com/taras/blog/2012/07/26/snappy-july-26-go-try-the-gecko-profiler/
+            http://tarasglek.github.com/blog/2012/07/26/snappy-july-26-go-try-the-gecko-profiler/
         </loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2012/08/06/snappy-aug-2/</loc>
+        <loc>http://tarasglek.github.com/blog/2012/08/06/snappy-aug-2/</loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2012/08/14/snappy-for-aug-9/</loc>
+        <loc>http://tarasglek.github.com/blog/2012/08/14/snappy-for-aug-9/</loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
-        <loc>
-            http://tarasglek.github.com/taras/blog/2012/08/15/dxr-is-back-at-dxr-mozilla-org/
-        </loc>
+        <loc>http://tarasglek.github.com/blog/2012/08/15/dxr-is-back-at-dxr-mozilla-org/</loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2012/08/16/snappy-36/</loc>
+        <loc>http://tarasglek.github.com/blog/2012/08/16/snappy-36/</loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tarasglek.github.com/taras/blog/2012/08/16/trilite-fast-string-matching-in-sqlite/
+            http://tarasglek.github.com/blog/2012/08/16/trilite-fast-string-matching-in-sqlite/
         </loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2012/08/23/snappy-37/</loc>
+        <loc>http://tarasglek.github.com/blog/2012/08/23/snappy-37/</loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tarasglek.github.com/taras/blog/2012/08/29/dxr-now-does-live-regexp-search-thanks-google-code/
+            http://tarasglek.github.com/blog/2012/08/29/dxr-now-does-live-regexp-search-thanks-google-code/
         </loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2012/09/04/snappy-38/</loc>
+        <loc>http://tarasglek.github.com/blog/2012/09/04/snappy-38/</loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2012/09/17/moacamp-eu-in-warsaw/</loc>
+        <loc>http://tarasglek.github.com/blog/2012/09/17/moacamp-eu-in-warsaw/</loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tarasglek.github.com/taras/blog/2012/09/17/snappy-in-warsaw-pierogy-fueled-hackfest/
+            http://tarasglek.github.com/blog/2012/09/17/snappy-in-warsaw-pierogy-fueled-hackfest/
         </loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2012/10/04/snappy-39/</loc>
+        <loc>http://tarasglek.github.com/blog/2012/10/04/snappy-39/</loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tarasglek.github.com/taras/blog/2012/10/15/snappy-40-faster-tabswitching-startup-analysis/
+            http://tarasglek.github.com/blog/2012/10/15/snappy-40-faster-tabswitching-startup-analysis/
         </loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2012/10/18/snappy-41/</loc>
+        <loc>http://tarasglek.github.com/blog/2012/10/18/snappy-41/</loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2012/10/26/snappy-42/</loc>
+        <loc>http://tarasglek.github.com/blog/2012/10/26/snappy-42/</loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tarasglek.github.com/taras/blog/2012/11/05/snappy-43-big-improvements-faster-startup-smoother-tabstrip/
+            http://tarasglek.github.com/blog/2012/11/05/snappy-43-big-improvements-faster-startup-smoother-tabstrip/
         </loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tarasglek.github.com/taras/blog/2012/11/16/snappy-44-fixing-tab-switching-in-vancouver/
+            http://tarasglek.github.com/blog/2012/11/16/snappy-44-fixing-tab-switching-in-vancouver/
         </loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/2012/11/26/coping-with-flash-hangs/</loc>
+        <loc>http://tarasglek.github.com/blog/2012/11/26/coping-with-flash-hangs/</loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/</loc>
+        <loc>http://tarasglek.github.com/</loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/blog/archives/</loc>
+        <loc>http://tarasglek.github.com/blog/archives/</loc>
         <lastmod>2012-12-16T12:35:14-08:00</lastmod>
     </url>
     <url>
-        <loc>http://tarasglek.github.com/taras/404.html</loc>
+        <loc>http://tarasglek.github.com/404.html</loc>
         <lastmod>2012-12-15T22:20:44-08:00</lastmod>
     </url>
 </urlset>

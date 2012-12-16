@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: treehydra | All About Performance]]></title>
-  <link href="http://tarasglek.github.com/taras/blog/categories/treehydra/atom.xml" rel="self"/>
-  <link href="http://tarasglek.github.com/taras/"/>
-  <updated>2012-12-16T12:35:28-08:00</updated>
-  <id>http://tarasglek.github.com/taras/</id>
+  <link href="http://tarasglek.github.com/blog/categories/treehydra/atom.xml" rel="self"/>
+  <link href="http://tarasglek.github.com/"/>
+  <updated>2012-12-16T13:07:16-08:00</updated>
+  <id>http://tarasglek.github.com/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[GCC Rant + Progress]]></title>
-    <link href="http://tarasglek.github.com/taras/blog/2009/04/30/gcc-rant-progress/"/>
+    <link href="http://tarasglek.github.com/blog/2009/04/30/gcc-rant-progress/"/>
     <updated>2009-04-30T06:51:35-07:00</updated>
-    <id>http://tarasglek.github.com/taras/blog/2009/04/30/gcc-rant-progress</id>
+    <id>http://tarasglek.github.com/blog/2009/04/30/gcc-rant-progress</id>
     <content type="html"><![CDATA[<p>I feel strange working on GCC-specific stuff and then discussing it on planet mozilla as mozilla work. However, without GCC, Dehydra and Treehydra would not be half as awesome (much less feasible even). The power of open source is that it allows us to leverage the entire open source ecosystem to achieve specific goals. When open source projects combine their efforts, not even the biggest software companies can compete as cross-project goals would be incredibly expensive and unpleasant otherwise.</p>
 
 <p>Occasionally, it is very frustrating to see people treat open source software as immutable and independent black boxes. In my personal experience, the browser and the compiler are viewed as finished products and therefore it is OK to bitch and complain about them. That's frustrating because the same users could be channeling that energy in a more positive way by reporting bugs, contributing code/documentation, etc.</p>
@@ -38,9 +38,9 @@
   
   <entry>
     <title type="html"><![CDATA[Status Report: Nearterm plans for Pork, Dehydra]]></title>
-    <link href="http://tarasglek.github.com/taras/blog/2008/06/24/status-report-nearterm-plans-for-pork-dehydra/"/>
+    <link href="http://tarasglek.github.com/blog/2008/06/24/status-report-nearterm-plans-for-pork-dehydra/"/>
     <updated>2008-06-24T06:36:19-07:00</updated>
-    <id>http://tarasglek.github.com/taras/blog/2008/06/24/status-report-nearterm-plans-for-pork-dehydra</id>
+    <id>http://tarasglek.github.com/blog/2008/06/24/status-report-nearterm-plans-for-pork-dehydra</id>
     <content type="html"><![CDATA[<p><a href="http://developer.mozilla.org/en/docs/Pork"><strong>Pork</strong></a></p>
 
 <p>I planned to release Pork 1.0 for a while now. The tools work great, even if all the love is going to the GCC-based toolchain. However, after hearing grumpy comments from a certain coworker about the uglyness of the oink build system it dawned on me that it's rather mean to release such a mess and call it 1.0.</p>
@@ -71,9 +71,9 @@
   
   <entry>
     <title type="html"><![CDATA[GCC Summit]]></title>
-    <link href="http://tarasglek.github.com/taras/blog/2008/06/18/gcc-summit/"/>
+    <link href="http://tarasglek.github.com/blog/2008/06/18/gcc-summit/"/>
     <updated>2008-06-18T23:01:08-07:00</updated>
-    <id>http://tarasglek.github.com/taras/blog/2008/06/18/gcc-summit</id>
+    <id>http://tarasglek.github.com/blog/2008/06/18/gcc-summit</id>
     <content type="html"><![CDATA[<p>Our presentation on <a href="http://developer.mozilla.org/en/docs/Treehydra">Treehydra</a> and <a href="http://developer.mozilla.org/en/docs/Dehydra">Dehydra</a> GCC plugins was received well at the summit.</p>
 
 <p>The big news is that FSF is working on license changes to allow GPL-only GCC plugins. I'm looking forward to having our work be compatible with future GCC without any patching.</p>
@@ -84,9 +84,9 @@
   
   <entry>
     <title type="html"><![CDATA[Dehydra 0.9: It's alive!]]></title>
-    <link href="http://tarasglek.github.com/taras/blog/2008/06/09/dehydra-09-its-alive/"/>
+    <link href="http://tarasglek.github.com/blog/2008/06/09/dehydra-09-its-alive/"/>
     <updated>2008-06-09T04:14:05-07:00</updated>
-    <id>http://tarasglek.github.com/taras/blog/2008/06/09/dehydra-09-its-alive</id>
+    <id>http://tarasglek.github.com/blog/2008/06/09/dehydra-09-its-alive</id>
     <content type="html"><![CDATA[<p>I am finally happy enough with Dehydra API and functionality to release 0.9. <a href="http://developer.mozilla.org/en/docs/Dehydra">Dehydra</a> is basically feature complete, the main reason I'm not calling it 1.0 is in case there are outstanding API bugs.</p>
 
 <p>I believe Dehydra is the first useful open source static analysis tool. I hope to see projects outside of Mozilla benefitting from it too.</p>
@@ -99,9 +99,9 @@
   
   <entry>
     <title type="html"><![CDATA[Treehydra goes Push and Pop]]></title>
-    <link href="http://tarasglek.github.com/taras/blog/2008/05/27/treehydra-goes-push-and-pop/"/>
+    <link href="http://tarasglek.github.com/blog/2008/05/27/treehydra-goes-push-and-pop/"/>
     <updated>2008-05-27T06:48:03-07:00</updated>
-    <id>http://tarasglek.github.com/taras/blog/2008/05/27/treehydra-goes-push-and-pop</id>
+    <id>http://tarasglek.github.com/blog/2008/05/27/treehydra-goes-push-and-pop</id>
     <content type="html"><![CDATA[<p>After writing a ton of <a href="http://developer.mozilla.org/en/docs/Dehydra_Manual">docs</a> and working through other <a href="http://developer.mozilla.org/en/docs/Dehydra">Dehydra</a> <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=423898">0.9 blockers</a>, I decided to cool off by doing some actual analyses. Before I get to that, I'd like to say that the last big task is to setup a buildbot for Dehydra on Linux/OSX. Thanks to yet another awesome contribution from Vlad, that's <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=430321">mostly done</a>.</p>
 
 <p>So I got working on <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=421934">GC-safety static analysis</a>. Originally we tried to define a complete spec before writing a single line of code. That turned to be a bad idea and resulted in a spec full of bugs. <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=432915">This time</a> we are defining the analysis incrementally and as a surprise reward, it already caught <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=435546">a bug</a>.</p>

@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: dehydra | All About Performance]]></title>
-  <link href="http://tarasglek.github.com/taras/blog/categories/dehydra/atom.xml" rel="self"/>
-  <link href="http://tarasglek.github.com/taras/"/>
-  <updated>2012-12-16T12:35:28-08:00</updated>
-  <id>http://tarasglek.github.com/taras/</id>
+  <link href="http://tarasglek.github.com/blog/categories/dehydra/atom.xml" rel="self"/>
+  <link href="http://tarasglek.github.com/"/>
+  <updated>2012-12-16T13:07:16-08:00</updated>
+  <id>http://tarasglek.github.com/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Dehyra/Treehydra Static Analysis Thoughts]]></title>
-    <link href="http://tarasglek.github.com/taras/blog/2011/06/30/dehyratreehydra-static-analysis-thoughts/"/>
+    <link href="http://tarasglek.github.com/blog/2011/06/30/dehyratreehydra-static-analysis-thoughts/"/>
     <updated>2011-06-30T05:07:20-07:00</updated>
-    <id>http://tarasglek.github.com/taras/blog/2011/06/30/dehyratreehydra-static-analysis-thoughts</id>
+    <id>http://tarasglek.github.com/blog/2011/06/30/dehyratreehydra-static-analysis-thoughts</id>
     <content type="html"><![CDATA[<p>I was pleased to see Mozilla static analysis <a href="http://lwn.net/Articles/447916/">mentioned</a> on lwn. Yes indeed, the <a href="https://lists.mozilla.org/listinfo/dev-static-analysis">mailing list</a> has been pretty dead (most of our communication happens on irc.mozilla.org #static). I completely failed to build a community around my static analysis tools. Perhaps more people will try <a href="https://developer.mozilla.org/en/Dehydra">Dehydra</a> now that it's <a href="http://packages.debian.org/experimental/dehydra">getting</a> into Debian. The hydras are still alive, <a href="http://hg.mozilla.org/rewriting-and-analysis/dehydra/">evidence</a> can be seen in the mercurial commit log. Development has slowed because the hydras are now considered to be feature-complete and my primary focus is elsewhere in Mozilla now.</p>
 
 <p>As to why open source static analysis has failed to take off, I have a few theories. I think the main problem is that static analysis requires a compiler/correctness/type-system-nerd/large-scale-development-nerd type personality. That's a pretty rare intersection of hobbies to begin with. One also has to hate the <a href="http://people.mozilla.com/~tglek/lca2010/">stone age</a> that C/C++ ecosystem we are in, but not move on to shiny new Haskell/Ocaml/whatever communities.</p>
@@ -58,9 +58,9 @@
   
   <entry>
     <title type="html"><![CDATA[Galois talk]]></title>
-    <link href="http://tarasglek.github.com/taras/blog/2010/06/09/galois-talk/"/>
+    <link href="http://tarasglek.github.com/blog/2010/06/09/galois-talk/"/>
     <updated>2010-06-09T03:08:44-07:00</updated>
-    <id>http://tarasglek.github.com/taras/blog/2010/06/09/galois-talk</id>
+    <id>http://tarasglek.github.com/blog/2010/06/09/galois-talk</id>
     <content type="html"><![CDATA[<p>I was invited to present a <a href="http://www.galois.com/blog/2010/06/03/tech-talk-large-scale-static-analysis-at-mozilla/">Galois tech talk</a> on Mozilla static analysis. It was really cool to give a talk locally to such an expert audience. I was surprised to discover a vibrant Programming Languages + Analysis community in Portland.</p>
 
 <p>Edward Z. Yang did an <a href="http://blog.ezyang.com/2010/06/static-analysis-mozilla/">excellent write-up</a> on the talk.</p>
@@ -77,9 +77,9 @@
   
   <entry>
     <title type="html"><![CDATA[Some developers manually grope around in the dark]]></title>
-    <link href="http://tarasglek.github.com/taras/blog/2010/01/04/some-developers-manually-grope-around-in-the-dark/"/>
+    <link href="http://tarasglek.github.com/blog/2010/01/04/some-developers-manually-grope-around-in-the-dark/"/>
     <updated>2010-01-04T12:27:03-08:00</updated>
-    <id>http://tarasglek.github.com/taras/blog/2010/01/04/some-developers-manually-grope-around-in-the-dark</id>
+    <id>http://tarasglek.github.com/blog/2010/01/04/some-developers-manually-grope-around-in-the-dark</id>
     <content type="html"><![CDATA[<p>Cool thing about static analysis is that you can ask painful-for-humans questions about your codebase AND have them answered. Here are two that got answered by Ehren:</p>
 
 <p>Where do function bodies continue after return statements (ie obviously dead/broken code)? <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=535646">Bug 535646</a>.</p>
@@ -92,9 +92,9 @@
   
   <entry>
     <title type="html"><![CDATA[Dehydra Testsuite Passes on GCC 4.5]]></title>
-    <link href="http://tarasglek.github.com/taras/blog/2009/11/20/dehydra-testsuite-passes-on-gcc-4-5/"/>
+    <link href="http://tarasglek.github.com/blog/2009/11/20/dehydra-testsuite-passes-on-gcc-4-5/"/>
     <updated>2009-11-20T08:24:04-08:00</updated>
-    <id>http://tarasglek.github.com/taras/blog/2009/11/20/dehydra-testsuite-passes-on-gcc-4-5</id>
+    <id>http://tarasglek.github.com/blog/2009/11/20/dehydra-testsuite-passes-on-gcc-4-5</id>
     <content type="html"><![CDATA[<p>I spent couple of days fixing the remaining test-suite failures on GCC 4.5 trunk for <a href="https://developer.mozilla.org/En/Dehydra">Dehydra</a>. Since the last time I looked into this, GCC went from crashing all over the place to only crashing if I did something bad. It was nice to discover that as a result of switching to 4.5 Dehydra users will get saner .isExplicit behavior and more precise location info.</p>
 
 <p>Treehydra will take more work due to me <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=510190">misunderstanding</a> GTY annotations.</p>
@@ -107,9 +107,9 @@
   
   <entry>
     <title type="html"><![CDATA[FSOSS & Dehydra Update]]></title>
-    <link href="http://tarasglek.github.com/taras/blog/2009/11/06/fsoss-dehydra-update/"/>
+    <link href="http://tarasglek.github.com/blog/2009/11/06/fsoss-dehydra-update/"/>
     <updated>2009-11-06T09:27:53-08:00</updated>
-    <id>http://tarasglek.github.com/taras/blog/2009/11/06/fsoss-dehydra-update</id>
+    <id>http://tarasglek.github.com/blog/2009/11/06/fsoss-dehydra-update</id>
     <content type="html"><![CDATA[<p>Last week I was in Canada to present at <a href="http://fsoss.senecac.on.ca/2009/">FSOSS</a> with <a href="http://vocamus.net/dave/">David Humphrey</a> on awesome Mozilla Tools: Dehydra, DXR, Pork, etc. I think we managed to convey the message regarding what a sad affair that current developer development tools are.</p>
 
 <p><strong>General-Purpose Dehydra Scripts</strong></p>
