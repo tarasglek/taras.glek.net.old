@@ -1,0 +1,270 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>CPP-Aware C++ Rewriting Can Be Fun - All About Performance</title>
+  <meta name="author" content="Taras Glek">
+
+  
+  <meta name="description" content="Recently MCPP started working well enough to process all of Mozilla with the special macro-expansion undoing markup. Below is the most exciting patch &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tarasglek.github.com/taras/blog/2007/07/18/cpp-aware-c-rewriting-can-be-fun/">
+  <link href="/taras/favicon.png" rel="icon">
+  <link href="/taras/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/taras/javascripts/modernizr-2.0.js"></script>
+  <script src="/taras/javascripts/ender.js"></script>
+  <script src="/taras/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/taras/atom.xml" rel="alternate" title="All About Performance" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/taras/">All About Performance</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/taras/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tarasglek.github.com/taras" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/taras/">Blog</a></li>
+  <li><a href="/taras/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">CPP-Aware C++ Rewriting Can Be Fun</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-07-18T07:29:16-07:00" pubdate data-updated="true">Jul 18<span>th</span>, 2007</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Recently MCPP started working well enough to process all of Mozilla with the special macro-expansion undoing markup. Below is the most exciting patch line I have produced so far. A few months ago, I didn&#8217;t think was possible to rewrite macro parameters with elsa.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>
+</span><span class='line'>-    ENCODE_SIMPLE_ARRAY(PRBool, Bool, (PRUint16) values[i]);
+</span><span class='line'>+    ENCODE_SIMPLE_ARRAY(PRBool, Bool, 0 != ((PRUint16) values[i]));
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>To produce this:</p>
+
+<ol>
+<li>Elsa consumed the expanded .ii file</li>
+<li>Boolean checker found the problematic subexpression</li>
+<li>Original source position was calculated from the expansion log</li>
+<li>Then prcheck figured out that only the macro parameter needs to be rewritten.</li>
+<li>Original source was read in and enclosed within 0 != ()
+<strong>Integrating Static Checks - PRBool check </strong></li>
+</ol>
+
+
+<p><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=266048">This bug</a> contains the rest of the rewriting results. Prcheck checks every assignment to a prbool and outputs a patch if the expression may evaluate to anything other than 0/1. A message is produced if a patch can not be generated because the expression is within a macro.</p>
+
+<p>The goal is to have prcheck run on every commit(or every day) and send out an email or another form of a complaint when a new prbool violation is introduced. Since the current prbool misuses aren&#8217;t going to be fixed overnight, there should be a db kept somewhere with the old misuses to prevent the new ones from being introduced and old ones from being annoying. I&#8217;m thinking of associating misuse counts with a filename, so when the number goes up an error gets mailed out. Anyone get a better idea?</p>
+
+<p><strong>Latest Recipe to Running Oink Tools </strong></p>
+
+<ol>
+<li>If you want to rewrite sources either wait for the next mcpp release or use my <a href="http://people.mozilla.org/~tglek/mcpp-post2.6.4.tar.gz">tarball</a>.</li>
+<li>Install gcc 3.4.x. If using mcpp, configure mcpp with &#8211;enable-replace-system so it replaces the gcc preprocessor</li>
+<li><a href="http://tarasglek.github.com/taras/2007/07/13/dehydra-prcheck-squash-in-mercurial/">Checkout</a> and build my oink version.</li>
+<li>Build mozilla with -save-temps gcc option. If using mcpp set environment variables CC=&#8221;gcc -Wp,-K -Wp,-W0 -save-temps &#8221; and CXX=&#8221;g++ -Wp,-K -Wp,-W0 -save-temps &#8221; and do make -f client.mk build as usual. The extra gcc parameters tell it to save intermediate files to pass -K and -W0 to enable macro expansion annotation and silence warnings.</li>
+<li>Run tools individual files</li>
+<li>Produce a global patch with ./pork-barrel 4 /path/to/prcheck /tmp/input.txt where input.txt is a list of absolute filenames of all of the .i and .ii files produced by the build process</li>
+</ol>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Taras Glek</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-07-18T07:29:16-07:00" pubdate data-updated="true">Jul 18<span>th</span>, 2007</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/taras/blog/categories/mozilla/'>mozilla</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://tarasglek.github.com/taras/blog/2007/07/18/cpp-aware-c-rewriting-can-be-fun/" data-via="tarasglek" data-counturl="http://tarasglek.github.com/taras/blog/2007/07/18/cpp-aware-c-rewriting-can-be-fun/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/taras/blog/2007/07/13/pondering-prepost-conditions-to-enforce-software-correctness/" title="Previous Post: Pondering Pre/Post Conditions to Enforce Software Correctness">&laquo; Pondering Pre/Post Conditions to Enforce Software Correctness</a>
+      
+      
+        <a class="basic-alignment right" href="/taras/blog/2007/07/27/superity-complex-static-analysis/" title="Next Post: Superity Complex & Static Analysis">Superity Complex & Static Analysis &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/26/coping-with-flash-hangs/">Coping with Flash hangs</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/16/snappy-44-fixing-tab-switching-in-vancouver/">Snappy #44: Fixing tab switching in Vancouver</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/05/snappy-43-big-improvements-faster-startup-smoother-tabstrip/">Snappy #43: Big improvements: faster startup? Smoother tabstrip!</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/26/snappy-42/">Snappy #42</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/18/snappy-41/">Snappy #41</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("tarasglek", 4, false);
+    });
+  </script>
+  <script src="/taras/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/tarasglek" class="twitter-follow-button" data-show-count="false">Follow @tarasglek</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Taras Glek -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

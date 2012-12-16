@@ -1,0 +1,276 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Linux: Why Loading Binaries From Disk Sucks - All About Performance</title>
+  <meta name="author" content="Taras Glek">
+
+  
+  <meta name="description" content="Note: I am doing my measurements and experiments on Fedora 12, once I feel that I understand and can solve the problems on Linux, other operating &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tarasglek.github.com/taras/blog/2010/03/24/linux-why-loading-binaries-from-disk-sucks/">
+  <link href="/taras/favicon.png" rel="icon">
+  <link href="/taras/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/taras/javascripts/modernizr-2.0.js"></script>
+  <script src="/taras/javascripts/ender.js"></script>
+  <script src="/taras/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/taras/atom.xml" rel="alternate" title="All About Performance" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/taras/">All About Performance</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/taras/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tarasglek.github.com/taras" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/taras/">Blog</a></li>
+  <li><a href="/taras/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Linux: Why Loading Binaries From Disk Sucks</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-03-24T08:47:28-07:00" pubdate data-updated="true">Mar 24<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><em>Note: I am doing my measurements and experiments on Fedora 12, once I feel that I understand and can solve the problems on Linux, other operating systems will follow. The aim of this post is to document what I have learned about the mysterious process of loading programs from the filesystem perspective.</em></p>
+
+<p>A binary is broken up into segments. There are about half dozen different segments in an executable, but only two that matter here:</p>
+
+<ol>
+<li>A segment that mostly contains function-bodies and some const data. It&#8217;s mapped in read+execute mode</li>
+<li>A segment that contains variable initializers, GOT, PLT, lists of constructors/destructors, etc
+The compile-time linker composes segments out of sections that contain variable data, function bodies, etc. The run-time linker maps the segments into memory via <a href="http://en.wikipedia.org/wiki/Mmap">mmap</a>. It resolves references to data and code in dynamic libraries (eg relocation) via COW. IO happens when the program (on behalf of the run-time linker) is trying to access memory that hasn&#8217;t been read from disk yet. These interruptions are called page faults. They cause the kernel to interrupt the program to read in some multiple of pages (4096byte chunks) from disk. On my system, page faults trigger ﻿﻿131072byte (32 pages) reads.</li>
+</ol>
+
+
+<p>For a detailed explanation of how linkers work check out the guides written by experts. Out of the scant <a href="http://lambda-the-ultimate.org/node/3474">list</a> of literature on the subject, my &#8220;favourite&#8221; is Ulrich Drepper&#8217;s &#8220;How to Write Shared Libraries&#8221;. It actually explains things in terms of file offsets, not just virtual addresses.</p>
+
+<p>A common misconception is that mmap()-caused IO is free (because you don&#8217;t issue any explicit read() statements). IO via page faults is just another &#8220;API&#8221; for file-access, there is no reason for it to be free. Another misconception is that one has no control over IO-patterns triggered by mmap(). On Linux-like OSes one can use madvise(). (Windows is more limited, afaik one can only set io-pattern-flags on the filehandles).</p>
+
+<p><strong>Prelinking Fail </strong></p>
+
+<p>Having the run-time linker fix up the binary causes a huge amount of IO even before any application code gets executed. These faults are visible in the second graph in my <a href="http://tarasglek.github.com/taras/2010/03/23/when-in-trouble-draw-a-picture/">previous post</a>. The linker&#8217;s faults (pun intended) are the small green rectangles above the big ones. The graph clearly shows the huge relative cost of inefficient run-time linker memory prodding.</p>
+
+<p>Supposedly, this problem is largely solved by <a href="http://en.wikipedia.org/wiki/Prelink">prelinking</a>. I can&#8217;t confirm that as prelink does not work on Firefox on the systems that I can measure IO with SystemTap. This non-determinism is frustrating; we should figure out a way to warn to the user that the OS infrastructure failed them. ****</p>
+
+<p><strong>Post-linker Fail</strong></p>
+
+<p>Above IO patterns can be blamed on careless run-time linker behavior. IO after that can be attributed to lack of organization in the output of the compiler and the compile-time linker. Turns out that the layout of the .text section (where all of the function bodies lie) and to a smaller degree .data[, .bss, etc] sections(ie variable initializers) is completely unhelpful. For a good laugh look at how the official nightly libxul.so is read mostly through backwards io (<a href="http://people.mozilla.com/~tglek/startup/systemtap_graphs/visualize.html?#stock.io.html">graph link</a>).</p>
+
+<p><em><aside>The libxul.so graphs in the previous post did not exhibit this kind of insanity. I did my best to order functions based on chronological order of access (courtesy of my </em><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=549749"><em>valgrind hack</em></a><em>). Unfortunately, the chronological log is not deterministic. Someone suggested that statistical fudging via </em><a href="http://en.wikipedia.org/wiki/Markov_chain"><em>markov chains</em></a><em> will help. From the io patterns in the graph I&#8217;m guessing that io patterns detected by valgrind and those that actually happen diverge due to threading differences. Linux users that are interested in fast startup should pray to the GCC Santas to reorder binaries as part of Profile-Guided-Optimization.</aside></em> ****</p>
+
+<p><strong>Are Large Programs Screwed Out of Fast Startup?</strong></p>
+
+<p>Yes, but it doesn&#8217;t have to be this way. Turns out this utter disaster is caused by naive use of mmap() in the dynamic-linker. The second graph (previous post) shows, that even a late madvise call (delightfully nasty <a href="https://bugzilla.mozilla.org/attachment.cgi?id=434721&amp;action=edit">patch</a>) can significantly improve the situation. Specifying madvise(MADV_WILLNEED) causes individual faults to read in 2097152bytes (512 pages,  16x larger reads than default),  3x(10x if one counts only ones after madvise()) reduction in the number of total faults, saves about 1 second of startup.</p>
+
+<p>The basic trick is outlined as &#8220;approach c&#8221; in this <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=554421">bug</a>. My current thinking is to:</p>
+
+<ol>
+<li>use Jim Blandy&#8217;s executable-parsing library from breakpad(which is already in our build) to parse our binaries</li>
+<li>calculate what the dynamic linker will mmap() at runtime.</li>
+<li>have some firefox.sh-like native frontend mmap()/madvise() it with appropriate flags
+In the longer term some fixes for madvise() should land in both runtime and compile-time linkers.</li>
+</ol>
+
+
+<p><strong>Conclusion</strong></p>
+
+<p>It took me a long time to produce the above story from my runtime linker observations. As recently as December I had no idea what a runtime linker was or what linker segments, sections, etc were. I&#8217;d like to thank Valgrind authors, kind folks on #gcc and numerous individuals who helped me connect the pieces. The above is written to the best of my still-incomplete understanding; I will appreciate any corrections.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Taras Glek</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-03-24T08:47:28-07:00" pubdate data-updated="true">Mar 24<span>th</span>, 2010</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/taras/blog/categories/mozilla/'>mozilla</a>, <a class='category' href='/taras/blog/categories/startup/'>startup</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://tarasglek.github.com/taras/blog/2010/03/24/linux-why-loading-binaries-from-disk-sucks/" data-via="tarasglek" data-counturl="http://tarasglek.github.com/taras/blog/2010/03/24/linux-why-loading-binaries-from-disk-sucks/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/taras/blog/2010/03/23/when-in-trouble-draw-a-picture/" title="Previous Post: When in Trouble, Draw a Picture">&laquo; When in Trouble, Draw a Picture</a>
+      
+      
+        <a class="basic-alignment right" href="/taras/blog/2010/03/25/madvise-prelink-update/" title="Next Post: Madvise, Prelink Update">Madvise, Prelink Update &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/26/coping-with-flash-hangs/">Coping with Flash hangs</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/16/snappy-44-fixing-tab-switching-in-vancouver/">Snappy #44: Fixing tab switching in Vancouver</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/05/snappy-43-big-improvements-faster-startup-smoother-tabstrip/">Snappy #43: Big improvements: faster startup? Smoother tabstrip!</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/26/snappy-42/">Snappy #42</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/18/snappy-41/">Snappy #41</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("tarasglek", 4, false);
+    });
+  </script>
+  <script src="/taras/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/tarasglek" class="twitter-follow-button" data-show-count="false">Follow @tarasglek</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Taras Glek -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

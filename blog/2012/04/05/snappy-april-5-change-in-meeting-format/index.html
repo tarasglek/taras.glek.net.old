@@ -1,0 +1,417 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Snappy, April 5: Change in meeting format - All About Performance</title>
+  <meta name="author" content="Taras Glek">
+
+  
+  <meta name="description" content="Lawrence, thanks for posting snappy updates while I was on leave. Snappy meetings have gotten a bit dull lately. There hasn&#8217;t been much arguing &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tarasglek.github.com/taras/blog/2012/04/05/snappy-april-5-change-in-meeting-format/">
+  <link href="/taras/favicon.png" rel="icon">
+  <link href="/taras/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/taras/javascripts/modernizr-2.0.js"></script>
+  <script src="/taras/javascripts/ender.js"></script>
+  <script src="/taras/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/taras/atom.xml" rel="alternate" title="All About Performance" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/taras/">All About Performance</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/taras/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tarasglek.github.com/taras" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/taras/">Blog</a></li>
+  <li><a href="/taras/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Snappy, April 5: Change in Meeting Format</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-04-05T06:52:12-07:00" pubdate data-updated="true">Apr 5<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Lawrence, thanks for posting <a href="http://lawrencemandel.com/tag/snappy/">snappy updates</a> while I was on leave.</p>
+
+<p>Snappy meetings have gotten a bit dull lately. There hasn&#8217;t been much arguing about what needs fixing, or much discussion, everybody gave status updates and was in agreement. Going forward we will do less status updating, except for major developments to save some energy for discussion.</p>
+
+<p>Discussion centered around personas&#8230;err themes <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=650968">murdering </a>firefox performance and goals for q2. Ehsan will post details how to reimplement themes. I made a separate <a href="https://blog.mozilla.org/tglek/2012/04/05/snappy-apr-5-snappy-goals-for-q2/">post </a>about goals.</p>
+
+<p>Vlad raised a question on whether we should proceed with <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=722243">cancellable </a>SQL queries given SQLite limitations. SQLite can only cancel all outstanding queries, which requires us to track carefully what requests are outstanding and/or do some SQLite feature development. Consensus was that we should proceed to avoid embarrassing situations like reading the places database <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=684513">backwards </a>during shutdown.</p>
+
+<p>Lawrence also revamped the <a href="https://wiki.mozilla.org/Performance/Snappy/2012-04-05">meeting notes</a> to be more readable.  As an experiment I&#8217;m going to paste them in here. Let me know if you prefer my cherry-picking summaries from before.</p>
+
+<h1>Snappy Apr. 5 Minutes</h1>
+
+<ul>
+<li>Sample Q2 goals: <a href="https://wiki.mozilla.org/Performance/Snappy#Snappy_TODO">https://wiki.mozilla.org/Performance/Snappy#Snappy_TODO</a></li>
+<li>Chart showing Snappy bugs resolved in the last week <a href="https://wiki.mozilla.org/Performance/Snappy/Dashboard#Resolved_in_the_last_week">https://wiki.mozilla.org/Performance/Snappy/Dashboard#Resolved_in_the_last_week</a>.</li>
+<li>did anyone attend the Intel sessions?
+
+<ul>
+<li>might be useful information at the next profiling session</li>
+</ul>
+</li>
+</ul>
+
+
+<h2>Actions</h2>
+
+<p>No actions.</p>
+
+<h2>Incoming</h2>
+
+<ul>
+<li>hardware acceleration: i disabled hwa on all macs in my family, and Firefox has been noticeably snappier across multiple types of macs. related bugs: bug 600763, bug 721273, bug 721892. should have someone from perf team or gfx dig in and at least confirm.
+
+<ul>
+<li>Taras asked to put on gfx q2 goals</li>
+</ul>
+</li>
+</ul>
+
+
+<h2>Projects</h2>
+
+<h3>Persona slowness(ehsan?)</h3>
+
+<p>Results from the past week</p>
+
+<ul>
+<li>issues discovered with animated personas and those that heavily use svg and css</li>
+<li>Ehsan to summarize the issue in a blog/wiki</li>
+<li>look at moving image decoding off of the main thread</li>
+</ul>
+
+
+<h3>Mainthread+Slow SQL (gavin/taras/vlad)</h3>
+
+<p>Results from the past week</p>
+
+<ul>
+<li>Worked on cancellable sql (bug 722243), have to figure out if benefit from cancellable queries justifies additional locking</li>
+</ul>
+
+
+<p>Todo this week</p>
+
+<ul>
+<li>Ask SQLite guys about fine-grained cancels</li>
+</ul>
+
+
+<h3>Better DOM event/task scheduling - jst (telemetry)</h3>
+
+<p>Results from the past week</p>
+
+<ul>
+<li>starting to work on slowing down parser in background tabs</li>
+</ul>
+
+
+<h3>Super-slow-startup investigations - vlad, taras</h3>
+
+<p>Results from the past week</p>
+
+<ul>
+<li>Received batch of slow startup data from March</li>
+</ul>
+
+
+<h3>Startup optimizations - bbondy</h3>
+
+<p>Results from the past week</p>
+
+<ul>
+<li>bbondy: Bug 692255 - WIll have implemented super review comments for prefetch</li>
+</ul>
+
+
+<h3>Front-end - Dietrich/bbondy</h3>
+
+<p>Results from the past week</p>
+
+<ul>
+<li>Dashboard: <a href="https://wiki.mozilla.org/SnappyFrontEndDashboard">https://wiki.mozilla.org/SnappyFrontEndDashboard</a></li>
+<li>QA chrome leak testing - should most affect frontend <a href="https://wiki.mozilla.org/QA/Snappy/Chrome_Leak_Testing">https://wiki.mozilla.org/QA/Snappy/Chrome_Leak_Testing</a></li>
+<li>IE Migrator changes started landing, Safari coming soon after.</li>
+<li>Tim Taubert put up AreWeSmallYet, tracking changes in build size: <a href="http://arewesmallyet.com/">http://arewesmallyet.com/</a></li>
+</ul>
+
+
+<p>Todo this week</p>
+
+<ul>
+<li>telemetry for home tab vs session restored</li>
+<li>telemetry for # of tabs restored</li>
+<li>taras: investigate if startup cache/omnijar is still of benefit</li>
+</ul>
+
+
+<h3>Profiler - jrmuizel/BenWa/Ehsan (and more)</h3>
+
+<p>Todo this week</p>
+
+<ul>
+<li>There seems to be an issue with symbolication with latest SPS extension version</li>
+</ul>
+
+
+<h3>Nondestructive chromehang - vlad</h3>
+
+<p>Results from the past week</p>
+
+<ul>
+<li>Co-ordinate with Softronics QA people &amp; Moz privacy review</li>
+<li>bug 742008: Nightly profiling updates consistently failing</li>
+</ul>
+
+
+<p>Todo this week</p>
+
+<ul>
+<li>Integrate about-telemetry into Firefox as a bundled addon</li>
+<li>Add a pass through mode so local symbolication server can pass symbolication requests to remote server (e.g. local Firefox symbols + remote Windows system symbols)</li>
+</ul>
+
+
+<h3>Peptest - mcote</h3>
+
+<p>Results from the past week</p>
+
+<ul>
+<li>revision numbers, with links, now in peptest graphs as of March 30</li>
+<li>results keep coming in!</li>
+</ul>
+
+
+<h3>GC pause reduction - billm</h3>
+
+<p>Results from the past week</p>
+
+<ul>
+<li>bug 641025: incremental GC - disabled due to leaks</li>
+<li>investigating leaks due to incremental GC</li>
+<li>landed bug 716142 (allow multi-compartmental GCs), which enables:</li>
+<li>worked on bug 739899, to keep compartment creation from stopping incremental GC</li>
+<li>Multi compartment GCs should also enable scheduling smaller chunks of GC and CC.</li>
+</ul>
+
+
+<h3>CC pause reduction - smaug, mccr8 (meta bug 698919)</h3>
+
+<p>Results from the past week</p>
+
+<ul>
+<li>smaug worked on trying to reduce the impact of leaked documents on the CC</li>
+<li>mccr8 worked on bug 653191 (collapse SCCs of JS in CC graph)</li>
+<li>remove more stuff from the CC graph (bug 740185)</li>
+<li>QA is working on plan to test for leaked documents</li>
+</ul>
+
+
+<h4>bug710935 - measure lag in handling user input (needs owner)</h4>
+
+<ul>
+<li>bbondy: I&#8217;ll probably be starting on this next week, but if you have someone else please feel more than free to take :)</li>
+</ul>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Taras Glek</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-04-05T06:52:12-07:00" pubdate data-updated="true">Apr 5<span>th</span>, 2012</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/taras/blog/categories/mozilla/'>mozilla</a>, <a class='category' href='/taras/blog/categories/snappy/'>snappy</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://tarasglek.github.com/taras/blog/2012/04/05/snappy-april-5-change-in-meeting-format/" data-via="tarasglek" data-counturl="http://tarasglek.github.com/taras/blog/2012/04/05/snappy-april-5-change-in-meeting-format/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/taras/blog/2012/04/05/snappy-apr-5-snappy-goals-for-q2/" title="Previous Post: Snappy, Apr 5: Snappy Goals for Q2">&laquo; Snappy, Apr 5: Snappy Goals for Q2</a>
+      
+      
+        <a class="basic-alignment right" href="/taras/blog/2012/04/10/argh-at-our-unresponsive-tab-strip-settimeoutfoo-0-can-be-very-harmful/" title="Next Post: ARGH at our unresponsive tab strip: setTimeout(foo, 0) can be very harmful">ARGH at our unresponsive tab strip: setTimeout(foo, 0) can be very harmful &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/26/coping-with-flash-hangs/">Coping with Flash hangs</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/16/snappy-44-fixing-tab-switching-in-vancouver/">Snappy #44: Fixing tab switching in Vancouver</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/05/snappy-43-big-improvements-faster-startup-smoother-tabstrip/">Snappy #43: Big improvements: faster startup? Smoother tabstrip!</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/26/snappy-42/">Snappy #42</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/18/snappy-41/">Snappy #41</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("tarasglek", 4, false);
+    });
+  </script>
+  <script src="/taras/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/tarasglek" class="twitter-follow-button" data-show-count="false">Follow @tarasglek</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Taras Glek -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

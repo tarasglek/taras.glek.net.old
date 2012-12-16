@@ -1,0 +1,277 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Status Report: Recent Work - All About Performance</title>
+  <meta name="author" content="Taras Glek">
+
+  
+  <meta name="description" content="New Tool: Prcheck - PRBool&#8217;s best friend Mozilla has a number boolean types and most of them are a form of an int. People expect them to behave &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tarasglek.github.com/taras/blog/2007/06/26/status-report-recent-work/">
+  <link href="/taras/favicon.png" rel="icon">
+  <link href="/taras/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/taras/javascripts/modernizr-2.0.js"></script>
+  <script src="/taras/javascripts/ender.js"></script>
+  <script src="/taras/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/taras/atom.xml" rel="alternate" title="All About Performance" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/taras/">All About Performance</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/taras/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tarasglek.github.com/taras" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/taras/">Blog</a></li>
+  <li><a href="/taras/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Status Report: Recent Work</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-06-26T04:08:52-07:00" pubdate data-updated="true">Jun 26<span>th</span>, 2007</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><strong>New Tool: Prcheck - PRBool&#8217;s best friend </strong></p>
+
+<p>Mozilla has a number boolean types and most of them are a form of an int. People expect them to behave like a bool, but since they can be assigned more than 1 value for true, this assumption can lead to bugs. Prcheck will mandate that prbools can only be assigned 1 or 0. Typically static checkers output errors, but prcheck outputs errors &amp; fixes for them in diff format so they can be fixed automatically. See <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=266048">this bug</a> for more info. I think the tool is almost complete. Hopefully, once the MCPP issues described below are addressed, I&#8217;ll have one giant patch to eliminate this problem.</p>
+
+<p><strong>MCPP Teething Troubles</strong></p>
+
+<p>Even in the open-source world there are some problems with vendor monoculture. For example we a single vendor providing the C++ compiler and one C preprocessor that is widely used. Even though MCPP is a portable preprocessor that can plug into multiple compilers, it still chokes on some GCCisms. Things are slowly changing and new open source compilers are on the horizon: I can&#8217;t wait.</p>
+
+<p>Additionally, since Mozilla is one of the largest projects to be preprocessed with MCPP, we found some scalability bugs in MCPP. The MCPP maintainer addressed those.</p>
+
+<p><strong>Elsa Backend Source Location Work - Works Well?</strong></p>
+
+<p>I am amazed, but hack &amp; slash approach to adding end-of-ast-node info to elkhound still seems to work correctly! It mostly required consulting wikipedia on LR &amp; GLR parsing algorithms to understand how to modify the data structures used in elkhound. I love the combination of Wikipedia and pretty &amp; easy to modify source code.</p>
+
+<p>The preprocessor undo-log appears to function exactly as intended too. That combined with the end-of-ast-node info means that I finally have the ability to easily cut&#8217;n&#8217;paste code to move it around programmatically. It basically makes the C/C++ pretty printer in oink obsolete for my purposes. This is cool because now I can output prettier source code AND rely on less oink C++ code to do so (ie no need to call the pretty printer[s]), so more refactoring tools could be written in higher level languages such as OCaml or JavaScript in the future.</p>
+
+<p><strong>Publishing My Oink Mods</strong></p>
+
+<p>I have been sending people tarballs on request, due to not being able to integrate my changes into the upstream svn repository. I tried a few svn2hg tools, but they didn&#8217;t work very well. <a href="http://cheeseshop.python.org/pypi/hgsvn/">hgsvn</a> is good enough to work for OpenJDK, so it might work for me. I&#8217;ll try to publish an hg repository of my work within the next week or two.</p>
+
+<p>I&#8217;m sorry for not doing this earlier, but it&#8217;s extremely time consuming to switch gears from coding oink stuff to trying to package it, especially due to all of the politics involved. Hopefully once the repository is easier to work with I&#8217;ll have more people sharing the oink worldload with me. Now that dust settled and the major missing pieces are either implemented or decided upon, a lot of exciting possibilities opened up.</p>
+
+<p><strong>libgcc</strong></p>
+
+<p>Another day, another piece of preprocessor trivia. Turned out there was an alternative to MCPP that I could have used: gcc&#8217;s libcpp. It is common knowledge that gcc uses an integrated preprocessor. It is not so well known that the preprocessor is factored out into what appears to be a mostly standalone library inside of gcc called libgcc. Google barely knows about it and there are no docs or other webpages pointing to it, so i missed it in my search.</p>
+
+<p>This could be a useful project, take libcpp turn it back into a standalone preprocessor and add the cpp undo log comments to it. The only downside of libgcc is that it is GPL which would normally be a pain for BSD-licensed projects, but by turning it back into a standalone tool there is no linking to to worry about.</p>
+
+<p>So if anyone finds implementing the macro-undo log with libgcc interesting, please feel free to do so :)</p>
+
+<p><strong>Random Rant on Parallels vs VMWare Fusion vs BootCamp vs 64bit Linux</strong></p>
+
+<p>I installed 64bit ubuntu on my MBP. Compilers &amp; other tools are ridiculously fast when running linux natively on core2duo. Due to some performance bugs that I can&#8217;t track down (shark isn&#8217;t working for and recently OSX&#8217;s gdb stopped working too) oink runs much faster on the linux side of the MBP. If any mac people want to profile oink on OSX, that&#8217;d be awesome. However OSX has some nice things (such as a display driver that works well and good battery life). I wish ati wasn&#8217;t such a pain with releasing specs for their cards so linux could support them properly. I hope the recent reverse engineered driver work stabilizes soon. So I figured it would be nice to access &amp; work on the linux partition from within OSX.</p>
+
+<p>I was pretty excited when I heard that Parallels 3 supports BootCamp. Problem was that nothing could see the bootcamp linux install. Turned the problem was caused because I used fdisk + refit to do the partitioning and turned on the bootable flag. To fix this I turned off the bootable flag on the linux partition using parted(which can sync the gpt partition table!) .</p>
+
+<p>Then I realized that Parallels has very slow disk access AND doesn&#8217;t do 64bit and doesn&#8217;t appear to support SMP.</p>
+
+<p>VMWare Fusion on the other hand supports bootcamp &amp; 64bit &amp; smp and appears to have much faster IO. However it lacks UI for accessing a linux bootcamp install or documentation. So here is the secret recipe to save time for others in my situation:</p>
+
+<p>1) Create a vmware disk for the bootcamp partition using vmware-rawdiskCreator in /Library/Application Support/VMware Fusion.</p>
+
+<p>2) Create a new machine, point at the file created in 1.</p>
+
+<p>Fusion&#8217;s performance is remarkable. Oink runs almost as fast as it does natively. Plus VMWare support the VMI interface in Linux which combined with a tickless kernel should make the virtualizing overhead minimal. Too bad Linux doesn&#8217;t have these features yet for amd64.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Taras Glek</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-06-26T04:08:52-07:00" pubdate data-updated="true">Jun 26<span>th</span>, 2007</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/taras/blog/categories/mozilla/'>mozilla</a>, <a class='category' href='/taras/blog/categories/prbool/'>prbool</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://tarasglek.github.com/taras/blog/2007/06/26/status-report-recent-work/" data-via="tarasglek" data-counturl="http://tarasglek.github.com/taras/blog/2007/06/26/status-report-recent-work/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/taras/blog/2007/06/19/it-works/" title="Previous Post: It works!">&laquo; It works!</a>
+      
+      
+        <a class="basic-alignment right" href="/taras/blog/2007/07/13/dehydra-prcheck-squash-in-mercurial/" title="Next Post: Dehydra, prcheck, squash - in mercurial">Dehydra, prcheck, squash - in mercurial &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/26/coping-with-flash-hangs/">Coping with Flash hangs</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/16/snappy-44-fixing-tab-switching-in-vancouver/">Snappy #44: Fixing tab switching in Vancouver</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/05/snappy-43-big-improvements-faster-startup-smoother-tabstrip/">Snappy #43: Big improvements: faster startup? Smoother tabstrip!</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/26/snappy-42/">Snappy #42</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/18/snappy-41/">Snappy #41</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("tarasglek", 4, false);
+    });
+  </script>
+  <script src="/taras/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/tarasglek" class="twitter-follow-button" data-show-count="false">Follow @tarasglek</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Taras Glek -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

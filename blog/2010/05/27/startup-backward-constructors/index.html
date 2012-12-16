@@ -1,0 +1,278 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Startup: Backward Constructors - All About Performance</title>
+  <meta name="author" content="Taras Glek">
+
+  
+  <meta name="description" content="This post is a result of debugging bug 561842. Turns out one needs to go far beyond lumping libraries together to reap startup benefits. I made a pdf &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tarasglek.github.com/taras/blog/2010/05/27/startup-backward-constructors/">
+  <link href="/taras/favicon.png" rel="icon">
+  <link href="/taras/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/taras/javascripts/modernizr-2.0.js"></script>
+  <script src="/taras/javascripts/ender.js"></script>
+  <script src="/taras/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/taras/atom.xml" rel="alternate" title="All About Performance" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/taras/">All About Performance</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/taras/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tarasglek.github.com/taras" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/taras/">Blog</a></li>
+  <li><a href="/taras/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Startup: Backward Constructors</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-05-27T09:35:20-07:00" pubdate data-updated="true">May 27<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><em>This post is a result of debugging <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=561842">bug 561842</a>. Turns out one needs to go far beyond lumping libraries together to reap startup benefits.</em></p>
+
+<p>I made a <a href="http://hg.mozilla.org/users/tglek_mozilla.com/startup/raw-file/ca994a12e2a8/xulanatomy.pdf">pdf</a> to illustrate the cost centers of loading libxul.so (the essence of Firefox).</p>
+
+<p>With <a href="http://tarasglek.github.com/taras/2010/04/07/icegrind-valgrind-plugin-for-optimizing-cold-startup/">Icegrind</a> I demonstrated that better binary layout can significantly improve application startup. However I still didn&#8217;t have a breakdown of reasons of why loading binaries is so damn inefficient. That&#8217;s what the above pdf is about.</p>
+
+<p>Loading libxul consists of 4 major phases:</p>
+
+<ol>
+<li>Runtime linker setup: mapping segments in, zeroing .bss, loading dependent libraries, etc</li>
+<li>Runtime linker relocations.</li>
+<li>Library intializers.</li>
+<li>main() and the rest of application code runs
+I blogged about 1, 2, 4, this post is about #3.</li>
+</ol>
+
+
+<p><strong>Library Initializers?</strong></p>
+
+<p><a href="http://people.gnome.org/~michael/">Michael Meeks</a> pointed me at the funny backwards IO pattern in his IO logs. I even <a href="http://tarasglek.github.com/taras/2010/03/24/linux-why-loading-binaries-from-disk-sucks/">made fun</a> of how by default libxul.so is read mostly via backwards IO. Once I <a href="http://tarasglek.github.com/taras/2010/05/24/teethig-troubles-assigning-blame-for-pagefaults/">assigned</a> userspace symbols to my pagefault log, it became clear that the backwards IO pattern was entirely due to library initializers. C++ compiler generates code that runs on library initialization to initialize globals and run relevant C++ constructors. In C one can assign a &#8220;constructor&#8221; GNU attribute to a function to participate in this mayhem.</p>
+
+<p><strong>Running Backwards?</strong></p>
+
+<p>Ian Lance Taylor clued me in on why these things run backwards.When one links the program, the object files are laid out sequentially. Static libraries are specified after the code that depends on them. Once an object is linked, the easiest way to make sure that libraries are initialized before their users is to invoke initializers backwards. The list of initializers is stored in the .ctors section and they loaded by libgcc.</p>
+
+<p>In Mozilla (and likely other C++ codebases) these global initializers are more or less evenly scattered throughout the codebase. By the time main() is run, most of the program has been paged in an unfortunately inefficient manner.</p>
+
+<p><strong>Run Faster Please?</strong></p>
+
+<p>The most interesting part about all this that the compiling toolchain can make a rather precise guess at how a large part of the initial program execution is going to go. To test this theory I wrote my best Mozilla <a href="https://bugzilla.mozilla.org/attachment.cgi?id=447253&amp;action=edit">patch</a> ever.</p>
+
+<p>One can place a function near the beginning of the library file and another one at the end (with a &#8220;constructor&#8221; attribute). The function at the end runs first and it can figure out the approximate range of memory that will need to be paged in and madvise() it. This results in a 5x reduction in libxul pagefaults. Unfortunately since constructors execute backwards and readahead forwards, the constructor execution stalls to wait for readahead, so the speedup is rather hard to detect.</p>
+
+<p><strong>Run Forward Faster!</strong></p>
+
+<p>Depressed about my hack failing to make a dent in startup time I patched gcc to run initializers in a forward order (and reversed the function-placement logic in above patch). Now readahead happened in the same direction as library initialization and my Firefox started 30% faster! I wrapped this up into a standalone <a href="http://people.mozilla.com/~tglek/startup/ctors.diff">gcc patch</a> (speed up any bloated C++ startup with a simple change to the compiler!). Note this hack reverses the library initialization order discussed above, this happens to not be a problem for Mozilla.</p>
+
+<p><strong>Conclusion: Order Matters! </strong></p>
+
+<p>The linker can reverse the per-library initializers such that initializers run forward, but cross-library dependencies are honoured. That in itself isn&#8217;t enough to boost startup without cleverer readahead on the kernel side (or application-side hacks).</p>
+
+<p>It&#8217;s weird to have initializers page in most of the binary. An interesting optimization would to have the compiler transitively mark functions reached by library initialization and place those in a .text.initializers section. Then one could have the linker group the initializers together.</p>
+
+<p><strong>Plans</strong></p>
+
+<p>I haven&#8217;t made up my mind on how to proceed. This madvise() hack + a simple linker patch could be deployed more easily than icegrind. This hack also appears to be as performant as a static firefox build + icegrind (due to inadequate kernel readahead without madvise()). Icegrid + libxul.so isn&#8217;t quite as efficient. I have a feeling that we&#8217;ll end up with a combination of icegrind + some form the initializer madvise() hack.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Taras Glek</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-05-27T09:35:20-07:00" pubdate data-updated="true">May 27<span>th</span>, 2010</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/taras/blog/categories/mozilla/'>mozilla</a>, <a class='category' href='/taras/blog/categories/startup/'>startup</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://tarasglek.github.com/taras/blog/2010/05/27/startup-backward-constructors/" data-via="tarasglek" data-counturl="http://tarasglek.github.com/taras/blog/2010/05/27/startup-backward-constructors/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/taras/blog/2010/05/24/teethig-troubles-assigning-blame-for-pagefaults/" title="Previous Post: Teething Troubles: Assigning blame for pagefaults">&laquo; Teething Troubles: Assigning blame for pagefaults</a>
+      
+      
+        <a class="basic-alignment right" href="/taras/blog/2010/06/09/galois-talk/" title="Next Post: Galois talk">Galois talk &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/26/coping-with-flash-hangs/">Coping with Flash hangs</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/16/snappy-44-fixing-tab-switching-in-vancouver/">Snappy #44: Fixing tab switching in Vancouver</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/05/snappy-43-big-improvements-faster-startup-smoother-tabstrip/">Snappy #43: Big improvements: faster startup? Smoother tabstrip!</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/26/snappy-42/">Snappy #42</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/18/snappy-41/">Snappy #41</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("tarasglek", 4, false);
+    });
+  </script>
+  <script src="/taras/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/tarasglek" class="twitter-follow-button" data-show-count="false">Follow @tarasglek</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Taras Glek -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

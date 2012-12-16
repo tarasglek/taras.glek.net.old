@@ -1,0 +1,265 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Uno, dos... DeHydra! - All About Performance</title>
+  <meta name="author" content="Taras Glek">
+
+  
+  <meta name="description" content="A Creature so Fierce&#8230; I&#8217;ve been wrestling with control flow graphs like this. I eliminated those pesky &#8220;empty&#8221; nodes found in &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tarasglek.github.com/taras/blog/2007/03/02/uno-dos-dehydra/">
+  <link href="/taras/favicon.png" rel="icon">
+  <link href="/taras/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/taras/javascripts/modernizr-2.0.js"></script>
+  <script src="/taras/javascripts/ender.js"></script>
+  <script src="/taras/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/taras/atom.xml" rel="alternate" title="All About Performance" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/taras/">All About Performance</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/taras/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tarasglek.github.com/taras" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/taras/">Blog</a></li>
+  <li><a href="/taras/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Uno, Dos... DeHydra!</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-03-02T02:52:59-08:00" pubdate data-updated="true">Mar 2<span>nd</span>, 2007</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><strong>A Creature so Fierce&#8230;</strong></p>
+
+<p>I&#8217;ve been wrestling with control flow graphs <a href="http://people.mozilla.org/~tglek/hydra.png">like this</a>. I eliminated those pesky &#8220;empty&#8221; nodes found in the previous incarnations, improved branching to track conditions and realized that what I&#8217;m really doing is developing a tool to bite off the excessive necks and heads (otherwise known as edges and basic blocks) of the Hydra monster that is represented by the bloody graph. Thus, say hello to DeHydra which was once known as <a href="http://tarasglek.github.com/taras/2007/02/01/lossy-ast-traversals-for-good-code-health">dos</a>.</p>
+
+<p><strong>DeHydra Plans</strong></p>
+
+<p>I am quite happy with how dehydra is turning out. JavaScript is a nice language to pattern match code in a flow sensitive fashion and the uno-style api seems appropriate for the task.</p>
+
+<p>In the near term I really need some value-awareness through abstract interpretation. For example, <a href="http://people.mozilla.org/~tglek/hydra-unfeasible.png">this graph</a> of a <a href="http://people.mozilla.org/~tglek/hydra-unfeasible.c">simple function</a> demonstrates several things that dehydra will need to notice:</p>
+
+<ol>
+<li>There is a path from hydra-unfeasable.c:6 to hydra-unfeasable.c:10 and that those blocks are part of only a single control flow, not 4.</li>
+<li>hydra-unfeasable.c:12 requires a contradiction in the condition in order to have flow through it and should be dropped or even reported as dead code.
+I pondered a number of approaches ranging from value analysis, using a theorem prover and reversing conditions via prolog code. A simple C++ symbolic expression interpreter in C++ seems like the most productive thing at this point. So I will focus on that in the next short while.</li>
+</ol>
+
+
+<p>While I was reviewing my options I found a paper on <a href="http://www.cs.umd.edu/~jspacco/marmoset/papers/hovemeyer-paste2005.pdf">null pointer analysis for Java</a> to be a useful stating point for references to other relevant literature.</p>
+
+<p><strong>Longer Term DeHydra Plans</strong></p>
+
+<p>There is literature on how source-to-source transformation (like squash but also like the future C++ to ES4 tool) is assisted by flow sensitive static analysis tools (like dehydra) which I will have to absorb. DeHydra will gain whole-program analysis capability by:</p>
+
+<ol>
+<li><em>Inlining control flow graphs</em> into the main() function</li>
+<li>Supporting user-defined function attributes and using some sort of <em>attribute inference </em>(like in ML) to propagate them. This method would have higher performance, but less precision.
+For the above to work will also need support for a user-correctable/suggestable callgraph to compensate for function pointers and dynamic module loading. This should also be enough to do dead code and module detection. Oh and I want dehydra to support JavaScript for doing cross-language analysis.</li>
+</ol>
+
+
+<p>There is also <a href="http://www.stanford.edu/~jwhaley/papers/pldi04.pdf">Whaley&#8217;s paper</a> which uses prolog as a concise and expressive query engine for the source code. I would really like to see dehydra evolve such capabilities.</p>
+
+<p>All this will take more than a little time on my own, but this stuff is too exciting for other impatient people to idly observe.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Taras Glek</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-03-02T02:52:59-08:00" pubdate data-updated="true">Mar 2<span>nd</span>, 2007</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/taras/blog/categories/decomtamination/'>DeCOMtamination</a>, <a class='category' href='/taras/blog/categories/dehydra/'>dehydra</a>, <a class='category' href='/taras/blog/categories/mozilla/'>mozilla</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://tarasglek.github.com/taras/blog/2007/03/02/uno-dos-dehydra/" data-via="tarasglek" data-counturl="http://tarasglek.github.com/taras/blog/2007/03/02/uno-dos-dehydra/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/taras/blog/2007/02/28/websquash/" title="Previous Post: WebSquash">&laquo; WebSquash</a>
+      
+      
+        <a class="basic-alignment right" href="/taras/blog/2007/03/07/dehydra-01/" title="Next Post: Dehydra 0.1">Dehydra 0.1 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/26/coping-with-flash-hangs/">Coping with Flash hangs</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/16/snappy-44-fixing-tab-switching-in-vancouver/">Snappy #44: Fixing tab switching in Vancouver</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/05/snappy-43-big-improvements-faster-startup-smoother-tabstrip/">Snappy #43: Big improvements: faster startup? Smoother tabstrip!</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/26/snappy-42/">Snappy #42</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/18/snappy-41/">Snappy #41</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("tarasglek", 4, false);
+    });
+  </script>
+  <script src="/taras/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/tarasglek" class="twitter-follow-button" data-show-count="false">Follow @tarasglek</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Taras Glek -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

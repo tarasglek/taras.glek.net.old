@@ -1,0 +1,239 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Magic patch that halves Windows startup - All About Performance</title>
+  <meta name="author" content="Taras Glek">
+
+  
+  <meta name="description" content="Internet as of late have been obsessing over magically short patches that improve performance _ times(probably as a result of LKML cgroups patch from &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tarasglek.github.com/taras/blog/2011/02/09/magic-patch-that-doubles-windows-startup/">
+  <link href="/taras/favicon.png" rel="icon">
+  <link href="/taras/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/taras/javascripts/modernizr-2.0.js"></script>
+  <script src="/taras/javascripts/ender.js"></script>
+  <script src="/taras/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/taras/atom.xml" rel="alternate" title="All About Performance" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/taras/">All About Performance</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/taras/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tarasglek.github.com/taras" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/taras/">Blog</a></li>
+  <li><a href="/taras/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Magic Patch That Halves Windows Startup</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-02-09T08:38:38-08:00" pubdate data-updated="true">Feb 9<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Internet as of late have been obsessing over magically short patches that improve performance _ times(probably as a result of LKML cgroups patch from a few weeks ago). So my work in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=627591">bug 627591</a> got picked up in all kinds of news sources(mostly due to @limi&#8217;s <a href="http://twitter.com/#!/limi/status/28983240966541312">manlove</a>). Apparently all that internet fame is good for is getting script-kiddies to upload viruses as bugzilla attachments. Dear Internet, please do not interrupt me in the middle of an investigation.</p>
+
+<p>To crux of the optimization lies in trading waiting for random io for fast sequential IO. Turned out that my patch worked great if windows prefetch wasn&#8217;t trying to help (ie firefox ran faster without prefetch on my test systems). With prefetch on, the patch was either a smaller win or a downright loss. When I dug in deeper, it turned that the Windows Prefetch helpfully spends 3-6 seconds doing IO before any Firefox code gets to run. It also doesn&#8217;t read in a very clever pattern, resulting in a very small speed up for Firefox, but preventing my exciting optimization.</p>
+
+<p>So I curled up into my defeated fetal position and pondered on how would I prevent Windows Prefetch from being so &#8220;helpful&#8221;. One way would be to <a href="http://tarasglek.github.com/taras/2010/10/04/diagnosing-slow-startup/">install</a> some crapware to cripple prefetch (kidding!), another way is to do the sequential IO in a separate executable(ala<a href="http://glandium.org/blog/?p=1719"> run-mozilla.sh</a> on Unix). This way Windows doesn&#8217;t try to do insane amounts of IO before my preloading logic gets to run. This seems to work (see wrapper.exe talk in the bug) and has potential to double Firefox startup times. It&#8217;s also ugly as sin, but if that&#8217;s what it takes&#8230;</p>
+
+<p>So now I need more reports to make sure the executable wrapper approach reliably/significantly speeds up cold(post-reboot) startup. Then we can make a decision on how to integrate this into Firefox. But until we have all the data, please don&#8217;t jump to conclusions on what will and wont make Firefox 2x faster.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Taras Glek</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-02-09T08:38:38-08:00" pubdate data-updated="true">Feb 9<span>th</span>, 2011</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/taras/blog/categories/mozilla/'>mozilla</a>, <a class='category' href='/taras/blog/categories/startup/'>startup</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://tarasglek.github.com/taras/blog/2011/02/09/magic-patch-that-doubles-windows-startup/" data-via="tarasglek" data-counturl="http://tarasglek.github.com/taras/blog/2011/02/09/magic-patch-that-doubles-windows-startup/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/taras/blog/2011/01/14/builtin-startup-measurement/" title="Previous Post: Builtin Startup Measurement">&laquo; Builtin Startup Measurement</a>
+      
+      
+        <a class="basic-alignment right" href="/taras/blog/2011/03/10/start-faster-addon/" title="Next Post: "Start Faster" Addon">"Start Faster" Addon &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/26/coping-with-flash-hangs/">Coping with Flash hangs</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/16/snappy-44-fixing-tab-switching-in-vancouver/">Snappy #44: Fixing tab switching in Vancouver</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/05/snappy-43-big-improvements-faster-startup-smoother-tabstrip/">Snappy #43: Big improvements: faster startup? Smoother tabstrip!</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/26/snappy-42/">Snappy #42</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/18/snappy-41/">Snappy #41</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("tarasglek", 4, false);
+    });
+  </script>
+  <script src="/taras/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/tarasglek" class="twitter-follow-button" data-show-count="false">Follow @tarasglek</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Taras Glek -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

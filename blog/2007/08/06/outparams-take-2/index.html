@@ -1,0 +1,338 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Outparams: Take 2 - All About Performance</title>
+  <meta name="author" content="Taras Glek">
+
+  
+  <meta name="description" content="Will Rid Code of Outparams! I resumed my outparam rewriting work last week. Having fixed the CPP induced architectural limitation that I ran into, it &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tarasglek.github.com/taras/blog/2007/08/06/outparams-take-2/">
+  <link href="/taras/favicon.png" rel="icon">
+  <link href="/taras/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/taras/javascripts/modernizr-2.0.js"></script>
+  <script src="/taras/javascripts/ender.js"></script>
+  <script src="/taras/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/taras/atom.xml" rel="alternate" title="All About Performance" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/taras/">All About Performance</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/taras/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tarasglek.github.com/taras" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/taras/">Blog</a></li>
+  <li><a href="/taras/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Outparams: Take 2</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-08-06T09:02:10-07:00" pubdate data-updated="true">Aug 6<span>th</span>, 2007</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><strong>Will Rid Code of Outparams!</strong></p>
+
+<p>I resumed my outparam rewriting work last week. Having fixed the <a href="http://tarasglek.github.com/taras/2007/05/11/cpp-strikes-back/">CPP induced</a> architectural limitation that I ran into, it was quite straight-forward to factor out squash&#8217;s rewriting code into a new tool. Unlike squash, outparamdel (creatively named new tool), can rewrite code precisely and reliably. I still don&#8217;t have end-of-ast-node information in every Elsa AST member, but I think I have added position info to enough AST nodes to be able to do most of the Mozilla 2 rewrites.</p>
+
+<p>Last time I was working on this, I was a little unhappy with the amount of code that had to be changed in the callee. I also wasn&#8217;t sure how to handle the complexity of callsites where control flow depends on the error code returned by the callee. This time I chose the path of least resistance.</p>
+
+<p>In the callee two variables replace the out-parameter. The first holds the return value and the second points at the first and is declared in the same way as the out-parameter.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>@@ -2358,6 +2358,5 @@
+</span><span class='line'>-nsresult
+</span><span class='line'>-nsCSSFrameConstructor::CreateHTMLImageFrame(nsIContent* aContent,
+</span><span class='line'>-                                            nsStyleContext* aStyleContext,
+</span><span class='line'>-                                            ImageFrameCreatorFunc aFunc,
+</span><span class='line'>-                                            nsIFrame** aFrame)
+</span><span class='line'>-{
+</span><span class='line'>+nsIFrame*
+</span><span class='line'>+nsCSSFrameConstructor::CreateHTMLImageFrame(nsIContent* aContent,
+</span><span class='line'>+                                            nsStyleContext* aStyleContext,
+</span><span class='line'>+                                            ImageFrameCreatorFunc aFunc)
+</span><span class='line'>+{
+</span><span class='line'>@@ -2364,1 +2364,3 @@
+</span><span class='line'>-  *aFrame = nsnull;
+</span><span class='line'>+  nsIFrame* __aFrame = 0;
+</span><span class='line'>+  nsIFrame** aFrame = &__aFrame;
+</span><span class='line'>+  *aFrame = nsnull;
+</span><span class='line'>@@ -2371,1 +2371,1 @@
+</span><span class='line'>-      return NS_ERROR_OUT_OF_MEMORY;
+</span><span class='line'>+      return nsnull;
+</span><span class='line'>@@ -2374,1 +2374,1 @@
+</span><span class='line'>-  return NS_OK;
+</span><span class='line'>+  return __aFrame;
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>With a little more work one can get of one or even both local variables, but that will require more heuristics.</p>
+
+<p>I also simplified call-site rewriting by wrapping the call to the callee function into a ternary expression when the error code is evaluated.</p>
+
+<p>@@ -5290,2 +5290,1 @@</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>-    rv = CreateHTMLImageFrame(aContent, aStyleContext, NS_NewImageFrame,
+</span><span class='line'>-                              &newFrame);
+</span><span class='line'>+    rv = ((newFrame = CreateHTMLImageFrame(aContent, aStyleContext, NS_NewImageFrame)) ? NS_OK : NS_ERROR_OUT_OF_MEMORY);
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Obviously this could be improved upon by getting rid of rv altogether, but the trick works in all cases and can be improved-upon incrementally.</p>
+
+<p><strong>Problems &amp; Limitations</strong></p>
+
+<ul>
+<li>Code within macros is detected, but not modified. Since macros are something that is easier to modify manually than with a tool, this isn&#8217;t a problem.</li>
+<li>Indentation isn&#8217;t updated. I think this is solvable with a few more heuristics in the patcher.</li>
+<li>Expression rewriting doesn&#8217;t work on Mac or Windows source-code. Mac is going to be relatively straight-forward to support. MCPP doesn&#8217;t understand all of the Mac strangeness yet and needs a loving and affectionate mac user to teach it the ways of Darwin. Windows is more work as it will require both updating the mingw Mozilla port and porting MCPP.
+<strong>Coolness</strong></li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>nsCSSFrameConstructor.cpp:10383: nsCSSFrameConstructor::CreateContinuingTableFrame,6=newFrame,
+</span><span class='line'>nsCSSFrameConstructor.cpp:10993: nsCSSFrameConstructor::GetInsertionPoint,2=aParentFrame,
+</span><span class='line'>nsCSSFrameConstructor.cpp:2374: nsCSSFrameConstructor::CreateHTMLImageFrame,3=aFunc,
+</span><span class='line'>nsCSSFrameConstructor.cpp:4080: nsCSSFrameConstructor::ConstructDocElementTableFrame,2=childList,
+</span><span class='line'>nsCSSFrameConstructor.cpp:4477: nsCSSFrameConstructor::ConstructRootFrame,1=viewportFrame,
+</span><span class='line'>nsCSSFrameConstructor.cpp:4720: nsCSSFrameConstructor::ConstructRadioControlFrame,0=NS_NewGfxRadioControlFrame,
+</span><span class='line'>nsCSSFrameConstructor.cpp:4741: nsCSSFrameConstructor::ConstructCheckboxControlFrame,0=NS_NewGfxCheckboxControlFrame,
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I wrote outparamdel and tested it on a convoluted manual testcase. Then I ran outparamdel mozilla-wide with the above input and the resulting code compiled! This was never the case prior to MCPP work since I found find new and exciting preprocessor madness to work-around and special case with every new rewrite.</p>
+
+<p><strong>Future</strong></p>
+
+<p>Going to make this a little more challenging by rewriting QueryInterface to return result by a return value which should affect the majority of functions in Mozilla.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Taras Glek</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-08-06T09:02:10-07:00" pubdate data-updated="true">Aug 6<span>th</span>, 2007</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/taras/blog/categories/decomtamination/'>DeCOMtamination</a>, <a class='category' href='/taras/blog/categories/mozilla/'>mozilla</a>, <a class='category' href='/taras/blog/categories/outparamdel/'>outparamdel</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://tarasglek.github.com/taras/blog/2007/08/06/outparams-take-2/" data-via="tarasglek" data-counturl="http://tarasglek.github.com/taras/blog/2007/08/06/outparams-take-2/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/taras/blog/2007/07/27/superity-complex-static-analysis/" title="Previous Post: Superity Complex & Static Analysis">&laquo; Superity Complex & Static Analysis</a>
+      
+      
+        <a class="basic-alignment right" href="/taras/blog/2007/08/30/pork-the-brave-new-world/" title="Next Post: Pork: The Brave New World">Pork: The Brave New World &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/26/coping-with-flash-hangs/">Coping with Flash hangs</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/16/snappy-44-fixing-tab-switching-in-vancouver/">Snappy #44: Fixing tab switching in Vancouver</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/05/snappy-43-big-improvements-faster-startup-smoother-tabstrip/">Snappy #43: Big improvements: faster startup? Smoother tabstrip!</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/26/snappy-42/">Snappy #42</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/18/snappy-41/">Snappy #41</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("tarasglek", 4, false);
+    });
+  </script>
+  <script src="/taras/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/tarasglek" class="twitter-follow-button" data-show-count="false">Follow @tarasglek</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Taras Glek -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,277 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Status Update: Outparam work - All About Performance</title>
+  <meta name="author" content="Taras Glek">
+
+  
+  <meta name="description" content="Squash Outparams The following took me a few days to achieve. 1
+./squash -sq-rewrite-outparams out2.txt -sq-implementation nsBidiPresUtils -sq-no- &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tarasglek.github.com/taras/blog/2007/05/07/status-update-outparam-work/">
+  <link href="/taras/favicon.png" rel="icon">
+  <link href="/taras/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/taras/javascripts/modernizr-2.0.js"></script>
+  <script src="/taras/javascripts/ender.js"></script>
+  <script src="/taras/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/taras/atom.xml" rel="alternate" title="All About Performance" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/taras/">All About Performance</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/taras/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tarasglek.github.com/taras" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/taras/">Blog</a></li>
+  <li><a href="/taras/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Status Update: Outparam Work</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-05-07T02:58:43-07:00" pubdate data-updated="true">May 7<span>th</span>, 2007</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><strong>Squash Outparams</strong></p>
+
+<p>The following took me a few days to achieve.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>./squash -sq-rewrite-outparams out2.txt -sq-implementation nsBidiPresUtils  -sq-no-squash -o-lang GNU_Cplusplus ~/work/ff-build/dom/src/base/nsFocusController.i</span></code></pre></td></tr></table></div></figure>
+
+
+<p>where out2.txt contains instructions on which functions to modify</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>nsFocusController::GetFocusedElement,0=mCurrentElement,</span></code></pre></td></tr></table></div></figure>
+
+
+<p>produces</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>--- /Users/tarasglek/work/mozilla/dom/src/base/nsFocusController.h
+</span><span class='line'>+++ /Users/tarasglek/work/mozilla/dom/src/base/nsFocusController.h
+</span><span class='line'>@@ -72,1 +72,1 @@
+</span><span class='line'>-  NS_IMETHOD GetFocusedElement(nsIDOMElement** aResult);
+</span><span class='line'>+  nsIDOMElement* GetFocusedElement();
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This still doesn&#8217;t add the already_AddRefed or other important attributes, but that should be easy. The result looks simple, but getting squash from working with a testcase to an actual source file was a little on the painful side.</p>
+
+<p>After my experience with renaming I have realized that squash should avoid the C++ pretty printer for now. Thus the result is produced in a verbose AST-sensitive regexp-like way. However figuring out where things start and end is incredibly painful due to the presence of the preprocessor.</p>
+
+<p>My plan is to get squash rewriting some basic Mozilla code the painful way and then I use what I learned to integrate <a href="http://mcpp.sourceforge.net/">mcpp</a> along with the much coveted end-of-ast-node info into elsa.</p>
+
+<p><strong>JavaScript is an AST&#8217;s Best Friend </strong></p>
+
+<p>Until recently I have been doing a lot of work with dehydra. Now that it is feature-complete I am back to working on squash fulltime and I miss JavaScript already. JS is much better suited for messing about with Abstract Syntax Trees. It is so nice to be able to print out any data structure, create new ones without modifying a billion files and the lack of C++ compile/linking delay is nice too. It&#8217;s amazing how much simpler it is to analyze functions for out-param rewriting in JS compared to checking for simpler patterns in C++. I am seriously excited about Tamarin/ES4 and the productivity boost that it will provide.</p>
+
+<p>I wonder whether a complete JS binding for Elsa would be a good idea.</p>
+
+<p><strong>Emacs</strong></p>
+
+<p>Switching to a Mac finally made me switch to Emacs. I could not find any other editors that would be support the workflow I was used to with SciTE or Kate. Other than absolutely hating the majoring of Emacs shortcuts (who&#8217;s idea was Ctrl-^ and the crazy undo/redo) I love the editor for the amazing term mode. It&#8217;s a little buggy in the current version, but the CVS version is good enough to comfortably run vim in it for quick edits :). It&#8217;s so nice to keep all of my terminals and code in the same window. I am dreaming of the day when Emacs will undergo the Mozilla->Firefox-like modernization.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Taras Glek</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-05-07T02:58:43-07:00" pubdate data-updated="true">May 7<span>th</span>, 2007</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/taras/blog/categories/mozilla/'>mozilla</a>, <a class='category' href='/taras/blog/categories/squash/'>squash</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://tarasglek.github.com/taras/blog/2007/05/07/status-update-outparam-work/" data-via="tarasglek" data-counturl="http://tarasglek.github.com/taras/blog/2007/05/07/status-update-outparam-work/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/taras/blog/2007/05/01/status-report/" title="Previous Post: Status Report">&laquo; Status Report</a>
+      
+      
+        <a class="basic-alignment right" href="/taras/blog/2007/05/10/nicely-rewriting-outparams/" title="Next Post: Nicely rewriting outparams">Nicely rewriting outparams &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/26/coping-with-flash-hangs/">Coping with Flash hangs</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/16/snappy-44-fixing-tab-switching-in-vancouver/">Snappy #44: Fixing tab switching in Vancouver</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/05/snappy-43-big-improvements-faster-startup-smoother-tabstrip/">Snappy #43: Big improvements: faster startup? Smoother tabstrip!</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/26/snappy-42/">Snappy #42</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/18/snappy-41/">Snappy #41</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("tarasglek", 4, false);
+    });
+  </script>
+  <script src="/taras/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/tarasglek" class="twitter-follow-button" data-show-count="false">Follow @tarasglek</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Taras Glek -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

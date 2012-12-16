@@ -1,0 +1,614 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>All About Performance</title>
+  <meta name="author" content="Taras Glek">
+
+  
+  <meta name="description" content="The most user facing fix has been discovery and removal of some sneaky cache IO on the main thread. Saptashi did some analysis on the impact of &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tarasglek.github.com/taras/blog/page/7/">
+  <link href="/taras/favicon.png" rel="icon">
+  <link href="/taras/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/taras/javascripts/modernizr-2.0.js"></script>
+  <script src="/taras/javascripts/ender.js"></script>
+  <script src="/taras/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/taras/atom.xml" rel="alternate" title="All About Performance" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/taras/">All About Performance</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/taras/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tarasglek.github.com/taras" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/taras/">Blog</a></li>
+  <li><a href="/taras/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+  
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2012/01/12/snappy-jan12/">Snappy Jan12</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-01-12T07:21:03-08:00" pubdate data-updated="true">Jan 12<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>The most user facing fix has been <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=715774">discovery</a> and <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=716293">removal</a> of some sneaky cache IO on the main thread.</p>
+
+<p>Saptashi did some analysis on the impact of running sqlite in async mode on mobile. Turns out it&#8217;s only a win for DELETEs. Expect a blog post from him soon.</p>
+
+<p>Dave <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=715774#c3">discovered</a> that we sometimes wait on locks on the main thread.</p>
+
+<p>Jeff and Bas are looking into diagnosing when d2d causes a slowdown.</p>
+
+<p>There was discussion of 4x reduction in cycle collection times landing soon, focusing on having cycle collector run less, etc. Lots of work(chromehang, profiler, &#8230;) is continuing from last week.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2012/01/11/call-for-snappy-help-looking-for-a-lots-of-tabs-sessions-with-lag/">Call for Snappy Help: Looking for a Lots-of-tabs Sessions With Lag</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-01-11T02:59:02-08:00" pubdate data-updated="true">Jan 11<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I have been working under assumption that the browser gets less snappy as more tabs are opened. This increases the chances of having an ill-behaved website in the background. An ill-behaved tab (or a couple of them) can in theory ruin scrolling, typing, clicking, etc in active tabs. However I do not have anything behind anecdotal evidence on this. There are bugs on specific websites in bugzilla, but it would be nice to get them mixed into a realistic set of tabs.</p>
+
+<p>Would someone be willing to contribute a list of webpages they use often that cause Firefox to lag (maybe a session restore file?)? I am a low-tab person myself, so I can&#8217;t easily reproduce this. Please make sure that Firefox is slow with your list of tabs even when all addons are disabled, include a description of slowness encountered.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2012/01/05/snappy-jan-5/">Snappy, Jan 5</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-01-05T06:07:36-08:00" pubdate data-updated="true">Jan 5<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I expected to a slow week, but there was a surprising amount of progress. I  take this as further evidence that having managers  go on vacation does wonders to engineer productivity :)</p>
+
+<p><strong>Interactivity with lots of tabs</strong></p>
+
+<p>We spent a lot of time pondering how to approach browser sluggishness in light of having tons of tabs open. On one hand people should understand, that one can&#8217;t expect the browser perform the same whether 1 tab is active or infinity. On the other hand we should do more to a) make the browser punish background tab hogs and b) communicate hogs to the user.</p>
+
+<p>For now we will look at throttling background setTimeouts better (bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=715376">715376</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=715378">715378</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=715380">715380</a>), XMLHttpRequest loops, etc more aggressively. We also plan to make more use of interactive state so Firefox can suspend non-critical tasks (bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=712478">712478</a>).</p>
+
+<p>Occasionally the cycle collector misbehaves, Andrew will look into not running cycle collection frequently when it is slow: bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=710496">710496</a>. Olli has been fixing many of the cycle-collection extremes, I don&#8217;t have bug #s for that, but apparently the improvements are dramatic.</p>
+
+<p><strong>Super-Slow Startups</strong></p>
+
+<p>Thanks to telemetry we now know that some users experience tragic startup speeds ranging from 30seconds to 34hours (bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=701872">701872</a>). Our network cache is to blame for some of these (bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=707436">707436</a>). Another theory is that an unfortunate turn of events causes us to start loading webpages before the UI is shown (bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=715402">715402</a>).</p>
+
+<p>Vlad will post some of his analysis and interested people can help us with telemetry forensics.</p>
+
+<p><strong>Profiling</strong></p>
+
+<p>Being able to profile interactivity bugs is an important key to making the browser snappier. Large parts of Benoit&#8217;s <a href="https://developer.mozilla.org/en/Performance/Profiling_with_the_Built-in_Profiler">interactivity profiler</a> have landed (bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=713227">713227</a>). Using this <a href="https://builder.addons.mozilla.org/addon/1023834/latest/">extension</a> on nightly win/mac should give you an idea of what it will look like when completed.</p>
+
+<p>We make heavy use of compiler optimizations. Unfortunately one of them is to omit the stack pointer. Ehsan has setup a developer-friendly <a href="http://groups.google.com/group/mozilla.dev.platform/browse_thread/thread/3389798e5ef9744b#">profiling branch</a>.</p>
+
+<p>Vlad is making progress on non-destructive chromehang(bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=712109">712109</a>). Traditionally we could not do this, but with a combination of telemetry + cycling Ehsan&#8217;s shiny new profiling branch on nightly channel&#8230; we&#8217;ll be in developer heaven.</p>
+
+<p><strong>Responsiveness testing</strong></p>
+
+<p><a href="https://wiki.mozilla.org/Auto-tools/Projects/peptest">Peptest</a> should be landing on try soon, Aki is wrapping stuff up. This should enable us to catch responsiveness regressions on our infrastructure.</p>
+
+<p><strong>Smooth Scrolling</strong></p>
+
+<p>Jared is almost done fixing tests to land smooth scrolling to gather feedback and move on to fancy physics (bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=710372">710372</a>).</p>
+
+<p>Other ongoing projects with nothing specific to link to: Vlad&#8217;s slow-sql telemetry, Rafael&#8217;s quest to close sql connections so we can exit(0), QA browser-cache-effectiveness comparisons.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2011/12/22/growing-reviewers/">Growing Reviewers</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-12-22T09:09:29-08:00" pubdate data-updated="true">Dec 22<span>nd</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>One of the challenges of a growing organization is that people become managers and have less time for coding. A scary proportion of module owners are managers now.</p>
+
+<p>We were discussing this with Dietrich and he came up with a really simple solution: module owner&#8217;s entire team should be able to review patches for that module. Obviously new people can&#8217;t review every little detail, for those they can pass the buck to their manager(and learn in the process). I really like the new <a href="http://groups.google.com/group/mozilla.dev.apps.firefox/browse_thread/thread/9c6072c52cc5165c/fbc124d0fbe8782a?pli=1">Firefox review policy</a> of having a large set of candidates for reviews who have an option of passing the patch along.</p>
+
+<p>Perhaps bugzilla can change r?:taras queries into r?:taras+his+team and do this automagically.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2011/12/22/snappy-dec-22/">Snappy Dec 22</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-12-22T06:42:22-08:00" pubdate data-updated="true">Dec 22<span>nd</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Work is continuing from last week: jank profiler, DOM storage fixes, font enumeration and SQL telemetry analysis. This was the last Snappy meeting of the year.</p>
+
+<p>We plan to hold a perf + snappy hack week at <a href="https://hackerspace.be/">hackerspace.be</a> Jan 31 - Feb 3, followed by attending FOSDEM.</p>
+
+<p>I&#8217;m off until January 3rd,  see #perf for taras-substitutes in meantime.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2011/12/20/fosdem-anyone/">FOSDEM Anyone?</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-12-20T06:57:10-08:00" pubdate data-updated="true">Dec 20<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Team Perf and a significant number of other Mozillians will be attending <a href="http://fosdem.org/2012/">FOSDEM</a> this year. My team will be giving talks on android linkers, IO, toolchain stuff, other TBD stuff. This will be my first FOSDEM, I&#8217;m really excited about it. There are a lot of European open sourcers to meet that don&#8217;t make it to this side of the pond much.</p>
+
+<p>Team perf &amp; other snappy people (10+ people) plan to spend the week before FOSDEM hacking on <a href="https://blog.mozilla.org/tglek/category/snappy/">Snappy</a> and other perf projects. Does anyone have suggestions on a cool hackerspace (I sent an email to hackerspaces.be folks) or a coworking facility that could host us in Brussels?</p>
+
+<p><strong>Update:</strong> Looks like hackerspaces.be will be hosting us. Looking forward to checking out HSBXL-NG :)</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2011/12/16/snappy-update-for-dec-15/">Snappy Update for Dec 15</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-12-16T08:31:05-08:00" pubdate data-updated="true">Dec 16<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><a href="https://wiki.mozilla.org/Performance/Snappy/2011-12-15">Meeting notes</a>.</p>
+
+<p>Not much exciting new stuff happened this week. There was some progress on responsiveness profiler, snappy scrolling, dom storage. We are starting investigations into reporting per-tab overhead, interruptable JavaScript, etc</p>
+
+<p>Slow (>100ms) SQL telemetry landed in Thursday&#8217;s nightly. Here are some preliminary results:</p>
+
+<ul>
+<li>Slow SQL on <a href="http://people.mozilla.org/~xstevens/telemetry/main-bycount.txt">UI thread</a> (ie blocking our UI)</li>
+<li>Slow SQL on <a href="http://people.mozilla.org/~xstevens/telemetry/other-bycount.txt">other threads</a> (harmless, but annoying)
+These files of the format: sql, count, average time per query.</li>
+</ul>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2011/12/13/slow-sql-tracking/">Slow SQL Tracking</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-12-13T03:55:43-08:00" pubdate data-updated="true">Dec 13<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><a href="http://blog.mozilla.org/vdjeric">Vladan</a> is working on adding slow SQL tracking to Telemetry, part of that has <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=699051">already landed</a>. He recently exposed this information via the <a href="https://addons.mozilla.org/en-US/firefox/addon/abouttelemetry/">about:telemetry</a> addon. We are working out a few remaining issues so we can <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=709406">send</a> this data to our telemetry servers. In the meantime <a href="https://addons.mozilla.org/en-US/firefox/addon/abouttelemetry/">install</a> the addon in your nightly builds (if you are upgrading from an older version, you need to restart Firefox) and check for yourself whether SQL is to blame for pauses in Firefox.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2011/12/13/snappy-summary-for-dec-8/">Snappy Summary for Dec 8</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-12-13T02:55:47-08:00" pubdate data-updated="true">Dec 13<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Our last meeting was last Thursday, at 11am PST (<a href="https://wiki.mozilla.org/Performance/Snappy/2011-12-08">meeting notes</a>). This blog post is late because of a combination of email disasters and travel.</p>
+
+<p>Cheng from the SUMO team mined SUMO inputs to see what our users are complaining most about. There were complaints about things were slow, unresponsive, frozen, etc. See meeting notes the complete blurb.</p>
+
+<p>The networking team has identified issues leading to slow <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=709297">shutdown</a> and <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=695003">startup</a>.</p>
+
+<p>Most of the the <a href="https://developer.mozilla.org/en/Performance/Profiling_with_the_Built-in_Profiler#Running%20the%20profiler">responsiveness profiler</a> landed.</p>
+
+<p>UX team provided an extensive list of Firefox features that needed tweaking, see meeting notes for details.  We are working on improving tab interactions and scrolling.</p>
+
+<p>I&#8217;ll post a beefier summary of plans/accomplishments next week.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2011/12/05/24-hour-reviews/">24-hour Reviews</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-12-05T08:51:10-08:00" pubdate data-updated="true">Dec 5<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I would like to see Firefox developers switch to 24hour review turn-around times. Note that in my definition review turn-around means any of the following:</p>
+
+<ul>
+<li>r+/r-</li>
+<li>unset/reassign r? to someone else
+It is ridiculous in our recent faster release cycle if a patch takes half (or more) of the cycle loitering in the review queue. I believe that a shorter review cycle is the simplest way to accelerate Firefox evolution.</li>
+</ul>
+
+
+<p>I view fast review times as a matter of respect. Posting a patch usually requires a significant time/effort commitment, reviewers should act appropriately. There is no bigger buzzkill than having your work pushed back to the bottom of somebody&#8217;s TODO list like some annoying chore.</p>
+
+<p>As far as I can tell there are 3 main reasons* that lead to long review times:</p>
+
+<p>1) People like gavin, bz, dbaron having disproportionally high review loads. We need a process to hand-off patches to other reviewers. High-load people shouldn&#8217;t shy away from passing on the r? to someone else when possible. 2) Bugzilla-fobic people (like myself) loosing track of bugzilla r? requests due to not having bugzilla <a href="https://bugzilla.mozilla.org/editwhines.cgi">whines</a> setup. Bugzilla whines should be enabled by default. 3) Bad review habits.  I met a number of Mozilla developers that like to batch their reviews up and then do them all on a single weekday. Please stop, you are killing all kinds of coding momentum/fun/etc.Lets make it our policy to set aside time every day to clear the review queue.</p>
+
+<p>Clearly people with existing backlogs will take a while to catch up, but most MoCo employees should be capable of this. I have yet to hear a good reason against doing daily reviews.</p>
+
+<p>It has been a few months since I proposed this on <a href="http://groups.google.com/group/mozilla.dev.platform/browse_thread/thread/d563bf8329089a5/cdc47838866b0bea">dev.platform</a>.  I have tried to live by the 24hour rule, I think a few others tried this too. I find that morning bugzilla r? whines work best for me. I still occasionally loose track of a patch for a few days, but nobody is perfect. I think people appreciate fast reviews, but nobody thanked me yet.</p>
+
+<p><strong>Dec 6 Update</strong>: My goal is to have <em>some</em> response within 24hours with an ETA for next followup in the worst case.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  <div class="pagination">
+    
+      <a class="prev" href="/taras/blog/page/8/">&larr; Older</a>
+    
+    <a href="/taras/blog/archives">Blog Archives</a>
+    
+    <a class="next" href="/taras/blog/page/6/">Newer &rarr;</a>
+    
+  </div>
+</div>
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/26/coping-with-flash-hangs/">Coping with Flash hangs</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/16/snappy-44-fixing-tab-switching-in-vancouver/">Snappy #44: Fixing tab switching in Vancouver</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/05/snappy-43-big-improvements-faster-startup-smoother-tabstrip/">Snappy #43: Big improvements: faster startup? Smoother tabstrip!</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/26/snappy-42/">Snappy #42</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/18/snappy-41/">Snappy #41</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("tarasglek", 4, false);
+    });
+  </script>
+  <script src="/taras/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/tarasglek" class="twitter-follow-button" data-show-count="false">Follow @tarasglek</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Taras Glek -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

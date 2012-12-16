@@ -1,0 +1,243 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Snappy, May 24 - meetingless - All About Performance</title>
+  <meta name="author" content="Taras Glek">
+
+  
+  <meta name="description" content="Frank and Jared are aiming to have the Australis theme up for review next week in bug 732583. There are no computed borders or gradients in the &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tarasglek.github.com/taras/blog/2012/05/29/snappy-may-24-meetingless/">
+  <link href="/taras/favicon.png" rel="icon">
+  <link href="/taras/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/taras/javascripts/modernizr-2.0.js"></script>
+  <script src="/taras/javascripts/ender.js"></script>
+  <script src="/taras/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/taras/atom.xml" rel="alternate" title="All About Performance" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/taras/">All About Performance</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/taras/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tarasglek.github.com/taras" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/taras/">Blog</a></li>
+  <li><a href="/taras/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Snappy, May 24 - Meetingless</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-05-29T03:31:59-07:00" pubdate data-updated="true">May 29<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Frank and Jared are aiming to have the Australis theme up for review next week in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=732583">bug 732583</a>. There are no <em>computed</em> borders or gradients in the redesign, so it will be faster.  The current theme generates new borders/gradients on every tab interaction, which is very inefficient. Bas is working on fixing our graphics backend to render borders/gradients more efficiently in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=750871">750871</a>.</p>
+
+<p>Wlad spotted some unintended bloat in the addon database in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=752868">bug 752868</a>. Blair fixed it, this should speed up startup and other addon manager interactions.</p>
+
+<p>Bill did some further IGC fixes: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=757483">bug 757483</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=754588">bug 754588</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=756732">bug 756732</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=731423">bug 731423</a>.</p>
+
+<p>We started a new project to let Firefox diagnose common Windows/etc misconfiguration issues that severely impact Firefox performance. Our new intern, Nicholas, is working on this in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=684646">684646</a>. The immediate plan is to release an addon that detects when Firefox startup is unusually slow, checks for known Windows issues and pops up a link to a Mozilla <a href="http://support.mozilla.com/">support</a> article on how to fix the problem. If this turns out to be successful, we&#8217;ll integrate this functionality into Firefox.</p>
+
+<p>The gecko profiler is now ready for general consumption. See Benoit&#8217;s <a href="https://groups.google.com/forum/#!topic/mozilla.dev.platform/jOklwc7AdC8">announcement</a>. This will allow users running  the <a href="http://groups.google.com/group/mozilla.dev.platform/browse_thread/thread/3389798e5ef9744b#">profiling </a>variant of Firefox nightly builds to capture/report performance problems in a way that developers can act on. I suspect that <a href="http://benoitgirard.wordpress.com">Benoit </a>will blog about this.</p>
+
+<p><strong>Update</strong>: I originally linked the wrong bug for windows misconfiguration detection.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Taras Glek</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-05-29T03:31:59-07:00" pubdate data-updated="true">May 29<span>th</span>, 2012</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/taras/blog/categories/mozilla/'>mozilla</a>, <a class='category' href='/taras/blog/categories/snappy/'>snappy</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://tarasglek.github.com/taras/blog/2012/05/29/snappy-may-24-meetingless/" data-via="tarasglek" data-counturl="http://tarasglek.github.com/taras/blog/2012/05/29/snappy-may-24-meetingless/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/taras/blog/2012/05/22/give-dxr-a-try/" title="Previous Post: Give DXR a try">&laquo; Give DXR a try</a>
+      
+      
+        <a class="basic-alignment right" href="/taras/blog/2012/06/04/snappy-may-31st-less-lag/" title="Next Post: Snappy, May 31st - Less lag">Snappy, May 31st - Less lag &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/26/coping-with-flash-hangs/">Coping with Flash hangs</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/16/snappy-44-fixing-tab-switching-in-vancouver/">Snappy #44: Fixing tab switching in Vancouver</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/05/snappy-43-big-improvements-faster-startup-smoother-tabstrip/">Snappy #43: Big improvements: faster startup? Smoother tabstrip!</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/26/snappy-42/">Snappy #42</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/18/snappy-41/">Snappy #41</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("tarasglek", 4, false);
+    });
+  </script>
+  <script src="/taras/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/tarasglek" class="twitter-follow-button" data-show-count="false">Follow @tarasglek</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Taras Glek -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

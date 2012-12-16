@@ -1,0 +1,731 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>All About Performance</title>
+  <meta name="author" content="Taras Glek">
+
+  
+  <meta name="description" content="There is a little bit of a disconnect between the kernel, the dynamic linker and compile-time linker. As I mentioned in my main &#8220;startup sucks &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tarasglek.github.com/taras/blog/page/12/">
+  <link href="/taras/favicon.png" rel="icon">
+  <link href="/taras/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/taras/javascripts/modernizr-2.0.js"></script>
+  <script src="/taras/javascripts/ender.js"></script>
+  <script src="/taras/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/taras/atom.xml" rel="alternate" title="All About Performance" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/taras/">All About Performance</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/taras/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tarasglek.github.com/taras" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/taras/">Blog</a></li>
+  <li><a href="/taras/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+  
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2010/03/29/linux-startup-inefficiency/">Linux Startup Inefficiency</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-03-29T06:11:02-07:00" pubdate data-updated="true">Mar 29<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>There is a little bit of a disconnect between the kernel, the dynamic linker and compile-time linker. As I mentioned in my main &#8220;startup sucks&#8221; <a href="http://tarasglek.github.com/taras/2010/03/24/linux-why-loading-binaries-from-disk-sucks/">post</a>: not-notifying the kernel of your patterns can kill performance, so can reading files backwards.</p>
+
+<p>Turns out that if the compile-time linker lays out files without considering <em>exactly</em> how they are read by the runtime linker, binaries will load slower. I filed a <a href="http://sourceware.org/bugzilla/show_bug.cgi?id=11447">bug</a> on that.</p>
+
+<p>Currently, SuSE appears to be leading in startup performance by shipping their glibc with the fadvise() patch (to load binaries from disk in bigger chunks). A <a href="http://sourceware.org/bugzilla/show_bug.cgi?id=11431">bug</a> is filed for this to get fixed in glibc, but in the meantime distributions should consider including SuSE&#8217;s patch (glibc-2.3.90-ld.so-madvise.diff) in their libc.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2010/03/25/madvise-prelink-update/">Madvise, Prelink Update</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-03-25T04:09:25-07:00" pubdate data-updated="true">Mar 25<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Got some helpful comments on my <a href="http://tarasglek.github.com/taras/2010/03/24/linux-why-loading-binaries-from-disk-sucks/">previous post</a>.</p>
+
+<p><strong>madvise(WILLNEED) in ld.so</strong></p>
+
+<p>Frank Ch. Eigler pointed out that other people have <a href="http://www.google.com/search?q=ld.so%20madvise">noticed</a> the madvise/mmap deficiency in the dynamic linker. Unfortunately those unfortunate people did not have the ability to flush caches or to measure page faults exactly. Linux has gotten a lot nicer for diagnosing this. Frank also filed a <a href="http://sourceware.org/bugzilla/show_bug.cgi?id=11431">glibc bug</a>. SuSE already ships with a madvise()ed dynamic linker.</p>
+
+<p><strong>Prelink saga</strong></p>
+
+<p>Both Bradley Baetz and Frank pointed me at the FIPS-caused <a href="https://bugzilla.redhat.com/show_bug.cgi?id=504949">bug</a> which causes prelink to get angry at Firefox. This isn&#8217;t the first time that practically-useless FIPS has gotten in the way of a higher performing Firefox.</p>
+
+<p>The most common response to people who complain about run-time linker issue is &#8220;are you using prelink?&#8221;. So I did my best to assume that prelink would erase a bunch of the overhead I saw in the previous bug.</p>
+
+<p>I got rid of the offending nss rule in the prelink configuration as the bug instructed; prelink started working on Firefox (according to LD_DEBUG=statistics). Unfortunately the IO pattern was identical to what I was seeing before.</p>
+
+<p>Frank suggested that I try prelink -u to undo any prelinking. This caused a bunch more runtime-linker IO from which one can conclude that the overhead I am seeing is not solved by prelink. The is still a lot of IO that happens before any application code is executed, so the runtime linker is still my primary suspect.</p>
+
+<p>Going to spend some quality time with SystemTap to try to figure out what the linker is doing.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2010/03/24/linux-why-loading-binaries-from-disk-sucks/">Linux: Why Loading Binaries From Disk Sucks</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-03-24T08:47:28-07:00" pubdate data-updated="true">Mar 24<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><em>Note: I am doing my measurements and experiments on Fedora 12, once I feel that I understand and can solve the problems on Linux, other operating systems will follow. The aim of this post is to document what I have learned about the mysterious process of loading programs from the filesystem perspective.</em></p>
+
+<p>A binary is broken up into segments. There are about half dozen different segments in an executable, but only two that matter here:</p>
+
+<ol>
+<li>A segment that mostly contains function-bodies and some const data. It&#8217;s mapped in read+execute mode</li>
+<li>A segment that contains variable initializers, GOT, PLT, lists of constructors/destructors, etc
+The compile-time linker composes segments out of sections that contain variable data, function bodies, etc. The run-time linker maps the segments into memory via <a href="http://en.wikipedia.org/wiki/Mmap">mmap</a>. It resolves references to data and code in dynamic libraries (eg relocation) via COW. IO happens when the program (on behalf of the run-time linker) is trying to access memory that hasn&#8217;t been read from disk yet. These interruptions are called page faults. They cause the kernel to interrupt the program to read in some multiple of pages (4096byte chunks) from disk. On my system, page faults trigger ﻿﻿131072byte (32 pages) reads.</li>
+</ol>
+
+
+<p>For a detailed explanation of how linkers work check out the guides written by experts. Out of the scant <a href="http://lambda-the-ultimate.org/node/3474">list</a> of literature on the subject, my &#8220;favourite&#8221; is Ulrich Drepper&#8217;s &#8220;How to Write Shared Libraries&#8221;. It actually explains things in terms of file offsets, not just virtual addresses.</p>
+
+<p>A common misconception is that mmap()-caused IO is free (because you don&#8217;t issue any explicit read() statements). IO via page faults is just another &#8220;API&#8221; for file-access, there is no reason for it to be free. Another misconception is that one has no control over IO-patterns triggered by mmap(). On Linux-like OSes one can use madvise(). (Windows is more limited, afaik one can only set io-pattern-flags on the filehandles).</p>
+
+<p><strong>Prelinking Fail </strong></p>
+
+<p>Having the run-time linker fix up the binary causes a huge amount of IO even before any application code gets executed. These faults are visible in the second graph in my <a href="http://tarasglek.github.com/taras/2010/03/23/when-in-trouble-draw-a-picture/">previous post</a>. The linker&#8217;s faults (pun intended) are the small green rectangles above the big ones. The graph clearly shows the huge relative cost of inefficient run-time linker memory prodding.</p>
+
+<p>Supposedly, this problem is largely solved by <a href="http://en.wikipedia.org/wiki/Prelink">prelinking</a>. I can&#8217;t confirm that as prelink does not work on Firefox on the systems that I can measure IO with SystemTap. This non-determinism is frustrating; we should figure out a way to warn to the user that the OS infrastructure failed them. ****</p>
+
+<p><strong>Post-linker Fail</strong></p>
+
+<p>Above IO patterns can be blamed on careless run-time linker behavior. IO after that can be attributed to lack of organization in the output of the compiler and the compile-time linker. Turns out that the layout of the .text section (where all of the function bodies lie) and to a smaller degree .data[, .bss, etc] sections(ie variable initializers) is completely unhelpful. For a good laugh look at how the official nightly libxul.so is read mostly through backwards io (<a href="http://people.mozilla.com/~tglek/startup/systemtap_graphs/visualize.html?#stock.io.html">graph link</a>).</p>
+
+<p><em><aside>The libxul.so graphs in the previous post did not exhibit this kind of insanity. I did my best to order functions based on chronological order of access (courtesy of my </em><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=549749"><em>valgrind hack</em></a><em>). Unfortunately, the chronological log is not deterministic. Someone suggested that statistical fudging via </em><a href="http://en.wikipedia.org/wiki/Markov_chain"><em>markov chains</em></a><em> will help. From the io patterns in the graph I&#8217;m guessing that io patterns detected by valgrind and those that actually happen diverge due to threading differences. Linux users that are interested in fast startup should pray to the GCC Santas to reorder binaries as part of Profile-Guided-Optimization.</aside></em> ****</p>
+
+<p><strong>Are Large Programs Screwed Out of Fast Startup?</strong></p>
+
+<p>Yes, but it doesn&#8217;t have to be this way. Turns out this utter disaster is caused by naive use of mmap() in the dynamic-linker. The second graph (previous post) shows, that even a late madvise call (delightfully nasty <a href="https://bugzilla.mozilla.org/attachment.cgi?id=434721&amp;action=edit">patch</a>) can significantly improve the situation. Specifying madvise(MADV_WILLNEED) causes individual faults to read in 2097152bytes (512 pages,  16x larger reads than default),  3x(10x if one counts only ones after madvise()) reduction in the number of total faults, saves about 1 second of startup.</p>
+
+<p>The basic trick is outlined as &#8220;approach c&#8221; in this <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=554421">bug</a>. My current thinking is to:</p>
+
+<ol>
+<li>use Jim Blandy&#8217;s executable-parsing library from breakpad(which is already in our build) to parse our binaries</li>
+<li>calculate what the dynamic linker will mmap() at runtime.</li>
+<li>have some firefox.sh-like native frontend mmap()/madvise() it with appropriate flags
+In the longer term some fixes for madvise() should land in both runtime and compile-time linkers.</li>
+</ol>
+
+
+<p><strong>Conclusion</strong></p>
+
+<p>It took me a long time to produce the above story from my runtime linker observations. As recently as December I had no idea what a runtime linker was or what linker segments, sections, etc were. I&#8217;d like to thank Valgrind authors, kind folks on #gcc and numerous individuals who helped me connect the pieces. The above is written to the best of my still-incomplete understanding; I will appreciate any corrections.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2010/03/23/when-in-trouble-draw-a-picture/">When in Trouble, Draw a Picture</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-03-23T08:12:52-07:00" pubdate data-updated="true">Mar 23<span>rd</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><strong>Graphs</strong></p>
+
+<p><em>Note: the following graphs broke on the nightlies this week. I would appreciate help with reducing this to a proper testcase. They work fine on older nightlies and released versions of Firefox. Non-spidermonkey JS engines wont work as they don&#8217;t support <a href="https://developer.mozilla.org/en/New_in_JavaScript_1.7#Destructuring_assignment">destructuring assignment</a> and other goodies.</em></p>
+
+<p>Once I graphed my file-access logs, most of my problems became clear. Here is the <a href="http://people.mozilla.org/~tglek/startup/systemtap_graphs/visualize.html#original.data.html">first</a> graph(<a href="http://people.mozilla.org/~tglek/startup/systemtap_graphs/orig.png">screenshot</a>). The y-axis is time; once you click on a square, x-axis is the file offset. One can clearly see that libxul (4th rectangle) is a big chunk of our io. It&#8217;s also clear that initially the file is being accessed in the begining and near the end. One can also see that there is a some &#8220;backwards&#8221; io. It&#8217;s ugly stuff.</p>
+
+<p>I first saw this picture on Friday evening, I spent the last 2 days trying to make libxul.so load less stupidly. <a href="http://people.mozilla.org/~tglek/startup/systemtap_graphs/visualize.html?#madvise.hack.html">Here</a> is a graph(<a href="http://people.mozilla.org/~tglek/startup/systemtap_graphs/madvise1.png">screenshot</a>) from a hack I tried this morning (approach b in the <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=554421">bug</a>) . The top is still stupid, but near the bottom, libxul is being read in a much more efficient manner (>50% less io).</p>
+
+<p>This <a href="http://people.mozilla.org/~tglek/startup/systemtap_graphs/visualize.html??#madvise_ahead.html">graph</a> is from a lunch-time hack(approach c). IO is being spread across two processes so it&#8217;s evading my systemtap script for  now. Fortunately, &#8220;approach c&#8221; also shaved off a second of my startup time, so I know the libxul graph would&#8217;ve been real pretty.</p>
+
+<p>What follows is a story of how I ended up graphing stuff; more on lessons learned later&#8230;</p>
+
+<p><strong>Story</strong></p>
+
+<p>Last week I was about to give up and live with a <a href="http://tarasglek.github.com/taras/2010/03/05/mirror-mirror-on-the-wall-why-is-my-binary-slow/">meager</a> 10% win on libxul.so cold startup. I just couldn&#8217;t squeeze any more useful ideas out of my timing and io logs. I reached out to Jim Blandy, who confirmed that things seemed to be working as expected (unlike me, Jim actually knows this stuff).</p>
+
+<p>Upon hearing of my quest, surprising number of people strongly suggested that I chat with <a href="http://people.gnome.org/~michael/blog/">Michael Meeks</a>. He was digging around in the binary cesspool for OpenOffice recently and asked many of the same questions. We had a fun conversation, where Michael proved me wrong. I said I couldn&#8217;t imagine a useful way to graph the file io logs. In response Michel, dug up this <a href="http://people.gnome.org/~michael/blog/">beauty</a>. He built it with a <a href="http://live.gnome.org/iogrind">fun</a> mix of valgrind + c#.</p>
+
+<p>Feeling massive diagram envy, I decided that I had to get an interactive graph of my <a href="http://tarasglek.github.com/taras/2009/10/23/studying-library-io-systemtap-style/">SystemTap</a> data. A brief Google search revealed that <a href="http://raphaeljs.com/">RaphaelJS</a> would be awesome for my needs (the most <a href="http://www.youtube.com/watch?v=4pXfHLUlZf4">j***worthy</a> vector gfx library ever). After many happy hours of messing with with pretty graphics and colours, the ugly truth emerged (hint: it&#8217;s about the linker/kernel relationship). More on that soon.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2010/03/11/extensions-startup/">Extensions & Startup</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-03-11T03:20:35-08:00" pubdate data-updated="true">Mar 11<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Dietrich <a href="http://autonome.wordpress.com/2010/03/10/firefox-extensions-and-performance/">blogged</a> a &#8220;wake up and smell the startup&#8221; executive overview of startup issues caused by our extension practices. This post is a &#8220;numbers&#8221; followup. For this experiment I installed a brand-spankin-new copy of Linux Firefox 3.6. Firefox is installed on a 7200 hard drive, the rest of my system lives on an SSD. The CPU is core2duo, keep in mind these numbers will be significantly worse for people running on netbooks and other common hardware. The numbers vary +/- 150ms, but the general picture is pretty clear.</p>
+
+<p><strong>Results</strong></p>
+
+<p><strong>Startup Time</strong></p>
+
+<p>Firefox 3.6 with no extensions:
+2240ms</p>
+
+<p>+<a href="https://addons.mozilla.org/en-US/firefox/addon/1865">Adblock Plus</a> (no subscriptions)
+2538ms</p>
+
+<p>+<a href="https://addons.mozilla.org/en-US/firefox/addon/3006">Video Download Helper</a>
+2727ms</p>
+
+<p>+<a href="https://addons.mozilla.org/en-US/firefox/addon/10900">Personas</a>
+3220ms</p>
+
+<p>+<a href="https://addons.mozilla.org/en-US/firefox/addon/748">Greasemonkey</a>
+3300ms</p>
+
+<p>+EasyList subscription for adblock
+4044ms
+I just doubled cold startup time for Firefox by merely adding 4 extensions. It takes weeks or even months of developer time to shave off every 100ms off Firefox startup, but mere seconds to undo any of those gains by installing extensions. These are just the top-4 extensions in the list (presumably they are higher quality too), I&#8217;m sure there are lots of other extensions with more drastic performance hits.</p>
+
+<p>Dietrich&#8217;s <a href="http://autonome.wordpress.com/2010/03/10/firefox-extensions-and-performance/">post</a> details some of the remedies that should reduce the startup cost of extensions. For the inquisitive minds: I used <a href="http://tarasglek.github.com/taras/2009/10/23/studying-library-io-systemtap-style/">SystemTap</a> to produce a <a href="http://people.mozilla.com/~tglek/startup/extensions_report.txt">report</a> of files read by Firefox on startup ordered by their startup cost.</p>
+
+<p><strong>Update:</strong> Dietrich asked me to summarize warm startup too:</p>
+
+<ul>
+<li>Without extensions: 550ms</li>
+<li>With above Extensions: 1800ms
+Note that this is a developer blog, so by &#8220;remedies&#8221; I meant &#8220;things developers can do to&#8221;. There is little normal users can do short of complaining to the extension authors.</li>
+</ul>
+
+
+<p>This post isn&#8217;t meant to shame specific extension authors into speeding up their extensions. The aim is to show that a measurable percentage of startup is due to extensions and that we need to:</p>
+
+<ol>
+<li>Educate extension developers about it</li>
+<li>Provide better tools to measure slowdowns caused by extensions</li>
+<li>Make sure that the Firefox side of extension handling is sufficiently efficient</li>
+</ol>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2010/03/05/mirror-mirror-on-the-wall-why-is-my-binary-slow/">Mirror, Mirror on the Wall, Why Is My Binary Slow?</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-03-05T09:48:25-08:00" pubdate data-updated="true">Mar 5<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>In an <a href="http://tarasglek.github.com/taras/2010/02/19/teaching-ld-to-optimize-binaries-for-startup/">earlier</a> post I described my Fiji hack: how to use some nasty instrumentation to spit out ld scripts to speed up cold startup. This week I tried to extract more data out of the binary to lay it out even better. Trouble is that even if one lays out functions perfectly, they load data for things like variable initializers which will cause more IO.</p>
+
+<p>A very clever friend suggested that I can write a valgrind plugin that can detect data accesses and function access and write the linker input files in one step. So with much hand-holding I hacked a sample valgrind plugin to do what I <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=549749">want</a>. Unfortunately, my binaries ended up not being significantly faster(if at all) than the Fiji ones. They also ended up 20% bigger.</p>
+
+<p>Fortunately, the GCC devs were able to point out my linker mistakes and pointed me at a <a href="http://sourceware.org/ml/binutils/2010-03/msg00050.html">linker patch</a> that does what I want without linker scripts(and has less binary-bloating side-effects). Unfortunately, that just confirmed that the speedup I was looking for wasn&#8217;t hiding behind data symbols. So I am going to have to sit down with my <a href="http://tarasglek.github.com/taras/2009/10/23/studying-library-io-systemtap-style/">io tracing script </a>and study what the heck is going on.</p>
+
+<p><strong>Cool Things I Learned</strong></p>
+
+<p>In the process of helping me, GCC people namedropped some compiler flags that may prove very helpful:</p>
+
+<ul>
+<li>-freorder-blocks-and-partition: Apparently this breaks up functions into hot/cold parts and gives them different section names so they can be moved around at link time.</li>
+<li>-fno-common, -fno-zero-initialized-in-bss should go well with my favourites: -ffunction-sections -fdata-sections
+Additionally, it may be possible to benefit from linking with large page support. I have some doubts about that.</li>
+</ul>
+
+
+<p>I did learn about some cool GNU Gold flags:</p>
+
+<ul>
+<li>&#8211;compress-debug-sections=zlib: Most of the overhead of linking a development libxul.so is writing out a near gig of debug data</li>
+<li>&#8211;icf: Identical code folding, I think that matches the deduplication feature found in the ms linker. Saves 5% on my libxul.so</li>
+</ul>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2010/02/26/updated-dehydra-installation-instructions/">Updated Dehydra Installation Instructions</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-02-26T03:02:46-08:00" pubdate data-updated="true">Feb 26<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>The <a href="https://developer.mozilla.org/En/Dehydra/Installing_Dehydra">Dehydra installation instructions</a> got to the point where they were more confusing than helpful. I spent this morning cutting out irrelevant crud, please let me know if there are any further cleanups that need to be done.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2010/02/19/teaching-ld-to-optimize-binaries-for-startup/">Teaching Ld to Optimize Binaries for Startup</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-02-19T03:28:51-08:00" pubdate data-updated="true">Feb 19<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I have been told that it should be possible to control the way the GNU linker lays out binaries. Unfortunately until recently I couldn&#8217;t figure out the right incantations to convince ld to do my bidding. Turns out what I needed was to be stranded on a beach in Fiji with nothing better to do than to reread the ld info page a few times.</p>
+
+<p>Recipe:</p>
+
+<ol>
+<li>Produce 2 mozilla builds: A tracing build with -finstrument-functions in CXXFLAGS/CFLAGS A release build with -ffunction-sections and -fdata-sections CXXFLAGS/CFLAGS to allow the linker to move stuff at function or static data(mostly variables) granularity</li>
+<li>Link my <a href="http://people.mozilla.com/~tglek/startup/ld/profile.cpp">profile.cpp</a> into libxul in the tracing build (without -finstrument-functions flag)</li>
+<li>Run the tracing build, capturing the spew from profile.cpp into a log file</li>
+<li>Feed the log file to <a href="http://people.mozilla.com/~tglek/startup/ld/generate_sections_ff.py">my script</a> to produce a linker script. This will produce library.so.script files for all of Mozilla libraries.</li>
+<li>Rebuild relevant libraries in the release build with -T library.so.script linker flag</li>
+<li>Enjoy faster startup
+This results in 200ms faster startup my 7200rpm laptop harddrive which is about a 10% of my startup. I think that&#8217;s pretty good for a proof of concept. Unfortunately there isn&#8217;t a measurable win on the SSD (not surprising) nor a reduction in memory usage (I expected one due to not having to page in code that isn&#8217;t needed for firefox startup).</li>
+</ol>
+
+
+<p>I suspect the problem is that data sections need to be laid out adjacent to functions that refer to them. I started sketching out a treehydra <a href="http://people.mozilla.com/~tglek/startup/ld/map_functions_and_symbols.js">script</a> to extract that info.</p>
+
+<p>I posted the relevant testcase and scripts. Do hg clone <a href="http://people.mozilla.com/~tglek/startup/ld/">http://people.mozilla.com/~tglek/startup/ld</a> to see the simple testcase and various WIP firefox scripts.</p>
+
+<p><strong>Long-term Expectations</strong></p>
+
+<p>The majority of Firefox startup overhead (prior to rendering of web pages) comes from frustrating areas such inefficient libraries (eg fontconfig, gtk) and the mess caused by crappy layout of binaries and overuse of dynamic libraries. This post describes one small step towards fixing the crappy layout of our binaries.</p>
+
+<p>I would like to end up in a world where our binaries are static and laid out such that they are read sequentially on startup (such that we can use the massive sequential read speeds provided by modern storage media). Laying out code/data properly should result in memory usage reductions which should be especially welcome on Fennec (especially on Windows Mobile).</p>
+
+<p>I am hoping to see 30-50% startup time improvements from this work if everything goes according to plan.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2010/02/09/static-analysis-articles/">Static Analysis Articles</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-02-09T06:22:40-08:00" pubdate data-updated="true">Feb 9<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>A really good <a href="http://cacm.acm.org/magazines/2010/2/69354-a-few-billion-lines-of-code-later/fulltext">ACM article</a> about static analysis from Coverity&#8217;s perspective has been making rounds in Mozilla. What struck me most was the following paragraph:_ _</p>
+
+<p><em>At the most basic level, errors found with little analysis are often better than errors found with deeper tricks. A good error is probable, a true error, easy to diagnose; best is difficult to misdiagnose. As the number of analysis steps increases, so, too, does the chance of analysis mistake, user confusion, or the perceived improbability of event sequence. No analysis equals no mistake.</em></p>
+
+<p>My personal view has been that &#8220;dumb&#8221; analyses are the most effective ones in terms of mistakes spotted vs time wasted writing/landing the analysis. It is interesting to see that sophisticated analyses are difficult to deploy even for Coverity.</p>
+
+<p>In other news, LCA 2010 was my favourite conference so far. I met a number of awesome developers there. Mozilla&#8217;s static analysis work finally got <a href="http://lwn.net/Articles/370717/">mentioned</a> in LWN!</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2010/01/21/state-of-static-analysis-at-mozilla/">State of Static Analysis at Mozilla</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-01-21T09:24:03-08:00" pubdate data-updated="true">Jan 21<span>st</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Mozilla has static analyses built into the buildsystem that can be turned on with &#8211;with-static-checking= flag. The analyses live in <a href="http://mxr.mozilla.org/mozilla-central/source/xpcom/analyses">xpcom/analyses</a> directory. The testcases (aka documentation) are in <a href="http://mxr.mozilla.org/mozilla-central/source/xpcom/tests/static-checker/">xpcom/tests/static-checker</a>. Analyses are implemented in either <a href="https://developer.mozilla.org/En/Dehydra">Dehydra</a> or <a href="https://developer.mozilla.org/en/Treehydra">Treehydra</a> and run within a patched GCC 4.3.</p>
+
+<p>The currently landed checks are:</p>
+
+<ul>
+<li>final.js: Java-like &#8220;final&#8221; keyword for C++</li>
+<li>flow.js: Ensure code in a function flows through a particular label</li>
+<li>must-override.js: Force derived classes to override certain methods</li>
+<li>override.js: Ensure methods exist in base class</li>
+<li>outparams.js: Ensure outparameters and return error codes are in sync</li>
+<li>stack.js: Mark classes as stack-only
+A whole lot more analyses in various states of completion can be tracked in the static analysis <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=430328">bug</a>.</li>
+</ul>
+
+
+<p>Asynchronous discussion happens in the mailing list. #static irc channel is the place for interactive discussion.</p>
+
+<p><strong>Nearterm Plans For Plugins </strong></p>
+
+<p>GCC 4.5 has an official plugin framework enabled by default. I will try to switch to GCC 4.5 as soon as it is out. Currently 4.5 is still changing too often for me to bother fixing Treehydra (Dehydra usually works). As soon as 4.5 is out I will revise the installation instructions to use distribution GCC and JavaScript packages to avoid the current mess (draft can be found <a href="http://groups.google.com/group/mozilla.dev.static-analysis/browse_thread/thread/a773ebdbc5479f9a#">here</a>). Sometime after that I&#8217;ll switch Mozilla static analysis to GCC 4.5 and drop 4.3 support.</p>
+
+<p>Hopefully, this will make it easier for other open source projects to adapt the hydras.</p>
+
+<p><strong>Plans for Analyses</strong></p>
+
+<p>I&#8217;m a big believer into application-specific static analyses, but I would like to see some heavy duty open source analyzers built on top of GCC.</p>
+
+<p>Some of the not-so-Mozilla-specific analyses should be bundled together to make them easy to try out on other projects.</p>
+
+<p>Hopefully 2010 will be the year that open source static analysis catches on.</p>
+
+<p><strong>LCA2010</strong></p>
+
+<p>I posted my <a href="http://people.mozilla.com/~tglek/lca2010/">slides</a> from yesterday.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  <div class="pagination">
+    
+      <a class="prev" href="/taras/blog/page/13/">&larr; Older</a>
+    
+    <a href="/taras/blog/archives">Blog Archives</a>
+    
+    <a class="next" href="/taras/blog/page/11/">Newer &rarr;</a>
+    
+  </div>
+</div>
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/26/coping-with-flash-hangs/">Coping with Flash hangs</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/16/snappy-44-fixing-tab-switching-in-vancouver/">Snappy #44: Fixing tab switching in Vancouver</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/05/snappy-43-big-improvements-faster-startup-smoother-tabstrip/">Snappy #43: Big improvements: faster startup? Smoother tabstrip!</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/26/snappy-42/">Snappy #42</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/18/snappy-41/">Snappy #41</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("tarasglek", 4, false);
+    });
+  </script>
+  <script src="/taras/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/tarasglek" class="twitter-follow-button" data-show-count="false">Follow @tarasglek</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Taras Glek -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

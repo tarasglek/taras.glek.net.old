@@ -1,0 +1,324 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>CPP Integration Progress - All About Performance</title>
+  <meta name="author" content="Taras Glek">
+
+  
+  <meta name="description" content="Existing Work All of existing work is based on basic C parsers so it can&#8217;t be directly applied to C++. I found out that someone did a PhD on &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tarasglek.github.com/taras/blog/2007/05/29/cpp-integration-progress/">
+  <link href="/taras/favicon.png" rel="icon">
+  <link href="/taras/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/taras/javascripts/modernizr-2.0.js"></script>
+  <script src="/taras/javascripts/ender.js"></script>
+  <script src="/taras/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/taras/atom.xml" rel="alternate" title="All About Performance" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/taras/">All About Performance</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/taras/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tarasglek.github.com/taras" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/taras/">Blog</a></li>
+  <li><a href="/taras/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">CPP Integration Progress</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-05-29T03:36:26-07:00" pubdate data-updated="true">May 29<span>th</span>, 2007</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><strong>Existing Work</strong></p>
+
+<p>All of existing work is based on basic C parsers so it can&#8217;t be directly applied to C++.</p>
+
+<p>I found out that someone did a PhD on refactoring C code resulting in the <a href="https://netfiles.uiuc.edu/garrido/www/CRefactory.html">CRefactory</a>(down atm) project. Looks like reversing the C preprocessor was by far the hardest task to address. Languages consisting of stacked lexical syntaxes (like OCaml &amp; camlp4) or preprocessorless ones like Java don&#8217;t even have this problem.</p>
+
+<p>A way to tackle the problem is to violently shove the some of the preprocessor markup into the C AST. Unfortunately this is an incredibly hard task because CPP is purely lexical and works at the token level, whereas the C compilers works with higher level AST syntax trees. Combining the two can result in an ambiguous grammar which is useless for refactoring.</p>
+
+<p>CRefactory integrates CPP into the AST where possible, it even handles some CPP conditionals. The author&#8217;s argument is that every CPP conditional represents a separate configuration and processing one configuration at a time will result in a combinatorial explosion of configurations to process thus conditionals must be integrated into the AST.</p>
+
+<p>However, CPP-in-AST solution is error prone and has issues scaling to large projects. Besides I think processing every configuration within the AST is still potentially a combinatorial explosion, the major benefit being that one can eliminate unfeasible conditionals if they cause syntax errors. This conditional elimination would be incredibly slow for C++. I also don&#8217;t believe that this would be enough to solve Mozilla&#8217;s conditionals since most of the troublesome macros are platform specific and would have dependencies on the system headers. Having said that, I appreciate seeing people prove that with enough effort even seemingly impossible tasks can be accomplished.</p>
+
+<p>A <a href="http://www.cs.berkeley.edu/~billm/astec-fse.pdf">paper</a> on ASTEC presents another solution which involves translating [lexical] CPP constructs into a CPP-like AST-based language. This works great in theory, but the translation process is only semi-automatic and requires a lot of hand-holding. I have mixed feeling about this approach. A simpler intermediate language is an excellent thing but as soon as it becomes &#8220;CPP sux, so I invented this better language: use it&#8221; the world gains yet another troublesome programming language.</p>
+
+<p><strong>My Approach</strong></p>
+
+<p>It took me a few weeks to figure out how to tackle the CPP problem in squash. I think I have a solution that will work real soon(TM).</p>
+
+<p>I like to avoid solving unsolvable problems and stick with works-for-me approach. Thus I probably wont make squash aware of CPP conditionals. My existing approach of combining output of running squash on Mac/Linux(and Windows in the future) should take care of 99% of cases in Mozilla. The rest will be flagged by a compiler and will be trivial to fix by hand.</p>
+
+<p><strong>Macro Expansion</strong></p>
+
+<p>I also don&#8217;t see the benefit of a partially integrated CPP within the C++ AST. Instead I am modifying MCPP to log the macro expansions with special markup enclosed in comments. Afterwards I plan to modify elsa to parse the macro-expansion log and modify the position tags on AST nodes accordingly. Then I&#8217;ll be able to do cool things like &#8220;cut out the piece of code that was parsed as 0&#8221; which will reference the source locations, figure out that 0 was a result of macro expansion and return &#8220;NULL&#8221;. Or when I try to rewrite a member in PR_MAX(something->GetPresContext()->foo, 0), the code will know that the the two GetPresContext() calls in the AST correspond to the same code fragment.</p>
+
+<p>Besides, isn&#8217;t this marked-up code pretty?</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>
+</span><span class='line'>/*m__CONCAT,"testcase3.c",2,*/
+</span><span class='line'>/*m__MATHDECL_1,"testcase3.c",5,*/
+</span><span class='line'>/*m__MATH_PRECNAME,"testcase3.c",8,*/
+</span><span class='line'># 10 "testcase3.c"
+</span><span class='line'>/*!0x2adfbaa6e010 _*/
+</span><span class='line'>/*!0x2adfbaa6e015 b*/
+</span><span class='line'># 10 "testcase3.c"
+</span><span class='line'>/*&lt;__CONCAT*/__boo/*&gt;*/
+</span><span class='line'>/*!0x2adfbaa6e010 _*/
+</span><span class='line'>/*!0x2adfbaa6e029 _*/
+</span><span class='line'># 11 "testcase3.c"
+</span><span class='line'># 11 "testcase3.c"
+</span><span class='line'># 11 "testcase3.c"
+</span><span class='line'>testcase3.c:11: error: Not a valid preprocessing token "//"
+</span><span class='line'>macro "__CONCAT" defined as: #define __CONCAT(x,y) x ## y   /* testcase3.c:*
+</span><span class='line'>/
+</span><span class='line'>macro "__MATHDECL_1" defined as: #define __MATHDECL_1(function,suffix) __CON
+</span><span class='line'>CAT(function,suffix)    /* testcase3.c:5        */
+</span><span class='line'>from testcase3.c: 11:    int __MATHDECL_1( __CONCAT(__, lgamma),_r);
+</span><span class='line'>int  /*&lt;__MATHDECL_1*/ /*&lt;__CONCAT*//*&lt;0x2adfbaa6e010*/ /*&lt;__CONCAT*/__lgamma/*&gt;
+</span><span class='line'>*//*&gt;*// *&lt;0x2adfbaa6e029*/_r/*&gt;*//*&gt;*/ /*&gt;*/ ;
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This is the original testcase:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>
+</span><span class='line'>#define __CONCAT(x,y)   x ## y</span></code></pre></td></tr></table></div></figure>
+
+
+<h1>define <strong>MATHDECL_1(function,suffix) \ </strong>CONCAT(function,suffix)</h1>
+
+<h1>define <strong>MATH_PRECNAME(name,r) </strong>CONCAT(name,r)</h1>
+
+<p><strong>CONCAT(</strong>, boo) int <strong>MATHDECL_1( </strong>CONCAT(<em>_, lgamma),</em>r); <strong>Code</strong></p>
+
+<p>The MCPP maintainer is absolutely awesome work with. MCPP needs to be modified to preserve horizontal whitespace(which preprocessors don&#8217;t do) and to provide the above expansion info. He volunteered to do a lot of the MCPP modifications for me and has been a lot of help in guiding me through his code.</p>
+
+<p>At this point looks like we&#8217;ll be able to integrate this work into the MCPP trunk. This is great news because to the best of my knowledge all of the other C refactoring tools either use a bitrotting fork of some C preprocessor or reimplement a yet another buggy version of CPP resulting in a lot of collectively wasted effort.</p>
+
+<p>I hope to have this working in squash within two weeks so I can finish the outparam rewrite and hopefully rid squash of a large portion of code that details with the non-deterministic source positions due to macro expansion.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Taras Glek</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-05-29T03:36:26-07:00" pubdate data-updated="true">May 29<span>th</span>, 2007</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/taras/blog/categories/mozilla/'>mozilla</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://tarasglek.github.com/taras/blog/2007/05/29/cpp-integration-progress/" data-via="tarasglek" data-counturl="http://tarasglek.github.com/taras/blog/2007/05/29/cpp-integration-progress/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/taras/blog/2007/05/17/undoing-cpp-deep-in-enemy-territory/" title="Previous Post: Undoing CPP - Deep in Enemy Territory">&laquo; Undoing CPP - Deep in Enemy Territory</a>
+      
+      
+        <a class="basic-alignment right" href="/taras/blog/2007/06/12/undoing-cpp-expansion-in-3-simple-steps-say-hello-to-easier-c-rewriting/" title="Next Post: Undoing CPP Expansion in 3 simple steps. Say "Hello" to easier C++ rewriting.">Undoing CPP Expansion in 3 simple steps. Say "Hello" to easier C++ rewriting. &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/26/coping-with-flash-hangs/">Coping with Flash hangs</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/16/snappy-44-fixing-tab-switching-in-vancouver/">Snappy #44: Fixing tab switching in Vancouver</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/05/snappy-43-big-improvements-faster-startup-smoother-tabstrip/">Snappy #43: Big improvements: faster startup? Smoother tabstrip!</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/26/snappy-42/">Snappy #42</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/18/snappy-41/">Snappy #41</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("tarasglek", 4, false);
+    });
+  </script>
+  <script src="/taras/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/tarasglek" class="twitter-follow-button" data-show-count="false">Follow @tarasglek</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Taras Glek -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

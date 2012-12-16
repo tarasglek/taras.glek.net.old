@@ -1,0 +1,247 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>GCC Rant + Progress - All About Performance</title>
+  <meta name="author" content="Taras Glek">
+
+  
+  <meta name="description" content="I feel strange working on GCC-specific stuff and then discussing it on planet mozilla as mozilla work. However, without GCC, Dehydra and Treehydra &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tarasglek.github.com/taras/blog/2009/04/30/gcc-rant-progress/">
+  <link href="/taras/favicon.png" rel="icon">
+  <link href="/taras/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/taras/javascripts/modernizr-2.0.js"></script>
+  <script src="/taras/javascripts/ender.js"></script>
+  <script src="/taras/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/taras/atom.xml" rel="alternate" title="All About Performance" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/taras/">All About Performance</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/taras/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tarasglek.github.com/taras" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/taras/">Blog</a></li>
+  <li><a href="/taras/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">GCC Rant + Progress</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-04-30T06:51:35-07:00" pubdate data-updated="true">Apr 30<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>I feel strange working on GCC-specific stuff and then discussing it on planet mozilla as mozilla work. However, without GCC, Dehydra and Treehydra would not be half as awesome (much less feasible even). The power of open source is that it allows us to leverage the entire open source ecosystem to achieve specific goals. When open source projects combine their efforts, not even the biggest software companies can compete as cross-project goals would be incredibly expensive and unpleasant otherwise.</p>
+
+<p>Occasionally, it is very frustrating to see people treat open source software as immutable and independent black boxes. In my personal experience, the browser and the compiler are viewed as finished products and therefore it is OK to bitch and complain about them. That&#8217;s frustrating because the same users could be channeling that energy in a more positive way by reporting bugs, contributing code/documentation, etc.</p>
+
+<p>Sometimes these rants result in rather comical conclusions: Ingo&#8217;s <a href="http://lwn.net/Articles/328685/">rant</a> is priceless. My perspective on this:</p>
+
+<ul>
+<li>what have Linux kernel devs done to help GCC help them?</li>
+<li><flame>Sparse is a deadend. Writing compiler code in C is silly, writing analysis code in C is sillier (and frustrating and limiting). Taking a crappy parser and bolting a crappy compiler backend onto it will result in bigger pile of crap :) Given how smart kernel devs are, they sure like wasting their time on crappy solutions in crappy languages.</flame></li>
+<li>Wouldn&#8217;t it be cool if instead of complaining these talented people wrote a GCC plugin to do what they want?
+<strong>GCC Plugin Progress</strong></li>
+</ul>
+
+
+<p>I finally landed the massively boring and annoying <a href="http://hg.mozilla.org/users/tglek_mozilla.com/gcc-moz-plugin-mq/file/24bbb11d7346/gty.diff">GTY patch</a>. I can barely believe that the patch went in so smoothly without excess complaining from GCC devs. From GCC perspective it&#8217;s merely a cosmetic cleanup that affects a large number of headers. For us it enables <a href="https://developer.mozilla.org/en/Treehydra">Treehydra</a> to be generated via <a href="https://developer.mozilla.org/En/Dehydra">Dehydra</a> with little manual effort. It basically makes Treehydra possible without patching GCC. I have another 3-4 patches that need to land before trunk GCC can run the hydras out of the box. Those are mainly localized bugfixes and cleanups so I fully expect them to go in and for GCC 4.5 to rock my world. Once GCC 4.5 ships. analyzing code will depend on a trivial matter of apt-getting(or equivalent) the hydras and specifying the analysis flags on the GCC commandline!</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Taras Glek</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-04-30T06:51:35-07:00" pubdate data-updated="true">Apr 30<span>th</span>, 2009</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/taras/blog/categories/dehydra/'>dehydra</a>, <a class='category' href='/taras/blog/categories/mozilla/'>mozilla</a>, <a class='category' href='/taras/blog/categories/treehydra/'>treehydra</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://tarasglek.github.com/taras/blog/2009/04/30/gcc-rant-progress/" data-via="tarasglek" data-counturl="http://tarasglek.github.com/taras/blog/2009/04/30/gcc-rant-progress/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/taras/blog/2009/04/23/benchmarks-and-instrumentation-for-fennecetc/" title="Previous Post: Benchmarks and Instrumentation for Fennec/etc">&laquo; Benchmarks and Instrumentation for Fennec/etc</a>
+      
+      
+        <a class="basic-alignment right" href="/taras/blog/2009/05/11/dehydra-updates/" title="Next Post: Dehydra Updates">Dehydra Updates &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/26/coping-with-flash-hangs/">Coping with Flash hangs</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/16/snappy-44-fixing-tab-switching-in-vancouver/">Snappy #44: Fixing tab switching in Vancouver</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/05/snappy-43-big-improvements-faster-startup-smoother-tabstrip/">Snappy #43: Big improvements: faster startup? Smoother tabstrip!</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/26/snappy-42/">Snappy #42</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/18/snappy-41/">Snappy #41</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("tarasglek", 4, false);
+    });
+  </script>
+  <script src="/taras/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/tarasglek" class="twitter-follow-button" data-show-count="false">Follow @tarasglek</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Taras Glek -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

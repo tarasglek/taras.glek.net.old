@@ -1,0 +1,658 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>All About Performance</title>
+  <meta name="author" content="Taras Glek">
+
+  
+  <meta name="description" content="For the in-progress work and minor changes that landed see non-meeting notes for this week. Jeff Muizelaar wrote an interesting blog post work &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tarasglek.github.com/taras/blog/page/3/">
+  <link href="/taras/favicon.png" rel="icon">
+  <link href="/taras/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/taras/javascripts/modernizr-2.0.js"></script>
+  <script src="/taras/javascripts/ender.js"></script>
+  <script src="/taras/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/taras/atom.xml" rel="alternate" title="All About Performance" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/taras/">All About Performance</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/taras/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tarasglek.github.com/taras" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/taras/">Blog</a></li>
+  <li><a href="/taras/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+  
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2012/07/23/snappy-july-19-telemetry-experiments/">Snappy, July 19: Telemetry Experiments</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-07-23T10:56:56-07:00" pubdate data-updated="true">Jul 23<span>rd</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>For the in-progress work and minor changes that landed see <a href="https://wiki.mozilla.org/Performance/Snappy/2012-07-19">non-meeting notes</a> for this week.</p>
+
+<p>Jeff Muizelaar wrote an interesting <a href="http://muizelaar.blogspot.ca/2012/07/what-happens-when-you-switch-to-gmail.html">blog post</a> work involved in a tab switch on Mac.</p>
+
+<p><strong>Windows Prefetch</strong>:<strong> Experimental Data vs Reality</strong></p>
+
+<p>I once discovered that <a href="http://en.wikipedia.org/wiki/Prefetcher">Windows Prefetch</a> can adversely affect application startup times, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=627591">627591</a>. Certain machines were showing performance to be much better with Windows prefetch disabled and using my &#8220;manual&#8221; dll preload code to warm up the cache. Manual dll preload is a win for loading large applications because it causes xul.dll to be read in sequentially rather than randomly via page-in (see my <a href="https://blog.mozilla.org/tglek/2010/">blog posts</a> from 2010 for details of startup IO uglyness). Unfortunately Windows Prefetch + my preload code measured as a net regression. I found a weird API that seemed to return 0 when prefetch was broken and <a href="https://hg.mozilla.org/mozilla-central/rev/cc18551d5cc3#l1.19">guarded </a>preload on that.</p>
+
+<p>We have recently backed out above heuristic based on a telemetry study in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=757215">757215</a>. Perhaps this is why our startup numbers have started <a href="https://metrics.mozilla.com/data/content/pentaho-cdf-dd/Render?solution=metrics2&amp;path=%2Ftelemetry&amp;file=telemetryEvolution.wcdf&amp;bookmarkState={%22impl%22%3A%22client%22%2C%22params%22%3A{%22referenceDate%22%3A%222012-07-23%22%2C%22appNameParameter%22%3A%22[Application].[Firefox]%22%2C%22osParameter%22%3A%22[OS].[WINNT]%22%2C%22channelParameter%22%3A%22[Channel].[nightly]%22%2C%22reasonParameter%22%3A%22[Reason].[idle-daily]%22%2C%22histogramParameter%22%3A%22[Histogram].[SIMPLE_MEASURES_FIRSTPAINT]%22%2C%22histogramPopupTools%22%3A%22%22%2C%22duplicateHistogram%22%3A%22%23duplicateHistogram%22%2C%22medianButtonParam%22%3A0%2C%22scatterChart%22%3A%22%22}}">getting better</a> in Firefox 16?</p>
+
+<p>Brian Bondy setup a <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=764905">telemetry startup trial</a> to randomly delete prefetch, turn on dll preload. Last week Saptarshi Guha crunched some <a href="https://wiki.mozilla.org/Platform/Features/Telemetry">telemetry</a> numbers, see this <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=771745#c9">bugzilla comment</a>. Turned out Windows Prefetch is a huge win and dll preload is a tiny incremental improvement on top of that (rather than being a regression).</p>
+
+<p>Moral of the story is: <em>do not rely on manual performance testing for workloads involving large amounts of IO</em>. Simulating a &#8220;typical&#8221; Windows machine is extremely hard without getting noisy numbers. Effort is better spent on analyzing noisy real-world numbers and running experiments in the wild.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2012/07/12/snappy-july-12-2012/">Snappy. July 12, 2012</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-07-12T08:30:52-07:00" pubdate data-updated="true">Jul 12<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><strong>Testing</strong></p>
+
+<p>We discussed setting up <a href="http://wrla.ch/blog/2012/06/mobile-firefox-measuring-how-a-browser-feels">Eideticker</a>, for desktop Firefox responsiveness testing.</p>
+
+<p>Andrew Halberstadt is making progress on a revised version of peptest. We are looking at loading talos pageset into individual tabs and tracking tab-switching</p>
+
+<p>We also discussed how QA can help in helping us confirm + narrow down regressions found by telemetry.</p>
+
+<p><strong>Necko</strong></p>
+
+<p>Necko guys are continuing to remove main thread DNS resolution, are integrating a custom DNS resolver. Last week they landed a bunch of <a href="https://metrics.mozilla.com/data/">telemetry</a> to help them play cache-lock-whack-a-mole: bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=763342">763342</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=767275">767275</a>.</p>
+
+<p><strong>Profiler</strong></p>
+
+<p>Our <a href="https://developer.mozilla.org/en/Performance/Profiling_with_the_Built-in_Profiler">profiler </a>should grok JavaScript now. See tomorrow&#8217;s nightly.</p>
+
+<p><strong>GC</strong></p>
+
+<p>Jon Coppeard put up a patch to do incremental sweeping. The cleanup phase of the GC is a major remaining continuous GC operation. This should help reduce remaining significant GC pauses.</p>
+
+<p><strong>Perf Team</strong></p>
+
+<p>Nicholas Chaim is almost done with setting a way to track main thread IO with XPerf in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=770317">770317</a>. We would like to track main thread network IO via xperf, but it&#8217;s not clear if xperf can report what thread IO operations happen on.</p>
+
+<p><strong>Slow Startup</strong></p>
+
+<p>Turns out Firefox validates some signed extensions on startup: bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=726125">726125</a>. I think we finally have a good explanation for some of the ridiculously slow startups we&#8217;ve been looking at. Yuck.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2012/07/09/snappy-update-for-week-of-july-5th/">Snappy Update for Week of July 5th</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-07-09T07:49:31-07:00" pubdate data-updated="true">Jul 9<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><strong>Frontend</strong></p>
+
+<p>Jared Wein discovered that our about:home was surprisingly expensive to load. He sped up the page by an estimated 30% in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=765411#c11">765411</a>. Similarly, Tim Taubert is fixing our new tab page performance in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=753448">753448</a>.</p>
+
+<p>Tim is also bravely attacking (via bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=769634">769634</a>) horrid performance issues with Firefox themes tracked by bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=650968">650968</a>.</p>
+
+<p><strong>Profiling</strong></p>
+
+<p>Alex Crichton added ability to profile JS in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=761261">761261</a>. Benoit Girard is adding labels to the profiler to expose JS profiling info in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=707308">bug 707308</a>.  Same functionality will also allow us to add URLs to the stacks. This means that in addition to seeing what Firefox is busy with, the profiler will now provide context on what caused the processing (<a href="http://people.mozilla.com/~tglek/velocity2012/css/profiler.png">screenshot</a>). This is huge. Benoit also improved profiler timing data in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=769989">769989</a>.</p>
+
+<p><strong>Slow Startup Research</strong></p>
+
+<p>As I mentioned <a href="https://blog.mozilla.org/tglek/2012/06/25/slow-startup-logging-help-wanted/">before</a>, Nicholas Chaim wrote an addon to track system IO usage while starting Firefox. He has since <a href="http://nchaim-moz2012.tumblr.com/post/26653615162/slow-startup-logging-add-on-0-12">updated </a>his addon to be hosted on <a href="https://addons.mozilla.org/en-US/firefox/addon/slow-startup-logging/">AMO</a> and to submit that data for analysis. If you suffer from slow Firefox startups, please help us identify common IO hogs by installing his addon. Please encourage friends with slow startups to do the same.</p>
+
+<p>This addon lists names of processes and amount of IO they did. This is somewhat private information, we can&#8217;t gather this data via telemetry.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2012/07/02/snappy-june-21-28/">Snappy June 21, 28</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-07-02T07:06:24-07:00" pubdate data-updated="true">Jul 2<span>nd</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Necko team is busy squashing main-thread waits, see <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=765665">bug 765665</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=766973">bug 766973</a>.</p>
+
+<p>Ehsan Akhgari turned on frame pointers on nightly channel: bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=764216">764216</a>. This means that one can now use the <a href="https://developer.mozilla.org/en/Performance/Profiling_with_the_Built-in_Profiler#Running%20the%20profiler">built-in profiler</a> on nightly builds. The main purpose behind the change was to collect more chromehang data(long Firefox UI stalls). Vlad Djeric lowered the chromehang reporting threshold to 5 seconds: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=763124">bug 763124</a>. We are waiting on metrics to separate out chromehang reporting from telemetry pings: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=763116">bug 763116</a>.</p>
+
+<p>Nathan Froyd is making heroic progress on teaching our events to queue so they can be prioritized: bug <a href="http://bugzilla.mozilla.org/show_bug.cgi?id=715376">715376</a>.</p>
+
+<p>Tim Taubert is working to reproduce a tab animation regression in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=752837">bug 752837</a>. He also taking over making Firefox themes less of a performance pig in<strong> </strong><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=650968">bug 650968</a> .</p>
+
+<p>We had great success with eliciting data on slow startups in Nicholas Chaim&#8217;s <a href="http://nchaim-moz2012.tumblr.com/post/25647745019/slow-startup-logging-add-on">blog post</a>.  We confirmed that external processes can affect Firefox startup (we had evidence for this) and that we can detect those situations (great work Nicholas!). It will be a hard slog before we can bolt a pretty UI to the extension + integrate system diagnostics into Firefox. In the meantime I recommend that <a href="http://support.mozilla.org/en-US/home">SUMO</a> people start suggesting this extension to diagnose slow Firefox installs. Nicholas is working on a revision of the extension that records slow-IO-caused-startup situations on a server so we prioritize + turn these into detectable fingerprints.</p>
+
+<p>William McCloskey fixed a nasty GC regression which caused GCs to run too often: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=768282">bug 768282</a>. Andrew McCreight sped up cycle collection when closing tabs: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=754495">bug 754495</a>. Olli Pettay enabled freeing DOM nodes directly (bypassing cycle-collection) when setting .innerHtml of non-empty DOM elements see <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=730639">bug 730639</a>.</p>
+
+<p><strong>PS</strong></p>
+
+<p>&#8220;The Performance of Open Source Applications&#8221; book is looking for <a href="http://www.aosabook.org/blog/2012/06/the-performance-of-open-source-applications/">contributors</a>. Would be cool if someone snuck some Mozilla wisdom in there.</p>
+
+<p>Sorry for skipping the snappy update last week. These posts take a lot more effort than is reasonable and I needed to direct it at my talk last week. You can see my <a href="http://velocityconf.com/velocity2012">Velocity</a> slides <a href="http://people.mozilla.com/~tglek/velocity2012/">here</a>.</p>
+
+<p>At least one person objected to the strong language used in the presentation (ie &#8220;dom local storage sucks&#8221;). I chose this language to emphasize the fact this isn&#8217;t a feature where one gets to weigh upsides vs downsides because the downsides are so severe. Most of the positive data on this is coming from what I believe to be unrepresentative benchmarks. I have not seen any other data points similar in quality to those reported by our <a href="https://metrics.mozilla.com/data/">telemetry</a>.</p>
+
+<p>Btw, Jan Varga is close to removing our IndexedDB prompt(bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=758357">758357</a>), opening up IndexedDB as an alternative to DOM Local Storage(<a href="https://blog.mozilla.org/tglek/2012/03/16/localstorage-pageload-perf/">which sucks</a>).</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2012/06/25/slow-startup-logging-help-wanted/">Slow Startup Logging: Help Wanted</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-06-25T03:07:06-07:00" pubdate data-updated="true">Jun 25<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>We have an intern working on an analysis tool to analyze how other Windows applications/services affect Firefox startup.</p>
+
+<p><a href="http://nchaim-moz2012.tumblr.com/post/25647745019/slow-startup-logging-add-on"><img src="http://media.tumblr.com/tumblr_m616xmP5m81qz73vw.png" alt="" /></a></p>
+
+<p>If you run Windows and you experience slow startups, please see Nicolas&#8217; <a href="http://nchaim-moz2012.tumblr.com/post/25647745019/slow-startup-logging-add-on">blog post</a> and submit data his addon gathers.</p>
+
+<p>ps. I will not have time to post a Snappy update for last week. The next update will cover 2 weeks.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2012/06/18/40-60-of-startups-are-warm/">40-60% of Startups Are Warm?</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-06-18T07:00:34-07:00" pubdate data-updated="true">Jun 18<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>_Note: click on the images if they get clipped by other content. Cold startups are those where data has to be read in from disk, warm ones are subsequent startups where the OS already has Firefox files in memory. _ I&#8217;m really surprised by the amount of warm startups done by Firefox users. Somewhere between 40% to 60% of startups are warm. On Linux you can see that by watching whether pagefaults occur while loading the firefox binary via <a href="https://metrics.mozilla.com/data/content/pentaho-cdf-dd/Render?solution=metrics2&amp;path=%2Ftelemetry&amp;file=telemetryHistogram.wcdf&amp;bookmarkState={%22impl%22%3A%22client%22%2C%22params%22%3A{%22startDate%22%3A%222012-05-19%22%2C%22endDate%22%3A%222012-06-17%22%2C%22appVersion%22%3A%22%22%2C%22appName%22%3A%22firefox%22%2C%22arch%22%3A%22%22%2C%22OS%22%3A%22%22%2C%22version%22%3A%22%22%2C%22channel%22%3A%22%22%2C%22appBuildID%22%3A%22%22%2C%22fromPlatformBuildID%22%3A%22%22%2C%22toPlatformBuildID%22%3A%22%22%2C%22excludeParam%22%3A%22%22%2C%22measure%22%3A%22EARLY_GLUESTARTUP_HARD_FAULTS%22%2C%22histogramCompareParam%22%3A%22appVersion%22%2C%22histogramVariablesParam%22%3A%22%22%2C%22platformBuildIDMode%22%3A%22LATEST%22%2C%22platformBuildIDTopCount%22%3A%2230%22%2C%22conditionsStatistic%22%3A%22%23conditionsStatistic%22%2C%22submissionsParameter%22%3A[[5229518]]}}">EARLY_GLUE_STARTUP_HARD_FAULTS</a> histogram.</p>
+
+<p><a href="http://tarasglek.github.com/taras/files/2012/06/glue.png"><img src="http://tarasglek.github.com/taras/files/2012/06/glue.png" alt="" /></a></p>
+
+<p>On Windows we do not have a good metric  for distinguishing cold startups from warm ones. However can look at the distribution of <a href="https://metrics.mozilla.com/data/content/pentaho-cdf-dd/Render?solution=metrics2&amp;path=%2Ftelemetry&amp;file=telemetryHistogram.wcdf&amp;bookmarkState={%22impl%22%3A%22client%22%2C%22params%22%3A{%22startDate%22%3A%222012-05-19%22%2C%22endDate%22%3A%222012-06-17%22%2C%22appVersion%22%3A%22%22%2C%22appName%22%3A%22firefox%22%2C%22arch%22%3A%22%22%2C%22OS%22%3A%22%22%2C%22version%22%3A%22%22%2C%22channel%22%3A%22%22%2C%22appBuildID%22%3A%22%22%2C%22fromPlatformBuildID%22%3A%22%22%2C%22toPlatformBuildID%22%3A%22%22%2C%22excludeParam%22%3A%22%22%2C%22measure%22%3A%22SIMPLE_MEASURES_FIRSTPAINT%22%2C%22histogramCompareParam%22%3A%22OS%22%2C%22histogramVariablesParam%22%3A%22darwin%2Clinux%2Cwinnt%22%2C%22platformBuildIDMode%22%3A%22LATEST%22%2C%22platformBuildIDTopCount%22%3A%2230%22%2C%22conditionsStatistic%22%3A%22%23conditionsStatistic%22%2C%22submissionsParameter%22%3A[[91510595]]}}">firstpaint histogram</a> and see that faster startups are more common than slower ones. Only a small minority of machines should be able to cold start a browser in &lt;3 seconds.  We have a lot of startups of various degrees of warmness.</p>
+
+<p><a href="http://tarasglek.github.com/taras/files/2012/06/firstpaint.png"><img src="http://tarasglek.github.com/taras/files/2012/06/firstpaint.png" alt="" /></a></p>
+
+<p>I have no explanation on why people restart Firefox so much. We know &lt; 10% of our shutdowns are <a href="https://metrics.mozilla.com/data/content/pentaho-cdf-dd/Render?solution=metrics2&amp;path=%2Ftelemetry&amp;file=telemetryHistogram.wcdf&amp;bookmarkState={%22impl%22%3A%22client%22%2C%22params%22%3A{%22startDate%22%3A%222012-05-19%22%2C%22endDate%22%3A%222012-06-17%22%2C%22appVersion%22%3A%22%22%2C%22appName%22%3A%22firefox%22%2C%22arch%22%3A%22%22%2C%22OS%22%3A%22%22%2C%22version%22%3A%22%22%2C%22channel%22%3A%22%22%2C%22appBuildID%22%3A%22%22%2C%22fromPlatformBuildID%22%3A%22%22%2C%22toPlatformBuildID%22%3A%22%22%2C%22excludeParam%22%3A%22%22%2C%22measure%22%3A%22SHUTDOWN_OK%22%2C%22histogramCompareParam%22%3A%22OS%22%2C%22histogramVariablesParam%22%3A%22darwin%2Clinux%2Cwinnt%22%2C%22platformBuildIDMode%22%3A%22LATEST%22%2C%22platformBuildIDTopCount%22%3A%2230%22%2C%22conditionsStatistic%22%3A%22%23conditionsStatistic%22%2C%22submissionsParameter%22%3A[[91503292]]}}">unclean</a> (most of those appear to be due to OS shutdown not waiting on Firefox, ie us shutting down too <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=662444">slowly</a>) so users aren&#8217;t crashing their browser and starting again. They are voluntarily closing the browser and then starting it soon after (ie OS doesn&#8217;t get a chance to flush Firefox out of filesystem cache).</p>
+
+<p><a href="http://tarasglek.github.com/taras/files/2012/06/shutdown_ok.png"><img src="http://tarasglek.github.com/taras/files/2012/06/shutdown_ok.png" alt="" /></a></p>
+
+<p>These patterns are pretty consistent across all of the Firefox release channels I checked, so I can&#8217;t blame warm startups on nightly users getting barraged with upgrade prompts. Can someone come up with a good theory(preferably with some evidence) for this?</p>
+
+<p>Note telemetry only collects data once a day and requires the browser to be open for a few minutes before submitting data, data could be skewed here.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2012/06/14/snappy-june-14th-telemetry-investigations/">Snappy, June 14th: Telemetry Investigations</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-06-14T07:51:24-07:00" pubdate data-updated="true">Jun 14<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>There are no news from the Firefox frontend team this week.</p>
+
+<p><strong>Adventures in Measuring Changes</strong></p>
+
+<p>Necko team spent this week investigating why the recent big <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=722034#c75">cache fix</a> was not showing as a win in telemetry.</p>
+
+<p><a href="https://metrics.mozilla.com/data/content/pentaho-cdf-dd/Render?solution=metrics2&amp;path=%2Ftelemetry&amp;file=telemetryEvolution.wcdf&amp;bookmarkState={%22impl%22%3A%22client%22%2C%22params%22%3A{%22appNameParameter%22%3A%22[Application].[Firefox]%22%2C%22channelParameter%22%3A%22[Channel].[nightly]%22%2C%22osParameter%22%3A%22[OS].[WINNT]%22%2C%22histogramParameter%22%3A%22[Histogram].[CACHE_SERVICE_LOCK_WAIT_MAINTHREAD]%22%2C%22referenceDate%22%3A%222012-06-14%22%2C%22histogramPopupTools%22%3A%22%22%2C%22duplicateHistogram%22%3A%22%23duplicateHistogram%22%2C%22medianButtonParam%22%3A0%2C%22scatterChart%22%3A%22%22}}"><img src="http://tarasglek.github.com/taras/files/2012/06/cache_lock_mainthread_crap.jpg.png" alt="" /></a></p>
+
+<p>We were on a verge of a big backout when Saptashi Guha&#8217;s analysis in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=762576">762576</a> suggested that we might actually be winning. It&#8217;s frustrating to have data point us in different directions. However, it is better to try to make sense of data than have no data at all as was the case only a year ago. I&#8217;ll have more on this next week.</p>
+
+<p>William McCloskey landed fix to turn on incremental GC for real (bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=761739">761739</a>). This might fix the mysterious recent user-responsiveness regression spotted by telemetry (bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=761722">761722</a>). He  also landed another GC speed up in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=743396">743396</a>.</p>
+
+<p>Mark Cote met with metrics analysts to discuss reporting peptest results robustly. The goal is avoid noise in reporting, so responsiveness regressions are acted upon</p>
+
+<p><strong>Interactivity Profiler</strong></p>
+
+<p>Benoit Girrard added added badges to mark known stacks in the profiler, see his <a href="http://benoitgirard.wordpress.com/2012/06/08/making-profiling-easier-automated-profiler-diagnostics/">blog post</a>. A few weeks ago Vladan <a href="http://blog.mozilla.org/vdjeric/2012/05/30/profiling-with-the-built-in-gecko-profiler-and-local-symbols-on-windows/">taught </a>the symbolication server to serve data from local .pdb files, allowing developers to use Benoit&#8217;s profiler in own builds. Mike Conley added incomplete Thunderbird support to the profiler.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2012/06/11/snappy-june-7/">Snappy, June 7</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-06-11T09:13:36-07:00" pubdate data-updated="true">Jun 11<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><a href="https://wiki.mozilla.org/Performance/Snappy/2012-06-07">Notes</a>.</p>
+
+<p>Justin&#8217;s FUEL fix will help add-ons avoid leaks and shutdown hangs: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=750454">bug 750454</a>.</p>
+
+<p>Jared plans to start landing Australis tab strip (<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=738491">738491</a>) on <a href="http://ftp.mozilla.org/pub/mozilla.org/firefox/nightly/latest-ux/">UX branch</a> this week. Australis is our new, faster UI theme.</p>
+
+<p>We landed a cache locking fix recently (<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=722034">722034</a>), but telemetry is now showing a regression (<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=761736">761736</a>), so this will likely be backed out and reworked.</p>
+
+<p>Vladan <a href="http://blog.mozilla.org/vdjeric/2012/06/08/cache-plugin-font-operations-most-common-in-chrome-hang-reports/">blogged</a> about first results from our non-destructive chromehang. Last year we briefly caused our nightly to crash if it hung for over 30seconds, which got us a lot of useful data (and some of the initial snappy bugs). This piggybacked on our crash-handling infrastructure so it was a very effective experiment (a bit brutal though). Vladan spent time this year working on plumbing to get the same sort of data non-destructively. As a result we are looking to <a href="https://groups.google.com/forum/?fromgroups#!topic/mozilla.dev.platform/UENmwUOFCkU">turn on frame pointers</a> in nightly builds and dial down hang detection to 5 seconds (bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=763124">763124</a>).</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2012/06/04/snappy-may-31st-less-lag/">Snappy, May 31st - Less Lag</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-06-04T02:38:08-07:00" pubdate data-updated="true">Jun 4<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>On Friday, the necko team finally landed a fix that makes cache less likely to freeze the UI thread during reads: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=722034">bug 722034</a>. Cache writes, other less common cache use-cases remain problematic (tracked by bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=717761">717761</a>). Poor cache/main-thread interactions are one of the main causes of UI lag tracked by the Snappy project, so this is very exciting. Barring the need to backout, this fix will appear in Firefox 15.</p>
+
+<p><strong>Help Wanted:</strong> The necko team is looking for some help to determine the optimal disk cache size, please see <a href="http://todesschaf.org/posts/2012/06/04/cache-usage-and-you.html">Nick&#8217;s post</a>. We need users to install an extension and submit detailed stats on our cache lifecycle.</p>
+
+<p>There are various Firefox frontend fixes in progress: improving session restore (working towards <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=669603">669603</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=669034">669034</a>), FUEL (bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=750454">750454</a>),  search service (bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=722332">722332</a>) and the new theme (bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=732583">732583</a>). I will blog about these in more detail as they land.</p>
+
+<p>Bill landed turned on incremental GC again. Hopefully it will stay on in Firefox 15.</p>
+
+<p>Andrew is making progress on reducing CC pauses while closing tabs: bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=754495">754495</a>.</p>
+
+<p>Brian has instrumented our event loop to measure the extent of Firefox lag when responding to user events, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=759449">759449</a>. This is different than measuring general event-loop lag in that it focuses on lag that the user would actually notice. Look for  the EVENTLOOP_UI_LAG_EXP_MS histogram in our <a href="https://metrics.mozilla.com/data/">telemetry dashboard </a>(yes, we are the only browser vendor to make this sort of data public). This should help us track progress as we tweak heuristics to delay background processing during user interaction (eg bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=712478">712478</a>).</p>
+
+<p>Brian also landed a way to bypass the windows prefetch service via our privileged silent update service, see <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=692255">bug 692255</a>. In my testing prefetch is likely to prefetch too many files, slowing down startup for complex apps like Firefox. Hopefully we can do better with our own prefetch.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2012/05/29/snappy-may-24-meetingless/">Snappy, May 24 - Meetingless</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-05-29T03:31:59-07:00" pubdate data-updated="true">May 29<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Frank and Jared are aiming to have the Australis theme up for review next week in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=732583">bug 732583</a>. There are no <em>computed</em> borders or gradients in the redesign, so it will be faster.  The current theme generates new borders/gradients on every tab interaction, which is very inefficient. Bas is working on fixing our graphics backend to render borders/gradients more efficiently in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=750871">750871</a>.</p>
+
+<p>Wlad spotted some unintended bloat in the addon database in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=752868">bug 752868</a>. Blair fixed it, this should speed up startup and other addon manager interactions.</p>
+
+<p>Bill did some further IGC fixes: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=757483">bug 757483</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=754588">bug 754588</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=756732">bug 756732</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=731423">bug 731423</a>.</p>
+
+<p>We started a new project to let Firefox diagnose common Windows/etc misconfiguration issues that severely impact Firefox performance. Our new intern, Nicholas, is working on this in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=684646">684646</a>. The immediate plan is to release an addon that detects when Firefox startup is unusually slow, checks for known Windows issues and pops up a link to a Mozilla <a href="http://support.mozilla.com/">support</a> article on how to fix the problem. If this turns out to be successful, we&#8217;ll integrate this functionality into Firefox.</p>
+
+<p>The gecko profiler is now ready for general consumption. See Benoit&#8217;s <a href="https://groups.google.com/forum/#!topic/mozilla.dev.platform/jOklwc7AdC8">announcement</a>. This will allow users running  the <a href="http://groups.google.com/group/mozilla.dev.platform/browse_thread/thread/3389798e5ef9744b#">profiling </a>variant of Firefox nightly builds to capture/report performance problems in a way that developers can act on. I suspect that <a href="http://benoitgirard.wordpress.com">Benoit </a>will blog about this.</p>
+
+<p><strong>Update</strong>: I originally linked the wrong bug for windows misconfiguration detection.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  <div class="pagination">
+    
+      <a class="prev" href="/taras/blog/page/4/">&larr; Older</a>
+    
+    <a href="/taras/blog/archives">Blog Archives</a>
+    
+    <a class="next" href="/taras/blog/page/2/">Newer &rarr;</a>
+    
+  </div>
+</div>
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/26/coping-with-flash-hangs/">Coping with Flash hangs</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/16/snappy-44-fixing-tab-switching-in-vancouver/">Snappy #44: Fixing tab switching in Vancouver</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/05/snappy-43-big-improvements-faster-startup-smoother-tabstrip/">Snappy #43: Big improvements: faster startup? Smoother tabstrip!</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/26/snappy-42/">Snappy #42</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/18/snappy-41/">Snappy #41</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("tarasglek", 4, false);
+    });
+  </script>
+  <script src="/taras/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/tarasglek" class="twitter-follow-button" data-show-count="false">Follow @tarasglek</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Taras Glek -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

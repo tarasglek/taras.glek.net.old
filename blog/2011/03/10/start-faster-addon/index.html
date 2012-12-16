@@ -1,0 +1,237 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>"Start Faster" Addon - All About Performance</title>
+  <meta name="author" content="Taras Glek">
+
+  
+  <meta name="description" content="A large proportion of our startup time is spent on loading the Firefox library(.dll, etc) files. This is true on all of our platforms. In my previous &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tarasglek.github.com/taras/blog/2011/03/10/start-faster-addon/">
+  <link href="/taras/favicon.png" rel="icon">
+  <link href="/taras/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/taras/javascripts/modernizr-2.0.js"></script>
+  <script src="/taras/javascripts/ender.js"></script>
+  <script src="/taras/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/taras/atom.xml" rel="alternate" title="All About Performance" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/taras/">All About Performance</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/taras/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tarasglek.github.com/taras" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/taras/">Blog</a></li>
+  <li><a href="/taras/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">"Start Faster" Addon</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-03-10T08:24:13-08:00" pubdate data-updated="true">Mar 10<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>A large proportion of our startup time is spent on loading the Firefox library(.dll, etc) files. This is true on all of our platforms. In my <a href="http://tarasglek.github.com/taras/2011/02/09/magic-patch-that-doubles-windows-startup/">previous pos</a>t I thought I discovered a way to load the Firefox binaries more efficiently on Windows(bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=627591">627591</a>). Further testing revealed that to not be true in all cases and that the Windows Prefetch service was still killing our startup speed. Microsoft does not seem to provide a way to opt out of the Windows Prefetch &#8216;service&#8217;.</p>
+
+<p>There is a DIY way to opt out of prefetch by gaining Administrator privileges and deleting files out of the prefetch directory. Our is plan is to provide a Windows service to handle Firefox updates (bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=481815">481815</a>). Additionally the service would be able to do useful things like delete prefetch files, defragment Firefox databases(or at least help report on fragmentation levels). This is all tricky stuff.</p>
+
+<p>In the meantime, to test my theory I wrote a <a href="https://addons.mozilla.org/en-US/firefox/addon/startupservice/">test extension</a>. This is a restartless extension that adds a Windows service and a wrapper executable to significantly speed up Firefox startup after rebooting (oh the irony!). After installing the extension, &#8220;Faster Firefox&#8221; shortcut on the Desktop should result in up to 2x speed up in Firefox startup. This addon is a rough proof of concept to play with while I bake this functionality into Firefox. Comments, improvements are welcome. Note that launching Firefox by shortcuts other &#8220;Faster Firefox&#8221; is slower while this extension is installed (this will be fixed once preloading functionality is integrated into Firefox properly). This addon does not yet work on XP because I do not yet have an XP enviroment to test/develop in (patches are welcome).</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Taras Glek</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-03-10T08:24:13-08:00" pubdate data-updated="true">Mar 10<span>th</span>, 2011</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/taras/blog/categories/mozilla/'>mozilla</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://tarasglek.github.com/taras/blog/2011/03/10/start-faster-addon/" data-via="tarasglek" data-counturl="http://tarasglek.github.com/taras/blog/2011/03/10/start-faster-addon/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/taras/blog/2011/02/09/magic-patch-that-doubles-windows-startup/" title="Previous Post: Magic patch that halves Windows startup">&laquo; Magic patch that halves Windows startup</a>
+      
+      
+        <a class="basic-alignment right" href="/taras/blog/2011/04/14/arguing-about-startup-communicating-performance/" title="Next Post: Arguing about startup: Communicating performance">Arguing about startup: Communicating performance &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/26/coping-with-flash-hangs/">Coping with Flash hangs</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/16/snappy-44-fixing-tab-switching-in-vancouver/">Snappy #44: Fixing tab switching in Vancouver</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/05/snappy-43-big-improvements-faster-startup-smoother-tabstrip/">Snappy #43: Big improvements: faster startup? Smoother tabstrip!</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/26/snappy-42/">Snappy #42</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/18/snappy-41/">Snappy #41</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("tarasglek", 4, false);
+    });
+  </script>
+  <script src="/taras/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/tarasglek" class="twitter-follow-button" data-show-count="false">Follow @tarasglek</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Taras Glek -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

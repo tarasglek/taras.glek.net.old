@@ -1,0 +1,290 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Undoing CPP Expansion in 3 simple steps. Say "Hello" to easier C++ rewriting. - All About Performance</title>
+  <meta name="author" content="Taras Glek">
+
+  
+  <meta name="description" content="This is incredibly exciting: I believe that I finally solved the messy and mind-numbingly boring CPP/C++ integration problem! Having code displaced &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tarasglek.github.com/taras/blog/2007/06/12/undoing-cpp-expansion-in-3-simple-steps-say-hello-to-easier-c-rewriting/">
+  <link href="/taras/favicon.png" rel="icon">
+  <link href="/taras/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/taras/javascripts/modernizr-2.0.js"></script>
+  <script src="/taras/javascripts/ender.js"></script>
+  <script src="/taras/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/taras/atom.xml" rel="alternate" title="All About Performance" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/taras/">All About Performance</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/taras/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tarasglek.github.com/taras" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/taras/">Blog</a></li>
+  <li><a href="/taras/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Undoing CPP Expansion in 3 Simple Steps. Say "Hello" to Easier C++ Rewriting.</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-06-12T03:26:01-07:00" pubdate data-updated="true">Jun 12<span>th</span>, 2007</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>This is incredibly exciting: I believe that I finally solved the messy and mind-numbingly boring CPP/C++ integration problem! Having code displaced or generated due to CPP-expansion should no longer be a fatal problem for <a href="http://wiki.mozilla.org/Squash">Squash</a>. I believe macro-expansion is (or was) the single biggest problem between me and large-scale automated refactoring of the Mozilla codebase.</p>
+
+<p>What&#8217;s even more exciting is that I think my solution is both incredibly simple to implement and more general than prior work. Most other tools combine the CPP expansion &amp; C parsing into a single step and then integrate (or should I say violently shove?) CPP constructs into the AST. This results in complete lack of separation between preprocessing and program analysis. For example, due to this tight coupling existing solutions were useless to me because the fancy CPP logic could not be separated from the C parser. I would also have a hard time submitting a more convoluted C++ parser upstream to the Elsa maintainer.</p>
+
+<p><strong>Design</strong></p>
+
+<p>There are three parts to my solution:</p>
+
+<ol>
+<li><em>Critical component</em>. A CPP expansion undo-log injected during CPP-expansion by a modified C preprocessor (upcoming version of MCPP). The statements are wrapped in C comments such that the preprocessed result can be parsed by any C/C++/etc parser or compiler. Implementation-wise this is the hardest part since MCPP(as most other C proprocessors) was never designed it keep track of macro expansion info.</li>
+<li>A small modification to the Elsa lexer to parse the undo-log and set it aside in a separate data structure.</li>
+<li><em>Tricky</em>. A function that utilizes the cpp undo-log to map the preprocessed source locations to the unpreprocessed ones. This is a a ridiculously simple solution to a tricky design problem of how to efficiently advertise the fact that every AST node has at least 2 different source positions (pre expansion, post expansion &amp; a stack of positions resulting from expanding nested macros).
+The MCPP maintainer is almost done with 1. I have a prototype implementation of 2 &amp; 3 weighing in at less than 500lines. Now that the design phase is complete, the amount of changes to Elsa is trivial, so I should be done with those real soon now.</li>
+</ol>
+
+
+<p><strong>Looking Ahead</strong></p>
+
+<p>Now I need to modify Elsa to retain more precise source locations. This includes adding end-of-ast-node-location and adding positions to nodes(such as expressions) that don&#8217;t even have a start position at the moment. This combined with cpp-undo-log enhanced precise positions should allow for code rewrites to retain as much original source code as possible. This reduces the amount of ugly machine-generated code and results in better correctness (existing code is likely to work).</p>
+
+<p><strong>CPP Undo-log Example</strong></p>
+
+<p>The undo-log took a couple of tries to get right. Now macro-parameters have a notion of scope and sensible names. The following example features macro-induced column displacement and macro-expansion causing line shrinkage.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>
+</span><span class='line'>#define NULL 0L
+</span><span class='line'>#define FOO(a, b) a + b
+</span><span class='line'>int i = NULL; int j;
+</span><span class='line'>int k = FOO(
+</span><span class='line'>FOO(NULL , 1),
+</span><span class='line'>2);
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Preprocessed version</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>
+</span><span class='line'># 1 "testcase4.c"
+</span><span class='line'>/*mNULL 1:8-1:15*/
+</span><span class='line'>/*mFOO 2:8-2:23*/</span></code></pre></td></tr></table></div></figure>
+
+
+<p>int i = /<em><NULL 3:8-3:12*/0L/*></em>/; # 3 &#8220;testcase4.c&#8221; int j; int k = /<em><FOO 4:8-6:3*//*!FOO#0-0 5:0-5:13*//*!FOO#0-1 6:1-6:2*//*<FOO#0-0*//*<FOO*//*!FOO#1-0*//*!FOO#1-1*//*<FOO#1-0*//*<NULL*/0L/*></em>//<em>></em>/ + /<em>&lt;FOO#1-1</em>/1/<em>></em>//<em>></em>//<em>></em>/ + /<em>&lt;FOO#0-1</em>/2/<em>></em>//<em>></em>/;</p>
+
+<p><strong>Conclusion</strong></p>
+
+<p>It took a lot to arrive at such a simple solution. I expect that all of my work is likely to end up upstream in BSD-licensed projects: MCPP &amp; and Elsa/Oink. I sincerely hope that other people will be able to build on it for their CPP-infested analysis needs and avoid the unbearable mind-numbing discomfort associated with making CPP play along.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Taras Glek</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-06-12T03:26:01-07:00" pubdate data-updated="true">Jun 12<span>th</span>, 2007</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/taras/blog/categories/mozilla/'>mozilla</a>, <a class='category' href='/taras/blog/categories/squash/'>squash</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://tarasglek.github.com/taras/blog/2007/06/12/undoing-cpp-expansion-in-3-simple-steps-say-hello-to-easier-c-rewriting/" data-via="tarasglek" data-counturl="http://tarasglek.github.com/taras/blog/2007/06/12/undoing-cpp-expansion-in-3-simple-steps-say-hello-to-easier-c-rewriting/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/taras/blog/2007/05/29/cpp-integration-progress/" title="Previous Post: CPP Integration Progress">&laquo; CPP Integration Progress</a>
+      
+      
+        <a class="basic-alignment right" href="/taras/blog/2007/06/19/it-works/" title="Next Post: It works!">It works! &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/26/coping-with-flash-hangs/">Coping with Flash hangs</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/16/snappy-44-fixing-tab-switching-in-vancouver/">Snappy #44: Fixing tab switching in Vancouver</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/05/snappy-43-big-improvements-faster-startup-smoother-tabstrip/">Snappy #43: Big improvements: faster startup? Smoother tabstrip!</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/26/snappy-42/">Snappy #42</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/18/snappy-41/">Snappy #41</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("tarasglek", 4, false);
+    });
+  </script>
+  <script src="/taras/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/tarasglek" class="twitter-follow-button" data-show-count="false">Follow @tarasglek</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Taras Glek -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

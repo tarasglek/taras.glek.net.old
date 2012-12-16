@@ -1,0 +1,351 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Mozilla 2: Outparamdel - All About Performance</title>
+  <meta name="author" content="Taras Glek">
+
+  
+  <meta name="description" content="There will be a lot of under-the-hood code changes in Mozilla 2. Our goal is to end up with a simpler, safer and faster codebase. This is my &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tarasglek.github.com/taras/blog/2007/11/26/mozilla-2-outparamdel/">
+  <link href="/taras/favicon.png" rel="icon">
+  <link href="/taras/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/taras/javascripts/modernizr-2.0.js"></script>
+  <script src="/taras/javascripts/ender.js"></script>
+  <script src="/taras/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/taras/atom.xml" rel="alternate" title="All About Performance" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/taras/">All About Performance</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/taras/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tarasglek.github.com/taras" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/taras/">Blog</a></li>
+  <li><a href="/taras/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Mozilla 2: Outparamdel</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-11-26T07:26:17-08:00" pubdate data-updated="true">Nov 26<span>th</span>, 2007</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>There will be a lot of under-the-hood code changes in Mozilla 2. Our goal is to end up with a simpler, safer and faster codebase.</p>
+
+<p>This is my perspective on the work ahead with respect to outparamdel.</p>
+
+<p><strong>Outparamdel</strong></p>
+
+<p>In the presence of a garbage collector we will be getting rid of stack nsCOMPtr&lt;> usage (using raw pointers instead), but the getter_Addrefs() will still be needed to pass references to heap-allocated nsCOMPtr so they can be assigned to. Eliminating as many outparams as possible will eliminate much getter_Addrefs() footprint/perf/code bloat.</p>
+
+<p>Within the next week I hope to attempt to rewrite all of the auto-detectable outparamdel candidates.</p>
+
+<p><strong>Determining What To Rewrite</strong></p>
+
+<p>outparams.js is a dehydra script for flagging code that can be rewritten to use outparameters. It turned out a bit trickier than I initially expected. Here are the checks required</p>
+
+<ol>
+<li>Check that a function only ever returns 1 failure error code (NS_OK and something else). This enough if a function is not virtual.</li>
+<li>Ensure that either a) This is the only implementation of a particular virtual function or b) All other implementations of this function satisfy 1 Currently I only do a).</li>
+<li>Also check that all overloads of this function have the same outparameter type. This is required since C++ (thankfully) doesn&#8217;t not allow function overloading by varying the return type.</li>
+<li>Checks 1-3 ensure that the function can be rewritten, however one also needs to determine if the return type should be wrapped in getter_Addrefs&lt;>. This can not be deterministically done from looking at the getter. So one has to scan the code for usage of the function to see if the outparam is ever passed getter_Addrefs.</li>
+<li>Check that none of the callers are within macros to minimize non-automatic rewriting.
+Checks 2 and 3 require the complete class hierachy of Mozilla so I finally made a few more dehydra scripts to produce that. This was on my TODO list for a while and should make a few other interesting analyses possible (my favourite one is finding interfaces which only have 1 implementation to get rid of excessive virtual functions).</li>
+</ol>
+
+
+<p>Checks 4 and 5 were easiest to implement as warnings in outparamdel.</p>
+
+<p>One should keep in mind transitivity. Once the first outparamdel candidates are rewritten, some of their callers should become flagged for rewriting in the same manner.</p>
+
+<p><strong>Rewriting Code </strong></p>
+
+<p>Here is an example of how code will be simplified.</p>
+
+<p>given a function:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>
+</span><span class='line'>nsresult getFoo(nsIFoo **out);
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And usage like:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>
+</span><span class='line'>nsCOMPtr&lt;nsIFoo&gt; bla;
+</span><span class='line'>nsresult rv = getFoo(getter_Addrefs(bla));</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>if ((NS_SUCCEEDED(rv) && bla) {
+</span><span class='line'>...
+</span><span class='line'>} else {
+</span><span class='line'>return rv;
+</span><span class='line'>}
+</span><span class='line'>nsCOMPtr&lt;nsIFoo&gt; bla2;
+</span><span class='line'>return getFoo(getter_Addrefs(bla2));
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The function definition will become:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>nsIFoo* getFoo();
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Before this can be done, several issues come up</p>
+
+<ol>
+<li>It is not clear if the original getFoo() is allowed to always override the value passed to it. This is hard to determine automatically, so we make the assumption that in the general case it is ok.</li>
+<li>It isn&#8217;t obvious if getFoo() is returns null in the outparam to indicate some non-error condition. This is rare so the parameter shall be annotated. Currently, the plan is to annotate with a NULLABLE_OUTPARAM() macro which would be detectable by dehydra and serve as documentation for the function behavior.</li>
+</ol>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>nsCOMPtr&lt;nsIFoo&gt; bla = getFoo(); //after XPCOMGC rewrite the left side will become nsIFoo* bla
+</span><span class='line'>if (bla) { // could even merge the above declaration into the if condition
+</span><span class='line'>...
+</span><span class='line'>} else {
+</span><span class='line'>return NS_ERROR;// or NULL if this is another outparamdel candidate
+</span><span class='line'>}
+</span><span class='line'>nsCOMPtr&lt;nsIFoo&gt; bla2 = getFoo();
+</span><span class='line'>return bla2 ? NS_OK : NS_ERROR_SOMETHING; // I'm not sure if outparamdel should use an explicit ternary operator or an inline function to convert new style errors into nsresult
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Currently the code is being rewritten in a much uglier way. So this cleaner version will likely be implemented as an optimization pass (probably with a new tool outparamdel-opt?). There several tricks here:</p>
+
+<ol>
+<li>Connect the declaration with initialization of bla and bla2</li>
+<li>Detect the error check and replace it with &#8220;bla&#8221;(or !bla for NS_FAILED).Then realize that bla &amp;&amp; bla contains a redundant statement and take it out.</li>
+<li>Do something similar to return statements.
+<strong>Result</strong></li>
+</ol>
+
+
+<p>This should result in prettier code that compiles quicker and to a smaller, more efficient binary. It will also be more GC-friendly.</p>
+
+<p><strong>C++ Exceptions</strong></p>
+
+<p>Right now outparamdel does rewrites that are useful even if C++ exceptions will not be introduced. There are further code reduction gains possible if above error checks were converted into C++ exceptions, but I am not clear on performance characteristics of exceptions. We would also need to change tamarin exceptions to match C++ ones before any experimentation can be done.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Taras Glek</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-11-26T07:26:17-08:00" pubdate data-updated="true">Nov 26<span>th</span>, 2007</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/taras/blog/categories/dehydra/'>dehydra</a>, <a class='category' href='/taras/blog/categories/mozilla/'>mozilla</a>, <a class='category' href='/taras/blog/categories/outparamdel/'>outparamdel</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://tarasglek.github.com/taras/blog/2007/11/26/mozilla-2-outparamdel/" data-via="tarasglek" data-counturl="http://tarasglek.github.com/taras/blog/2007/11/26/mozilla-2-outparamdel/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/taras/blog/2007/11/12/cleaning-up-my-act/" title="Previous Post: Cleaning up my act">&laquo; Cleaning up my act</a>
+      
+      
+        <a class="basic-alignment right" href="/taras/blog/2007/11/28/volume-of-refactoring-ahead/" title="Next Post: Volume of Refactoring Ahead">Volume of Refactoring Ahead &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/26/coping-with-flash-hangs/">Coping with Flash hangs</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/16/snappy-44-fixing-tab-switching-in-vancouver/">Snappy #44: Fixing tab switching in Vancouver</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/05/snappy-43-big-improvements-faster-startup-smoother-tabstrip/">Snappy #43: Big improvements: faster startup? Smoother tabstrip!</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/26/snappy-42/">Snappy #42</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/18/snappy-41/">Snappy #41</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("tarasglek", 4, false);
+    });
+  </script>
+  <script src="/taras/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/tarasglek" class="twitter-follow-button" data-show-count="false">Follow @tarasglek</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Taras Glek -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

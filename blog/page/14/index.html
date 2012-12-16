@@ -1,0 +1,675 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>All About Performance</title>
+  <meta name="author" content="Taras Glek">
+
+  
+  <meta name="description" content="While writing C++ sometimes one wishes that one could squeeze a little more out of the type system. In this particular case, Zack Weinberg (layout- &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tarasglek.github.com/taras/blog/page/14/">
+  <link href="/taras/favicon.png" rel="icon">
+  <link href="/taras/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/taras/javascripts/modernizr-2.0.js"></script>
+  <script src="/taras/javascripts/ender.js"></script>
+  <script src="/taras/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/taras/atom.xml" rel="alternate" title="All About Performance" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/taras/">All About Performance</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/taras/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tarasglek.github.com/taras" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/taras/">Blog</a></li>
+  <li><a href="/taras/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+  
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2009/09/18/enforcing-inheritance-rules/">Enforcing Inheritance Rules</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-09-18T03:01:48-07:00" pubdate data-updated="true">Sep 18<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>While writing C++ sometimes one wishes that one could squeeze a little more out of the type system. In this particular case, Zack Weinberg (layout-refactorer extraordinaire), wanted to make sure that certain methods always get overridden in derived classes. Unfortunately, in that particular design, those methods were not pure-virtual. At this point most C++ hackers would cry a little and move on without any compiler assistance.</p>
+
+<p>Instead of crying, Zack added a NS_MUST_OVERRIDE attribute to methods along with a matching <a href="https://developer.mozilla.org/En/Dehydra">Dehydra</a> script. See the <a href="http://hg.mozilla.org/mozilla-central/file/2047ed35d947/xpcom/analysis/must-override.js">source code</a> and the <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=512726">bug</a> for how simple it can be to extend C++ with a useful new check.</p>
+
+<p>Nothing makes me happier than seeing developers land big code changes and accompany them with compiler checks instead of relying on programming folklore to maintain important invariants.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2009/08/27/moving-files-into-jars/">Moving Files Into JARs</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-08-27T03:40:09-07:00" pubdate data-updated="true">Aug 27<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Moving files into jars reduces amount of seeks on startup, and has miscellaneous other performance/organization benefits. I added resource://gre-resources/ which maps to jar:toolkit.jar!/res/.</p>
+
+<p>To move a file into a jar:</p>
+
+<ol>
+<li>Add a jar.mn entry.</li>
+<li>Remove existing references to the file in Makefile.in, packages-static files</li>
+<li>Add file to the removed-files.in list of dead files</li>
+<li>Update urls refering to the file in the source. Sometimes one has to switch from using file streams and filenames to using channels and URIs. This is the hard part.</li>
+<li>Set your bug as blocking bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=513027">513027</a>.
+For an example see <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=508421">bug 508421</a>.</li>
+</ol>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2009/08/20/cleaning-up-startup-disk-io/">Cleaning Up Startup Disk IO</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-08-20T08:50:12-07:00" pubdate data-updated="true">Aug 20<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><strong>Maintaining a module, killing off another one </strong></p>
+
+<p>I was granted ownership of the <a href="http://benjamin.smedbergs.us/blog/2009-08-19/taras-owns-libjar/">jar module</a>. Today, I resumed my quest to <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=457949">kill off </a>the barely limping stopwatch module. Together with nuking <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=505784">STANDALONE</a> mode in jar stuff, I will have landed 75KB worth of -ve diffs this month. It feels so good to delete code.</p>
+
+<p><strong>IO Report</strong></p>
+
+<p>Currently I am focusing on application IO (excluding libraries and IO caused by libraries).</p>
+
+<p>From my empirical measurements, opening individual files on a 7200RPM hard drive costs around 0-40ms. This is on Linux. I presume files open quickly when they are located near previously opened files and slower if a full disk seek is required for them. Combining files is usually a significant win in terms of throughput. It turns out that even warm starts and reading from SSDs can benefit from combined IO. Currently small file throughput ranges from &lt;1KB/s to &lt;200KB/s for files &lt; 500K. Combining files into memory mapped jars bumps that up to 1-1.5MB/s (currently jar files are relatively small, making them responsible for a higher proportion of IO should boost that further).</p>
+
+<p>The biggest gains are to be had on Windows Mobile where almost every seemingly trivial filesystem operation takes 2-3ms.</p>
+
+<p>I would like to reduce the number of files read on startup to a dozen or so to be able to crank up disk throughput. Unfortunately, there is a lot to be done, I could use a great deal of help.</p>
+
+<p>Below is a long list of files gathered by stracing firefox-bin, and what I know about them:  /home/taras/builds/minefield/dist/bin/application.ini /home/taras/builds/minefield/dist/bin/browserconfig.properties /home/taras/builds/minefield/dist/bin/platform.ini Haven&#8217;t investigated these yet. Perhaps, instead of reading these files should be compiling this info into the xulrunner launcher app?</p>
+
+<p><strong>Update</strong>: ted says application.ini used to be compiled in: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=383167">bug 383167 </a> /home/taras/builds/minefield/dist/bin/plugins</p>
+
+<p>I&#8217;m ignoring plugins at the moment. /home/taras/builds/minefield/dist/bin/chrome /home/taras/builds/minefield/dist/bin/chrome/browser.jar /home/taras/builds/minefield/dist/bin/chrome/browser.manifest /home/taras/builds/minefield/dist/bin/chrome/comm.manifest /home/taras/builds/minefield/dist/bin/chrome/en-US.jar /home/taras/builds/minefield/dist/bin/chrome/en-US.manifest /home/taras/builds/minefield/dist/bin/chrome/pageloader.manifest /home/taras/builds/minefield/dist/bin/chrome/pippki.manifest /home/taras/builds/minefield/dist/bin/chrome/reftest.manifest /home/taras/builds/minefield/dist/bin/chrome/toolkit.jar /home/taras/builds/minefield/dist/bin/chrome/toolkit.manifest /home/taras/builds/minefield/dist/bin/chrome/xslt-qa.manifest</p>
+
+<p>The .manifest files describe how to find stuff in chrome jars. Parsing .manifest files is inefficient due to disk seeks. Additionally, current .manifest parsing code appears to be slow on mobile devices. <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=506392">bug 506392</a> I would like to move .manifest files within jars(and look for manifests within jars when a manifest isn&#8217;t found alongside the .jar in the filesystem)</p>
+
+<p>.jar files are a little bit of  a  cpu hog when it comes  to parse the zip file index. This can be done lazily: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=511754">bug 511754</a> /home/taras/builds/minefield/dist/bin/chrome/icons/default/default16.png /home/taras/builds/minefield/dist/bin/chrome/icons/default/default32.png /home/taras/builds/minefield/dist/bin/chrome/icons/default/default48.png These icons are parsed by gnome libs 3 times during startup. I wonder if we are initializing some gnome thing 3 times?</p>
+
+<p>/home/taras/builds/minefield/dist/bin/components /home/taras/builds/minefield/dist/bin/components/aboutCertError.js /home/taras/builds/minefield/dist/bin/components/aboutPrivateBrowsing.js /home/taras/builds/minefield/dist/bin/components/aboutRights.js /home/taras/builds/minefield/dist/bin/components/aboutRobots.js /home/taras/builds/minefield/dist/bin/components/aboutSessionRestore.js /home/taras/builds/minefield/dist/bin/components/FeedConverter.js /home/taras/builds/minefield/dist/bin/components/FeedWriter.js /home/taras/builds/minefield/dist/bin/components/fuelApplication.js /home/taras/builds/minefield/dist/bin/components/httpd.js /home/taras/builds/minefield/dist/bin/components/NetworkGeolocationProvider.js /home/taras/builds/minefield/dist/bin/components/nsAddonRepository.js /home/taras/builds/minefield/dist/bin/components/nsBadCertHandler.js /home/taras/builds/minefield/dist/bin/components/nsBlocklistService.js /home/taras/builds/minefield/dist/bin/components/nsBrowserContentHandler.js /home/taras/builds/minefield/dist/bin/components/nsBrowserGlue.js /home/taras/builds/minefield/dist/bin/components/nsContentDispatchChooser.js /home/taras/builds/minefield/dist/bin/components/nsContentPrefService.js /home/taras/builds/minefield/dist/bin/components/nsDefaultCLH.js /home/taras/builds/minefield/dist/bin/components/nsDownloadManagerUI.js /home/taras/builds/minefield/dist/bin/components/nsExtensionManager.js /home/taras/builds/minefield/dist/bin/components/nsFilePicker.js /home/taras/builds/minefield/dist/bin/components/nsFormAutoComplete.js /home/taras/builds/minefield/dist/bin/components/nsHandlerService.js /home/taras/builds/minefield/dist/bin/components/nsHelperAppDlg.js /home/taras/builds/minefield/dist/bin/components/nsLivemarkService.js /home/taras/builds/minefield/dist/bin/components/nsLoginInfo.js /home/taras/builds/minefield/dist/bin/components/nsLoginManager.js /home/taras/builds/minefield/dist/bin/components/nsLoginManagerPrompter.js /home/taras/builds/minefield/dist/bin/components/nsMicrosummaryService.js /home/taras/builds/minefield/dist/bin/components/nsPlacesAutoComplete.js /home/taras/builds/minefield/dist/bin/components/nsPlacesDBFlush.js /home/taras/builds/minefield/dist/bin/components/nsPlacesTransactionsService.js /home/taras/builds/minefield/dist/bin/components/nsPrivateBrowsingService.js /home/taras/builds/minefield/dist/bin/components/nsProgressDialog.js /home/taras/builds/minefield/dist/bin/components/nsProxyAutoConfig.js /home/taras/builds/minefield/dist/bin/components/nsSafebrowsingApplication.js /home/taras/builds/minefield/dist/bin/components/nsSample.js /home/taras/builds/minefield/dist/bin/components/nsSearchService.js /home/taras/builds/minefield/dist/bin/components/nsSearchSuggestions.js /home/taras/builds/minefield/dist/bin/components/nsSessionStartup.js /home/taras/builds/minefield/dist/bin/components/nsSessionStore.js /home/taras/builds/minefield/dist/bin/components/nsSetDefaultBrowser.js /home/taras/builds/minefield/dist/bin/components/nsSidebar.js /home/taras/builds/minefield/dist/bin/components/nsTaggingService.js /home/taras/builds/minefield/dist/bin/components/nsTryToClose.js /home/taras/builds/minefield/dist/bin/components/nsUpdateService.js /home/taras/builds/minefield/dist/bin/components/nsUrlClassifierLib.js /home/taras/builds/minefield/dist/bin/components/nsUrlClassifierListManager.js /home/taras/builds/minefield/dist/bin/components/nsURLFormatter.js /home/taras/builds/minefield/dist/bin/components/nsWebHandlerApp.js /home/taras/builds/minefield/dist/bin/components/pluginGlue.js /home/taras/builds/minefield/dist/bin/components/reftest-cmdline.js /home/taras/builds/minefield/dist/bin/components/storage-Legacy.js /home/taras/builds/minefield/dist/bin/components/storage-mozStorage.js /home/taras/builds/minefield/dist/bin/components/tp-cmdline.js /home/taras/builds/minefield/dist/bin/components/txEXSLTRegExFunctions.js /home/taras/builds/minefield/dist/bin/components/WebContentConverter.js Above files are only read in during the &#8220;slow&#8221; startup and are &#8220;fastloaded&#8221; afterward. However, they are stat()ed to make sure the fastload stuff isn&#8217;t stale. This is bad: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=511761">bug 511761</a>. Making these depend on .autoreg seems reasonable.</p>
+
+<p>/home/taras/builds/minefield/dist/bin/extensions This probably should depend on .autoreg too</p>
+
+<p>/home/taras/builds/minefield/dist/bin/updates /home/taras/builds/minefield/dist/bin/updates/0/update.test /home/taras/builds/minefield/dist/bin/update.test This too?</p>
+
+<p>/home/taras/builds/minefield/dist/bin/greprefs /home/taras/builds/minefield/dist/bin/greprefs/all.js /home/taras/builds/minefield/dist/bin/greprefs/security-prefs.js /home/taras/builds/minefield/dist/bin/greprefs/xpinstall.js Reading a directory full of pref files that never change is crazy. <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=507288">bug 507288</a> provides 10-100x throughput improvement in reading gre prefs.</p>
+
+<p>/home/taras/builds/minefield/dist/bin/defaults/pref /home/taras/builds/minefield/dist/bin/defaults/pref/channel-prefs.js /home/taras/builds/minefield/dist/bin/defaults/pref/firefox-branding.js /home/taras/builds/minefield/dist/bin/defaults/pref/firefox.js /home/taras/builds/minefield/dist/bin/defaults/pref/firefox-l10n.js /home/taras/builds/minefield/dist/bin/defaults/pref/reporter.js This is similar to gre pref situation, but worse because there are more pref files. This is also harder to refactor. I propose having 2 hardcoded pref names for xulrunner applications: app.js burried in a jar file speed and l10n.js for localization convenience.</p>
+
+<p>/home/taras/builds/minefield/dist/bin/dictionaries /home/taras/builds/minefield/dist/bin/dictionaries/en-US.aff /home/taras/builds/minefield/dist/bin/dictionaries/en-US.dic For some reason only one of my computers is reading the spellcheck dictionary at startup, but it is costing me 70ms. I wonder if these can be moved to a locale jar.</p>
+
+<p>/home/taras/builds/minefield/dist/bin/modules/distribution.js /home/taras/builds/minefield/dist/bin/modules/DownloadLastDir.jsm /home/taras/builds/minefield/dist/bin/modules/ISO8601DateUtils.jsm /home/taras/builds/minefield/dist/bin/modules/NetUtil.jsm /home/taras/builds/minefield/dist/bin/modules/utils.js /home/taras/builds/minefield/dist/bin/modules/XPCOMUtils.jsm These modules should be moved into toolkit.jar: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=509755">bug 509755</a></p>
+
+<p>/home/taras/builds/minefield/dist/bin/res/broken-image.png /home/taras/builds/minefield/dist/bin/res/charsetalias.properties /home/taras/builds/minefield/dist/bin/res/charsetData.properties /home/taras/builds/minefield/dist/bin/res/forms.css /home/taras/builds/minefield/dist/bin/res/hiddenWindow.html /home/taras/builds/minefield/dist/bin/res/html.css /home/taras/builds/minefield/dist/bin/res/loading-image.png /home/taras/builds/minefield/dist/bin/res/quirk.css /home/taras/builds/minefield/dist/bin/res/ua.css</p>
+
+<p>These need to be in a jar too: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=508421">bug 508421</a> /home/taras/builds/minefield/dist/bin/searchplugins /home/taras/builds/minefield/dist/bin/searchplugins/amazondotcom.xml /home/taras/builds/minefield/dist/bin/searchplugins/answers.xml /home/taras/builds/minefield/dist/bin/searchplugins/creativecommons.xml /home/taras/builds/minefield/dist/bin/searchplugins/eBay.xml /home/taras/builds/minefield/dist/bin/searchplugins/google.xml /home/taras/builds/minefield/dist/bin/searchplugins/wikipedia.xml /home/taras/builds/minefield/dist/bin/searchplugins/yahoo.xml I think these should be in a jar too.</p>
+
+<p>This concludes the list of Firefox application files read at startup. I haven&#8217;t touched the stuff in the profile directories or libraries. I think it is realistic to get a tenfold reduction in physical files read by Firefox 3.6.</p>
+
+<p>https://bugzilla.mozilla.org/show_bug.cgi?id=383167</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2009/08/14/there-is-nothing-exciting-about-filesystems/">There Is Nothing Exciting About Filesystems</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-08-14T07:22:22-07:00" pubdate data-updated="true">Aug 14<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>When I originally started at Mozilla, I only knew the people who interviewed me. But I quickly discovered beltzner when he uttered a sacrilegious statement that went something like: &#8220;&#8230;.. nothing could be as boring as filesystems&#8230;.&#8221;. Mike Beltzner is one of my favourite characters at Mozilla for his ability to speak his mind, but this quote has troubled me greatly. How can one not care about filesystems? Linux&#8217;s ability to do file stuff efficiently makes it magnitudes faster than other operating systems. Plan 9&#8217;s file-system-centric layout proved that OSes don&#8217;t have to consist of a series of poorly named and categorized system calls. In fact, a clean file layout allows many awesome optimizations. ZFS is one of the few things keeping Solaris relevant. HFS+ is one of the things keeping OSX from being fast.</p>
+
+<p>Being a Linux user, I was disappointed by the pointlessness of optimizing application IO. Sure we inefficiently open tons of files on startup, sure we hit the filesystem 10-100x more than we could, why would one optimize when there when there is no more than a few percent of startup being take up by terrible io patterns?</p>
+
+<p><strong>Excitingly Crappy Filesystems</strong></p>
+
+<p>Luckily Firefox runs on OSX and we are making it run on WinCE. I was delighted to discover that on wince* we paid 1-5ms per file existence check, modification date, size, etc. I was shocked to see that the throughput while reading certain files could be expressed in bytes per second (most crappy flash media seems to be able to pull in >1mb/s).  This brought upon switching our<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=504864"> jar io to mmap</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=468011">amalgamating</a> jar files, moving more <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=508421">files into jars</a>, etc. I&#8217;ll blog about the details later. My basic idea is that we can utilize jar files as &#8220;controlled filesystem environments&#8221; to deal with having to run on crappy OSes with exceptionally bad filesystems. OSes such as OSX where file IO is barely faster than that of a WinCE phone.</p>
+
+<p>Beltzner, wouldn&#8217;t it be exciting if OSes like Mac OSX had file systems worth being excited about?</p>
+
+<ul>
+<li>MS likes to use puns for their product names</li>
+</ul>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2009/08/03/this-month-in-static-analysis/">This Month in Static Analysis</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-08-03T14:19:55-07:00" pubdate data-updated="true">Aug 3<span>rd</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Lately I have been focusing on optimizing Fennec startup on a delightfully inadequate platform: Windows Mobile. More on fascinating startup, performance problems and solutions later. As a result I have been doing relatively little static analysis stuff.</p>
+
+<p>The main reason for taking a break is that I feel that I went from having no way to do any analysis to having production-quality tools for <a href="https://developer.mozilla.org/En/Dehydra">analysis</a> and <a href="https://developer.mozilla.org/En/Pork">rewriting</a>.  I finally have a chance to move on from developing tools to using them in everyday development. The main puzzle piece that needs completion is GCC 4.5 support in Dehydra. We are feature-complete on 4.5, just need to stabilize once the trunk stabilizes.</p>
+
+<p><strong>Drowning In Pork </strong></p>
+
+<p>A number of other people did some cool stuff in the meantime. First and foremost: Joshua Cranmer has ventured into the land of <a href="https://developer.mozilla.org/En/Pork">Pork</a> and is publishing a guide to doing refactoring tools on this blog (<a href="http://quetzalcoatal.blogspot.com/2009/07/guide-to-pork-part-1.html">part 1</a>, <a href="http://quetzalcoatal.blogspot.com/2009/07/guide-to-pork-part-2.html">part 2</a>, <a href="http://quetzalcoatal.blogspot.com/2009/08/guide-to-pork-part-3.html">part 3</a>). This is cool, because until now, there were no Pork docs and nothing I write could ever match Joshua&#8217;s documenting talents.  Thanks a bunch, Joshua.</p>
+
+<p>I have also received my first-ever bugfix patches to Elsa. Previously, I&#8217;ve received miscellaneous build fixes, etc, but these are the first patches that involved somebody pounding their head against the wall until they figured out why things were crashing or not accepting valid C++ code.</p>
+
+<p><strong>Introducing Dan Witte</strong></p>
+
+<p>Dan is the new static analysis go-to person. So far he facilitated an explosion of static analysis ideas (they are tracked in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=430328">bug 430328</a>). A lot of these can be expressed as &lt;10line Dehydra analyses, so they are excellent introductory projects. If you are dying to start analyzing code, but don&#8217;t know where to begin, look in that bug. Dan has written an interesting analysis to do with finding accidental temporaries due to C++&#8217;s &#8220;wonderful&#8221; implicit conversions/etc (expect to see a blog post on that). He is also working on the holy grail of Mozilla static analysis: a full callgraph. It&#8217;s a little embarrassing that we don&#8217;t have that yet, but it&#8217;s hard and once we do have it, a whole new world of analyses will be possible.</p>
+
+<p><strong>Speaking of Callgraphs&#8230;</strong></p>
+
+<p>So while various Mozillians were pondering how awesome it would be to do inter-function analysis, an intern has beat us to writing the first useful inter-function analysis! Sully had a problem, after a tiny bit of  Dehydra coaching, he solved his problem in the amount of time it took me to eat my lunch. Brilliant! See his <a href="http://www.msully.net/blog/2009/08/03/doing-whole-tree-analysis-with-dehydra/">blog post</a> for details. My conclusion: either Dehydra is pretty easy to use and/or we get mad genius interns :).</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2009/07/22/chasewamu-fraud-friendlyness/">Chase/WaMu Fraud-friendlyness</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-07-22T01:09:24-07:00" pubdate data-updated="true">Jul 22<span>nd</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Turns out that if someone compromises a merchant that you shop with, such as bikenashbar.com, then they are entitled to your money as long as they can show to the bank that they have your billing/shipping information. According to Chase it&#8217;s not fraud if they steal your address along with the card number.  I recommend that people use a bank that protects their customer&#8217;s finances, one that isn&#8217;t called <a href="http://chase.com/">Chase</a>.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2009/07/21/those-crazy-comm-central-guys/">Those Crazy Comm-central Guys&#8230;</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-07-21T02:54:42-07:00" pubdate data-updated="true">Jul 21<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>When it comes to taking on crazy tasks involving disguising code, you can always count on Joshua. This time Joshua has gone deep in <a href="https://developer.mozilla.org/En/Pork">Pork</a> territory to do a very impressive rewrite (one that would not be even close to possible with anything other than Elsa-based tools) and he is blogging about it. He posted the <a href="http://quetzalcoatal.blogspot.com/2009/07/guide-to-pork-part-1.html">first installment</a> of his rewriting-with-Pork guide.</p>
+
+<p>Still on the subject on mad csc-entist Joshua: Andrew Sutherland has finally gotten sick of crappy JS documentation tools and took matters into his own hands thanks to Joshua&#8217;s JSHydra tool. Checkout his <a href="http://www.visophyte.org/blog/2009/07/20/doccelerator-javascript-documentation-via-jshydra-into-couchdb-with-an-ajax-ui/">blog post</a> on how the documentation world will be a better place thanks to being able to build tools on top of <em>the JavaScript parser</em>.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2009/07/14/virtualbox-rocks/">VirtualBox 3.0 Rocks</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-07-14T06:15:52-07:00" pubdate data-updated="true">Jul 14<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>With much pain I managed to convince a Vmware WinXP virtual machine to run in <a href="http://www.virtualbox.org/">VirtualBox</a>. At first it ran very sluggishly(>3 hours to do a build?), but after I turned off IO Apic stuff in Windows, it&#8217;s become disturbingly fast. It now takes 40minutes to build a wince fennec vs almost 80minutes it took on VMware server.</p>
+
+<p>VirtualBox&#8217;s disk throughput is phenomenal, in fact, this is the first time I&#8217;ve seen almost-native speed disk io in virtual machine. A benchmark I tried reported 45mb/s 4K read/writes (these were cached on the linux side).</p>
+
+<p>Unlike Vmware server, VirtualBox&#8217;s usb works without troubles, shared folders were easy to setup etc. It&#8217;s an awesome app, hope Sun/Oracle keeps it up.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2009/07/01/python-gdb-logging-file-io/">Python GDB - Logging File IO</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-07-01T08:05:42-07:00" pubdate data-updated="true">Jul 1<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><strong>Python GDB Rocks!</strong></p>
+
+<p>I wanted a non-painful way to figure out what&#8217;s causing bonus file IO. I&#8217;ve noticed that gtk likes to open files, but I didn&#8217;t have the exact details. So I grabbed <a href="http://sourceware.org/gdb/wiki/PythonGdb">python gdb</a>, and with some tips on syscalls from gdb old-timers managed to produce a <a href="http://people.mozilla.com/~tglek/fennec/files.txt">report</a> to assign blame for open()ing files to relevant Mozilla functions.</p>
+
+<p>Other than the gdb-hating syscalls issue, achieving this was simple</p>
+
+<ol>
+<li>Compile python-enabled gdb(Next set of distribution releases should have it..I hope)</li>
+<li>Define a new gdb command in a python file. I called mine &#8220;taras&#8221; for lack of a better name.</li>
+<li>Set a breakpoint, attach your command to it. :</li>
+</ol>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>break open  
+</span><span class='line'>
+</span><span class='line'>source -p /path/to/your/script.py  
+</span><span class='line'>
+</span><span class='line'>command 1  
+</span><span class='line'>
+</span><span class='line'>taras  
+</span><span class='line'>
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+
+<ol>
+<li>Have the script walk the backtrace to figure out the filename and the last Mozilla function. Log the info, issue gdb continue command.</li>
+<li>Print out a report and profit:</li>
+</ol>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>python report()</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Here is my <a href="http://people.mozilla.com/~tglek/gdblog.py">script</a>. The only nasty part here is that I had to read the filename out of a register (i&#8217;m on amd64, on 32 it&#8217;d be $esi instead of $rdi) because gdb doesn&#8217;t deal well with system calls.</p>
+
+<p>I&#8217;ve never throught it would be this fun to use gdb. I always thought debuggers should be scriptable, thanks to <a href="http://tromey.com/blog/">Tom Tromey</a> (lots of gdb tutorials on Tom&#8217;s blog) and any others who finally made this a reality.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2009/06/29/dxr-the-most-impressive-code-navigation-tool-ever/">DXR: The Most Impressive Code Navigation Tool Ever</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-06-29T02:19:16-07:00" pubdate data-updated="true">Jun 29<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Are you are a developer who has been frustrated by the pathetic state of the art in code search engines and code browsing experience on the web? Have you been longing for being able to view code with more aid than coloured words?</p>
+
+<p>David Humphrey just <a href="http://vocamus.net/dave/?p=557">released</a> his DXR bombshell. The &#8220;basic&#8221; concept behind DXR is extraction of the rich semantic information gathered by tools like GCC, Spidermonkey and <a href="https://developer.mozilla.org/en/XPIDL/xpidl">xpidl</a>. This data is then coherently linked together into a pretty UI in order to provide cleverness during code browsing sessions.</p>
+
+<p>DXR will be happy to answer seemingly trivial queries:</p>
+
+<ul>
+<li>List implementations of interfaces in C++ (and soon JS).</li>
+<li>Provide relevant search results by searching semantic data first. No, grep is no longer state of the art for searching code.</li>
+<li>Switch between definition and declaration.</li>
+<li>Walk up/down class hierarchies.</li>
+<li>Lookup typedefs, types, etc.</li>
+</ul>
+
+
+<p>I&#8217;ve been wanting to see this sort of tool built on top information exposed by <a href="https://developer.mozilla.org/En/Dehydra">Dehydra</a> since I got it working. Words can not express how pumped I am about DXR and the magic powers that we will be granting it.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  <div class="pagination">
+    
+      <a class="prev" href="/taras/blog/page/15/">&larr; Older</a>
+    
+    <a href="/taras/blog/archives">Blog Archives</a>
+    
+    <a class="next" href="/taras/blog/page/13/">Newer &rarr;</a>
+    
+  </div>
+</div>
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/26/coping-with-flash-hangs/">Coping with Flash hangs</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/16/snappy-44-fixing-tab-switching-in-vancouver/">Snappy #44: Fixing tab switching in Vancouver</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/05/snappy-43-big-improvements-faster-startup-smoother-tabstrip/">Snappy #43: Big improvements: faster startup? Smoother tabstrip!</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/26/snappy-42/">Snappy #42</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/18/snappy-41/">Snappy #41</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("tarasglek", 4, false);
+    });
+  </script>
+  <script src="/taras/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/tarasglek" class="twitter-follow-button" data-show-count="false">Follow @tarasglek</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Taras Glek -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,247 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Arguing about startup: Communicating performance - All About Performance</title>
+  <meta name="author" content="Taras Glek">
+
+  
+  <meta name="description" content="Recently the addon team started working towards penalizing addons that penalize our startup. We have solid data shows that startup gets worse as more &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tarasglek.github.com/taras/blog/2011/04/14/arguing-about-startup-communicating-performance/">
+  <link href="/taras/favicon.png" rel="icon">
+  <link href="/taras/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/taras/javascripts/modernizr-2.0.js"></script>
+  <script src="/taras/javascripts/ender.js"></script>
+  <script src="/taras/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/taras/atom.xml" rel="alternate" title="All About Performance" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/taras/">All About Performance</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/taras/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tarasglek.github.com/taras" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/taras/">Blog</a></li>
+  <li><a href="/taras/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Arguing About Startup: Communicating Performance</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-04-14T04:15:46-07:00" pubdate data-updated="true">Apr 14<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Recently the addon team started working towards penalizing addons that penalize our startup. We have solid data shows that startup gets worse as more addons installed so the effort is justified. Justin published this picture to illustrate the problem: <img src="http://people.mozilla.com/~fligtar/performance/num-addons-med.png" alt="" /></p>
+
+<p>However some technical mistakes were made. Wladimir (AdBlock+ guy!) has been busy exposing them on his <a href="http://adblockplus.org/blog/the-wrong-way-of-allowing-users-to-make-informed-decisions">blog</a>. Thanks Wladimir! I spent a couple of years understanding Firefox startup, so I really appreciate Wladimir&#8217;s remarkable speed/quality in poking holes in AMO approach.</p>
+
+<p><strong>Rating Addon Performance</strong>****</p>
+
+<p>Wlad&#8217;s latest <a href="http://adblockplus.org/blog/the-wrong-way-of-allowing-users-to-make-informed-decisions">point</a> is regarding how addon impact is measured on warm startup with an empty profile. I agree that addon impact on warm startup with clean profile is going to be different from that of cold startup with a dirty real-world profile. I also agree that it is weird to primarily measure warm startup given that our data clearly indicates that most users are experiencing cold startup.</p>
+
+<p>However startup is an irritating multidimensional problem influenced by a large number of factors. Should we suck it up and let addons kill warm startup (and risk ruining firefox upgrade times, pissing off web developers)? How does one choose a typical dirty profile? Creating a &#8220;typical&#8221; dirty profile is a tough problem (ie due to privacy, disk fragmentation) and there is no reason to let clean profile performance be degraded.</p>
+
+<p>So an addon performance rating will not be perfect. Time added by addon during warm startup is the easiest starting point and is one of the more deterministic measures (Wlad&#8217;s blog says otherwise, but measuring other startup kinds have even more noise). This is no worse than choosing browsers based on their JavaScript benchmark performance.</p>
+
+<p>I think a much awesomer addon performance rating may be obtainable by clever statistics boffins by analyzing our aggregated startup data. Perhaps the Mozilla Metrics will make it a reality, but in the meantime we&#8217;ll have to make do with an imperfect approach.</p>
+
+<p><em><strong>Coming soon:</strong> Why is the measurement approach in Jorge&#8217;s <a href="http://xulforge.com/blog/2011/04/testing-add-on-startup-performance/">post</a> is overly complicated and somewhat incorrect.</em></p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Taras Glek</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-04-14T04:15:46-07:00" pubdate data-updated="true">Apr 14<span>th</span>, 2011</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/taras/blog/categories/mozilla/'>mozilla</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://tarasglek.github.com/taras/blog/2011/04/14/arguing-about-startup-communicating-performance/" data-via="tarasglek" data-counturl="http://tarasglek.github.com/taras/blog/2011/04/14/arguing-about-startup-communicating-performance/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/taras/blog/2011/03/10/start-faster-addon/" title="Previous Post: "Start Faster" Addon">&laquo; "Start Faster" Addon</a>
+      
+      
+        <a class="basic-alignment right" href="/taras/blog/2011/04/26/measuring-startup-speed-correctly/" title="Next Post: Measuring Startup Speed Correctly">Measuring Startup Speed Correctly &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/26/coping-with-flash-hangs/">Coping with Flash hangs</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/16/snappy-44-fixing-tab-switching-in-vancouver/">Snappy #44: Fixing tab switching in Vancouver</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/05/snappy-43-big-improvements-faster-startup-smoother-tabstrip/">Snappy #43: Big improvements: faster startup? Smoother tabstrip!</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/26/snappy-42/">Snappy #42</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/18/snappy-41/">Snappy #41</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("tarasglek", 4, false);
+    });
+  </script>
+  <script src="/taras/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/tarasglek" class="twitter-follow-button" data-show-count="false">Follow @tarasglek</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Taras Glek -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

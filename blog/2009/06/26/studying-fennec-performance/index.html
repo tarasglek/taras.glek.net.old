@@ -1,0 +1,255 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Studying Fennec Performance - All About Performance</title>
+  <meta name="author" content="Taras Glek">
+
+  
+  <meta name="description" content="Working on Fennec performance N810 has been very educational. I have been learning more and more about performance profiling on crappy platforms. I &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tarasglek.github.com/taras/blog/2009/06/26/studying-fennec-performance/">
+  <link href="/taras/favicon.png" rel="icon">
+  <link href="/taras/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/taras/javascripts/modernizr-2.0.js"></script>
+  <script src="/taras/javascripts/ender.js"></script>
+  <script src="/taras/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/taras/atom.xml" rel="alternate" title="All About Performance" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/taras/">All About Performance</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/taras/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tarasglek.github.com/taras" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/taras/">Blog</a></li>
+  <li><a href="/taras/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Studying Fennec Performance</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-06-26T07:31:36-07:00" pubdate data-updated="true">Jun 26<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Working on Fennec performance N810 has been very educational. I have been learning more and more about performance profiling on crappy platforms. I define a platform as crap if it has poor development tools, limited OS or other significant limitations. Linux is a crappy platform in this case because it&#8217;s running on ARM where oprofile barely does anything and there are no other performance tools for N810 (more modern ARM cpus should user-space perf counters and be more useful for instrumentation).</p>
+
+<p><strong>JSD Secret Sauce for JS Optimization</strong></p>
+
+<p>In general there is a misconception that implementing stuff in JavaScript will result in slower code than doing the same in C++. That may be true if the code is implemented in the exact same manner. But in real life the expressiveness and safety of a high-level language like JavaScript permits algorithmic optimizations that would often not be realistic to do in C++ because of time/safety constraints.</p>
+
+<p>So how does one figure out what&#8217;s slow in JS? timeless suggested that I checkout the JavaScript Debugging API. Using the API and a small hack in spidermonkey(JSD doesn&#8217;t expose fast dom calls) I was able to hook into chrome code to get a timed trace of JavaScript functions being run.</p>
+
+<p>Once I had a trace it was relatively easy to figure out to &#8220;do not call this slow thing all the time&#8221; dance (aka optimize code). I collected that work in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=470116">bug 470116</a>. Last I checked there was relatively little room for optimization left on the JS side of Fennec, so then I went to look at what&#8217;s lurking in C++.</p>
+
+<p>PS. Firebug is a popular consumer of the JSD API for those times when one isn&#8217;t willing to write JS components to figure out why something is slow.</p>
+
+<p><strong>C++ Is Harder</strong></p>
+
+<p>I&#8217;ve some success with inserting probes into C++ code. I would find interesting code by running oprofile on the desktop (while doing things that I felt were slow on N810). Oprofile would then provide me a callgraph which I would visualize with <a href="http://code.google.com/p/jrfonseca/wiki/Gprof2Dot">this awesome little script</a>. Then I would stick <a href="http://people.mozilla.com/~tglek/fennec/patches/measurer.diff">MeasurerOfTime</a> timing blocks into interesting &#8220;hot&#8221; code and hope that I would learn something useful.</p>
+
+<p>This got me thinking. Wouldn&#8217;t it be nice if there existed a JSD for C++? It&#8217;d be cool to inspect the C++ callgraph just like one does for JS. It seems like it would help on platforms that aren&#8217;t gcc and can&#8217;t inject tracing code via -finstrument-functions. Even -finstrument-functions is of limited use due to the pain of looking up symbols in shared libraries. Stay tuned.</p>
+
+<p><strong>Measuring Progress</strong></p>
+
+<p>The worst part of doing optimizations is knowing that some time in a future an innocent programmer will slightly change some seemingly innocent code and things will no longer happen quickly. Short of policing every single patch by people who previously optimized code in question there is only one thing one can do: performance tests.</p>
+
+<p><a href="http://hg.mozilla.org/users/tglek_mozilla.com/fennecmark">Fennecmark</a> is a benchmark for measuring responsiveness of the Fennec features that I worked on most: panning, zooming and lag during pageload. I <a href="http://tarasglek.github.com/taras/2009/04/23/benchmarks-and-instrumentation-for-fennecetc/">blogged</a> about it before. Since then Joel Maher has <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=493057">gotten Fennecmark</a> to run automatically and produce results on the graph server. I think we should be logging more numbers (Tpan, Tzoom), but it&#8217;s an excellent first step in monitoring performance regressions.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Taras Glek</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-06-26T07:31:36-07:00" pubdate data-updated="true">Jun 26<span>th</span>, 2009</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/taras/blog/categories/fennec/'>fennec</a>, <a class='category' href='/taras/blog/categories/mozilla/'>mozilla</a>, <a class='category' href='/taras/blog/categories/performance/'>performance</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://tarasglek.github.com/taras/blog/2009/06/26/studying-fennec-performance/" data-via="tarasglek" data-counturl="http://tarasglek.github.com/taras/blog/2009/06/26/studying-fennec-performance/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/taras/blog/2009/06/25/dehydra-pork-sources-moved/" title="Previous Post: Dehydra & Pork Sources Moved">&laquo; Dehydra & Pork Sources Moved</a>
+      
+      
+        <a class="basic-alignment right" href="/taras/blog/2009/06/29/dxr-the-most-impressive-code-navigation-tool-ever/" title="Next Post: DXR: The Most Impressive Code Navigation Tool Ever">DXR: The Most Impressive Code Navigation Tool Ever &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/26/coping-with-flash-hangs/">Coping with Flash hangs</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/16/snappy-44-fixing-tab-switching-in-vancouver/">Snappy #44: Fixing tab switching in Vancouver</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/05/snappy-43-big-improvements-faster-startup-smoother-tabstrip/">Snappy #43: Big improvements: faster startup? Smoother tabstrip!</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/26/snappy-42/">Snappy #42</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/18/snappy-41/">Snappy #41</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("tarasglek", 4, false);
+    });
+  </script>
+  <script src="/taras/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/tarasglek" class="twitter-follow-button" data-show-count="false">Follow @tarasglek</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Taras Glek -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

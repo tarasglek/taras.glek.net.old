@@ -1,0 +1,268 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Outparamdelling this way comes - All About Performance</title>
+  <meta name="author" content="Taras Glek">
+
+  
+  <meta name="description" content="Recently I dusted off outparamdel to see if I can get some refactorings landed. About a year ago, with the great QueryInterface outparamdelling &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tarasglek.github.com/taras/blog/2008/09/19/outparamdelling-this-way-comes/">
+  <link href="/taras/favicon.png" rel="icon">
+  <link href="/taras/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/taras/javascripts/modernizr-2.0.js"></script>
+  <script src="/taras/javascripts/ender.js"></script>
+  <script src="/taras/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/taras/atom.xml" rel="alternate" title="All About Performance" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/taras/">All About Performance</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/taras/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tarasglek.github.com/taras" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/taras/">Blog</a></li>
+  <li><a href="/taras/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Outparamdelling This Way Comes</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-09-19T07:06:08-07:00" pubdate data-updated="true">Sep 19<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Recently I dusted off outparamdel to see if I can get some refactorings landed. About a year ago, with the great QueryInterface outparamdelling experiment we ended up with a smaller binary footprint and tiny performance gain, but that never landed due to us not wanting to break compatability yet. Ever since, outparamdel has been patiently bitrotting within <a href="http://developer.mozilla.org/en/docs/Pork">Pork</a> waiting for the day it&#8217;s allowed to break APIs.</p>
+
+<p>Recently jst <a href="http://wiki.mozilla.org/Gecko:DeCOMtamination">listed</a> some private API candidates for deCOMtamination and I have been letting outparamdel loose on them for the past week. So far only one such <a href="http://hg.mozilla.org/mozilla-central/raw-rev/ec4733eb1bd8">change</a> has been committed, the rest are sitting in jst&#8217;s review queue. It&#8217;s exciting, as it&#8217;s the first ever application of outparamdel that didn&#8217;t get canned. For the whole list see the most recent bugs blocking my <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=430328">analysis metabug</a>.</p>
+
+<p>Cool part about these patches is that after various outparamdel special-casing and manual cleanup the line count is reduced by 10-30% while maintaining existing functionality!</p>
+
+<p>So far I haven&#8217;t touched much outside of content/, so if you know of any APIs that could have the outparam rotated into the return value, file some rewriting bugs against me.</p>
+
+<p><strong>Rewriting with Mercurial</strong></p>
+
+<p>Mercurial is now my favourite python program ever. It makes rewrites so easy. Here is my typical workflow:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>
+</span><span class='line'># Write an outparamdel input file specifying functions to rewrite..run outparamdel with pork-barrel to generate patch
+</span><span class='line'>hg qimport -f autopatch.diff && hg qpush && hg qref #make the patch nice and readable
+</span><span class='line'>hg qnew manual.diff #create a manual cleanup patch for cosmetic touchups and rewrites screwed up by macros#of course to submit patch for review, those two patches need to be combined
+</span><span class='line'>#do manual stuff
+</span><span class='line'>hg diff -r 19277 #produce a combined diff without loosing ability to edit each applied patch individually! For example, can regenerate the autopatch.diff with different outparamdel parameters or a bugfixed outparamdel. 19277 is a revision that has to be looked up with hg log, unfortunately there isn't a relative syntax to do hg diff -r "tip - 2"
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This is a huge improvement over the ad-hoc workflow prior to hg switch when I was prototyping my tools. CVS + quilt don&#8217;t hold a candle to a modern revision control system.</p>
+
+<p><strong>Prcheck</strong></p>
+
+<p>I also have been doing another round of <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=266048">prbool corrections</a>. Somehow I didn&#8217;t notice that the system stopped working due to the CVS->hg switch. Once again when reviving my nightly checker scripts, it was a pleasure to substitute all of the CVS hacks with mercurial commands.</p>
+
+<p>I am waiting for the few remaining largeish (ie 3-4 bugs per file) patches to land before I can start submitting whackamole bugs with a single prbool correction per module.</p>
+
+<p>It also seems that cairo and every other pre-C99 project have the same set of issues as Mozilla with their typedefed-int boolean types. Perhaps prcheck isn&#8217;t mozilla-specific at all.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Taras Glek</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-09-19T07:06:08-07:00" pubdate data-updated="true">Sep 19<span>th</span>, 2008</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/taras/blog/categories/decomtamination/'>DeCOMtamination</a>, <a class='category' href='/taras/blog/categories/mozilla/'>mozilla</a>, <a class='category' href='/taras/blog/categories/outparamdel/'>outparamdel</a>, <a class='category' href='/taras/blog/categories/prbool/'>prbool</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://tarasglek.github.com/taras/blog/2008/09/19/outparamdelling-this-way-comes/" data-via="tarasglek" data-counturl="http://tarasglek.github.com/taras/blog/2008/09/19/outparamdelling-this-way-comes/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/taras/blog/2008/09/08/must_flow_throughlabel/" title="Previous Post: MUST_FLOW_THROUGH("label")">&laquo; MUST_FLOW_THROUGH("label")</a>
+      
+      
+        <a class="basic-alignment right" href="/taras/blog/2008/09/26/living-dead-code/" title="Next Post: Living Dead Code">Living Dead Code &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/26/coping-with-flash-hangs/">Coping with Flash hangs</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/16/snappy-44-fixing-tab-switching-in-vancouver/">Snappy #44: Fixing tab switching in Vancouver</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/05/snappy-43-big-improvements-faster-startup-smoother-tabstrip/">Snappy #43: Big improvements: faster startup? Smoother tabstrip!</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/26/snappy-42/">Snappy #42</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/18/snappy-41/">Snappy #41</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("tarasglek", 4, false);
+    });
+  </script>
+  <script src="/taras/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/tarasglek" class="twitter-follow-button" data-show-count="false">Follow @tarasglek</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Taras Glek -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

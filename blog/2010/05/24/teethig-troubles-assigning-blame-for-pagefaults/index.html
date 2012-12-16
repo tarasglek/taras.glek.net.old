@@ -1,0 +1,265 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Teething Troubles: Assigning blame for pagefaults - All About Performance</title>
+  <meta name="author" content="Taras Glek">
+
+  
+  <meta name="description" content="I have been able to get precise filed-backed page fault logging(systemtap on Linux, xperf on Windows) for a while. It is incredibly useful to see &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tarasglek.github.com/taras/blog/2010/05/24/teethig-troubles-assigning-blame-for-pagefaults/">
+  <link href="/taras/favicon.png" rel="icon">
+  <link href="/taras/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/taras/javascripts/modernizr-2.0.js"></script>
+  <script src="/taras/javascripts/ender.js"></script>
+  <script src="/taras/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/taras/atom.xml" rel="alternate" title="All About Performance" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/taras/">All About Performance</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/taras/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tarasglek.github.com/taras" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/taras/">Blog</a></li>
+  <li><a href="/taras/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Teething Troubles: Assigning Blame for Pagefaults</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-05-24T03:52:22-07:00" pubdate data-updated="true">May 24<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>I have been able to get precise filed-backed page fault logging(systemtap on Linux, xperf on Windows) for a while. It is incredibly useful to see exactly how Firefox is being loaded from disk. From there one I deduce what is causing the IO, try to make improvements and measure if I accomplished anything.</p>
+
+<p>Unfortunately, a mere IO log requires a lot of pondering of why IO is happening. It would be so much easier if one could just get a report of every IO operation + an application backtrace to easily identify the cause. I was having trouble figuring out why some of my optimizations were not having the impact I expected, so i embarked on adding a backtrace to my log.</p>
+
+<p><strong>XPerf Fail</strong> I fed <a href="https://developer.mozilla.org/En/Profiling_with_Xperf">xperf</a> my Firefox symbols hoping this would plop stack traces next to my faults, but no such luck. It records backtraces in just about every probe, except for the &#8220;hard faults&#8221; probe I care about. I wonder if a custom perf probe could log what I want.</p>
+
+<p><strong>Perf Fail</strong></p>
+
+<p>Some prominent kernel hackers have long been complaining about OProfile/SystemTap/NIH performance monitoring tools. They finally produced a <a href="http://git.kernel.org/?p=linux/kernel/git/torvalds/linux-2.6.git;a=tree;f=tools/perf;h=3f4245bfe10b67348c5cd41606f3fdc0396cbbea;hb=7e125f7b9cbfce4101191b8076d606c517a73066">perf</a> tool (It&#8217;s like they tried to make it hard to google for. It does not have a <a href="https://perf.wiki.kernel.org/index.php/Main_Page">proper</a> website; Real men read the source and skim LKML archives) to do profiling the Linux way(tm). I might be wrong, but so far it appears to be a functional equivalent of Microsoft&#8217;s xperf minus the nice UI.</p>
+
+<p>Turned out that my Fedora 2.6.32 perf implementation is too buggy to even log pagefaults. Apparently this works in the current Linus kernels. I&#8217;m not completely sure, but looks like even if xperf pagefault logging worked, it&#8217;s pretty neutered. It does not appear that it can log file offsets next to pagefaults, nor stacks.</p>
+
+<p>I think perf could be fixed to log io and accompanying userspace backtraces. There are some talented folks contributing to it. However I think that the pre-canned analysis model sucks. It is useful for building sophisticated versions of top, but when you really need to dig into what&#8217;s causing a particular issue, it really sucks to be restricted by what the developers foresaw as useful.</p>
+
+<p><strong>SystemTap</strong></p>
+
+<p>As awesome as the kernel side of <a href="http://sourceware.org/systemtap/">SystemTap</a> is, I keep running into userspace bugs and limitations. Getting userspace stacks for large collections of large libraries that Firefox relies on has been a systemtap-bug-finding affair. I can occasionally get useful userspace tracks for userspace probes, but apparently recording a userspace stack from a kernel probe is a hard problem that SystemTap devs haven&#8217;t fully addressed yet.</p>
+
+<p>Luckily SystemTap provides a uaddr() function which appears to get correct addresses from my kernel probes(which is way more than the other tools offer). Unfortunately usymname() fails to resolve those addresses.</p>
+
+<p>As a workaround, Jim Blandy suggested turning off <a href="http://gcc.gnu.org/wiki/Randomization">address-space randomization</a> so I can log uaddr() and resolve the values in gdb. I&#8217;ve been manually printing this with gdb&#8217;s &#8220;p/a <addr>&#8221; command until recently.</p>
+
+<p><strong>Success?</strong></p>
+
+<p>Then it dawned on me that I can use python gdb-scripting to automatically post-process the log. So now with a combination of a <a href="http://hg.mozilla.org/users/tglek_mozilla.com/startup/file/74e2f62fe64c/kernelio.stp">systemtap io logging script</a> and a hacky <a href="http://hg.mozilla.org/users/tglek_mozilla.com/startup/file/74e2f62fe64c/gdb_resolve.py">gdb python script</a> I can produce logs like <a href="http://people.mozilla.com/~tglek/startup/pagefault_blame.txt">this</a>.</p>
+
+<p>I still don&#8217;t have backtraces, but at least now I have the name of the function that&#8217;s causing trouble. This is surprisingly useful already. One can now easily tell how much of startup is being wasted on relocations(dlopen() in a prelinked binary!). Another obvious one is the <a href="http://sourceware.org/bugzilla/show_bug.cgi?id=11618">harm</a> of single-page COW faults to zero .bss (memset entries in the log). Turns out <a href="http://gcc.gnu.org/bugzilla/show_bug.cgi?id=44236">sprinkling</a> initializers all over the binary is a bad idea. Looks like there are significant performance wins to be had with a bit of &#8216;easy&#8217; compiler/linker hacking.</p>
+
+<p>All of the above problems are really obvious and would&#8217;ve been fixed a long time ago if it was easier to get at this information. Unfortunately, there is still a lot of room for improvement in developer tools<strong>.</strong></p>
+
+<p><strong>Update:</strong></p>
+
+<p>Sounds like I can use addr2line instead of gdb.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Taras Glek</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-05-24T03:52:22-07:00" pubdate data-updated="true">May 24<span>th</span>, 2010</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/taras/blog/categories/mozilla/'>mozilla</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://tarasglek.github.com/taras/blog/2010/05/24/teethig-troubles-assigning-blame-for-pagefaults/" data-via="tarasglek" data-counturl="http://tarasglek.github.com/taras/blog/2010/05/24/teethig-troubles-assigning-blame-for-pagefaults/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/taras/blog/2010/04/20/mozillaservices/" title="Previous Post: mozilla::services">&laquo; mozilla::services</a>
+      
+      
+        <a class="basic-alignment right" href="/taras/blog/2010/05/27/startup-backward-constructors/" title="Next Post: Startup: Backward Constructors">Startup: Backward Constructors &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/26/coping-with-flash-hangs/">Coping with Flash hangs</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/16/snappy-44-fixing-tab-switching-in-vancouver/">Snappy #44: Fixing tab switching in Vancouver</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/05/snappy-43-big-improvements-faster-startup-smoother-tabstrip/">Snappy #43: Big improvements: faster startup? Smoother tabstrip!</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/26/snappy-42/">Snappy #42</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/18/snappy-41/">Snappy #41</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("tarasglek", 4, false);
+    });
+  </script>
+  <script src="/taras/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/tarasglek" class="twitter-follow-button" data-show-count="false">Follow @tarasglek</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Taras Glek -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

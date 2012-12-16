@@ -1,0 +1,271 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Squashed and Compiled - All About Performance</title>
+  <meta name="author" content="Taras Glek">
+
+  
+  <meta name="description" content="Squash Milestone Reached Squash can now produce a patch that squashes my testcase class nsCSSLoaderImpl into the nsICSSLoader interface such that the &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tarasglek.github.com/taras/blog/2007/01/03/squashed-and-compiled/">
+  <link href="/taras/favicon.png" rel="icon">
+  <link href="/taras/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/taras/javascripts/modernizr-2.0.js"></script>
+  <script src="/taras/javascripts/ender.js"></script>
+  <script src="/taras/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/taras/atom.xml" rel="alternate" title="All About Performance" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/taras/">All About Performance</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/taras/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tarasglek.github.com/taras" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/taras/">Blog</a></li>
+  <li><a href="/taras/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Squashed and Compiled</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-01-03T03:22:25-08:00" pubdate data-updated="true">Jan 3<span>rd</span>, 2007</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><strong>Squash Milestone Reached</strong> Squash can now produce a patch that squashes my testcase class nsCSSLoaderImpl into the nsICSSLoader interface such that the resulting code compiles, links and runs!</p>
+
+<p><strong>Gory Details</strong> Patching function bodies turned out easier than expected. Since the last post, I&#8217;ve added the ability to rewrite variable declarations, casts and static method calls. This was enough to get nsCSSLoader.cpp compiling.</p>
+
+<p>I also ran into an issue where some methods need to remain virtual such that they can be referenced from other modules. I added a -sq-virtual flag to specify method names which need to stay virtual.</p>
+
+<p>I discovered that the implementation class can be used from other source files so now squash can work on multiple files. Unfortunately, this made me run into another Elsa misfeature: memory allocation. Elsa data structures do not attempt to clean up in their destructors. Once an AST is produced, it will remain in memory for the duration of execution. This is an issue, because merely parsing all of the .i files in layout/style/ takes over 600M of memory even though squash is strictly sequential and processes a single file at a time. Hopefully, converting Elsa to use auto_ptr is feasible and I wont have to resort to funny fork() tricks to reclaim memory.</p>
+
+<p><strong>ML vs C++ for Compilers: Rant</strong> I wonder why people insist on using C++ for symbolic manipulations instead of an *ml like O&#8217;Caml and either give up or, more frequently, reinvent features such as the ml type system, list processing, garbage collection or pattern matching. Isn&#8217;t it more productive to not have to deal with segfaults, slow compilation times and have a tenfold reduction in code size?</p>
+
+<p><strong>Squash Usage</strong> First I grep the build directory for usage of CSSLoaderImpl. This imprecise and will eventually be handled by squash itself, but first the memory deallocation issue has to be addressed or an index of the whole sourcetree needs to be built.</p>
+
+<p>find -name *.o | xargs grep CSSLoaderImpl</p>
+
+<p>This returned nsCSSLoader.o and nsLayoutStatics.o . Now .i files are produced by running make in their respective directories</p>
+
+<p>make nsCSSLoader.i make nsLayoutStatics.i</p>
+
+<p>For convenience I gather the .i files in a moz directory and run squash.</p>
+
+<p>./squash -o-lang GNU_Cplusplus -sq-exclude-include string/nsTString.h -sq-include nsString.h -sq-include nsCOMArray.h -sq-virtual LoadSheetSync -sq-virtual LoadSheet -sq-implementation CSSLoaderImpl moz/nsCSSLoader.i moz/nsLayoutStatics.i > cssloader.patch</p>
+
+<p>Turns out pretty printing C++ is hard and Oink/Elsa&#8217;s pretty printer still needs a lot of work. By producing patches and only rewriting part of the code squash rewrites only the code that needs changing. This avoids pretty printer bugs, and maximally preserves comments and the original code structure. The wackyness of the pretty printed code is apparent in the <a href="http://glek.net:8080/~taras/cssloader.patch">cssloader.patch</a>, especially in the function bodies.</p>
+
+<p><strong>Future Work</strong> I am happy to see that patching is viable even without precise source coordinates or preprocessor support in Elsa. My near term goals for squash are:</p>
+
+<ul>
+<li>Push squash upstream</li>
+<li>Add the ability to translate out-parameters to return values where possible</li>
+<li>Get a list of candidates for DeCOMtamination and improve squash enough to process all of them</li>
+<li>Work on a source code indexer. This would be useful to both squash as a semantic grep database and could be used to improve lxr.
+In the longer term, I would also like to see some Elsa changes:</li>
+<li>Figure out a memory de-allocation strategy</li>
+<li>Resolve the pain that is caused by Elsa having own &#8220;string&#8221; class which makes using STL an exercise in namespace verbosity. If Elsa were to switch to C++ strings, the above de-allocation job would be simplified too.</li>
+<li>Elsa is lossy when it comes to C++ extensions: may need to extend the Elsa AST a little</li>
+<li>It would be nice to improve Elsa memory consumption further. This would be hard.</li>
+<li>It would be great to make Elsa&#8217;s C++ <a href="http://www.parashift.com/c++-faq-lite/const-correctness.html">const-correct</a></li>
+</ul>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Taras Glek</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-01-03T03:22:25-08:00" pubdate data-updated="true">Jan 3<span>rd</span>, 2007</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/taras/blog/categories/decomtamination/'>DeCOMtamination</a>, <a class='category' href='/taras/blog/categories/mozilla/'>mozilla</a>, <a class='category' href='/taras/blog/categories/squash/'>squash</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://tarasglek.github.com/taras/blog/2007/01/03/squashed-and-compiled/" data-via="tarasglek" data-counturl="http://tarasglek.github.com/taras/blog/2007/01/03/squashed-and-compiled/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/taras/blog/2006/12/21/oink-meet-squash/" title="Previous Post: Oink, Meet Squash">&laquo; Oink, Meet Squash</a>
+      
+      
+        <a class="basic-alignment right" href="/taras/blog/2007/01/11/squash-progress-and-plans/" title="Next Post: Squash Progress and Plans">Squash Progress and Plans &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/26/coping-with-flash-hangs/">Coping with Flash hangs</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/16/snappy-44-fixing-tab-switching-in-vancouver/">Snappy #44: Fixing tab switching in Vancouver</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/05/snappy-43-big-improvements-faster-startup-smoother-tabstrip/">Snappy #43: Big improvements: faster startup? Smoother tabstrip!</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/26/snappy-42/">Snappy #42</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/18/snappy-41/">Snappy #41</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("tarasglek", 4, false);
+    });
+  </script>
+  <script src="/taras/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/tarasglek" class="twitter-follow-button" data-show-count="false">Follow @tarasglek</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Taras Glek -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

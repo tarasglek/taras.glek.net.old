@@ -1,0 +1,262 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Windows Sucks At Memory-Mapped IO During Startup - All About Performance</title>
+  <meta name="author" content="Taras Glek">
+
+  
+  <meta name="description" content="Last week I learned about how Windows handles page faults backed by files (specifically xul.dll). I already knew that Linux was suboptimal in this &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tarasglek.github.com/taras/blog/2010/04/19/windows-sucks-at-memory-mapped-io-during-startup/">
+  <link href="/taras/favicon.png" rel="icon">
+  <link href="/taras/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/taras/javascripts/modernizr-2.0.js"></script>
+  <script src="/taras/javascripts/ender.js"></script>
+  <script src="/taras/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/taras/atom.xml" rel="alternate" title="All About Performance" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/taras/">All About Performance</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/taras/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tarasglek.github.com/taras" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/taras/">Blog</a></li>
+  <li><a href="/taras/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Windows Sucks at Memory-Mapped IO During Startup</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-04-19T07:00:00-07:00" pubdate data-updated="true">Apr 19<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Last week I learned about how Windows handles page faults backed by files (specifically xul.dll). I already knew that Linux was <a href="http://tarasglek.github.com/taras/2010/04/12/squeezing-every-last-bit-of-performance-out-of-the-linux-toolchain/">suboptimal</a> in this area, perhaps the clever people at Redmond did better.</p>
+
+<p>Shaver pointed me at <a href="https://developer.mozilla.org/En/Profiling_with_Xperf">xperf</a>, which is sort of like the new Linux perf tools. Xperf rocks in that it can capture the relevant data and it can export it as .csv.</p>
+
+<p>Even with profile-guided-optimization Windows causes 3x as much IO in xul.dll than linux does on libxul.so. That&#8217;s especially interesting given that xul.dll is one-third smaller on Windows. Here is the <a href="http://people.mozilla.com/~tglek/startup/systemtap_graphs/visualize.html?#../win7/noprefetch.csv.html">graph</a>. PGO isn&#8217;t helping on Windows as much as it can help on Linux because MSVC PGO doesn&#8217;t do the equivalent of GCC&#8217;s -freorder-blocks-and-partition (unless I missed something in the docs).</p>
+
+<p>With the Windows <a href="http://en.wikipedia.org/wiki/Prefetcher">prefetcher</a>, there were 4x less xul.dll IOs (graph <a href="http://people.mozilla.com/~tglek/startup/systemtap_graphs/visualize.html?#../win7/prefetch.csv.html">here</a>). Unfortunately, the prefetcher can&#8217;t figure out that the whole xul.dll should be paged in and we still end up with an excess of random IO.</p>
+
+<p><strong>Why?</strong></p>
+
+<p>When a page fault occurs, Windows goes to read the page from the file and reads a little extra (just like any other sane OS) assuming that there will be more IO nearby. Unfortunately the gods of virtual memory at Microsoft decided that for every page fault, only 7 extra pages should read. So reads occur in 32K chunks (vs 128K in Linux, which is still too small). To make matters worse, segments mapped in as data only read in 3 extra pages (ie 16K chunks).</p>
+
+<p>This is funny in a sad way. Reading in 32K chunks is supposed to minimize ram usage (which makes no bloody sense when Win7 officially requires 1GB of RAM). As a result of being so thrifty on easy-to-evict file cache, windows ends up doing 4x as much file IO as Linux. The 16K reads are particularly funny as one can see the result of that misoptimization in the string of puny reads on the top right of the graphs.</p>
+
+<p><strong>Surely There is an API like madvise()</strong> On Posix systems madvise() can be used to influence the caching behavior of the OS. fadvise() is another such call for IO based on filehandles. For example, Firefox fastload files are now madvise()ed such that they are read in a single 2mb chunk on startup. Unfortunately, it appears that Windows has no such APIs so one is stuck with pathetically small reads.</p>
+
+<p>At first, I thought that, passing FILE_FLAG_SEQUENTIAL_SCAN when opening the file handle will work like a crappy fadvise()-equivalent. Turns out that mmaping files completely bypasses the Windows Cache Manager, so that flag just gets ignored.</p>
+
+<p>So as far as I can tell the only way to convince Windows to not read stuff in stupidly small chunks is to mmap() everything we care about using large pages. Unfortunately that comes with some significant costs.</p>
+
+<p>We are going to try to <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=553721">order</a> the binaries better which should halve the amount of page faults.</p>
+
+<p><strong>Can Windows Do Anything Better?</strong></p>
+
+<p>Yes. The &#8220;Unix way&#8221; of breaking up everything into a billion libraries and configuration files results in 10x more files being read on startup on Linux vs Windows. Just because Linux can read individual libraries 4x faster, doesn&#8217;t mean that IO becomes free.</p>
+
+<p>Presently, in ideal conditions, Firefox starts up 30-50% faster on Windows. The Windows Prefetcher hack sweeps a lot of Windows suck under the carpet, but Microsoft has a lot of room for improvement.</p>
+
+<p><strong>Update:</strong><br/>
+People seem to prefer to comment on <a href="http://www.reddit.com/r/programming/comments/bu2do/windows_sucks_at_memorymapped_io_during_startup/">reddit</a>. If you want me to not miss your comment, make sure you comment here.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Taras Glek</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-04-19T07:00:00-07:00" pubdate data-updated="true">Apr 19<span>th</span>, 2010</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/taras/blog/categories/mozilla/'>mozilla</a>, <a class='category' href='/taras/blog/categories/performance/'>performance</a>, <a class='category' href='/taras/blog/categories/startup/'>startup</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://tarasglek.github.com/taras/blog/2010/04/19/windows-sucks-at-memory-mapped-io-during-startup/" data-via="tarasglek" data-counturl="http://tarasglek.github.com/taras/blog/2010/04/19/windows-sucks-at-memory-mapped-io-during-startup/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/taras/blog/2010/04/12/squeezing-every-last-bit-of-performance-out-of-the-linux-toolchain/" title="Previous Post: Squeezing Every Last Bit of Performance Out of The Linux Toolchain">&laquo; Squeezing Every Last Bit of Performance Out of The Linux Toolchain</a>
+      
+      
+        <a class="basic-alignment right" href="/taras/blog/2010/04/20/mozillaservices/" title="Next Post: mozilla::services">mozilla::services &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/26/coping-with-flash-hangs/">Coping with Flash hangs</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/16/snappy-44-fixing-tab-switching-in-vancouver/">Snappy #44: Fixing tab switching in Vancouver</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/05/snappy-43-big-improvements-faster-startup-smoother-tabstrip/">Snappy #43: Big improvements: faster startup? Smoother tabstrip!</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/26/snappy-42/">Snappy #42</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/18/snappy-41/">Snappy #41</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("tarasglek", 4, false);
+    });
+  </script>
+  <script src="/taras/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/tarasglek" class="twitter-follow-button" data-show-count="false">Follow @tarasglek</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Taras Glek -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

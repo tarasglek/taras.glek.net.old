@@ -1,0 +1,261 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>icegrind - Valgrind Plugin for Optimizing Cold Startup - All About Performance</title>
+  <meta name="author" content="Taras Glek">
+
+  
+  <meta name="description" content="Most program binaries are laid out with little to no regard to how programs get loaded from disk. This disconnect between compile-time and runtime &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tarasglek.github.com/taras/blog/2010/04/07/icegrind-valgrind-plugin-for-optimizing-cold-startup/">
+  <link href="/taras/favicon.png" rel="icon">
+  <link href="/taras/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/taras/javascripts/modernizr-2.0.js"></script>
+  <script src="/taras/javascripts/ender.js"></script>
+  <script src="/taras/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/taras/atom.xml" rel="alternate" title="All About Performance" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/taras/">All About Performance</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/taras/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tarasglek.github.com/taras" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/taras/">Blog</a></li>
+  <li><a href="/taras/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Icegrind - Valgrind Plugin for Optimizing Cold Startup</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-04-07T08:03:24-07:00" pubdate data-updated="true">Apr 7<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Most program binaries are laid out with little to no regard to how programs get loaded from disk. This disconnect between compile-time and runtime behaviour of binaries imposes a significant performance penalty to on large applications such as browsers, office suites, etc.</p>
+
+<p>It is incredibly difficult to observe both the cause (ie calling a random function) of binary-induced IO and the effect (the program gets suspended during startup while parts being loaded from disk), so this area doesn&#8217;t get as much optimization love as it deserves.</p>
+
+<p>My estimate is that around 50% of Firefox startup time is wasted on subobtimal binary layout. My previous <a href="http://tarasglek.github.com/taras/2010/04/05/linux-how-to-make-startup-suck-less-and-reduce-memory-usage/">post</a> demonstrated the kind of difference a better binary layout can make. Note that reordering executables isn&#8217;t the only solution, eliminating dead code should also speed things up (deleting <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=457262">dead code</a> is a <a href="http://ehren.wordpress.com/">hard</a>).</p>
+
+<p><strong>Optimizing Binary Layout</strong><em> Disclaimer:I just finished my 3rd rewrite of icegrind a few hours ago, be gentle.</em></p>
+
+<p>Ingredients: <a href="http://valgrind.org/">Valgrind</a> SVN trunk + <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=549749">icegrind patch</a>, GNU Gold + <a href="http://sourceware.org/ml/binutils/2010-03/msg00050.html">section-ordering-file patch</a>, a way to describe contents of binaries.</p>
+
+<p><em>Step 1a: Produce a build </em>Since I am interested in reorganizing program binaries, I build mozilla with &#8220;-ffunction-sections -fdata-sections&#8221; in CFLAGS/CXXFLAGS</p>
+
+<p>I also prelink the binaries in dist/bin such that my binaries better correspond to how they will be used: prelink $LD_LIBRARY_PATH/firefox-bin $LD_LIBRARY_PATH/*.so</p>
+
+<p><em>Step 1b: Produce a description of interesting files </em>I use my <a href="http://hg.mozilla.org/users/tglek_mozilla.com/startup/file/6453ad2a7906/elflog.cpp">elflog</a> utility to produce a .sections description of files I&#8217;m interested in. Elflog looks at the symbol table and tries to infer section names (produced by -ffunction-sections -fdata-sections) from symbol names/locations(see also &#8211;print-map option for ld).</p>
+
+<p>elflog  &#8211;contents  libxul.so >  libxul.so.sections elflog currently emits non-existent .comment.* sections because it gets confused by 0-length sections such as .bss. Note, one can also build tools to describe other kinds of files, such as jar or sqlite files. The only limitation is that Icegrind currently only tracks mmap()-caused disk IO, it would be trivial to extend it to deal with open/seek/read kind of disk IO.</p>
+
+<p><em>Step 2: Produce a log with icegrind! </em>Apply my icegrind <a href="https://bugzilla.mozilla.org/attachment.cgi?id=437664&amp;action=edit">patch</a>, build+install valgrind. Run Firefox valgrind &#8211;tool=icegrind firefox-bin -profile /tmp/ff -no-remote This will produce a .log file for every mmap()ed file with a .sections description. This log chronologically lists sections in the order of access.</p>
+
+<p><em>Step 3: Tell gold to link using the above log</em> Build/install binutils (I use a CVS checkout from a month ago) with the <a href="http://sourceware.org/ml/binutils/2010-03/msg00050.html">section ordering patch</a>, specify &#8211;enable-gold. To reorder the binary, I just add -Wl,&#8211;section-ordering-file,libxul.so.log to my linker commandline. Note there are still some teething issues with using this patch, it exhibits N<sup>2</sup> behavior (ie takes 10min to link libxul.so with it) and occasionally swaps order for .rela.plt and .rela.dyn, which makes prelink upset. But unlike my <a href="http://tarasglek.github.com/taras/2010/02/19/teaching-ld-to-optimize-binaries-for-startup/">earlier attempt</a> with linker scripts, it does not affect the binary size.</p>
+
+<p>Step 4: Enjoy! Now strip, install, prelink your binaries and enjoy faster startup.</p>
+
+<p><strong>Plans</strong></p>
+
+<p>I would like to see the gold patch fixed up and landed. Once that is done I&#8217;d like to turn this on for our Linux and mobile linux builds.</p>
+
+<p>I am hoping that some sort of sensible ordering of binaries will become commonplace in the future.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Taras Glek</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-04-07T08:03:24-07:00" pubdate data-updated="true">Apr 7<span>th</span>, 2010</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/taras/blog/categories/mozilla/'>mozilla</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://tarasglek.github.com/taras/blog/2010/04/07/icegrind-valgrind-plugin-for-optimizing-cold-startup/" data-via="tarasglek" data-counturl="http://tarasglek.github.com/taras/blog/2010/04/07/icegrind-valgrind-plugin-for-optimizing-cold-startup/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/taras/blog/2010/04/05/linux-how-to-make-startup-suck-less-and-reduce-memory-usage/" title="Previous Post: Linux: How to Make Startup Suck Less (Also Reduce Memory Usage!)">&laquo; Linux: How to Make Startup Suck Less (Also Reduce Memory Usage!)</a>
+      
+      
+        <a class="basic-alignment right" href="/taras/blog/2010/04/12/squeezing-every-last-bit-of-performance-out-of-the-linux-toolchain/" title="Next Post: Squeezing Every Last Bit of Performance Out of The Linux Toolchain">Squeezing Every Last Bit of Performance Out of The Linux Toolchain &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/26/coping-with-flash-hangs/">Coping with Flash hangs</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/16/snappy-44-fixing-tab-switching-in-vancouver/">Snappy #44: Fixing tab switching in Vancouver</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/05/snappy-43-big-improvements-faster-startup-smoother-tabstrip/">Snappy #43: Big improvements: faster startup? Smoother tabstrip!</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/26/snappy-42/">Snappy #42</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/18/snappy-41/">Snappy #41</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("tarasglek", 4, false);
+    });
+  </script>
+  <script src="/taras/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/tarasglek" class="twitter-follow-button" data-show-count="false">Follow @tarasglek</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Taras Glek -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

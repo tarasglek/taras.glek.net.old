@@ -1,0 +1,259 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Snappy, May 17 - Physical Room Edition - All About Performance</title>
+  <meta name="author" content="Taras Glek">
+
+  
+  <meta name="description" content="Misc This was an unusual meeting for the Snappy project: everybody was in the same physical room (though someone dialed in 5min before the end). I &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tarasglek.github.com/taras/blog/2012/05/21/snappy-may-17-physical-room-edition/">
+  <link href="/taras/favicon.png" rel="icon">
+  <link href="/taras/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/taras/javascripts/modernizr-2.0.js"></script>
+  <script src="/taras/javascripts/ender.js"></script>
+  <script src="/taras/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/taras/atom.xml" rel="alternate" title="All About Performance" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/taras/">All About Performance</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/taras/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tarasglek.github.com/taras" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/taras/">Blog</a></li>
+  <li><a href="/taras/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Snappy, May 17 - Physical Room Edition</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-05-21T04:10:23-07:00" pubdate data-updated="true">May 21<span>st</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><strong>Misc</strong></p>
+
+<p>This was an unusual meeting for the Snappy project: everybody was in the same physical room (though someone dialed in 5min before the end). I love the distributed nature of Mozilla, but it&#8217;s nice to have everybody in the same room for a change.</p>
+
+<p>Vlad did some super-slow-startup investigation. We have even more <a href="http://blog.mozilla.org/vdjeric/2012/05/17/looking-at-my-own-abouttelemetry-data/">evidence</a> that loading pages before the UI is up is a bad idea: bug 715402.</p>
+
+<p>Jet sped up browser chrome by converting SVG masks to clip-paths: bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=752918">752918</a>. With a name like that, how can he not work on performance bugs :)</p>
+
+<p>The necko team is looking for feedback on test builds that reduce cache-related pauses on the main thread. If you suffer from cache-related lag, give <a href="https://ftp.mozilla.org/pub/mozilla.org/firefox/try-builds/bsmith@mozilla.com-10b6ced92518/">these</a> a spin: bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=722034">722034</a>.</p>
+
+<p>Benoit made our profiling builds useful on Linux, Android (in addition to Windows, Mac64). Work is happening on extending our debug protocol with <a href="https://developer.mozilla.org/en/Performance/Profiling_with_the_Built-in_Profiler">profiling </a>abilities. Unfortunately I do not have bug #s to link to. The Windows symbol server is almost done with security review so it can be exposed to the web. For more profiler details see bugs: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=753588">753588</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=751355">751355</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=751355">751355</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=751034">751034</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=751779">751779</a>.</p>
+
+<p>Rafael is getting close to calling exit(0) in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=662444">662444</a>. Much work remains, it&#8217;ll be the most significant change since we embarked on this project almost a year ago. Our current application shutdown situation is not pretty.</p>
+
+<p><strong>GC/CC</strong></p>
+
+<p>Bill landed incremental GC again, it promptly bounced out: bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=735099">735099</a>.</p>
+
+<p>We now do compartmental GC more often: bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=716014">716014</a>.</p>
+
+<p>Andrew is working on reducing CC overhead (by 80% in his benchmark) when closing tabs: bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=754495">754495</a>.</p>
+
+<p><strong>LagBlock Plus</strong></p>
+
+<p>I&#8217;ve been running Wlad&#8217;s <a href="https://addons.mozilla.org/en-US/firefox/addon/suspend-background-tabs/">extension</a> for over a week now. The browser is so much more pleasant now. Background tabs used to make text-entry a painful process. Can&#8217;t wait until we can approach a similar level of responsiveness by scheduling background tab events more intelligently.</p>
+
+<p>I feel that letting tabs run out of control is a serious misfeature in the current web &#8216;architecture&#8217;. Modern OSes require background apps to suspend (ie Android, iOS). It is about time that browsers forced a similar behavior: ie bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=675539">675539</a>. Web developers should be given a way to request to run background tasks and users should be able to veto that.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Taras Glek</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-05-21T04:10:23-07:00" pubdate data-updated="true">May 21<span>st</span>, 2012</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/taras/blog/categories/mozilla/'>mozilla</a>, <a class='category' href='/taras/blog/categories/snappy/'>snappy</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://tarasglek.github.com/taras/blog/2012/05/21/snappy-may-17-physical-room-edition/" data-via="tarasglek" data-counturl="http://tarasglek.github.com/taras/blog/2012/05/21/snappy-may-17-physical-room-edition/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/taras/blog/2012/05/21/snappy-workweek/" title="Previous Post: Snappy Workweek">&laquo; Snappy Workweek</a>
+      
+      
+        <a class="basic-alignment right" href="/taras/blog/2012/05/22/give-dxr-a-try/" title="Next Post: Give DXR a try">Give DXR a try &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/26/coping-with-flash-hangs/">Coping with Flash hangs</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/16/snappy-44-fixing-tab-switching-in-vancouver/">Snappy #44: Fixing tab switching in Vancouver</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/05/snappy-43-big-improvements-faster-startup-smoother-tabstrip/">Snappy #43: Big improvements: faster startup? Smoother tabstrip!</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/26/snappy-42/">Snappy #42</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/18/snappy-41/">Snappy #41</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("tarasglek", 4, false);
+    });
+  </script>
+  <script src="/taras/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/tarasglek" class="twitter-follow-button" data-show-count="false">Follow @tarasglek</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Taras Glek -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

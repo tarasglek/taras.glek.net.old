@@ -1,0 +1,253 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Snappy June 21, 28 - All About Performance</title>
+  <meta name="author" content="Taras Glek">
+
+  
+  <meta name="description" content="Necko team is busy squashing main-thread waits, see bug 765665, bug 766973. Ehsan Akhgari turned on frame pointers on nightly channel: bug 764216. &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tarasglek.github.com/taras/blog/2012/07/02/snappy-june-21-28/">
+  <link href="/taras/favicon.png" rel="icon">
+  <link href="/taras/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/taras/javascripts/modernizr-2.0.js"></script>
+  <script src="/taras/javascripts/ender.js"></script>
+  <script src="/taras/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/taras/atom.xml" rel="alternate" title="All About Performance" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/taras/">All About Performance</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/taras/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tarasglek.github.com/taras" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/taras/">Blog</a></li>
+  <li><a href="/taras/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Snappy June 21, 28</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-07-02T07:06:24-07:00" pubdate data-updated="true">Jul 2<span>nd</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Necko team is busy squashing main-thread waits, see <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=765665">bug 765665</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=766973">bug 766973</a>.</p>
+
+<p>Ehsan Akhgari turned on frame pointers on nightly channel: bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=764216">764216</a>. This means that one can now use the <a href="https://developer.mozilla.org/en/Performance/Profiling_with_the_Built-in_Profiler#Running%20the%20profiler">built-in profiler</a> on nightly builds. The main purpose behind the change was to collect more chromehang data(long Firefox UI stalls). Vlad Djeric lowered the chromehang reporting threshold to 5 seconds: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=763124">bug 763124</a>. We are waiting on metrics to separate out chromehang reporting from telemetry pings: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=763116">bug 763116</a>.</p>
+
+<p>Nathan Froyd is making heroic progress on teaching our events to queue so they can be prioritized: bug <a href="http://bugzilla.mozilla.org/show_bug.cgi?id=715376">715376</a>.</p>
+
+<p>Tim Taubert is working to reproduce a tab animation regression in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=752837">bug 752837</a>. He also taking over making Firefox themes less of a performance pig in<strong> </strong><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=650968">bug 650968</a> .</p>
+
+<p>We had great success with eliciting data on slow startups in Nicholas Chaim&#8217;s <a href="http://nchaim-moz2012.tumblr.com/post/25647745019/slow-startup-logging-add-on">blog post</a>.  We confirmed that external processes can affect Firefox startup (we had evidence for this) and that we can detect those situations (great work Nicholas!). It will be a hard slog before we can bolt a pretty UI to the extension + integrate system diagnostics into Firefox. In the meantime I recommend that <a href="http://support.mozilla.org/en-US/home">SUMO</a> people start suggesting this extension to diagnose slow Firefox installs. Nicholas is working on a revision of the extension that records slow-IO-caused-startup situations on a server so we prioritize + turn these into detectable fingerprints.</p>
+
+<p>William McCloskey fixed a nasty GC regression which caused GCs to run too often: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=768282">bug 768282</a>. Andrew McCreight sped up cycle collection when closing tabs: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=754495">bug 754495</a>. Olli Pettay enabled freeing DOM nodes directly (bypassing cycle-collection) when setting .innerHtml of non-empty DOM elements see <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=730639">bug 730639</a>.</p>
+
+<p><strong>PS</strong></p>
+
+<p>&#8220;The Performance of Open Source Applications&#8221; book is looking for <a href="http://www.aosabook.org/blog/2012/06/the-performance-of-open-source-applications/">contributors</a>. Would be cool if someone snuck some Mozilla wisdom in there.</p>
+
+<p>Sorry for skipping the snappy update last week. These posts take a lot more effort than is reasonable and I needed to direct it at my talk last week. You can see my <a href="http://velocityconf.com/velocity2012">Velocity</a> slides <a href="http://people.mozilla.com/~tglek/velocity2012/">here</a>.</p>
+
+<p>At least one person objected to the strong language used in the presentation (ie &#8220;dom local storage sucks&#8221;). I chose this language to emphasize the fact this isn&#8217;t a feature where one gets to weigh upsides vs downsides because the downsides are so severe. Most of the positive data on this is coming from what I believe to be unrepresentative benchmarks. I have not seen any other data points similar in quality to those reported by our <a href="https://metrics.mozilla.com/data/">telemetry</a>.</p>
+
+<p>Btw, Jan Varga is close to removing our IndexedDB prompt(bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=758357">758357</a>), opening up IndexedDB as an alternative to DOM Local Storage(<a href="https://blog.mozilla.org/tglek/2012/03/16/localstorage-pageload-perf/">which sucks</a>).</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Taras Glek</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-07-02T07:06:24-07:00" pubdate data-updated="true">Jul 2<span>nd</span>, 2012</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/taras/blog/categories/mozilla/'>mozilla</a>, <a class='category' href='/taras/blog/categories/snappy/'>snappy</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://tarasglek.github.com/taras/blog/2012/07/02/snappy-june-21-28/" data-via="tarasglek" data-counturl="http://tarasglek.github.com/taras/blog/2012/07/02/snappy-june-21-28/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/taras/blog/2012/06/25/slow-startup-logging-help-wanted/" title="Previous Post: Slow startup logging: help wanted">&laquo; Slow startup logging: help wanted</a>
+      
+      
+        <a class="basic-alignment right" href="/taras/blog/2012/07/09/snappy-update-for-week-of-july-5th/" title="Next Post: Snappy update for week of July 5th">Snappy update for week of July 5th &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/26/coping-with-flash-hangs/">Coping with Flash hangs</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/16/snappy-44-fixing-tab-switching-in-vancouver/">Snappy #44: Fixing tab switching in Vancouver</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/05/snappy-43-big-improvements-faster-startup-smoother-tabstrip/">Snappy #43: Big improvements: faster startup? Smoother tabstrip!</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/26/snappy-42/">Snappy #42</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/18/snappy-41/">Snappy #41</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("tarasglek", 4, false);
+    });
+  </script>
+  <script src="/taras/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/tarasglek" class="twitter-follow-button" data-show-count="false">Follow @tarasglek</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Taras Glek -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

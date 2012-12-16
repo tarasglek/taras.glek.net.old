@@ -1,0 +1,259 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>LocalStorage pageload perf - All About Performance</title>
+  <meta name="author" content="Taras Glek">
+
+  
+  <meta name="description" content="Sorry for the delay in posting this. We don&#8217;t yet have a frontend for tracking SQL performance in Firefox. Had to wait on Xavier to become &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tarasglek.github.com/taras/blog/2012/03/16/localstorage-pageload-perf/">
+  <link href="/taras/favicon.png" rel="icon">
+  <link href="/taras/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/taras/javascripts/modernizr-2.0.js"></script>
+  <script src="/taras/javascripts/ender.js"></script>
+  <script src="/taras/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/taras/atom.xml" rel="alternate" title="All About Performance" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/taras/">All About Performance</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/taras/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tarasglek.github.com/taras" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/taras/">Blog</a></li>
+  <li><a href="/taras/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">LocalStorage Pageload Perf</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-03-16T03:26:51-07:00" pubdate data-updated="true">Mar 16<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Sorry for the delay in posting this. We don&#8217;t yet have a frontend for tracking SQL performance in Firefox. Had to wait on Xavier to become available to do the <a href="http://people.mozilla.org/~xstevens/telemetry/slowsql/">manual reports</a> for me.</p>
+
+<p>product
+product_version
+channel
+sql
+doc_count
+sum_count
+quantiles(min,0.25,0.5,0.75,0.95,max)</p>
+
+<p>Firefox
+12.0a2
+aurora
+INSERT INTO webappsstore2_temp (scope, key, value, secure, owner) SELECT scope, key, value, secure, owner FROM webappsstore2 WHERE scope = :scope AND NOT EXISTS ( SELECT scope, key FROM webappsstore2_temp WHERE scope = webappsstore2.scope AND key = webappsstore2.key )
+2970
+6676
+(100.0,133.0,199.0,365.0,1731.0,244503.0)</p>
+
+<p>Last column shows the time it takes to prepopulate DOM local storage for a webpage in milliseconds. It means in the worst case it took 4minutes before the filesystem decided to give us what we asked for. For 95% of the users reporting it took &lt; 1.7seconds to preload local storage, for 75% &lt; 0.36seconds, etc.</p>
+
+<p>Generally IO is quite fast, but these terrible corner cases means that responsible software developers should always do async IO in interactive applications. Note that this has little to do with how we are accessing data from disk and everything to do with disk IO latency being non-deterministic.</p>
+
+<p><strong>What about other SQL queries?</strong></p>
+
+<p>Feel free to explore the other slow SQL queries in the product, most of them already have Snappy:P1 bugs filed. The plan for snappy is to systematically annihilate the worst performing IO in the browser ASAP.</p>
+
+<p>This data shows why doing SQL IO in applications is both a curse and a blessing. On one hand, a general purpose relational database is always going to be slower than an application-specific storage mechanism. On the other hand, it is a very nice abstraction that makes analysis like this trivial.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Taras Glek</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-03-16T03:26:51-07:00" pubdate data-updated="true">Mar 16<span>th</span>, 2012</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/taras/blog/categories/mozilla/'>mozilla</a>, <a class='category' href='/taras/blog/categories/snappy/'>snappy</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://tarasglek.github.com/taras/blog/2012/03/16/localstorage-pageload-perf/" data-via="tarasglek" data-counturl="http://tarasglek.github.com/taras/blog/2012/03/16/localstorage-pageload-perf/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/taras/blog/2012/03/14/abouttelemetry-diff-mode-search/" title="Previous Post: about:telemetry: diff mode + search">&laquo; about:telemetry: diff mode + search</a>
+      
+      
+        <a class="basic-alignment right" href="/taras/blog/2012/03/16/snappy-march-15th/" title="Next Post: Snappy, March 15th">Snappy, March 15th &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/26/coping-with-flash-hangs/">Coping with Flash hangs</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/16/snappy-44-fixing-tab-switching-in-vancouver/">Snappy #44: Fixing tab switching in Vancouver</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/05/snappy-43-big-improvements-faster-startup-smoother-tabstrip/">Snappy #43: Big improvements: faster startup? Smoother tabstrip!</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/26/snappy-42/">Snappy #42</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/18/snappy-41/">Snappy #41</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("tarasglek", 4, false);
+    });
+  </script>
+  <script src="/taras/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/tarasglek" class="twitter-follow-button" data-show-count="false">Follow @tarasglek</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Taras Glek -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,249 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Effective Static Analysis - All About Performance</title>
+  <meta name="author" content="Taras Glek">
+
+  
+  <meta name="description" content="Static analysis can be a very fun pastime. One gets to sift through giant codebases looking for interesting clues, what could be more fun? A couple &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tarasglek.github.com/taras/blog/2011/08/03/effective-static-analysis/">
+  <link href="/taras/favicon.png" rel="icon">
+  <link href="/taras/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/taras/javascripts/modernizr-2.0.js"></script>
+  <script src="/taras/javascripts/ender.js"></script>
+  <script src="/taras/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/taras/atom.xml" rel="alternate" title="All About Performance" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/taras/">All About Performance</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/taras/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tarasglek.github.com/taras" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/taras/">Blog</a></li>
+  <li><a href="/taras/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Effective Static Analysis</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-08-03T13:27:54-07:00" pubdate data-updated="true">Aug 3<span>rd</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Static analysis can be a very fun pastime. One gets to sift through giant codebases looking for interesting clues, what could be more fun? A couple things qualify: a) static analysis accompanied by cool rewrites b) static analysis accompanied by cool visualizations.</p>
+
+<p><strong>Cool Rewrite</strong></p>
+
+<p>Michael Wu&#8217;s <a href="http://blog.mozilla.org/mwu/2011/07/28/the-twelve-booleans-of-mozilla/">boolcheck</a> tool is awesome. He wrote it to check that &#8220;typedef int&#8221; bools are really being used as booleans and aren&#8217;t perversely carrying integer values. The process of writing the tool is cool. As Michael is discovers bugs/disagreements stemming from setting &#8220;typedef bool PRBool&#8221;, he just adds another pattern to check for to the tool and never has to worry about that pattern again. I hope to see someone apply boolcheck to the linux kernel, GTK projects or anything else with int booleans. Some projects don&#8217;t have the luxury of switching to real bools, so they can continue using a static checker to make up for it.</p>
+
+<p><strong>Pretty Code</strong></p>
+
+<p>I&#8217;ve blogged about <a href="http://dxr.mozilla.org/clang/">DXR</a> many times. As of this week clang-based DXR is on par with the old Dehydra-based one. Callgraph, inheritance, etc queries now work. <a href="http://quetzalcoatal.blogspot.com/">Joshua</a> did an outstanding job gutting and rewriting the DXR backend this summer and is now going back to school. I&#8217;m extremely impressed with his work this summer. I didn&#8217;t think it was possible to get as far as he did.</p>
+
+<p>We are looking for more help with DXR. Please deploy it on your pet project, contribute plugins for various languages, simplify deployment, etc.</p>
+
+<p>Additionally, now that the backed is in a fairly decent shape, we are looking for someone to help us turn DXR into the slickest code browsing tool ever(we have some ideas <a href="https://wiki.mozilla.org/DXR_Future_Work_Plan">written down</a>). I&#8217;d like interactive graphs, various code visualizations, integration with bugzilla, etc. This needs a JSON-query frontend and a few other bits &amp; pieces to be implemented.</p>
+
+<p><strong>Interns Wanted</strong></p>
+
+<p>We would love to hire more static analysis interns. Are you student who dreams about making large codebases easy to grasp? Do you want to spend a few months making Control Flow Graphs behave? If that sounds like your calling: leave a comment, send me an email.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Taras Glek</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-08-03T13:27:54-07:00" pubdate data-updated="true">Aug 3<span>rd</span>, 2011</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/taras/blog/categories/mozilla/'>mozilla</a>, <a class='category' href='/taras/blog/categories/static-analysis/'>static-analysis</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://tarasglek.github.com/taras/blog/2011/08/03/effective-static-analysis/" data-via="tarasglek" data-counturl="http://tarasglek.github.com/taras/blog/2011/08/03/effective-static-analysis/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/taras/blog/2011/07/01/telemetry-status/" title="Previous Post: Telemetry Status">&laquo; Telemetry Status</a>
+      
+      
+        <a class="basic-alignment right" href="/taras/blog/2011/08/09/ride-to-the-coast/" title="Next Post: Ride to The Coast">Ride to The Coast &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/26/coping-with-flash-hangs/">Coping with Flash hangs</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/16/snappy-44-fixing-tab-switching-in-vancouver/">Snappy #44: Fixing tab switching in Vancouver</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/05/snappy-43-big-improvements-faster-startup-smoother-tabstrip/">Snappy #43: Big improvements: faster startup? Smoother tabstrip!</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/26/snappy-42/">Snappy #42</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/18/snappy-41/">Snappy #41</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("tarasglek", 4, false);
+    });
+  </script>
+  <script src="/taras/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/tarasglek" class="twitter-follow-button" data-show-count="false">Follow @tarasglek</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Taras Glek -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,245 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Snappy, April 26 - All About Performance</title>
+  <meta name="author" content="Taras Glek">
+
+  
+  <meta name="description" content="Notes from today&#8217;s meeting are here. No major snappy fixes landed this week. However, if you look in the notes, there are quite a few projects &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tarasglek.github.com/taras/blog/2012/04/26/snappy-april-26/">
+  <link href="/taras/favicon.png" rel="icon">
+  <link href="/taras/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/taras/javascripts/modernizr-2.0.js"></script>
+  <script src="/taras/javascripts/ender.js"></script>
+  <script src="/taras/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/taras/atom.xml" rel="alternate" title="All About Performance" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/taras/">All About Performance</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/taras/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tarasglek.github.com/taras" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/taras/">Blog</a></li>
+  <li><a href="/taras/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Snappy, April 26</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-04-26T08:43:50-07:00" pubdate data-updated="true">Apr 26<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Notes from today&#8217;s meeting are <a href="https://wiki.mozilla.org/Performance/Snappy/2012-04-26">here</a>.</p>
+
+<p>No major snappy fixes landed this week. However, if you look in the notes, there are quite a few projects going through the review cycle.</p>
+
+<p>Personally, I&#8217;m most excited by progress in getting rid of the setTimeout on tab click(bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=743877">743877</a>). Neil posted a diagnosis of why we need setTimeout while switching tabs. Tim followed up with a patch to avoid the setTimeout for non-focus bits. On the subject of SetTimeouts: we devised a plan for managing SetTimeout <a href="https://blog.mozilla.org/tglek/2012/04/18/web-2-0-a-collection-of-settimeouts/">overhead </a>in background tabs. This will involve breaking up our global event queue into a global queue + smaller per-page queues, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=715376">715376</a>. This will not be a pleasant task, but Nathan aims to have a proof of concept ready next week. With this infrastructure we should be able start prioritizing which events we handle and punish misbehaving tabs.</p>
+
+<p>The graphics team is wrapping up the big Android push, freeing up cycles for elsewhere. Bas is back to looking at slowdowns due to hw acceleration (bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=721273">721273</a>). Bas is also looking into changing our chrome CSS to be less expensive to paint.</p>
+
+<p>Ehsan is working with Paul to change firefox themes to not be horrible <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=650968">performance hogs</a>.</p>
+
+<p><strong>Update:</strong> A very significant snappy fix <a href="http://blog.kylehuey.com/post/21892343371/fixing-the-memory-leak">landed </a>this week as part of memshrink. It should significantly reduce memory usage and thus cycle-collector pauses, etc.</p>
+
+<p><strong>Update #2</strong>: I missed another very cool Snappy fix: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=729133">bug 729133</a>. This is based on revising old assumptions about cache being faster than disk. We learned from telemetry data that a significant portion of disk cache requests are processed slower than they would if we just went straight to network. Firefox now hedges bets and warms up a TCP connection while checking cache. For details see Patricks&#8217;s <a href="http://bitsup.blogspot.com/2012/04/making-firefox-search-snappier.html">blog</a>.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Taras Glek</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-04-26T08:43:50-07:00" pubdate data-updated="true">Apr 26<span>th</span>, 2012</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/taras/blog/categories/mozilla/'>mozilla</a>, <a class='category' href='/taras/blog/categories/snappy/'>snappy</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://tarasglek.github.com/taras/blog/2012/04/26/snappy-april-26/" data-via="tarasglek" data-counturl="http://tarasglek.github.com/taras/blog/2012/04/26/snappy-april-26/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/taras/blog/2012/04/19/snappy-april-19/" title="Previous Post: Snappy, April 19">&laquo; Snappy, April 19</a>
+      
+      
+        <a class="basic-alignment right" href="/taras/blog/2012/05/01/pushing-the-borders-out-of-firefox-performance/" title="Next Post: Pushing the borders [out] of Firefox performance">Pushing the borders [out] of Firefox performance &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/26/coping-with-flash-hangs/">Coping with Flash hangs</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/16/snappy-44-fixing-tab-switching-in-vancouver/">Snappy #44: Fixing tab switching in Vancouver</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/05/snappy-43-big-improvements-faster-startup-smoother-tabstrip/">Snappy #43: Big improvements: faster startup? Smoother tabstrip!</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/26/snappy-42/">Snappy #42</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/18/snappy-41/">Snappy #41</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("tarasglek", 4, false);
+    });
+  </script>
+  <script src="/taras/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/tarasglek" class="twitter-follow-button" data-show-count="false">Follow @tarasglek</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Taras Glek -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

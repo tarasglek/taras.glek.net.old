@@ -1,0 +1,247 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Rant on Library IO - All About Performance</title>
+  <meta name="author" content="Taras Glek">
+
+  
+  <meta name="description" content="So I&#8217;ve been trying to figure out how optimize disk IO startup. I looked into IO caused by libraries and turns out that apps with big libraries &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tarasglek.github.com/taras/blog/2009/10/20/large-apps-just-have-to-start-slow/">
+  <link href="/taras/favicon.png" rel="icon">
+  <link href="/taras/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/taras/javascripts/modernizr-2.0.js"></script>
+  <script src="/taras/javascripts/ender.js"></script>
+  <script src="/taras/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/taras/atom.xml" rel="alternate" title="All About Performance" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/taras/">All About Performance</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/taras/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tarasglek.github.com/taras" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/taras/">Blog</a></li>
+  <li><a href="/taras/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Rant on Library IO</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-10-20T14:24:36-07:00" pubdate data-updated="true">Oct 20<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>So I&#8217;ve been trying to figure out how optimize disk IO startup. I looked into IO caused by libraries and turns out that apps with big libraries are screwed. Here is how I came to this conclusion:</p>
+
+<p>Gnomer&#8217;s <a href="http://www.gnome.org/~lcolitti/gnome-startup/analysis/">research</a> on startup pointed out that dumb readahead leads to wins in terms file io. So I wrote some code and sure enough, reading in libxul on top of our main() function does indeed result in a significant measurable speed-up on both Linux and OSX.</p>
+
+<p>From the gnome page I found a link to some <a href="http://ds9a.nl/diskstat/">diskstat</a> stuff. There lay a presentation with graphs that appear to show that OpenOffice has a much better cold IO pattern than Firefox. Given that there are some strong similarities between our application layouts I went digging to see if OpenOffice does something funny. And oh boy, it does do <a href="http://wiki.services.openoffice.org/wiki/Performance/Reorder_Symbols_For_Libraries">funny</a> page reordering on Windows and &#8220;slightly-smarter-than-dumb-readahead-style library prefetch&#8221; on Linux&#8230;</p>
+
+<p>So here is an innocent question: Why is page-reordering not done as a PGO step? I mean shouldn&#8217;t you fire up your app, feed some info back to the linker and be done with it? Another question: Why can&#8217;t we mark certain files as &#8220;keep this whole file in ram if someone asks for part of it to be paged in&#8221;?</p>
+
+<p>So is the only way to fast application startup via static linking? It sure is easy to</p>
+
+<p>posix_fadvise(open(argv[0],O_RDONLY),  POSIX_FADV_WILLNEED);</p>
+
+<p>Are these hacks still the state of the art in making apps with large libraries startup fast?</p>
+
+<p><strong>Update:</strong> Found some mentions of GNU Rope unfinishedware and a relatively recent blog <a href="http://blogs.linux.ie/caolan/2007/04/24/controlling-symbol-ordering/">post</a></p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Taras Glek</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-10-20T14:24:36-07:00" pubdate data-updated="true">Oct 20<span>th</span>, 2009</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/taras/blog/categories/mozilla/'>mozilla</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://tarasglek.github.com/taras/blog/2009/10/20/large-apps-just-have-to-start-slow/" data-via="tarasglek" data-counturl="http://tarasglek.github.com/taras/blog/2009/10/20/large-apps-just-have-to-start-slow/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/taras/blog/2009/10/08/restless-bug-fixing/" title="Previous Post: Restless Bug Fixing">&laquo; Restless Bug Fixing</a>
+      
+      
+        <a class="basic-alignment right" href="/taras/blog/2009/10/23/studying-library-io-systemtap-style/" title="Next Post: Studying Library IO - SystemTap Style">Studying Library IO - SystemTap Style &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/26/coping-with-flash-hangs/">Coping with Flash hangs</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/16/snappy-44-fixing-tab-switching-in-vancouver/">Snappy #44: Fixing tab switching in Vancouver</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/05/snappy-43-big-improvements-faster-startup-smoother-tabstrip/">Snappy #43: Big improvements: faster startup? Smoother tabstrip!</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/26/snappy-42/">Snappy #42</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/18/snappy-41/">Snappy #41</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("tarasglek", 4, false);
+    });
+  </script>
+  <script src="/taras/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/tarasglek" class="twitter-follow-button" data-show-count="false">Follow @tarasglek</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Taras Glek -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

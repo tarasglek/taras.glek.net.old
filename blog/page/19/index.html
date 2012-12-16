@@ -1,0 +1,722 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>All About Performance</title>
+  <meta name="author" content="Taras Glek">
+
+  
+  <meta name="description" content="When started on my static analysis quest just over a year ago. I imagined a perfect world in which I make tools and people use them to do awesome &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tarasglek.github.com/taras/blog/page/19/">
+  <link href="/taras/favicon.png" rel="icon">
+  <link href="/taras/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/taras/javascripts/modernizr-2.0.js"></script>
+  <script src="/taras/javascripts/ender.js"></script>
+  <script src="/taras/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/taras/atom.xml" rel="alternate" title="All About Performance" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/taras/">All About Performance</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/taras/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tarasglek.github.com/taras" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/taras/">Blog</a></li>
+  <li><a href="/taras/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+  
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2008/04/22/static-analyses-gadgets-of-mozilla-2-james-bonds/">Static Analyses: Gadgets of Mozilla 2 James Bonds</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-04-22T05:49:42-07:00" pubdate data-updated="true">Apr 22<span>nd</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>When started on my static analysis quest just over a year ago. I imagined a perfect world in which I make tools and people use them to do awesome analyses. Since I did not want to be disappointed, I imagined this, but did not think it would come true.</p>
+
+<p>Now we are at a point where static analysis use is growing rapidly, most analyses are done by people other than me as lately I barely have time to work on actual analyses. Treehydra and dehydra now have users and are well on their way to being released, which is taking up most of my time. Some of the most notable happenings:</p>
+
+<ul>
+<li>Vlad Sukhoy appeared out of nowhere and <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=415289">ported Dehydra</a> to GCC 4.2 on OSX. This is exciting because it showed that the plugin system is portable between GCC release, and it&#8217;s the biggest patch from a non-core dev.</li>
+<li>We finished the paper on our static analysis work to be presented at the <a href="https://www.gccsummit.org/2008/summary.php">GCC summit</a>. I am looking forward to meeting developers that built the GCC features that made the *hydras practical.</li>
+<li>There is a lot finishing touches being done such that we can release Dehydra 0.9 and eventually 1.0. <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=423898">Bug</a>.</li>
+<li>Dave Mandelin implemented a proper testsuite for the *hydras. This is a massive step up from what we had before.</li>
+<li>There is a massive amount of Treehydra work going on. Looks like it is boldly going where no static analysis has gone before, even faster than Dehydra did. So far it looks like Treehydra is going to be a bigger deal than Dehydra could ever be. It is turning out to be a very potent combination of GCC for features and JavaScript for ease of use.
+I have elaborate plans on how to take over the world with static analysis, more on that later. In the meantime I&#8217;ve started compiling a <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=430328">tracking bug</a> of ongoing analyses for Moz 2.</li>
+</ul>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2008/04/14/mozillafisl08/">Mozilla@FISL08</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-04-14T02:43:34-07:00" pubdate data-updated="true">Apr 14<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I will be presenting on the work we are doing on Mozilla 2 at <a href="http://fisl.softwarelivre.org/9.0/www/">FISL08</a>. Chris posted an excellent <a href="http://www.0xdeadbeef.com/weblog/?p=344">breakdown</a> of Mozilla plans for the conference.</p>
+
+<p>If you are at all interested in ground-breaking development happening in Mozilla 2, the challenges of static analysis then look me up!</p>
+
+<p>This is all very exciting as it&#8217;ll be a trip of many personal firsts: Brazil, the southern hemisphere and a conference of this scale.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2008/03/17/dehydra-world-tour/">Dehydra World Tour</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-03-17T06:57:35-07:00" pubdate data-updated="true">Mar 17<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>After a few weeks of mindnumbing work on treehydra gutts, I finally have something exciting to talk about!</p>
+
+<p>We will be presenting  <a href="http://wiki.mozilla.org/Dehydra_GCC">Dehydra</a> at the <a href="http://www.gccsummit.org/2008/">GCC Developer&#8217;s Summit</a> in lovely Ottawa. The GCC version of Dehydra exceeded all of my expectations, so it will be exciting to meet awesome GCC hackers who lay the groundwork to make this possible. Got suggestions for other venues to present Dehydra?</p>
+
+<p><strong>Packaging Help Needed</strong></p>
+
+<p>I feel that the Dehydra concept is getting mature enough for a 1.0 release. Recently baked GCC 4.3 means I&#8217;ll be able to distribute a 4.3-specific <a href="http://hg.mozilla.org/users/tglek_mozilla.com/gcc-moz-plugin-mq/">plugin patch</a>(currently it&#8217;s against trunk, aka 4.4to-be). Now I need README, LICENSE, configure files, etc.</p>
+
+<p>I will need help with packaging dehydra + patched gcc into .dpkg and .rpm files. Leave a comment, email me/<a href="https://lists.mozilla.org/listinfo/dev-static-analysis">static analysis list</a> or poke me in #mmgc on irc.mozilla.org if you can help with packaging.</p>
+
+<p><strong>Logo/Mascot Wanted</strong></p>
+
+<p>Since every serious project has a cool mascot, it would be cool to get one for Dehydra. I&#8217;d be curious to see what people think could symbolize a code scanning monster that makes grep feel inadequate. I have a feeling a cartoon version of a giant <a href="http://photos-b.ak.facebook.com/photos-ak-sf2p/v181/152/124/53600064/n53600064_30549377_7914.jpg">Heavy Metal Duck</a> might be it, but I haven&#8217;t made up my mind yet.</p>
+
+<p><strong>Treehydra What?</strong></p>
+
+<p>Treehydra is a work-in-progress name for the low-level equivalent of Dehydra. Currently it is built as separate GCC plugin. I haven&#8217;t yet made up mind on whether Treehydra will end up extending Dehydra or stay a separate tool. Since treehydra needs dehydra for bootstrap, they&#8217;ll stay separate for now.</p>
+
+<p>Last week I managed to run treehydra to completition on my mozilla checkout and walk the resulting AST in JS correctly. Now comes the fun part of making it do useful tricks.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2008/03/12/recipe-how-many-classes-are-instantiated-in-mozilla/">Recipe: How Many Classes Are Instantiated in Mozilla?</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-03-12T03:59:27-07:00" pubdate data-updated="true">Mar 12<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I got this question in the mail today.</p>
+
+<p>Seems like a simple enough question, but grep won&#8217;t provide that answer :) It also happens to be an excellent usecase for <a href="http://wiki.mozilla.org/Dehydra_GCC">Dehydra</a>.</p>
+
+<p>My script:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>
+</span><span class='line'>var classes = []
+</span><span class='line'>function process_type (c) {
+</span><span class='line'>if (!/class|struct/(c.kind)) return
+</span><span class='line'>classes.push (c.name)
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>
+</span><span class='line'>function input_end() {
+</span><span class='line'>var f = this.aux_base_name + ".counter"
+</span><span class='line'>print(f)
+</span><span class='line'>write_file (f, classes.join ("\n"))
+</span><span class='line'>}
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>process_type is called every time GCC hits a class declaration or a template is instantiated(also for enums and unions, but those get ignored with the .kind check). Then input_end is called when GCC is done processing the file. this.aux_base_name is the input filename.</p>
+
+<p>I hooked up this script to the mozilla build by adding the following to .mozconfig:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>
+</span><span class='line'>export CXX=$HOME/gcc/bin/g++
+</span><span class='line'>export CXXFLAGS="-fplugin=$HOME/work/gccplugin/gcc_dehydra.so -fplugin-arg=$HOME/work/gccplugin/test/count_classes.js"
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Then I built:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>
+</span><span class='line'>make -f client.mk build WARNINGS_AS_ERRORS=
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Count:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>
+</span><span class='line'>find -name \*.counter|xargs cat |sort |uniq &gt; /tmp/classes.txt
+</span><span class='line'>wc /tmp/classes.txt
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Answer: 15001</p>
+
+<p>There are a million other trivial queries that could be accomplished in a similar manner that weren&#8217;t easy or possible before.</p>
+
+<p><strong>Update</strong>: Fixed typo, had an extra zero in the answer</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2008/03/11/dehydra-as-pesticide/">Dehydra as Pesticide?</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-03-11T15:13:23-07:00" pubdate data-updated="true">Mar 11<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><a href="http://quetzalcoatal.blogspot.com/">Joshua</a>, pointed me at a <a href="http://www.economist.com/printedition/displaystory.cfm?story_id=10789417">fabulous article</a> over at the Economist. The brave souls went to great deal of effort to compare, contrast static and dynamic analyses in an easy to understand fashion. My favourite part of the article:</p>
+
+<blockquote><p>Seth Hallem, the co-founder of Coverity, which makes a static-analysis tool, expects greater integration between programming and testing tools in future.</p></blockquote>
+
+<p>I suspect in the future, there will be awesome tools that even <a href="http://wiki.mozilla.org/Dehydra_GCC">integrate</a> into one&#8217;s compiler. Egads!</p>
+
+<p><strong>Treehydra</strong></p>
+
+<p>I spent a few days chasing my own tail looking for bugs in the C->JS conversion code. Turns it out it wasn&#8217;t bug, but a manifestation of GCC having slightly more AST mutation than I expected*. Bugs in the mental model hurt most :) The upside is that this forced me to switched the conversion process from eager to lazy which also gave a big performance boost. I hope to finally have something capable of doing initial analyses by the end of the week.</p>
+
+<ul>
+<li>In a perfect world compilers are written in functional languages where AST are transformed instead of mutated.</li>
+</ul>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2008/03/03/random-news-in-the-dehydra-corner/">Random News in the Dehydra Corner</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-03-03T10:05:31-08:00" pubdate data-updated="true">Mar 3<span>rd</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I have not blogged recently because I have been busy working on a rather fancy new mode for <a href="http://wiki.mozilla.org/Dehydra_GCC">Dehydra</a>. Turned out it is indeed possible to use JavaScript to walk and generate code to automagically convert thousands of recursive C structures into corresponding JS Objects. Now dehydra will have two modes: a simple pattern matcher that is easy to get started with and a hardcore mode for compiler geeks capable of advanced analyses. More on this later, for now subscribe to <a href="https://lists.mozilla.org/listinfo/dev-static-analysis">static analysis</a> mailing list for more information.</p>
+
+<p>Turns out that I&#8217;m not the first person to <a href="https://sourceforge.net/forum/forum.php?thread_id=1685933&amp;forum_id=624529">embed</a> SpiderMonkey into GCC.</p>
+
+<p>I have gotten in touch with two different GCC plugin projects. Seems that other projects are more academic in nature and still in the early design/development stages.</p>
+
+<p>In constrast, Dehydra efforts are driven by existing unmet needs. In two months we went from having a crazy idea about using GCC for static analysis to having Benjamin <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=419622">integrate</a> support for Dehydra checks into the moz 2 development repository to be run in a tinderbox.</p>
+
+<p>I am also excited to see that people are discovering that Dehydra can be used to explore the codebase. We are not quite at the stage where one can interactively query the codebase from an ajax UI, but we are making <a href="http://blog.mozilla.org/dmandelin/2008/02/14/dtrace-c-mysteries-solved/">steps</a> in the right direction. As part of this trend, dehydra documentation is starting to migrate to MDC.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2008/02/06/gcc4-elsa-together-at-last/">GCC4 + Elsa, Together at Last?</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-02-06T05:26:44-08:00" pubdate data-updated="true">Feb 6<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>David Mandelin has been going through <a href="http://wiki.mozilla.org/Pork">Pork</a> fixing bugs and now it is almost working with GCC4. Prior to Dave&#8217;s involvement people would run into Elsa&#8217;s scary template bugs and switch back to GCC3.4 while trembling with fear. I asked Dave to fix a few easily work-aroundable (in Moz, not in Elsa) crashes in Elsa caused by Mozilla source and he did. Recently, I accidentally ran Elsa on a Mozilla .ii file produced by GCC4 and magically it processed! Turns out that the 3-4 bugs that Dave fixed also fixed 90% of the failures caused by GCC4 headers. The good news is that soon people won&#8217;t have to worry about that pesky GCC3.4 dependancy and run rewriting tools easier.</p>
+
+<p><a href="http://wiki.mozilla.org/Dehydra_GCC"><strong>GCC Dehydra</strong></a></p>
+
+<p>I feel like I&#8217;m nearing the feature-complete milestone. I plan to have Dehydra generate conversion code from GCC tree structures to JavaScript objects so we&#8217;ll be able to easily hook into any GCC middle-end pass in pure JS.  Dynamic, GCed, introspective nature of JavaScript should allow for very rapid development of code police/extraction/grep tools. This should result in a consistent codebase for Mozilla 2.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2008/01/25/dehydra-progress/">Dehydra Progress</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-01-25T09:39:30-08:00" pubdate data-updated="true">Jan 25<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><a href="http://wiki.mozilla.org/Dehydra_GCC">GCC Dehydra</a> is evolving much faster than the Elsa version did and it is easier to use. Once I implemented virtual methods correctly, Joshua was able to <a href="http://quetzalcoatal.blogspot.com/2008/01/more-fun-and-games.html">do his thing</a> in no time at all. All it takes is a custom GCC (I&#8217;d love to see it packaged) and specifying plugin parameters in CXXFLAGS.</p>
+
+<p>Dehydra has some new tricks now like a tree representation of types (instead of a string) with full typedef support. Lisp remnants in GCC are getting a new life as JavaScript objects.</p>
+
+<p>I&#8217;m current working on exposing the full GCC tree structure in JavaScript so one could do any analysis they wanted in pure JS. Dynamically typed GCC tree nodes are great for that. I&#8217;m starting with middle-end GIMPLE representation so in theory one will be able to analyze anything gcc can compile (Java, C++, C, ObjC, ObjC++, FORTRAN?). Eventually this will be expanded to support frontend specific tree nodes to be able to look at code closer to the way it was written. Oh and I expect people will be able to script large parts of C++ -> JavaScript rewrites with Dehydra.</p>
+
+<p>In theory, one could make tree node conversion two way which would enable writing optimization passes in JS, but that would be silly.</p>
+
+<p><strong>What&#8217;s the point?</strong></p>
+
+<p>I want to be able to do <a href="http://wiki.mozilla.org/Exceptions">Exception-safety analysis</a> in pure JS. I want to enable <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=265084">unit checking </a>(thought typedefs and inline conversion functions) in pure JS.</p>
+
+<p>Additionally, Dehydra should be awesome for generating bindings. For example, I&#8217;ll be able use Dehydra to import GCC&#8217;s autogenerated enums to get string names for nodes.</p>
+
+<p>Also it will become easy to extract callgraphs and various other stats out of the code if they are accessible in JS. Eventually we&#8217;ll be switching Dehydra to Tamarin to do all of the above really really fast.</p>
+
+<p><strong>GCC Plugins</strong></p>
+
+<p>While I am messing with the GCC AST, Dave is working on utilizing GCC&#8217;s <a href="http://blog.mozilla.org/dmandelin/">control flow graphs</a> with a separate plugin. Eventually we&#8217;ll merge our work, but for now it&#8217;s nice to not step on each others toes while adding features to the compiler. Given how easy life is with plugins I am amazed that people chose to go uphill bothways and not collaborate on a plugin interface for their crazy GCC extensions. Yes, I&#8217;m looking at you: <a href="http://mygcc.free.fr/">mygcc</a> and <a href="http://www.gccxml.org/HTML/Index.html">gccxml</a>.</p>
+
+<p>Aren&#8217;t there <a href="http://www.eclipse.org/cdt/">IDEs</a> interested in making use of GCC internals too or is everybody interested in maintaining <a href="http://git.kernel.org/?p=devel/sparse/sparse.git;a=blob;f=expression.c;h=289927ac7c88eb5bffbbb450915a7b829394d5a0;hb=a02aeb329d5a8f9047c0b75b7e7f64ee2db3ffcf">yet another crappy C parser</a> like Linux&#8217;s Sparse tool?</p>
+
+<p>I&#8217;m looking forward to exploring the many ways we can reuse what&#8217;s in the compiler to empower developers for Mozilla 2.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2008/01/17/gcc-spidermonkey-gcc-dehydra/">GCC + SpiderMonkey = GCC Dehydra</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-01-17T08:16:07-08:00" pubdate data-updated="true">Jan 17<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><strong>Analysis</strong></p>
+
+<p><a href="http://wiki.mozilla.org/Dehydra_GCC">GCC Dehydra</a> is starting to work. I encourage people try it out for their code scanning needs. The main missing feature is control-flow-sensitive traversal, which means that currently function bodies are traversed represented in a sequential fashion. It is the most complicated part of <a href="http://wiki.mozilla.org/DeHydra">Dehydra</a>, but most of the time this feature is not needed.</p>
+
+<p>So far I got Benjamin&#8217;s <a href="http://hg.mozilla.org/users/bsmedberg_mozilla.com/xpcomgc-patches/?file/de1d37e87cf4/find-stack-comptrs.js">stack-nsCOMPtr finding script</a> to do stuff, which indicates that most of the features are working.</p>
+
+<p>My vision is to switch to the GCC backend for all of our code analysis needs since it is well tested, fairly feature complete works with new versions of GCC (by definition).</p>
+
+<p>Not everything is perfect in GCC land. There are some frustrating typedef issues to <a href="http://gcc.gnu.org/ml/gcc/2008-01/msg00280.html">solve</a>.</p>
+
+<p><strong>Source Re-factoring</strong></p>
+
+<p>Elsa still holds its own when it comes to refactoring code because it has a much cleaner lexer/parser and rarely opts to &#8220;optimize away&#8221; original AST structure. We should stick with Elsa&#8217;s arcane requirement of having to preprocess files with gcc &lt;= 3.4 until either GCC becomes viable as a platform for refactoring or <a href="http://clang.llvm.org/">clang</a> matures.</p>
+
+<p>GCC is not suitable for refactoring work because it:</p>
+
+<ol>
+<li>Starts simplifying the AST  too early</li>
+<li>The parser is handwritten and therefore would be hard to modify to maintain end-of-AST-node location info.</li>
+<li>GCC reuses many AST nodes which means their locations point at the declaration rather than usage-point.</li>
+<li>Handwritten nature of GCC makes any of these above improvements time-consuming to implement and the political issues are something I&#8217;d rather not deal with.
+Most of these wouldn&#8217;t have been an issue if GCC was written in <a href="http://en.wikipedia.org/wiki/ML_programming_language">ML</a> :) <strong>What&#8217;s Next?</strong></li>
+</ol>
+
+
+<p>Time to start using GCC Dehydra to enforce GC-safety and lots of fun exception-rewrite preparation work.</p>
+
+<p>Stay tuned for more exciting developments regarding regaining control over source code here and on <a href="http://blog.mozilla.org/dmandelin/2008/01/15/hello-world/">Dave Mandelin&#8217;s blog</a>.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2008/01/08/dehydra-as-a-gcc-plugin/">Dehydra as a GCC Plugin</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-01-08T04:56:48-08:00" pubdate data-updated="true">Jan 8<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Thanks to the 2-fold increase in manpower working on pork, we finally have an opportunity to work on the nice-to-have things.</p>
+
+<p><strong>Progress</strong></p>
+
+<p>Recently I have been working on a GCC plugin to do Mozilla-specific analyses with GCC.</p>
+
+<p>Unfortunately, I didn&#8217;t notice that GCC had a<a href="http://gcc.gnu.org/svn.html"> plugin branch </a>so I reinvented the wheel there. Fortunately that part was rather easy and turned out that the plugin branch isn&#8217;t very useful to work with as it is in SVN, doesn&#8217;t link GCC with -rdynamic nor does it install the hooks I need in the C++ frontend. Overall the plugin shim is relatively trivial and it will be pretty easy to merge with other similar efforts.</p>
+
+<p>My first and only plugin is a C reimplementation of Dehydra. GCC sources are currently fairly hostile to C++, so I elected to not make my head spin by mixing in C++ in addition to C and JavaScript. I think the C Dehydra has reached the hello world state, to take it for a spin see the <a href="http://wiki.mozilla.org/Dehydra_GCC">wiki page</a>.</p>
+
+<p><strong>GCC Thoughts</strong></p>
+
+<p>Integrating with GCC is pretty awesome. So far I regret not jumping in earlier. I was reluctant to do so as everyone I&#8217;ve talked to (other than <a href="http://tromey.com/blog/">Tom Tromey</a>) claimed that GCC is ridiculously complicated and impossible to do stuff with. In fact academic people are so scared of GCC that they tend to opt to go with commercial frontends that have ridiculus licensing terms and make it impossible to release their work to general public.</p>
+
+<p>GCC internals are pretty crazy since everything is done with macros and the AST is dynamically typed so it&#8217;s fairly painful to figure out seemingly simple things like &#8220;what AST nodes does this AST node contain&#8221;. Additionally, GCC loves rewriting AST nodes inplace as the compilation progresses which sucks when one wants to analyze the AST while it looks as close as possible to the source. GCC parser also sucks to work with as it is implemented as a C code hodge-podge (technical term which applies to much code in GCC). Luckily, I am mainly concerned with poking at data that&#8217;s already in GCC.</p>
+
+<p>The upside is that GCC is a well-tested production compiler that most source compiles with. Integrating with GCC means that the AST is correct (Elsa is a frontend so there is no way of knowing if AST has mistakes in it) . Integration also means that the user doesn&#8217;t have to worry about making preprocessed files and maintain obsolete versions of GCC or old GCC headers. Unlike Elsa, GCC already has useful features like typedef tracking and doesn&#8217;t implement location tracking with a stupid programming trick. Additionally, I hope to reuse computations from from middle-end GCC passes to build my control flow graph, do value numbering and other useful, but tricky to implement stuff.</p>
+
+<p>GCC isn&#8217;t scary at all, it&#8217;s just another way of implementing a compiler. Some people elect to have more pain in life by electing to <a href="http://www.cs.berkeley.edu/~smcpeak/cpp/cplusplus.html">reinvent ML in C++</a> instead of using ML for compiler writing,  others get their pain dosage from working on a C compiler originally generated from LISP sources.</p>
+
+<p>Lastly, I&#8217;d like to thank patient gcc hackers in #gcc without whom I wouldn&#8217;t stand a chance in figuring out how to get this far.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  <div class="pagination">
+    
+      <a class="prev" href="/taras/blog/page/20/">&larr; Older</a>
+    
+    <a href="/taras/blog/archives">Blog Archives</a>
+    
+    <a class="next" href="/taras/blog/page/18/">Newer &rarr;</a>
+    
+  </div>
+</div>
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/26/coping-with-flash-hangs/">Coping with Flash hangs</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/16/snappy-44-fixing-tab-switching-in-vancouver/">Snappy #44: Fixing tab switching in Vancouver</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/05/snappy-43-big-improvements-faster-startup-smoother-tabstrip/">Snappy #43: Big improvements: faster startup? Smoother tabstrip!</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/26/snappy-42/">Snappy #42</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/18/snappy-41/">Snappy #41</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("tarasglek", 4, false);
+    });
+  </script>
+  <script src="/taras/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/tarasglek" class="twitter-follow-button" data-show-count="false">Follow @tarasglek</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Taras Glek -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

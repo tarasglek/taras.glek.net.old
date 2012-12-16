@@ -1,0 +1,664 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>All About Performance</title>
+  <meta name="author" content="Taras Glek">
+
+  
+  <meta name="description" content="Working on Fennec performance N810 has been very educational. I have been learning more and more about performance profiling on crappy platforms. I &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tarasglek.github.com/taras/blog/page/15/">
+  <link href="/taras/favicon.png" rel="icon">
+  <link href="/taras/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/taras/javascripts/modernizr-2.0.js"></script>
+  <script src="/taras/javascripts/ender.js"></script>
+  <script src="/taras/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/taras/atom.xml" rel="alternate" title="All About Performance" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/taras/">All About Performance</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/taras/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tarasglek.github.com/taras" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/taras/">Blog</a></li>
+  <li><a href="/taras/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+  
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2009/06/26/studying-fennec-performance/">Studying Fennec Performance</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-06-26T07:31:36-07:00" pubdate data-updated="true">Jun 26<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Working on Fennec performance N810 has been very educational. I have been learning more and more about performance profiling on crappy platforms. I define a platform as crap if it has poor development tools, limited OS or other significant limitations. Linux is a crappy platform in this case because it&#8217;s running on ARM where oprofile barely does anything and there are no other performance tools for N810 (more modern ARM cpus should user-space perf counters and be more useful for instrumentation).</p>
+
+<p><strong>JSD Secret Sauce for JS Optimization</strong></p>
+
+<p>In general there is a misconception that implementing stuff in JavaScript will result in slower code than doing the same in C++. That may be true if the code is implemented in the exact same manner. But in real life the expressiveness and safety of a high-level language like JavaScript permits algorithmic optimizations that would often not be realistic to do in C++ because of time/safety constraints.</p>
+
+<p>So how does one figure out what&#8217;s slow in JS? timeless suggested that I checkout the JavaScript Debugging API. Using the API and a small hack in spidermonkey(JSD doesn&#8217;t expose fast dom calls) I was able to hook into chrome code to get a timed trace of JavaScript functions being run.</p>
+
+<p>Once I had a trace it was relatively easy to figure out to &#8220;do not call this slow thing all the time&#8221; dance (aka optimize code). I collected that work in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=470116">bug 470116</a>. Last I checked there was relatively little room for optimization left on the JS side of Fennec, so then I went to look at what&#8217;s lurking in C++.</p>
+
+<p>PS. Firebug is a popular consumer of the JSD API for those times when one isn&#8217;t willing to write JS components to figure out why something is slow.</p>
+
+<p><strong>C++ Is Harder</strong></p>
+
+<p>I&#8217;ve some success with inserting probes into C++ code. I would find interesting code by running oprofile on the desktop (while doing things that I felt were slow on N810). Oprofile would then provide me a callgraph which I would visualize with <a href="http://code.google.com/p/jrfonseca/wiki/Gprof2Dot">this awesome little script</a>. Then I would stick <a href="http://people.mozilla.com/~tglek/fennec/patches/measurer.diff">MeasurerOfTime</a> timing blocks into interesting &#8220;hot&#8221; code and hope that I would learn something useful.</p>
+
+<p>This got me thinking. Wouldn&#8217;t it be nice if there existed a JSD for C++? It&#8217;d be cool to inspect the C++ callgraph just like one does for JS. It seems like it would help on platforms that aren&#8217;t gcc and can&#8217;t inject tracing code via -finstrument-functions. Even -finstrument-functions is of limited use due to the pain of looking up symbols in shared libraries. Stay tuned.</p>
+
+<p><strong>Measuring Progress</strong></p>
+
+<p>The worst part of doing optimizations is knowing that some time in a future an innocent programmer will slightly change some seemingly innocent code and things will no longer happen quickly. Short of policing every single patch by people who previously optimized code in question there is only one thing one can do: performance tests.</p>
+
+<p><a href="http://hg.mozilla.org/users/tglek_mozilla.com/fennecmark">Fennecmark</a> is a benchmark for measuring responsiveness of the Fennec features that I worked on most: panning, zooming and lag during pageload. I <a href="http://tarasglek.github.com/taras/2009/04/23/benchmarks-and-instrumentation-for-fennecetc/">blogged</a> about it before. Since then Joel Maher has <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=493057">gotten Fennecmark</a> to run automatically and produce results on the graph server. I think we should be logging more numbers (Tpan, Tzoom), but it&#8217;s an excellent first step in monitoring performance regressions.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2009/06/25/dehydra-pork-sources-moved/">Dehydra & Pork Sources Moved</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-06-25T08:32:57-07:00" pubdate data-updated="true">Jun 25<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I moved dehydra to a more official location, please update your scripts and hg settings. New dehydra url: http://hg.mozilla.org/rewriting-and-analysis/dehydra/</p>
+
+<p>Pork got reshuffled during the move, it&#8217;s now 2 repositories. oink is dead. It now depends on current versions of flex (as opposed to flex-old) and features a cleaned up buildsystem.</p>
+
+<p>New way to checkout pork:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>
+</span><span class='line'>hg clone http://hg.mozilla.org/rewriting-and-analysis/pork
+</span><span class='line'>hg clone http://hg.mozilla.org/rewriting-and-analysis/elsa pork/elsa
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2009/06/17/dehydratreehydra-c-support/">Dehydra/Treehydra C Support</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-06-17T04:22:53-07:00" pubdate data-updated="true">Jun 17<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Every once in a while people want to be analyze C code. If you are one of those people, checkout <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=494960">bug 494960</a>. For GCC 4.3, you&#8217;ll need to update your patch queue. If you you followed the <a href="https://developer.mozilla.org/En/Dehydra/Installing_Dehydra">Dehydra install instructions</a> do something like:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>
+</span><span class='line'>cd gcc-4.3.0/.hg/patches
+</span><span class='line'>hg pull -u
+</span><span class='line'>cd ../..
+</span><span class='line'>hg qpush -a
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>and rebuild gcc to get C support in the plugin framework for GCC 4.5 (patch for trunk is in the bug).</p>
+
+<p>Everything other than process_function should work in both treehydra and dehydra. Note that the objects provided by GCC will be slightly different in structure due to the underlying difference between gcc/g++, so scripts that were written for C++ may need to be updated.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2009/05/14/gcc-45-dehydra-is-a-go-and-other-updates/">GCC 4.5 + Dehydra Is a Go and Other Updates</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-05-14T14:06:59-07:00" pubdate data-updated="true">May 14<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I finally landed the remaining GCC patches needed to get a useful <a href="https://developer.mozilla.org/En/Dehydra">Dehydra</a> without any of that gcc-patching pain!</p>
+
+<p>This week I also got some nice contributions from a contributor with a masterplan.</p>
+
+<p>Overall I expect cool things to happen once GCC 4.5 ships with plugin support. It&#8217;ll open up a jar of whoopass like C++ has not seen before.</p>
+
+<p><strong>Dehydra Docs</strong></p>
+
+<p>Benjamin redid the <a href="http://benjamin.smedbergs.us/blog/">Dehydra</a> documentation, it should be easier than ever to get started.</p>
+
+<p><strong>Static Analysis in Mozilla</strong></p>
+
+<p>Slowly but surely we are gathering static analysis momentum. More and more developers are pausing and thinking &#8220;I need to make sure this code has an analysis to go with it because there is no way I can prove it correct, time to write a <a href="https://developer.mozilla.org/en/Treehydra">Treehydra</a> script&#8230;or ask someone else to make one for me&#8221;. This mindset is important for being able to introduce complex changes in a controlled manner.</p>
+
+<p>On the refactoring side, things are held up a little by API compatibility. Perhaps multi-process stuff will shake things up. However, nothing can hold <a href="https://blog.mozilla.org/cjones/">Chris</a> up from letting his piglet/porky gremlins chew through locking code.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2009/05/11/dehydra-updates/">Dehydra Updates</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-05-11T03:55:14-07:00" pubdate data-updated="true">May 11<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><strong>How well are you packing your structs?</strong> Arpad asked that question with an awesome <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=492185">Dehydra scrip</a>t and came up with an interesting list.</p>
+
+<p><strong>GCC 4.3.3 Is supported</strong> GCC 4.3.3(4.3.[210] worked) broke C++ compatibility in the headers used by <a href="https://developer.mozilla.org/En/Dehydra">Dehydra</a>. Zach pointed out that passing -fpermissive to g++ solves the problem. Sorry to all the people who had issues building the hydras with GCC 4.3.3, that&#8217;s fixed now.</p>
+
+<p>As I mentioned before, we are skipping GCC 4.4 support in Dehydra and aiming for supporting unpatched GCC 4.5. I wish that the small GCC patches were as quick to land as that big one I landed a couple of weeks ago :(.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2009/04/30/gcc-rant-progress/">GCC Rant + Progress</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-04-30T06:51:35-07:00" pubdate data-updated="true">Apr 30<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I feel strange working on GCC-specific stuff and then discussing it on planet mozilla as mozilla work. However, without GCC, Dehydra and Treehydra would not be half as awesome (much less feasible even). The power of open source is that it allows us to leverage the entire open source ecosystem to achieve specific goals. When open source projects combine their efforts, not even the biggest software companies can compete as cross-project goals would be incredibly expensive and unpleasant otherwise.</p>
+
+<p>Occasionally, it is very frustrating to see people treat open source software as immutable and independent black boxes. In my personal experience, the browser and the compiler are viewed as finished products and therefore it is OK to bitch and complain about them. That&#8217;s frustrating because the same users could be channeling that energy in a more positive way by reporting bugs, contributing code/documentation, etc.</p>
+
+<p>Sometimes these rants result in rather comical conclusions: Ingo&#8217;s <a href="http://lwn.net/Articles/328685/">rant</a> is priceless. My perspective on this:</p>
+
+<ul>
+<li>what have Linux kernel devs done to help GCC help them?</li>
+<li><flame>Sparse is a deadend. Writing compiler code in C is silly, writing analysis code in C is sillier (and frustrating and limiting). Taking a crappy parser and bolting a crappy compiler backend onto it will result in bigger pile of crap :) Given how smart kernel devs are, they sure like wasting their time on crappy solutions in crappy languages.</flame></li>
+<li>Wouldn&#8217;t it be cool if instead of complaining these talented people wrote a GCC plugin to do what they want?
+<strong>GCC Plugin Progress</strong></li>
+</ul>
+
+
+<p>I finally landed the massively boring and annoying <a href="http://hg.mozilla.org/users/tglek_mozilla.com/gcc-moz-plugin-mq/file/24bbb11d7346/gty.diff">GTY patch</a>. I can barely believe that the patch went in so smoothly without excess complaining from GCC devs. From GCC perspective it&#8217;s merely a cosmetic cleanup that affects a large number of headers. For us it enables <a href="https://developer.mozilla.org/en/Treehydra">Treehydra</a> to be generated via <a href="https://developer.mozilla.org/En/Dehydra">Dehydra</a> with little manual effort. It basically makes Treehydra possible without patching GCC. I have another 3-4 patches that need to land before trunk GCC can run the hydras out of the box. Those are mainly localized bugfixes and cleanups so I fully expect them to go in and for GCC 4.5 to rock my world. Once GCC 4.5 ships. analyzing code will depend on a trivial matter of apt-getting(or equivalent) the hydras and specifying the analysis flags on the GCC commandline!</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2009/04/23/benchmarks-and-instrumentation-for-fennecetc/">Benchmarks and Instrumentation for Fennec/etc</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-04-23T03:19:14-07:00" pubdate data-updated="true">Apr 23<span>rd</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I wrote Fennecmark to automate some of the tasks that I did manually while doing performance debugging.</p>
+
+<p>I tried to capture some of the &#8220;perceived performance&#8221; in numbers. My goal is to focus on user-visible areas of performance. Ideally it will enable us to track performance better to ensure that key features do not regress in performance and enable us to compare Fennec speed on various platforms. I need to spend some quality time with QA people to figure out how to achieve that.</p>
+
+<p>Currently Fennecmark loads a slow-to-load webpage, zooms around it and then pans from the top to the bottom. This measures: responsiveness during pageload, zoom speed and panning lag.</p>
+
+<p>See code at <a href="http://hg.mozilla.org/users/tglek_mozilla.com/fennecmark">http://hg.mozilla.org/users/tglek_mozilla.com/fennecmark</a>.</p>
+
+<p><strong>JSD Instrumentation</strong></p>
+
+<p>Spidermonkey provides an API that allows one to get a notification on every method entry/exit. I was able to do most of my Fennec performance analysis via a component in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=470116">bug 470116</a>. My stopwatch component times the execution of every js function call and spits out a log that has been very useful in figuring out what is taking up time in Fennec chrome.</p>
+
+<p><strong>Porkstain</strong></p>
+
+<p>I am itching to write a tool that can instrument large portions of Mozilla code such that it can be profiled across C++/JS boundaries and without any external tool support. I am guessing this would be most useful on platforms with crappy sampling tools, but it would be cool if it made finding slow codepaths easier in general. If you know any lightweight instrumentation techniques, please share.</p>
+
+<p>I wrote a little prototype to insert stopwatch stuff into code deemed interesting by oprofile (stuff in the bug above). The code patching part works well, but it&#8217;s a big runtime hit and outputs too much data.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2009/04/15/misc-static-analysis-news-smmgcstatic-codecon-piglet/">Misc Static Analysis News: S/#mmgc/#static/, Codecon, Piglet, &#8230;</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-04-15T06:37:23-07:00" pubdate data-updated="true">Apr 15<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h1>static on irc.mozilla.org is now the correct irc channel for anything to do with static analysis.</h1>
+
+<p><strong>Codecon</strong> On Sunday, I will be presenting on <a href="https://developer.mozilla.org/En/Pork">Pork</a> at codecon. I have been meaning to attend <a href="http://www.codecon.org/">codecon</a> since the days when P2P was considered cool, was not able to make it until this year. It is a historical milestone for me. Codecon was how people at Mozilla first heard of Elsa, which is now the foundation of all our refactoring tools (it is also inherited baggage I get to maintain).</p>
+
+<p><strong>Piglet</strong></p>
+
+<p>I adopted <a href="http://hg.mozilla.org/users/tglek_mozilla.com/piglet">Piglet</a>, <a href="http://blog.mozilla.org/dmandelin/">Dave Mandelin</a>&#8217;s de-oinkification project, and imported it into hg. It feels really good to finally be able to do a make -j without disturbing people nearby with surprise explosions of foul language. I plan to move all relevant static analysis tools into piglet. After that I shall finally merge a dozen or so elsa repositories and end up with Pork consisting of elsa/ + piglet/.</p>
+
+<p><strong>Pork</strong>*</p>
+
+<p>Chris Jones is quietly working on making Pork magnitudes more useful to average developers. It&#8217;s exciting stuff and I&#8217;ll let him announce it when he&#8217;s ready. Between his work and <a href="http://vocamus.net/dave/">David Humphrey</a>&#8217;s DXR. I think we are finally going to make it easier to hack on Mozilla for a much wider audience than before.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2009/03/31/nsresult-analysis/">Nsresult Analysis</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-03-31T07:16:18-07:00" pubdate data-updated="true">Mar 31<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>After I wrote <a href="http://tarasglek.github.com/taras/2008/11/07/enabling-prcheck-email-notifications/">prcheck</a>, I was surprised by the errors it found. I expected to find lots of cases of prbool variables having integers assigned into them. Indeed there were some of those, but the most frequent offenders were things like</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>
+</span><span class='line'>NS_ENSURE_SUCCESS(rv,rv);
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>in methods with a PRBool return value. In this case (and many similar  return values within macros) the function will likely do the opposite of what was intended if there is an error condition. Here is a less hypothetical <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=483589">example</a> in bugzilla.</p>
+
+<p>So I&#8217;m thinking that instead of porting the prbool analysis to <a href="https://developer.mozilla.org/en/Treehydra">Treehydra</a> (such that it&#8217;d based on a less buggy <a href="https://developer.mozilla.org/En/Pork">backend</a> and can be integrated into the build) it might be more interesting to ensure that nsresults do not mix with other integer types. That would catch all of the worst prbool offenders and possibly other nsresult misfortunes.</p>
+
+<p><em>Has anyone run into bugs like this that do not involve prbools?</em></p>
+
+<p>I suppose a general solution would be to define a lattice of typedefs with rules specifying which typedefs can be assigned to each other. This would make GCC distinguish certain typedefs as discrete and incompatible types. Thoughts?</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2009/03/17/fennec-beta-1-need-for-speed/">Fennec Beta 1 - Need for Speed</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-03-17T23:52:42-07:00" pubdate data-updated="true">Mar 17<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>A couple of months ago Stuart casually asked me to investigate Fennec performance for moving about a page, zooming and loading pages in general. Beta 1 contains the result of that:</p>
+
+<ul>
+<li>There is little to no hardware graphics acceleration on mobile arm device. That combined with low memory bandwidth results in painfully slow screen updates (10x slower than crappy gfx on the desktop?). The painting engine now works hard to skip redundant draws of the page.</li>
+<li>During loading pages or zooming Fennec now only draws the minimum required. In my testing complicated pages load 2-5 times faster. Zooming is now 5 times faster.</li>
+<li>There is less DOM querying now. Things like checking an element&#8217;s size can cause pages to reflow resulting in a less responsive UI</li>
+</ul>
+
+
+<p>Other performance highlights:</p>
+
+<ul>
+<li>Fennec now features a redesigned firstrun page which not only looks better, but also contributed to a 0.5second startup speedup. Overall Beta 1 should startup is almost a second quicker than the previous release</li>
+<li>The JavaScript JIT is now on by default providing a noticeable performance boost throughout Fennec.</li>
+</ul>
+
+
+<p>For more info on Fennec Beta 1 and where to get it see <a href="http://blog.pavlov.net/2009/03/17/fennec-1-beta-1/">Stuart&#8217;s blog</a>.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  <div class="pagination">
+    
+      <a class="prev" href="/taras/blog/page/16/">&larr; Older</a>
+    
+    <a href="/taras/blog/archives">Blog Archives</a>
+    
+    <a class="next" href="/taras/blog/page/14/">Newer &rarr;</a>
+    
+  </div>
+</div>
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/26/coping-with-flash-hangs/">Coping with Flash hangs</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/16/snappy-44-fixing-tab-switching-in-vancouver/">Snappy #44: Fixing tab switching in Vancouver</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/05/snappy-43-big-improvements-faster-startup-smoother-tabstrip/">Snappy #43: Big improvements: faster startup? Smoother tabstrip!</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/26/snappy-42/">Snappy #42</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/18/snappy-41/">Snappy #41</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("tarasglek", 4, false);
+    });
+  </script>
+  <script src="/taras/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/tarasglek" class="twitter-follow-button" data-show-count="false">Follow @tarasglek</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Taras Glek -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

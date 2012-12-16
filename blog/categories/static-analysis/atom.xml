@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: static-analysis | All About Performance]]></title>
+  <link href="http://tarasglek.github.com/taras/blog/categories/static-analysis/atom.xml" rel="self"/>
+  <link href="http://tarasglek.github.com/taras/"/>
+  <updated>2012-12-16T12:35:28-08:00</updated>
+  <id>http://tarasglek.github.com/taras/</id>
+  <author>
+    <name><![CDATA[Taras Glek]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Give DXR a try]]></title>
+    <link href="http://tarasglek.github.com/taras/blog/2012/05/22/give-dxr-a-try/"/>
+    <updated>2012-05-22T02:34:51-07:00</updated>
+    <id>http://tarasglek.github.com/taras/blog/2012/05/22/give-dxr-a-try</id>
+    <content type="html"><![CDATA[<p>At Mozilla we have a long history of using <a href="http://mxr.mozilla.org/">MXR</a> for looking up and discussing source code. Unfortunately MXR is an unlovable mess of Perl and a crappy (in terms of performance and license) text indexing engine that is glimpse. It is dead because nobody wants to work on it.</p>
+
+<p><a href="https://wiki.mozilla.org/DXR">DXR</a> is a semantically-aware successor to MXR. Semantic information is extracted from LLVM during compilation. This makes it possible to do searches like <a href="http://dxr.lanedo.com/search.cgi?tree=mozilla-central&amp;derived=nsIFile">derived:nsIFile</a>. DXR uses a modern Full Text Search engine for text searches, so it should be much faster than MXR. There is a test instance at <a href="http://dxr.lanedo.com/">dxr.mozilla.org</a>, please give it a try. The homepage lists sample searches you can do.</p>
+
+<p>DXR is written in Python. It uses an SQLite database + FTS index as a backend. Useful semantic information is extracted from the source via a Clang LLVM plugin. Checkout the <a href="https://github.com/mozilla/dxr/">source code</a> at github.</p>
+
+<p>DXR should be getting close to feature parity with MXR. Give it a try and let me know of any bugs/missing features you encounter (or submit a patch!). I realize that people have gotten used to various MXR quirks and that it can be stressful to switch to a new code indexer while trying to get stuff done, but MXR IS DEAD. We need to move on. Mozilla is complex, finding relevant code can take quite a while, especially for new contributors. Using a smarter indexer should save time, reduce frustration and free up a few developer-years to make Firefox better.</p>
+
+<p>We have lots of ideas for DXR, but first we need to ensure it is a suitable replacement for MXR. Take DXR for a spin!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Effective Static Analysis]]></title>
+    <link href="http://tarasglek.github.com/taras/blog/2011/08/03/effective-static-analysis/"/>
+    <updated>2011-08-03T13:27:54-07:00</updated>
+    <id>http://tarasglek.github.com/taras/blog/2011/08/03/effective-static-analysis</id>
+    <content type="html"><![CDATA[<p>Static analysis can be a very fun pastime. One gets to sift through giant codebases looking for interesting clues, what could be more fun? A couple things qualify: a) static analysis accompanied by cool rewrites b) static analysis accompanied by cool visualizations.</p>
+
+<p><strong>Cool Rewrite</strong></p>
+
+<p>Michael Wu's <a href="http://blog.mozilla.org/mwu/2011/07/28/the-twelve-booleans-of-mozilla/">boolcheck</a> tool is awesome. He wrote it to check that "typedef int" bools are really being used as booleans and aren't perversely carrying integer values. The process of writing the tool is cool. As Michael is discovers bugs/disagreements stemming from setting "typedef bool PRBool", he just adds another pattern to check for to the tool and never has to worry about that pattern again. I hope to see someone apply boolcheck to the linux kernel, GTK projects or anything else with int booleans. Some projects don't have the luxury of switching to real bools, so they can continue using a static checker to make up for it.</p>
+
+<p><strong>Pretty Code</strong></p>
+
+<p>I've blogged about <a href="http://dxr.mozilla.org/clang/">DXR</a> many times. As of this week clang-based DXR is on par with the old Dehydra-based one. Callgraph, inheritance, etc queries now work. <a href="http://quetzalcoatal.blogspot.com/">Joshua</a> did an outstanding job gutting and rewriting the DXR backend this summer and is now going back to school. I'm extremely impressed with his work this summer. I didn't think it was possible to get as far as he did.</p>
+
+<p>We are looking for more help with DXR. Please deploy it on your pet project, contribute plugins for various languages, simplify deployment, etc.</p>
+
+<p>Additionally, now that the backed is in a fairly decent shape, we are looking for someone to help us turn DXR into the slickest code browsing tool ever(we have some ideas <a href="https://wiki.mozilla.org/DXR_Future_Work_Plan">written down</a>). I'd like interactive graphs, various code visualizations, integration with bugzilla, etc. This needs a JSON-query frontend and a few other bits &amp; pieces to be implemented.</p>
+
+<p><strong>Interns Wanted</strong></p>
+
+<p>We would love to hire more static analysis interns. Are you student who dreams about making large codebases easy to grasp? Do you want to spend a few months making Control Flow Graphs behave? If that sounds like your calling: leave a comment, send me an email.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Galois talk]]></title>
+    <link href="http://tarasglek.github.com/taras/blog/2010/06/09/galois-talk/"/>
+    <updated>2010-06-09T03:08:44-07:00</updated>
+    <id>http://tarasglek.github.com/taras/blog/2010/06/09/galois-talk</id>
+    <content type="html"><![CDATA[<p>I was invited to present a <a href="http://www.galois.com/blog/2010/06/03/tech-talk-large-scale-static-analysis-at-mozilla/">Galois tech talk</a> on Mozilla static analysis. It was really cool to give a talk locally to such an expert audience. I was surprised to discover a vibrant Programming Languages + Analysis community in Portland.</p>
+
+<p>Edward Z. Yang did an <a href="http://blog.ezyang.com/2010/06/static-analysis-mozilla/">excellent write-up</a> on the talk.</p>
+
+<p><strong>PLDi</strong></p>
+
+<p>Robert O'Callahan mentioned Dehydra in his <a href="http://weblogs.mozillazine.org/roc/archives/2010/06/sleepless_in_to.html">PLDI talk</a>.</p>
+
+<p><strong>Dehydra/Treehydra in GCC 4.5</strong></p>
+
+<p>There a few fixes that are about to land. I'm hoping that by the end of the week GCC 4.5 support will be production-quality. Sorry that it's taken so long, but I've been busy focusing on startup. <a href="http://ehren.wordpress.com/">Ehren</a> has picked up the slack, we should be able to produce a fairly polished Dehydra 1.0 by the end of the summer.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Static Analysis Articles]]></title>
+    <link href="http://tarasglek.github.com/taras/blog/2010/02/09/static-analysis-articles/"/>
+    <updated>2010-02-09T06:22:40-08:00</updated>
+    <id>http://tarasglek.github.com/taras/blog/2010/02/09/static-analysis-articles</id>
+    <content type="html"><![CDATA[<p>A really good <a href="http://cacm.acm.org/magazines/2010/2/69354-a-few-billion-lines-of-code-later/fulltext">ACM article</a> about static analysis from Coverity's perspective has been making rounds in Mozilla. What struck me most was the following paragraph:_ _</p>
+
+<p><em>At the most basic level, errors found with little analysis are often better than errors found with deeper tricks. A good error is probable, a true error, easy to diagnose; best is difficult to misdiagnose. As the number of analysis steps increases, so, too, does the chance of analysis mistake, user confusion, or the perceived improbability of event sequence. No analysis equals no mistake.</em></p>
+
+<p>My personal view has been that "dumb" analyses are the most effective ones in terms of mistakes spotted vs time wasted writing/landing the analysis. It is interesting to see that sophisticated analyses are difficult to deploy even for Coverity.</p>
+
+<p>In other news, LCA 2010 was my favourite conference so far. I met a number of awesome developers there. Mozilla's static analysis work finally got <a href="http://lwn.net/Articles/370717/">mentioned</a> in LWN!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[State of Static Analysis At Mozilla]]></title>
+    <link href="http://tarasglek.github.com/taras/blog/2010/01/21/state-of-static-analysis-at-mozilla/"/>
+    <updated>2010-01-21T09:24:03-08:00</updated>
+    <id>http://tarasglek.github.com/taras/blog/2010/01/21/state-of-static-analysis-at-mozilla</id>
+    <content type="html"><![CDATA[<p>Mozilla has static analyses built into the buildsystem that can be turned on with --with-static-checking= flag. The analyses live in <a href="http://mxr.mozilla.org/mozilla-central/source/xpcom/analyses">xpcom/analyses</a> directory. The testcases (aka documentation) are in <a href="http://mxr.mozilla.org/mozilla-central/source/xpcom/tests/static-checker/">xpcom/tests/static-checker</a>. Analyses are implemented in either <a href="https://developer.mozilla.org/En/Dehydra">Dehydra</a> or <a href="https://developer.mozilla.org/en/Treehydra">Treehydra</a> and run within a patched GCC 4.3.</p>
+
+<p>The currently landed checks are:</p>
+
+<ul>
+<li>final.js: Java-like "final" keyword for C++</li>
+<li>flow.js: Ensure code in a function flows through a particular label</li>
+<li>must-override.js: Force derived classes to override certain methods</li>
+<li>override.js: Ensure methods exist in base class</li>
+<li>outparams.js: Ensure outparameters and return error codes are in sync</li>
+<li>stack.js: Mark classes as stack-only
+A whole lot more analyses in various states of completion can be tracked in the static analysis <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=430328">bug</a>.</li>
+</ul>
+
+
+<p>Asynchronous discussion happens in the mailing list. #static irc channel is the place for interactive discussion.</p>
+
+<p><strong>Nearterm Plans For Plugins </strong></p>
+
+<p>GCC 4.5 has an official plugin framework enabled by default. I will try to switch to GCC 4.5 as soon as it is out. Currently 4.5 is still changing too often for me to bother fixing Treehydra (Dehydra usually works). As soon as 4.5 is out I will revise the installation instructions to use distribution GCC and JavaScript packages to avoid the current mess (draft can be found <a href="http://groups.google.com/group/mozilla.dev.static-analysis/browse_thread/thread/a773ebdbc5479f9a#">here</a>). Sometime after that I'll switch Mozilla static analysis to GCC 4.5 and drop 4.3 support.</p>
+
+<p>Hopefully, this will make it easier for other open source projects to adapt the hydras.</p>
+
+<p><strong>Plans for Analyses</strong></p>
+
+<p>I'm a big believer into application-specific static analyses, but I would like to see some heavy duty open source analyzers built on top of GCC.</p>
+
+<p>Some of the not-so-Mozilla-specific analyses should be bundled together to make them easy to try out on other projects.</p>
+
+<p>Hopefully 2010 will be the year that open source static analysis catches on.</p>
+
+<p><strong>LCA2010</strong></p>
+
+<p>I posted my <a href="http://people.mozilla.com/~tglek/lca2010/">slides</a> from yesterday.</p>
+]]></content>
+  </entry>
+  
+</feed>

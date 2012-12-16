@@ -1,0 +1,245 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Snappy Feb 9: Blame Canada! - All About Performance</title>
+  <meta name="author" content="Taras Glek">
+
+  
+  <meta name="description" content="The meeting was short this time because all of the participating people in the Toronto office conspired be busy or on vacation today. Our UX team &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tarasglek.github.com/taras/blog/2012/02/09/snappy-feb-9-blame-canada/">
+  <link href="/taras/favicon.png" rel="icon">
+  <link href="/taras/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/taras/javascripts/modernizr-2.0.js"></script>
+  <script src="/taras/javascripts/ender.js"></script>
+  <script src="/taras/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/taras/atom.xml" rel="alternate" title="All About Performance" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/taras/">All About Performance</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/taras/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tarasglek.github.com/taras" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/taras/">Blog</a></li>
+  <li><a href="/taras/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Snappy Feb 9: Blame Canada!</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-02-09T07:01:02-08:00" pubdate data-updated="true">Feb 9<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>The meeting was short this time because all of the participating people in the Toronto office conspired be busy or on vacation today.</p>
+
+<p>Our UX team helped us decide to turn on tabs-on-demand + do tab restore by default, Bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=711193">711193</a>. This change will make interacting with the browser more responsive after startup, help <a href="https://wiki.mozilla.org/Performance/MemShrink">MemShink</a> and not trigger as much captive wifi portal badness.</p>
+
+<p>Frontend people are busy adding telemetry to everything that matters, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=671038">bug 671038</a>. Some of this has already paid off in terms of us catching a tab animation regression in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=724349">bug 724349</a>. We plan to switch our awesomebar searching from SQL to an FTS. If you are a text-search/tokenizer expert, perhaps you help us with <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=725821">bug 725821</a>. There is also a lot of activity on making various sync IO things async, see the <a href="https://wiki.mozilla.org/Performance/Snappy/2012-02-09#Projects">meeting notes</a> for complete details.</p>
+
+<p>Brian Bondy posted an <a href="http://www.brianbondy.com/blog/id/127/">update</a> documenting his two-week rampage through Firefox startup inefficiencies on Windows. Brian&#8217;s blog post contains tips on xperf, Firefox profiler, about:startup - <a href="http://www.brianbondy.com/blog/id/127/">read it</a>.</p>
+
+<p>The networking team is busy nuking the big cache lock, see bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=717761">717761</a>.</p>
+
+<p>Olli has landed most of the cycle collector fixes. Telemetry shows a dramatic reduction in cycle collection times for Firefox 13. He and Andrew investigating the remaining causes of long CC times.</p>
+
+<p>I&#8217;ll end this post with a pretty picture demonstrating recent cycle collection improvements. <a href="http://tarasglek.github.com/taras/files/2012/02/cc13_12.png"> <img src="http://tarasglek.github.com/taras/files/2012/02/cc13_12.png" alt="" /></a> * y: frequency, x: milliseconds</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Taras Glek</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-02-09T07:01:02-08:00" pubdate data-updated="true">Feb 9<span>th</span>, 2012</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/taras/blog/categories/mozilla/'>mozilla</a>, <a class='category' href='/taras/blog/categories/snappy/'>snappy</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://tarasglek.github.com/taras/blog/2012/02/09/snappy-feb-9-blame-canada/" data-via="tarasglek" data-counturl="http://tarasglek.github.com/taras/blog/2012/02/09/snappy-feb-9-blame-canada/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/taras/blog/2012/02/07/snappy-feb-2nd-fosdem-help-wanted/" title="Previous Post: Snappy, Feb 2nd - FOSDEM, Help Wanted">&laquo; Snappy, Feb 2nd - FOSDEM, Help Wanted</a>
+      
+      
+        <a class="basic-alignment right" href="/taras/blog/2012/02/16/snappy-feb-16/" title="Next Post: Snappy, Feb 16">Snappy, Feb 16 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/26/coping-with-flash-hangs/">Coping with Flash hangs</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/16/snappy-44-fixing-tab-switching-in-vancouver/">Snappy #44: Fixing tab switching in Vancouver</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/05/snappy-43-big-improvements-faster-startup-smoother-tabstrip/">Snappy #43: Big improvements: faster startup? Smoother tabstrip!</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/26/snappy-42/">Snappy #42</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/18/snappy-41/">Snappy #41</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("tarasglek", 4, false);
+    });
+  </script>
+  <script src="/taras/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/tarasglek" class="twitter-follow-button" data-show-count="false">Follow @tarasglek</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Taras Glek -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

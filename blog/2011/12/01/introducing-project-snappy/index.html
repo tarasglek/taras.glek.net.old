@@ -1,0 +1,249 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Introducing Project Snappy - All About Performance</title>
+  <meta name="author" content="Taras Glek">
+
+  
+  <meta name="description" content="Two weeks ago I started project Snappy. The purpose of the meeting is to help us focus on eradicating jarring pauses in Firefox. Today we had our &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tarasglek.github.com/taras/blog/2011/12/01/introducing-project-snappy/">
+  <link href="/taras/favicon.png" rel="icon">
+  <link href="/taras/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/taras/javascripts/modernizr-2.0.js"></script>
+  <script src="/taras/javascripts/ender.js"></script>
+  <script src="/taras/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/taras/atom.xml" rel="alternate" title="All About Performance" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/taras/">All About Performance</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/taras/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tarasglek.github.com/taras" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/taras/">Blog</a></li>
+  <li><a href="/taras/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Introducing Project Snappy</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-12-01T08:15:39-08:00" pubdate data-updated="true">Dec 1<span>st</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Two weeks ago I started project <a href="https://wiki.mozilla.org/Performance/Snappy">Snappy</a>. The purpose of the meeting is to help us focus on eradicating jarring pauses in Firefox.</p>
+
+<p>Today we had our second meeting (<a href="https://wiki.mozilla.org/Performance/Snappy/2011-12-01">notes</a>).  A surprising amount of work has happened between the first and second meeting:</p>
+
+<ul>
+<li><a href="https://bugzilla.mozilla.org/buglist.cgi?quicksearch=chromehang&amp;list_id=1813678">Chromehang </a>was briefly turned on. This converted browser stalls of >30seconds into crashes. This showed that a number of issues are worse than previously assumed</li>
+<li>We are about to start <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=699051">tracking</a> slow SQL queries via telemetry</li>
+<li>Even though <a href="http://www.w3.org/TR/IndexedDB">IndexedDB</a> is the new hotness, existing websites use the evil old DOM Storage API. This API is not asynchronous and degrades browser performance. The workaround is to <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=704933">tell</a> the backend to use async IO.
+Just like MemShrink, Snappy bugs fall into three categories:</li>
+<li>P1: Should be fixed ASAP</li>
+<li>P2: Should be fixed as soon as developers have cycles for it</li>
+<li>P3: Everything else
+Multiple people have asked whether Snappy is appropriate for bugs caught by Chromehang: ie should we focus on one-off long delays (ie font enumeration) or small delays that happen frequently (ie tab animations). After reflecting on this I decided that UI jank can be thought of as a risk of frustrating the user. Risk has a scientific definition: severity of event multiplied by probability.  Thus a long occasional pause during browsing is equivalent to a frequent short pause.</li>
+</ul>
+
+
+<p>For next week we plan to wrap up a <a href="http://benoitgirard.wordpress.com/2011/11/08/firefox-built-in-profiler/">profiler</a>, come up with a fix for cache io on startup/shutdown, look into submitting hang stacks in a less <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=706916">brutal way</a>.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Taras Glek</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-12-01T08:15:39-08:00" pubdate data-updated="true">Dec 1<span>st</span>, 2011</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/taras/blog/categories/mozilla/'>mozilla</a>, <a class='category' href='/taras/blog/categories/snappy/'>snappy</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://tarasglek.github.com/taras/blog/2011/12/01/introducing-project-snappy/" data-via="tarasglek" data-counturl="http://tarasglek.github.com/taras/blog/2011/12/01/introducing-project-snappy/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/taras/blog/2011/10/20/emacs-cmd-exe/" title="Previous Post: Emacs > CMD.EXE">&laquo; Emacs > CMD.EXE</a>
+      
+      
+        <a class="basic-alignment right" href="/taras/blog/2011/12/05/24-hour-reviews/" title="Next Post: 24-hour reviews">24-hour reviews &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/26/coping-with-flash-hangs/">Coping with Flash hangs</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/16/snappy-44-fixing-tab-switching-in-vancouver/">Snappy #44: Fixing tab switching in Vancouver</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/05/snappy-43-big-improvements-faster-startup-smoother-tabstrip/">Snappy #43: Big improvements: faster startup? Smoother tabstrip!</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/26/snappy-42/">Snappy #42</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/18/snappy-41/">Snappy #41</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("tarasglek", 4, false);
+    });
+  </script>
+  <script src="/taras/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/tarasglek" class="twitter-follow-button" data-show-count="false">Follow @tarasglek</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Taras Glek -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,267 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Snappy: March 1st - All About Performance</title>
+  <meta name="author" content="Taras Glek">
+
+  
+  <meta name="description" content="SUMO Problem Investigation Looks like increase in negative SUMO reports that I mentioned last time was due to over-counting. There might be some &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tarasglek.github.com/taras/blog/2012/03/05/snappy-march-1st/">
+  <link href="/taras/favicon.png" rel="icon">
+  <link href="/taras/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/taras/javascripts/modernizr-2.0.js"></script>
+  <script src="/taras/javascripts/ender.js"></script>
+  <script src="/taras/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/taras/atom.xml" rel="alternate" title="All About Performance" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/taras/">All About Performance</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/taras/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tarasglek.github.com/taras" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/taras/">Blog</a></li>
+  <li><a href="/taras/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Snappy: March 1st</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-03-05T08:09:45-08:00" pubdate data-updated="true">Mar 5<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><strong>SUMO Problem Investigation</strong></p>
+
+<p>Looks like increase in negative SUMO reports that I mentioned <a href="https://blog.mozilla.org/tglek/2012/02/27/snappy-feb-23rd/">last time</a> was due to over-counting. There might be some networking regressions, but no general slowdown. Without solid data it&#8217;s hard to tell.</p>
+
+<p>In order to provide more context to make SUMO reports more useful to developers we are looking into allowing users to attach their telemetry data: bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=732522">732522</a>.</p>
+
+<p><strong>Work in Progress</strong></p>
+
+<p>There are few exciting landings to report this week, but there is a lot of exciting work going on.</p>
+
+<p>Nick is getting rid of main thread cache locks, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=723577">723577</a>. Limited initial testing indicates this can significantly improve Firefox responsiveness.</p>
+
+<p>Brian&#8217;s prefetch nuking bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=692255">692255 </a>is moving along. Interactivity profiling is also close to landing, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=710935">710935</a>.</p>
+
+<p>Dietrich is pushing automation changes to how we monitor startup so we can alter our startup sequence to show the main window sooner, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=715402">715402</a>.</p>
+
+<p>Vlad tweaked chromehang to work on all windows versions and is working on the serverside component with Benjamin, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=712109">712109</a>.</p>
+
+<p>I posted <a href="https://groups.google.com/forum/#!topic/mozilla.dev.platform/1fn0Vz20wu8">our plan</a> on shutting down Firefox efficiently, speak up if I missed an important detail. Rafael is working on this in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=662444">662444</a>.</p>
+
+<p>Jared has landed more of Avi&#8217;s smooth scrolling tweaks on the ux-branch, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=198964">198964</a>. Take the <a href="http://ftp.mozilla.org/pub/mozilla.org/firefox/nightly/latest-ux">ux nightlies</a> for a spin to try improved scrolling.</p>
+
+<p>Dietrich and Andrew are looking into massive CC pauses after resume, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=639262">639262</a>.</p>
+
+<p><strong>Landed</strong></p>
+
+<p>Async livemarks changes landed, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=613588">613588</a>. Macro is following up to fix any slowdown for livemark users.</p>
+
+<p>Nathan landed persistent telemetry, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=707320">707320</a>. It&#8217;s not quite working yet, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=732970">732970</a>.</p>
+
+<p><strong>Local Storage Discussion</strong></p>
+
+<p>Chris wrote a great <a href="http://hacks.mozilla.org/2012/03/there-is-no-simple-solution-for-local-storage/">post</a> on DOM Local Storage, the discussion is great. I did a <a href="https://blog.mozilla.org/tglek/2012/02/22/psa-dom-local-storage-considered-harmful/">post</a> on this a few weeks ago.</p>
+
+<p>I have some raw data on exactly how slow DOM Local Storage is, I will post it once Xavier has time to yank data properly out of the cluster.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Taras Glek</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-03-05T08:09:45-08:00" pubdate data-updated="true">Mar 5<span>th</span>, 2012</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/taras/blog/categories/mozilla/'>mozilla</a>, <a class='category' href='/taras/blog/categories/snappy/'>snappy</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://tarasglek.github.com/taras/blog/2012/03/05/snappy-march-1st/" data-via="tarasglek" data-counturl="http://tarasglek.github.com/taras/blog/2012/03/05/snappy-march-1st/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/taras/blog/2012/03/01/24hour-code-reviews-still-aiming-for-it/" title="Previous Post: 24hour code reviews: still aiming for it">&laquo; 24hour code reviews: still aiming for it</a>
+      
+      
+        <a class="basic-alignment right" href="/taras/blog/2012/03/07/planet-should-be-technical/" title="Next Post: Planet should be technical">Planet should be technical &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/26/coping-with-flash-hangs/">Coping with Flash hangs</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/16/snappy-44-fixing-tab-switching-in-vancouver/">Snappy #44: Fixing tab switching in Vancouver</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/05/snappy-43-big-improvements-faster-startup-smoother-tabstrip/">Snappy #43: Big improvements: faster startup? Smoother tabstrip!</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/26/snappy-42/">Snappy #42</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/18/snappy-41/">Snappy #41</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("tarasglek", 4, false);
+    });
+  </script>
+  <script src="/taras/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/tarasglek" class="twitter-follow-button" data-show-count="false">Follow @tarasglek</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Taras Glek -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

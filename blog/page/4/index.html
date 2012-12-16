@@ -1,0 +1,648 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>All About Performance</title>
+  <meta name="author" content="Taras Glek">
+
+  
+  <meta name="description" content="At Mozilla we have a long history of using MXR for looking up and discussing source code. Unfortunately MXR is an unlovable mess of Perl and a crappy &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tarasglek.github.com/taras/blog/page/4/">
+  <link href="/taras/favicon.png" rel="icon">
+  <link href="/taras/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/taras/javascripts/modernizr-2.0.js"></script>
+  <script src="/taras/javascripts/ender.js"></script>
+  <script src="/taras/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/taras/atom.xml" rel="alternate" title="All About Performance" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/taras/">All About Performance</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/taras/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tarasglek.github.com/taras" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/taras/">Blog</a></li>
+  <li><a href="/taras/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+  
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2012/05/22/give-dxr-a-try/">Give DXR a Try</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-05-22T02:34:51-07:00" pubdate data-updated="true">May 22<span>nd</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>At Mozilla we have a long history of using <a href="http://mxr.mozilla.org/">MXR</a> for looking up and discussing source code. Unfortunately MXR is an unlovable mess of Perl and a crappy (in terms of performance and license) text indexing engine that is glimpse. It is dead because nobody wants to work on it.</p>
+
+<p><a href="https://wiki.mozilla.org/DXR">DXR</a> is a semantically-aware successor to MXR. Semantic information is extracted from LLVM during compilation. This makes it possible to do searches like <a href="http://dxr.lanedo.com/search.cgi?tree=mozilla-central&amp;derived=nsIFile">derived:nsIFile</a>. DXR uses a modern Full Text Search engine for text searches, so it should be much faster than MXR. There is a test instance at <a href="http://dxr.lanedo.com/">dxr.mozilla.org</a>, please give it a try. The homepage lists sample searches you can do.</p>
+
+<p>DXR is written in Python. It uses an SQLite database + FTS index as a backend. Useful semantic information is extracted from the source via a Clang LLVM plugin. Checkout the <a href="https://github.com/mozilla/dxr/">source code</a> at github.</p>
+
+<p>DXR should be getting close to feature parity with MXR. Give it a try and let me know of any bugs/missing features you encounter (or submit a patch!). I realize that people have gotten used to various MXR quirks and that it can be stressful to switch to a new code indexer while trying to get stuff done, but MXR IS DEAD. We need to move on. Mozilla is complex, finding relevant code can take quite a while, especially for new contributors. Using a smarter indexer should save time, reduce frustration and free up a few developer-years to make Firefox better.</p>
+
+<p>We have lots of ideas for DXR, but first we need to ensure it is a suitable replacement for MXR. Take DXR for a spin!</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2012/05/21/snappy-may-17-physical-room-edition/">Snappy, May 17 - Physical Room Edition</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-05-21T04:10:23-07:00" pubdate data-updated="true">May 21<span>st</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><strong>Misc</strong></p>
+
+<p>This was an unusual meeting for the Snappy project: everybody was in the same physical room (though someone dialed in 5min before the end). I love the distributed nature of Mozilla, but it&#8217;s nice to have everybody in the same room for a change.</p>
+
+<p>Vlad did some super-slow-startup investigation. We have even more <a href="http://blog.mozilla.org/vdjeric/2012/05/17/looking-at-my-own-abouttelemetry-data/">evidence</a> that loading pages before the UI is up is a bad idea: bug 715402.</p>
+
+<p>Jet sped up browser chrome by converting SVG masks to clip-paths: bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=752918">752918</a>. With a name like that, how can he not work on performance bugs :)</p>
+
+<p>The necko team is looking for feedback on test builds that reduce cache-related pauses on the main thread. If you suffer from cache-related lag, give <a href="https://ftp.mozilla.org/pub/mozilla.org/firefox/try-builds/bsmith@mozilla.com-10b6ced92518/">these</a> a spin: bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=722034">722034</a>.</p>
+
+<p>Benoit made our profiling builds useful on Linux, Android (in addition to Windows, Mac64). Work is happening on extending our debug protocol with <a href="https://developer.mozilla.org/en/Performance/Profiling_with_the_Built-in_Profiler">profiling </a>abilities. Unfortunately I do not have bug #s to link to. The Windows symbol server is almost done with security review so it can be exposed to the web. For more profiler details see bugs: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=753588">753588</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=751355">751355</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=751355">751355</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=751034">751034</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=751779">751779</a>.</p>
+
+<p>Rafael is getting close to calling exit(0) in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=662444">662444</a>. Much work remains, it&#8217;ll be the most significant change since we embarked on this project almost a year ago. Our current application shutdown situation is not pretty.</p>
+
+<p><strong>GC/CC</strong></p>
+
+<p>Bill landed incremental GC again, it promptly bounced out: bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=735099">735099</a>.</p>
+
+<p>We now do compartmental GC more often: bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=716014">716014</a>.</p>
+
+<p>Andrew is working on reducing CC overhead (by 80% in his benchmark) when closing tabs: bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=754495">754495</a>.</p>
+
+<p><strong>LagBlock Plus</strong></p>
+
+<p>I&#8217;ve been running Wlad&#8217;s <a href="https://addons.mozilla.org/en-US/firefox/addon/suspend-background-tabs/">extension</a> for over a week now. The browser is so much more pleasant now. Background tabs used to make text-entry a painful process. Can&#8217;t wait until we can approach a similar level of responsiveness by scheduling background tab events more intelligently.</p>
+
+<p>I feel that letting tabs run out of control is a serious misfeature in the current web &#8216;architecture&#8217;. Modern OSes require background apps to suspend (ie Android, iOS). It is about time that browsers forced a similar behavior: ie bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=675539">675539</a>. Web developers should be given a way to request to run background tasks and users should be able to veto that.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2012/05/21/snappy-workweek/">Snappy Workweek</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-05-21T02:53:14-07:00" pubdate data-updated="true">May 21<span>st</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><strong>Workweek</strong></p>
+
+<p>The perf team + Lawrence held a snappy workweek at the Mozilla HQ last week. We spent most of the week meeting with various people involved with the Snappy project. I expect lots of good things to happen in the near future.</p>
+
+<p>The most immediate outcome of all of these meetings was the public unveiling of our telemetry dashboards. See Lawrence&#8217;s <a href="http://lawrencemandel.com/2012/05/16/sign-in-to-telemetry-with-persona/">post</a> on how to log in with your persona account. We started work on telemetry about a year ago, felt great to finally reach this milestone. Lots of work remains on UI polish, data validation, etc. Telemetry is our primary mechanism for gathering snappy performance data. Every telemetry infrastructure improvement leads to better snappy decisions.</p>
+
+<p>Additionally we discussed Australis theme work (how it should be faster than existing theme), dom event scheduling, main thread io work, feasibility of switching to an FTS backend for places, etc.</p>
+
+<p>Vlad wrote some good posts on analyzing <a href="http://blog.mozilla.org/vdjeric/2012/05/14/more-telemetry-from-super-slow-startups/">startup</a> and <a href="http://blog.mozilla.org/vdjeric/2012/05/17/looking-at-my-own-abouttelemetry-data/">other data</a> exposed by about:telemetry. <a href="http://planet.mozilla.org/">Planet Mozilla</a> could use more technical posts like that.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2012/05/14/snappy-may-10-suspending-activity-in-background-tabs/">Snappy, May 10: Suspending Activity in Background Tabs</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-05-14T03:06:52-07:00" pubdate data-updated="true">May 14<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Tim landed a fix to avoid setTimeout()s when handling tab clicks: bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=743877">743877</a>. This should significantly improve our tab strip responsiveness.</p>
+
+<p>Incremental GC is making progress towards being turned on by default again: bugs <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=750959">750959</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=752098">752098</a>.</p>
+
+<p>There was also progress on cancellable SQL (bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=722243">722243</a>). This should result in faster shutdown.</p>
+
+<p>Progress was made towards fixing cache locking, bug <a href="http://bugzilla.mozilla.org/show_bug.cgi?id=722034">722034</a>.</p>
+
+<p>Lawrence posted a <a href="http://hacks.mozilla.org/2012/05/getting-snappy-performance-optimisations-in-firefox-13/">summary</a> of snappy work that went into Firefox 13.</p>
+
+<p><strong>LagBlock Plus</strong></p>
+
+<p>Some of the lag in Firefox is caused by background tabs processing timeouts <a href="https://blog.mozilla.org/tglek/2012/04/18/web-2-0-a-collection-of-settimeouts/">willy-nilly</a>. We are working on teaching Firefox to cope with overactive background tabs in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=715376">715376</a>. The plan is to allow Firefox to throttle/group background events, especially in tabs that are CPU hogs.</p>
+
+<p>To help us along, the author of Adblock Plus <a href="http://adblockplus.org/blog/preventing-background-tabs-from-wasting-your-computer-s-resources">released</a> an experimental addon that freezes activity in background tabs. Since this addon halts all background tab activity, it is a useful gauge of baseline performance that we&#8217;ll try to get asymptotically close to. It is also helpful for isolating responsiveness issues that are not caused by background tabs.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2012/05/03/snappy-may-3rd-faint-hope-of-handling-mousedown-events-without-a-settimeout/">Snappy, May 3rd: Faint Hope of Handling Mousedown Events Without a setTimeout</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-05-03T07:23:13-07:00" pubdate data-updated="true">May 3<span>rd</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Meeting <a href="https://wiki.mozilla.org/Performance/Snappy/2012-05-03">notes</a>.</p>
+
+<p>Memshink had a good idea to switch to bi-weekly meetings. We are going to try the same for Snappy. My plan is to still solicit status updates and blog weekly, but only meet in person every two weeks. The next meeting will be on May 17.</p>
+
+<p><strong>Borders/Gradients</strong></p>
+
+<p>Turns out that most of the painting overhead in accelerated versions of Firefox is spent rendering borders and gradients. I <a href="http://tarasglek.github.com/taras/2012/05/01/pushing-the-borders-out-of-firefox-performance/">blogged </a>a little about this earlier. It&#8217;s a combination us not caching gradients and being overly picky about rendering border corners perfectly (ie to spec). Our chrome renders particularly slowly because as our chrome CSS changed (after implementing d2d accel and optimizing for exists codepaths), we started hitting more slow paths in the border code. We need telemetry to notice when things are rendering slower than expected.</p>
+
+<p>According to Bas we need to enable Azure for content and then start implementing respective caches. We should get significant speedups within 3-4 weeks, but to get close to the baseline performance of the no-borders/gradients build will take 3-4months. In the meantime we should look into simplifying our chrome to not feature as much expensive CSS.</p>
+
+<p>Longer term, Frank will look into reimplementing the tab bar in pure HTML  instead of XUL to maximize responsiveness.</p>
+
+<p><strong>CC/GC Pauses</strong></p>
+
+<p>Incremental GC should turned back on soon (bugs <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=750424">750424</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=750416">750416</a>). Olli relanded bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=747675">747675</a> which should reduce CC times somewhat.</p>
+
+<p>Kyle&#8217;s big memory leak <a href="http://blog.kylehuey.com/post/21892343371/fixing-the-memory-leak">fix</a> from last week turned out to occasionally cause leaks where there were none before: see bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=751466">751466</a>.</p>
+
+<p><strong>Frontend</strong></p>
+
+<p>Tim spent the week in a seemingly infinite r?/r- cycle attempting to prove that one handle clicks on tabs without setTimeout, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=743877">743877</a>. Tim also moved thumbnail storage away from network cache. This reduced cache contention (and browser freezes), bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=744388">744388</a>. Paulo continued nuking sync favicon api usage, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=728168">728168</a>.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2012/05/01/pushing-the-borders-out-of-firefox-performance/">Pushing the Borders [Out] of Firefox Performance</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-05-01T09:57:33-07:00" pubdate data-updated="true">May 1<span>st</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>As I mentioned before, we are back to investigating some gfx deceleration issues. Preliminary investigation shows that our border+gradient code is inefficient and since Firefox uses these features heavily, we get some epic slowdowns when tab switching.</p>
+
+<p>To test out this theory Bas put up a test build that simply does not draw gradients or borders. See <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=750871">bug 75087</a>  for a screenshot demonstrating drastic reduction in browser attractiveness. There is also a test build for people suffering from slow drawing to try out.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2012/04/26/snappy-april-26/">Snappy, April 26</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-04-26T08:43:50-07:00" pubdate data-updated="true">Apr 26<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Notes from today&#8217;s meeting are <a href="https://wiki.mozilla.org/Performance/Snappy/2012-04-26">here</a>.</p>
+
+<p>No major snappy fixes landed this week. However, if you look in the notes, there are quite a few projects going through the review cycle.</p>
+
+<p>Personally, I&#8217;m most excited by progress in getting rid of the setTimeout on tab click(bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=743877">743877</a>). Neil posted a diagnosis of why we need setTimeout while switching tabs. Tim followed up with a patch to avoid the setTimeout for non-focus bits. On the subject of SetTimeouts: we devised a plan for managing SetTimeout <a href="https://blog.mozilla.org/tglek/2012/04/18/web-2-0-a-collection-of-settimeouts/">overhead </a>in background tabs. This will involve breaking up our global event queue into a global queue + smaller per-page queues, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=715376">715376</a>. This will not be a pleasant task, but Nathan aims to have a proof of concept ready next week. With this infrastructure we should be able start prioritizing which events we handle and punish misbehaving tabs.</p>
+
+<p>The graphics team is wrapping up the big Android push, freeing up cycles for elsewhere. Bas is back to looking at slowdowns due to hw acceleration (bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=721273">721273</a>). Bas is also looking into changing our chrome CSS to be less expensive to paint.</p>
+
+<p>Ehsan is working with Paul to change firefox themes to not be horrible <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=650968">performance hogs</a>.</p>
+
+<p><strong>Update:</strong> A very significant snappy fix <a href="http://blog.kylehuey.com/post/21892343371/fixing-the-memory-leak">landed </a>this week as part of memshrink. It should significantly reduce memory usage and thus cycle-collector pauses, etc.</p>
+
+<p><strong>Update #2</strong>: I missed another very cool Snappy fix: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=729133">bug 729133</a>. This is based on revising old assumptions about cache being faster than disk. We learned from telemetry data that a significant portion of disk cache requests are processed slower than they would if we just went straight to network. Firefox now hedges bets and warms up a TCP connection while checking cache. For details see Patricks&#8217;s <a href="http://bitsup.blogspot.com/2012/04/making-firefox-search-snappier.html">blog</a>.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2012/04/19/snappy-april-19/">Snappy, April 19</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-04-19T07:47:40-07:00" pubdate data-updated="true">Apr 19<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>At 15 minutes, this might&#8217;ve been our shortest meeting yet (<a href="https://wiki.mozilla.org/Performance/Snappy/2012-04-19">notes</a>).</p>
+
+<p>Most of the work happened in <a href="https://wiki.mozilla.org/Performance/Snappy/2012-04-19#Front-end_-_Dietrich">frontend stuff</a>. Most notable improvements are reduced screenshot overhead (by taking less screenshots, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=744152">744152</a>) and a brand new IE migrator (a step towards fully async places API, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=710895">710895</a>).</p>
+
+<p>Work resumed on making peptest return more <a href="https://wiki.mozilla.org/Performance/Snappy/2012-04-19#peptest_-_mcote">consistent </a>results.</p>
+
+<p>The necko team decided to take a more involved approach to solve our cache locking(bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=722034">722034</a>) which means the fix will land later than we originally hoped for.</p>
+
+<p>My little investigation into setTimeout <a href="http://tarasglek.github.com/taras/2012/04/18/web-2-0-a-collection-of-settimeouts/">overhead</a> exposed more overhead than I expected. After our regularly scheduled snappy meeting, we had a follow up meeting to spec out how to change our event handling to cope with this (bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=715376">715376</a>). Our best people are on this :) I asked for someone to prototype an extension to suspend background tab activity, sounds like  Wladimir of adblockplus might lend a hand.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2012/04/18/web-2-0-a-collection-of-settimeouts/">Web 2.0: A Collection of SetTimeouts</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-04-18T09:13:19-07:00" pubdate data-updated="true">Apr 18<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Earlier I <a href="http://tarasglek.github.com/taras/2012/04/10/argh-at-our-unresponsive-tab-strip-settimeoutfoo-0-can-be-very-harmful/">blogged </a>about terrible UI responsiveness resulting from a poorly placed setTimeout. I&#8217;ve long suspected that SetTimeouts are to blame for everything. Now with help of bz and sfink I have proof.</p>
+
+<p>Turns out webpages like to keep users entertained and spin setTimeout loops to poll the servers to synchronize news tickers, social networking shoe-ins, collaborative editing, etc. Most pages do this regardless of whether they are a background or a foreground tab. Firefox tries to mitigate this by not allowing background tabs to schedule setTimeouts &lt; 2seconds. Turns out this is a pretty weak defense.</p>
+
+<p>In my personal browsing: etherpad, twitter, zimbra burn through cpu cycles. See this bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=744470#c12">comment </a>for an example of setTimeout terrorism with less than 10 tabs. In Firefox these setTimeouts cause significant UI lag, but they will also eat your battery life, overheat your laptop, etc. I filed bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=715376">715376</a> to add functionality to cope with this.  The plan is to prioritize foreground tab activity and do exponential setTimeout decay on abusive background tabs. We basically have to write something similar to an OS scheduler. Ideally we&#8217;d also follow that up with unloading idle tabs, ie bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=675539">675539</a>.</p>
+
+<p>If you are curious about what tabs are abusing your browser my <a href="http://ftp.mozilla.org/pub/mozilla.org/firefox/try-builds/tglek@mozilla.com-520630fd738e">diagnostic builds</a> will be available on try in a few hours. Install a <a href="http://people.mozilla.com/~tglek/telemetry/ping.telemetry.xpi">modified </a>version of about:telemetry to see the report.</p>
+
+<p><strong>What should well-behaved web apps do?</strong></p>
+
+<p>You can detect when your tab becomes inactive via <a href="https://developer.mozilla.org/en/DOM/window.onblur">window.onblur</a>, then throttle or disable your page activity. I know using focus is suboptional for this. There is also a vendor-prefixed <a href="https://developer.mozilla.org/en/API/PageVisibility/Page_Visibility_API">visibility api</a> (thanks!).</p>
+
+<p>Now you know why your browser keeps your CPU wide awake :)</p>
+
+<p><em>Update:</em></p>
+
+<p>Wrote this post in a rush on the way out, thanks for the visibility links. I am aware that some webpages need to do work in the background. However that work should be as minimal as possible, this is often not the case.</p>
+
+<p><em>Project Idea:</em></p>
+
+<p>Would be nice if someone wrote an extension that goes through tabs and nukes any outstanding setTimeouts/XHRs/etc.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2012/04/16/snappy-april-12/">Snappy, April 12</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-04-16T06:45:17-07:00" pubdate data-updated="true">Apr 16<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Notes are<a href="https://wiki.mozilla.org/Performance/Snappy/2012-04-12"> here</a>. Time was spent on administrative issues like overlap/conflict between Snappy and Kilimanjaro, plans for security review for Vladan&#8217;s symbol server and bug triage.</p>
+
+<p>I&#8217;m usually really bad at noticing UI lag, but now my mind is focused on tab switching and I notice the lag every time click on tabs (keyboard switching is unaffected). We discussed how to fix tab lag I blogged about <a href="http://blog.mozilla.com/tglek/2012/04/10/argh-at-our-unresponsive-tab-strip-settimeoutfoo-0-can-be-very-harmful/">earlier</a>. It&#8217;s hard because there is some funny interaction between focus and drag &amp; drop and us switching tabs on mousedown. Neil will look into addressing focus issues this week.</p>
+
+<p>Tim is addressing thumbnail capture slowness in bugs: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=744388">744388</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=742594">742594</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=726347">726347</a>.</p>
+
+<p>Paolo is busy switching code away from synchronous places APIs: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=728168">728168</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=728174">728174</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=728142">728142 </a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=739213">739213</a>.</p>
+
+<p>The networking team is expected to make a decision this week on how to fix the big networking cache lock. See Nick&#8217;s <a href="https://wiki.mozilla.org/Performance/Snappy/2012-04-12#Fix_cache_-_hurley">notes</a> on options presented.</p>
+
+<p>Thanks for feedback on preferred snappy update format: we&#8217;ll stick with cherries.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  <div class="pagination">
+    
+      <a class="prev" href="/taras/blog/page/5/">&larr; Older</a>
+    
+    <a href="/taras/blog/archives">Blog Archives</a>
+    
+    <a class="next" href="/taras/blog/page/3/">Newer &rarr;</a>
+    
+  </div>
+</div>
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/26/coping-with-flash-hangs/">Coping with Flash hangs</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/16/snappy-44-fixing-tab-switching-in-vancouver/">Snappy #44: Fixing tab switching in Vancouver</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/05/snappy-43-big-improvements-faster-startup-smoother-tabstrip/">Snappy #43: Big improvements: faster startup? Smoother tabstrip!</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/26/snappy-42/">Snappy #42</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/18/snappy-41/">Snappy #41</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("tarasglek", 4, false);
+    });
+  </script>
+  <script src="/taras/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/tarasglek" class="twitter-follow-button" data-show-count="false">Follow @tarasglek</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Taras Glek -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

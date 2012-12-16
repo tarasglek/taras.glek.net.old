@@ -1,0 +1,274 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Will Rename Class Members for Food - All About Performance</title>
+  <meta name="author" content="Taras Glek">
+
+  
+  <meta name="description" content="Squash may now be ready as a class member renaming tool for early adopters. I would like people to use me as a frontend to squash. Email me your &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tarasglek.github.com/taras/blog/2007/01/24/will-rename-class-members-for-food/">
+  <link href="/taras/favicon.png" rel="icon">
+  <link href="/taras/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/taras/javascripts/modernizr-2.0.js"></script>
+  <script src="/taras/javascripts/ender.js"></script>
+  <script src="/taras/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/taras/atom.xml" rel="alternate" title="All About Performance" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/taras/">All About Performance</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/taras/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tarasglek.github.com/taras" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/taras/">Blog</a></li>
+  <li><a href="/taras/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Will Rename Class Members for Food</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-01-24T10:04:39-08:00" pubdate data-updated="true">Jan 24<span>th</span>, 2007</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Squash may now be ready as a class member renaming tool for early adopters. I would like people to use me as a frontend to squash. Email me your requests for renames and I will reply with giant patches. This way squash can be immediately useful. Plus I can fix bugs in squash and figure out actual usecase while I get the frontend set up.Progress</p>
+
+<p>Squash can now produce a good looking <a href="http://glek.net:8080/~taras/nsiframe.diff">92K patch</a> for renaming nsIFrame::GetPresContext. This means that squash can now correctly traverse 167 files and produce a patch that affects 103 of them. I am going to work on the web frontend next.</p>
+
+<p>Some issues below.</p>
+
+<p><strong>Tool Explosion</strong></p>
+
+<p>I wrote a creatively named frontend: run_squash. It prevents squash from running out of address space by running squash unit-at-a-time and combining patch output from multiple runs. It runs squash in parallel similar to make -j. This decreases runtime proportionally with the number of cores. I would be curious to see how Sun&#8217;s Rock-based systems fare for this. For example on the 4way Opteron a 20 minute squash run takes around 5 minutes. Having lots of CPU cores will become important down the road once multiple users are running multiple analysis tasks on a single machine through a web frontend.</p>
+
+<p>There is another temporarly named tool, prepare.py, which greps .cpp files looking for candidates for renaming, produces matching .i files, figures out number of cpus and then invokes run_squash.</p>
+
+<p>More special purpose tools will need to be written. For example roc mentioned that it would be nice to check when generated interface files are being modified and to have the corresponding IDL updated instead while refusing to modify frozen IDL interfaces. Classes with IIDs would need to have them changed too.</p>
+
+<p><em>Tool Rant</em> I am trying to decide how to manage the tool growth such that things evolve sanely. Should squash be a giant swiss-army-knife binary capable of doing everything but incredibly hard to modify? Or should it be broken up into a dozen of separate programs &amp; scripts that work together in an ad-hoc way? The latter would be what some people describe as UNIX way, whatever that means. In the 90s, the former would&#8217;ve been done by making everything a COM component and still just as hard to modify. Alternatively, I could use some strong ROPE and SOAP to tie everything together with SOA. Kidding aside, it would be nice to have a strategy to deal with this so people could run squash on their own machines too without spending a week setting up dependencies.</p>
+
+<p><strong>CPP – To Invert or Not to Invert</strong></p>
+
+<p>A large part of squash is hacks and workarounds for preprocessor-induced pain. Recently, I ran into two interesting cases where blind string substitution fails.</p>
+
+<p><em>Multiline macro parameters</em></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>if (NS_SUCCEEDED(
+</span><span class='line'>nsSVGUtils::GetReferencedFrame(&nextPattern, targetURI,
+</span><span class='line'>mContent,
+</span><span class='line'>GetPresContext()-&gt;PresShell()))) {
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Squash works on an AST produced from .i files. When cpp expands this macro, everything ends up on the same line as the if keyword. That&#8217;s a problem because when squash wants to replace GetPresContext() the parser gives it the wrong line. Initially I was tempted to remove the newline in a few cases from the original source, but then I realized that this analogous to looking for the closing } in class declarations when end-of-AST-node info isn&#8217;t available. Now if a string substitution fails squash will go to the next line until a match is found or one of ;{} characters is encountered. Yes, that&#8217;s also an emoticon of me looking at yet another CPP-induced problem.</p>
+
+<p><em>Replacing Code Within a Macro Definition. </em>Mozilla has whole functions defined within macros. Squash can not deal with that. Is it worth it to do a limited preprocessor inversion to fix these or to fail and let a developer do it by hand? For example one could mark up the .i file with metadata on which sections came from a macro expansion and which sections were passed into macros as parameters. Then an intelligent rewrite decision could be made. This would solve most of the CPP-induced problems I can think of, but would require hacking a good C preprocessor. This is probably not worth the pain, but apparently someone bolted on a bsd-licensed preprocessor onto Elsa. If that&#8217;s true, the patch may get me most of the way to a macro-aware squash.</p>
+
+<p><strong>Quick Analyses</strong></p>
+
+<p>There are hundreds of useful analyses that can be done on Elsa&#8217;s AST of Mozilla. However using C++ is too verbose and error prone do many of the simpler tasks. It would be nice to make a first-class binding to Oink/Elsa that easily extract all interesting info from the AST. Olmar is one way of doing that, but converting Elsa-style OO into ML datatypes produces incredibly verbose data structures and requires careful conversion of code such that information isn&#8217;t lost.</p>
+
+<p>A language that can query the C++ AST in the way that the author&#8217;s intended it, may be an easier way to go. ES4 JavaScript would be interesting for that because the script could traverse the cast-happy Elsa-AST, extract information of interested and present that as a structured type which could then be manipulated using type-safe pattern matching.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Taras Glek</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-01-24T10:04:39-08:00" pubdate data-updated="true">Jan 24<span>th</span>, 2007</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/taras/blog/categories/decomtamination/'>DeCOMtamination</a>, <a class='category' href='/taras/blog/categories/mozilla/'>mozilla</a>, <a class='category' href='/taras/blog/categories/squash/'>squash</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://tarasglek.github.com/taras/blog/2007/01/24/will-rename-class-members-for-food/" data-via="tarasglek" data-counturl="http://tarasglek.github.com/taras/blog/2007/01/24/will-rename-class-members-for-food/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/taras/blog/2007/01/11/squash-progress-and-plans/" title="Previous Post: Squash Progress and Plans">&laquo; Squash Progress and Plans</a>
+      
+      
+        <a class="basic-alignment right" href="/taras/blog/2007/02/01/lossy-ast-traversals-for-good-code-health/" title="Next Post: Lossy AST Traversals for Good Code Health">Lossy AST Traversals for Good Code Health &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/26/coping-with-flash-hangs/">Coping with Flash hangs</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/16/snappy-44-fixing-tab-switching-in-vancouver/">Snappy #44: Fixing tab switching in Vancouver</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/05/snappy-43-big-improvements-faster-startup-smoother-tabstrip/">Snappy #43: Big improvements: faster startup? Smoother tabstrip!</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/26/snappy-42/">Snappy #42</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/18/snappy-41/">Snappy #41</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("tarasglek", 4, false);
+    });
+  </script>
+  <script src="/taras/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/tarasglek" class="twitter-follow-button" data-show-count="false">Follow @tarasglek</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Taras Glek -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

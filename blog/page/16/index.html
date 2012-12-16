@@ -1,0 +1,678 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>All About Performance</title>
+  <meta name="author" content="Taras Glek">
+
+  
+  <meta name="description" content="I love new programming toys and this week is a good one for those. Ever since I laid the foundations for Dehydra I&#8217;ve been dreaming of a world &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tarasglek.github.com/taras/blog/page/16/">
+  <link href="/taras/favicon.png" rel="icon">
+  <link href="/taras/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/taras/javascripts/modernizr-2.0.js"></script>
+  <script src="/taras/javascripts/ender.js"></script>
+  <script src="/taras/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/taras/atom.xml" rel="alternate" title="All About Performance" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/taras/">All About Performance</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/taras/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tarasglek.github.com/taras" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/taras/">Blog</a></li>
+  <li><a href="/taras/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+  
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2009/02/19/quickfix-model-of-develoment/">Quickfix Model of Develoment</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-02-19T03:20:51-08:00" pubdate data-updated="true">Feb 19<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I love new programming toys and this week is a good one for those. Ever since I laid the foundations for Dehydra I&#8217;ve been dreaming of a world where I can quickly lookup a piece of code(say something that someone complains about on IRC), fix it, get it reviewed and pushed in the most efficient manner possible. Seems that the pieces are finally falling into place.</p>
+
+<ol>
+<li>I want quick semantically aware code lookup via <a href="http://zenit.senecac.on.ca/wiki/dxr/">DXR</a>. And guess what, there is <a href="http://www.visophyte.org/blog/2009/02/19/dxrpy-with-references-against-mailnews-plus-bespin-wishes/">progress</a> in that direction.</li>
+<li>I want to DXR to provide a link to edit the code. <a href="http://bespin.mozilla.com/">Bespin</a> looks like the most promising candidate for editing. As an aside, using canvas to do text editing is badass. I salute devs who are crazy enough to prove their point by reimplementing something (hopefully better) from scratch using an approach that hasn&#8217;t been tried before.</li>
+<li>I want my changes to be saved as a diff into bugzilla. I want that to be two way so I can edit existing patches and save them as new bugzilla attachments.</li>
+<li>From there I&#8217;d like a commit feature in bugzilla so the patch would go through try-then-push cycle that Jesse <a href="http://www.squarefree.com/">described</a>.</li>
+<li>Having all this inplace would make it trivial to integrate random features such as crash stack trace navigation or <a href="https://developer.mozilla.org/En/Pork">Pork</a> automagic refactoring.
+Now I&#8217;m sure that most of us would still run Emacs and other desktop editors for longer development tasks. But just imagine being bored with a computer at a webcafe, boring friend, etc and having the ability to quickly jump into in the development process as easily as logging into webmail.</li>
+</ol>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2009/02/16/security-with-dehydra/">Security With Dehydra</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-02-16T08:36:38-08:00" pubdate data-updated="true">Feb 16<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>When I wrote the initial prototype of Dehydra I pondered how long it would take before it&#8217;s adopted by security guys. Unfortunately, until now take-up has been non-existent. Grep and Perl still seem to rule in that community even though the plain text approach restricts the range of possible security scans.</p>
+
+<p>Normally I would be tempted to rant on how grep is convenient yet limiting. However Ben Kurtz <a href="http://www.awgh.org/?p=73">discovered Dehydra for security scans</a> and did a great job explaining the issues involved. Thanks to Georgi for linking me to Ben&#8217;s post.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2009/01/28/semantic-rewriting-of-code-with-pork-a-bitter-recap/">Semantic Rewriting of Code With Pork - a Bitter Recap</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-01-28T16:17:47-08:00" pubdate data-updated="true">Jan 28<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>LWN <a href="http://lwn.net/Articles/315686/">published</a> an article about a tool that does refactoring of C code. Guess what, it&#8217;s yet another tool on top of a crappy C-parser that will never grok C well or even hope to support C++. To my great disappointment the author was not aware of my work on Pork. Clearly I have failed in letting people know that complex C and C++ can be refactored with (somewhat raw, but powerful) open source tools.</p>
+
+<p>In addition to <a href="https://developer.mozilla.org/En/Dehydra">Dehydra</a> (which is even mentioned in the first comment, yay!), I also maintain <a href="https://developer.mozilla.org/En/Pork">Pork</a> - a fork of oink that is well suited to large-scale refactoring of real-world C/C++ code.</p>
+
+<p>So far pork has been used for &#8220;minor&#8221; things like renaming classes&amp;functions, rotating <a href="http://tarasglek.github.com/taras/2007/08/06/outparams-take-2/">outparameters</a> and correcting <a href="http://tarasglek.github.com/taras/2007/06/26/status-report-recent-work/">prbool</a> bugs. Additionally, Pork proved itself in an <a href="http://tarasglek.github.com/taras/2007/11/02/garburator-works/#comments">experiment</a> which involved rewriting almost every function(ie generating a 3+MB patch) in Mozilla to use garbage collection instead of reference-counting.</p>
+
+<p>So to summarize:</p>
+
+<ul>
+<li>Refactoring C is hard, but C++ is much harder</li>
+<li>For refactoring C++ there is no better toolchain to start with than Pork</li>
+<li>Pork shares no code with Dehydra.</li>
+<li>Pork is built on the Elsa parser which makes it well-suited for rewriting large amounts of code. Dehydra&#8217;s isn&#8217;t suitable for rewriting code due to GCC providing a very lossy AST and incomplete location information.</li>
+<li>Pork is not as convenient for analysis needs as Dehydra
+For any questions regarding Pork feel free to post on the <a href="https://lists.mozilla.org/listinfo/dev-static-analysis">mailing list</a> or ping me on IRC.</li>
+</ul>
+
+
+<p><strong>Language Wars</strong></p>
+
+<p>I find it depressing that the comments to the LWN article ended up being about language wars rather than the refactoring topic. Pork is written in C++ which is much more widely known than OCaml. However, I seriously doubt it&#8217;s easier for anyone to hack on advanced compiler frontend pieces in a language as ill-suited for the task as C++.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2009/01/27/gcc-plugins-are-a-go/">GCC Plugins Are a Go!</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-01-27T08:38:35-08:00" pubdate data-updated="true">Jan 27<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>The nice folks at FSF <a href="http://gcc.gnu.org/ml/gcc-announce/2009/msg00000.html">allowed</a> GCC have plugins. In a couple of GCC releases, Dehydra(4.5 if we are lucky) will work with distribution GCCs. Of course the API is yet to be decided on, but we have been coordinating with authors of other GCC plugin efforts to ensure that the final API meets reasonable needs.</p>
+
+<p>In the future enabling static analysis checks will involve little more than specifying &#8211;with-static-checking in your Mozilla build!</p>
+
+<p><strong>JSHydra</strong></p>
+
+<p>The other breakthrough news is that Joshua Cranmer has been working on hooking up a *hydra style API to the Spidermonkey parser. This resulted in <a href="http://quetzalcoatal.blogspot.com/2009/01/jshydra.html">JSHydra</a>. Ability to look into JavaScript has been sorely missing from our stack, so this is extremely exciting.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2009/01/13/seven-things-you-may-not-know-about-me/">Seven Things You May Not Know About Me</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-01-13T11:17:49-08:00" pubdate data-updated="true">Jan 13<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I got tagged by <a href="http://benjamin.smedbergs.us/blog/2009-01-12/seven-things-you-may-not-know-about-me/">Benjamin</a>, so I better comply and get my blog memed.</p>
+
+<h4>Rules</h4>
+
+<ol>
+<li>Link back to your original tagger and list the rules in your post.</li>
+<li>Share seven facts about yourself.</li>
+<li>Tag some (seven?) people by leaving names and links to their blogs.</li>
+<li><p>Let them know they’ve been tagged.
+<strong>Seven Things</strong></p></li>
+<li><p>In Soviet Ukraine, kindergarten failed me (luckily they don&#8217;t make you retake that). Apparently when I was six, my handwriting and reading skills were not up to the communist standards of time. I still fondly remember excepts of various communist hymns we got to sing along.</p></li>
+<li>Grade 1 coincided with the fall of communism and me getting the most kickass grades of my academic career.</li>
+<li>I have owned two cars, but I have since traded that lifestyle for a garage full of bikes. I never liked the effects that driving had on my health nor the effect that crappy German engineering had on my savings.</li>
+<li>I met my wife on my first <a href="http://www.momentumplanet.com/features/moonlight-midnight-mystery-ride">midnight mystery ride</a>. Riding at midnight is awesome because that&#8217;s the only time that traffic dies down enough that one sees nothing but fellow bikers and drunk pedestrians.</li>
+<li>To buy groceries I ride a comical contraption called an adult tricycle. We even worked the trike into our wedding.</li>
+<li><img src="http://photos-e.ak.fbcdn.net/photos-ak-snc1/v1925/118/14/122504458/n122504458_33849548_3260.jpg" alt="" /></li>
+</ol>
+
+
+<p>I never had a real job. For some reason all of the Burger Kings and Subways that I applied at never took an interest in me. Instead, in grade 8 my first source of income was teaching Java to someone 2.5x my age for $3 an hour. From then on I bounced around various part-time jobs and internships until I ended up at Mozilla, my first real job.
+  7. For a something like six years I wore long hair to go along with my taste for Metal. I&#8217;m always looking for more awesome metal music, currently in heavy rotation are Testament, Winds of Plague, Dying Fetus and Opeth. If you think there is an awesome metal band I might be missing out on, let me know.
+<strong>Tags</strong></p>
+
+<p><a href="http://mozilla.damon.sicore.org/">Damon Sicore</a> - There are seven random things I need to know about my boss.</p>
+
+<p><a href="http://quetzalcoatal.blogspot.com/">Joshua Cranmer</a> - lets hear seven things about you without mentioning dem0rkification.</p>
+
+<p><a href="http://www.bluishcoder.co.nz/">Chris Double</a> - I hope to hear seven reasons for one to program in Reverse Polish Notation</p>
+
+<p><a href="http://blog.mozilla.org/graydon/">Graydon Hoare</a> -  because his blog hasn&#8217;t been memed. It&#8217;s also getting a bit dated</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2008/12/23/fennec-a2-performance/">Fennec A2 - Performance</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-12-23T03:23:12-08:00" pubdate data-updated="true">Dec 23<span>rd</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><strong>Static Analysis vs Performance</strong></p>
+
+<p>Two months ago I got the feeling that I gotta take a break from static analysis and do something that obviously affects Firefox at runtime. Luckily that coincided with ramp-up on Fennec performance work.</p>
+
+<p>I find that I enjoy fixing existing code a lot more than other sorts of programming, so I was extremely happy to switch focus from the static analysis way of fixing code to my other favourite: optimization. Both are peculiar programming endeavours because after a bunch of gruntwork the program ends up doing the exact same thing as before, but better.</p>
+
+<p>In static analysis I focus more on how different pieces fit together, whereas in an optimization I get to focus on what various pieces are trying to achieve so I learned a lot more random Mozilla mysteries.</p>
+
+<p><strong>Fennec</strong></p>
+
+<p>Fennec is pure joy to optimize because it runs in such a constrained Linux environment (compared to desktop Linux). Things seem to happen roughly 10x slower on the arm processor than on my core2duo laptop. Thus performance details that are hard to spot on the desktop almost trivial to discover.</p>
+
+<p>There is no hard drive seeks to introduce unpleasant surprise latency. This simplifies things a lot - there is a lot less variance between hot and cold start on <a href="http://en.wikipedia.org/wiki/Nokia_N810">n810</a> than on hard drived desktop.</p>
+
+<p>Unfortunately the N810 linux environment also leaves a lot to be desired. Compiling stuff is a chore. It turns out the oprofile produces nonsense results when a compiler of <a href="https://wiki.mozilla.org/Mobile/Build/cs2007q3">recent</a> vintage is used (ancient one cant really compile Mozilla).</p>
+
+<p>I had a lot of fun digging deep into Mozilla code and dealing with <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=465128">mischievous</a> timestamps, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=465556">misbehaving</a> caches and <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=466877">rude</a> GC interruptions. All this was done using <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=470116">stone-age</a> instrumentation techniques on N810.</p>
+
+<p>Mark Finkle blogged some <a href="http://starkravingfinkle.org/blog/2008/12/fennec-alpha2-performance/">details</a> on Fennec Alpha2 performance. Alpha2 is magnitudes faster than Alpha1, I expect more of the same in subsequent releases.</p>
+
+<p><strong>Software Improvements That  Santa Claus Should Get Me </strong></p>
+
+<p>Even though <a href="http://oprofile.sourceforge.net/news/">oprofile</a> is useless on N810, one can get a pretty good idea of what the performance issues are from running it on x86. OProfile is a little rough to use, but I&#8217;ve learned to love it when sugared with <a href="http://code.google.com/p/jrfonseca/wiki/Gprof2Dot">gprof2dot</a> and <a href="http://code.google.com/p/jrfonseca/wiki/XDot">xdot</a>. It&#8217;s great for locating places in the code to stick printf()s into.</p>
+
+<p>OProfile has taught me that what I really want is Dtrace (or some knockoff) running on n810.</p>
+
+<p>Also, I really hate how embedded Linux takes away one of coolest things about Desktop Linux: ability to compile own kernel. I haven&#8217;t been able to get a more modern kernel to run on N810 which means I can&#8217;t try a newer version of oprofile or the new omap high res timers. I would also like to get a working image of N810 under qemu, but success has avoided me there too.</p>
+
+<p><strong>Static Stuff</strong></p>
+
+<p>Unfortunately I found that can&#8217;t effectively work on static analysis stuff without giving it my full and undivided attention. Right now I&#8217;m hoping to set aside time to focus on writing a more general dead code finder and catch up on other misc things sometime in Janurary or February.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2008/11/07/enabling-prcheck-email-notifications/">Enabling Prcheck Email Notifications</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-11-07T07:58:08-08:00" pubdate data-updated="true">Nov 7<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I&#8217;ve been running my prbool checker with nightly notifications for about a year now. There are some false positivies, but mostly it picks up real bugs. The checker pulls the blame source to try to guess who is responsible for the error, but so far it has only been emailing me.</p>
+
+<p>I&#8217;m going to make it emailed the hg blamed person starting this weekend, so if you commit something and get an email from me complaining about it don&#8217;t take it too personally. Hopefully this will keep the amount of new detectable prbool bugs at 0. If you do get an email and decide you don&#8217;t want to get these in the future, please complain and we&#8217;ll try to come up with a better notification solution.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2008/10/09/cool-stuff-in-foreign-realms/">Cool Stuff in Foreign Realms</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-10-09T02:18:29-07:00" pubdate data-updated="true">Oct 9<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Open Source projects are often like parallel worlds. People reach the same conclusions, attempt similar solutions and are typically blissfully unaware of each other&#8217;s existance.</p>
+
+<p>Here are two projects that came to my attention this week:</p>
+
+<ul>
+<li>Via Planet KDE I stumbled on <a href="http://www.englishbreakfastnetwork.org/krazy/">Krazy</a>. It&#8217;s neat if not somewhat depressing that even if C++ parsers are finally becoming accessible all this is still Perl.</li>
+<li>Helpful comment on my previous entry pointed me to <a href="http://blogs.linux.ie/caolan/">dead method hunting</a> in OpenOffice.
+<strong>Uncool Open Source Rant</strong></li>
+</ul>
+
+
+<p>Reason I switched to linux was because it seemed like a developer&#8217;s dream come true. Compilers are a package manager operation away (and generally aren&#8217;t tied to OS versions, I&#8217;m looking at you Apple), everything can be recompiled to address any particular concerns and there are crapload of weird languages to write your software in. This is especially awesome when compared to a typical proprietory software stack where one can&#8217;t easily fix problems that involve multiple components due to licensing issues or due to not having the code available(or due to not having the development environment available). So one would think that Linux distributions hold the ultimate software power: unlimited pass to modify their offering to their target audience&#8217;s content.</p>
+
+<p>Unfortunately my view of Linux ways is unrealistic. For example when people do <a href="http://lwn.net/Articles/299483/">friggin&#8217; awesome work</a> knocking down boot time to 5 seconds by hacking and slashing their way through the entire software stack involved in boottime delays, distributions claim that it&#8217;s not somethin they can seriously consider because they are too set in their ways of general purpose(and generally bloated) init systems and stock kernels(worst case: why can&#8217;t we recompile the kernel on the user&#8217;s machine or ship a couple of custom variations for common hardware out there). What&#8217;s the point of open source if we continue pretending that everything is a general purpose black box that doesn&#8217;t like to play together? It&#8217;s been two weeks and I haven&#8217;t seen a single distro bite the bullet and attempt to list 5 second boot in their goals. Come on guys, don&#8217;t you like to be challenged?</p>
+
+<p>Hope someone proves me wrong.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2008/10/07/note-this-is-not-called-yet-its-just-a-placeholder-for-future-changes/">&#8220;NOTE: This Is Not Called YET. It&#8217;s Just a Placeholder for Future Changes.&#8221;</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-10-07T08:53:44-07:00" pubdate data-updated="true">Oct 7<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>In my quest to rid Firefox of code that doesn&#8217;t do anything it is possible to screw up and delete a method that is only used by outside code. So far, I&#8217;ve hit a <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=457302">component</a> that isn&#8217;t used in Firefox, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=457965">methods</a> that aren&#8217;t used in Firefox and methods that <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=458983">claim</a> someone is about to use them (with a timestamp from 8 years ago). That and I discovered some code only appears to be used from BeOS or OS/2 specific ifdefs.</p>
+
+<p>Not surprisingly, I had someone comment that I do some &#8220;dangerous shit&#8221;. Sure, I can see why someone would think that.</p>
+
+<p>My protection: I use the try server to make sure that everything builds on supported platforms. On top of that every patch gets reviewed.</p>
+
+<p>Furthermore, I would like to point out that methods that aren&#8217;t called within Firefox are less likely to be tested and correct. So if one leaves code that should only be called from other projects, it&#8217;d be appropriate if we had some unit tests for it, which would flag the code as in-use. That would let us move to the next level and setup a tinderbox to detect dead code as soon as it is orphaned.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2008/09/26/living-dead-code/">Living Dead Code</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-09-26T03:58:37-07:00" pubdate data-updated="true">Sep 26<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>The coolest part about my job is that I get to work on tasks that are cool, but typically are forever laid to rest in the would-be-cool-if-we-could-but-we-don&#8217;t-have-time-or-resources category. However as project code sizes increases, the usefulness/coolness ratio of static analysis grows and moves from would-be-cool, to nice-to-have to this-is-the-only-way. Now, I&#8217;m not sure where Mozilla lies on this scale, but I do know for sure that the giant codebase is an analysis treasure trove.</p>
+
+<p><strong>Dead Code Motivation </strong></p>
+
+<p>I have been talking about dead code detection in Mozilla for ages. As software changes, some pieces of code unintentially get left behind, but often there is no way to tell. It results in unnessary maintanance burden and increased footprint. In <a href="http://weblogs.mozillazine.org/roc/">roc</a>&#8217;s case randomly spotting dead methods may also involve a little IRC griping at me about not having any tools for it, even rudimentary ones. Between that and <a href="http://www.0xdeadbeef.com/weblog/?p=766">blizzard&#8217;s cheering</a> over reduced code size, I had no choice, but to give it a try once I had enough outparamdelling being reviewed.</p>
+
+<p><strong>Dead Code Results</strong></p>
+
+<p>First of, the approach described below seems to work well: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=457262">see bug</a> with initial results. Now I get a few thousand reported methods to inspect and refine the results.</p>
+
+<p><strong>Dead Code Approach</strong></p>
+
+<p>I&#8217;ve been pondering dead code detection since I&#8217;ve started working on this stuff. There are lots of ways to do it, but I finally settled on the dead-simplest one: method-level granularity. <a href="http://hg.mozilla.org/users/tglek_mozilla.com/deadlive/">Ingredients</a> are:</p>
+
+<ul>
+<li>Dehydra/Treehydra extraction JavaScript: Dehydra makes it easy to enumerate methods and class hierarchies. Treehydra makes it possible to extract every mention of a method from the code(except for <a href="http://mxr.mozilla.org/mozilla-central/source/content/events/src/nsEventListenerManager.cpp#206">pointers to virtual functions that were casted</a>&#8230;in that case we are left with vtable index and a type that the pointer was cast to). Additionally, Treehydra counts the number of AST nodes visited in every function body.</li>
+<li>Shell script to aggregate the result of processing Mozilla source. Gotta admit, perl&#8217;s hashtables give GNU sort -u a run for its money.</li>
+<li>Ocaml program to do the super-dumb algorithm. Classes with the same names, are assumed to be the same class. Method overloads are assumed to be a single method. All methods are assumed to be virtual. Every ClassType::FUNCTION_CALL call walks down to all children &amp; up through all the parents and marks the derived methods as called. Then all derivatives of scriptable XPIDL are filtered out and the uncalled methods are printed out. In order to find most exciting functions first, methods in the results are sorted by their AST count =D. <strong>Language Nerd Trivia:</strong> Why OCaml - because ADTs are no fun in other languages. Why is my OCaml so bad - because I lost the hang out if due to not writing anything it for the past 2 years.
+I&#8217;m sure most people reading this will go: &#8220;Wait a minute, this is unsound if you don&#8217;t see the virtual function pointers?&#8221;, to which I reply: &#8220;Once I nuke the method and mozilla compiles successfully, it&#8217;s sound&#8221;. In reality someone could make a puny GCC patch to preserve more data in virtual function pointer assignments.</li>
+</ul>
+
+
+<p>Since this is all in early stages there a bunch of things I don&#8217;t deal with: method overloads, constructors, destructors and overloaded operators&#8230;.and templates. All function bodies are scanned, but some function names are a pain to deal with or they aren&#8217;t straightforward function calls in GCC so they don&#8217;t participate in the dead/alive contest.</p>
+
+<p><strong>Where To Go From Here</strong></p>
+
+<p>Well, once we run out of dead code detected by the primitive caveman approach above, we&#8217;ll have to investigate less conservative approaches possibly involving abstract interpretation and callgraphs.</p>
+
+<p><strong>How To Get Involved in Screwing With Software Cost Models By Contributing Negative Line Counts </strong></p>
+
+<p>This project has a lot of places to help out:</p>
+
+<ul>
+<li>work through the dead method list, filing bugs accordingly and deleting any related code</li>
+<li>Extend the machinery to work on all non-static function</li>
+<li>Try this on your favourite large codebase.</li>
+<li>Write the virtual function pointer annotation patch :)</li>
+</ul>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  <div class="pagination">
+    
+      <a class="prev" href="/taras/blog/page/17/">&larr; Older</a>
+    
+    <a href="/taras/blog/archives">Blog Archives</a>
+    
+    <a class="next" href="/taras/blog/page/15/">Newer &rarr;</a>
+    
+  </div>
+</div>
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/26/coping-with-flash-hangs/">Coping with Flash hangs</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/16/snappy-44-fixing-tab-switching-in-vancouver/">Snappy #44: Fixing tab switching in Vancouver</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/05/snappy-43-big-improvements-faster-startup-smoother-tabstrip/">Snappy #43: Big improvements: faster startup? Smoother tabstrip!</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/26/snappy-42/">Snappy #42</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/18/snappy-41/">Snappy #41</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("tarasglek", 4, false);
+    });
+  </script>
+  <script src="/taras/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/tarasglek" class="twitter-follow-button" data-show-count="false">Follow @tarasglek</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Taras Glek -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

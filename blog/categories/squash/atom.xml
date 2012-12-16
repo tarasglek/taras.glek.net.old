@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: squash | All About Performance]]></title>
+  <link href="http://tarasglek.github.com/taras/blog/categories/squash/atom.xml" rel="self"/>
+  <link href="http://tarasglek.github.com/taras/"/>
+  <updated>2012-12-16T12:35:28-08:00</updated>
+  <id>http://tarasglek.github.com/taras/</id>
+  <author>
+    <name><![CDATA[Taras Glek]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Dehydra, prcheck, squash - in mercurial]]></title>
+    <link href="http://tarasglek.github.com/taras/blog/2007/07/13/dehydra-prcheck-squash-in-mercurial/"/>
+    <updated>2007-07-13T01:54:08-07:00</updated>
+    <id>http://tarasglek.github.com/taras/blog/2007/07/13/dehydra-prcheck-squash-in-mercurial</id>
+    <content type="html"><![CDATA[<p><strong>New Repository</strong></p>
+
+<p>Since I do not yet have write access to oink svn, I have been doing all of my development in ad-hoc repositories within the svn checkout. This made it rather hard to collaborate with others. I finally got sick of the situation (and stumbled upon <a href="http://cheeseshop.python.org/pypi/hgsvn/">hgsvn</a>) and converted all 11 svn repositories to mercurial. To my surprise, mercurial even let me merge my repositories while preserving history (hg has yet to fail me!).</p>
+
+<p>oink uses svn-externals to aggregate the repositories into a single checkout. hg doesn't have anything similar, so to checkout all 11 repositories use a script:</p>
+
+<p>```
+<a href="http://people.mozilla.org/~tglek/checkout.sh">checkout.sh</a> http://hg.mozilla.org</p>
+
+<p>```
+<strong>Released Differences from Oink Mainline </strong></p>
+
+<ul>
+<li>New oink tool - <a href="http://tarasglek.github.com/taras/2007/06/26/status-report-recent-work/">prcheck</a>: ensures that bool-like integer typedefs behave like bools</li>
+<li>New oink tool - <a href="http://wiki.mozilla.org/DeHydra">dehydra</a>: source query tool with queries specified in JavaScript</li>
+<li>New oink tool - <a href="http://wiki.mozilla.org/Squash">squash</a>: source refactoring tool. This is now deprecated since most of the code in it dealt with working around elsa limitations to do with macro expansion &amp; lack of precise locations. The patching engine used in squash lives on to provide a simple refactoring API for use in other tools (like prcheck).</li>
+<li>Minor grammar changes to parse more of Mozilla</li>
+<li>Compilation fixes for OSX</li>
+<li>Elsa fixes to parse OSX headers</li>
+<li>make -j support for elsa</li>
+<li>end-of-ast-node location support for elkhound &amp; elsa</li>
+<li><p>preprocessor expansion markup support for elsa
+<strong>Coming Soon</strong></p></li>
+<li><p>Amazing new version of <a href="http://mcpp.sourceforge.net/">MCPP</a> capable of preprocessing mozilla while outputting refactoring-friendly annotations.</p></li>
+<li>Web front-end for squash which will likely be refactored to be tool-agnostic.</li>
+<li><p>Front-end to run patch-producing tools in parallel for multi-core machines
+<strong>Near Future</strong></p></li>
+<li><p>squash will be split up into a library with each major feature ripped out into a standalone tool. Two tools coming soon:outparam rewriter &amp; class member renamer.</p></li>
+<li><p>RAD for static analysis: oink tool templates to make it trivial to write custom new tools with minimal amount of boilerplate
+<strong>Some time in the Future</strong></p></li>
+<li><p>Collaboration with the author of <a href="http://www.cs.ru.nl/~tews/olmar/">Olmar</a> to provide an OCaml API for Elsa. If everything goes as expected it will be possible to write analyses that are more powerful and more concise than DeHydra ones except they will perform at C/C++ speeds. Plus it should be possible to perform them from a native interactive OCaml toplevel. Most of this work already exists in bits and pieces. It's a matter of adding some AST transformations, fixing a few issues and tying it all together.</p></li>
+<li>MapReduce inspired front-end: generic framework for executing transformations/analyses in-parallel and Mozilla-wide without blowing the 32bit address space (as it typical when static analysis tools meet Mozilla).</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Undoing CPP Expansion in 3 simple steps. Say "Hello" to easier C++ rewriting.]]></title>
+    <link href="http://tarasglek.github.com/taras/blog/2007/06/12/undoing-cpp-expansion-in-3-simple-steps-say-hello-to-easier-c-rewriting/"/>
+    <updated>2007-06-12T03:26:01-07:00</updated>
+    <id>http://tarasglek.github.com/taras/blog/2007/06/12/undoing-cpp-expansion-in-3-simple-steps-say-hello-to-easier-c-rewriting</id>
+    <content type="html"><![CDATA[<p>This is incredibly exciting: I believe that I finally solved the messy and mind-numbingly boring CPP/C++ integration problem! Having code displaced or generated due to CPP-expansion should no longer be a fatal problem for <a href="http://wiki.mozilla.org/Squash">Squash</a>. I believe macro-expansion is (or was) the single biggest problem between me and large-scale automated refactoring of the Mozilla codebase.</p>
+
+<p>What's even more exciting is that I think my solution is both incredibly simple to implement and more general than prior work. Most other tools combine the CPP expansion &amp; C parsing into a single step and then integrate (or should I say violently shove?) CPP constructs into the AST. This results in complete lack of separation between preprocessing and program analysis. For example, due to this tight coupling existing solutions were useless to me because the fancy CPP logic could not be separated from the C parser. I would also have a hard time submitting a more convoluted C++ parser upstream to the Elsa maintainer.</p>
+
+<p><strong>Design</strong></p>
+
+<p>There are three parts to my solution:</p>
+
+<ol>
+<li><em>Critical component</em>. A CPP expansion undo-log injected during CPP-expansion by a modified C preprocessor (upcoming version of MCPP). The statements are wrapped in C comments such that the preprocessed result can be parsed by any C/C++/etc parser or compiler. Implementation-wise this is the hardest part since MCPP(as most other C proprocessors) was never designed it keep track of macro expansion info.</li>
+<li>A small modification to the Elsa lexer to parse the undo-log and set it aside in a separate data structure.</li>
+<li><em>Tricky</em>. A function that utilizes the cpp undo-log to map the preprocessed source locations to the unpreprocessed ones. This is a a ridiculously simple solution to a tricky design problem of how to efficiently advertise the fact that every AST node has at least 2 different source positions (pre expansion, post expansion &amp; a stack of positions resulting from expanding nested macros).
+The MCPP maintainer is almost done with 1. I have a prototype implementation of 2 &amp; 3 weighing in at less than 500lines. Now that the design phase is complete, the amount of changes to Elsa is trivial, so I should be done with those real soon now.</li>
+</ol>
+
+
+<p><strong>Looking Ahead</strong></p>
+
+<p>Now I need to modify Elsa to retain more precise source locations. This includes adding end-of-ast-node-location and adding positions to nodes(such as expressions) that don't even have a start position at the moment. This combined with cpp-undo-log enhanced precise positions should allow for code rewrites to retain as much original source code as possible. This reduces the amount of ugly machine-generated code and results in better correctness (existing code is likely to work).</p>
+
+<p><strong>CPP Undo-log Example</strong></p>
+
+<p>The undo-log took a couple of tries to get right. Now macro-parameters have a notion of scope and sensible names. The following example features macro-induced column displacement and macro-expansion causing line shrinkage.
+```</p>
+
+<h1>define NULL 0L</h1>
+
+<h1>define FOO(a, b) a + b</h1>
+
+<p>int i = NULL; int j;
+int k = FOO(
+FOO(NULL , 1),
+2);</p>
+
+<p><code>
+Preprocessed version
+</code></p>
+
+<h1>1 "testcase4.c"</h1>
+
+<p>/<em>mNULL 1:8-1:15</em>/
+/<em>mFOO 2:8-2:23</em>/
+```</p>
+
+<p>int i = /<em><NULL 3:8-3:12*/0L/*></em>/; # 3 "testcase4.c" int j; int k = /<em><FOO 4:8-6:3*//*!FOO#0-0 5:0-5:13*//*!FOO#0-1 6:1-6:2*//*<FOO#0-0*//*<FOO*//*!FOO#1-0*//*!FOO#1-1*//*<FOO#1-0*//*<NULL*/0L/*></em>//<em>></em>/ + /<em>&lt;FOO#1-1</em>/1/<em>></em>//<em>></em>//<em>></em>/ + /<em>&lt;FOO#0-1</em>/2/<em>></em>//<em>></em>/;</p>
+
+<p><strong>Conclusion</strong></p>
+
+<p>It took a lot to arrive at such a simple solution. I expect that all of my work is likely to end up upstream in BSD-licensed projects: MCPP &amp; and Elsa/Oink. I sincerely hope that other people will be able to build on it for their CPP-infested analysis needs and avoid the unbearable mind-numbing discomfort associated with making CPP play along.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[CPP Strikes Back]]></title>
+    <link href="http://tarasglek.github.com/taras/blog/2007/05/11/cpp-strikes-back/"/>
+    <updated>2007-05-11T09:07:26-07:00</updated>
+    <id>http://tarasglek.github.com/taras/blog/2007/05/11/cpp-strikes-back</id>
+    <content type="html"><![CDATA[<p>I have gotten used to dodging CPP-expansion issues by fudging column &amp; line information until the position info in squash mostly matches the source positions in the original source code. That sufficed for rewriting declarations, but I have finally hit a brick wall.</p>
+
+<p><strong>CPP Fun</strong></p>
+
+<p>I got as far with call-site outparam rewriting as <a href="http://people.mozilla.org/~tglek/outparams.May11.diff">this patch</a>. It demonstrates an interesting flaw.
+<code>
+@@ -8297,1 +8297,1 @@
+-  GetInsertionPoint(parentFrame, nsnull, &amp;insertionPoint, &amp;multiple);
++  insertionPoint = GetInsertionPoint(parentFrame, &amp;insertionPoint, &amp;multiple);
+@@ -8346,1 +8346,1 @@
+-          GetInsertionPoint(parentFrame, child, &amp;insertionPoint);
++          insertionPoint = GetInsertionPoint(parentFrame, child);
+</code></p>
+
+<p>Due to macro expansion, nsnull contracts to 0 such that the .i file has &amp;insertionpoint positioned right in the middle of nsnull (in the .cpp file). So when squash trims the param including the surrounding commas, it ends up removing the wrong parameter.</p>
+
+<p><strong>Elsa Limitation</strong></p>
+
+<p>I have mentioned lack of end-of-ast-node position information in Elsa. It also lacks start-of-ast-node information for most expressions. This makes selectively rewriting source code rather difficult.</p>
+
+<p><strong>Plan</strong></p>
+
+<p>Instead of fighting an uphill fudging battle against CPP, I am going to have to suspend outparam rewriting yet again to work on better position information and integrating a preprocessor into elsa. This is unfortunate because I was looking forward to finally doing something more sophisticated than renames. Now my elsa fork is going to grow even bigger before I get commit access.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Nicely rewriting outparams]]></title>
+    <link href="http://tarasglek.github.com/taras/blog/2007/05/10/nicely-rewriting-outparams/"/>
+    <updated>2007-05-10T07:52:07-07:00</updated>
+    <id>http://tarasglek.github.com/taras/blog/2007/05/10/nicely-rewriting-outparams</id>
+    <content type="html"><![CDATA[<p>Automatic code rewriting business can be a little depressing sometimes. I tend to run into funny issues caused by CPP, oink limitations or just unpleasant-to-rewrite parts of C++. After banging my head against the wall due to all these issues I finally arrived at a workable approach for the easy part of the outparam rewrite.</p>
+
+<p>Currently I have a dehydra script that finds all non-virtual getters that return either NS_OK or <em>NS_SOMETHING_IS_WRONG</em>. The script then outputs data for squash to base the rewrites on. Then squash takes over.</p>
+
+<p>In order to preserve sanity, pretty-printing is not used at all for rewriting the getter functions. This way one doesn't have to worry about oink generating invalid C++ and the output is much more aesthetically pleasing. Instead, squash finds interesting expressions in the .i file. Then it extracts the corresponding strings from .h/.cpp files. The strings are used to fudge the position information obtained from the .i file to vaguely correspond to the original source files. After various C++ string-foo, squash produces a promising looking patch like <a href="http://people.mozilla.org/~tglek/outparams.May10.diff">this</a>.</p>
+
+<p>This also relies on a fair amount of semantic information provided by elsa/oink. For example when removing a parameter, squash inserts a local variable with the same name and then removes all of the derefences of the old parameter. Since there could be multiple variables with the same name, squash relies on elsa's variable resolution.</p>
+
+<p>I think squash is now 50% feature complete with respect to outparam stuff. The other 50% is the hard part of rewriting all of the call-sites. I'm not counting easy parts like wrapping the return type in already_AddRefed&lt;>, eliminating redundant assignments in the getter or removing the error variable once it is no longer needed.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Status Update: Outparam work]]></title>
+    <link href="http://tarasglek.github.com/taras/blog/2007/05/07/status-update-outparam-work/"/>
+    <updated>2007-05-07T02:58:43-07:00</updated>
+    <id>http://tarasglek.github.com/taras/blog/2007/05/07/status-update-outparam-work</id>
+    <content type="html"><![CDATA[<p><strong>Squash Outparams</strong></p>
+
+<p>The following took me a few days to achieve.</p>
+
+<p><code>
+./squash -sq-rewrite-outparams out2.txt -sq-implementation nsBidiPresUtils  -sq-no-squash -o-lang GNU_Cplusplus ~/work/ff-build/dom/src/base/nsFocusController.i
+</code></p>
+
+<p>where out2.txt contains instructions on which functions to modify</p>
+
+<p><code>
+nsFocusController::GetFocusedElement,0=mCurrentElement,
+</code></p>
+
+<p>produces</p>
+
+<p>```
+--- /Users/tarasglek/work/mozilla/dom/src/base/nsFocusController.h
++++ /Users/tarasglek/work/mozilla/dom/src/base/nsFocusController.h
+@@ -72,1 +72,1 @@
+-  NS_IMETHOD GetFocusedElement(nsIDOMElement<em>* aResult);
++  nsIDOMElement</em> GetFocusedElement();</p>
+
+<p>```</p>
+
+<p>This still doesn't add the already_AddRefed or other important attributes, but that should be easy. The result looks simple, but getting squash from working with a testcase to an actual source file was a little on the painful side.</p>
+
+<p>After my experience with renaming I have realized that squash should avoid the C++ pretty printer for now. Thus the result is produced in a verbose AST-sensitive regexp-like way. However figuring out where things start and end is incredibly painful due to the presence of the preprocessor.</p>
+
+<p>My plan is to get squash rewriting some basic Mozilla code the painful way and then I use what I learned to integrate <a href="http://mcpp.sourceforge.net/">mcpp</a> along with the much coveted end-of-ast-node info into elsa.</p>
+
+<p><strong>JavaScript is an AST's Best Friend </strong></p>
+
+<p>Until recently I have been doing a lot of work with dehydra. Now that it is feature-complete I am back to working on squash fulltime and I miss JavaScript already. JS is much better suited for messing about with Abstract Syntax Trees. It is so nice to be able to print out any data structure, create new ones without modifying a billion files and the lack of C++ compile/linking delay is nice too. It's amazing how much simpler it is to analyze functions for out-param rewriting in JS compared to checking for simpler patterns in C++. I am seriously excited about Tamarin/ES4 and the productivity boost that it will provide.</p>
+
+<p>I wonder whether a complete JS binding for Elsa would be a good idea.</p>
+
+<p><strong>Emacs</strong></p>
+
+<p>Switching to a Mac finally made me switch to Emacs. I could not find any other editors that would be support the workflow I was used to with SciTE or Kate. Other than absolutely hating the majoring of Emacs shortcuts (who's idea was Ctrl-^ and the crazy undo/redo) I love the editor for the amazing term mode. It's a little buggy in the current version, but the CVS version is good enough to comfortably run vim in it for quick edits :). It's so nice to keep all of my terminals and code in the same window. I am dreaming of the day when Emacs will undergo the Mozilla->Firefox-like modernization.</p>
+]]></content>
+  </entry>
+  
+</feed>

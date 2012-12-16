@@ -1,0 +1,816 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>All About Performance</title>
+  <meta name="author" content="Taras Glek">
+
+  
+  <meta name="description" content="I try to blog about interesting things I encounter while solving various issues in Mozilla. Some things are less bloggable than others. If this blog &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tarasglek.github.com/taras/blog/page/11/">
+  <link href="/taras/favicon.png" rel="icon">
+  <link href="/taras/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/taras/javascripts/modernizr-2.0.js"></script>
+  <script src="/taras/javascripts/ender.js"></script>
+  <script src="/taras/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/taras/atom.xml" rel="alternate" title="All About Performance" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/taras/">All About Performance</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/taras/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tarasglek.github.com/taras" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/taras/">Blog</a></li>
+  <li><a href="/taras/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+  
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2010/07/14/my-startup-summary/">My Startup Summary</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-07-14T04:27:13-07:00" pubdate data-updated="true">Jul 14<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I try to blog about interesting things I encounter while solving various issues in Mozilla. Some things are less bloggable than others. If this blog don&#8217;t fulfill your startup + static analysis needs you can follow my <a href="http://benjamin.smedbergs.us/weekly-updates.fcgi/user/tarasglek/posts">status</a> updates and <a href="http://twitter.com/crazyhackerdude">twitter</a>. For now here is a summary of various half-baked/inprogress work:</p>
+
+<ul>
+<li>I worked on <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=559964">upgrading</a> to GCC 4.5 which turned out to be a performance regression. While tracking down a workaround, I got into helping GCC guys help us by fixing gcc trunk&#8217;s LTO to work on Mozilla.</li>
+<li>I am also determined to see Firefox come out with a <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=561842">fat</a> libxul and not link to <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=577522">useless</a> to us libraries by default.</li>
+<li>I spent a lot of time figuring out why our sqlite io <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=572459">hurting</a>, ended up bumping block size to 32K. I am really hoping that Marco can <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=541373">deliver</a> VACUUM for all of the Firefox databases in time for Firefox 4.</li>
+<li>I refactored most of icegrind so in addition optimizing startup, it can also facilitate investigative work like <a href="http://glandium.org/blog/?p=1016">Mike Hommey </a>is doing.</li>
+<li>Posted a <a href="http://groups.google.com/group/mozilla.dev.platform/browse_thread/thread/abf60ad5fd03a708?pli=1">summary</a> on the evils of static initializers. Came across a Chrome <a href="http://comments.gmane.org/gmane.comp.web.chromium.devel/16789">equivalent</a> today.
+I plan to blog more on each of these subjects as they get closer to realization.</li>
+</ul>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2010/06/09/galois-talk/">Galois Talk</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-06-09T03:08:44-07:00" pubdate data-updated="true">Jun 9<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I was invited to present a <a href="http://www.galois.com/blog/2010/06/03/tech-talk-large-scale-static-analysis-at-mozilla/">Galois tech talk</a> on Mozilla static analysis. It was really cool to give a talk locally to such an expert audience. I was surprised to discover a vibrant Programming Languages + Analysis community in Portland.</p>
+
+<p>Edward Z. Yang did an <a href="http://blog.ezyang.com/2010/06/static-analysis-mozilla/">excellent write-up</a> on the talk.</p>
+
+<p><strong>PLDi</strong></p>
+
+<p>Robert O&#8217;Callahan mentioned Dehydra in his <a href="http://weblogs.mozillazine.org/roc/archives/2010/06/sleepless_in_to.html">PLDI talk</a>.</p>
+
+<p><strong>Dehydra/Treehydra in GCC 4.5</strong></p>
+
+<p>There a few fixes that are about to land. I&#8217;m hoping that by the end of the week GCC 4.5 support will be production-quality. Sorry that it&#8217;s taken so long, but I&#8217;ve been busy focusing on startup. <a href="http://ehren.wordpress.com/">Ehren</a> has picked up the slack, we should be able to produce a fairly polished Dehydra 1.0 by the end of the summer.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2010/05/27/startup-backward-constructors/">Startup: Backward Constructors</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-05-27T09:35:20-07:00" pubdate data-updated="true">May 27<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><em>This post is a result of debugging <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=561842">bug 561842</a>. Turns out one needs to go far beyond lumping libraries together to reap startup benefits.</em></p>
+
+<p>I made a <a href="http://hg.mozilla.org/users/tglek_mozilla.com/startup/raw-file/ca994a12e2a8/xulanatomy.pdf">pdf</a> to illustrate the cost centers of loading libxul.so (the essence of Firefox).</p>
+
+<p>With <a href="http://tarasglek.github.com/taras/2010/04/07/icegrind-valgrind-plugin-for-optimizing-cold-startup/">Icegrind</a> I demonstrated that better binary layout can significantly improve application startup. However I still didn&#8217;t have a breakdown of reasons of why loading binaries is so damn inefficient. That&#8217;s what the above pdf is about.</p>
+
+<p>Loading libxul consists of 4 major phases:</p>
+
+<ol>
+<li>Runtime linker setup: mapping segments in, zeroing .bss, loading dependent libraries, etc</li>
+<li>Runtime linker relocations.</li>
+<li>Library intializers.</li>
+<li>main() and the rest of application code runs
+I blogged about 1, 2, 4, this post is about #3.</li>
+</ol>
+
+
+<p><strong>Library Initializers?</strong></p>
+
+<p><a href="http://people.gnome.org/~michael/">Michael Meeks</a> pointed me at the funny backwards IO pattern in his IO logs. I even <a href="http://tarasglek.github.com/taras/2010/03/24/linux-why-loading-binaries-from-disk-sucks/">made fun</a> of how by default libxul.so is read mostly via backwards IO. Once I <a href="http://tarasglek.github.com/taras/2010/05/24/teethig-troubles-assigning-blame-for-pagefaults/">assigned</a> userspace symbols to my pagefault log, it became clear that the backwards IO pattern was entirely due to library initializers. C++ compiler generates code that runs on library initialization to initialize globals and run relevant C++ constructors. In C one can assign a &#8220;constructor&#8221; GNU attribute to a function to participate in this mayhem.</p>
+
+<p><strong>Running Backwards?</strong></p>
+
+<p>Ian Lance Taylor clued me in on why these things run backwards.When one links the program, the object files are laid out sequentially. Static libraries are specified after the code that depends on them. Once an object is linked, the easiest way to make sure that libraries are initialized before their users is to invoke initializers backwards. The list of initializers is stored in the .ctors section and they loaded by libgcc.</p>
+
+<p>In Mozilla (and likely other C++ codebases) these global initializers are more or less evenly scattered throughout the codebase. By the time main() is run, most of the program has been paged in an unfortunately inefficient manner.</p>
+
+<p><strong>Run Faster Please?</strong></p>
+
+<p>The most interesting part about all this that the compiling toolchain can make a rather precise guess at how a large part of the initial program execution is going to go. To test this theory I wrote my best Mozilla <a href="https://bugzilla.mozilla.org/attachment.cgi?id=447253&amp;action=edit">patch</a> ever.</p>
+
+<p>One can place a function near the beginning of the library file and another one at the end (with a &#8220;constructor&#8221; attribute). The function at the end runs first and it can figure out the approximate range of memory that will need to be paged in and madvise() it. This results in a 5x reduction in libxul pagefaults. Unfortunately since constructors execute backwards and readahead forwards, the constructor execution stalls to wait for readahead, so the speedup is rather hard to detect.</p>
+
+<p><strong>Run Forward Faster!</strong></p>
+
+<p>Depressed about my hack failing to make a dent in startup time I patched gcc to run initializers in a forward order (and reversed the function-placement logic in above patch). Now readahead happened in the same direction as library initialization and my Firefox started 30% faster! I wrapped this up into a standalone <a href="http://people.mozilla.com/~tglek/startup/ctors.diff">gcc patch</a> (speed up any bloated C++ startup with a simple change to the compiler!). Note this hack reverses the library initialization order discussed above, this happens to not be a problem for Mozilla.</p>
+
+<p><strong>Conclusion: Order Matters! </strong></p>
+
+<p>The linker can reverse the per-library initializers such that initializers run forward, but cross-library dependencies are honoured. That in itself isn&#8217;t enough to boost startup without cleverer readahead on the kernel side (or application-side hacks).</p>
+
+<p>It&#8217;s weird to have initializers page in most of the binary. An interesting optimization would to have the compiler transitively mark functions reached by library initialization and place those in a .text.initializers section. Then one could have the linker group the initializers together.</p>
+
+<p><strong>Plans</strong></p>
+
+<p>I haven&#8217;t made up my mind on how to proceed. This madvise() hack + a simple linker patch could be deployed more easily than icegrind. This hack also appears to be as performant as a static firefox build + icegrind (due to inadequate kernel readahead without madvise()). Icegrid + libxul.so isn&#8217;t quite as efficient. I have a feeling that we&#8217;ll end up with a combination of icegrind + some form the initializer madvise() hack.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2010/05/24/teethig-troubles-assigning-blame-for-pagefaults/">Teething Troubles: Assigning Blame for Pagefaults</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-05-24T03:52:22-07:00" pubdate data-updated="true">May 24<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I have been able to get precise filed-backed page fault logging(systemtap on Linux, xperf on Windows) for a while. It is incredibly useful to see exactly how Firefox is being loaded from disk. From there one I deduce what is causing the IO, try to make improvements and measure if I accomplished anything.</p>
+
+<p>Unfortunately, a mere IO log requires a lot of pondering of why IO is happening. It would be so much easier if one could just get a report of every IO operation + an application backtrace to easily identify the cause. I was having trouble figuring out why some of my optimizations were not having the impact I expected, so i embarked on adding a backtrace to my log.</p>
+
+<p><strong>XPerf Fail</strong> I fed <a href="https://developer.mozilla.org/En/Profiling_with_Xperf">xperf</a> my Firefox symbols hoping this would plop stack traces next to my faults, but no such luck. It records backtraces in just about every probe, except for the &#8220;hard faults&#8221; probe I care about. I wonder if a custom perf probe could log what I want.</p>
+
+<p><strong>Perf Fail</strong></p>
+
+<p>Some prominent kernel hackers have long been complaining about OProfile/SystemTap/NIH performance monitoring tools. They finally produced a <a href="http://git.kernel.org/?p=linux/kernel/git/torvalds/linux-2.6.git;a=tree;f=tools/perf;h=3f4245bfe10b67348c5cd41606f3fdc0396cbbea;hb=7e125f7b9cbfce4101191b8076d606c517a73066">perf</a> tool (It&#8217;s like they tried to make it hard to google for. It does not have a <a href="https://perf.wiki.kernel.org/index.php/Main_Page">proper</a> website; Real men read the source and skim LKML archives) to do profiling the Linux way(tm). I might be wrong, but so far it appears to be a functional equivalent of Microsoft&#8217;s xperf minus the nice UI.</p>
+
+<p>Turned out that my Fedora 2.6.32 perf implementation is too buggy to even log pagefaults. Apparently this works in the current Linus kernels. I&#8217;m not completely sure, but looks like even if xperf pagefault logging worked, it&#8217;s pretty neutered. It does not appear that it can log file offsets next to pagefaults, nor stacks.</p>
+
+<p>I think perf could be fixed to log io and accompanying userspace backtraces. There are some talented folks contributing to it. However I think that the pre-canned analysis model sucks. It is useful for building sophisticated versions of top, but when you really need to dig into what&#8217;s causing a particular issue, it really sucks to be restricted by what the developers foresaw as useful.</p>
+
+<p><strong>SystemTap</strong></p>
+
+<p>As awesome as the kernel side of <a href="http://sourceware.org/systemtap/">SystemTap</a> is, I keep running into userspace bugs and limitations. Getting userspace stacks for large collections of large libraries that Firefox relies on has been a systemtap-bug-finding affair. I can occasionally get useful userspace tracks for userspace probes, but apparently recording a userspace stack from a kernel probe is a hard problem that SystemTap devs haven&#8217;t fully addressed yet.</p>
+
+<p>Luckily SystemTap provides a uaddr() function which appears to get correct addresses from my kernel probes(which is way more than the other tools offer). Unfortunately usymname() fails to resolve those addresses.</p>
+
+<p>As a workaround, Jim Blandy suggested turning off <a href="http://gcc.gnu.org/wiki/Randomization">address-space randomization</a> so I can log uaddr() and resolve the values in gdb. I&#8217;ve been manually printing this with gdb&#8217;s &#8220;p/a <addr>&#8221; command until recently.</p>
+
+<p><strong>Success?</strong></p>
+
+<p>Then it dawned on me that I can use python gdb-scripting to automatically post-process the log. So now with a combination of a <a href="http://hg.mozilla.org/users/tglek_mozilla.com/startup/file/74e2f62fe64c/kernelio.stp">systemtap io logging script</a> and a hacky <a href="http://hg.mozilla.org/users/tglek_mozilla.com/startup/file/74e2f62fe64c/gdb_resolve.py">gdb python script</a> I can produce logs like <a href="http://people.mozilla.com/~tglek/startup/pagefault_blame.txt">this</a>.</p>
+
+<p>I still don&#8217;t have backtraces, but at least now I have the name of the function that&#8217;s causing trouble. This is surprisingly useful already. One can now easily tell how much of startup is being wasted on relocations(dlopen() in a prelinked binary!). Another obvious one is the <a href="http://sourceware.org/bugzilla/show_bug.cgi?id=11618">harm</a> of single-page COW faults to zero .bss (memset entries in the log). Turns out <a href="http://gcc.gnu.org/bugzilla/show_bug.cgi?id=44236">sprinkling</a> initializers all over the binary is a bad idea. Looks like there are significant performance wins to be had with a bit of &#8216;easy&#8217; compiler/linker hacking.</p>
+
+<p>All of the above problems are really obvious and would&#8217;ve been fixed a long time ago if it was easier to get at this information. Unfortunately, there is still a lot of room for improvement in developer tools<strong>.</strong></p>
+
+<p><strong>Update:</strong></p>
+
+<p>Sounds like I can use addr2line instead of gdb.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2010/04/20/mozillaservices/">Mozilla::services</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-04-20T04:20:10-07:00" pubdate data-updated="true">Apr 20<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I landed the mozilla::services <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=516085">bug</a> around the same time as Gavin <a href="http://www.gavinsharp.com/blog/2010/02/25/services-jsm/">announced</a> the Services.jsm equivalent. Services.jsm came a pleasant surprise to me, it&#8217;s nice to have API symmetry.</p>
+
+<p><a href="https://developer.mozilla.org/en/XPCOM/mozilla::services_namespace">mozilla::services</a> namespace provides a fast C++ way to refer to common services. This replaces a myriad layers of indirection that happened in the XPCOM <a href="https://developer.mozilla.org/en/XPCOM_Interface_Reference/nsIServiceManager/getService">GetService()</a> call. Too much generality hurts.</p>
+
+<p>So far I only replaced the common IOService getters. URL objects are 30% less slow to create now. A contributor, Mitchell Field, has volunteered to switch over a huge amount of other common services in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=560095">bug 560095</a>. That rocks.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2010/04/19/windows-sucks-at-memory-mapped-io-during-startup/">Windows Sucks at Memory-Mapped IO During Startup</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-04-19T07:00:00-07:00" pubdate data-updated="true">Apr 19<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Last week I learned about how Windows handles page faults backed by files (specifically xul.dll). I already knew that Linux was <a href="http://tarasglek.github.com/taras/2010/04/12/squeezing-every-last-bit-of-performance-out-of-the-linux-toolchain/">suboptimal</a> in this area, perhaps the clever people at Redmond did better.</p>
+
+<p>Shaver pointed me at <a href="https://developer.mozilla.org/En/Profiling_with_Xperf">xperf</a>, which is sort of like the new Linux perf tools. Xperf rocks in that it can capture the relevant data and it can export it as .csv.</p>
+
+<p>Even with profile-guided-optimization Windows causes 3x as much IO in xul.dll than linux does on libxul.so. That&#8217;s especially interesting given that xul.dll is one-third smaller on Windows. Here is the <a href="http://people.mozilla.com/~tglek/startup/systemtap_graphs/visualize.html?#../win7/noprefetch.csv.html">graph</a>. PGO isn&#8217;t helping on Windows as much as it can help on Linux because MSVC PGO doesn&#8217;t do the equivalent of GCC&#8217;s -freorder-blocks-and-partition (unless I missed something in the docs).</p>
+
+<p>With the Windows <a href="http://en.wikipedia.org/wiki/Prefetcher">prefetcher</a>, there were 4x less xul.dll IOs (graph <a href="http://people.mozilla.com/~tglek/startup/systemtap_graphs/visualize.html?#../win7/prefetch.csv.html">here</a>). Unfortunately, the prefetcher can&#8217;t figure out that the whole xul.dll should be paged in and we still end up with an excess of random IO.</p>
+
+<p><strong>Why?</strong></p>
+
+<p>When a page fault occurs, Windows goes to read the page from the file and reads a little extra (just like any other sane OS) assuming that there will be more IO nearby. Unfortunately the gods of virtual memory at Microsoft decided that for every page fault, only 7 extra pages should read. So reads occur in 32K chunks (vs 128K in Linux, which is still too small). To make matters worse, segments mapped in as data only read in 3 extra pages (ie 16K chunks).</p>
+
+<p>This is funny in a sad way. Reading in 32K chunks is supposed to minimize ram usage (which makes no bloody sense when Win7 officially requires 1GB of RAM). As a result of being so thrifty on easy-to-evict file cache, windows ends up doing 4x as much file IO as Linux. The 16K reads are particularly funny as one can see the result of that misoptimization in the string of puny reads on the top right of the graphs.</p>
+
+<p><strong>Surely There is an API like madvise()</strong> On Posix systems madvise() can be used to influence the caching behavior of the OS. fadvise() is another such call for IO based on filehandles. For example, Firefox fastload files are now madvise()ed such that they are read in a single 2mb chunk on startup. Unfortunately, it appears that Windows has no such APIs so one is stuck with pathetically small reads.</p>
+
+<p>At first, I thought that, passing FILE_FLAG_SEQUENTIAL_SCAN when opening the file handle will work like a crappy fadvise()-equivalent. Turns out that mmaping files completely bypasses the Windows Cache Manager, so that flag just gets ignored.</p>
+
+<p>So as far as I can tell the only way to convince Windows to not read stuff in stupidly small chunks is to mmap() everything we care about using large pages. Unfortunately that comes with some significant costs.</p>
+
+<p>We are going to try to <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=553721">order</a> the binaries better which should halve the amount of page faults.</p>
+
+<p><strong>Can Windows Do Anything Better?</strong></p>
+
+<p>Yes. The &#8220;Unix way&#8221; of breaking up everything into a billion libraries and configuration files results in 10x more files being read on startup on Linux vs Windows. Just because Linux can read individual libraries 4x faster, doesn&#8217;t mean that IO becomes free.</p>
+
+<p>Presently, in ideal conditions, Firefox starts up 30-50% faster on Windows. The Windows Prefetcher hack sweeps a lot of Windows suck under the carpet, but Microsoft has a lot of room for improvement.</p>
+
+<p><strong>Update:</strong><br/>
+People seem to prefer to comment on <a href="http://www.reddit.com/r/programming/comments/bu2do/windows_sucks_at_memorymapped_io_during_startup/">reddit</a>. If you want me to not miss your comment, make sure you comment here.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2010/04/12/squeezing-every-last-bit-of-performance-out-of-the-linux-toolchain/">Squeezing Every Last Bit of Performance Out of the Linux Toolchain</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-04-12T08:16:08-07:00" pubdate data-updated="true">Apr 12<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><strong>Magic of GCC PGO</strong></p>
+
+<p>On Friday I finally got gold to produce a prelinkable static binary(<a href="http://sourceware.org/bugzilla/show_bug.cgi?id=11483">bug</a>). I also got around to trying out GCC <a href="https://developer.mozilla.org/en/Building_with_Profile-Guided_Optimization">profile-guided-optimization</a> with the debloatifying -freorder-blocks-and-partition option. This option breaks up every profiled function into cold and hot &#8220;functions&#8221;. It then lumps all of the hot functions together.</p>
+
+<p>PGO performance is amazingly close to that of binaries produced by <a href="http://tarasglek.github.com/taras/2010/04/07/icegrind-valgrind-plugin-for-optimizing-cold-startup/">icegrind </a>(within 10% based on page-counts).</p>
+
+<p><strong>Startup Time</strong>
+<strong>RSS (KB)</strong></p>
+
+<p>firefox.stock
+2515ms
+49452</p>
+
+<p>firefox.ordered
+1919ms
+45344</p>
+
+<p>firefox.static
+2321ms
+49616</p>
+
+<p>firefox.static.ordered
+1577ms
+37072</p>
+
+<p>firefox.static.pgo
+1619ms
+38436
+In above table, ordered means application of <a href="http://tarasglek.github.com/taras/2010/04/07/icegrind-valgrind-plugin-for-optimizing-cold-startup/">icegrind</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=525013">static</a> means a fat firefox-bin. To generate the PGO profile I just started and closed Firefox. So it&#8217;s not too surprising that the results are similar to those of an explicitly ordered binary. RSS refers to how much memory is mmap()ed into the process(lower RSS usage means we are paging in less junk). I was not able to control the layout of PGO builds; will need some linker hackery to deal with split functions.</p>
+
+<p>I think the numbers speak for themselves. Isn&#8217;t it scary how wasteful binaries are by default? It amazes me that Firefox can shrug off a significant amount of resource bloat without changing a single line of code. I think this is a good demonstration on why application developers should a) expect more out of their toolchain (Linux, GCC, Binutils) b) contribute to their toolchain.</p>
+
+<p>I think my next step is to tackle PGO Firefox builds(<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=418866">bug</a>). From there I would like to teach icegrind to play together with PGO.</p>
+
+<p><strong>Pieces of The Startup Puzzle</strong></p>
+
+<p>It took a long time since I <a href="http://tarasglek.github.com/taras/2009/10/20/large-apps-just-have-to-start-slow/">first noticed</a> the suckyness of library io. After much digging, help by smart people on #gcc + <a href="http://thread.gmane.org/gmane.linux.kernel/970483/focus=970920">LKML discussion</a>, I think I finally have a pretty clear list of the remaining/inprogress things needed for Linux applications to start faster.</p>
+
+<ol>
+<li>Wu Fengguang is making headway on <a href="http://lwn.net/Articles/372384/">smarter readahead</a> that makes better use of available RAM + disk bandwidth. Firefox could be read in 512kb chunks instead of 128 (4x page-fault reduction). Distributions should be aggressively testing this patch.</li>
+<li>Better agreement on binary organization between the compile-time <a href="http://sourceware.org/bugzilla/show_bug.cgi?id=11447">linker</a>, run-time <a href="http://sourceware.org/bugzilla/show_bug.cgi?id=11431">linker</a> and the kernel (see LKML discussion). Can shave off a handful of unneeded page-faults per file this way.</li>
+<li>A linker flag to specify how much of a particular library should be read-in via madvise(). For example any xulrunner apps will know ahead of time that they need large parts of libxul.so - might as well let the OS know.</li>
+<li>Transparent read-only per-file ext4 compression (<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=514083">like OSX</a>). Ted Tso indicated that this would be easy to add to ext4, but as far as I know nobody has jumped on this.
+I think with all of the above combined, we could load apps like Firefox at near-warm (0.5 second) speeds. Most of these are easy. #1 is hard, but it&#8217;s already being worked on. I&#8217;ll be happy to point someone at how to solve items 2-4 while I work on the Firefox side of things. The end result of all this should be a more instant gratification for all Linux users.</li>
+</ol>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2010/04/07/icegrind-valgrind-plugin-for-optimizing-cold-startup/">Icegrind - Valgrind Plugin for Optimizing Cold Startup</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-04-07T08:03:24-07:00" pubdate data-updated="true">Apr 7<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Most program binaries are laid out with little to no regard to how programs get loaded from disk. This disconnect between compile-time and runtime behaviour of binaries imposes a significant performance penalty to on large applications such as browsers, office suites, etc.</p>
+
+<p>It is incredibly difficult to observe both the cause (ie calling a random function) of binary-induced IO and the effect (the program gets suspended during startup while parts being loaded from disk), so this area doesn&#8217;t get as much optimization love as it deserves.</p>
+
+<p>My estimate is that around 50% of Firefox startup time is wasted on subobtimal binary layout. My previous <a href="http://tarasglek.github.com/taras/2010/04/05/linux-how-to-make-startup-suck-less-and-reduce-memory-usage/">post</a> demonstrated the kind of difference a better binary layout can make. Note that reordering executables isn&#8217;t the only solution, eliminating dead code should also speed things up (deleting <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=457262">dead code</a> is a <a href="http://ehren.wordpress.com/">hard</a>).</p>
+
+<p><strong>Optimizing Binary Layout</strong><em> Disclaimer:I just finished my 3rd rewrite of icegrind a few hours ago, be gentle.</em></p>
+
+<p>Ingredients: <a href="http://valgrind.org/">Valgrind</a> SVN trunk + <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=549749">icegrind patch</a>, GNU Gold + <a href="http://sourceware.org/ml/binutils/2010-03/msg00050.html">section-ordering-file patch</a>, a way to describe contents of binaries.</p>
+
+<p><em>Step 1a: Produce a build </em>Since I am interested in reorganizing program binaries, I build mozilla with &#8220;-ffunction-sections -fdata-sections&#8221; in CFLAGS/CXXFLAGS</p>
+
+<p>I also prelink the binaries in dist/bin such that my binaries better correspond to how they will be used: prelink $LD_LIBRARY_PATH/firefox-bin $LD_LIBRARY_PATH/*.so</p>
+
+<p><em>Step 1b: Produce a description of interesting files </em>I use my <a href="http://hg.mozilla.org/users/tglek_mozilla.com/startup/file/6453ad2a7906/elflog.cpp">elflog</a> utility to produce a .sections description of files I&#8217;m interested in. Elflog looks at the symbol table and tries to infer section names (produced by -ffunction-sections -fdata-sections) from symbol names/locations(see also &#8211;print-map option for ld).</p>
+
+<p>elflog  &#8211;contents  libxul.so >  libxul.so.sections elflog currently emits non-existent .comment.* sections because it gets confused by 0-length sections such as .bss. Note, one can also build tools to describe other kinds of files, such as jar or sqlite files. The only limitation is that Icegrind currently only tracks mmap()-caused disk IO, it would be trivial to extend it to deal with open/seek/read kind of disk IO.</p>
+
+<p><em>Step 2: Produce a log with icegrind! </em>Apply my icegrind <a href="https://bugzilla.mozilla.org/attachment.cgi?id=437664&amp;action=edit">patch</a>, build+install valgrind. Run Firefox valgrind &#8211;tool=icegrind firefox-bin -profile /tmp/ff -no-remote This will produce a .log file for every mmap()ed file with a .sections description. This log chronologically lists sections in the order of access.</p>
+
+<p><em>Step 3: Tell gold to link using the above log</em> Build/install binutils (I use a CVS checkout from a month ago) with the <a href="http://sourceware.org/ml/binutils/2010-03/msg00050.html">section ordering patch</a>, specify &#8211;enable-gold. To reorder the binary, I just add -Wl,&#8211;section-ordering-file,libxul.so.log to my linker commandline. Note there are still some teething issues with using this patch, it exhibits N<sup>2</sup> behavior (ie takes 10min to link libxul.so with it) and occasionally swaps order for .rela.plt and .rela.dyn, which makes prelink upset. But unlike my <a href="http://tarasglek.github.com/taras/2010/02/19/teaching-ld-to-optimize-binaries-for-startup/">earlier attempt</a> with linker scripts, it does not affect the binary size.</p>
+
+<p>Step 4: Enjoy! Now strip, install, prelink your binaries and enjoy faster startup.</p>
+
+<p><strong>Plans</strong></p>
+
+<p>I would like to see the gold patch fixed up and landed. Once that is done I&#8217;d like to turn this on for our Linux and mobile linux builds.</p>
+
+<p>I am hoping that some sort of sensible ordering of binaries will become commonplace in the future.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2010/04/05/linux-how-to-make-startup-suck-less-and-reduce-memory-usage/">Linux: How to Make Startup Suck Less (Also Reduce Memory Usage!)</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-04-05T05:36:01-07:00" pubdate data-updated="true">Apr 5<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>As I explained before, loading binaries from disk <a href="http://tarasglek.github.com/taras/2010/03/24/linux-why-loading-binaries-from-disk-sucks/">sucks</a>. Aside from <a href="http://tarasglek.github.com/taras/2010/03/25/madvise-prelink-update/">switching</a> glibc to use madvise/fadvise, what can application developers do to minimize this suckyness?</p>
+
+<p>I am going to start with numbers to give an idea of the magnitudes involved here. I&#8217;m still using my 1.8ghz core2duo laptop with a 7200 200GB harddrive.</p>
+
+<p>Time(ms)</p>
+
+<h1>of libxul.so reads</h1>
+
+<p>Typical Firefox build
+2300
+147</p>
+
+<p>Prelinked Firefox
+2130
+139</p>
+
+<p>Ordered Firefox
+2500
+131</p>
+
+<p>Ordered+Prelinked
+2065
+124</p>
+
+<p>Prelinked-Ordered Firefox
+1860
+72</p>
+
+<p>Prelink-Ordered + Prelinked Firefox
+1636
+66
+Additionally, proper binary reordering results in >2mb reduction in memory usage(out of 14mb that&#8217;s mapped in for code) since less random code gets paged in during readahead. This should be interesting for mobile where our binaries are RISC-bloated and there is less RAM is available.</p>
+
+<p><strong>Analysis</strong></p>
+
+<p>****A commonly-suggested linux adage is to <a href="http://en.wikipedia.org/wiki/Prelink">prelink</a> if your binaries are loading slowly. All of the good Linux distributions are doing using it. Unfortunately that alone gives pretty pathetic improvements. Beyond the weak 8.5% speed one has to do own tools to speed things up.</p>
+
+<p>As I mentioned before, application binaries are laid out in a basically random order. This seemed like an obvious optimization so I embarked on a non-obvious quest to capture every single memory access and to use that info to order our binaries sensibly.</p>
+
+<p><strong>Valgrind Adventures</strong></p>
+
+<p>Due to disappointing results I had to change my strategies a few times. The happy numbers(easy 30% speedup) in the above table were produced after the 3rd rewrite of my valgrind plugin. Before I seemed perpetually stuck at 10%.</p>
+
+<p>In the current revision of my valgrind plugin I produce a section listing by inferring section names from symbol names via a libelf-based program(unfortunately I do not know of a way get ld to retain function sections in the final binary). This turned out to be easier to get right than abusing Valgrind&#8217;s symbol-lookup APIs into figuring out what sections they came from.</p>
+
+<p>Also in addition to reordering executable code in .text, the plugin now reorders the various .data sections. Turned out that even though data is a relatively small portion of the executable, it is located on the opposite end of the executable from code. This means that every page fault in the .data section kills continuous reading of the .text section.</p>
+
+<p>I also switched to using gold with a section-ordering patch, it seems to produce binaries that are basically the same size as unordered ones(unlike ones produced by my linker script hack).</p>
+
+<p><strong>What is a Prelink-Ordered binary?</strong></p>
+
+<p>In the end, turned out prelink was the key to my problem. I realized that I am measuring memory accesses in valgrind on a non-prelinked binary causing the linker-induced memory accesses  to drive my binary layout. During symbol relocation, the dynamic linker rummages through the .text and .data sections (which I am trying to layout correctly) in order that does not correlate later execution of the program. Unfortunately I was using that data to order my binary even if the final result was meant to be prelinked.</p>
+
+<p>Perhaps that explains why, in the above table, ordered non-prelinked firefox is actually slower than default non-prelinked firefox. Another explanation is that this could be to additional disk fragmentation or other factors. Cold startup numbers depend hard-drive&#8217;s luck at seeking + filesystem fragmentation, so the only reliably comparator is the number of reads/page-faults.</p>
+
+<p>As of now my recipe to producing fast-starting binaries is:</p>
+
+<ol>
+<li>Build firefox</li>
+<li>Switch to root, set LD_LIBRARY_PATH to /dist/bin/ in the object directory, run: prelink $LD_LIBRARY_PATH/firefox-bin $LD_LIBRARY_PATH/*.so</li>
+<li>Run my libelf utility: elflog  &#8211;contents  dist/bin/libxul.so > dist/bin/libxul.so.sections</li>
+<li>As a normal user run Firefox under my valgrind plugin. It will output a list of section names to dist/bin/libxul.so.log</li>
+<li>Relink libxul.so with -Wl,&#8211;section-ordering-file,$HOME/builds/minefield.release/dist/bin/libxul.so.log</li>
+<li>make dist, copy resulting binaries somewhere, prelink em</li>
+<li>Enjoy faster startup
+<strong>Conclusion</strong></li>
+</ol>
+
+
+<p>Using prelink incorrectly can cause massive performance variation.</p>
+
+<p>My plugin does .data reordering now, but it would be very hard to do .data reordering as part of profile-guided optimization. Valgrind is the best tool for this job.</p>
+
+<p>I will try to cleanup the code and release my plugin this week. Pretty much every significant application can benefit from this, might as well let this loose. I need to decide on a name: ldgrind? startupgrind? binarymaidgrind?</p>
+
+<p>We need to develop a built-in diagnostic for detecting when the user isn&#8217;t using prelink (or has other startup misconfiguration issues).</p>
+
+<p>Measuring startup times is highly machine-specific and varies even on individual machines. A much better metric is to measure the amount of io(ie number and size of pagefaults and non-cached reads) serviced by the kernel, that&#8217;s very consistent.</p>
+
+<p><strong>Misc</strong></p>
+
+<p>Prelink sure gets upset easily. The last (fastest) result in the table above causes:</p>
+
+<p>prelink $LD_LIBRARY_PATH/firefox-bin prelink: /hd/startup.test/firefox//firefox-bin: section file offsets not monotonically increasing</p>
+
+<p>What&#8217;s going on? I&#8217;m only modifying libxul inbetween prelink runs, why is prelink complaining about firefox-bin which stays constant?</p>
+
+<p>prelink: /hd/startup.test/firefox.ordered.static/firefox-bin: DT_JMPREL tag not adjacent to DT_REL relocations</p>
+
+<p>What does that mean?</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2010/03/31/how-to-get-reviews-fast-delete-code/">How to Get Reviews Fast: Delete Code!</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-03-31T13:17:48-07:00" pubdate data-updated="true">Mar 31<span>st</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>The fastest review I ever got was when I deleted a bunch of code from libjar. It was so riddled crud it was next to impossible to modify the code. That was a mere <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=505784">24KB patch</a> produced manually.</p>
+
+<p><a href="http://ehren.wordpress.com/">Ehren</a> just put my personal records to shame with a <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=556446">94KB patch</a> that got r+ed at breakneck speed. Best part is that he generates these by plucking off dead parts of the Mozilla callgraph via static analysis. I bet if he tried he could land 90KB patches every day. Way to go Ehren!</p>
+
+<p>I expect more good code deletions to make themselves known via this <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=457262">meta bug</a>.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  <div class="pagination">
+    
+      <a class="prev" href="/taras/blog/page/12/">&larr; Older</a>
+    
+    <a href="/taras/blog/archives">Blog Archives</a>
+    
+    <a class="next" href="/taras/blog/page/10/">Newer &rarr;</a>
+    
+  </div>
+</div>
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/26/coping-with-flash-hangs/">Coping with Flash hangs</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/16/snappy-44-fixing-tab-switching-in-vancouver/">Snappy #44: Fixing tab switching in Vancouver</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/05/snappy-43-big-improvements-faster-startup-smoother-tabstrip/">Snappy #43: Big improvements: faster startup? Smoother tabstrip!</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/26/snappy-42/">Snappy #42</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/18/snappy-41/">Snappy #41</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("tarasglek", 4, false);
+    });
+  </script>
+  <script src="/taras/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/tarasglek" class="twitter-follow-button" data-show-count="false">Follow @tarasglek</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Taras Glek -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

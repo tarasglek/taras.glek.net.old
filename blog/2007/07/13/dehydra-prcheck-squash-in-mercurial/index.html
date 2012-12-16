@@ -1,0 +1,267 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Dehydra, prcheck, squash - in mercurial - All About Performance</title>
+  <meta name="author" content="Taras Glek">
+
+  
+  <meta name="description" content="New Repository Since I do not yet have write access to oink svn, I have been doing all of my development in ad-hoc repositories within the svn &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tarasglek.github.com/taras/blog/2007/07/13/dehydra-prcheck-squash-in-mercurial/">
+  <link href="/taras/favicon.png" rel="icon">
+  <link href="/taras/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/taras/javascripts/modernizr-2.0.js"></script>
+  <script src="/taras/javascripts/ender.js"></script>
+  <script src="/taras/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/taras/atom.xml" rel="alternate" title="All About Performance" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/taras/">All About Performance</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/taras/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tarasglek.github.com/taras" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/taras/">Blog</a></li>
+  <li><a href="/taras/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Dehydra, Prcheck, Squash - in Mercurial</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-07-13T01:54:08-07:00" pubdate data-updated="true">Jul 13<span>th</span>, 2007</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><strong>New Repository</strong></p>
+
+<p>Since I do not yet have write access to oink svn, I have been doing all of my development in ad-hoc repositories within the svn checkout. This made it rather hard to collaborate with others. I finally got sick of the situation (and stumbled upon <a href="http://cheeseshop.python.org/pypi/hgsvn/">hgsvn</a>) and converted all 11 svn repositories to mercurial. To my surprise, mercurial even let me merge my repositories while preserving history (hg has yet to fail me!).</p>
+
+<p>oink uses svn-externals to aggregate the repositories into a single checkout. hg doesn&#8217;t have anything similar, so to checkout all 11 repositories use a script:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[checkout.sh](http://people.mozilla.org/~tglek/checkout.sh) http://hg.mozilla.org
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>Released Differences from Oink Mainline </strong></p>
+
+<ul>
+<li>New oink tool - <a href="http://tarasglek.github.com/taras/2007/06/26/status-report-recent-work/">prcheck</a>: ensures that bool-like integer typedefs behave like bools</li>
+<li>New oink tool - <a href="http://wiki.mozilla.org/DeHydra">dehydra</a>: source query tool with queries specified in JavaScript</li>
+<li>New oink tool - <a href="http://wiki.mozilla.org/Squash">squash</a>: source refactoring tool. This is now deprecated since most of the code in it dealt with working around elsa limitations to do with macro expansion &amp; lack of precise locations. The patching engine used in squash lives on to provide a simple refactoring API for use in other tools (like prcheck).</li>
+<li>Minor grammar changes to parse more of Mozilla</li>
+<li>Compilation fixes for OSX</li>
+<li>Elsa fixes to parse OSX headers</li>
+<li>make -j support for elsa</li>
+<li>end-of-ast-node location support for elkhound &amp; elsa</li>
+<li><p>preprocessor expansion markup support for elsa
+<strong>Coming Soon</strong></p></li>
+<li><p>Amazing new version of <a href="http://mcpp.sourceforge.net/">MCPP</a> capable of preprocessing mozilla while outputting refactoring-friendly annotations.</p></li>
+<li>Web front-end for squash which will likely be refactored to be tool-agnostic.</li>
+<li><p>Front-end to run patch-producing tools in parallel for multi-core machines
+<strong>Near Future</strong></p></li>
+<li><p>squash will be split up into a library with each major feature ripped out into a standalone tool. Two tools coming soon:outparam rewriter &amp; class member renamer.</p></li>
+<li><p>RAD for static analysis: oink tool templates to make it trivial to write custom new tools with minimal amount of boilerplate
+<strong>Some time in the Future</strong></p></li>
+<li><p>Collaboration with the author of <a href="http://www.cs.ru.nl/~tews/olmar/">Olmar</a> to provide an OCaml API for Elsa. If everything goes as expected it will be possible to write analyses that are more powerful and more concise than DeHydra ones except they will perform at C/C++ speeds. Plus it should be possible to perform them from a native interactive OCaml toplevel. Most of this work already exists in bits and pieces. It&#8217;s a matter of adding some AST transformations, fixing a few issues and tying it all together.</p></li>
+<li>MapReduce inspired front-end: generic framework for executing transformations/analyses in-parallel and Mozilla-wide without blowing the 32bit address space (as it typical when static analysis tools meet Mozilla).</li>
+</ul>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Taras Glek</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-07-13T01:54:08-07:00" pubdate data-updated="true">Jul 13<span>th</span>, 2007</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/taras/blog/categories/dehydra/'>dehydra</a>, <a class='category' href='/taras/blog/categories/mozilla/'>mozilla</a>, <a class='category' href='/taras/blog/categories/squash/'>squash</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://tarasglek.github.com/taras/blog/2007/07/13/dehydra-prcheck-squash-in-mercurial/" data-via="tarasglek" data-counturl="http://tarasglek.github.com/taras/blog/2007/07/13/dehydra-prcheck-squash-in-mercurial/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/taras/blog/2007/06/26/status-report-recent-work/" title="Previous Post: Status Report: Recent Work">&laquo; Status Report: Recent Work</a>
+      
+      
+        <a class="basic-alignment right" href="/taras/blog/2007/07/13/pondering-prepost-conditions-to-enforce-software-correctness/" title="Next Post: Pondering Pre/Post Conditions to Enforce Software Correctness">Pondering Pre/Post Conditions to Enforce Software Correctness &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/26/coping-with-flash-hangs/">Coping with Flash hangs</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/16/snappy-44-fixing-tab-switching-in-vancouver/">Snappy #44: Fixing tab switching in Vancouver</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/05/snappy-43-big-improvements-faster-startup-smoother-tabstrip/">Snappy #43: Big improvements: faster startup? Smoother tabstrip!</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/26/snappy-42/">Snappy #42</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/18/snappy-41/">Snappy #41</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("tarasglek", 4, false);
+    });
+  </script>
+  <script src="/taras/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/tarasglek" class="twitter-follow-button" data-show-count="false">Follow @tarasglek</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Taras Glek -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

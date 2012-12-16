@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: performance | All About Performance]]></title>
+  <link href="http://tarasglek.github.com/taras/blog/categories/performance/atom.xml" rel="self"/>
+  <link href="http://tarasglek.github.com/taras/"/>
+  <updated>2012-12-16T12:35:28-08:00</updated>
+  <id>http://tarasglek.github.com/taras/</id>
+  <author>
+    <name><![CDATA[Taras Glek]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[FOSDEM Anyone?]]></title>
+    <link href="http://tarasglek.github.com/taras/blog/2011/12/20/fosdem-anyone/"/>
+    <updated>2011-12-20T06:57:10-08:00</updated>
+    <id>http://tarasglek.github.com/taras/blog/2011/12/20/fosdem-anyone</id>
+    <content type="html"><![CDATA[<p>Team Perf and a significant number of other Mozillians will be attending <a href="http://fosdem.org/2012/">FOSDEM</a> this year. My team will be giving talks on android linkers, IO, toolchain stuff, other TBD stuff. This will be my first FOSDEM, I'm really excited about it. There are a lot of European open sourcers to meet that don't make it to this side of the pond much.</p>
+
+<p>Team perf &amp; other snappy people (10+ people) plan to spend the week before FOSDEM hacking on <a href="https://blog.mozilla.org/tglek/category/snappy/">Snappy</a> and other perf projects. Does anyone have suggestions on a cool hackerspace (I sent an email to hackerspaces.be folks) or a coworking facility that could host us in Brussels?</p>
+
+<p><strong>Update:</strong> Looks like hackerspaces.be will be hosting us. Looking forward to checking out HSBXL-NG :)</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Windows Sucks At Memory-Mapped IO During Startup]]></title>
+    <link href="http://tarasglek.github.com/taras/blog/2010/04/19/windows-sucks-at-memory-mapped-io-during-startup/"/>
+    <updated>2010-04-19T07:00:00-07:00</updated>
+    <id>http://tarasglek.github.com/taras/blog/2010/04/19/windows-sucks-at-memory-mapped-io-during-startup</id>
+    <content type="html"><![CDATA[<p>Last week I learned about how Windows handles page faults backed by files (specifically xul.dll). I already knew that Linux was <a href="http://tarasglek.github.com/taras/2010/04/12/squeezing-every-last-bit-of-performance-out-of-the-linux-toolchain/">suboptimal</a> in this area, perhaps the clever people at Redmond did better.</p>
+
+<p>Shaver pointed me at <a href="https://developer.mozilla.org/En/Profiling_with_Xperf">xperf</a>, which is sort of like the new Linux perf tools. Xperf rocks in that it can capture the relevant data and it can export it as .csv.</p>
+
+<p>Even with profile-guided-optimization Windows causes 3x as much IO in xul.dll than linux does on libxul.so. That's especially interesting given that xul.dll is one-third smaller on Windows. Here is the <a href="http://people.mozilla.com/~tglek/startup/systemtap_graphs/visualize.html?#../win7/noprefetch.csv.html">graph</a>. PGO isn't helping on Windows as much as it can help on Linux because MSVC PGO doesn't do the equivalent of GCC's -freorder-blocks-and-partition (unless I missed something in the docs).</p>
+
+<p>With the Windows <a href="http://en.wikipedia.org/wiki/Prefetcher">prefetcher</a>, there were 4x less xul.dll IOs (graph <a href="http://people.mozilla.com/~tglek/startup/systemtap_graphs/visualize.html?#../win7/prefetch.csv.html">here</a>). Unfortunately, the prefetcher can't figure out that the whole xul.dll should be paged in and we still end up with an excess of random IO.</p>
+
+<p><strong>Why?</strong></p>
+
+<p>When a page fault occurs, Windows goes to read the page from the file and reads a little extra (just like any other sane OS) assuming that there will be more IO nearby. Unfortunately the gods of virtual memory at Microsoft decided that for every page fault, only 7 extra pages should read. So reads occur in 32K chunks (vs 128K in Linux, which is still too small). To make matters worse, segments mapped in as data only read in 3 extra pages (ie 16K chunks).</p>
+
+<p>This is funny in a sad way. Reading in 32K chunks is supposed to minimize ram usage (which makes no bloody sense when Win7 officially requires 1GB of RAM). As a result of being so thrifty on easy-to-evict file cache, windows ends up doing 4x as much file IO as Linux. The 16K reads are particularly funny as one can see the result of that misoptimization in the string of puny reads on the top right of the graphs.</p>
+
+<p><strong>Surely There is an API like madvise()</strong> On Posix systems madvise() can be used to influence the caching behavior of the OS. fadvise() is another such call for IO based on filehandles. For example, Firefox fastload files are now madvise()ed such that they are read in a single 2mb chunk on startup. Unfortunately, it appears that Windows has no such APIs so one is stuck with pathetically small reads.</p>
+
+<p>At first, I thought that, passing FILE_FLAG_SEQUENTIAL_SCAN when opening the file handle will work like a crappy fadvise()-equivalent. Turns out that mmaping files completely bypasses the Windows Cache Manager, so that flag just gets ignored.</p>
+
+<p>So as far as I can tell the only way to convince Windows to not read stuff in stupidly small chunks is to mmap() everything we care about using large pages. Unfortunately that comes with some significant costs.</p>
+
+<p>We are going to try to <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=553721">order</a> the binaries better which should halve the amount of page faults.</p>
+
+<p><strong>Can Windows Do Anything Better?</strong></p>
+
+<p>Yes. The "Unix way" of breaking up everything into a billion libraries and configuration files results in 10x more files being read on startup on Linux vs Windows. Just because Linux can read individual libraries 4x faster, doesn't mean that IO becomes free.</p>
+
+<p>Presently, in ideal conditions, Firefox starts up 30-50% faster on Windows. The Windows Prefetcher hack sweeps a lot of Windows suck under the carpet, but Microsoft has a lot of room for improvement.</p>
+
+<p><strong>Update:</strong><br/>
+People seem to prefer to comment on <a href="http://www.reddit.com/r/programming/comments/bu2do/windows_sucks_at_memorymapped_io_during_startup/">reddit</a>. If you want me to not miss your comment, make sure you comment here.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Studying Fennec Performance]]></title>
+    <link href="http://tarasglek.github.com/taras/blog/2009/06/26/studying-fennec-performance/"/>
+    <updated>2009-06-26T07:31:36-07:00</updated>
+    <id>http://tarasglek.github.com/taras/blog/2009/06/26/studying-fennec-performance</id>
+    <content type="html"><![CDATA[<p>Working on Fennec performance N810 has been very educational. I have been learning more and more about performance profiling on crappy platforms. I define a platform as crap if it has poor development tools, limited OS or other significant limitations. Linux is a crappy platform in this case because it's running on ARM where oprofile barely does anything and there are no other performance tools for N810 (more modern ARM cpus should user-space perf counters and be more useful for instrumentation).</p>
+
+<p><strong>JSD Secret Sauce for JS Optimization</strong></p>
+
+<p>In general there is a misconception that implementing stuff in JavaScript will result in slower code than doing the same in C++. That may be true if the code is implemented in the exact same manner. But in real life the expressiveness and safety of a high-level language like JavaScript permits algorithmic optimizations that would often not be realistic to do in C++ because of time/safety constraints.</p>
+
+<p>So how does one figure out what's slow in JS? timeless suggested that I checkout the JavaScript Debugging API. Using the API and a small hack in spidermonkey(JSD doesn't expose fast dom calls) I was able to hook into chrome code to get a timed trace of JavaScript functions being run.</p>
+
+<p>Once I had a trace it was relatively easy to figure out to "do not call this slow thing all the time" dance (aka optimize code). I collected that work in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=470116">bug 470116</a>. Last I checked there was relatively little room for optimization left on the JS side of Fennec, so then I went to look at what's lurking in C++.</p>
+
+<p>PS. Firebug is a popular consumer of the JSD API for those times when one isn't willing to write JS components to figure out why something is slow.</p>
+
+<p><strong>C++ Is Harder</strong></p>
+
+<p>I've some success with inserting probes into C++ code. I would find interesting code by running oprofile on the desktop (while doing things that I felt were slow on N810). Oprofile would then provide me a callgraph which I would visualize with <a href="http://code.google.com/p/jrfonseca/wiki/Gprof2Dot">this awesome little script</a>. Then I would stick <a href="http://people.mozilla.com/~tglek/fennec/patches/measurer.diff">MeasurerOfTime</a> timing blocks into interesting "hot" code and hope that I would learn something useful.</p>
+
+<p>This got me thinking. Wouldn't it be nice if there existed a JSD for C++? It'd be cool to inspect the C++ callgraph just like one does for JS. It seems like it would help on platforms that aren't gcc and can't inject tracing code via -finstrument-functions. Even -finstrument-functions is of limited use due to the pain of looking up symbols in shared libraries. Stay tuned.</p>
+
+<p><strong>Measuring Progress</strong></p>
+
+<p>The worst part of doing optimizations is knowing that some time in a future an innocent programmer will slightly change some seemingly innocent code and things will no longer happen quickly. Short of policing every single patch by people who previously optimized code in question there is only one thing one can do: performance tests.</p>
+
+<p><a href="http://hg.mozilla.org/users/tglek_mozilla.com/fennecmark">Fennecmark</a> is a benchmark for measuring responsiveness of the Fennec features that I worked on most: panning, zooming and lag during pageload. I <a href="http://tarasglek.github.com/taras/2009/04/23/benchmarks-and-instrumentation-for-fennecetc/">blogged</a> about it before. Since then Joel Maher has <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=493057">gotten Fennecmark</a> to run automatically and produce results on the graph server. I think we should be logging more numbers (Tpan, Tzoom), but it's an excellent first step in monitoring performance regressions.</p>
+]]></content>
+  </entry>
+  
+</feed>

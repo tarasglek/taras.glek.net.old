@@ -1,0 +1,262 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Status Report - All About Performance</title>
+  <meta name="author" content="Taras Glek">
+
+  
+  <meta name="description" content="Automated Analyses and Rewrites Dehydra and Squash are now mature enough to assist with mundane tasks like renames and various kinds of tedious code &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tarasglek.github.com/taras/blog/2007/05/01/status-report/">
+  <link href="/taras/favicon.png" rel="icon">
+  <link href="/taras/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/taras/javascripts/modernizr-2.0.js"></script>
+  <script src="/taras/javascripts/ender.js"></script>
+  <script src="/taras/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/taras/atom.xml" rel="alternate" title="All About Performance" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/taras/">All About Performance</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/taras/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tarasglek.github.com/taras" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/taras/">Blog</a></li>
+  <li><a href="/taras/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Status Report</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-05-01T07:13:01-07:00" pubdate data-updated="true">May 1<span>st</span>, 2007</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><strong>Automated Analyses and Rewrites</strong></p>
+
+<p>Dehydra and Squash are now mature enough to assist with mundane tasks like renames and various kinds of tedious code inspection. If you ever suspect that part of the Mozilla hacking you are doing could be done by a tool, contact me to see if I have a suitable tool for you.</p>
+
+<p>Also, these tools are in no way limited to working with Mozilla source code. I would be happy to see people use them for other projects too.</p>
+
+<p><strong>Short-term Plans</strong></p>
+
+<p>For the next week or two I plan to focus on out-parameter rewriting and the Mozilla-wide C++ callgraph.</p>
+
+<p><strong>Mozilla-wide Callgraph</strong> This is proving to be a little painful. Things work for basic test-cases, but I am running into scalability issues with Mozilla (as expected). My current approach of serializing everything into a giant JSON graph blows the 32bit address space after a few hundred files. Even doing a Mozilla-wide inheritance graph causes out of memory errors, but that runs almost to competition. The best solution to this will be to break up the graph into as many smaller JSON files as possible and only load ones that are absolutely required into memory.</p>
+
+<p>The callgraph will be a useful starting point for many other useful analyses (dead code one is going to be lots of fun) and it&#8217;s a good test of dehydra&#8217;s scalability, but I have suspended work on it for a few days to focus on more productive tasks.</p>
+
+<p><strong>Out-parameter Rewriting</strong></p>
+
+<p>Due to XPCOM, Mozilla getters typically return an error code and a value via an out parameter. This requires checking the error code and likely propagating it at the callsite.</p>
+
+<p>For many places in the code there are performance and aesthetical reasons to stop using error codes. Brendan talks discusses some reasons <a href="http://weblogs.mozillazine.org/roadmap/archives/2006/10/mozilla_2.html">here</a>. This would be cool stuff, but switching to exceptions isn&#8217;t going to happen right away. However, I can already start working on my tools to assist with simpler cases (like <a href="http://www.google.com/codesearch?hl=en&amp;q=+nsBidiPresUtils::GetBidiEngine+show:kW5gzhxHJvU:iRn_dfI9xJY:Y5Gdp6b4NgE&amp;sa=N&amp;cd=1&amp;ct=rc&amp;cs_p=http://ftp.mozilla.org/pub/mozilla.org/mozilla/releases/mozilla1.7a/src/mozilla-source-1.7a.tar.bz2&amp;cs_f=mozilla/layout/base/src/nsBidiPresUtils.cpp#a0">nsBidiPresUtils::GetBidiEngine</a>?). I&#8217;m focusing on getters that return NS_OK/(some error) and a value and rewriting them to return NULL on error and non-NULL on success. This could be ready in time for Firefox 3. Once I&#8217;m done with the tool, I&#8217;ll just need someone to help me figure which functions are ok to simplify like that.</p>
+
+<p>I suspended work on out-param rewriting <a href="http://tarasglek.github.com/taras/2007/01/11/squash-progress-and-plans/">some time ago</a>. It was proving to be too complicated to do within squash. Now that I can use dehydra to verify the control flow graph, things are a lot simpler. Current plan is to have the <a href="http://people.mozilla.org/~tglek/outparams.js">dehydra script</a> produce a list of candidates for out-param surgery and have squash consume that list and produce the appropriate patches. Currently, the script works for some very simple cases and I am working on the squash side.</p>
+
+<p><strong>Smaller Tasks</strong></p>
+
+<ul>
+<li>Sayrer&#8217;s uninitialized member analysis: added more complete constructor support to dehyra, wrote a <a href="http://people.mozilla.org/~tglek/member-init.js">sample script</a> to get sayrer started. Fixed dehydra&#8217;s 64bit support. <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=378763">Bug 378763</a></li>
+<li>Made some squash-generated patches for bz, helped me find a bug in squash. <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=378780">Bug 378780</a></li>
+<li>Pushing squash upstream into oink. This is time consuming because it is a combination of legal and many minor technical issues. Dehydra will follow later.</li>
+</ul>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Taras Glek</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-05-01T07:13:01-07:00" pubdate data-updated="true">May 1<span>st</span>, 2007</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/taras/blog/categories/decomtamination/'>DeCOMtamination</a>, <a class='category' href='/taras/blog/categories/dehydra/'>dehydra</a>, <a class='category' href='/taras/blog/categories/mozilla/'>mozilla</a>, <a class='category' href='/taras/blog/categories/squash/'>squash</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://tarasglek.github.com/taras/blog/2007/05/01/status-report/" data-via="tarasglek" data-counturl="http://tarasglek.github.com/taras/blog/2007/05/01/status-report/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/taras/blog/2007/04/23/mozilla-class-browser/" title="Previous Post: Mozilla Class Browser">&laquo; Mozilla Class Browser</a>
+      
+      
+        <a class="basic-alignment right" href="/taras/blog/2007/05/07/status-update-outparam-work/" title="Next Post: Status Update: Outparam work">Status Update: Outparam work &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/26/coping-with-flash-hangs/">Coping with Flash hangs</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/16/snappy-44-fixing-tab-switching-in-vancouver/">Snappy #44: Fixing tab switching in Vancouver</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/05/snappy-43-big-improvements-faster-startup-smoother-tabstrip/">Snappy #43: Big improvements: faster startup? Smoother tabstrip!</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/26/snappy-42/">Snappy #42</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/18/snappy-41/">Snappy #41</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("tarasglek", 4, false);
+    });
+  </script>
+  <script src="/taras/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/tarasglek" class="twitter-follow-button" data-show-count="false">Follow @tarasglek</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Taras Glek -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

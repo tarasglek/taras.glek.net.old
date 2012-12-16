@@ -1,0 +1,261 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Exceptional Circumstances - All About Performance</title>
+  <meta name="author" content="Taras Glek">
+
+  
+  <meta name="description" content="My previous post on outparam rewriting described the wealth of functions that can be rewritten. Unfortunately, most functions in Mozilla are declared &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tarasglek.github.com/taras/blog/2007/12/05/exceptional-circumstances/">
+  <link href="/taras/favicon.png" rel="icon">
+  <link href="/taras/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/taras/javascripts/modernizr-2.0.js"></script>
+  <script src="/taras/javascripts/ender.js"></script>
+  <script src="/taras/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/taras/atom.xml" rel="alternate" title="All About Performance" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/taras/">All About Performance</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/taras/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tarasglek.github.com/taras" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/taras/">Blog</a></li>
+  <li><a href="/taras/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Exceptional Circumstances</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-12-05T06:23:38-08:00" pubdate data-updated="true">Dec 5<span>th</span>, 2007</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>My previous post on outparam rewriting <a href="http://tarasglek.github.com/taras/2007/11/28/volume-of-refactoring-ahead/">described</a> the wealth of functions that can be rewritten. Unfortunately, most functions in Mozilla are declared in XPIDL interfaces.</p>
+
+<p>I have been convinced that my plan to rewrite xpidlgen to avoid outparameters wont be possible because most XPIDLinterfaces can be implemented by JavaScript in a few different ways. That is problematic because in addition to return values, JavaScript can also have an exception thrown at any point and have that converted to an nsresult error code by XPConnect. That means that the getters implemented in JavaScript are not in the set of functions that only return NS_OK+outparam/someerror. I wouldn&#8217;t be at all disappointed if someone proved me wrong here.</p>
+
+<p><strong>nsexception</strong></p>
+
+<p>There is one other way to rid the code of outparameters (including getter_AddRefs and friends). Time to face my greatest reluctance: rewriting Mozilla to use exceptions. Brendan has been talking about it for a long time, but I have been skeptical until now, mostly due to the complexity of rewriting that much code. However, I have more confidence in rewriting huge amounts of code now since the XPCOMGC rewrite which touched most functions in Mozilla without too much trouble (in relative terms).</p>
+
+<p><strong>Motivation</strong></p>
+
+<p>There are some obvious benefits to be gained from switching to exceptions other than a reduction in code-size (and footprint?) and having code that looks more like common C++.</p>
+
+<p>We would like to modify tamarin to use C++ exceptions such that an exception thrown from JavaScript would unroll the mixed C++/JS stack. This would simplify and enable significant optimizations for XPConnect.</p>
+
+<p>I am dreaming of JITed marshaling code for C++->JS calls and having a low level FFI interface(ie being able to call most C/C++ methods <a href="http://starkravingfinkle.org/blog/2007/09/hello-js-ctypes-goodbye-binary-components/">directly</a>) on the JavaScript side such that tracing JIT could automatically optimize common XPConnect calls. This an exciting area and there are lots of details to be worked out, so I&#8217;d love to see some feedback (or better yet proof of concept code!) on this.</p>
+
+<p><strong>The Plan</strong> - Rewriting</p>
+
+<p>I have started implementing thrower (I am not a great namer), a tool for converting various code patterns involving nsresult into something that uses an nsexception wrapper.</p>
+
+<p>Since this rewrite requires a lot more scanning for code patterns I added an elsa feature to allow pattern matching on AST nodes in C++ (also using exceptions). Since there are lot of patterns to transform, for documentation I will be writing many minimal testcases documenting(and testing) exactly what gets rewritten. Any interested parties are welcome to contribute Mozilla error handling patterns as testcases.</p>
+
+<p><strong>Verifying the Result </strong></p>
+
+<p>Just like in the XPCOMGC rewrite, code will have to be scanned to verify that it fits in the &#8220;new world order&#8221;. Unlike XPCOMGC, there are additional flow-sensitive issues to scan for to ensure that the code is thread-safe. The scans are at a lower level than dehydra currently works at, so it&#8217;s a perfect opportunity to either extend dehydra or write the new tool.</p>
+
+<p>It would be especially cool to implement the code analysis tool as a <a href="http://tarasglek.github.com/taras/2007/11/29/gcc-plugins-under-my-xmas-tree/">gcc plugin</a>.  Sean Callanan&#8217;s &#8220;Extending GCC with Modular GIMPLE Optimizations&#8221; paper in the <a href="http://ols2006.108.redhat.com/2007/GCC-Reprints/GCC2007-Proceedings.pdf">GCC summit proceedings</a> should be an excellent starting point.</p>
+
+<p>This is an exciting experiment. I look forward to reducing speculation on the risks/benefits of switching the codebase to use exceptions with some concrete data.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Taras Glek</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-12-05T06:23:38-08:00" pubdate data-updated="true">Dec 5<span>th</span>, 2007</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/taras/blog/categories/decomtamination/'>DeCOMtamination</a>, <a class='category' href='/taras/blog/categories/mozilla/'>mozilla</a>, <a class='category' href='/taras/blog/categories/outparamdel/'>outparamdel</a>, <a class='category' href='/taras/blog/categories/thrower/'>thrower</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://tarasglek.github.com/taras/blog/2007/12/05/exceptional-circumstances/" data-via="tarasglek" data-counturl="http://tarasglek.github.com/taras/blog/2007/12/05/exceptional-circumstances/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/taras/blog/2007/11/29/gcc-plugins-under-my-xmas-tree/" title="Previous Post: GCC Plugins under my xmas tree?">&laquo; GCC Plugins under my xmas tree?</a>
+      
+      
+        <a class="basic-alignment right" href="/taras/blog/2007/12/11/switching-to-exceptions-makes-head-spin/" title="Next Post: Switching to Exceptions: Makes Head Spin">Switching to Exceptions: Makes Head Spin &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/26/coping-with-flash-hangs/">Coping with Flash hangs</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/16/snappy-44-fixing-tab-switching-in-vancouver/">Snappy #44: Fixing tab switching in Vancouver</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/05/snappy-43-big-improvements-faster-startup-smoother-tabstrip/">Snappy #43: Big improvements: faster startup? Smoother tabstrip!</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/26/snappy-42/">Snappy #42</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/18/snappy-41/">Snappy #41</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("tarasglek", 4, false);
+    });
+  </script>
+  <script src="/taras/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/tarasglek" class="twitter-follow-button" data-show-count="false">Follow @tarasglek</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Taras Glek -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

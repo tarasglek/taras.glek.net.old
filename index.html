@@ -1,1 +1,686 @@
-My Octopress Page is coming soon &hellip;
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>All About Performance</title>
+  <meta name="author" content="Taras Glek">
+
+  
+  <meta name="description" content="Blocking calls into the Flash plugin can temporarily hang Firefox. This is a problem because sometimes the user would be happy to kill the plugin to &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tarasglek.github.com/taras/">
+  <link href="/taras/favicon.png" rel="icon">
+  <link href="/taras/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/taras/javascripts/modernizr-2.0.js"></script>
+  <script src="/taras/javascripts/ender.js"></script>
+  <script src="/taras/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/taras/atom.xml" rel="alternate" title="All About Performance" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/taras/">All About Performance</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/taras/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tarasglek.github.com/taras" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/taras/">Blog</a></li>
+  <li><a href="/taras/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+  
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2012/11/26/coping-with-flash-hangs/">Coping With Flash Hangs</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-11-26T01:45:11-08:00" pubdate data-updated="true">Nov 26<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Blocking calls into the Flash plugin can temporarily hang Firefox. This is a problem because sometimes the user would be happy to kill the plugin to access their webpage and at other times it&#8217;s the only way to get certain flash apps/games to load. If you suffer from flash-related hangs see Aaron&#8217;s <a href="http://dblohm7.ca/blog/2012/11/22/plugin-hang-user-interface-for-firefox/">blog post</a> for some builds to try. He is working a new <a href="https://wiki.mozilla.org/Features/Firefox/Windows_Plugin_Hang_UI">feature </a>to provide an option to kill hanging flash instances.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2012/11/16/snappy-44-fixing-tab-switching-in-vancouver/">Snappy #44: Fixing Tab Switching in Vancouver</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-11-16T10:06:41-08:00" pubdate data-updated="true">Nov 16<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I joined our GFX+Layout teams for a workweek in Vancouver. Since profiling is most effective on slow machines, I brought along my trusty Acer  Aspire 722(slow 1.3ghz  CPU+ fast GPU) as my primary laptop. This hardware is great because the combination of a weak CPU + decent GPU means that if we accelerate things right the browser can perform quite well and if we don&#8217;t, things get really slow. (analogous situation exists when fast CPUs are matched with slow GPUs).</p>
+
+<p>In the beginning of the week I quickly demoed menu lag, slow gmail tab switching(<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=811472">811472</a>). Later in the week we looked at problematic Facebook tab switch times (<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=811474">811474</a>), Australis(see Matt&#8217;s <a href="http://matthew.noorenberghe.com/blog/2012/11/australis-tabs-where-are-you">post</a>) performance. By the end of the week tab switching improved by over 2x for both facebook and gmail. I don&#8217;t have exact figures because while we can measure general tab switch trends via telemetry, there isn&#8217;t a convenient way to do it on individual browsers yet. <em>Help wanted:</em> would be great if someone could do up a barebone addon to monitor tab switching in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=812381">812381</a>, we&#8217;ll fill in the rest.</p>
+
+<p>Jeff Muizelaar started out by speeding up checkbox drawing in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=809603">809603</a><strong>.</strong> Matt Woodrow sped up gmail by tweaking how we use layers in bugs <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=811927">811927</a>,  <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=811570">811570</a>.</p>
+
+<p>Matt made sure that we no longer draw layers with opacity of 0 in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=811831">811831</a>. Turns rendering lots of invisible text can be expensive.</p>
+
+<p>Workweeks are a more about communication than getting code landed, so it is impressive that Jeff, Matt and their reviewers managed to diagnose, fix, review, land such significant optimizations in a couple of days. My laptop of pain feels much faster already.</p>
+
+<p>In the coming weeks expect to see smoother tab switching, smoother animations, lower profiling overhead as we work through issues discussed during the workweek.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2012/11/05/snappy-43-big-improvements-faster-startup-smoother-tabstrip/">Snappy #43: Big Improvements: Faster Startup? Smoother Tabstrip!</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-11-05T09:22:03-08:00" pubdate data-updated="true">Nov 5<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Our median startup performance (as measured by <a href="https://metrics.mozilla.com/data/content/pentaho-cdf-dd/Render?solution=metrics2&amp;path=%2Ftelemetry&amp;file=telemetryEvolution.wcdf&amp;bookmarkState={%22impl%22%3A%22client%22%2C%22params%22%3A{%22referenceDate%22%3A%222012-11-05%22%2C%22appNameParameter%22%3A%22[Application].[Firefox]%22%2C%22osParameter%22%3A%22[OS].[WINNT]%22%2C%22channelParameter%22%3A%22[Channel].[nightly]%22%2C%22reasonParameter%22%3A%22[Reason].[idle-daily]%22%2C%22histogramParameter%22%3A%22[Histogram].[SIMPLE_MEASURES_FIRSTPAINT]%22%2C%22histogramPopupTools%22%3A%22%22%2C%22duplicateHistogram%22%3A%22%23duplicateHistogram%22%2C%22medianButtonParam%22%3A1%2C%22scatterChart%22%3A%22%22}}">SIMPLE_MEASURES_FIRST_PAINT</a>) improved between 20%-25% at the end of Firefox 18 cycle (~Oct 26). Strangely most of the speedup seems to have come from a 50% speedup in library loading (measured by <a href="https://metrics.mozilla.com/data/content/pentaho-cdf-dd/Render?solution=metrics2&amp;path=%2Ftelemetry&amp;file=telemetryEvolution.wcdf&amp;bookmarkState={%22impl%22%3A%22client%22%2C%22params%22%3A{%22referenceDate%22%3A%222012-11-05%22%2C%22appNameParameter%22%3A%22[Application].[Firefox]%22%2C%22osParameter%22%3A%22[OS].[WINNT]%22%2C%22channelParameter%22%3A%22[Channel].[nightly]%22%2C%22reasonParameter%22%3A%22[Reason].[saved-session]%22%2C%22histogramParameter%22%3A%22[Histogram].[SIMPLE_MEASURES_MAIN]%22%2C%22histogramPopupTools%22%3A%22%22%2C%22duplicateHistogram%22%3A%22%23duplicateHistogram%22%2C%22medianButtonParam%22%3A1%2C%22scatterChart%22%3A%22%22}}">SIMPLE_MEASURES_MAIN</a>).</p>
+
+<p><a href="http://tarasglek.github.com/taras/files/2012/11/startup2025.png"><img src="http://tarasglek.github.com/taras/files/2012/11/startup2025.png" alt="" /></a></p>
+
+<p><strong>Tab-strip</strong></p>
+
+<p>Bas Schouten landed <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=805831">bug 805831</a> which should further speed up tab-strip drawing when 2d-acceleration is used. Neil Deakin fixed <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=792296">bug 792296</a> and <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=752376">bug 752376</a>.</p>
+
+<p>We spent a lot of time focusing on tab smoothness recently. We still have a long way to go, but I checked telemetry data and the improvements are staggering. In the picture below I&#8217;m comparing tab closing animation(<a href="https://metrics.mozilla.com/data/content/pentaho-cdf-dd/Render?solution=metrics2&amp;path=%2Ftelemetry&amp;file=telemetryHistogram.wcdf&amp;bookmarkState={%22impl%22%3A%22client%22%2C%22params%22%3A{%22startDate%22%3A%222012-10-06%22%2C%22endDate%22%3A%222012-11-04%22%2C%22appVersion%22%3A%22%22%2C%22appName%22%3A%22Firefox%22%2C%22arch%22%3A%22%22%2C%22OS%22%3A%22WINNT%22%2C%22version%22%3A%226.1%22%2C%22channel%22%3A%22nightly%22%2C%22reason%22%3A%22idle-daily%22%2C%22appBuildID%22%3A%22%22%2C%22fromPlatformBuildID%22%3A%22%22%2C%22toPlatformBuildID%22%3A%22%22%2C%22excludeParam%22%3A%22%22%2C%22measure%22%3A%22FX_TAB_ANIM_CLOSE_MS%22%2C%22histogramCompareParam%22%3A%22appVersion%22%2C%22histogramVariablesParam%22%3A%2217.0a1%2C18.0a1%2C19.0a1%22%2C%22platformBuildIDMode%22%3A%22LATEST%22%2C%22platformBuildIDTopCount%22%3A%2230%22%2C%22conditionsStatistic%22%3A%22%23conditionsStatistic%22%2C%22submissionsParameter%22%3A[[134541]]}}">FX_TAB_ANIM_CLOSE</a>) between 17, 18, 19. In the picture below there should be 0 entries to the right of 154(that&#8217;s our problematic performance tail). In 2.5 months, we went from having almost 20% of our tab animations taking > 400ms to complete to ~3%.</p>
+
+<p><a href="http://tarasglek.github.com/taras/files/2012/11/fx_anim_tab_close1.png"><img src="http://tarasglek.github.com/taras/files/2012/11/fx_anim_tab_close1.png" alt="" /></a></p>
+
+<p>In addition to median perf improving, tab animations are now much less likely to vary in duration, etc. This required fixes in layout, gfx, frontend code. It&#8217;s really great to see a cross-team effort producing tangible results. It&#8217;s too bad that our analysis infrastructure makes it so hard to pinpoint specific changes that contributed most to an improvement like this.</p>
+
+<p><strong>Misc</strong></p>
+
+<p>Matt Woodrow improve performance of a periodic table demo in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=806256">806256</a>. However, performance is still poor on some types of machines, so I filed bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=808838">808838</a>.</p>
+
+<p>Dão Gottwald landed bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=756313">756313</a> which is similarly to his work in last Snappy update postphones doing content work until Firefox chrome is painted.</p>
+
+<p>Benoit Girard changed the <a href="https://addons.mozilla.org/en-us/firefox/addon/gecko-profiler/">profiler </a>so it now updates the url as the treeview is being navigated. This makes it much easier to discuss what we are seeing in the profile.</p>
+
+<p><strong>Blog</strong></p>
+
+<p>Thanks for the feedback on blogging platform alternatives. I turned on a better captcha plugin to deflect spam. A lot less spam gets through now (but I think it&#8217;s also preventing legitimate users from getting through). If you are having trouble commenting, use twitter for now.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2012/10/26/snappy-42/">Snappy #42</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-10-26T08:01:40-07:00" pubdate data-updated="true">Oct 26<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Vladan Djeric landed a probe to directly measure various DOM Local Storage overheads, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=802920">802920</a>, <a href="http://is.gd/BYJQkE">telemetry data</a>.</p>
+
+<p><strong>Frontend Speedups</strong></p>
+
+<p>I thought our frontend optimization people did not have spare cycles for snappy UI fixes due to other important projects atm, but they proved me wrong this week.</p>
+
+<p>Jared Wein landed bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=804968">804968</a> which fixes jank where our awesomebar popup would appear then disappear while typing in the location bar. We were flushing layout for the top and bottom result on each adjustment to the awesomebar results, those flushes weren&#8217;t necessary for each time, they are now skipped after the first pass in the browser session.</p>
+
+<p>Dão Gottwald landed <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=752376">bug 752376</a> which removes some expensive layout flushes when switching tabs if the user isn&#8217;t overflowing their tabbar.</p>
+
+<p>Dão also landed bug<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=715402"> 715402</a> which corrects certain initialization code to run after the Firefox is drawn. Previously this code would get delayed, but due to some undeterministic event madness it would still be likely to get scheduled to run before Firefox is drawn on the screen. This should result in 10% faster perceived startups in some cases.</p>
+
+<p><strong>Profiler-assisted Bug Reporting</strong></p>
+
+<p>I looked at bug<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=642257"> 642257</a> and gave up figuring out what causes the problem because I could not reproduce it. I asked the reporter to try to record a profile of the problem with the <a href="https://developer.mozilla.org/en-US/docs/Performance/Profiling_with_the_Built-in_Profiler">gecko profiler</a>. Within 2.5 hours of the profile being posted in the bug, Timothy Nikkel identified the problem and posted a patch for it.</p>
+
+<p>I&#8217;m very excited about this because the reporter has never used a profiler and yet on the first try helped fix a hard to reproduce bug. Thanks to a dedicated bug reporter, keen layout hackers and our new profiling infrastructure Flash in background tabs will no longer slow down our layout calculations. For many types of bugs identifying the problem is the hardest part, this is very promising.</p>
+
+<p><strong>Moving Blogs Soon</strong></p>
+
+<p>I will be moving to a new blog location as soon as I decide on a better blog setup. I&#8217;ve been irritated by Wordpress since I started at Mozilla in 2006. The volume of comment spam has increased exponentially this year. After 6 years of suffering a terrible UI, spam, slowness, lossyness, I&#8217;m ready to move on to a blogging service elsewhere. If you have any suggestions for blog providers, ping me on <a href="https://twitter.com/tarasglek">twitter</a> as I likely wont see your comment in the mountain of spam.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2012/10/18/snappy-41/">Snappy #41</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-10-18T08:53:19-07:00" pubdate data-updated="true">Oct 18<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Jeff Muizelaar may not have cut tab switch times in half in my <a href="https://blog.mozilla.org/tglek/2012/10/15/snappy-40-faster-tabswitching-startup-analysis/">last update</a>. The overhead moved to a later part of the process that we were not measuring before the change landed. We&#8217;ll be able to tell the magnitude of the tab-switch improvement was by landing bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=800031">800031</a> on Aurora.</p>
+
+<p>Matt Woodrow reduced tab-close animation jank in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=750417">bug 750417</a>.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2012/10/15/snappy-40-faster-tabswitching-startup-analysis/">Snappy #40: Faster Tabswitching, Startup Analysis</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-10-15T03:25:14-07:00" pubdate data-updated="true">Oct 15<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>This was an interesting week. On one hand all performance aspects of tab strip work were suspended until end of year on the frontend team, on the other impressive gains were made on platform side of things.</p>
+
+<p><strong>Jeff Muizelaar cut tab switch times in half</strong></p>
+
+<p>Data came in on Jeff&#8217;s optimization I mentioned <a href="https://blog.mozilla.org/tglek/2012/10/04/snappy-39/">last week</a>: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=792199">bug 792199</a>. This halved our median tab switch time. Since this also landed at the end of our 18 cycle, a comparison between 18/19 Nightlies gives us an idea of how this changed our tab switching times overall. Note the actual difference would be greater since both 18 &amp; 19 include data points with Jeff&#8217;s patch, but the majority of data in 18 is without Jeff&#8217;s patch.</p>
+
+<p><a href="http://tarasglek.github.com/taras/files/2012/10/fx_tab_switch_update.png"><img src="http://tarasglek.github.com/taras/files/2012/10/fx_tab_switch_update.png" alt="" /></a></p>
+
+<p><em>Black: v18, Blue V19. X-axis represents time in milliseconds to do a tab switch, excluding time to paint.</em></p>
+
+<p>Above graph shows a shift towards fast tab switch times across the board with particularly nice improvements in the tail. See the corresponding 50% fall in medians on our <a href="https://metrics.mozilla.com/data/content/pentaho-cdf-dd/Render?solution=metrics2&amp;path=%2Ftelemetry&amp;file=telemetryEvolution.wcdf&amp;bookmarkState={%22impl%22%3A%22client%22%2C%22params%22%3A{%22referenceDate%22%3A%222012-10-09%22%2C%22appNameParameter%22%3A%22[Application].[Firefox]%22%2C%22osParameter%22%3A%22[OS].[WINNT]%22%2C%22channelParameter%22%3A%22[Channel].[nightly]%22%2C%22reasonParameter%22%3A%22[Reason].[saved-session]%22%2C%22histogramParameter%22%3A%22[Histogram].[FX_TAB_SWITCH_UPDATE_MS]%22%2C%22histogramPopupTools%22%3A%22%22%2C%22duplicateHistogram%22%3A%22%23duplicateHistogram%22%2C%22medianButtonParam%22%3A0%2C%22scatterChart%22%3A%22%22}}">telemetry evolution dashboard</a>.</p>
+
+<p>Unfortunately, Jeff&#8217;s patch was too good. Instead of decoding less images, it ended up decoding no images at all causing unnecessary flicker when switching tabs. The patch got backed out, but this accident provided us with a good baseline of how fast tab switching can be without decoding images :) Jeff landed a correction in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=799335">bug 799335</a>.</p>
+
+<p>As I mentioned above graph does not include paint times. Jeff also landed bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=800031">800031</a> which measures the complete tab switch duration (including paint time).</p>
+
+<p><a href="http://tarasglek.github.com/taras/files/2012/10/fx_tab_switch_total.png"><img src="http://tarasglek.github.com/taras/files/2012/10/fx_tab_switch_total.png" alt="" /></a></p>
+
+<p><strong>Timothy Nikkel&#8217;s Visible Image Decoding</strong></p>
+
+<p>Currently Firefox tends to decode too many images while browsing image-heavy sites. This hurts our total memory consumption, increases tab switch times, etc. Timothy has been posting tests builds in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=689623">bug 689623</a> which try to only decode visible images. Please give those builds a spin if you suffer from poor Firefox performance while browsing image-heavy sites.</p>
+
+<p><strong>Startup Time Profiling</strong></p>
+
+<p>Benoit Girard taught the the Gecko profiler how to capture most of browser startup in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=799638">799638</a>. This might be the most important achievement so far in tackling startup problems caused by extensions. This means that every Nightly user (and in a few weeks every Firefox user) can install the <a href="https://developer.mozilla.org/en-US/docs/Performance/Profiling_with_the_Built-in_Profiler">Gecko profiler</a>, click &#8216;Profile Startup&#8217; and get a report on what makes Firefox startup slow. This can then be posted to bugzilla, <a href="http://support.mozilla.com/">SUMO</a>, <a href="https://addons.mozilla.org/">AMO </a>or this blog so we can easily identify problematic addons, problematic APIs used by addons and the extent of startup overhead contributed by them.</p>
+
+<p>Making extension-aware startup profiling easy has incredible potential for making Firefox startup faster for extension-addicted users. If you can&#8217;t wait to try this out, you can install a <a href="https://raw.github.com/bgirard/Gecko-Profiler-Addon/2d0c32507f21d4e64a5eb3bff091f23d21528ad5/geckoprofiler.xpi">development snapshot</a> of the profiler extension. Feel free to post your startup profile links in a comment.</p>
+
+<p><strong>Proxy-detection</strong></p>
+
+<p>As I mentioned last time, Patrick McManus fixed proxy-related jank in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=769764">bug 769764</a>. Last week Vladan Djeric analyzed our chromehang data and confirmed that proxy jank went from being one of our top offenders to not happening.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2012/10/04/snappy-39/">Snappy #39</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-10-04T09:24:57-07:00" pubdate data-updated="true">Oct 4<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>We should no longer do proxy-related IO on the main thread now that Patrick McManus landed <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=769764">bug 769764</a>. Synchronous proxy code resulted in a miserable user experience for people using proxies, but it also affected normal users during proxy-detection. This was one of the top intermittent freezes that we&#8217;ve seen.</p>
+
+<p>Tab switching should be much faster in Firefox 18 than before. Jared Wein got rid of an expensive regexp that was applied during a tab switch in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=781588">bug 781588</a>.  Jeff Muizelaar landed <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=792199">bug 792199</a> which should make switching to a image-heavy sites much faster. Jared&#8217;s change is already on nightlies, Jeff&#8217;s change should show up tomorrow if everything goes well.</p>
+
+<p>Matt Woodrow landed the huge change that is DLBI in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=539356">bug 539356</a> (yet again). DLBI speeds up reflows, reduces repaints resulting in a more responsive browser. For more details see Robert O&#8217;Callahan&#8217;s <a href="https://groups.google.com/forum/#!topic/mozilla.dev.platform/UFndiSxW4rU">announcement</a>.</p>
+
+<p><strong>Startup Regression </strong></p>
+
+<p>After working on improving startup for the last couple of releases we seem to have regressed it during the 18 cycle. I filed <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=798130">bug 798130</a> on this. I just noticed the regression a few hours ago. If anyone has ideas on what might&#8217;ve caused it, please comment.</p>
+
+<p><strong>Profiler</strong></p>
+
+<p><a href="https://addons.mozilla.org/en-us/firefox/addon/gecko-profiler/">Gecko profiler</a> now lives on AMO.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2012/09/17/snappy-in-warsaw-pierogy-fueled-hackfest/">Snappy in Warsaw: Pierogy-fueled Hackfest</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-09-17T20:06:15-07:00" pubdate data-updated="true">Sep 17<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>After MozCamp, we held a snappy meet-up at <a href="http://www.noacowork.pl/">NoaCowork</a> in Warsaw. I believe this was one of the most productive weeks I had the pleasure of participating in since I started at Mozilla. My only regret I was not motivated to organize any memorable after-work activities while suffering the MozCamp.EU plague (Mozilla gatherings are great for exchanging global influenza strains).</p>
+
+<p><strong>Profiler</strong></p>
+
+<p>Benoit Girard went through existing and upcoming profiler features. We made sure that everyone in attendance knew how to use the profiler. We also discussed potential UX improvements. Markus Stange is a community contributor who originally designed and implemented the current profiler UI. He attended MozCamp and spent most of Monday with us planning future profiler improvements with Benoit.</p>
+
+<p><strong>Bas-tool: Azure Drawing Tracer</strong></p>
+
+<p>Bas Schouten presented his work-in-progress graphics tracing tool. Our graphics people have been using the Microsoft <a href="http://www.google.com.ua/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;ved=0CCEQFjAA&amp;url=http%3A%2F%2Fen.wikipedia.org%2Fwiki%2FPIX_(Microsoft">PIX tool</a>&amp;ei=D0FYUM2yK4zasgat6IHoCQ&amp;usg=AFQjCNFaEbWMtMB_UAvO0oOb0drynfX-qw) to debug accelerated drawing issues with Direct2D. I believe Bas got fed up with the buggyness and limitations of an otherwise excellent tool and wrote a similar Azure-specific tool with some special Bas-sauce.</p>
+
+<p>Bas-tool presents a graphics trace so one can see how Firefox draws on the screen. Seeing how something is drawn step-by-step helps us see when we not using efficient graphics primitives, are doing redundant invalidations, etc. The tool can also do tricks like bruteforce graphics operations to find redundant ones, etc.</p>
+
+<p>I expect Bas will present this tool + accompanying patches soon.</p>
+
+<p><strong>OMTC &amp; Tab Strip</strong></p>
+
+<p>Current Firefox tab-strip implementation is crufty. It uses expensive graphics primitives, inefficient CSS transitions, implements scrolling/overflow animations in JS and does other non-performant things (tracked by <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=593680">bug 593680</a>). These things happen when one keeps adding features without having good profiling/tracing tools.</p>
+
+<p>Tim Taubert lead the effort to prototype a new tab strip that is implemented without JS animations and uses OMTC-friendly, efficient graphics primitives. Bas-tool was used heavily to see whether CSS transitions were animating efficiently. We sorely missed having a layout person around help diagnose layerizing issues, etc. Turns out CSS transition scheduling is very <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=753139#c10">jank-sensitive</a>. We may also need come up + implement some new CSS transition to make an attractive tab strip. Good news is that any backend improvements we make in this area should make it easier to implement fluid, responsive web apps.</p>
+
+<p>Tim Taubert, Benoit Girard &amp; Jared Wein cobbled together a desktop OMTC throbber demo where the tab throbber was implemented using CSS rotations which made it animate smoothly through content jank.</p>
+
+<p><strong>Chromehangs</strong></p>
+
+<p>Me, Josh Aas, Vladan Djeric, Lawrence Mandel went through our new non-destructive chromehang report. Chromehangs are multi-second browser stalls that we report via telemetry. See the complete list that we went through <a href="https://etherpad.mozilla.org/chromehangs">here</a>.</p>
+
+<p>Looks our recently-discovered synchronous proxy code and flash are to blame for most of our temporary hangs. Proxy stuff should disappear once bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=769764">769764</a> is fixed. <a href="http://www.google.com.ua/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;ved=0CCQQFjAA&amp;url=http%3A%2F%2Fmsujaws.wordpress.com%2F2012%2F04%2F11%2Fopting-in-to-plugins-in-firefox%2F&amp;ei=DUhYUKGvA4eTswbZ94DYCw&amp;usg=AFQjCNGkVdVAsE90oEm9Ycou1OrBheMdIg">Click-to-play</a> will help with some of the plugin-caused hangs. We will be discussing how to deal with the rest of the plugin-jank in the coming weeks.</p>
+
+<p>My favourite chromehang was the one that pinpointed why downloads jank Firefox so much: bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=789932">789932</a>. We tried to pin this on anti-virus scans, download manager sqlite activity, but the main reason turned out to be very simple. Turns out we do network traffic on a networking thread only to write out file contents to disk on main thread.</p>
+
+<p><strong>Other </strong></p>
+
+<p>Paulo Amadini, Lawrence Mandel, Gavin Sharp and me made plans to get rid of main thread SQL usage in download, addon manager.</p>
+
+<p>Vladan Djeric explained his plans to speed up &amp; reduce jank caused by DOM Local Storage.</p>
+
+<p>Margaret Leibovic worked on removing synchronous cache API usage, added pageload telemetry. She also filed a bug that resulted in 20% faster link navigation in Fennec (bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=789889">789889</a>). Perhaps we should do the same on our Metro build?</p>
+
+<p>Olli Pettay &amp; Felipe Gomes worked on making our social api features not leak memory.</p>
+
+<p>Julian Seward, Mike Hommey, Benoit Girard worked on improving our profiling infrastructure and making it work on Android, B2G, Linux.</p>
+
+<p>Josh Aas, Lawrence &amp; me coordinated on Snappy priorities on necko team.</p>
+
+<p>I&#8217;m sure I missed a few projects, I hope other attendees blog about their work last week.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2012/09/17/moacamp-eu-in-warsaw/">MozCamp.EU in Warsaw</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-09-17T18:09:30-07:00" pubdate data-updated="true">Sep 17<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Last week a few of us attended MozCamp.EU in Warsaw. Me, Benoit &amp; Vlad presented a <a href="https://wiki.mozilla.org/MozCampEU2012/Schedule/Desktopandmobile/All-About-Performance">talk </a>on performance work. Primary aim of our talk was to inform our community about various performance tools that came to fruition of the past year and how to use them to investigate Firefox performance problems. Hopefully we&#8217;ll see a spike in bug reports with detailed performance information (profiler traces, telemetry histogram+chromehang excepts, etc).</p>
+
+<p>My favourite part of MozCamp was finally meeting some a couple of the impressive community contributors in person. I finally had the pleasure of literally buying beer to thank someone for cleaning up some nasty code. I hope some day we can do a developer-oriented MozCamp-like conference.</p>
+
+<p>My favourite talk was Anant &amp; Tim&#8217;s presentation on WebRTC. There is something incredibly attractive about having an encrypted, cross-browser, firewall-punching p2p implementation (realtime open video conferencing is a nice bonus). See Anant&#8217;s <a href="http://kix.in/2012/09/16/mozcamp-eu-2012-mobilize-mozilla/">blog post</a> for more details.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2012/09/04/snappy-38/">Snappy #38: Responsiveness Fixes Galore</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-09-04T02:17:48-07:00" pubdate data-updated="true">Sep 4<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>End of summer is a tough time to make progress because a lot of people are on vacation. Surprisingly, Firefox got some good fixes in since the last update.</p>
+
+<p><strong>Less Slow Startups</strong></p>
+
+<p><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=726125">Bug 726125</a>: should get rid of a lot of super-slow startups. Due to an abstraction accident we ended up validating jars more eagerly than expected. Firefox would go on the net (on the main thread) to check the certificate every time a signed jar was opened. There are over 500 signed extensions on AMO with over 14million active users. See the following for background on the (now dead) feature that caused our jar code to go nuts: <a href="http://www.mozilla.org/projects/security/components/signed-scripts.html">signed scripts</a> and <a href="https://developer.mozilla.org/en-US/docs/Bypassing_Security_Restrictions_and_Signing_Code">note on removal of signed script</a> support. Thanks for Nicholas Chaim and Vladan Djeric for fixing this.</p>
+
+<p><strong>Less Proxy Lag (WIP)</strong></p>
+
+<p><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=769764#c5">Bug 769764</a>. We have received a lot of strange complaints about Firefox network performance that we could never reproduce. Turned out this was because none of us used proxies. Patrick McManus discovered a lot of synchronous proxy and DNS code in our network stack.</p>
+
+<p>Fix for this should also improve performance for people without proxies since proxy-autodetection code was also doing main thread IO. As a result all of us replacing sync APIs with async ones all of the existing proxy-related addons will have to be updated. Patrick is reaching out to addon authors to make sure addons are updated in time for the next release.</p>
+
+<p><strong>Less UI Repaint Lag</strong></p>
+
+<p><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=786421">Bug 786421</a>: Nightlies got unbearably slow for me recently. Turned out we ended continuously resizing + applying theme + redrawing invisible tooltips on every paint. Thanks for Timothy Nikkel for fixing this. This bug never affected anyone outside of the Nightly/Aurora testers, but it serves as yet another example of how the <a href="https://developer.mozilla.org/en-US/docs/Performance/Profiling_with_the_Built-in_Profiler">Gecko Profiler</a> makes it easier than ever to diagnose weird performance problems. The single biggest contribution anyone can do at the moment is to provide instructions of how to reproduce lag with accompanying profiler traces.</p>
+
+<p><strong>Less Gradient Lag</strong></p>
+
+<p><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=761393">Bug 761393</a>: Paul Adenot implemented a gradient cache. This was landed as a Telemetry experiment so we can determine what the optimal cache retention strategy is. We&#8217;ll be watching the relationship between GRADIENT_DURATION and GRADIENT_RETENTION_TIME in the coming weeks. Currently rendering gradients cause stalls in the GPU pipeline. In previous experiments we found out that most of the tab-switch rendering time in hardware-accelerated Firefox is spent rendering gradients :(. Gradients are hard to notice for casual users, but they are heavily used in our tab strip and on Google web properties.</p>
+
+<p><strong>MozCamp</strong></p>
+
+<p>I may not have a chance to post the next snappy update as I&#8217;ll be hopping on the plane to Warsaw right after our meeting. If you are attending MozCamp come to our <a href="https://wiki.mozilla.org/index.php?title=MozCampEU2012/Schedule/Desktopandmobile/All-About-Performance">&#8216;All About Performance&#8217; session</a>. Our goal for the talk is to significantly expand the pool of people who can diagnose Firefox (and web) performance problems.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  <div class="pagination">
+    
+      <a class="prev" href="/taras/blog/page/2/">&larr; Older</a>
+    
+    <a href="/taras/blog/archives">Blog Archives</a>
+    
+  </div>
+</div>
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/26/coping-with-flash-hangs/">Coping with Flash hangs</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/16/snappy-44-fixing-tab-switching-in-vancouver/">Snappy #44: Fixing tab switching in Vancouver</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/05/snappy-43-big-improvements-faster-startup-smoother-tabstrip/">Snappy #43: Big improvements: faster startup? Smoother tabstrip!</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/26/snappy-42/">Snappy #42</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/18/snappy-41/">Snappy #41</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("tarasglek", 4, false);
+    });
+  </script>
+  <script src="/taras/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/tarasglek" class="twitter-follow-button" data-show-count="false">Follow @tarasglek</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Taras Glek -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

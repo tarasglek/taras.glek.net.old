@@ -1,0 +1,253 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Snappy, Feb 16 - All About Performance</title>
+  <meta name="author" content="Taras Glek">
+
+  
+  <meta name="description" content="Canadians and their Profilers Much like eating bacon, writing profiling tools is a favourite Canadian pastime. Unfortunately, while today&#8217;s &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tarasglek.github.com/taras/blog/2012/02/16/snappy-feb-16/">
+  <link href="/taras/favicon.png" rel="icon">
+  <link href="/taras/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/taras/javascripts/modernizr-2.0.js"></script>
+  <script src="/taras/javascripts/ender.js"></script>
+  <script src="/taras/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/taras/atom.xml" rel="alternate" title="All About Performance" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/taras/">All About Performance</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/taras/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tarasglek.github.com/taras" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/taras/">Blog</a></li>
+  <li><a href="/taras/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Snappy, Feb 16</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-02-16T08:20:17-08:00" pubdate data-updated="true">Feb 16<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><strong>Canadians and their Profilers</strong></p>
+
+<p>Much like eating bacon, writing profiling tools is a favourite Canadian pastime. Unfortunately, while <a href="https://wiki.mozilla.org/Performance/Snappy/2012-02-16">today&#8217;s meeting</a> had more Canadians than last time, a few the usual suspects are still busy with Android bugs this week and weren&#8217;t able to attend.  There are no updates on about:jank or our <a href="https://developer.mozilla.org/en/Performance/Profiling_with_the_Built-in_Profiler">profiler</a> this week. Next week, Vlad plans to hook up Windows symbolification to the profiler bringing it up to par with Mac64.</p>
+
+<p><strong>UX Tweaks</strong></p>
+
+<p>Jared is almost done with preparation for snappy scrolling. He is wrapping up making scrollbar + arrow keys behave in a consistent manner, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=710373">710373</a>. The next step is to tweak our scrolling physics, which may lead us to integrate addon scrolling code in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=206438">bug 206438</a>. Jared also got rid of pointless &#8220;connecting&#8230;&#8221; tab title on refresh, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=709182">bug 709182</a>.****</p>
+
+<p><strong>IO Optimizations</strong></p>
+
+<p>Brian recently worked out a way to neuter prefetch in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=692255">692255</a>, this week he added Firefox hooks to take advantage of that in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=727864">727864</a>. Once that is done our startup speed will be up to us - no longer at the mercy of a misbehaving Microsoft heuristic. Brian also discovered a single-character typo (bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=726503">726503</a>) in my code,which apparently resulted in a 15% speed up in our page-loading benchmark, tp5. I&#8217;m disturbed that we didn&#8217;t notice respective slowdown when we landed this.</p>
+
+<p>Brian is also bravely battling download-manager lag in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=632556">632556</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=727275">727275</a>.</p>
+
+<p>Marco is working on reducing thread contention due to vacuum/pragmas, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=723611">723611</a>. Marco is also almost done with rewriting our ill-conceived, jank-happy livemarks code in bug  <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=613588">613588</a>.</p>
+
+<p><strong>Content</strong></p>
+
+<p>Vladan landed a DOM storage fix that should significantly reduce the amount of main thread SQL done by content <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=714964">bug 714964</a>. We plan to make dom storage not cause main thread io lag in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=712009">712009</a>.</p>
+
+<p>More of the content team is jumping into Snappy work next week, expect to see more in this section.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Taras Glek</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-02-16T08:20:17-08:00" pubdate data-updated="true">Feb 16<span>th</span>, 2012</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/taras/blog/categories/mozilla/'>mozilla</a>, <a class='category' href='/taras/blog/categories/snappy/'>snappy</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://tarasglek.github.com/taras/blog/2012/02/16/snappy-feb-16/" data-via="tarasglek" data-counturl="http://tarasglek.github.com/taras/blog/2012/02/16/snappy-feb-16/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/taras/blog/2012/02/09/snappy-feb-9-blame-canada/" title="Previous Post: Snappy Feb 9: Blame Canada!">&laquo; Snappy Feb 9: Blame Canada!</a>
+      
+      
+        <a class="basic-alignment right" href="/taras/blog/2012/02/22/psa-dom-local-storage-considered-harmful/" title="Next Post: PSA: DOM Local Storage considered harmful">PSA: DOM Local Storage considered harmful &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/26/coping-with-flash-hangs/">Coping with Flash hangs</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/16/snappy-44-fixing-tab-switching-in-vancouver/">Snappy #44: Fixing tab switching in Vancouver</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/05/snappy-43-big-improvements-faster-startup-smoother-tabstrip/">Snappy #43: Big improvements: faster startup? Smoother tabstrip!</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/26/snappy-42/">Snappy #42</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/18/snappy-41/">Snappy #41</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("tarasglek", 4, false);
+    });
+  </script>
+  <script src="/taras/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/tarasglek" class="twitter-follow-button" data-show-count="false">Follow @tarasglek</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Taras Glek -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

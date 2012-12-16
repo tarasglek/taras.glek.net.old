@@ -1,0 +1,251 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>When in Trouble, Draw a Picture - All About Performance</title>
+  <meta name="author" content="Taras Glek">
+
+  
+  <meta name="description" content="Graphs Note: the following graphs broke on the nightlies this week. I would appreciate help with reducing this to a proper testcase. They work fine &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tarasglek.github.com/taras/blog/2010/03/23/when-in-trouble-draw-a-picture/">
+  <link href="/taras/favicon.png" rel="icon">
+  <link href="/taras/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/taras/javascripts/modernizr-2.0.js"></script>
+  <script src="/taras/javascripts/ender.js"></script>
+  <script src="/taras/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/taras/atom.xml" rel="alternate" title="All About Performance" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/taras/">All About Performance</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/taras/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tarasglek.github.com/taras" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/taras/">Blog</a></li>
+  <li><a href="/taras/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">When in Trouble, Draw a Picture</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-03-23T08:12:52-07:00" pubdate data-updated="true">Mar 23<span>rd</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><strong>Graphs</strong></p>
+
+<p><em>Note: the following graphs broke on the nightlies this week. I would appreciate help with reducing this to a proper testcase. They work fine on older nightlies and released versions of Firefox. Non-spidermonkey JS engines wont work as they don&#8217;t support <a href="https://developer.mozilla.org/en/New_in_JavaScript_1.7#Destructuring_assignment">destructuring assignment</a> and other goodies.</em></p>
+
+<p>Once I graphed my file-access logs, most of my problems became clear. Here is the <a href="http://people.mozilla.org/~tglek/startup/systemtap_graphs/visualize.html#original.data.html">first</a> graph(<a href="http://people.mozilla.org/~tglek/startup/systemtap_graphs/orig.png">screenshot</a>). The y-axis is time; once you click on a square, x-axis is the file offset. One can clearly see that libxul (4th rectangle) is a big chunk of our io. It&#8217;s also clear that initially the file is being accessed in the begining and near the end. One can also see that there is a some &#8220;backwards&#8221; io. It&#8217;s ugly stuff.</p>
+
+<p>I first saw this picture on Friday evening, I spent the last 2 days trying to make libxul.so load less stupidly. <a href="http://people.mozilla.org/~tglek/startup/systemtap_graphs/visualize.html?#madvise.hack.html">Here</a> is a graph(<a href="http://people.mozilla.org/~tglek/startup/systemtap_graphs/madvise1.png">screenshot</a>) from a hack I tried this morning (approach b in the <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=554421">bug</a>) . The top is still stupid, but near the bottom, libxul is being read in a much more efficient manner (>50% less io).</p>
+
+<p>This <a href="http://people.mozilla.org/~tglek/startup/systemtap_graphs/visualize.html??#madvise_ahead.html">graph</a> is from a lunch-time hack(approach c). IO is being spread across two processes so it&#8217;s evading my systemtap script for  now. Fortunately, &#8220;approach c&#8221; also shaved off a second of my startup time, so I know the libxul graph would&#8217;ve been real pretty.</p>
+
+<p>What follows is a story of how I ended up graphing stuff; more on lessons learned later&#8230;</p>
+
+<p><strong>Story</strong></p>
+
+<p>Last week I was about to give up and live with a <a href="http://tarasglek.github.com/taras/2010/03/05/mirror-mirror-on-the-wall-why-is-my-binary-slow/">meager</a> 10% win on libxul.so cold startup. I just couldn&#8217;t squeeze any more useful ideas out of my timing and io logs. I reached out to Jim Blandy, who confirmed that things seemed to be working as expected (unlike me, Jim actually knows this stuff).</p>
+
+<p>Upon hearing of my quest, surprising number of people strongly suggested that I chat with <a href="http://people.gnome.org/~michael/blog/">Michael Meeks</a>. He was digging around in the binary cesspool for OpenOffice recently and asked many of the same questions. We had a fun conversation, where Michael proved me wrong. I said I couldn&#8217;t imagine a useful way to graph the file io logs. In response Michel, dug up this <a href="http://people.gnome.org/~michael/blog/">beauty</a>. He built it with a <a href="http://live.gnome.org/iogrind">fun</a> mix of valgrind + c#.</p>
+
+<p>Feeling massive diagram envy, I decided that I had to get an interactive graph of my <a href="http://tarasglek.github.com/taras/2009/10/23/studying-library-io-systemtap-style/">SystemTap</a> data. A brief Google search revealed that <a href="http://raphaeljs.com/">RaphaelJS</a> would be awesome for my needs (the most <a href="http://www.youtube.com/watch?v=4pXfHLUlZf4">j***worthy</a> vector gfx library ever). After many happy hours of messing with with pretty graphics and colours, the ugly truth emerged (hint: it&#8217;s about the linker/kernel relationship). More on that soon.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Taras Glek</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-03-23T08:12:52-07:00" pubdate data-updated="true">Mar 23<span>rd</span>, 2010</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/taras/blog/categories/mozilla/'>mozilla</a>, <a class='category' href='/taras/blog/categories/startup/'>startup</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://tarasglek.github.com/taras/blog/2010/03/23/when-in-trouble-draw-a-picture/" data-via="tarasglek" data-counturl="http://tarasglek.github.com/taras/blog/2010/03/23/when-in-trouble-draw-a-picture/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/taras/blog/2010/03/11/extensions-startup/" title="Previous Post: Extensions & Startup">&laquo; Extensions & Startup</a>
+      
+      
+        <a class="basic-alignment right" href="/taras/blog/2010/03/24/linux-why-loading-binaries-from-disk-sucks/" title="Next Post: Linux: Why Loading Binaries From Disk Sucks">Linux: Why Loading Binaries From Disk Sucks &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/26/coping-with-flash-hangs/">Coping with Flash hangs</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/16/snappy-44-fixing-tab-switching-in-vancouver/">Snappy #44: Fixing tab switching in Vancouver</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/05/snappy-43-big-improvements-faster-startup-smoother-tabstrip/">Snappy #43: Big improvements: faster startup? Smoother tabstrip!</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/26/snappy-42/">Snappy #42</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/18/snappy-41/">Snappy #41</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("tarasglek", 4, false);
+    });
+  </script>
+  <script src="/taras/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/tarasglek" class="twitter-follow-button" data-show-count="false">Follow @tarasglek</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Taras Glek -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

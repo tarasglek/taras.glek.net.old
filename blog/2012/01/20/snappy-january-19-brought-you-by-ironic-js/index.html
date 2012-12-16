@@ -1,0 +1,257 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Snappy, January 19: Brought you by Ironic JS - All About Performance</title>
+  <meta name="author" content="Taras Glek">
+
+  
+  <meta name="description" content="Meeting notes. Network Cache Horrors Last week we discovered that our cache uses main thread locks to successfully block on off-main thread io. See ( &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tarasglek.github.com/taras/blog/2012/01/20/snappy-january-19-brought-you-by-ironic-js/">
+  <link href="/taras/favicon.png" rel="icon">
+  <link href="/taras/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/taras/javascripts/modernizr-2.0.js"></script>
+  <script src="/taras/javascripts/ender.js"></script>
+  <script src="/taras/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/taras/atom.xml" rel="alternate" title="All About Performance" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/taras/">All About Performance</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/taras/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tarasglek.github.com/taras" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/taras/">Blog</a></li>
+  <li><a href="/taras/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Snappy, January 19: Brought You by Ironic JS</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-01-20T05:50:54-08:00" pubdate data-updated="true">Jan 20<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><a href="https://wiki.mozilla.org/Performance/Snappy/2012-01-19">Meeting notes</a>.</p>
+
+<p><strong>Network Cache Horrors</strong></p>
+
+<p><a href="https://blog.mozilla.org/tglek/2012/01/12/snappy-jan12/">Last week</a> we discovered that our cache uses main thread locks to successfully block on off-main thread io. See (<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=695399">Bug 695399</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=717761">Bug 717761</a>). QA did an <a href="http://groups.google.com/group/mozilla.dev.tech.network/browse_thread/thread/6dfa3e6ebe80c336">experiment</a> which confirmed that our disk cache is performing poorly.</p>
+
+<p><strong>Flash Lag</strong></p>
+
+<p>We are looking into reports of flash lag, tracking <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=720000">Bug 720000</a>. Initial QA data shows a significant slowdown when page is first loaded and smaller slowdowns later. There are also long browser pauses when the flash container progress freezes.</p>
+
+<p><strong>Profiling</strong></p>
+
+<p>Vlad continued work on non-destructive chromehang, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=712109">Bug 712109</a>. Client-side is ready to land and he is wrapping up symbolification for the server-side.</p>
+
+<p><a href="https://developer.mozilla.org/en/Performance/Profiling_with_the_Built-in_Profiler">Interactivity profiler</a> is now able to collect stacks on 64-bit MacOS. Benoit is looking for contributors to add Windows, Linux support (<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=719536">Bug 719536)</a>. I highly encourage adventurous contributors to help out with that as it involves modifying some concise, straightforward, yet highly <a href="https://github.com/bgirard/Gecko-Profiler-Addon/blob/master/lib/symbolicate.js">ironic JavaScript</a>. We are also looking for help with the profiler UI. If you are a skilled addon/frontend person, see <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=719530">Bug 719530</a>.</p>
+
+<p>Jeff posted an early preview of about:jank <a href="http://people.mozilla.com/~jmuizelaar/aboutjank-0.1.xpi">addon</a>. He also working on measuring painting speed via telemetry. Note this addon is buggy and requires a very recent nightly.</p>
+
+<p>Last week I asked for some laggy session restore profiles. I&#8217;m behind on reproducing those(will be done today or next week). I&#8217;ve been in email contact with several of the commenters. I really appreciate the data gathered so far.</p>
+
+<p><strong>Snappy UX</strong></p>
+
+<p>Jared landed smooth scrolling, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=198964">Bug 198964</a>. He is now working on hooking it up to scrolling via scrollbar, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=710373">Bug 710373</a>. Up next: fixing fallout from turning on smooth scrolling, hooking it up to the refresh driver and tweaking scrolling physics.</p>
+
+<p>Marco landed inline autocomplete, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=566489">Bug 566489</a> and is now fixing fallout from that too.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Taras Glek</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-01-20T05:50:54-08:00" pubdate data-updated="true">Jan 20<span>th</span>, 2012</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/taras/blog/categories/mozilla/'>mozilla</a>, <a class='category' href='/taras/blog/categories/snappy/'>snappy</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://tarasglek.github.com/taras/blog/2012/01/20/snappy-january-19-brought-you-by-ironic-js/" data-via="tarasglek" data-counturl="http://tarasglek.github.com/taras/blog/2012/01/20/snappy-january-19-brought-you-by-ironic-js/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/taras/blog/2012/01/12/snappy-jan12/" title="Previous Post: Snappy Jan12">&laquo; Snappy Jan12</a>
+      
+      
+        <a class="basic-alignment right" href="/taras/blog/2012/01/26/snappy-january-26/" title="Next Post: Snappy, January 26">Snappy, January 26 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/26/coping-with-flash-hangs/">Coping with Flash hangs</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/16/snappy-44-fixing-tab-switching-in-vancouver/">Snappy #44: Fixing tab switching in Vancouver</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/05/snappy-43-big-improvements-faster-startup-smoother-tabstrip/">Snappy #43: Big improvements: faster startup? Smoother tabstrip!</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/26/snappy-42/">Snappy #42</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/18/snappy-41/">Snappy #41</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("tarasglek", 4, false);
+    });
+  </script>
+  <script src="/taras/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/tarasglek" class="twitter-follow-button" data-show-count="false">Follow @tarasglek</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Taras Glek -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

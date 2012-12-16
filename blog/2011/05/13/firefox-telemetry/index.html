@@ -1,0 +1,253 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Firefox Telemetry - All About Performance</title>
+  <meta name="author" content="Taras Glek">
+
+  
+  <meta name="description" content="Benchmarks Suck Mozilla has traditionally relied on [Talos, Sunspider, Kraken, etc] benchmarks to optimize Firefox. Unfortunately there are two &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tarasglek.github.com/taras/blog/2011/05/13/firefox-telemetry/">
+  <link href="/taras/favicon.png" rel="icon">
+  <link href="/taras/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/taras/javascripts/modernizr-2.0.js"></script>
+  <script src="/taras/javascripts/ender.js"></script>
+  <script src="/taras/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/taras/atom.xml" rel="alternate" title="All About Performance" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/taras/">All About Performance</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/taras/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tarasglek.github.com/taras" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/taras/">Blog</a></li>
+  <li><a href="/taras/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Firefox Telemetry</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-05-13T09:35:45-07:00" pubdate data-updated="true">May 13<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><strong>Benchmarks Suck</strong></p>
+
+<p>Mozilla has traditionally relied on [Talos, Sunspider, Kraken, etc] benchmarks to optimize Firefox. Unfortunately there are two problems with benchmarks: a) it is hard to write good benchmarks (see all of the complaints about Sunspider) b) the most perfect synthetic benchmarks do not completely correspond to actual user usage. Firefox with a well-used profile, anti-viral software, well-aged Windows and 30 addons will not perform the same as it does in our clean benchmarking environment.</p>
+
+<p>For my team this became obvious in Firefox 4 once we started recording Firefox startup times. Turned out that it is easier to work on fixing startup performance than make our synthetic test closely reflect real world startup speed.</p>
+
+<p><strong>Telemetry</strong></p>
+
+<p>There is only one solution to this problem: develop telemetry infrastructure to measure Firefox performance in the wild. Beginning with version 6, Firefox will ask users to opt-in to sending anonymous usage statistics about performance, user interface feature usage, memory usage, and responsiveness to Mozilla. This information will help us improve future versions of Firefox to better fit actual usage patterns.</p>
+
+<p>This functionality is already present in our major competitors. Unlike our competition we do not plan to tag reported data with unique identifiers. This will make it harder for us see how Firefox performance changes over time for particular users (or easily tell whether some users are disproportionately represented due to sending more reports). We take our users&#8217; privacy seriously, so this seems like a reasonable trade off.</p>
+
+<p>Yesterday I landed the reporting part of telemetry (bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=585196">585196</a>). We are still working on UI, official server-side and on updating the privacy policy.</p>
+
+<p><img src="http://people.mozilla.com/~tglek/telemetry/telemetry.jpg" alt="" /></p>
+
+<p>Above screenshot shows some of the data that will be gathered for users that opt-in to telemetry.</p>
+
+<p>Please help us get a headstart on telemetry. In the recent nightlies, go to about:config and set toolkit.telemetry.enabled to true. Once the pref is set, Firefox will send interesting performance data to the telemetry test server. The metrics are very compact and are sent out no more than once a day.</p>
+
+<p>Since there is no UI yet, install my <a href="https://addons.mozilla.org/en-US/firefox/addon/abouttelemetry/">about:telemetry</a> extension and navigate to &#8220;about:telemetry&#8221; to see the metrics collected.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Taras Glek</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-05-13T09:35:45-07:00" pubdate data-updated="true">May 13<span>th</span>, 2011</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/taras/blog/categories/mozilla/'>mozilla</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://tarasglek.github.com/taras/blog/2011/05/13/firefox-telemetry/" data-via="tarasglek" data-counturl="http://tarasglek.github.com/taras/blog/2011/05/13/firefox-telemetry/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/taras/blog/2011/04/26/measuring-startup-speed-correctly/" title="Previous Post: Measuring Startup Speed Correctly">&laquo; Measuring Startup Speed Correctly</a>
+      
+      
+        <a class="basic-alignment right" href="/taras/blog/2011/06/01/telemetry-updates/" title="Next Post: Telemetry Updates">Telemetry Updates &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/26/coping-with-flash-hangs/">Coping with Flash hangs</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/16/snappy-44-fixing-tab-switching-in-vancouver/">Snappy #44: Fixing tab switching in Vancouver</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/05/snappy-43-big-improvements-faster-startup-smoother-tabstrip/">Snappy #43: Big improvements: faster startup? Smoother tabstrip!</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/26/snappy-42/">Snappy #42</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/18/snappy-41/">Snappy #41</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("tarasglek", 4, false);
+    });
+  </script>
+  <script src="/taras/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/tarasglek" class="twitter-follow-button" data-show-count="false">Follow @tarasglek</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Taras Glek -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

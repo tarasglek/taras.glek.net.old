@@ -1,0 +1,704 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>All About Performance</title>
+  <meta name="author" content="Taras Glek">
+
+  
+  <meta name="description" content="Telemetry went live in Firefox Nightly builds over the weekend. Everyone who wants to contribute to making Firefox better now has an easy new way: &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tarasglek.github.com/taras/blog/page/9/">
+  <link href="/taras/favicon.png" rel="icon">
+  <link href="/taras/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/taras/javascripts/modernizr-2.0.js"></script>
+  <script src="/taras/javascripts/ender.js"></script>
+  <script src="/taras/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/taras/atom.xml" rel="alternate" title="All About Performance" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/taras/">All About Performance</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/taras/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tarasglek.github.com/taras" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/taras/">Blog</a></li>
+  <li><a href="/taras/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+  
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2011/06/27/telemetry-is-on-in-nightly-firefox-builds/">Telemetry Is on in Nightly Firefox Builds</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-06-27T04:26:12-07:00" pubdate data-updated="true">Jun 27<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Telemetry went live in Firefox Nightly builds over the weekend. Everyone who wants to contribute to making Firefox better now has an easy new way: opt-in to telemetry. There are two ways to opt in: A) Click yes when prompted to report performance B) Enable it by going to Options/Preferences, then Advanced/General tab</p>
+
+<p><a href="http://tarasglek.github.com/taras/files/2011/06/Optimized-out.jpg"><img src="http://tarasglek.github.com/taras/files/2011/06/Optimized-out.jpg" alt="" /></a></p>
+
+<p>You can check on the data collected by installing my <a href="https://addons.mozilla.org/en-US/firefox/addon/abouttelemetry/">about:telemetry</a> extension.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2011/06/22/developers-how-to-submit-telemetry-data/">Developers: How to Submit Telemetry Data</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-06-22T07:06:14-07:00" pubdate data-updated="true">Jun 22<span>nd</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Telemetry is a way to gather stats about Firefox. Currently histograms are the main mechanism by which to gather data. There are 3 histogram types currently supported: exponential, linear and boolean. Exponential+linear histograms can accumulate numbers between 0 and a user-defined integer maximum, they differ in bucket size increments. Boolean histograms are meant to store 0 or 1.</p>
+
+<p><strong>Steps to Add a New Metric</strong></p>
+
+<p>1) Add a histogram definition to <a href="http://mxr.mozilla.org/mozilla-central/source/toolkit/components/telemetry/TelemetryHistograms.h">TelemetryHistograms.h</a> specifying a histogram id, parameters and a description. For example HISTOGRAM(MYHGRAM, 1, 10000, 50, EXPONENTIAL, &#8220;Time (ms) taken by shiny new metric&#8221;) defines a MYHGRAM histogram with a minimum value of 1, maximum 10000 and 50 buckets that grow exponentially with the description specifying units as milliseconds. 2a) C++:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>
+</span><span class='line'>#include &lt;mozilla/Telemetry.h&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>&#8230;. Telemetry::Accumulate(Telemetry::MYHGRAM, <some interestin integer value goes here>)</p>
+
+<p>2b) JS:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>
+</span><span class='line'>Telemetry = Cc["@mozilla.org/base/telemetry;1"].getService(Ci.nsITelemetry)
+</span><span class='line'>var h = Telemetry.getHistogramById("MYHGRAM");
+</span><span class='line'>h.Add(&lt;some interesting value goes here&gt;);
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>3) Install <a href="https://addons.mozilla.org/en-US/firefox/addon/abouttelemetry/">about:telemetry</a> addon, go to about:telemetry to check that the chosen histogram type and parameters summarize your data in a useful way.</p>
+
+<p>4) Commit and wait for results to come in. <strong>FAQ</strong> <em>Q: What about those UMA</em>* macros?_ A: Don&#8217;t use them. I added TelemetryHistograms.h so telemetry can be easily reviewed by security and privacy police. It also avoids a few pitfalls such as accidentally initializing the same histogram with different parameters, etc.</p>
+
+<p><em>Q: When will telemetry be deployed?</em> A: We will land the <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=652657">UI</a> to turn it on as soon as an updated <a href="http://www.mozilla.com/en-US/legal/privacy/firefox.html">privacy policy</a> is <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=664845">posted</a>. It should show up in nightly builds by the end of the week.</p>
+
+<p><em>Q: How do I access the gathered telemetry data?</em> A: TBD. Data is stored on metrics server, we will figure this out soon.</p>
+
+<p><em>Q: What about addons?</em> A: TBD. At the moment addons are free to inspect telemetry data in their browser. We haven&#8217;t decided on a process to let addon authors add new probes and access stats. For now, addons should not participate in telemetry.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2011/06/01/telemetry-updates/">Telemetry Updates</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-06-01T05:03:47-07:00" pubdate data-updated="true">Jun 1<span>st</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>My <a href="https://blog.mozilla.org/tglek/2011/05/13/firefox-telemetry/">previous post</a> was too optimistic. There will be no telemetry in Firefox 6. Due to the multitude of reviews involved we slipped and are now aiming for Firefox 7. <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=659396">Bug 659396</a> tracks various ongoing telemetry tasks.</p>
+
+<p>I updated my <a href="http://people.mozilla.com/~tglek/telemetry/ping.telemetry.xpi">about:telemetry</a> extension to work with Firefox 7 nightlies. Additionally, my friend, David, helped me apply some nasty CSS tricks to make the histograms look like histograms. I&#8217;m open to further CSS contributions. I haven&#8217;t listed the extension on AMO because we plan to have this functionality integrated into Firefox soon (hopefully 7).</p>
+
+<p>To turn on telemetry,we have to: a) finish up the telemetry <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=652657">opt-in UI</a> and b) <a href="http://www.archivum.info/mozilla.governance/2011-05/00009/Update-to-Firefox-Privacy-Policy.html">update</a> our privacy policy.</p>
+
+<p>Thanks to everybody who manually flipped the pref to turn on telemetry. Having early feedback on this feature is awesome.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2011/05/13/firefox-telemetry/">Firefox Telemetry</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-05-13T09:35:45-07:00" pubdate data-updated="true">May 13<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><strong>Benchmarks Suck</strong></p>
+
+<p>Mozilla has traditionally relied on [Talos, Sunspider, Kraken, etc] benchmarks to optimize Firefox. Unfortunately there are two problems with benchmarks: a) it is hard to write good benchmarks (see all of the complaints about Sunspider) b) the most perfect synthetic benchmarks do not completely correspond to actual user usage. Firefox with a well-used profile, anti-viral software, well-aged Windows and 30 addons will not perform the same as it does in our clean benchmarking environment.</p>
+
+<p>For my team this became obvious in Firefox 4 once we started recording Firefox startup times. Turned out that it is easier to work on fixing startup performance than make our synthetic test closely reflect real world startup speed.</p>
+
+<p><strong>Telemetry</strong></p>
+
+<p>There is only one solution to this problem: develop telemetry infrastructure to measure Firefox performance in the wild. Beginning with version 6, Firefox will ask users to opt-in to sending anonymous usage statistics about performance, user interface feature usage, memory usage, and responsiveness to Mozilla. This information will help us improve future versions of Firefox to better fit actual usage patterns.</p>
+
+<p>This functionality is already present in our major competitors. Unlike our competition we do not plan to tag reported data with unique identifiers. This will make it harder for us see how Firefox performance changes over time for particular users (or easily tell whether some users are disproportionately represented due to sending more reports). We take our users&#8217; privacy seriously, so this seems like a reasonable trade off.</p>
+
+<p>Yesterday I landed the reporting part of telemetry (bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=585196">585196</a>). We are still working on UI, official server-side and on updating the privacy policy.</p>
+
+<p><img src="http://people.mozilla.com/~tglek/telemetry/telemetry.jpg" alt="" /></p>
+
+<p>Above screenshot shows some of the data that will be gathered for users that opt-in to telemetry.</p>
+
+<p>Please help us get a headstart on telemetry. In the recent nightlies, go to about:config and set toolkit.telemetry.enabled to true. Once the pref is set, Firefox will send interesting performance data to the telemetry test server. The metrics are very compact and are sent out no more than once a day.</p>
+
+<p>Since there is no UI yet, install my <a href="https://addons.mozilla.org/en-US/firefox/addon/abouttelemetry/">about:telemetry</a> extension and navigate to &#8220;about:telemetry&#8221; to see the metrics collected.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2011/04/26/measuring-startup-speed-correctly/">Measuring Startup Speed Correctly</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-04-26T07:34:02-07:00" pubdate data-updated="true">Apr 26<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Until recently our state of the art method for measuring startup was to subtract a timestamp passed via commandline from a</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>new Date()</span></code></pre></td></tr></table></div></figure>
+
+
+<p>timestamp within a</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;script&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>tag. Vlad <a href="http://blog.vlad1.com/2009/07/28/measuring-startup/">pioneered</a> this approach, <a href="http://tarasglek.github.com/taras/2010/01/19/chromium-vs-minefield-cold-startup-performance-comparison/">me</a> and others adopted it.</p>
+
+<p>Turns out there are two problems with this approach:</p>
+
+<ol>
+<li>It is cumbersome, especially on Windows where there is no easy way to pass a timestamp via the commandline.</li>
+<li>It is wrong. Turns out that Firefox starts loading web pages before the UI is shown. One can&#8217;t be sure that the page being loaded is within a visible browser
+Our oldest startup benchmark, ts,  has been gathering wrong numbers all along.  This resulted in a class of perverse optimizations that decreased the ts number, but increased the time taken for UI to appear (ie <a href="http://bugzil.la/641691">bug 641691</a>). The new <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=612190">tpaint (bug 612190)</a> benchmark should should address this. On my machine measuring pageload vs paint-time results in a 50-100ms difference. See the <a href="http://graphs.allizom.org/graph.html#tests=[[83,1,1],[83,1,17],[83,1,12],[83,1,13],[83,1,14],[16,1,12]]&amp;sel=none&amp;displayrange=7&amp;datatype=running">graph server</a> for more data.</li>
+</ol>
+
+
+<p>This is why AMO&#8217;s <a href="http://xulforge.com/blog/2011/04/testing-add-on-startup-performance/">complicated method</a> of measuring startup is wrong. Please use our shiny new <a href="https://wiki.mozilla.org/Firefox/Projects/StartupPerformance/MeasuringStartup">about:startup</a> extension or if you absolutely want to avoid adding any overhead use <a href="https://developer.mozilla.org/en/XPCOM_Interface_Reference/nsIAppStartup_MOZILLA_2_0#getStartupInfo%28%29">getStartupInfo</a> API directly.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2011/04/14/arguing-about-startup-communicating-performance/">Arguing About Startup: Communicating Performance</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-04-14T04:15:46-07:00" pubdate data-updated="true">Apr 14<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Recently the addon team started working towards penalizing addons that penalize our startup. We have solid data shows that startup gets worse as more addons installed so the effort is justified. Justin published this picture to illustrate the problem: <img src="http://people.mozilla.com/~fligtar/performance/num-addons-med.png" alt="" /></p>
+
+<p>However some technical mistakes were made. Wladimir (AdBlock+ guy!) has been busy exposing them on his <a href="http://adblockplus.org/blog/the-wrong-way-of-allowing-users-to-make-informed-decisions">blog</a>. Thanks Wladimir! I spent a couple of years understanding Firefox startup, so I really appreciate Wladimir&#8217;s remarkable speed/quality in poking holes in AMO approach.</p>
+
+<p><strong>Rating Addon Performance</strong>****</p>
+
+<p>Wlad&#8217;s latest <a href="http://adblockplus.org/blog/the-wrong-way-of-allowing-users-to-make-informed-decisions">point</a> is regarding how addon impact is measured on warm startup with an empty profile. I agree that addon impact on warm startup with clean profile is going to be different from that of cold startup with a dirty real-world profile. I also agree that it is weird to primarily measure warm startup given that our data clearly indicates that most users are experiencing cold startup.</p>
+
+<p>However startup is an irritating multidimensional problem influenced by a large number of factors. Should we suck it up and let addons kill warm startup (and risk ruining firefox upgrade times, pissing off web developers)? How does one choose a typical dirty profile? Creating a &#8220;typical&#8221; dirty profile is a tough problem (ie due to privacy, disk fragmentation) and there is no reason to let clean profile performance be degraded.</p>
+
+<p>So an addon performance rating will not be perfect. Time added by addon during warm startup is the easiest starting point and is one of the more deterministic measures (Wlad&#8217;s blog says otherwise, but measuring other startup kinds have even more noise). This is no worse than choosing browsers based on their JavaScript benchmark performance.</p>
+
+<p>I think a much awesomer addon performance rating may be obtainable by clever statistics boffins by analyzing our aggregated startup data. Perhaps the Mozilla Metrics will make it a reality, but in the meantime we&#8217;ll have to make do with an imperfect approach.</p>
+
+<p><em><strong>Coming soon:</strong> Why is the measurement approach in Jorge&#8217;s <a href="http://xulforge.com/blog/2011/04/testing-add-on-startup-performance/">post</a> is overly complicated and somewhat incorrect.</em></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2011/03/10/start-faster-addon/">&#8220;Start Faster&#8221; Addon</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-03-10T08:24:13-08:00" pubdate data-updated="true">Mar 10<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>A large proportion of our startup time is spent on loading the Firefox library(.dll, etc) files. This is true on all of our platforms. In my <a href="http://tarasglek.github.com/taras/2011/02/09/magic-patch-that-doubles-windows-startup/">previous pos</a>t I thought I discovered a way to load the Firefox binaries more efficiently on Windows(bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=627591">627591</a>). Further testing revealed that to not be true in all cases and that the Windows Prefetch service was still killing our startup speed. Microsoft does not seem to provide a way to opt out of the Windows Prefetch &#8216;service&#8217;.</p>
+
+<p>There is a DIY way to opt out of prefetch by gaining Administrator privileges and deleting files out of the prefetch directory. Our is plan is to provide a Windows service to handle Firefox updates (bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=481815">481815</a>). Additionally the service would be able to do useful things like delete prefetch files, defragment Firefox databases(or at least help report on fragmentation levels). This is all tricky stuff.</p>
+
+<p>In the meantime, to test my theory I wrote a <a href="https://addons.mozilla.org/en-US/firefox/addon/startupservice/">test extension</a>. This is a restartless extension that adds a Windows service and a wrapper executable to significantly speed up Firefox startup after rebooting (oh the irony!). After installing the extension, &#8220;Faster Firefox&#8221; shortcut on the Desktop should result in up to 2x speed up in Firefox startup. This addon is a rough proof of concept to play with while I bake this functionality into Firefox. Comments, improvements are welcome. Note that launching Firefox by shortcuts other &#8220;Faster Firefox&#8221; is slower while this extension is installed (this will be fixed once preloading functionality is integrated into Firefox properly). This addon does not yet work on XP because I do not yet have an XP enviroment to test/develop in (patches are welcome).</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2011/02/09/magic-patch-that-doubles-windows-startup/">Magic Patch That Halves Windows Startup</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-02-09T08:38:38-08:00" pubdate data-updated="true">Feb 9<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Internet as of late have been obsessing over magically short patches that improve performance _ times(probably as a result of LKML cgroups patch from a few weeks ago). So my work in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=627591">bug 627591</a> got picked up in all kinds of news sources(mostly due to @limi&#8217;s <a href="http://twitter.com/#!/limi/status/28983240966541312">manlove</a>). Apparently all that internet fame is good for is getting script-kiddies to upload viruses as bugzilla attachments. Dear Internet, please do not interrupt me in the middle of an investigation.</p>
+
+<p>To crux of the optimization lies in trading waiting for random io for fast sequential IO. Turned out that my patch worked great if windows prefetch wasn&#8217;t trying to help (ie firefox ran faster without prefetch on my test systems). With prefetch on, the patch was either a smaller win or a downright loss. When I dug in deeper, it turned that the Windows Prefetch helpfully spends 3-6 seconds doing IO before any Firefox code gets to run. It also doesn&#8217;t read in a very clever pattern, resulting in a very small speed up for Firefox, but preventing my exciting optimization.</p>
+
+<p>So I curled up into my defeated fetal position and pondered on how would I prevent Windows Prefetch from being so &#8220;helpful&#8221;. One way would be to <a href="http://tarasglek.github.com/taras/2010/10/04/diagnosing-slow-startup/">install</a> some crapware to cripple prefetch (kidding!), another way is to do the sequential IO in a separate executable(ala<a href="http://glandium.org/blog/?p=1719"> run-mozilla.sh</a> on Unix). This way Windows doesn&#8217;t try to do insane amounts of IO before my preloading logic gets to run. This seems to work (see wrapper.exe talk in the bug) and has potential to double Firefox startup times. It&#8217;s also ugly as sin, but if that&#8217;s what it takes&#8230;</p>
+
+<p>So now I need more reports to make sure the executable wrapper approach reliably/significantly speeds up cold(post-reboot) startup. Then we can make a decision on how to integrate this into Firefox. But until we have all the data, please don&#8217;t jump to conclusions on what will and wont make Firefox 2x faster.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2011/01/14/builtin-startup-measurement/">Builtin Startup Measurement</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-01-14T05:25:20-08:00" pubdate data-updated="true">Jan 14<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I got used to measuring startup the complicated way (example <a href="http://tarasglek.github.com/taras/2010/01/04/windows-7-startup-exploration/">here</a>). It&#8217;s complicated enough that many people prefer to use stopwatches.</p>
+
+<p>Turns out modern operating systems can help applications self-diagnose startup speed. Thanks to landing <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=522375">bug 522375</a> we now provide an API for measuring startup speed. For example, now I know that xpcshell takes forever to startup on mac</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>
+</span><span class='line'>./xpcshell -e 'print(new Date() - Components.classes["@mozilla.org/toolkit/app-startup;1"].getService(Components.interfaces.nsIAppStartup_MOZILLA_2_0).getStartupInfo().process)'
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>At any point one can now go to the error console and type in</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>
+</span><span class='line'>uneval(Components.classes["@mozilla.org/toolkit/app-startup;1"].getService(Components.interfaces.nsIAppStartup_MOZILLA_2_0).getStartupInfo())
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>or</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>
+</span><span class='line'>var si=Components.classes["@mozilla.org/toolkit/app-startup;1"].getService(Components.interfaces.nsIAppStartup_MOZILLA_2_0).getStartupInfo(); si.sessionRestored-si.process
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>to get various interesting timestamps. So next time you see a startup take a surprising amount of time, you can go and poke around to see where that time was spent. At the moment there are 4 datapoints:</p>
+
+<ol>
+<li>.process - Process creation timestamp. This is cool because this happens before any library code is executed.</li>
+<li>.main - XRE_main timestamp. My favourite thing to do is to subtract .process from .main. This demonstrates huge overheads that many application programmers refuse to believe in.</li>
+<li>.firstPaint - Timestamp of the first intended paint. This coincides with when the user sees the first sign of life.</li>
+<li>.sessionRestore - Timestamp of session restore, ie when the browser becomes useful.
+Lots of people helped in getting this feature landed, but two people stand out. Daniel Brooks originally figured how to expose Windows/Linux startup speed in Mozilla. Mike Hommey devised a morally-reprehensible way to get precise startup speed out of the idiotic way that Linux presents it.</li>
+</ol>
+
+
+<p><strong>Linux Sucks </strong></p>
+
+<p>Mac and Windows expose process creation times via human time. It&#8217;s just like any other API with time in it. Linux provides process startup speed in imbecile jiffies-since-boot. That&#8217;d be irritating enough, but to piss people off further there is no way to convert that into human time. Clever ps developers resort to calculating jiffies/second by comparing against seconds-since-start in /proc/uptime. Unfortunately that does not even come close to providing anything close to millisecond resolution needed for useful numbers. Mike&#8217;s idea of timing startup of another thread/task to get a known jiffy-stamp got us precise-enough numbers (around 10ms resolution with most kernels, see <a href="http://hg.mozilla.org/mozilla-central/rev/dfdf3e5dc749">patch</a> for details). At least Linus was kind enough to let mere user-space devs obtain the current tick-rate.</p>
+
+<p><strong>Update:</strong></p>
+
+<p>Linux doesn&#8217;t suck anymore, a commenter pointed me to a relatively new(2006) taskstats interface which appears to work sanely like the BSD one.</p>
+
+<p>Mike Hommey made an <a href="http://glandium.org/blog/?p=1575">about:startup extension</a> using this API.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/taras/blog/2010/12/29/faster-plugin-enumeration-help-wanted/">Faster Plugin Enumeration + Help Wanted</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-12-29T09:08:47-08:00" pubdate data-updated="true">Dec 29<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>In addition to slow <a href="https://blog.mozilla.org/tglek/">font enumeration</a>, we were suffering from a similar problem: slow plugin enumeration. Just as with fonts, the plugin enumeration code is different on every platform. Unlike the font situation, plugin enumeration is done completely within our code(ie easy to fix).</p>
+
+<p>Plugin enumeration is often triggered by JavaScript code (for example by checking if a Java handler is present). This means that enumeration is a blocking operation that must happen quickly. XPerf made me wonder why so many plugin-like .dll files were being read. This lead me to a fun set of perf fixes.</p>
+
+<p><strong>The Algorithm</strong></p>
+
+<ol>
+<li>Files in plugin directories are listed</li>
+<li>Platform-specific IsPluginFile function to determines what files look like plugins(ie np*.dll on Windows).</li>
+<li>Code then checks if the files + their timestamps are known by pluginreg.dat. If so, cached info is used and the following steps are skipped</li>
+<li>For each library-file that isn&#8217;t found in pluginreg.dat, we use platform-specific GetPluginInfo to load the library-file to see if it is indeed a valid plugin (and to see what mimetypes it handles/etc).</li>
+<li>Valid plugins are recorded in pluginreg.dat.
+This process took up to 3 seconds on a user&#8217;s computer. WTF? There were gotchas in almost every step of the way.</li>
+<li>Windows directory listing code would request metadata for <em>every bloody file in the directory</em>. Which resulted in an easiest optimization ever: <a href="https://bug616256.bugzilla.mozilla.org/attachment.cgi?id=494795">pure code deletion</a>.</li>
+<li>IsPluginFile on Windows/Mac sneakily did more than just check the filename. It also <a href="https://bugzilla.mozilla.org/attachment.cgi?id=494840&amp;action=edit">checked</a> if the file was loadable, which on Windows loaded the dll and all of the dependencies. Mac code was <a href="https://bugzilla.mozilla.org/attachment.cgi?id=499855&amp;action=edit">satisfied</a> with merely doing a little extra IO.</li>
+<li>This part was right</li>
+<li><h1>2 was easily fixed by moving file IO here.</h1></li>
+<li>Files that failed the check in #4 were doomed to cause extra IO for all of eternity. Scott Greenlay fixed that by <a href="https://bugzilla.mozilla.org/attachment.cgi?id=496518&amp;action=edit">recording</a> invalid plugin-like files too.
+This was a rare fix that resulted in seconds saved on crapware-loaded computers. Usually I have to count my progress in milliseconds :(</li>
+</ol>
+
+
+<p><strong>Help Wanted </strong></p>
+
+<p>I have plans for vastly improving Firefox startup, but I need help to get there. If you enjoy beating under-performing code into submission and want to work for Mozilla, please send me your resume(taras at mozilla dot com). Example projects: a better performance testsuite (ie tracking IO, cpu instructions, etc), better infrastructure for profiling addons, optimizing away various CSS/XUL markup, etc. A low-level approach to solving problems is helpful, compiler/linker/kernel hackers are well-suited (but not required) for this.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  <div class="pagination">
+    
+      <a class="prev" href="/taras/blog/page/10/">&larr; Older</a>
+    
+    <a href="/taras/blog/archives">Blog Archives</a>
+    
+    <a class="next" href="/taras/blog/page/8/">Newer &rarr;</a>
+    
+  </div>
+</div>
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/26/coping-with-flash-hangs/">Coping with Flash hangs</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/16/snappy-44-fixing-tab-switching-in-vancouver/">Snappy #44: Fixing tab switching in Vancouver</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/05/snappy-43-big-improvements-faster-startup-smoother-tabstrip/">Snappy #43: Big improvements: faster startup? Smoother tabstrip!</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/26/snappy-42/">Snappy #42</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/18/snappy-41/">Snappy #41</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("tarasglek", 4, false);
+    });
+  </script>
+  <script src="/taras/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/tarasglek" class="twitter-follow-button" data-show-count="false">Follow @tarasglek</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Taras Glek -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

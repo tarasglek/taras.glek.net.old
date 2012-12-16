@@ -1,0 +1,249 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Benchmarks and Instrumentation for Fennec/etc - All About Performance</title>
+  <meta name="author" content="Taras Glek">
+
+  
+  <meta name="description" content="I wrote Fennecmark to automate some of the tasks that I did manually while doing performance debugging. I tried to capture some of the &#8220; &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tarasglek.github.com/taras/blog/2009/04/23/benchmarks-and-instrumentation-for-fennecetc/">
+  <link href="/taras/favicon.png" rel="icon">
+  <link href="/taras/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/taras/javascripts/modernizr-2.0.js"></script>
+  <script src="/taras/javascripts/ender.js"></script>
+  <script src="/taras/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/taras/atom.xml" rel="alternate" title="All About Performance" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/taras/">All About Performance</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/taras/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tarasglek.github.com/taras" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/taras/">Blog</a></li>
+  <li><a href="/taras/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Benchmarks and Instrumentation for Fennec/etc</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-04-23T03:19:14-07:00" pubdate data-updated="true">Apr 23<span>rd</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>I wrote Fennecmark to automate some of the tasks that I did manually while doing performance debugging.</p>
+
+<p>I tried to capture some of the &#8220;perceived performance&#8221; in numbers. My goal is to focus on user-visible areas of performance. Ideally it will enable us to track performance better to ensure that key features do not regress in performance and enable us to compare Fennec speed on various platforms. I need to spend some quality time with QA people to figure out how to achieve that.</p>
+
+<p>Currently Fennecmark loads a slow-to-load webpage, zooms around it and then pans from the top to the bottom. This measures: responsiveness during pageload, zoom speed and panning lag.</p>
+
+<p>See code at <a href="http://hg.mozilla.org/users/tglek_mozilla.com/fennecmark">http://hg.mozilla.org/users/tglek_mozilla.com/fennecmark</a>.</p>
+
+<p><strong>JSD Instrumentation</strong></p>
+
+<p>Spidermonkey provides an API that allows one to get a notification on every method entry/exit. I was able to do most of my Fennec performance analysis via a component in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=470116">bug 470116</a>. My stopwatch component times the execution of every js function call and spits out a log that has been very useful in figuring out what is taking up time in Fennec chrome.</p>
+
+<p><strong>Porkstain</strong></p>
+
+<p>I am itching to write a tool that can instrument large portions of Mozilla code such that it can be profiled across C++/JS boundaries and without any external tool support. I am guessing this would be most useful on platforms with crappy sampling tools, but it would be cool if it made finding slow codepaths easier in general. If you know any lightweight instrumentation techniques, please share.</p>
+
+<p>I wrote a little prototype to insert stopwatch stuff into code deemed interesting by oprofile (stuff in the bug above). The code patching part works well, but it&#8217;s a big runtime hit and outputs too much data.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Taras Glek</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-04-23T03:19:14-07:00" pubdate data-updated="true">Apr 23<span>rd</span>, 2009</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/taras/blog/categories/mozilla/'>mozilla</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://tarasglek.github.com/taras/blog/2009/04/23/benchmarks-and-instrumentation-for-fennecetc/" data-via="tarasglek" data-counturl="http://tarasglek.github.com/taras/blog/2009/04/23/benchmarks-and-instrumentation-for-fennecetc/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/taras/blog/2009/04/15/misc-static-analysis-news-smmgcstatic-codecon-piglet/" title="Previous Post: Misc Static Analysis News: s/#mmgc/#static/, Codecon, piglet, ...">&laquo; Misc Static Analysis News: s/#mmgc/#static/, Codecon, piglet, ...</a>
+      
+      
+        <a class="basic-alignment right" href="/taras/blog/2009/04/30/gcc-rant-progress/" title="Next Post: GCC Rant + Progress">GCC Rant + Progress &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/26/coping-with-flash-hangs/">Coping with Flash hangs</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/16/snappy-44-fixing-tab-switching-in-vancouver/">Snappy #44: Fixing tab switching in Vancouver</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/11/05/snappy-43-big-improvements-faster-startup-smoother-tabstrip/">Snappy #43: Big improvements: faster startup? Smoother tabstrip!</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/26/snappy-42/">Snappy #42</a>
+      </li>
+    
+      <li class="post">
+        <a href="/taras/blog/2012/10/18/snappy-41/">Snappy #41</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("tarasglek", 4, false);
+    });
+  </script>
+  <script src="/taras/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/tarasglek" class="twitter-follow-button" data-show-count="false">Follow @tarasglek</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Taras Glek -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
