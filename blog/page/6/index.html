@@ -113,7 +113,7 @@ Bill landed incremental GC this week, bug <a href="https://bugzilla.mozilla.org/
 
 <p><strong>DOM</strong></p>
 
-<p>Kyle is adding infrastructure to allow webpages to wait on <a href="http://taras.glek.net/2012/02/22/psa-dom-local-storage-considered-harmful/">local storage</a> without blocking user interactions, see <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=729769">729769</a>.</p>
+<p>Kyle is adding infrastructure to allow webpages to wait on <a href="http://taras.glek.net/blog/2012/02/22/psa-dom-local-storage-considered-harmful/">local storage</a> without blocking user interactions, see <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=729769">729769</a>.</p>
 
 <p><strong>Profiling</strong></p>
 
@@ -306,7 +306,7 @@ This freeze can last anywhere from a few milliseconds on an unburdened computer 
 
 <p>Olli has landed most of the cycle collector fixes. Telemetry shows a dramatic reduction in cycle collection times for Firefox 13. He and Andrew investigating the remaining causes of long CC times.</p>
 
-<p>I&#8217;ll end this post with a pretty picture demonstrating recent cycle collection improvements. <a href="http://taras.glek.net/files/2012/02/cc13_12.png"> <img src="http://taras.glek.net/files/2012/02/cc13_12.png" alt="" /></a> * y: frequency, x: milliseconds</p>
+<p>I&#8217;ll end this post with a pretty picture demonstrating recent cycle collection improvements. <a href="http://taras.glek.net/blog/files/2012/02/cc13_12.png"> <img src="http://taras.glek.net/blog/files/2012/02/cc13_12.png" alt="" /></a> * y: frequency, x: milliseconds</p>
 </div>
   
   
@@ -514,7 +514,7 @@ We spent the weekend at FOSDEM. I re-presented my Plumbers talk on why Linux <a 
 
   <div class="entry-content"><p><strong>Slow Sessions - Tabs-on-Demand</strong></p>
 
-<p>Armed to the teeth with <a href="https://addons.mozilla.org/en-US/firefox/addon/aboutjank/">about:jank</a>, I was testing session restore scenarios that people <a href="http://taras.glek.net/2012/01/11/call-for-snappy-help-looking-for-a-lots-of-tabs-sessions-with-lag/">reported</a>. While at it I came up with a <a href="https://plus.google.com/108936502671219351445/posts/UMzBAQr3xDS">testcase</a> for bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=711193">711193</a>. At first we were going to use telemetry to debate the merits of tabs on demand by default, but I feel my example illustrates responsiveness problems with session-restore well enough. Gavin is looking into this so we can make a decision this week.</p>
+<p>Armed to the teeth with <a href="https://addons.mozilla.org/en-US/firefox/addon/aboutjank/">about:jank</a>, I was testing session restore scenarios that people <a href="http://taras.glek.net/blog/2012/01/11/call-for-snappy-help-looking-for-a-lots-of-tabs-sessions-with-lag/">reported</a>. While at it I came up with a <a href="https://plus.google.com/108936502671219351445/posts/UMzBAQr3xDS">testcase</a> for bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=711193">711193</a>. At first we were going to use telemetry to debate the merits of tabs on demand by default, but I feel my example illustrates responsiveness problems with session-restore well enough. Gavin is looking into this so we can make a decision this week.</p>
 
 <p><strong>Laggy </strong><strong>Sessions </strong></p>
 
@@ -574,7 +574,7 @@ We spent the weekend at FOSDEM. I re-presented my Plumbers talk on why Linux <a 
 
 <p><strong>Network Cache Horrors</strong></p>
 
-<p><a href="http://taras.glek.net/2012/01/12/snappy-jan12/">Last week</a> we discovered that our cache uses main thread locks to successfully block on off-main thread io. See (<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=695399">Bug 695399</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=717761">Bug 717761</a>). QA did an <a href="http://groups.google.com/group/mozilla.dev.tech.network/browse_thread/thread/6dfa3e6ebe80c336">experiment</a> which confirmed that our disk cache is performing poorly.</p>
+<p><a href="http://taras.glek.net/blog/2012/01/12/snappy-jan12/">Last week</a> we discovered that our cache uses main thread locks to successfully block on off-main thread io. See (<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=695399">Bug 695399</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=717761">Bug 717761</a>). QA did an <a href="http://groups.google.com/group/mozilla.dev.tech.network/browse_thread/thread/6dfa3e6ebe80c336">experiment</a> which confirmed that our disk cache is performing poorly.</p>
 
 <p><strong>Flash Lag</strong></p>
 

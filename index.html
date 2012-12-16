@@ -175,7 +175,7 @@
 
   <div class="entry-content"><p>Our median startup performance (as measured by <a href="https://metrics.mozilla.com/data/content/pentaho-cdf-dd/Render?solution=metrics2&amp;path=%2Ftelemetry&amp;file=telemetryEvolution.wcdf&amp;bookmarkState={%22impl%22%3A%22client%22%2C%22params%22%3A{%22referenceDate%22%3A%222012-11-05%22%2C%22appNameParameter%22%3A%22[Application].[Firefox]%22%2C%22osParameter%22%3A%22[OS].[WINNT]%22%2C%22channelParameter%22%3A%22[Channel].[nightly]%22%2C%22reasonParameter%22%3A%22[Reason].[idle-daily]%22%2C%22histogramParameter%22%3A%22[Histogram].[SIMPLE_MEASURES_FIRSTPAINT]%22%2C%22histogramPopupTools%22%3A%22%22%2C%22duplicateHistogram%22%3A%22%23duplicateHistogram%22%2C%22medianButtonParam%22%3A1%2C%22scatterChart%22%3A%22%22}}">SIMPLE_MEASURES_FIRST_PAINT</a>) improved between 20%-25% at the end of Firefox 18 cycle (~Oct 26). Strangely most of the speedup seems to have come from a 50% speedup in library loading (measured by <a href="https://metrics.mozilla.com/data/content/pentaho-cdf-dd/Render?solution=metrics2&amp;path=%2Ftelemetry&amp;file=telemetryEvolution.wcdf&amp;bookmarkState={%22impl%22%3A%22client%22%2C%22params%22%3A{%22referenceDate%22%3A%222012-11-05%22%2C%22appNameParameter%22%3A%22[Application].[Firefox]%22%2C%22osParameter%22%3A%22[OS].[WINNT]%22%2C%22channelParameter%22%3A%22[Channel].[nightly]%22%2C%22reasonParameter%22%3A%22[Reason].[saved-session]%22%2C%22histogramParameter%22%3A%22[Histogram].[SIMPLE_MEASURES_MAIN]%22%2C%22histogramPopupTools%22%3A%22%22%2C%22duplicateHistogram%22%3A%22%23duplicateHistogram%22%2C%22medianButtonParam%22%3A1%2C%22scatterChart%22%3A%22%22}}">SIMPLE_MEASURES_MAIN</a>).</p>
 
-<p><a href="http://taras.glek.net/files/2012/11/startup2025.png"><img src="http://taras.glek.net/files/2012/11/startup2025.png" alt="" /></a></p>
+<p><a href="http://taras.glek.net/blog/files/2012/11/startup2025.png"><img src="http://taras.glek.net/blog/files/2012/11/startup2025.png" alt="" /></a></p>
 
 <p><strong>Tab-strip</strong></p>
 
@@ -183,7 +183,7 @@
 
 <p>We spent a lot of time focusing on tab smoothness recently. We still have a long way to go, but I checked telemetry data and the improvements are staggering. In the picture below I&#8217;m comparing tab closing animation(<a href="https://metrics.mozilla.com/data/content/pentaho-cdf-dd/Render?solution=metrics2&amp;path=%2Ftelemetry&amp;file=telemetryHistogram.wcdf&amp;bookmarkState={%22impl%22%3A%22client%22%2C%22params%22%3A{%22startDate%22%3A%222012-10-06%22%2C%22endDate%22%3A%222012-11-04%22%2C%22appVersion%22%3A%22%22%2C%22appName%22%3A%22Firefox%22%2C%22arch%22%3A%22%22%2C%22OS%22%3A%22WINNT%22%2C%22version%22%3A%226.1%22%2C%22channel%22%3A%22nightly%22%2C%22reason%22%3A%22idle-daily%22%2C%22appBuildID%22%3A%22%22%2C%22fromPlatformBuildID%22%3A%22%22%2C%22toPlatformBuildID%22%3A%22%22%2C%22excludeParam%22%3A%22%22%2C%22measure%22%3A%22FX_TAB_ANIM_CLOSE_MS%22%2C%22histogramCompareParam%22%3A%22appVersion%22%2C%22histogramVariablesParam%22%3A%2217.0a1%2C18.0a1%2C19.0a1%22%2C%22platformBuildIDMode%22%3A%22LATEST%22%2C%22platformBuildIDTopCount%22%3A%2230%22%2C%22conditionsStatistic%22%3A%22%23conditionsStatistic%22%2C%22submissionsParameter%22%3A[[134541]]}}">FX_TAB_ANIM_CLOSE</a>) between 17, 18, 19. In the picture below there should be 0 entries to the right of 154(that&#8217;s our problematic performance tail). In 2.5 months, we went from having almost 20% of our tab animations taking > 400ms to complete to ~3%.</p>
 
-<p><a href="http://taras.glek.net/files/2012/11/fx_anim_tab_close1.png"><img src="http://taras.glek.net/files/2012/11/fx_anim_tab_close1.png" alt="" /></a></p>
+<p><a href="http://taras.glek.net/blog/files/2012/11/fx_anim_tab_close1.png"><img src="http://taras.glek.net/blog/files/2012/11/fx_anim_tab_close1.png" alt="" /></a></p>
 
 <p>In addition to median perf improving, tab animations are now much less likely to vary in duration, etc. This required fixes in layout, gfx, frontend code. It&#8217;s really great to see a cross-team effort producing tangible results. It&#8217;s too bad that our analysis infrastructure makes it so hard to pinpoint specific changes that contributed most to an improvement like this.</p>
 
@@ -289,7 +289,7 @@
   </header>
 
 
-  <div class="entry-content"><p>Jeff Muizelaar may not have cut tab switch times in half in my <a href="http://taras.glek.net/2012/10/15/snappy-40-faster-tabswitching-startup-analysis/">last update</a>. The overhead moved to a later part of the process that we were not measuring before the change landed. We&#8217;ll be able to tell the magnitude of the tab-switch improvement was by landing bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=800031">800031</a> on Aurora.</p>
+  <div class="entry-content"><p>Jeff Muizelaar may not have cut tab switch times in half in my <a href="http://taras.glek.net/blog/2012/10/15/snappy-40-faster-tabswitching-startup-analysis/">last update</a>. The overhead moved to a later part of the process that we were not measuring before the change landed. We&#8217;ll be able to tell the magnitude of the tab-switch improvement was by landing bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=800031">800031</a> on Aurora.</p>
 
 <p>Matt Woodrow reduced tab-close animation jank in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=750417">bug 750417</a>.</p>
 </div>
@@ -331,9 +331,9 @@
 
 <p><strong>Jeff Muizelaar cut tab switch times in half</strong></p>
 
-<p>Data came in on Jeff&#8217;s optimization I mentioned <a href="http://taras.glek.net/2012/10/04/snappy-39/">last week</a>: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=792199">bug 792199</a>. This halved our median tab switch time. Since this also landed at the end of our 18 cycle, a comparison between 18/19 Nightlies gives us an idea of how this changed our tab switching times overall. Note the actual difference would be greater since both 18 &amp; 19 include data points with Jeff&#8217;s patch, but the majority of data in 18 is without Jeff&#8217;s patch.</p>
+<p>Data came in on Jeff&#8217;s optimization I mentioned <a href="http://taras.glek.net/blog/2012/10/04/snappy-39/">last week</a>: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=792199">bug 792199</a>. This halved our median tab switch time. Since this also landed at the end of our 18 cycle, a comparison between 18/19 Nightlies gives us an idea of how this changed our tab switching times overall. Note the actual difference would be greater since both 18 &amp; 19 include data points with Jeff&#8217;s patch, but the majority of data in 18 is without Jeff&#8217;s patch.</p>
 
-<p><a href="http://taras.glek.net/files/2012/10/fx_tab_switch_update.png"><img src="http://taras.glek.net/files/2012/10/fx_tab_switch_update.png" alt="" /></a></p>
+<p><a href="http://taras.glek.net/blog/files/2012/10/fx_tab_switch_update.png"><img src="http://taras.glek.net/blog/files/2012/10/fx_tab_switch_update.png" alt="" /></a></p>
 
 <p><em>Black: v18, Blue V19. X-axis represents time in milliseconds to do a tab switch, excluding time to paint.</em></p>
 
@@ -343,7 +343,7 @@
 
 <p>As I mentioned above graph does not include paint times. Jeff also landed bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=800031">800031</a> which measures the complete tab switch duration (including paint time).</p>
 
-<p><a href="http://taras.glek.net/files/2012/10/fx_tab_switch_total.png"><img src="http://taras.glek.net/files/2012/10/fx_tab_switch_total.png" alt="" /></a></p>
+<p><a href="http://taras.glek.net/blog/files/2012/10/fx_tab_switch_total.png"><img src="http://taras.glek.net/blog/files/2012/10/fx_tab_switch_total.png" alt="" /></a></p>
 
 <p><strong>Timothy Nikkel&#8217;s Visible Image Decoding</strong></p>
 

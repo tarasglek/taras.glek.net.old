@@ -88,7 +88,7 @@
   </header>
 
 
-<div class="entry-content"><p>Earlier I <a href="http://taras.glek.net/2012/04/10/argh-at-our-unresponsive-tab-strip-settimeoutfoo-0-can-be-very-harmful/">blogged </a>about terrible UI responsiveness resulting from a poorly placed setTimeout. I&#8217;ve long suspected that SetTimeouts are to blame for everything. Now with help of bz and sfink I have proof.</p>
+<div class="entry-content"><p>Earlier I <a href="http://taras.glek.net/blog/2012/04/10/argh-at-our-unresponsive-tab-strip-settimeoutfoo-0-can-be-very-harmful/">blogged </a>about terrible UI responsiveness resulting from a poorly placed setTimeout. I&#8217;ve long suspected that SetTimeouts are to blame for everything. Now with help of bz and sfink I have proof.</p>
 
 <p>Turns out webpages like to keep users entertained and spin setTimeout loops to poll the servers to synchronize news tickers, social networking shoe-ins, collaborative editing, etc. Most pages do this regardless of whether they are a background or a foreground tab. Firefox tries to mitigate this by not allowing background tabs to schedule setTimeouts &lt; 2seconds. Turns out this is a pretty weak defense.</p>
 

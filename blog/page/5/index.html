@@ -149,7 +149,7 @@
 
 <p>Snappy meetings have gotten a bit dull lately. There hasn&#8217;t been much arguing about what needs fixing, or much discussion, everybody gave status updates and was in agreement. Going forward we will do less status updating, except for major developments to save some energy for discussion.</p>
 
-<p>Discussion centered around personas&#8230;err themes <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=650968">murdering </a>firefox performance and goals for q2. Ehsan will post details how to reimplement themes. I made a separate <a href="http://taras.glek.net/2012/04/05/snappy-apr-5-snappy-goals-for-q2/">post </a>about goals.</p>
+<p>Discussion centered around personas&#8230;err themes <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=650968">murdering </a>firefox performance and goals for q2. Ehsan will post details how to reimplement themes. I made a separate <a href="http://taras.glek.net/blog/2012/04/05/snappy-apr-5-snappy-goals-for-q2/">post </a>about goals.</p>
 
 <p>Vlad raised a question on whether we should proceed with <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=722243">cancellable </a>SQL queries given SQLite limitations. SQLite can only cancel all outstanding queries, which requires us to track carefully what requests are outstanding and/or do some SQLite feature development. Consensus was that we should proceed to avoid embarrassing situations like reading the places database <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=684513">backwards </a>during shutdown.</p>
 
@@ -419,7 +419,7 @@ We do a lot of work outside of our goal process, so above goals represent only t
 
   <div class="entry-content"><p>Firefox 13 became Aurora this week. Firefox 13 is the first release that contains a significant amount of Snappy improvements. Some work got backported to 11 &amp; 12, but 13 is where the bulk of work landed. I am very proud of how much we accomplished in 13.</p>
 
-<p>[caption id=&#8221;attachment_613&#8221; align=&#8221;alignnone&#8221; width=&#8221;600&#8221; caption=&#8221;Distribution of Snappy fixes&#8221;]<a href="http://taras.glek.net/files/2012/03/ff13.png"><img src="http://taras.glek.net/files/2012/03/ff13.png" alt="" /></a>[/caption]</p>
+<p>[caption id=&#8221;attachment_613&#8221; align=&#8221;alignnone&#8221; width=&#8221;600&#8221; caption=&#8221;Distribution of Snappy fixes&#8221;]<a href="http://taras.glek.net/blog/files/2012/03/ff13.png"><img src="http://taras.glek.net/blog/files/2012/03/ff13.png" alt="" /></a>[/caption]</p>
 
 <p>I suspect the unnamed bar mostly consists of bugs that did not get version-tagged, but those should also be FF13.</p>
 
@@ -553,7 +553,7 @@ INSERT INTO webappsstore2_temp (scope, key, value, secure, owner) SELECT scope, 
   </header>
 
 
-  <div class="entry-content"><p><a href="http://taras.glek.net/files/2012/03/telemetry.png"><img src="http://taras.glek.net/files/2012/03/telemetry.png" alt="" /></a></p>
+  <div class="entry-content"><p><a href="http://taras.glek.net/blog/files/2012/03/telemetry.png"><img src="http://taras.glek.net/blog/files/2012/03/telemetry.png" alt="" /></a></p>
 
 <p>I cleaned up about:telemetry to be a bit less of a hack. It mostly generates charts using proper DOM manipulations now, so should be easier to contribute to.</p>
 
@@ -701,7 +701,7 @@ INSERT INTO webappsstore2_temp (scope, key, value, secure, owner) SELECT scope, 
 
   <div class="entry-content"><p><strong>SUMO Problem Investigation</strong></p>
 
-<p>Looks like increase in negative SUMO reports that I mentioned <a href="http://taras.glek.net/2012/02/27/snappy-feb-23rd/">last time</a> was due to over-counting. There might be some networking regressions, but no general slowdown. Without solid data it&#8217;s hard to tell.</p>
+<p>Looks like increase in negative SUMO reports that I mentioned <a href="http://taras.glek.net/blog/2012/02/27/snappy-feb-23rd/">last time</a> was due to over-counting. There might be some networking regressions, but no general slowdown. Without solid data it&#8217;s hard to tell.</p>
 
 <p>In order to provide more context to make SUMO reports more useful to developers we are looking into allowing users to attach their telemetry data: bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=732522">732522</a>.</p>
 
@@ -731,7 +731,7 @@ INSERT INTO webappsstore2_temp (scope, key, value, secure, owner) SELECT scope, 
 
 <p><strong>Local Storage Discussion</strong></p>
 
-<p>Chris wrote a great <a href="http://hacks.mozilla.org/2012/03/there-is-no-simple-solution-for-local-storage/">post</a> on DOM Local Storage, the discussion is great. I did a <a href="http://taras.glek.net/2012/02/22/psa-dom-local-storage-considered-harmful/">post</a> on this a few weeks ago.</p>
+<p>Chris wrote a great <a href="http://hacks.mozilla.org/2012/03/there-is-no-simple-solution-for-local-storage/">post</a> on DOM Local Storage, the discussion is great. I did a <a href="http://taras.glek.net/blog/2012/02/22/psa-dom-local-storage-considered-harmful/">post</a> on this a few weeks ago.</p>
 
 <p>I have some raw data on exactly how slow DOM Local Storage is, I will post it once Xavier has time to yank data properly out of the cluster.</p>
 </div>

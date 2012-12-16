@@ -184,7 +184,7 @@
   </header>
 
 
-  <div class="entry-content"><p>Dehydra does a form of basic symbolic execution now. It&#8217;s enough to avoid the <em><a href="http://taras.glek.net/2007/03/02/uno-dos...-dehydra">unfeasable</a> </em>branches. It enabled me to add known_zero() and known_notzero() so dehydra supports all of the functions documented in the <a href="http://www.spinroot.com/uno/uno_long.pdf">UNO paper</a>.</p>
+  <div class="entry-content"><p>Dehydra does a form of basic symbolic execution now. It&#8217;s enough to avoid the <em><a href="http://taras.glek.net/blog/2007/03/02/uno-dos...-dehydra">unfeasable</a> </em>branches. It enabled me to add known_zero() and known_notzero() so dehydra supports all of the functions documented in the <a href="http://www.spinroot.com/uno/uno_long.pdf">UNO paper</a>.</p>
 
 <p>I believe dehydra can now match all of the features of uno&#8217;s DSL. Download it <a href="http://spinroot.com/uno/">here</a>. See malloc.js for an example of how to port UNO scripts. There is no documentation, except for this blog, but the docs on the <a href="http://spinroot.com/uno/">UNO website</a> should work too.</p>
 
@@ -226,7 +226,7 @@
 
   <div class="entry-content"><p><strong>A Creature so Fierce&#8230;</strong></p>
 
-<p>I&#8217;ve been wrestling with control flow graphs <a href="http://people.mozilla.org/~tglek/hydra.png">like this</a>. I eliminated those pesky &#8220;empty&#8221; nodes found in the previous incarnations, improved branching to track conditions and realized that what I&#8217;m really doing is developing a tool to bite off the excessive necks and heads (otherwise known as edges and basic blocks) of the Hydra monster that is represented by the bloody graph. Thus, say hello to DeHydra which was once known as <a href="http://taras.glek.net/2007/02/01/lossy-ast-traversals-for-good-code-health">dos</a>.</p>
+<p>I&#8217;ve been wrestling with control flow graphs <a href="http://people.mozilla.org/~tglek/hydra.png">like this</a>. I eliminated those pesky &#8220;empty&#8221; nodes found in the previous incarnations, improved branching to track conditions and realized that what I&#8217;m really doing is developing a tool to bite off the excessive necks and heads (otherwise known as edges and basic blocks) of the Hydra monster that is represented by the bloody graph. Thus, say hello to DeHydra which was once known as <a href="http://taras.glek.net/blog/2007/02/01/lossy-ast-traversals-for-good-code-health">dos</a>.</p>
 
 <p><strong>DeHydra Plans</strong></p>
 

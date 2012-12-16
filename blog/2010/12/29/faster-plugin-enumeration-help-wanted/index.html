@@ -88,7 +88,7 @@
   </header>
 
 
-<div class="entry-content"><p>In addition to slow <a href="http://taras.glek.net/">font enumeration</a>, we were suffering from a similar problem: slow plugin enumeration. Just as with fonts, the plugin enumeration code is different on every platform. Unlike the font situation, plugin enumeration is done completely within our code(ie easy to fix).</p>
+<div class="entry-content"><p>In addition to slow <a href="http://taras.glek.net/blog/">font enumeration</a>, we were suffering from a similar problem: slow plugin enumeration. Just as with fonts, the plugin enumeration code is different on every platform. Unlike the font situation, plugin enumeration is done completely within our code(ie easy to fix).</p>
 
 <p>Plugin enumeration is often triggered by JavaScript code (for example by checking if a Java handler is present). This means that enumeration is a blocking operation that must happen quickly. XPerf made me wonder why so many plugin-like .dll files were being read. This lead me to a fun set of perf fixes.</p>
 

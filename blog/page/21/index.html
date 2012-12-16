@@ -99,7 +99,7 @@
 
 <p>Brendan &amp; Graydon pointed me to <a href="http://www.cs.berkeley.edu/~smcpeak/elkhound/sources/elsa/">elsa</a>, the C++ parser that supposedly could parse Mozilla. However, it turned out that it was only able to parse an old version of Mozilla and rejected the new source. One of the elsa maintainers even tried to convince us to it was not designed for source-to-source transformations and wouldn&#8217;t work that way.</p>
 
-<p>After I patched up elsa and started devising ways to use it for source rewriting I ran into more pain. After a few false starts, I realized that C++ in Mozilla is actually a mix of CPP and C++ and one can not rewrite C++ without dealing with the <a href="http://taras.glek.net/2007/05/11/cpp-strikes-back/">mess that is macro expansion</a>. <a href="http://mcpp.sourceforge.net/">MCPP</a> was pointed out to me as a good starting point for hacking on a preprocessor. So I <a href="http://taras.glek.net/2007/06/12/undoing-cpp-expansion-in-3-simple-steps.-say-hello-to-easier-c-rewriting./">designed</a> an inline log for macro expansion. To my surprise the maintainer of MCPP, Kiyoshi MATSUI, volunteered to implement the spec and thus saved me from a world of pain. (For which I am eternally grateful as I can&#8217;t imagine a more depressing pastime than working on the root of all evil: the C preprocessor).</p>
+<p>After I patched up elsa and started devising ways to use it for source rewriting I ran into more pain. After a few false starts, I realized that C++ in Mozilla is actually a mix of CPP and C++ and one can not rewrite C++ without dealing with the <a href="http://taras.glek.net/blog/2007/05/11/cpp-strikes-back/">mess that is macro expansion</a>. <a href="http://mcpp.sourceforge.net/">MCPP</a> was pointed out to me as a good starting point for hacking on a preprocessor. So I <a href="http://taras.glek.net/blog/2007/06/12/undoing-cpp-expansion-in-3-simple-steps.-say-hello-to-easier-c-rewriting./">designed</a> an inline log for macro expansion. To my surprise the maintainer of MCPP, Kiyoshi MATSUI, volunteered to implement the spec and thus saved me from a world of pain. (For which I am eternally grateful as I can&#8217;t imagine a more depressing pastime than working on the root of all evil: the C preprocessor).</p>
 
 <p>In parallel with Kiyoshi&#8217;s work I modified <a href="http://www.cs.berkeley.edu/~smcpeak/elkhound/">elkhound</a> &amp; elsa to make the C++ parser a lot more suitable for source transformations. I learned about LR &amp; GLR parsing and confirmed my suspicion that I don&#8217;t want to write parser generators for a living.</p>
 
@@ -107,7 +107,7 @@
 
 <p>All this work finally got us what we discussed last September: a framework for doing lots of <a href="http://wiki.mozilla.org/XPCOMGC/Stack_Pointers">boring code rewrites</a>.</p>
 
-<p>The first big Moz2 task is <a href="http://wiki.mozilla.org/XPCOMGC">switching</a> from reference counting to garbage collection. Today, <a href="http://taras.glek.net/2007/09/12/garburator-another-day-another-rewrite-tool/">garburator</a> produced a <a href="http://people.mozilla.org/~tglek/garburator/nsgenerichtmlelement.diff">gigantic patch</a> for subset of the content/ module and all of the affected files compiled. Hopefully next week I&#8217;ll have a multi-megabyte patch for the whole of Mozilla that compiles and possibly runs.</p>
+<p>The first big Moz2 task is <a href="http://wiki.mozilla.org/XPCOMGC">switching</a> from reference counting to garbage collection. Today, <a href="http://taras.glek.net/blog/2007/09/12/garburator-another-day-another-rewrite-tool/">garburator</a> produced a <a href="http://people.mozilla.org/~tglek/garburator/nsgenerichtmlelement.diff">gigantic patch</a> for subset of the content/ module and all of the affected files compiled. Hopefully next week I&#8217;ll have a multi-megabyte patch for the whole of Mozilla that compiles and possibly runs.</p>
 </div>
   
   
@@ -145,7 +145,7 @@
 
   <div class="entry-content"><p><strong>Prcheck</strong></p>
 
-<p>The trouble with prcheck and the automated <a href="http://taras.glek.net/2007/06/26/status-report-recent-work/">prbool validation</a> is that one can&#8217;t attach the giant patch it produces to bugzilla and expect it to get committed. So I am spending this week combing through prcheck output  and patch-bombing bugzilla with per-module patches.</p>
+<p>The trouble with prcheck and the automated <a href="http://taras.glek.net/blog/2007/06/26/status-report-recent-work/">prbool validation</a> is that one can&#8217;t attach the giant patch it produces to bugzilla and expect it to get committed. So I am spending this week combing through prcheck output  and patch-bombing bugzilla with per-module patches.</p>
 
 <p>I find going through the errors manually to be a lot of fun than I expected. I am finding types of errors that I was not considering when I was writing prcheck. For example, I expected the biggest gains to come at runtime from making all prbool values 0/1, but it seems that most of the cool errors are due to PRBool &amp; PRInt32 resolving to the same type. That results in code mayhem ranging from wrong method overloads being called to method signatures claiming to return PRBool where method bodies act like the function returns nsresults.</p>
 
@@ -231,7 +231,7 @@
 
   <div class="entry-content"><p>This is an update on the ongoing <a href="http://wiki.mozilla.org/Gecko:DeCOMtamination">deCOMtamination</a> work from the automated rewriting perspective. I think it&#8217;s pretty exciting that Mozilla is the first large-scale C++ project to attempt automated large scale source code cleanups and optimizations. I think the tools are finally getting mature enough for the job.</p>
 
-<p>The downside is that there isn&#8217;t a published roadmap of what we are planning to achieve with deCOMtamination as we are still in the planning stages. The upside is that there is still time for any interested parties to think up the next great improvement on how things are done, <a href="http://taras.glek.net/2007/07/13/dehydra-prcheck-squash-in-mercurial/">checkout</a> the refactoring toolchain and either extend an existing tool or implement a new one.</p>
+<p>The downside is that there isn&#8217;t a published roadmap of what we are planning to achieve with deCOMtamination as we are still in the planning stages. The upside is that there is still time for any interested parties to think up the next great improvement on how things are done, <a href="http://taras.glek.net/blog/2007/07/13/dehydra-prcheck-squash-in-mercurial/">checkout</a> the refactoring toolchain and either extend an existing tool or implement a new one.</p>
 
 <p>Below is a list of things that I plan to have working in the near future. The idea is to try to implement various optimizations that would be impractical(or impossible?) to do manually and see if they yield the expected performance and code quality benefits.</p>
 
@@ -251,7 +251,7 @@
 
 <p>Tamarin comes with a modern <a href="http://developer.mozilla.org/en/docs/MMgc">garbage collector</a>.</p>
 
-<p>The goal of this rewrite is to aid <a href="http://blog.mozilla.org/jorendorff/">Jason</a> and <a href="http://benjamin.smedbergs.us/">Benjamin</a> with switching XPCOM from reference counting to garbage collection. This might end up in gigantic patches to rid the stack of nsCOMPtr objects. This might be hard as it will be affecting a lot of code and might reveal more shortcomings in <a href="http://taras.glek.net/2007/08/30/pork-the-brave-new-world/">my version</a> of elsa and MCPP. <a href="http://wiki.mozilla.org/XPCOMGC">Details</a> are in the wiki.</p>
+<p>The goal of this rewrite is to aid <a href="http://blog.mozilla.org/jorendorff/">Jason</a> and <a href="http://benjamin.smedbergs.us/">Benjamin</a> with switching XPCOM from reference counting to garbage collection. This might end up in gigantic patches to rid the stack of nsCOMPtr objects. This might be hard as it will be affecting a lot of code and might reveal more shortcomings in <a href="http://taras.glek.net/blog/2007/08/30/pork-the-brave-new-world/">my version</a> of elsa and MCPP. <a href="http://wiki.mozilla.org/XPCOMGC">Details</a> are in the wiki.</p>
 
 <p><strong>Step 3: Try C++ Exceptions</strong></p>
 
@@ -369,7 +369,7 @@
 
   <div class="entry-content"><p><strong>Will Rid Code of Outparams!</strong></p>
 
-<p>I resumed my outparam rewriting work last week. Having fixed the <a href="http://taras.glek.net/2007/05/11/cpp-strikes-back/">CPP induced</a> architectural limitation that I ran into, it was quite straight-forward to factor out squash&#8217;s rewriting code into a new tool. Unlike squash, outparamdel (creatively named new tool), can rewrite code precisely and reliably. I still don&#8217;t have end-of-ast-node information in every Elsa AST member, but I think I have added position info to enough AST nodes to be able to do most of the Mozilla 2 rewrites.</p>
+<p>I resumed my outparam rewriting work last week. Having fixed the <a href="http://taras.glek.net/blog/2007/05/11/cpp-strikes-back/">CPP induced</a> architectural limitation that I ran into, it was quite straight-forward to factor out squash&#8217;s rewriting code into a new tool. Unlike squash, outparamdel (creatively named new tool), can rewrite code precisely and reliably. I still don&#8217;t have end-of-ast-node information in every Elsa AST member, but I think I have added position info to enough AST nodes to be able to do most of the Mozilla 2 rewrites.</p>
 
 <p>Last time I was working on this, I was a little unhappy with the amount of code that had to be changed in the callee. I also wasn&#8217;t sure how to handle the complexity of callsites where control flow depends on the error code returned by the callee. This time I chose the path of least resistance.</p>
 
@@ -603,7 +603,7 @@ Error: /content/base/src/nsPlainTextSerializer.cpp: 614:
 <ol>
 <li>If you want to rewrite sources either wait for the next mcpp release or use my <a href="http://people.mozilla.org/~tglek/mcpp-post2.6.4.tar.gz">tarball</a>.</li>
 <li>Install gcc 3.4.x. If using mcpp, configure mcpp with &#8211;enable-replace-system so it replaces the gcc preprocessor</li>
-<li><a href="http://taras.glek.net/2007/07/13/dehydra-prcheck-squash-in-mercurial/">Checkout</a> and build my oink version.</li>
+<li><a href="http://taras.glek.net/blog/2007/07/13/dehydra-prcheck-squash-in-mercurial/">Checkout</a> and build my oink version.</li>
 <li>Build mozilla with -save-temps gcc option. If using mcpp set environment variables CC=&#8221;gcc -Wp,-K -Wp,-W0 -save-temps &#8221; and CXX=&#8221;g++ -Wp,-K -Wp,-W0 -save-temps &#8221; and do make -f client.mk build as usual. The extra gcc parameters tell it to save intermediate files to pass -K and -W0 to enable macro expansion annotation and silence warnings.</li>
 <li>Run tools individual files</li>
 <li>Produce a global patch with ./pork-barrel 4 /path/to/prcheck /tmp/input.txt where input.txt is a list of absolute filenames of all of the .i and .ii files produced by the build process</li>
@@ -711,7 +711,7 @@ Resulting code runs fast has a lot fewer bugs than code without all this fancy m
 <p><strong>Released Differences from Oink Mainline </strong></p>
 
 <ul>
-<li>New oink tool - <a href="http://taras.glek.net/2007/06/26/status-report-recent-work/">prcheck</a>: ensures that bool-like integer typedefs behave like bools</li>
+<li>New oink tool - <a href="http://taras.glek.net/blog/2007/06/26/status-report-recent-work/">prcheck</a>: ensures that bool-like integer typedefs behave like bools</li>
 <li>New oink tool - <a href="http://wiki.mozilla.org/DeHydra">dehydra</a>: source query tool with queries specified in JavaScript</li>
 <li>New oink tool - <a href="http://wiki.mozilla.org/Squash">squash</a>: source refactoring tool. This is now deprecated since most of the code in it dealt with working around elsa limitations to do with macro expansion &amp; lack of precise locations. The patching engine used in squash lives on to provide a simple refactoring API for use in other tools (like prcheck).</li>
 <li>Minor grammar changes to parse more of Mozilla</li>

@@ -94,7 +94,7 @@
 
 <p><strong>Borders/Gradients</strong></p>
 
-<p>Turns out that most of the painting overhead in accelerated versions of Firefox is spent rendering borders and gradients. I <a href="http://taras.glek.net/2012/05/01/pushing-the-borders-out-of-firefox-performance/">blogged </a>a little about this earlier. It&#8217;s a combination us not caching gradients and being overly picky about rendering border corners perfectly (ie to spec). Our chrome renders particularly slowly because as our chrome CSS changed (after implementing d2d accel and optimizing for exists codepaths), we started hitting more slow paths in the border code. We need telemetry to notice when things are rendering slower than expected.</p>
+<p>Turns out that most of the painting overhead in accelerated versions of Firefox is spent rendering borders and gradients. I <a href="http://taras.glek.net/blog/2012/05/01/pushing-the-borders-out-of-firefox-performance/">blogged </a>a little about this earlier. It&#8217;s a combination us not caching gradients and being overly picky about rendering border corners perfectly (ie to spec). Our chrome renders particularly slowly because as our chrome CSS changed (after implementing d2d accel and optimizing for exists codepaths), we started hitting more slow paths in the border code. We need telemetry to notice when things are rendering slower than expected.</p>
 
 <p>According to Bas we need to enable Azure for content and then start implementing respective caches. We should get significant speedups within 3-4 weeks, but to get close to the baseline performance of the no-borders/gradients build will take 3-4months. In the meantime we should look into simplifying our chrome to not feature as much expensive CSS.</p>
 

@@ -88,7 +88,7 @@
   </header>
 
 
-<div class="entry-content"><p>My previous post on outparam rewriting <a href="http://taras.glek.net/2007/11/28/volume-of-refactoring-ahead/">described</a> the wealth of functions that can be rewritten. Unfortunately, most functions in Mozilla are declared in XPIDL interfaces.</p>
+<div class="entry-content"><p>My previous post on outparam rewriting <a href="http://taras.glek.net/blog/2007/11/28/volume-of-refactoring-ahead/">described</a> the wealth of functions that can be rewritten. Unfortunately, most functions in Mozilla are declared in XPIDL interfaces.</p>
 
 <p>I have been convinced that my plan to rewrite xpidlgen to avoid outparameters wont be possible because most XPIDLinterfaces can be implemented by JavaScript in a few different ways. That is problematic because in addition to return values, JavaScript can also have an exception thrown at any point and have that converted to an nsresult error code by XPConnect. That means that the getters implemented in JavaScript are not in the set of functions that only return NS_OK+outparam/someerror. I wouldn&#8217;t be at all disappointed if someone proved me wrong here.</p>
 
@@ -114,7 +114,7 @@
 
 <p>Just like in the XPCOMGC rewrite, code will have to be scanned to verify that it fits in the &#8220;new world order&#8221;. Unlike XPCOMGC, there are additional flow-sensitive issues to scan for to ensure that the code is thread-safe. The scans are at a lower level than dehydra currently works at, so it&#8217;s a perfect opportunity to either extend dehydra or write the new tool.</p>
 
-<p>It would be especially cool to implement the code analysis tool as a <a href="http://taras.glek.net/2007/11/29/gcc-plugins-under-my-xmas-tree/">gcc plugin</a>.  Sean Callanan&#8217;s &#8220;Extending GCC with Modular GIMPLE Optimizations&#8221; paper in the <a href="http://ols2006.108.redhat.com/2007/GCC-Reprints/GCC2007-Proceedings.pdf">GCC summit proceedings</a> should be an excellent starting point.</p>
+<p>It would be especially cool to implement the code analysis tool as a <a href="http://taras.glek.net/blog/2007/11/29/gcc-plugins-under-my-xmas-tree/">gcc plugin</a>.  Sean Callanan&#8217;s &#8220;Extending GCC with Modular GIMPLE Optimizations&#8221; paper in the <a href="http://ols2006.108.redhat.com/2007/GCC-Reprints/GCC2007-Proceedings.pdf">GCC summit proceedings</a> should be an excellent starting point.</p>
 
 <p>This is an exciting experiment. I look forward to reducing speculation on the risks/benefits of switching the codebase to use exceptions with some concrete data.</p>
 </div>

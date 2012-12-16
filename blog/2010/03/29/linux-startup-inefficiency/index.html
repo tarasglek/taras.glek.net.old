@@ -88,7 +88,7 @@
   </header>
 
 
-<div class="entry-content"><p>There is a little bit of a disconnect between the kernel, the dynamic linker and compile-time linker. As I mentioned in my main &#8220;startup sucks&#8221; <a href="http://taras.glek.net/2010/03/24/linux-why-loading-binaries-from-disk-sucks/">post</a>: not-notifying the kernel of your patterns can kill performance, so can reading files backwards.</p>
+<div class="entry-content"><p>There is a little bit of a disconnect between the kernel, the dynamic linker and compile-time linker. As I mentioned in my main &#8220;startup sucks&#8221; <a href="http://taras.glek.net/blog/2010/03/24/linux-why-loading-binaries-from-disk-sucks/">post</a>: not-notifying the kernel of your patterns can kill performance, so can reading files backwards.</p>
 
 <p>Turns out that if the compile-time linker lays out files without considering <em>exactly</em> how they are read by the runtime linker, binaries will load slower. I filed a <a href="http://sourceware.org/bugzilla/show_bug.cgi?id=11447">bug</a> on that.</p>
 
