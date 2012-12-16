@@ -4,7 +4,7 @@
   <title><![CDATA[Category: performance | All About Performance]]></title>
   <link href="http://tarasglek.github.com/blog/categories/performance/atom.xml" rel="self"/>
   <link href="http://tarasglek.github.com/"/>
-  <updated>2012-12-16T13:07:16-08:00</updated>
+  <updated>2012-12-16T13:15:14-08:00</updated>
   <id>http://tarasglek.github.com/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -31,7 +31,7 @@
     <link href="http://tarasglek.github.com/blog/2010/04/19/windows-sucks-at-memory-mapped-io-during-startup/"/>
     <updated>2010-04-19T07:00:00-07:00</updated>
     <id>http://tarasglek.github.com/blog/2010/04/19/windows-sucks-at-memory-mapped-io-during-startup</id>
-    <content type="html"><![CDATA[<p>Last week I learned about how Windows handles page faults backed by files (specifically xul.dll). I already knew that Linux was <a href="http://tarasglek.github.com/taras/2010/04/12/squeezing-every-last-bit-of-performance-out-of-the-linux-toolchain/">suboptimal</a> in this area, perhaps the clever people at Redmond did better.</p>
+    <content type="html"><![CDATA[<p>Last week I learned about how Windows handles page faults backed by files (specifically xul.dll). I already knew that Linux was <a href="http://taras.glek.net/2010/04/12/squeezing-every-last-bit-of-performance-out-of-the-linux-toolchain/">suboptimal</a> in this area, perhaps the clever people at Redmond did better.</p>
 
 <p>Shaver pointed me at <a href="https://developer.mozilla.org/En/Profiling_with_Xperf">xperf</a>, which is sort of like the new Linux perf tools. Xperf rocks in that it can capture the relevant data and it can export it as .csv.</p>
 
@@ -91,7 +91,7 @@ People seem to prefer to comment on <a href="http://www.reddit.com/r/programming
 
 <p>The worst part of doing optimizations is knowing that some time in a future an innocent programmer will slightly change some seemingly innocent code and things will no longer happen quickly. Short of policing every single patch by people who previously optimized code in question there is only one thing one can do: performance tests.</p>
 
-<p><a href="http://hg.mozilla.org/users/tglek_mozilla.com/fennecmark">Fennecmark</a> is a benchmark for measuring responsiveness of the Fennec features that I worked on most: panning, zooming and lag during pageload. I <a href="http://tarasglek.github.com/taras/2009/04/23/benchmarks-and-instrumentation-for-fennecetc/">blogged</a> about it before. Since then Joel Maher has <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=493057">gotten Fennecmark</a> to run automatically and produce results on the graph server. I think we should be logging more numbers (Tpan, Tzoom), but it's an excellent first step in monitoring performance regressions.</p>
+<p><a href="http://hg.mozilla.org/users/tglek_mozilla.com/fennecmark">Fennecmark</a> is a benchmark for measuring responsiveness of the Fennec features that I worked on most: panning, zooming and lag during pageload. I <a href="http://taras.glek.net/2009/04/23/benchmarks-and-instrumentation-for-fennecetc/">blogged</a> about it before. Since then Joel Maher has <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=493057">gotten Fennecmark</a> to run automatically and produce results on the graph server. I think we should be logging more numbers (Tpan, Tzoom), but it's an excellent first step in monitoring performance regressions.</p>
 ]]></content>
   </entry>
   

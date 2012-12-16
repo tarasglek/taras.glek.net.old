@@ -297,7 +297,7 @@
 
 <p><strong>Borders/Gradients</strong></p>
 
-<p>Turns out that most of the painting overhead in accelerated versions of Firefox is spent rendering borders and gradients. I <a href="http://tarasglek.github.com/taras/2012/05/01/pushing-the-borders-out-of-firefox-performance/">blogged </a>a little about this earlier. It&#8217;s a combination us not caching gradients and being overly picky about rendering border corners perfectly (ie to spec). Our chrome renders particularly slowly because as our chrome CSS changed (after implementing d2d accel and optimizing for exists codepaths), we started hitting more slow paths in the border code. We need telemetry to notice when things are rendering slower than expected.</p>
+<p>Turns out that most of the painting overhead in accelerated versions of Firefox is spent rendering borders and gradients. I <a href="http://taras.glek.net/2012/05/01/pushing-the-borders-out-of-firefox-performance/">blogged </a>a little about this earlier. It&#8217;s a combination us not caching gradients and being overly picky about rendering border corners perfectly (ie to spec). Our chrome renders particularly slowly because as our chrome CSS changed (after implementing d2d accel and optimizing for exists codepaths), we started hitting more slow paths in the border code. We need telemetry to notice when things are rendering slower than expected.</p>
 
 <p>According to Bas we need to enable Azure for content and then start implementing respective caches. We should get significant speedups within 3-4 weeks, but to get close to the baseline performance of the no-borders/gradients build will take 3-4months. In the meantime we should look into simplifying our chrome to not feature as much expensive CSS.</p>
 
@@ -441,7 +441,7 @@
 
 <p>The necko team decided to take a more involved approach to solve our cache locking(bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=722034">722034</a>) which means the fix will land later than we originally hoped for.</p>
 
-<p>My little investigation into setTimeout <a href="http://tarasglek.github.com/taras/2012/04/18/web-2-0-a-collection-of-settimeouts/">overhead</a> exposed more overhead than I expected. After our regularly scheduled snappy meeting, we had a follow up meeting to spec out how to change our event handling to cope with this (bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=715376">715376</a>). Our best people are on this :) I asked for someone to prototype an extension to suspend background tab activity, sounds like  Wladimir of adblockplus might lend a hand.</p>
+<p>My little investigation into setTimeout <a href="http://taras.glek.net/2012/04/18/web-2-0-a-collection-of-settimeouts/">overhead</a> exposed more overhead than I expected. After our regularly scheduled snappy meeting, we had a follow up meeting to spec out how to change our event handling to cope with this (bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=715376">715376</a>). Our best people are on this :) I asked for someone to prototype an extension to suspend background tab activity, sounds like  Wladimir of adblockplus might lend a hand.</p>
 </div>
   
   
@@ -477,7 +477,7 @@
   </header>
 
 
-  <div class="entry-content"><p>Earlier I <a href="http://tarasglek.github.com/taras/2012/04/10/argh-at-our-unresponsive-tab-strip-settimeoutfoo-0-can-be-very-harmful/">blogged </a>about terrible UI responsiveness resulting from a poorly placed setTimeout. I&#8217;ve long suspected that SetTimeouts are to blame for everything. Now with help of bz and sfink I have proof.</p>
+  <div class="entry-content"><p>Earlier I <a href="http://taras.glek.net/2012/04/10/argh-at-our-unresponsive-tab-strip-settimeoutfoo-0-can-be-very-harmful/">blogged </a>about terrible UI responsiveness resulting from a poorly placed setTimeout. I&#8217;ve long suspected that SetTimeouts are to blame for everything. Now with help of bz and sfink I have proof.</p>
 
 <p>Turns out webpages like to keep users entertained and spin setTimeout loops to poll the servers to synchronize news tickers, social networking shoe-ins, collaborative editing, etc. Most pages do this regardless of whether they are a background or a foreground tab. Firefox tries to mitigate this by not allowing background tabs to schedule setTimeouts &lt; 2seconds. Turns out this is a pretty weak defense.</p>
 

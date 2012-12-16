@@ -91,7 +91,7 @@
   </header>
 
 
-  <div class="entry-content"><p>There is a little bit of a disconnect between the kernel, the dynamic linker and compile-time linker. As I mentioned in my main &#8220;startup sucks&#8221; <a href="http://tarasglek.github.com/taras/2010/03/24/linux-why-loading-binaries-from-disk-sucks/">post</a>: not-notifying the kernel of your patterns can kill performance, so can reading files backwards.</p>
+  <div class="entry-content"><p>There is a little bit of a disconnect between the kernel, the dynamic linker and compile-time linker. As I mentioned in my main &#8220;startup sucks&#8221; <a href="http://taras.glek.net/2010/03/24/linux-why-loading-binaries-from-disk-sucks/">post</a>: not-notifying the kernel of your patterns can kill performance, so can reading files backwards.</p>
 
 <p>Turns out that if the compile-time linker lays out files without considering <em>exactly</em> how they are read by the runtime linker, binaries will load slower. I filed a <a href="http://sourceware.org/bugzilla/show_bug.cgi?id=11447">bug</a> on that.</p>
 
@@ -131,7 +131,7 @@
   </header>
 
 
-  <div class="entry-content"><p>Got some helpful comments on my <a href="http://tarasglek.github.com/taras/2010/03/24/linux-why-loading-binaries-from-disk-sucks/">previous post</a>.</p>
+  <div class="entry-content"><p>Got some helpful comments on my <a href="http://taras.glek.net/2010/03/24/linux-why-loading-binaries-from-disk-sucks/">previous post</a>.</p>
 
 <p><strong>madvise(WILLNEED) in ld.so</strong></p>
 
@@ -200,7 +200,7 @@ The compile-time linker composes segments out of sections that contain variable 
 
 <p><strong>Prelinking Fail </strong></p>
 
-<p>Having the run-time linker fix up the binary causes a huge amount of IO even before any application code gets executed. These faults are visible in the second graph in my <a href="http://tarasglek.github.com/taras/2010/03/23/when-in-trouble-draw-a-picture/">previous post</a>. The linker&#8217;s faults (pun intended) are the small green rectangles above the big ones. The graph clearly shows the huge relative cost of inefficient run-time linker memory prodding.</p>
+<p>Having the run-time linker fix up the binary causes a huge amount of IO even before any application code gets executed. These faults are visible in the second graph in my <a href="http://taras.glek.net/2010/03/23/when-in-trouble-draw-a-picture/">previous post</a>. The linker&#8217;s faults (pun intended) are the small green rectangles above the big ones. The graph clearly shows the huge relative cost of inefficient run-time linker memory prodding.</p>
 
 <p>Supposedly, this problem is largely solved by <a href="http://en.wikipedia.org/wiki/Prelink">prelinking</a>. I can&#8217;t confirm that as prelink does not work on Firefox on the systems that I can measure IO with SystemTap. This non-determinism is frustrating; we should figure out a way to warn to the user that the OS infrastructure failed them. ****</p>
 
@@ -276,11 +276,11 @@ In the longer term some fixes for madvise() should land in both runtime and comp
 
 <p><strong>Story</strong></p>
 
-<p>Last week I was about to give up and live with a <a href="http://tarasglek.github.com/taras/2010/03/05/mirror-mirror-on-the-wall-why-is-my-binary-slow/">meager</a> 10% win on libxul.so cold startup. I just couldn&#8217;t squeeze any more useful ideas out of my timing and io logs. I reached out to Jim Blandy, who confirmed that things seemed to be working as expected (unlike me, Jim actually knows this stuff).</p>
+<p>Last week I was about to give up and live with a <a href="http://taras.glek.net/2010/03/05/mirror-mirror-on-the-wall-why-is-my-binary-slow/">meager</a> 10% win on libxul.so cold startup. I just couldn&#8217;t squeeze any more useful ideas out of my timing and io logs. I reached out to Jim Blandy, who confirmed that things seemed to be working as expected (unlike me, Jim actually knows this stuff).</p>
 
 <p>Upon hearing of my quest, surprising number of people strongly suggested that I chat with <a href="http://people.gnome.org/~michael/blog/">Michael Meeks</a>. He was digging around in the binary cesspool for OpenOffice recently and asked many of the same questions. We had a fun conversation, where Michael proved me wrong. I said I couldn&#8217;t imagine a useful way to graph the file io logs. In response Michel, dug up this <a href="http://people.gnome.org/~michael/blog/">beauty</a>. He built it with a <a href="http://live.gnome.org/iogrind">fun</a> mix of valgrind + c#.</p>
 
-<p>Feeling massive diagram envy, I decided that I had to get an interactive graph of my <a href="http://tarasglek.github.com/taras/2009/10/23/studying-library-io-systemtap-style/">SystemTap</a> data. A brief Google search revealed that <a href="http://raphaeljs.com/">RaphaelJS</a> would be awesome for my needs (the most <a href="http://www.youtube.com/watch?v=4pXfHLUlZf4">j***worthy</a> vector gfx library ever). After many happy hours of messing with with pretty graphics and colours, the ugly truth emerged (hint: it&#8217;s about the linker/kernel relationship). More on that soon.</p>
+<p>Feeling massive diagram envy, I decided that I had to get an interactive graph of my <a href="http://taras.glek.net/2009/10/23/studying-library-io-systemtap-style/">SystemTap</a> data. A brief Google search revealed that <a href="http://raphaeljs.com/">RaphaelJS</a> would be awesome for my needs (the most <a href="http://www.youtube.com/watch?v=4pXfHLUlZf4">j***worthy</a> vector gfx library ever). After many happy hours of messing with with pretty graphics and colours, the ugly truth emerged (hint: it&#8217;s about the linker/kernel relationship). More on that soon.</p>
 </div>
   
   
@@ -341,7 +341,7 @@ In the longer term some fixes for madvise() should land in both runtime and comp
 4044ms
 I just doubled cold startup time for Firefox by merely adding 4 extensions. It takes weeks or even months of developer time to shave off every 100ms off Firefox startup, but mere seconds to undo any of those gains by installing extensions. These are just the top-4 extensions in the list (presumably they are higher quality too), I&#8217;m sure there are lots of other extensions with more drastic performance hits.</p>
 
-<p>Dietrich&#8217;s <a href="http://autonome.wordpress.com/2010/03/10/firefox-extensions-and-performance/">post</a> details some of the remedies that should reduce the startup cost of extensions. For the inquisitive minds: I used <a href="http://tarasglek.github.com/taras/2009/10/23/studying-library-io-systemtap-style/">SystemTap</a> to produce a <a href="http://people.mozilla.com/~tglek/startup/extensions_report.txt">report</a> of files read by Firefox on startup ordered by their startup cost.</p>
+<p>Dietrich&#8217;s <a href="http://autonome.wordpress.com/2010/03/10/firefox-extensions-and-performance/">post</a> details some of the remedies that should reduce the startup cost of extensions. For the inquisitive minds: I used <a href="http://taras.glek.net/2009/10/23/studying-library-io-systemtap-style/">SystemTap</a> to produce a <a href="http://people.mozilla.com/~tglek/startup/extensions_report.txt">report</a> of files read by Firefox on startup ordered by their startup cost.</p>
 
 <p><strong>Update:</strong> Dietrich asked me to summarize warm startup too:</p>
 
@@ -395,11 +395,11 @@ Note that this is a developer blog, so by &#8220;remedies&#8221; I meant &#8220;
   </header>
 
 
-  <div class="entry-content"><p>In an <a href="http://tarasglek.github.com/taras/2010/02/19/teaching-ld-to-optimize-binaries-for-startup/">earlier</a> post I described my Fiji hack: how to use some nasty instrumentation to spit out ld scripts to speed up cold startup. This week I tried to extract more data out of the binary to lay it out even better. Trouble is that even if one lays out functions perfectly, they load data for things like variable initializers which will cause more IO.</p>
+  <div class="entry-content"><p>In an <a href="http://taras.glek.net/2010/02/19/teaching-ld-to-optimize-binaries-for-startup/">earlier</a> post I described my Fiji hack: how to use some nasty instrumentation to spit out ld scripts to speed up cold startup. This week I tried to extract more data out of the binary to lay it out even better. Trouble is that even if one lays out functions perfectly, they load data for things like variable initializers which will cause more IO.</p>
 
 <p>A very clever friend suggested that I can write a valgrind plugin that can detect data accesses and function access and write the linker input files in one step. So with much hand-holding I hacked a sample valgrind plugin to do what I <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=549749">want</a>. Unfortunately, my binaries ended up not being significantly faster(if at all) than the Fiji ones. They also ended up 20% bigger.</p>
 
-<p>Fortunately, the GCC devs were able to point out my linker mistakes and pointed me at a <a href="http://sourceware.org/ml/binutils/2010-03/msg00050.html">linker patch</a> that does what I want without linker scripts(and has less binary-bloating side-effects). Unfortunately, that just confirmed that the speedup I was looking for wasn&#8217;t hiding behind data symbols. So I am going to have to sit down with my <a href="http://tarasglek.github.com/taras/2009/10/23/studying-library-io-systemtap-style/">io tracing script </a>and study what the heck is going on.</p>
+<p>Fortunately, the GCC devs were able to point out my linker mistakes and pointed me at a <a href="http://sourceware.org/ml/binutils/2010-03/msg00050.html">linker patch</a> that does what I want without linker scripts(and has less binary-bloating side-effects). Unfortunately, that just confirmed that the speedup I was looking for wasn&#8217;t hiding behind data symbols. So I am going to have to sit down with my <a href="http://taras.glek.net/2009/10/23/studying-library-io-systemtap-style/">io tracing script </a>and study what the heck is going on.</p>
 
 <p><strong>Cool Things I Learned</strong></p>
 

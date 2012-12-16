@@ -105,7 +105,7 @@ The compile-time linker composes segments out of sections that contain variable 
 
 <p><strong>Prelinking Fail </strong></p>
 
-<p>Having the run-time linker fix up the binary causes a huge amount of IO even before any application code gets executed. These faults are visible in the second graph in my <a href="http://tarasglek.github.com/taras/2010/03/23/when-in-trouble-draw-a-picture/">previous post</a>. The linker&#8217;s faults (pun intended) are the small green rectangles above the big ones. The graph clearly shows the huge relative cost of inefficient run-time linker memory prodding.</p>
+<p>Having the run-time linker fix up the binary causes a huge amount of IO even before any application code gets executed. These faults are visible in the second graph in my <a href="http://taras.glek.net/2010/03/23/when-in-trouble-draw-a-picture/">previous post</a>. The linker&#8217;s faults (pun intended) are the small green rectangles above the big ones. The graph clearly shows the huge relative cost of inefficient run-time linker memory prodding.</p>
 
 <p>Supposedly, this problem is largely solved by <a href="http://en.wikipedia.org/wiki/Prelink">prelinking</a>. I can&#8217;t confirm that as prelink does not work on Firefox on the systems that I can measure IO with SystemTap. This non-determinism is frustrating; we should figure out a way to warn to the user that the OS infrastructure failed them. ****</p>
 

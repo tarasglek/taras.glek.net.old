@@ -92,7 +92,7 @@
 
 <p>I made a <a href="http://hg.mozilla.org/users/tglek_mozilla.com/startup/raw-file/ca994a12e2a8/xulanatomy.pdf">pdf</a> to illustrate the cost centers of loading libxul.so (the essence of Firefox).</p>
 
-<p>With <a href="http://tarasglek.github.com/taras/2010/04/07/icegrind-valgrind-plugin-for-optimizing-cold-startup/">Icegrind</a> I demonstrated that better binary layout can significantly improve application startup. However I still didn&#8217;t have a breakdown of reasons of why loading binaries is so damn inefficient. That&#8217;s what the above pdf is about.</p>
+<p>With <a href="http://taras.glek.net/2010/04/07/icegrind-valgrind-plugin-for-optimizing-cold-startup/">Icegrind</a> I demonstrated that better binary layout can significantly improve application startup. However I still didn&#8217;t have a breakdown of reasons of why loading binaries is so damn inefficient. That&#8217;s what the above pdf is about.</p>
 
 <p>Loading libxul consists of 4 major phases:</p>
 
@@ -107,7 +107,7 @@ I blogged about 1, 2, 4, this post is about #3.</li>
 
 <p><strong>Library Initializers?</strong></p>
 
-<p><a href="http://people.gnome.org/~michael/">Michael Meeks</a> pointed me at the funny backwards IO pattern in his IO logs. I even <a href="http://tarasglek.github.com/taras/2010/03/24/linux-why-loading-binaries-from-disk-sucks/">made fun</a> of how by default libxul.so is read mostly via backwards IO. Once I <a href="http://tarasglek.github.com/taras/2010/05/24/teethig-troubles-assigning-blame-for-pagefaults/">assigned</a> userspace symbols to my pagefault log, it became clear that the backwards IO pattern was entirely due to library initializers. C++ compiler generates code that runs on library initialization to initialize globals and run relevant C++ constructors. In C one can assign a &#8220;constructor&#8221; GNU attribute to a function to participate in this mayhem.</p>
+<p><a href="http://people.gnome.org/~michael/">Michael Meeks</a> pointed me at the funny backwards IO pattern in his IO logs. I even <a href="http://taras.glek.net/2010/03/24/linux-why-loading-binaries-from-disk-sucks/">made fun</a> of how by default libxul.so is read mostly via backwards IO. Once I <a href="http://taras.glek.net/2010/05/24/teethig-troubles-assigning-blame-for-pagefaults/">assigned</a> userspace symbols to my pagefault log, it became clear that the backwards IO pattern was entirely due to library initializers. C++ compiler generates code that runs on library initialization to initialize globals and run relevant C++ constructors. In C one can assign a &#8220;constructor&#8221; GNU attribute to a function to participate in this mayhem.</p>
 
 <p><strong>Running Backwards?</strong></p>
 

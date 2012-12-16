@@ -4,7 +4,7 @@
   <title><![CDATA[Category: startup | All About Performance]]></title>
   <link href="http://tarasglek.github.com/blog/categories/startup/atom.xml" rel="self"/>
   <link href="http://tarasglek.github.com/"/>
-  <updated>2012-12-16T13:07:16-08:00</updated>
+  <updated>2012-12-16T13:15:14-08:00</updated>
   <id>http://tarasglek.github.com/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -54,7 +54,7 @@ timestamp within a
 
 <script>
 ```
-tag. Vlad [pioneered](http://blog.vlad1.com/2009/07/28/measuring-startup/) this approach, [me](http://tarasglek.github.com/taras/2010/01/19/chromium-vs-minefield-cold-startup-performance-comparison/) and others adopted it.  
+tag. Vlad [pioneered](http://blog.vlad1.com/2009/07/28/measuring-startup/) this approach, [me](http://taras.glek.net/2010/01/19/chromium-vs-minefield-cold-startup-performance-comparison/) and others adopted it.  
   
 Turns out there are two problems with this approach: 
 
@@ -76,7 +76,7 @@ This is why AMO's [complicated method](http://xulforge.com/blog/2011/04/testing-
 
 <p>To crux of the optimization lies in trading waiting for random io for fast sequential IO. Turned out that my patch worked great if windows prefetch wasn't trying to help (ie firefox ran faster without prefetch on my test systems). With prefetch on, the patch was either a smaller win or a downright loss. When I dug in deeper, it turned that the Windows Prefetch helpfully spends 3-6 seconds doing IO before any Firefox code gets to run. It also doesn't read in a very clever pattern, resulting in a very small speed up for Firefox, but preventing my exciting optimization.</p>
 
-<p>So I curled up into my defeated fetal position and pondered on how would I prevent Windows Prefetch from being so "helpful". One way would be to <a href="http://tarasglek.github.com/taras/2010/10/04/diagnosing-slow-startup/">install</a> some crapware to cripple prefetch (kidding!), another way is to do the sequential IO in a separate executable(ala<a href="http://glandium.org/blog/?p=1719"> run-mozilla.sh</a> on Unix). This way Windows doesn't try to do insane amounts of IO before my preloading logic gets to run. This seems to work (see wrapper.exe talk in the bug) and has potential to double Firefox startup times. It's also ugly as sin, but if that's what it takes...</p>
+<p>So I curled up into my defeated fetal position and pondered on how would I prevent Windows Prefetch from being so "helpful". One way would be to <a href="http://taras.glek.net/2010/10/04/diagnosing-slow-startup/">install</a> some crapware to cripple prefetch (kidding!), another way is to do the sequential IO in a separate executable(ala<a href="http://glandium.org/blog/?p=1719"> run-mozilla.sh</a> on Unix). This way Windows doesn't try to do insane amounts of IO before my preloading logic gets to run. This seems to work (see wrapper.exe talk in the bug) and has potential to double Firefox startup times. It's also ugly as sin, but if that's what it takes...</p>
 
 <p>So now I need more reports to make sure the executable wrapper approach reliably/significantly speeds up cold(post-reboot) startup. Then we can make a decision on how to integrate this into Firefox. But until we have all the data, please don't jump to conclusions on what will and wont make Firefox 2x faster.</p>
 ]]></content>

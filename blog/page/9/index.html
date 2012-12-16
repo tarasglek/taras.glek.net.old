@@ -93,7 +93,7 @@
 
   <div class="entry-content"><p>Telemetry went live in Firefox Nightly builds over the weekend. Everyone who wants to contribute to making Firefox better now has an easy new way: opt-in to telemetry. There are two ways to opt in: A) Click yes when prompted to report performance B) Enable it by going to Options/Preferences, then Advanced/General tab</p>
 
-<p><a href="http://tarasglek.github.com/taras/files/2011/06/Optimized-out.jpg"><img src="http://tarasglek.github.com/taras/files/2011/06/Optimized-out.jpg" alt="" /></a></p>
+<p><a href="http://taras.glek.net/files/2011/06/Optimized-out.jpg"><img src="http://taras.glek.net/files/2011/06/Optimized-out.jpg" alt="" /></a></p>
 
 <p>You can check on the data collected by installing my <a href="https://addons.mozilla.org/en-US/firefox/addon/abouttelemetry/">about:telemetry</a> extension.</p>
 </div>
@@ -312,7 +312,7 @@
 </pre></td><td class='code'><pre><code class=''><span class='line'>&lt;script&gt;</span></code></pre></td></tr></table></div></figure>
 
 
-<p>tag. Vlad <a href="http://blog.vlad1.com/2009/07/28/measuring-startup/">pioneered</a> this approach, <a href="http://tarasglek.github.com/taras/2010/01/19/chromium-vs-minefield-cold-startup-performance-comparison/">me</a> and others adopted it.</p>
+<p>tag. Vlad <a href="http://blog.vlad1.com/2009/07/28/measuring-startup/">pioneered</a> this approach, <a href="http://taras.glek.net/2010/01/19/chromium-vs-minefield-cold-startup-performance-comparison/">me</a> and others adopted it.</p>
 
 <p>Turns out there are two problems with this approach:</p>
 
@@ -409,7 +409,7 @@ Our oldest startup benchmark, ts,Â  has been gathering wrong numbers all along.Â
   </header>
 
 
-  <div class="entry-content"><p>A large proportion of our startup time is spent on loading the Firefox library(.dll, etc) files. This is true on all of our platforms. In my <a href="http://tarasglek.github.com/taras/2011/02/09/magic-patch-that-doubles-windows-startup/">previous pos</a>t I thought I discovered a way to load the Firefox binaries more efficiently on Windows(bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=627591">627591</a>). Further testing revealed that to not be true in all cases and that the Windows Prefetch service was still killing our startup speed. Microsoft does not seem to provide a way to opt out of the Windows Prefetch &#8216;service&#8217;.</p>
+  <div class="entry-content"><p>A large proportion of our startup time is spent on loading the Firefox library(.dll, etc) files. This is true on all of our platforms. In my <a href="http://taras.glek.net/2011/02/09/magic-patch-that-doubles-windows-startup/">previous pos</a>t I thought I discovered a way to load the Firefox binaries more efficiently on Windows(bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=627591">627591</a>). Further testing revealed that to not be true in all cases and that the Windows Prefetch service was still killing our startup speed. Microsoft does not seem to provide a way to opt out of the Windows Prefetch &#8216;service&#8217;.</p>
 
 <p>There is a DIY way to opt out of prefetch by gaining Administrator privileges and deleting files out of the prefetch directory. Our is plan is to provide a Windows service to handle Firefox updates (bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=481815">481815</a>). Additionally the service would be able to do useful things like delete prefetch files, defragment Firefox databases(or at least help report on fragmentation levels). This is all tricky stuff.</p>
 
@@ -453,7 +453,7 @@ Our oldest startup benchmark, ts,Â  has been gathering wrong numbers all along.Â
 
 <p>To crux of the optimization lies in trading waiting for random io for fast sequential IO. Turned out that my patch worked great if windows prefetch wasn&#8217;t trying to help (ie firefox ran faster without prefetch on my test systems). With prefetch on, the patch was either a smaller win or a downright loss. When I dug in deeper, it turned that the Windows Prefetch helpfully spends 3-6 seconds doing IO before any Firefox code gets to run. It also doesn&#8217;t read in a very clever pattern, resulting in a very small speed up for Firefox, but preventing my exciting optimization.</p>
 
-<p>So I curled up into my defeated fetal position and pondered on how would I prevent Windows Prefetch from being so &#8220;helpful&#8221;. One way would be to <a href="http://tarasglek.github.com/taras/2010/10/04/diagnosing-slow-startup/">install</a> some crapware to cripple prefetch (kidding!), another way is to do the sequential IO in a separate executable(ala<a href="http://glandium.org/blog/?p=1719"> run-mozilla.sh</a> on Unix). This way Windows doesn&#8217;t try to do insane amounts of IO before my preloading logic gets to run. This seems to work (see wrapper.exe talk in the bug) and has potential to double Firefox startup times. It&#8217;s also ugly as sin, but if that&#8217;s what it takes&#8230;</p>
+<p>So I curled up into my defeated fetal position and pondered on how would I prevent Windows Prefetch from being so &#8220;helpful&#8221;. One way would be to <a href="http://taras.glek.net/2010/10/04/diagnosing-slow-startup/">install</a> some crapware to cripple prefetch (kidding!), another way is to do the sequential IO in a separate executable(ala<a href="http://glandium.org/blog/?p=1719"> run-mozilla.sh</a> on Unix). This way Windows doesn&#8217;t try to do insane amounts of IO before my preloading logic gets to run. This seems to work (see wrapper.exe talk in the bug) and has potential to double Firefox startup times. It&#8217;s also ugly as sin, but if that&#8217;s what it takes&#8230;</p>
 
 <p>So now I need more reports to make sure the executable wrapper approach reliably/significantly speeds up cold(post-reboot) startup. Then we can make a decision on how to integrate this into Firefox. But until we have all the data, please don&#8217;t jump to conclusions on what will and wont make Firefox 2x faster.</p>
 </div>
@@ -491,7 +491,7 @@ Our oldest startup benchmark, ts,Â  has been gathering wrong numbers all along.Â
   </header>
 
 
-  <div class="entry-content"><p>I got used to measuring startup the complicated way (example <a href="http://tarasglek.github.com/taras/2010/01/04/windows-7-startup-exploration/">here</a>). It&#8217;s complicated enough that many people prefer to use stopwatches.</p>
+  <div class="entry-content"><p>I got used to measuring startup the complicated way (example <a href="http://taras.glek.net/2010/01/04/windows-7-startup-exploration/">here</a>). It&#8217;s complicated enough that many people prefer to use stopwatches.</p>
 
 <p>Turns out modern operating systems can help applications self-diagnose startup speed. Thanks to landing <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=522375">bug 522375</a> we now provide an API for measuring startup speed. For example, now I know that xpcshell takes forever to startup on mac</p>
 

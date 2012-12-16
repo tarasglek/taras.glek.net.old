@@ -4,7 +4,7 @@
   <title><![CDATA[Category: thrower | All About Performance]]></title>
   <link href="http://tarasglek.github.com/blog/categories/thrower/atom.xml" rel="self"/>
   <link href="http://tarasglek.github.com/"/>
-  <updated>2012-12-16T13:07:16-08:00</updated>
+  <updated>2012-12-16T13:15:14-08:00</updated>
   <id>http://tarasglek.github.com/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -20,7 +20,7 @@
     <id>http://tarasglek.github.com/blog/2007/12/19/exceptions</id>
     <content type="html"><![CDATA[<p>Often there are two ways to write code. One way is to design an API and have code patterns adhere to how the API is supposed to be used. Another way is to rely on language features to accomplish the same thing. Typically API-pattern approaches are chosen because compilers are too immature or just don't provide the necessary features. Sometimes compilers do catch up and the possibility of utilizing newer language features appears.</p>
 
-<p>In the case of the exception rewrite the task is to rewrite code from a pattern-based (compiler in your head) approach to a more strict C++ construct-based exception paradigm. Unfortunately APIs don't enforce their usage as much as a compiler (in part because we don't have <a href="http://tarasglek.github.com/taras/2007/11/29/gcc-plugins-under-my-xmas-tree/">app-spefic compiler plugins</a>) so transforming that into a strict compiler-friendly form automatically isn't always realistic (<a href="http://lxr.mozilla.org/seamonkey/source/xpcom/glue/nsIInterfaceRequestorUtils.cpp#43">example</a>). See my previous post for more examples.</p>
+<p>In the case of the exception rewrite the task is to rewrite code from a pattern-based (compiler in your head) approach to a more strict C++ construct-based exception paradigm. Unfortunately APIs don't enforce their usage as much as a compiler (in part because we don't have <a href="http://taras.glek.net/2007/11/29/gcc-plugins-under-my-xmas-tree/">app-spefic compiler plugins</a>) so transforming that into a strict compiler-friendly form automatically isn't always realistic (<a href="http://lxr.mozilla.org/seamonkey/source/xpcom/glue/nsIInterfaceRequestorUtils.cpp#43">example</a>). See my previous post for more examples.</p>
 
 <p>Having done more work on the exception conversion I believe that it is possible to switch Mozilla to exceptions to the point of getting it to compile. Unfortunately, I don't think that it's possible to do this in the Mozilla2 timeframe due to the large amount of manual labour required.</p>
 
@@ -88,7 +88,7 @@ Usually stage 3 is a few times harder than 2. For garburator rewriting got reall
     <link href="http://tarasglek.github.com/blog/2007/12/05/exceptional-circumstances/"/>
     <updated>2007-12-05T06:23:38-08:00</updated>
     <id>http://tarasglek.github.com/blog/2007/12/05/exceptional-circumstances</id>
-    <content type="html"><![CDATA[<p>My previous post on outparam rewriting <a href="http://tarasglek.github.com/taras/2007/11/28/volume-of-refactoring-ahead/">described</a> the wealth of functions that can be rewritten. Unfortunately, most functions in Mozilla are declared in XPIDL interfaces.</p>
+    <content type="html"><![CDATA[<p>My previous post on outparam rewriting <a href="http://taras.glek.net/2007/11/28/volume-of-refactoring-ahead/">described</a> the wealth of functions that can be rewritten. Unfortunately, most functions in Mozilla are declared in XPIDL interfaces.</p>
 
 <p>I have been convinced that my plan to rewrite xpidlgen to avoid outparameters wont be possible because most XPIDLinterfaces can be implemented by JavaScript in a few different ways. That is problematic because in addition to return values, JavaScript can also have an exception thrown at any point and have that converted to an nsresult error code by XPConnect. That means that the getters implemented in JavaScript are not in the set of functions that only return NS_OK+outparam/someerror. I wouldn't be at all disappointed if someone proved me wrong here.</p>
 
@@ -114,7 +114,7 @@ Usually stage 3 is a few times harder than 2. For garburator rewriting got reall
 
 <p>Just like in the XPCOMGC rewrite, code will have to be scanned to verify that it fits in the "new world order". Unlike XPCOMGC, there are additional flow-sensitive issues to scan for to ensure that the code is thread-safe. The scans are at a lower level than dehydra currently works at, so it's a perfect opportunity to either extend dehydra or write the new tool.</p>
 
-<p>It would be especially cool to implement the code analysis tool as a <a href="http://tarasglek.github.com/taras/2007/11/29/gcc-plugins-under-my-xmas-tree/">gcc plugin</a>.  Sean Callanan's "Extending GCC with Modular GIMPLE Optimizations" paper in the <a href="http://ols2006.108.redhat.com/2007/GCC-Reprints/GCC2007-Proceedings.pdf">GCC summit proceedings</a> should be an excellent starting point.</p>
+<p>It would be especially cool to implement the code analysis tool as a <a href="http://taras.glek.net/2007/11/29/gcc-plugins-under-my-xmas-tree/">gcc plugin</a>.  Sean Callanan's "Extending GCC with Modular GIMPLE Optimizations" paper in the <a href="http://ols2006.108.redhat.com/2007/GCC-Reprints/GCC2007-Proceedings.pdf">GCC summit proceedings</a> should be an excellent starting point.</p>
 
 <p>This is an exciting experiment. I look forward to reducing speculation on the risks/benefits of switching the codebase to use exceptions with some concrete data.</p>
 ]]></content>

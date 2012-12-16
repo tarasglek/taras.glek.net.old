@@ -90,7 +90,7 @@
 
 <div class="entry-content"><p>This is an update on the ongoing <a href="http://wiki.mozilla.org/Gecko:DeCOMtamination">deCOMtamination</a> work from the automated rewriting perspective. I think it&#8217;s pretty exciting that Mozilla is the first large-scale C++ project to attempt automated large scale source code cleanups and optimizations. I think the tools are finally getting mature enough for the job.</p>
 
-<p>The downside is that there isn&#8217;t a published roadmap of what we are planning to achieve with deCOMtamination as we are still in the planning stages. The upside is that there is still time for any interested parties to think up the next great improvement on how things are done, <a href="http://tarasglek.github.com/taras/2007/07/13/dehydra-prcheck-squash-in-mercurial/">checkout</a> the refactoring toolchain and either extend an existing tool or implement a new one.</p>
+<p>The downside is that there isn&#8217;t a published roadmap of what we are planning to achieve with deCOMtamination as we are still in the planning stages. The upside is that there is still time for any interested parties to think up the next great improvement on how things are done, <a href="http://taras.glek.net/2007/07/13/dehydra-prcheck-squash-in-mercurial/">checkout</a> the refactoring toolchain and either extend an existing tool or implement a new one.</p>
 
 <p>Below is a list of things that I plan to have working in the near future. The idea is to try to implement various optimizations that would be impractical(or impossible?) to do manually and see if they yield the expected performance and code quality benefits.</p>
 
@@ -110,7 +110,7 @@
 
 <p>Tamarin comes with a modern <a href="http://developer.mozilla.org/en/docs/MMgc">garbage collector</a>.</p>
 
-<p>The goal of this rewrite is to aid <a href="http://blog.mozilla.org/jorendorff/">Jason</a> and <a href="http://benjamin.smedbergs.us/">Benjamin</a> with switching XPCOM from reference counting to garbage collection. This might end up in gigantic patches to rid the stack of nsCOMPtr objects. This might be hard as it will be affecting a lot of code and might reveal more shortcomings in <a href="http://tarasglek.github.com/taras/2007/08/30/pork-the-brave-new-world/">my version</a> of elsa and MCPP. <a href="http://wiki.mozilla.org/XPCOMGC">Details</a> are in the wiki.</p>
+<p>The goal of this rewrite is to aid <a href="http://blog.mozilla.org/jorendorff/">Jason</a> and <a href="http://benjamin.smedbergs.us/">Benjamin</a> with switching XPCOM from reference counting to garbage collection. This might end up in gigantic patches to rid the stack of nsCOMPtr objects. This might be hard as it will be affecting a lot of code and might reveal more shortcomings in <a href="http://taras.glek.net/2007/08/30/pork-the-brave-new-world/">my version</a> of elsa and MCPP. <a href="http://wiki.mozilla.org/XPCOMGC">Details</a> are in the wiki.</p>
 
 <p><strong>Step 3: Try C++ Exceptions</strong></p>
 

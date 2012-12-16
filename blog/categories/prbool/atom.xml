@@ -4,7 +4,7 @@
   <title><![CDATA[Category: prbool | All About Performance]]></title>
   <link href="http://tarasglek.github.com/blog/categories/prbool/atom.xml" rel="self"/>
   <link href="http://tarasglek.github.com/"/>
-  <updated>2012-12-16T13:07:16-08:00</updated>
+  <updated>2012-12-16T13:15:14-08:00</updated>
   <id>http://tarasglek.github.com/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -22,7 +22,7 @@
 
 <p>In addition to <a href="https://developer.mozilla.org/En/Dehydra">Dehydra</a> (which is even mentioned in the first comment, yay!), I also maintain <a href="https://developer.mozilla.org/En/Pork">Pork</a> - a fork of oink that is well suited to large-scale refactoring of real-world C/C++ code.</p>
 
-<p>So far pork has been used for "minor" things like renaming classes&amp;functions, rotating <a href="http://tarasglek.github.com/taras/2007/08/06/outparams-take-2/">outparameters</a> and correcting <a href="http://tarasglek.github.com/taras/2007/06/26/status-report-recent-work/">prbool</a> bugs. Additionally, Pork proved itself in an <a href="http://tarasglek.github.com/taras/2007/11/02/garburator-works/#comments">experiment</a> which involved rewriting almost every function(ie generating a 3+MB patch) in Mozilla to use garbage collection instead of reference-counting.</p>
+<p>So far pork has been used for "minor" things like renaming classes&amp;functions, rotating <a href="http://taras.glek.net/2007/08/06/outparams-take-2/">outparameters</a> and correcting <a href="http://taras.glek.net/2007/06/26/status-report-recent-work/">prbool</a> bugs. Additionally, Pork proved itself in an <a href="http://taras.glek.net/2007/11/02/garburator-works/#comments">experiment</a> which involved rewriting almost every function(ie generating a 3+MB patch) in Mozilla to use garbage collection instead of reference-counting.</p>
 
 <p>So to summarize:</p>
 
@@ -101,7 +101,7 @@ This is a huge improvement over the ad-hoc workflow prior to hg switch when I wa
     <id>http://tarasglek.github.com/blog/2007/10/04/multiple-degrees-of-correctness</id>
     <content type="html"><![CDATA[<p><strong>Prcheck</strong></p>
 
-<p>The trouble with prcheck and the automated <a href="http://tarasglek.github.com/taras/2007/06/26/status-report-recent-work/">prbool validation</a> is that one can't attach the giant patch it produces to bugzilla and expect it to get committed. So I am spending this week combing through prcheck output  and patch-bombing bugzilla with per-module patches.</p>
+<p>The trouble with prcheck and the automated <a href="http://taras.glek.net/2007/06/26/status-report-recent-work/">prbool validation</a> is that one can't attach the giant patch it produces to bugzilla and expect it to get committed. So I am spending this week combing through prcheck output  and patch-bombing bugzilla with per-module patches.</p>
 
 <p>I find going through the errors manually to be a lot of fun than I expected. I am finding types of errors that I was not considering when I was writing prcheck. For example, I expected the biggest gains to come at runtime from making all prbool values 0/1, but it seems that most of the cool errors are due to PRBool &amp; PRInt32 resolving to the same type. That results in code mayhem ranging from wrong method overloads being called to method signatures claiming to return PRBool where method bodies act like the function returns nsresults.</p>
 

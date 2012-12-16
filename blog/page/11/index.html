@@ -187,7 +187,7 @@ I plan to blog more on each of these subjects as they get closer to realization.
 
 <p>I made a <a href="http://hg.mozilla.org/users/tglek_mozilla.com/startup/raw-file/ca994a12e2a8/xulanatomy.pdf">pdf</a> to illustrate the cost centers of loading libxul.so (the essence of Firefox).</p>
 
-<p>With <a href="http://tarasglek.github.com/taras/2010/04/07/icegrind-valgrind-plugin-for-optimizing-cold-startup/">Icegrind</a> I demonstrated that better binary layout can significantly improve application startup. However I still didn&#8217;t have a breakdown of reasons of why loading binaries is so damn inefficient. That&#8217;s what the above pdf is about.</p>
+<p>With <a href="http://taras.glek.net/2010/04/07/icegrind-valgrind-plugin-for-optimizing-cold-startup/">Icegrind</a> I demonstrated that better binary layout can significantly improve application startup. However I still didn&#8217;t have a breakdown of reasons of why loading binaries is so damn inefficient. That&#8217;s what the above pdf is about.</p>
 
 <p>Loading libxul consists of 4 major phases:</p>
 
@@ -202,7 +202,7 @@ I blogged about 1, 2, 4, this post is about #3.</li>
 
 <p><strong>Library Initializers?</strong></p>
 
-<p><a href="http://people.gnome.org/~michael/">Michael Meeks</a> pointed me at the funny backwards IO pattern in his IO logs. I even <a href="http://tarasglek.github.com/taras/2010/03/24/linux-why-loading-binaries-from-disk-sucks/">made fun</a> of how by default libxul.so is read mostly via backwards IO. Once I <a href="http://tarasglek.github.com/taras/2010/05/24/teethig-troubles-assigning-blame-for-pagefaults/">assigned</a> userspace symbols to my pagefault log, it became clear that the backwards IO pattern was entirely due to library initializers. C++ compiler generates code that runs on library initialization to initialize globals and run relevant C++ constructors. In C one can assign a &#8220;constructor&#8221; GNU attribute to a function to participate in this mayhem.</p>
+<p><a href="http://people.gnome.org/~michael/">Michael Meeks</a> pointed me at the funny backwards IO pattern in his IO logs. I even <a href="http://taras.glek.net/2010/03/24/linux-why-loading-binaries-from-disk-sucks/">made fun</a> of how by default libxul.so is read mostly via backwards IO. Once I <a href="http://taras.glek.net/2010/05/24/teethig-troubles-assigning-blame-for-pagefaults/">assigned</a> userspace symbols to my pagefault log, it became clear that the backwards IO pattern was entirely due to library initializers. C++ compiler generates code that runs on library initialization to initialize globals and run relevant C++ constructors. In C one can assign a &#8220;constructor&#8221; GNU attribute to a function to participate in this mayhem.</p>
 
 <p><strong>Running Backwards?</strong></p>
 
@@ -372,7 +372,7 @@ I blogged about 1, 2, 4, this post is about #3.</li>
   </header>
 
 
-  <div class="entry-content"><p>Last week I learned about how Windows handles page faults backed by files (specifically xul.dll). I already knew that Linux was <a href="http://tarasglek.github.com/taras/2010/04/12/squeezing-every-last-bit-of-performance-out-of-the-linux-toolchain/">suboptimal</a> in this area, perhaps the clever people at Redmond did better.</p>
+  <div class="entry-content"><p>Last week I learned about how Windows handles page faults backed by files (specifically xul.dll). I already knew that Linux was <a href="http://taras.glek.net/2010/04/12/squeezing-every-last-bit-of-performance-out-of-the-linux-toolchain/">suboptimal</a> in this area, perhaps the clever people at Redmond did better.</p>
 
 <p>Shaver pointed me at <a href="https://developer.mozilla.org/En/Profiling_with_Xperf">xperf</a>, which is sort of like the new Linux perf tools. Xperf rocks in that it can capture the relevant data and it can export it as .csv.</p>
 
@@ -441,7 +441,7 @@ People seem to prefer to comment on <a href="http://www.reddit.com/r/programming
 
 <p>On Friday I finally got gold to produce a prelinkable static binary(<a href="http://sourceware.org/bugzilla/show_bug.cgi?id=11483">bug</a>). I also got around to trying out GCC <a href="https://developer.mozilla.org/en/Building_with_Profile-Guided_Optimization">profile-guided-optimization</a> with the debloatifying -freorder-blocks-and-partition option. This option breaks up every profiled function into cold and hot &#8220;functions&#8221;. It then lumps all of the hot functions together.</p>
 
-<p>PGO performance is amazingly close to that of binaries produced by <a href="http://tarasglek.github.com/taras/2010/04/07/icegrind-valgrind-plugin-for-optimizing-cold-startup/">icegrind </a>(within 10% based on page-counts).</p>
+<p>PGO performance is amazingly close to that of binaries produced by <a href="http://taras.glek.net/2010/04/07/icegrind-valgrind-plugin-for-optimizing-cold-startup/">icegrind </a>(within 10% based on page-counts).</p>
 
 <p><strong>Startup Time</strong>
 <strong>RSS (KB)</strong></p>
@@ -465,7 +465,7 @@ People seem to prefer to comment on <a href="http://www.reddit.com/r/programming
 <p>firefox.static.pgo
 1619ms
 38436
-In above table, ordered means application of <a href="http://tarasglek.github.com/taras/2010/04/07/icegrind-valgrind-plugin-for-optimizing-cold-startup/">icegrind</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=525013">static</a> means a fat firefox-bin. To generate the PGO profile I just started and closed Firefox. So it&#8217;s not too surprising that the results are similar to those of an explicitly ordered binary. RSS refers to how much memory is mmap()ed into the process(lower RSS usage means we are paging in less junk). I was not able to control the layout of PGO builds; will need some linker hackery to deal with split functions.</p>
+In above table, ordered means application of <a href="http://taras.glek.net/2010/04/07/icegrind-valgrind-plugin-for-optimizing-cold-startup/">icegrind</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=525013">static</a> means a fat firefox-bin. To generate the PGO profile I just started and closed Firefox. So it&#8217;s not too surprising that the results are similar to those of an explicitly ordered binary. RSS refers to how much memory is mmap()ed into the process(lower RSS usage means we are paging in less junk). I was not able to control the layout of PGO builds; will need some linker hackery to deal with split functions.</p>
 
 <p>I think the numbers speak for themselves. Isn&#8217;t it scary how wasteful binaries are by default? It amazes me that Firefox can shrug off a significant amount of resource bloat without changing a single line of code. I think this is a good demonstration on why application developers should a) expect more out of their toolchain (Linux, GCC, Binutils) b) contribute to their toolchain.</p>
 
@@ -473,7 +473,7 @@ In above table, ordered means application of <a href="http://tarasglek.github.co
 
 <p><strong>Pieces of The Startup Puzzle</strong></p>
 
-<p>It took a long time since I <a href="http://tarasglek.github.com/taras/2009/10/20/large-apps-just-have-to-start-slow/">first noticed</a> the suckyness of library io. After much digging, help by smart people on #gcc + <a href="http://thread.gmane.org/gmane.linux.kernel/970483/focus=970920">LKML discussion</a>, I think I finally have a pretty clear list of the remaining/inprogress things needed for Linux applications to start faster.</p>
+<p>It took a long time since I <a href="http://taras.glek.net/2009/10/20/large-apps-just-have-to-start-slow/">first noticed</a> the suckyness of library io. After much digging, help by smart people on #gcc + <a href="http://thread.gmane.org/gmane.linux.kernel/970483/focus=970920">LKML discussion</a>, I think I finally have a pretty clear list of the remaining/inprogress things needed for Linux applications to start faster.</p>
 
 <ol>
 <li>Wu Fengguang is making headway on <a href="http://lwn.net/Articles/372384/">smarter readahead</a> that makes better use of available RAM + disk bandwidth. Firefox could be read in 512kb chunks instead of 128 (4x page-fault reduction). Distributions should be aggressively testing this patch.</li>
@@ -522,7 +522,7 @@ I think with all of the above combined, we could load apps like Firefox at near-
 
 <p>It is incredibly difficult to observe both the cause (ie calling a random function) of binary-induced IO and the effect (the program gets suspended during startup while parts being loaded from disk), so this area doesn&#8217;t get as much optimization love as it deserves.</p>
 
-<p>My estimate is that around 50% of Firefox startup time is wasted on subobtimal binary layout. My previous <a href="http://tarasglek.github.com/taras/2010/04/05/linux-how-to-make-startup-suck-less-and-reduce-memory-usage/">post</a> demonstrated the kind of difference a better binary layout can make. Note that reordering executables isn&#8217;t the only solution, eliminating dead code should also speed things up (deleting <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=457262">dead code</a> is a <a href="http://ehren.wordpress.com/">hard</a>).</p>
+<p>My estimate is that around 50% of Firefox startup time is wasted on subobtimal binary layout. My previous <a href="http://taras.glek.net/2010/04/05/linux-how-to-make-startup-suck-less-and-reduce-memory-usage/">post</a> demonstrated the kind of difference a better binary layout can make. Note that reordering executables isn&#8217;t the only solution, eliminating dead code should also speed things up (deleting <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=457262">dead code</a> is a <a href="http://ehren.wordpress.com/">hard</a>).</p>
 
 <p><strong>Optimizing Binary Layout</strong><em> Disclaimer:I just finished my 3rd rewrite of icegrind a few hours ago, be gentle.</em></p>
 
@@ -538,7 +538,7 @@ I think with all of the above combined, we could load apps like Firefox at near-
 
 <p><em>Step 2: Produce a log with icegrind! </em>Apply my icegrind <a href="https://bugzilla.mozilla.org/attachment.cgi?id=437664&amp;action=edit">patch</a>, build+install valgrind. Run Firefox valgrind &#8211;tool=icegrind firefox-bin -profile /tmp/ff -no-remote This will produce a .log file for every mmap()ed file with a .sections description. This log chronologically lists sections in the order of access.</p>
 
-<p><em>Step 3: Tell gold to link using the above log</em> Build/install binutils (I use a CVS checkout from a month ago) with the <a href="http://sourceware.org/ml/binutils/2010-03/msg00050.html">section ordering patch</a>, specify &#8211;enable-gold. To reorder the binary, I just add -Wl,&#8211;section-ordering-file,libxul.so.log to my linker commandline. Note there are still some teething issues with using this patch, it exhibits N<sup>2</sup> behavior (ie takes 10min to link libxul.so with it) and occasionally swaps order for .rela.plt and .rela.dyn, which makes prelink upset. But unlike my <a href="http://tarasglek.github.com/taras/2010/02/19/teaching-ld-to-optimize-binaries-for-startup/">earlier attempt</a> with linker scripts, it does not affect the binary size.</p>
+<p><em>Step 3: Tell gold to link using the above log</em> Build/install binutils (I use a CVS checkout from a month ago) with the <a href="http://sourceware.org/ml/binutils/2010-03/msg00050.html">section ordering patch</a>, specify &#8211;enable-gold. To reorder the binary, I just add -Wl,&#8211;section-ordering-file,libxul.so.log to my linker commandline. Note there are still some teething issues with using this patch, it exhibits N<sup>2</sup> behavior (ie takes 10min to link libxul.so with it) and occasionally swaps order for .rela.plt and .rela.dyn, which makes prelink upset. But unlike my <a href="http://taras.glek.net/2010/02/19/teaching-ld-to-optimize-binaries-for-startup/">earlier attempt</a> with linker scripts, it does not affect the binary size.</p>
 
 <p>Step 4: Enjoy! Now strip, install, prelink your binaries and enjoy faster startup.</p>
 
@@ -582,7 +582,7 @@ I think with all of the above combined, we could load apps like Firefox at near-
   </header>
 
 
-  <div class="entry-content"><p>As I explained before, loading binaries from disk <a href="http://tarasglek.github.com/taras/2010/03/24/linux-why-loading-binaries-from-disk-sucks/">sucks</a>. Aside from <a href="http://tarasglek.github.com/taras/2010/03/25/madvise-prelink-update/">switching</a> glibc to use madvise/fadvise, what can application developers do to minimize this suckyness?</p>
+  <div class="entry-content"><p>As I explained before, loading binaries from disk <a href="http://taras.glek.net/2010/03/24/linux-why-loading-binaries-from-disk-sucks/">sucks</a>. Aside from <a href="http://taras.glek.net/2010/03/25/madvise-prelink-update/">switching</a> glibc to use madvise/fadvise, what can application developers do to minimize this suckyness?</p>
 
 <p>I am going to start with numbers to give an idea of the magnitudes involved here. I&#8217;m still using my 1.8ghz core2duo laptop with a 7200 200GB harddrive.</p>
 

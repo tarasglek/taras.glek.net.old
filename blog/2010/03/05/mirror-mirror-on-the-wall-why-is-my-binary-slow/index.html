@@ -88,11 +88,11 @@
   </header>
 
 
-<div class="entry-content"><p>In an <a href="http://tarasglek.github.com/taras/2010/02/19/teaching-ld-to-optimize-binaries-for-startup/">earlier</a> post I described my Fiji hack: how to use some nasty instrumentation to spit out ld scripts to speed up cold startup. This week I tried to extract more data out of the binary to lay it out even better. Trouble is that even if one lays out functions perfectly, they load data for things like variable initializers which will cause more IO.</p>
+<div class="entry-content"><p>In an <a href="http://taras.glek.net/2010/02/19/teaching-ld-to-optimize-binaries-for-startup/">earlier</a> post I described my Fiji hack: how to use some nasty instrumentation to spit out ld scripts to speed up cold startup. This week I tried to extract more data out of the binary to lay it out even better. Trouble is that even if one lays out functions perfectly, they load data for things like variable initializers which will cause more IO.</p>
 
 <p>A very clever friend suggested that I can write a valgrind plugin that can detect data accesses and function access and write the linker input files in one step. So with much hand-holding I hacked a sample valgrind plugin to do what I <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=549749">want</a>. Unfortunately, my binaries ended up not being significantly faster(if at all) than the Fiji ones. They also ended up 20% bigger.</p>
 
-<p>Fortunately, the GCC devs were able to point out my linker mistakes and pointed me at a <a href="http://sourceware.org/ml/binutils/2010-03/msg00050.html">linker patch</a> that does what I want without linker scripts(and has less binary-bloating side-effects). Unfortunately, that just confirmed that the speedup I was looking for wasn&#8217;t hiding behind data symbols. So I am going to have to sit down with my <a href="http://tarasglek.github.com/taras/2009/10/23/studying-library-io-systemtap-style/">io tracing script </a>and study what the heck is going on.</p>
+<p>Fortunately, the GCC devs were able to point out my linker mistakes and pointed me at a <a href="http://sourceware.org/ml/binutils/2010-03/msg00050.html">linker patch</a> that does what I want without linker scripts(and has less binary-bloating side-effects). Unfortunately, that just confirmed that the speedup I was looking for wasn&#8217;t hiding behind data symbols. So I am going to have to sit down with my <a href="http://taras.glek.net/2009/10/23/studying-library-io-systemtap-style/">io tracing script </a>and study what the heck is going on.</p>
 
 <p><strong>Cool Things I Learned</strong></p>
 

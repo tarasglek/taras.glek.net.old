@@ -120,7 +120,7 @@
 <ol>
 <li>If you want to rewrite sources either wait for the next mcpp release or use my <a href="http://people.mozilla.org/~tglek/mcpp-post2.6.4.tar.gz">tarball</a>.</li>
 <li>Install gcc 3.4.x. If using mcpp, configure mcpp with &#8211;enable-replace-system so it replaces the gcc preprocessor</li>
-<li><a href="http://tarasglek.github.com/taras/2007/07/13/dehydra-prcheck-squash-in-mercurial/">Checkout</a> and build my oink version.</li>
+<li><a href="http://taras.glek.net/2007/07/13/dehydra-prcheck-squash-in-mercurial/">Checkout</a> and build my oink version.</li>
 <li>Build mozilla with -save-temps gcc option. If using mcpp set environment variables CC=&#8221;gcc -Wp,-K -Wp,-W0 -save-temps &#8221; and CXX=&#8221;g++ -Wp,-K -Wp,-W0 -save-temps &#8221; and do make -f client.mk build as usual. The extra gcc parameters tell it to save intermediate files to pass -K and -W0 to enable macro expansion annotation and silence warnings.</li>
 <li>Run tools individual files</li>
 <li>Produce a global patch with ./pork-barrel 4 /path/to/prcheck /tmp/input.txt where input.txt is a list of absolute filenames of all of the .i and .ii files produced by the build process</li>

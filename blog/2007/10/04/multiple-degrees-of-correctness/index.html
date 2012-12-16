@@ -90,7 +90,7 @@
 
 <div class="entry-content"><p><strong>Prcheck</strong></p>
 
-<p>The trouble with prcheck and the automated <a href="http://tarasglek.github.com/taras/2007/06/26/status-report-recent-work/">prbool validation</a> is that one can&#8217;t attach the giant patch it produces to bugzilla and expect it to get committed. So I am spending this week combing through prcheck output  and patch-bombing bugzilla with per-module patches.</p>
+<p>The trouble with prcheck and the automated <a href="http://taras.glek.net/2007/06/26/status-report-recent-work/">prbool validation</a> is that one can&#8217;t attach the giant patch it produces to bugzilla and expect it to get committed. So I am spending this week combing through prcheck output  and patch-bombing bugzilla with per-module patches.</p>
 
 <p>I find going through the errors manually to be a lot of fun than I expected. I am finding types of errors that I was not considering when I was writing prcheck. For example, I expected the biggest gains to come at runtime from making all prbool values 0/1, but it seems that most of the cool errors are due to PRBool &amp; PRInt32 resolving to the same type. That results in code mayhem ranging from wrong method overloads being called to method signatures claiming to return PRBool where method bodies act like the function returns nsresults.</p>
 

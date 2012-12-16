@@ -90,7 +90,7 @@
 
 <div class="entry-content"><p><strong>Will Rid Code of Outparams!</strong></p>
 
-<p>I resumed my outparam rewriting work last week. Having fixed the <a href="http://tarasglek.github.com/taras/2007/05/11/cpp-strikes-back/">CPP induced</a> architectural limitation that I ran into, it was quite straight-forward to factor out squash&#8217;s rewriting code into a new tool. Unlike squash, outparamdel (creatively named new tool), can rewrite code precisely and reliably. I still don&#8217;t have end-of-ast-node information in every Elsa AST member, but I think I have added position info to enough AST nodes to be able to do most of the Mozilla 2 rewrites.</p>
+<p>I resumed my outparam rewriting work last week. Having fixed the <a href="http://taras.glek.net/2007/05/11/cpp-strikes-back/">CPP induced</a> architectural limitation that I ran into, it was quite straight-forward to factor out squash&#8217;s rewriting code into a new tool. Unlike squash, outparamdel (creatively named new tool), can rewrite code precisely and reliably. I still don&#8217;t have end-of-ast-node information in every Elsa AST member, but I think I have added position info to enough AST nodes to be able to do most of the Mozilla 2 rewrites.</p>
 
 <p>Last time I was working on this, I was a little unhappy with the amount of code that had to be changed in the callee. I also wasn&#8217;t sure how to handle the complexity of callsites where control flow depends on the error code returned by the callee. This time I chose the path of least resistance.</p>
 

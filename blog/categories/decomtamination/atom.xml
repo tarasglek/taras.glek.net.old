@@ -4,7 +4,7 @@
   <title><![CDATA[Category: DeCOMtamination | All About Performance]]></title>
   <link href="http://tarasglek.github.com/blog/categories/decomtamination/atom.xml" rel="self"/>
   <link href="http://tarasglek.github.com/"/>
-  <updated>2012-12-16T13:07:16-08:00</updated>
+  <updated>2012-12-16T13:15:14-08:00</updated>
   <id>http://tarasglek.github.com/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -105,7 +105,7 @@ Usually stage 3 is a few times harder than 2. For garburator rewriting got reall
     <link href="http://tarasglek.github.com/blog/2007/12/05/exceptional-circumstances/"/>
     <updated>2007-12-05T06:23:38-08:00</updated>
     <id>http://tarasglek.github.com/blog/2007/12/05/exceptional-circumstances</id>
-    <content type="html"><![CDATA[<p>My previous post on outparam rewriting <a href="http://tarasglek.github.com/taras/2007/11/28/volume-of-refactoring-ahead/">described</a> the wealth of functions that can be rewritten. Unfortunately, most functions in Mozilla are declared in XPIDL interfaces.</p>
+    <content type="html"><![CDATA[<p>My previous post on outparam rewriting <a href="http://taras.glek.net/2007/11/28/volume-of-refactoring-ahead/">described</a> the wealth of functions that can be rewritten. Unfortunately, most functions in Mozilla are declared in XPIDL interfaces.</p>
 
 <p>I have been convinced that my plan to rewrite xpidlgen to avoid outparameters wont be possible because most XPIDLinterfaces can be implemented by JavaScript in a few different ways. That is problematic because in addition to return values, JavaScript can also have an exception thrown at any point and have that converted to an nsresult error code by XPConnect. That means that the getters implemented in JavaScript are not in the set of functions that only return NS_OK+outparam/someerror. I wouldn't be at all disappointed if someone proved me wrong here.</p>
 
@@ -131,7 +131,7 @@ Usually stage 3 is a few times harder than 2. For garburator rewriting got reall
 
 <p>Just like in the XPCOMGC rewrite, code will have to be scanned to verify that it fits in the "new world order". Unlike XPCOMGC, there are additional flow-sensitive issues to scan for to ensure that the code is thread-safe. The scans are at a lower level than dehydra currently works at, so it's a perfect opportunity to either extend dehydra or write the new tool.</p>
 
-<p>It would be especially cool to implement the code analysis tool as a <a href="http://tarasglek.github.com/taras/2007/11/29/gcc-plugins-under-my-xmas-tree/">gcc plugin</a>.  Sean Callanan's "Extending GCC with Modular GIMPLE Optimizations" paper in the <a href="http://ols2006.108.redhat.com/2007/GCC-Reprints/GCC2007-Proceedings.pdf">GCC summit proceedings</a> should be an excellent starting point.</p>
+<p>It would be especially cool to implement the code analysis tool as a <a href="http://taras.glek.net/2007/11/29/gcc-plugins-under-my-xmas-tree/">gcc plugin</a>.  Sean Callanan's "Extending GCC with Modular GIMPLE Optimizations" paper in the <a href="http://ols2006.108.redhat.com/2007/GCC-Reprints/GCC2007-Proceedings.pdf">GCC summit proceedings</a> should be an excellent starting point.</p>
 
 <p>This is an exciting experiment. I look forward to reducing speculation on the risks/benefits of switching the codebase to use exceptions with some concrete data.</p>
 ]]></content>
@@ -150,7 +150,7 @@ Usually stage 3 is a few times harder than 2. For garburator rewriting got reall
 
 <p>Brendan &amp; Graydon pointed me to <a href="http://www.cs.berkeley.edu/~smcpeak/elkhound/sources/elsa/">elsa</a>, the C++ parser that supposedly could parse Mozilla. However, it turned out that it was only able to parse an old version of Mozilla and rejected the new source. One of the elsa maintainers even tried to convince us to it was not designed for source-to-source transformations and wouldn't work that way.</p>
 
-<p>After I patched up elsa and started devising ways to use it for source rewriting I ran into more pain. After a few false starts, I realized that C++ in Mozilla is actually a mix of CPP and C++ and one can not rewrite C++ without dealing with the <a href="http://tarasglek.github.com/taras/2007/05/11/cpp-strikes-back/">mess that is macro expansion</a>. <a href="http://mcpp.sourceforge.net/">MCPP</a> was pointed out to me as a good starting point for hacking on a preprocessor. So I <a href="http://tarasglek.github.com/taras/2007/06/12/undoing-cpp-expansion-in-3-simple-steps.-say-hello-to-easier-c-rewriting./">designed</a> an inline log for macro expansion. To my surprise the maintainer of MCPP, Kiyoshi MATSUI, volunteered to implement the spec and thus saved me from a world of pain. (For which I am eternally grateful as I can't imagine a more depressing pastime than working on the root of all evil: the C preprocessor).</p>
+<p>After I patched up elsa and started devising ways to use it for source rewriting I ran into more pain. After a few false starts, I realized that C++ in Mozilla is actually a mix of CPP and C++ and one can not rewrite C++ without dealing with the <a href="http://taras.glek.net/2007/05/11/cpp-strikes-back/">mess that is macro expansion</a>. <a href="http://mcpp.sourceforge.net/">MCPP</a> was pointed out to me as a good starting point for hacking on a preprocessor. So I <a href="http://taras.glek.net/2007/06/12/undoing-cpp-expansion-in-3-simple-steps.-say-hello-to-easier-c-rewriting./">designed</a> an inline log for macro expansion. To my surprise the maintainer of MCPP, Kiyoshi MATSUI, volunteered to implement the spec and thus saved me from a world of pain. (For which I am eternally grateful as I can't imagine a more depressing pastime than working on the root of all evil: the C preprocessor).</p>
 
 <p>In parallel with Kiyoshi's work I modified <a href="http://www.cs.berkeley.edu/~smcpeak/elkhound/">elkhound</a> &amp; elsa to make the C++ parser a lot more suitable for source transformations. I learned about LR &amp; GLR parsing and confirmed my suspicion that I don't want to write parser generators for a living.</p>
 
@@ -158,7 +158,7 @@ Usually stage 3 is a few times harder than 2. For garburator rewriting got reall
 
 <p>All this work finally got us what we discussed last September: a framework for doing lots of <a href="http://wiki.mozilla.org/XPCOMGC/Stack_Pointers">boring code rewrites</a>.</p>
 
-<p>The first big Moz2 task is <a href="http://wiki.mozilla.org/XPCOMGC">switching</a> from reference counting to garbage collection. Today, <a href="http://tarasglek.github.com/taras/2007/09/12/garburator-another-day-another-rewrite-tool/">garburator</a> produced a <a href="http://people.mozilla.org/~tglek/garburator/nsgenerichtmlelement.diff">gigantic patch</a> for subset of the content/ module and all of the affected files compiled. Hopefully next week I'll have a multi-megabyte patch for the whole of Mozilla that compiles and possibly runs.</p>
+<p>The first big Moz2 task is <a href="http://wiki.mozilla.org/XPCOMGC">switching</a> from reference counting to garbage collection. Today, <a href="http://taras.glek.net/2007/09/12/garburator-another-day-another-rewrite-tool/">garburator</a> produced a <a href="http://people.mozilla.org/~tglek/garburator/nsgenerichtmlelement.diff">gigantic patch</a> for subset of the content/ module and all of the affected files compiled. Hopefully next week I'll have a multi-megabyte patch for the whole of Mozilla that compiles and possibly runs.</p>
 ]]></content>
   </entry>
   

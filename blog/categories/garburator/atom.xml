@@ -4,7 +4,7 @@
   <title><![CDATA[Category: garburator | All About Performance]]></title>
   <link href="http://tarasglek.github.com/blog/categories/garburator/atom.xml" rel="self"/>
   <link href="http://tarasglek.github.com/"/>
-  <updated>2012-12-16T13:07:16-08:00</updated>
+  <updated>2012-12-16T13:15:14-08:00</updated>
   <id>http://tarasglek.github.com/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -35,7 +35,7 @@
     <id>http://tarasglek.github.com/blog/2007/12/19/exceptions</id>
     <content type="html"><![CDATA[<p>Often there are two ways to write code. One way is to design an API and have code patterns adhere to how the API is supposed to be used. Another way is to rely on language features to accomplish the same thing. Typically API-pattern approaches are chosen because compilers are too immature or just don't provide the necessary features. Sometimes compilers do catch up and the possibility of utilizing newer language features appears.</p>
 
-<p>In the case of the exception rewrite the task is to rewrite code from a pattern-based (compiler in your head) approach to a more strict C++ construct-based exception paradigm. Unfortunately APIs don't enforce their usage as much as a compiler (in part because we don't have <a href="http://tarasglek.github.com/taras/2007/11/29/gcc-plugins-under-my-xmas-tree/">app-spefic compiler plugins</a>) so transforming that into a strict compiler-friendly form automatically isn't always realistic (<a href="http://lxr.mozilla.org/seamonkey/source/xpcom/glue/nsIInterfaceRequestorUtils.cpp#43">example</a>). See my previous post for more examples.</p>
+<p>In the case of the exception rewrite the task is to rewrite code from a pattern-based (compiler in your head) approach to a more strict C++ construct-based exception paradigm. Unfortunately APIs don't enforce their usage as much as a compiler (in part because we don't have <a href="http://taras.glek.net/2007/11/29/gcc-plugins-under-my-xmas-tree/">app-spefic compiler plugins</a>) so transforming that into a strict compiler-friendly form automatically isn't always realistic (<a href="http://lxr.mozilla.org/seamonkey/source/xpcom/glue/nsIInterfaceRequestorUtils.cpp#43">example</a>). See my previous post for more examples.</p>
 
 <p>Having done more work on the exception conversion I believe that it is possible to switch Mozilla to exceptions to the point of getting it to compile. Unfortunately, I don't think that it's possible to do this in the Mozilla2 timeframe due to the large amount of manual labour required.</p>
 
@@ -72,13 +72,13 @@ I think the best bet with exceptions would be to start working on them during th
     <link href="http://tarasglek.github.com/blog/2007/11/02/garburator-works/"/>
     <updated>2007-11-02T09:02:15-07:00</updated>
     <id>http://tarasglek.github.com/blog/2007/11/02/garburator-works</id>
-    <content type="html"><![CDATA[<p>A <a href="http://tarasglek.github.com/taras/2007/10/12/rewriting-tools-for-mozilla-2-moving-forward-as-planned/">few weeks</a> ago I convinced myself that is possible to rewrite Mozilla to avoid COMPtrs on the stack. Since then I've changed my mind a few times and felt like I may not be able to get this rewrite working. However, after three or four false starts, I finally managed to work out a metal model of the stack nsCOMPtr usage. With a combination of automatic blacklisting of tricky code, manual demacroing and lots of help from <a href="http://benjamin.smedbergs.us/">Benjamin</a> I got the generated 3.2MB patch to compile.</p>
+    <content type="html"><![CDATA[<p>A <a href="http://taras.glek.net/2007/10/12/rewriting-tools-for-mozilla-2-moving-forward-as-planned/">few weeks</a> ago I convinced myself that is possible to rewrite Mozilla to avoid COMPtrs on the stack. Since then I've changed my mind a few times and felt like I may not be able to get this rewrite working. However, after three or four false starts, I finally managed to work out a metal model of the stack nsCOMPtr usage. With a combination of automatic blacklisting of tricky code, manual demacroing and lots of help from <a href="http://benjamin.smedbergs.us/">Benjamin</a> I got the generated 3.2MB patch to compile.</p>
 
 <p>I am sure that there are lots of bugs to be found still, but at least we've discovered the pattern that the code follows. I am also sure that there are lots of unpleasant surprises to be discovered and dealt with in the near future.</p>
 
 <p>The bright side is that the result of these rewrites we should get a less buggy codebase that is easier to work on, more efficient and compiles to smaller binaries. My other big wish is to significantly reduce the amount of C++ magic in the codebase.</p>
 
-<p>I am happy that garburator works as it means I can go back to playing <a href="http://tarasglek.github.com/taras/category/outparamdel/">outparamdel</a>. Hopefully, once garburator+outparamdel are applied on all possible methods we'll end up with relatively nice looking C++ code and a healthy performance boost.</p>
+<p>I am happy that garburator works as it means I can go back to playing <a href="http://taras.glek.net/category/outparamdel/">outparamdel</a>. Hopefully, once garburator+outparamdel are applied on all possible methods we'll end up with relatively nice looking C++ code and a healthy performance boost.</p>
 ]]></content>
   </entry>
   
@@ -95,7 +95,7 @@ I think the best bet with exceptions would be to start working on them during th
 
 <p>Brendan &amp; Graydon pointed me to <a href="http://www.cs.berkeley.edu/~smcpeak/elkhound/sources/elsa/">elsa</a>, the C++ parser that supposedly could parse Mozilla. However, it turned out that it was only able to parse an old version of Mozilla and rejected the new source. One of the elsa maintainers even tried to convince us to it was not designed for source-to-source transformations and wouldn't work that way.</p>
 
-<p>After I patched up elsa and started devising ways to use it for source rewriting I ran into more pain. After a few false starts, I realized that C++ in Mozilla is actually a mix of CPP and C++ and one can not rewrite C++ without dealing with the <a href="http://tarasglek.github.com/taras/2007/05/11/cpp-strikes-back/">mess that is macro expansion</a>. <a href="http://mcpp.sourceforge.net/">MCPP</a> was pointed out to me as a good starting point for hacking on a preprocessor. So I <a href="http://tarasglek.github.com/taras/2007/06/12/undoing-cpp-expansion-in-3-simple-steps.-say-hello-to-easier-c-rewriting./">designed</a> an inline log for macro expansion. To my surprise the maintainer of MCPP, Kiyoshi MATSUI, volunteered to implement the spec and thus saved me from a world of pain. (For which I am eternally grateful as I can't imagine a more depressing pastime than working on the root of all evil: the C preprocessor).</p>
+<p>After I patched up elsa and started devising ways to use it for source rewriting I ran into more pain. After a few false starts, I realized that C++ in Mozilla is actually a mix of CPP and C++ and one can not rewrite C++ without dealing with the <a href="http://taras.glek.net/2007/05/11/cpp-strikes-back/">mess that is macro expansion</a>. <a href="http://mcpp.sourceforge.net/">MCPP</a> was pointed out to me as a good starting point for hacking on a preprocessor. So I <a href="http://taras.glek.net/2007/06/12/undoing-cpp-expansion-in-3-simple-steps.-say-hello-to-easier-c-rewriting./">designed</a> an inline log for macro expansion. To my surprise the maintainer of MCPP, Kiyoshi MATSUI, volunteered to implement the spec and thus saved me from a world of pain. (For which I am eternally grateful as I can't imagine a more depressing pastime than working on the root of all evil: the C preprocessor).</p>
 
 <p>In parallel with Kiyoshi's work I modified <a href="http://www.cs.berkeley.edu/~smcpeak/elkhound/">elkhound</a> &amp; elsa to make the C++ parser a lot more suitable for source transformations. I learned about LR &amp; GLR parsing and confirmed my suspicion that I don't want to write parser generators for a living.</p>
 
@@ -103,7 +103,7 @@ I think the best bet with exceptions would be to start working on them during th
 
 <p>All this work finally got us what we discussed last September: a framework for doing lots of <a href="http://wiki.mozilla.org/XPCOMGC/Stack_Pointers">boring code rewrites</a>.</p>
 
-<p>The first big Moz2 task is <a href="http://wiki.mozilla.org/XPCOMGC">switching</a> from reference counting to garbage collection. Today, <a href="http://tarasglek.github.com/taras/2007/09/12/garburator-another-day-another-rewrite-tool/">garburator</a> produced a <a href="http://people.mozilla.org/~tglek/garburator/nsgenerichtmlelement.diff">gigantic patch</a> for subset of the content/ module and all of the affected files compiled. Hopefully next week I'll have a multi-megabyte patch for the whole of Mozilla that compiles and possibly runs.</p>
+<p>The first big Moz2 task is <a href="http://wiki.mozilla.org/XPCOMGC">switching</a> from reference counting to garbage collection. Today, <a href="http://taras.glek.net/2007/09/12/garburator-another-day-another-rewrite-tool/">garburator</a> produced a <a href="http://people.mozilla.org/~tglek/garburator/nsgenerichtmlelement.diff">gigantic patch</a> for subset of the content/ module and all of the affected files compiled. Hopefully next week I'll have a multi-megabyte patch for the whole of Mozilla that compiles and possibly runs.</p>
 ]]></content>
   </entry>
   

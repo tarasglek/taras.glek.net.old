@@ -183,7 +183,7 @@
 
   <div class="entry-content"><p>There is a common fallacy that since linkers and compilers are written by really smart people, there aren&#8217;t any huge performance wins left in the toolchain. My theory is that the efficiency of any given codebase varies inversely with the number of people who tried to optimize it.</p>
 
-<p>I have long complained of suboptimal binaries generated from our code. Modern profiling tools such as <a href="http://tarasglek.github.com/taras/2009/10/23/studying-library-io-systemtap-style/">systemtap</a> and <a href="http://tarasglek.github.com/taras/2010/04/07/icegrind-valgrind-plugin-for-optimizing-cold-startup/">icegrind</a> made this painfully obvious. Mike Hommey opted for actually doing something about it. What started as a simple ld.so hack grew into a<a href="http://glandium.org/blog/?p=1177"> badass binary-rewriting tool</a> (and the most interesting blog post I&#8217;ve read this year).</p>
+<p>I have long complained of suboptimal binaries generated from our code. Modern profiling tools such as <a href="http://taras.glek.net/2009/10/23/studying-library-io-systemtap-style/">systemtap</a> and <a href="http://taras.glek.net/2010/04/07/icegrind-valgrind-plugin-for-optimizing-cold-startup/">icegrind</a> made this painfully obvious. Mike Hommey opted for actually doing something about it. What started as a simple ld.so hack grew into a<a href="http://glandium.org/blog/?p=1177"> badass binary-rewriting tool</a> (and the most interesting blog post I&#8217;ve read this year).</p>
 </div>
   
   
@@ -221,7 +221,7 @@
 
   <div class="entry-content"><p><strong>Fragmentation: SQLite &amp; Friends </strong></p>
 
-<p>I am happy to report that the SQLite fragmentation <a href="http://tarasglek.github.com/taras/2010/09/07/fighting-fragmentation-sqlite/">problem</a> is now <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=581606">solved</a>. I copied my profile a month ago, and my places.sqlite is still in a single fragment! There was a similar <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=592520">fix</a> done to Firefox disk cache. Thanks to helpful comments on my OSX preallocation <a href="https://blog.mozilla.org/tglek/2010/09/09/help-wanted-does-fcntlf_preallocate-work-as-advertised-on-osx/">cry for help</a>, we now preallocate efficiently on OSX too.</p>
+<p>I am happy to report that the SQLite fragmentation <a href="http://taras.glek.net/2010/09/07/fighting-fragmentation-sqlite/">problem</a> is now <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=581606">solved</a>. I copied my profile a month ago, and my places.sqlite is still in a single fragment! There was a similar <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=592520">fix</a> done to Firefox disk cache. Thanks to helpful comments on my OSX preallocation <a href="https://blog.mozilla.org/tglek/2010/09/09/help-wanted-does-fcntlf_preallocate-work-as-advertised-on-osx/">cry for help</a>, we now preallocate efficiently on OSX too.</p>
 
 <p>Startup cache is the last <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=593349">remaining</a> bastion of fragmentation, but that&#8217;s already 10x better than it was a month ago. I have two complimentary solutions for that: either <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=562406">omnijar startup cache generation</a> for core code and/or write the cache more <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=586859">efficiently</a>.</p>
 
@@ -448,7 +448,7 @@ Click on &#8220;IO Counts&#8221; or &#8220;Hard faults&#8221; graph, select &#82
   </header>
 
 
-  <div class="entry-content"><p>Thanks for all of those who commented on <a href="http://tarasglek.github.com/taras/2010/07/22/file-fragmentation/">previous post</a> on fragmentation. My first fragmentation <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=581606">fix</a> has landed. In current nightlies and future releases the main Firefox databases will grow more aggressively to avoid fragmentation. This should translate into better history/awesomebar/cookie performance for our most dedicated users.</p>
+  <div class="entry-content"><p>Thanks for all of those who commented on <a href="http://taras.glek.net/2010/07/22/file-fragmentation/">previous post</a> on fragmentation. My first fragmentation <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=581606">fix</a> has landed. In current nightlies and future releases the main Firefox databases will grow more aggressively to avoid fragmentation. This should translate into better history/awesomebar/cookie performance for our most dedicated users.</p>
 
 <p>Unfortunately fixing existing profiles is <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=592678">hard</a> from within Firefox. In the meantime advanced users on non-Windows platforms who are suffering from fragmentation can manually copy *.sqlite files to another directory and back.</p>
 
@@ -510,7 +510,7 @@ To summarize: there are a lot of misleading stories floating around. I am always
   </header>
 
 
-  <div class="entry-content"><p>I was digging through a MSVC++ <a href="http://msdn.microsoft.com/en-us/library/k7xkk3e2%28v=VS.80%29.aspx">map file</a> for xul.dll. Turns out MSVC++ isn&#8217;t as <a href="http://tarasglek.github.com/taras/2010/05/27/startup-backward-constructors/">naive</a> about virtual initializers as the GNU toolchain. Initializers are all laid out next to each other. Same goes for what looks like finalizers and exception unwinding stuff. Initializers have an __E prefix and look like this:</p>
+  <div class="entry-content"><p>I was digging through a MSVC++ <a href="http://msdn.microsoft.com/en-us/library/k7xkk3e2%28v=VS.80%29.aspx">map file</a> for xul.dll. Turns out MSVC++ isn&#8217;t as <a href="http://taras.glek.net/2010/05/27/startup-backward-constructors/">naive</a> about virtual initializers as the GNU toolchain. Initializers are all laid out next to each other. Same goes for what looks like finalizers and exception unwinding stuff. Initializers have an __E prefix and look like this:</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -529,7 +529,7 @@ To summarize: there are a lot of misleading stories floating around. I am always
 </pre></td><td class='code'><pre><code class=''><span class='line'>memory-mapped IO</span></code></pre></td></tr></table></div></figure>
 
 
-<p>](http://tarasglek.github.com/taras/2010/04/19/windows-sucks-at-memory-mapped-io-during-startup/) efficiently, it&#8217;d be a superior OS for starting Firefox.</p>
+<p>](http://taras.glek.net/2010/04/19/windows-sucks-at-memory-mapped-io-during-startup/) efficiently, it&#8217;d be a superior OS for starting Firefox.</p>
 </div>
   
   

@@ -90,7 +90,7 @@
 
 <div class="entry-content"><p><strong>Hunting Down Mythical &#8220;Slowness&#8221;</strong></p>
 
-<p>I recently met a developer who used Chromium instead of Firefox. Chromium&#8217;s superior startup speed was his reason for using it.This got me excited because said developer was running Linux, so it was relatively easy to measure cold startup and get a complete <a href="http://tarasglek.github.com/taras/2009/10/23/studying-library-io-systemtap-style/">IO breakdown</a>.</p>
+<p>I recently met a developer who used Chromium instead of Firefox. Chromium&#8217;s superior startup speed was his reason for using it.This got me excited because said developer was running Linux, so it was relatively easy to measure cold startup and get a complete <a href="http://taras.glek.net/2009/10/23/studying-library-io-systemtap-style/">IO breakdown</a>.</p>
 
 <p>Turned out Firefox took roughly 23 seconds to start. After much cursing about how I&#8217;ve never seen Firefox startup this slow, I eventually gave up on figuring out what&#8217;s slowing his startup and instead we measured Chromium startup. It also turned out to also be roughly 23 seconds. The super-slow hard drive made everything slow. Turned out Chromium&#8217;s superior startup was a myth in this case.</p>
 
@@ -124,13 +124,13 @@ What am I testing? I am measuring the time between invoking the browser until a 
 
 <p>Running Minefield five times: 3155, 3273, 3352, 3311, 3322</p>
 
-<p>I picked Minefield because that&#8217;s the browser that I run and the codebase that I focus on. The linux Chromium channel seems to be the closest parallel to Minefield. I did not test on Windows because it is a bit of a <a href="http://tarasglek.github.com/taras/2010/01/04/windows-7-startup-exploration/">nightmare</a> to measure cold startup there.</p>
+<p>I picked Minefield because that&#8217;s the browser that I run and the codebase that I focus on. The linux Chromium channel seems to be the closest parallel to Minefield. I did not test on Windows because it is a bit of a <a href="http://taras.glek.net/2010/01/04/windows-7-startup-exploration/">nightmare</a> to measure cold startup there.</p>
 
 <p><strong>Conclusion</strong></p>
 
 <p>On my system Minefield is around 30% faster at starting up with  an empty profile than Chromium (the difference is amplified by running the CPU at 800Mhz). For comparison of Minefield against older Firefox versions, see <a href="http://autonome.wordpress.com/2009/11/21/firefox-startup-performance-weekly-summary-11/">Dietrich&#8217;s post</a>.</p>
 
-<p>I suspect that there is a relatively small difference between the two browsers because we are running into the fundamental limitations of loading large applications into memory (<a href="http://tarasglek.github.com/taras/2009/10/20/large-apps-just-have-to-start-slow/">my rant</a>).</p>
+<p>I suspect that there is a relatively small difference between the two browsers because we are running into the fundamental limitations of loading large applications into memory (<a href="http://taras.glek.net/2009/10/20/large-apps-just-have-to-start-slow/">my rant</a>).</p>
 </div>
 
 
