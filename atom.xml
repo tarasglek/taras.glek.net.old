@@ -4,7 +4,7 @@
   <title><![CDATA[All About Performance]]></title>
   <link href="http://tarasglek.github.com/atom.xml" rel="self"/>
   <link href="http://tarasglek.github.com/"/>
-  <updated>2012-12-16T13:15:14-08:00</updated>
+  <updated>2012-12-16T13:18:18-08:00</updated>
   <id>http://tarasglek.github.com/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -108,7 +108,7 @@
     <link href="http://tarasglek.github.com/blog/2012/10/18/snappy-41/"/>
     <updated>2012-10-18T08:53:19-07:00</updated>
     <id>http://tarasglek.github.com/blog/2012/10/18/snappy-41</id>
-    <content type="html"><![CDATA[<p>Jeff Muizelaar may not have cut tab switch times in half in my <a href="https://blog.mozilla.org/tglek/2012/10/15/snappy-40-faster-tabswitching-startup-analysis/">last update</a>. The overhead moved to a later part of the process that we were not measuring before the change landed. We&#8217;ll be able to tell the magnitude of the tab-switch improvement was by landing bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=800031">800031</a> on Aurora.</p>
+    <content type="html"><![CDATA[<p>Jeff Muizelaar may not have cut tab switch times in half in my <a href="http://taras.glek.net/2012/10/15/snappy-40-faster-tabswitching-startup-analysis/">last update</a>. The overhead moved to a later part of the process that we were not measuring before the change landed. We&#8217;ll be able to tell the magnitude of the tab-switch improvement was by landing bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=800031">800031</a> on Aurora.</p>
 
 <p>Matt Woodrow reduced tab-close animation jank in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=750417">bug 750417</a>.</p>
 ]]></content>
@@ -123,7 +123,7 @@
 
 <p><strong>Jeff Muizelaar cut tab switch times in half</strong></p>
 
-<p>Data came in on Jeff&#8217;s optimization I mentioned <a href="https://blog.mozilla.org/tglek/2012/10/04/snappy-39/">last week</a>: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=792199">bug 792199</a>. This halved our median tab switch time. Since this also landed at the end of our 18 cycle, a comparison between 18/19 Nightlies gives us an idea of how this changed our tab switching times overall. Note the actual difference would be greater since both 18 &amp; 19 include data points with Jeff&#8217;s patch, but the majority of data in 18 is without Jeff&#8217;s patch.</p>
+<p>Data came in on Jeff&#8217;s optimization I mentioned <a href="http://taras.glek.net/2012/10/04/snappy-39/">last week</a>: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=792199">bug 792199</a>. This halved our median tab switch time. Since this also landed at the end of our 18 cycle, a comparison between 18/19 Nightlies gives us an idea of how this changed our tab switching times overall. Note the actual difference would be greater since both 18 &amp; 19 include data points with Jeff&#8217;s patch, but the majority of data in 18 is without Jeff&#8217;s patch.</p>
 
 <p><a href="http://taras.glek.net/files/2012/10/fx_tab_switch_update.png"><img src="http://taras.glek.net/files/2012/10/fx_tab_switch_update.png" alt="" /></a></p>
 
@@ -309,7 +309,7 @@ We spent most of the meeting discussing bug <a href="https://bugzilla.mozilla.or
 
 <p><strong>Thanks!</strong></p>
 
-<p>Thanks for the great comments on my <a href="https://blog.mozilla.org/tglek/2012/08/16/snappy-36/">previous </a>snappy updates. <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=783755">Bug 783755</a> should take care of the new cache size pref not sticking. <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=718910">Bug 718910</a> on hiding Cache directory from Spotlight is making progress too.</p>
+<p>Thanks for the great comments on my <a href="http://taras.glek.net/2012/08/16/snappy-36/">previous </a>snappy updates. <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=783755">Bug 783755</a> should take care of the new cache size pref not sticking. <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=718910">Bug 718910</a> on hiding Cache directory from Spotlight is making progress too.</p>
 
 <p>Commenter, kumalos, reported a tab switching regression and posted a profile recorded with our <a href="https://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;ved=0CCIQFjAA&amp;url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FPerformance%2FProfiling_with_the_Built-in_Profiler&amp;ei=FLw2UKzMO4WXiQLSgoHwAQ&amp;usg=AFQjCNEGPmI44wGwpjRbtR-WT36EdVv-ew">profiler </a>as evidence. This proved to be an example of bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=783748">783748</a>, and lead us to identify a previously unknown issue in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=784756">784756</a>. Constructive feedback like this is one of the main reasons I blog.</p>
 

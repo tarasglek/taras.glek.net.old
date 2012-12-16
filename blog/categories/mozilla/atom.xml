@@ -4,7 +4,7 @@
   <title><![CDATA[Category: mozilla | All About Performance]]></title>
   <link href="http://tarasglek.github.com/blog/categories/mozilla/atom.xml" rel="self"/>
   <link href="http://tarasglek.github.com/"/>
-  <updated>2012-12-16T13:15:14-08:00</updated>
+  <updated>2012-12-16T13:18:18-08:00</updated>
   <id>http://tarasglek.github.com/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -108,7 +108,7 @@
     <link href="http://tarasglek.github.com/blog/2012/10/18/snappy-41/"/>
     <updated>2012-10-18T08:53:19-07:00</updated>
     <id>http://tarasglek.github.com/blog/2012/10/18/snappy-41</id>
-    <content type="html"><![CDATA[<p>Jeff Muizelaar may not have cut tab switch times in half in my <a href="https://blog.mozilla.org/tglek/2012/10/15/snappy-40-faster-tabswitching-startup-analysis/">last update</a>. The overhead moved to a later part of the process that we were not measuring before the change landed. We'll be able to tell the magnitude of the tab-switch improvement was by landing bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=800031">800031</a> on Aurora.</p>
+    <content type="html"><![CDATA[<p>Jeff Muizelaar may not have cut tab switch times in half in my <a href="http://taras.glek.net/2012/10/15/snappy-40-faster-tabswitching-startup-analysis/">last update</a>. The overhead moved to a later part of the process that we were not measuring before the change landed. We'll be able to tell the magnitude of the tab-switch improvement was by landing bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=800031">800031</a> on Aurora.</p>
 
 <p>Matt Woodrow reduced tab-close animation jank in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=750417">bug 750417</a>.</p>
 ]]></content>

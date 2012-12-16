@@ -4,7 +4,7 @@
   <title><![CDATA[Category: performance | All About Performance]]></title>
   <link href="http://tarasglek.github.com/blog/categories/performance/atom.xml" rel="self"/>
   <link href="http://tarasglek.github.com/"/>
-  <updated>2012-12-16T13:15:14-08:00</updated>
+  <updated>2012-12-16T13:18:18-08:00</updated>
   <id>http://tarasglek.github.com/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -20,7 +20,7 @@
     <id>http://tarasglek.github.com/blog/2011/12/20/fosdem-anyone</id>
     <content type="html"><![CDATA[<p>Team Perf and a significant number of other Mozillians will be attending <a href="http://fosdem.org/2012/">FOSDEM</a> this year. My team will be giving talks on android linkers, IO, toolchain stuff, other TBD stuff. This will be my first FOSDEM, I'm really excited about it. There are a lot of European open sourcers to meet that don't make it to this side of the pond much.</p>
 
-<p>Team perf &amp; other snappy people (10+ people) plan to spend the week before FOSDEM hacking on <a href="https://blog.mozilla.org/tglek/category/snappy/">Snappy</a> and other perf projects. Does anyone have suggestions on a cool hackerspace (I sent an email to hackerspaces.be folks) or a coworking facility that could host us in Brussels?</p>
+<p>Team perf &amp; other snappy people (10+ people) plan to spend the week before FOSDEM hacking on <a href="http://taras.glek.net/category/snappy/">Snappy</a> and other perf projects. Does anyone have suggestions on a cool hackerspace (I sent an email to hackerspaces.be folks) or a coworking facility that could host us in Brussels?</p>
 
 <p><strong>Update:</strong> Looks like hackerspaces.be will be hosting us. Looking forward to checking out HSBXL-NG :)</p>
 ]]></content>
