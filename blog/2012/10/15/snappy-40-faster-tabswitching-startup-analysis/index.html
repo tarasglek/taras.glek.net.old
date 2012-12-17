@@ -37,6 +37,8 @@
   <header role="banner"><hgroup>
   <h1><a href="/">All About Performance</a></h1>
   
+    <h2>and other stuff by Taras Glek</h2>
+  
 </hgroup>
 
 </header>
@@ -94,7 +96,7 @@
 
 <p>Data came in on Jeff&#8217;s optimization I mentioned <a href="http://taras.glek.net/blog/2012/10/04/snappy-39/">last week</a>: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=792199">bug 792199</a>. This halved our median tab switch time. Since this also landed at the end of our 18 cycle, a comparison between 18/19 Nightlies gives us an idea of how this changed our tab switching times overall. Note the actual difference would be greater since both 18 &amp; 19 include data points with Jeff&#8217;s patch, but the majority of data in 18 is without Jeff&#8217;s patch.</p>
 
-<p><a href="http://taras.glek.net/blog/files/2012/10/fx_tab_switch_update.png"><img src="http://taras.glek.net/blog/files/2012/10/fx_tab_switch_update.png" alt="" /></a></p>
+<p><a href="/assets/images/2012-10-15-snappy-40-faster-tabswitching-startup-analysis/fx_tab_switch_update.png"><img src="/assets/images/2012-10-15-snappy-40-faster-tabswitching-startup-analysis/fx_tab_switch_update.png" alt="" /></a></p>
 
 <p><em>Black: v18, Blue V19. X-axis represents time in milliseconds to do a tab switch, excluding time to paint.</em></p>
 
@@ -104,7 +106,7 @@
 
 <p>As I mentioned above graph does not include paint times. Jeff also landed bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=800031">800031</a> which measures the complete tab switch duration (including paint time).</p>
 
-<p><a href="http://taras.glek.net/blog/files/2012/10/fx_tab_switch_total.png"><img src="http://taras.glek.net/blog/files/2012/10/fx_tab_switch_total.png" alt="" /></a></p>
+<p><a href="/assets/images/2012-10-15-snappy-40-faster-tabswitching-startup-analysis/fx_tab_switch_total.png"><img src="/assets/images/2012-10-15-snappy-40-faster-tabswitching-startup-analysis/fx_tab_switch_total.png" alt="" /></a></p>
 
 <p><strong>Timothy Nikkel&#8217;s Visible Image Decoding</strong></p>
 

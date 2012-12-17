@@ -37,6 +37,8 @@
   <header role="banner"><hgroup>
   <h1><a href="/">All About Performance</a></h1>
   
+    <h2>and other stuff by Taras Glek</h2>
+  
 </hgroup>
 
 </header>
@@ -94,7 +96,7 @@
 
 <p>Necko team spent this week investigating why the recent big <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=722034#c75">cache fix</a> was not showing as a win in telemetry.</p>
 
-<p><a href="https://metrics.mozilla.com/data/content/pentaho-cdf-dd/Render?solution=metrics2&amp;path=%2Ftelemetry&amp;file=telemetryEvolution.wcdf&amp;bookmarkState={%22impl%22%3A%22client%22%2C%22params%22%3A{%22appNameParameter%22%3A%22[Application].[Firefox]%22%2C%22channelParameter%22%3A%22[Channel].[nightly]%22%2C%22osParameter%22%3A%22[OS].[WINNT]%22%2C%22histogramParameter%22%3A%22[Histogram].[CACHE_SERVICE_LOCK_WAIT_MAINTHREAD]%22%2C%22referenceDate%22%3A%222012-06-14%22%2C%22histogramPopupTools%22%3A%22%22%2C%22duplicateHistogram%22%3A%22%23duplicateHistogram%22%2C%22medianButtonParam%22%3A0%2C%22scatterChart%22%3A%22%22}}"><img src="http://taras.glek.net/blog/files/2012/06/cache_lock_mainthread_crap.jpg.png" alt="" /></a></p>
+<p><a href="https://metrics.mozilla.com/data/content/pentaho-cdf-dd/Render?solution=metrics2&amp;path=%2Ftelemetry&amp;file=telemetryEvolution.wcdf&amp;bookmarkState={%22impl%22%3A%22client%22%2C%22params%22%3A{%22appNameParameter%22%3A%22[Application].[Firefox]%22%2C%22channelParameter%22%3A%22[Channel].[nightly]%22%2C%22osParameter%22%3A%22[OS].[WINNT]%22%2C%22histogramParameter%22%3A%22[Histogram].[CACHE_SERVICE_LOCK_WAIT_MAINTHREAD]%22%2C%22referenceDate%22%3A%222012-06-14%22%2C%22histogramPopupTools%22%3A%22%22%2C%22duplicateHistogram%22%3A%22%23duplicateHistogram%22%2C%22medianButtonParam%22%3A0%2C%22scatterChart%22%3A%22%22}}"><img src="/assets/images/2012-06-14-snappy-june-14th-telemetry-investigations/cache_lock_mainthread_crap.jpg.png" alt="" /></a></p>
 
 <p>We were on a verge of a big backout when Saptashi Guha&#8217;s analysis in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=762576">762576</a> suggested that we might actually be winning. It&#8217;s frustrating to have data point us in different directions. However, it is better to try to make sense of data than have no data at all as was the case only a year ago. I&#8217;ll have more on this next week.</p>
 
