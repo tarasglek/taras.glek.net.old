@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="For the in-progress work and minor changes that landed see non-meeting notes for this week. Jeff Muizelaar wrote an interesting blog post work &hellip;">
+  <meta name="description" content="Telemetry has been in production for about year. However, it turns out that many Mozillians do not know what it is good for. I presented about &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -64,6 +64,81 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/07/25/telemetry-and-what-it-is-good-for-part-1-nuts-and-bolts/">Telemetry and What It Is Good for: Part 1: Nuts and Bolts</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-07-25T08:00:27-07:00" pubdate data-updated="true">Jul 25<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Telemetry has been in production for about year. However, it turns out that many Mozillians do not know what it is good for. I presented <a href="http://people.mozilla.com/~tglek/fosdem2012/#/step-1">about</a> Telemetry at FOSDEM 2012, but have not had a chance to reach out to the core Mozilla developers because we haven&#8217;t had a Mozilla All-Hands since Telemetry got useful.</p>
+
+<p><strong>Why Would One Use Telemetry?</strong></p>
+
+<p>Telemetry exists for a single purpose: matching developer expectations with real Firefox behavior. My experience working on startup lead me to believe that is unreasonably complex to try to model real-world behavior in a lab setting and that it was actually easier to just measure real world behavior.</p>
+
+<p>Anything that varies with IO, system configuration, user input, user workloads is easier to measure with Telemetry than to develop a useful finite benchmark for.</p>
+
+<p><strong>Nuts &amp; Bolts</strong></p>
+
+<p>Telemetry consists of two parts: client-side collection code + serverside frontend.</p>
+
+<p>Client-side Telemetry currently records:</p>
+
+<ul>
+<li>simple measures: discrete numbers such as amount of ram, various startup times, flash version, etc</li>
+<li><a href="http://mxr.mozilla.org/mozilla-central/source//ipc/chromium/src/base/histogram.h">histograms</a>: efficient one-dimensional means of gathering a range of values such as memory usage, cycle collection times, types of events occurring, etc. These are all specified in <a href="http://mxr.mozilla.org/mozilla-central/source/toolkit/components/telemetry/TelemetryHistograms.h">TelemetryHistograms.h</a>. You can view your local histograms by enabling telemetry and installing <a href="https://addons.mozilla.org/en-US/firefox/addon/abouttelemetry/">about:telemetry</a>.</li>
+<li>slow sql statements: We record SQL statements that take over 100ms and whether they occur on main thread to prioritize <a href="https://wiki.mozilla.org/Performance/Snappy">Snappy</a> SQL work.</li>
+<li>chromehangs: Nightly builds ship with frame-pointers so we can detect when Firefox pauses for over 5 seconds. Every time Firefox pauses, we record the backtrace. We started sending those a month ago, processing them on the serverside is a work-in-progress. These should be very handy for prioritizing work on making Firefox more responsive
+One current limitation is that histograms are on-dimensional, there is no way to relate cycle collection times to uptime, memory usage, etc. We also go to great lengths to avoid collecting any personal identifiers. As a result we have no user UIDs and no ability to track how a user&#8217;s performance changes over time.</li>
+</ul>
+
+
+<p>Telemetry Frontend is a public dashboard that can be seen at <a href="http://arewesnappyyet.com/">arewesnappyyet.com</a>. Anyone can get a BrowserID login and look at our browser stats. Telemetry dashboard consists of two views:</p>
+
+<ul>
+<li>Telemetry Histograms: this is basically the same data as displayed in about:telemetry, but aggregated from our userbase. This was our original view and is likely to get folded into evolution in the future.</li>
+<li>Telemetry Evolution: This view tracks how medians/percentiles gathered by histograms change over time. This is the view that most developers use.
+Telemetry is not a technology unique to Firefox. I borrowed a lot of code from the Chromium implementation to get caught up. Microsoft also collects similar metrics.</li>
+</ul>
+
+
+<p>There are two differences between us and other browser vendors:</p>
+
+<ol>
+<li>We do not assign a unique id to every user. This sucks from a developer perspective as it makes it a lot harder to track performance over time, but we believe the privacy benefits are worth it.</li>
+<li>We made our dashboards public because we would like to have our community actively involved in helping us track Firefox performance.
+In part 2 I&#8217;ll discuss how various people at Mozilla use Telemetry.</li>
+</ol>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -517,52 +592,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/05/29/snappy-may-24-meetingless/">Snappy, May 24 - Meetingless</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-05-29T03:31:59-07:00" pubdate data-updated="true">May 29<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Frank and Jared are aiming to have the Australis theme up for review next week in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=732583">bug 732583</a>. There are no <em>computed</em> borders or gradients in the redesign, so it will be faster.  The current theme generates new borders/gradients on every tab interaction, which is very inefficient. Bas is working on fixing our graphics backend to render borders/gradients more efficiently in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=750871">750871</a>.</p>
-
-<p>Wlad spotted some unintended bloat in the addon database in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=752868">bug 752868</a>. Blair fixed it, this should speed up startup and other addon manager interactions.</p>
-
-<p>Bill did some further IGC fixes: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=757483">bug 757483</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=754588">bug 754588</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=756732">bug 756732</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=731423">bug 731423</a>.</p>
-
-<p>We started a new project to let Firefox diagnose common Windows/etc misconfiguration issues that severely impact Firefox performance. Our new intern, Nicholas, is working on this in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=684646">684646</a>. The immediate plan is to release an addon that detects when Firefox startup is unusually slow, checks for known Windows issues and pops up a link to a Mozilla <a href="http://support.mozilla.com/">support</a> article on how to fix the problem. If this turns out to be successful, we&#8217;ll integrate this functionality into Firefox.</p>
-
-<p>The gecko profiler is now ready for general consumption. See Benoit&#8217;s <a href="https://groups.google.com/forum/#!topic/mozilla.dev.platform/jOklwc7AdC8">announcement</a>. This will allow users running  the <a href="http://groups.google.com/group/mozilla.dev.platform/browse_thread/thread/3389798e5ef9744b#">profiling </a>variant of Firefox nightly builds to capture/report performance problems in a way that developers can act on. I suspect that <a href="http://benoitgirard.wordpress.com">Benoit </a>will blog about this.</p>
-
-<p><strong>Update</strong>: I originally linked the wrong bug for windows misconfiguration detection.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/4/">&larr; Older</a>
@@ -580,6 +609,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2012/12/17/hello-octopress/">Hello Octopress</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2012/11/26/coping-with-flash-hangs/">Coping with Flash hangs</a>
       </li>
     
@@ -593,10 +626,6 @@
     
       <li class="post">
         <a href="/blog/2012/10/26/snappy-42/">Snappy #42</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/10/18/snappy-41/">Snappy #41</a>
       </li>
     
   </ul>

@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="In the Beginning There Was a Void Approximately a year ago, Brendan discussed with me the crazy possibility of rewriting most of the Mozilla code &hellip;">
+  <meta name="description" content="I&#8217;m having a very painful time rewriting Mozilla source code to switch it to garbage collection. So I took a little break to think about Myk&# &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -64,6 +64,48 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2007/10/24/rewriting-javascript/">Rewriting JavaScript</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-10-24T08:36:00-07:00" pubdate data-updated="true">Oct 24<span>th</span>, 2007</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I&#8217;m having a very painful time rewriting Mozilla source code to switch it to garbage collection. So I took a little break to think about Myk&#8217;s <a href="http://www.melez.com/mykzilla/2007/10/automated-js-code-rewriting.html">JavaScript rewriting idea</a>.Then I found excellent info on <a href="http://siliconforks.com/doc/parsing-javascript-with-spidermonkey/">parsing JS</a> with <a href="http://www.mozilla.org/js/spidermonkey/">SpiderMonkey</a>. The downside to SpiderMonkey is that it is in C and thus hard to reuse, the upside is that will be able to parse all valid JavaScript.</p>
+
+<p>I think I shall find some free time to prototype a little tool to take a .js file and produce a JSON representation of it such that one could write transformation passes in JavaScript. This will be useful as it will complete DeHydra by enabling it to process JS in addition to C++ and it will save a lot of time for various JavaScript refactorings.</p>
+
+<p>I expect developing a JS refactoring tool to be relatively trivial compared to refactoring C++ as there is no source-code mangling going on due to lack of preprocessing (but JS is dynamic and can be embedded in various document types, so that could complicate things). Perhaps it would even be of use to mozpad people.</p>
+
+<p>Looking forward to playing more with this idea.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -671,76 +713,6 @@ Resulting code runs fast has a lot fewer bugs than code without all this fancy m
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2007/07/13/dehydra-prcheck-squash-in-mercurial/">Dehydra, Prcheck, Squash - in Mercurial</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2007-07-13T01:54:08-07:00" pubdate data-updated="true">Jul 13<span>th</span>, 2007</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><strong>New Repository</strong></p>
-
-<p>Since I do not yet have write access to oink svn, I have been doing all of my development in ad-hoc repositories within the svn checkout. This made it rather hard to collaborate with others. I finally got sick of the situation (and stumbled upon <a href="http://cheeseshop.python.org/pypi/hgsvn/">hgsvn</a>) and converted all 11 svn repositories to mercurial. To my surprise, mercurial even let me merge my repositories while preserving history (hg has yet to fail me!).</p>
-
-<p>oink uses svn-externals to aggregate the repositories into a single checkout. hg doesn&#8217;t have anything similar, so to checkout all 11 repositories use a script:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>[checkout.sh](http://people.mozilla.org/~tglek/checkout.sh) http://hg.mozilla.org
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>Released Differences from Oink Mainline </strong></p>
-
-<ul>
-<li>New oink tool - <a href="http://taras.glek.net/blog/2007/06/26/status-report-recent-work/">prcheck</a>: ensures that bool-like integer typedefs behave like bools</li>
-<li>New oink tool - <a href="http://wiki.mozilla.org/DeHydra">dehydra</a>: source query tool with queries specified in JavaScript</li>
-<li>New oink tool - <a href="http://wiki.mozilla.org/Squash">squash</a>: source refactoring tool. This is now deprecated since most of the code in it dealt with working around elsa limitations to do with macro expansion &amp; lack of precise locations. The patching engine used in squash lives on to provide a simple refactoring API for use in other tools (like prcheck).</li>
-<li>Minor grammar changes to parse more of Mozilla</li>
-<li>Compilation fixes for OSX</li>
-<li>Elsa fixes to parse OSX headers</li>
-<li>make -j support for elsa</li>
-<li>end-of-ast-node location support for elkhound &amp; elsa</li>
-<li><p>preprocessor expansion markup support for elsa
-<strong>Coming Soon</strong></p></li>
-<li><p>Amazing new version of <a href="http://mcpp.sourceforge.net/">MCPP</a> capable of preprocessing mozilla while outputting refactoring-friendly annotations.</p></li>
-<li>Web front-end for squash which will likely be refactored to be tool-agnostic.</li>
-<li><p>Front-end to run patch-producing tools in parallel for multi-core machines
-<strong>Near Future</strong></p></li>
-<li><p>squash will be split up into a library with each major feature ripped out into a standalone tool. Two tools coming soon:outparam rewriter &amp; class member renamer.</p></li>
-<li><p>RAD for static analysis: oink tool templates to make it trivial to write custom new tools with minimal amount of boilerplate
-<strong>Some time in the Future</strong></p></li>
-<li><p>Collaboration with the author of <a href="http://www.cs.ru.nl/~tews/olmar/">Olmar</a> to provide an OCaml API for Elsa. If everything goes as expected it will be possible to write analyses that are more powerful and more concise than DeHydra ones except they will perform at C/C++ speeds. Plus it should be possible to perform them from a native interactive OCaml toplevel. Most of this work already exists in bits and pieces. It&#8217;s a matter of adding some AST transformations, fixing a few issues and tying it all together.</p></li>
-<li>MapReduce inspired front-end: generic framework for executing transformations/analyses in-parallel and Mozilla-wide without blowing the 32bit address space (as it typical when static analysis tools meet Mozilla).</li>
-</ul>
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/22/">&larr; Older</a>
@@ -758,6 +730,10 @@ Resulting code runs fast has a lot fewer bugs than code without all this fancy m
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2012/12/17/hello-octopress/">Hello Octopress</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2012/11/26/coping-with-flash-hangs/">Coping with Flash hangs</a>
       </li>
     
@@ -771,10 +747,6 @@ Resulting code runs fast has a lot fewer bugs than code without all this fancy m
     
       <li class="post">
         <a href="/blog/2012/10/26/snappy-42/">Snappy #42</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/10/18/snappy-41/">Snappy #41</a>
       </li>
     
   </ul>

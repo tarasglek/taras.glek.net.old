@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="SUMO Problem investigation There was an increase in negative feedback regarding Firefox 11 beta relative to Firefox 10 beta on SUMO.  Cheng and me &hellip;">
+  <meta name="description" content="I mainly review code written by team perf. You&#8217;d think a 6 person team would imply a fairly chill review queue. The team must&#8217;ve &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -64,6 +64,48 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/03/01/24hour-code-reviews-still-aiming-for-it/">24hour Code Reviews: Still Aiming for It</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-03-01T06:32:17-08:00" pubdate data-updated="true">Mar 1<span>st</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I mainly review code written by team perf. You&#8217;d think a 6 person team would imply a fairly chill review queue. The team must&#8217;ve conspired to burn me out, for a few weeks I was spending half of my day reviewing patches. A few patches took >3 days to review. I think I even let a patch lapse for almost a week (don&#8217;t always have mental capacity to review linker code). Recently, my review inbox is often empty and recent patches have been &lt;10KB, I&#8217;m not falling behind anymore.</p>
+
+<p>My point is that 24hour reviews are not bounded by time. It&#8217;s an aspirational target. If you value time spent writing the patch, please review accordingly. Same goes for people requesting reviews, I&#8217;m a lot more likely to give you a quick review if your patches are broken up into reasonably small logical pieces.</p>
+
+<p>The 24hour-review-turn-around dream is still alive. I haven&#8217;t been making noise about it because I&#8217;m waiting on #metrics to provide us with hard review-latency data. I&#8217;m hoping my review turn-around is 24hours, but there is no easy way to find out atm.</p>
+
+<p>Thanks to everyone who adopted 24-hour review goal. I have noticed reviews flying by at a faster pace. One reviewer even let a team-perf patch jump to the front of his review in return for pushing on 24hour reviews.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -544,66 +586,6 @@ We spent the weekend at FOSDEM. I re-presented my Plumbers talk on why Linux <a 
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/01/20/snappy-january-19-brought-you-by-ironic-js/">Snappy, January 19: Brought You by Ironic JS</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-01-20T05:50:54-08:00" pubdate data-updated="true">Jan 20<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><a href="https://wiki.mozilla.org/Performance/Snappy/2012-01-19">Meeting notes</a>.</p>
-
-<p><strong>Network Cache Horrors</strong></p>
-
-<p><a href="http://taras.glek.net/blog/2012/01/12/snappy-jan12/">Last week</a> we discovered that our cache uses main thread locks to successfully block on off-main thread io. See (<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=695399">Bug 695399</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=717761">Bug 717761</a>). QA did an <a href="http://groups.google.com/group/mozilla.dev.tech.network/browse_thread/thread/6dfa3e6ebe80c336">experiment</a> which confirmed that our disk cache is performing poorly.</p>
-
-<p><strong>Flash Lag</strong></p>
-
-<p>We are looking into reports of flash lag, tracking <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=720000">Bug 720000</a>. Initial QA data shows a significant slowdown when page is first loaded and smaller slowdowns later. There are also long browser pauses when the flash container progress freezes.</p>
-
-<p><strong>Profiling</strong></p>
-
-<p>Vlad continued work on non-destructive chromehang, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=712109">Bug 712109</a>. Client-side is ready to land and he is wrapping up symbolification for the server-side.</p>
-
-<p><a href="https://developer.mozilla.org/en/Performance/Profiling_with_the_Built-in_Profiler">Interactivity profiler</a> is now able to collect stacks on 64-bit MacOS. Benoit is looking for contributors to add Windows, Linux support (<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=719536">Bug 719536)</a>. I highly encourage adventurous contributors to help out with that as it involves modifying some concise, straightforward, yet highly <a href="https://github.com/bgirard/Gecko-Profiler-Addon/blob/master/lib/symbolicate.js">ironic JavaScript</a>. We are also looking for help with the profiler UI. If you are a skilled addon/frontend person, see <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=719530">Bug 719530</a>.</p>
-
-<p>Jeff posted an early preview of about:jank <a href="http://people.mozilla.com/~jmuizelaar/aboutjank-0.1.xpi">addon</a>. He also working on measuring painting speed via telemetry. Note this addon is buggy and requires a very recent nightly.</p>
-
-<p>Last week I asked for some laggy session restore profiles. I&#8217;m behind on reproducing those(will be done today or next week). I&#8217;ve been in email contact with several of the commenters. I really appreciate the data gathered so far.</p>
-
-<p><strong>Snappy UX</strong></p>
-
-<p>Jared landed smooth scrolling, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=198964">Bug 198964</a>. He is now working on hooking it up to scrolling via scrollbar, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=710373">Bug 710373</a>. Up next: fixing fallout from turning on smooth scrolling, hooking it up to the refresh driver and tweaking scrolling physics.</p>
-
-<p>Marco landed inline autocomplete, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=566489">Bug 566489</a> and is now fixing fallout from that too.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/7/">&larr; Older</a>
@@ -621,6 +603,10 @@ We spent the weekend at FOSDEM. I re-presented my Plumbers talk on why Linux <a 
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2012/12/17/hello-octopress/">Hello Octopress</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2012/11/26/coping-with-flash-hangs/">Coping with Flash hangs</a>
       </li>
     
@@ -634,10 +620,6 @@ We spent the weekend at FOSDEM. I re-presented my Plumbers talk on why Linux <a 
     
       <li class="post">
         <a href="/blog/2012/10/26/snappy-42/">Snappy #42</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/10/18/snappy-41/">Snappy #41</a>
       </li>
     
   </ul>

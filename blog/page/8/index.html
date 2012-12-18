@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Two weeks ago I started project Snappy. The purpose of the meeting is to help us focus on eradicating jarring pauses in Firefox. Today we had our &hellip;">
+  <meta name="description" content="I would like to see Firefox developers switch to 24hour review turn-around times. Note that in my definition review turn-around means any of the &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -64,6 +64,61 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/12/05/24-hour-reviews/">24-hour Reviews</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-12-05T08:51:10-08:00" pubdate data-updated="true">Dec 5<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I would like to see Firefox developers switch to 24hour review turn-around times. Note that in my definition review turn-around means any of the following:</p>
+
+<ul>
+<li>r+/r-</li>
+<li>unset/reassign r? to someone else
+It is ridiculous in our recent faster release cycle if a patch takes half (or more) of the cycle loitering in the review queue. I believe that a shorter review cycle is the simplest way to accelerate Firefox evolution.</li>
+</ul>
+
+
+<p>I view fast review times as a matter of respect. Posting a patch usually requires a significant time/effort commitment, reviewers should act appropriately. There is no bigger buzzkill than having your work pushed back to the bottom of somebody&#8217;s TODO list like some annoying chore.</p>
+
+<p>As far as I can tell there are 3 main reasons* that lead to long review times:</p>
+
+<p>1) People like gavin, bz, dbaron having disproportionally high review loads. We need a process to hand-off patches to other reviewers. High-load people shouldn&#8217;t shy away from passing on the r? to someone else when possible. 2) Bugzilla-fobic people (like myself) loosing track of bugzilla r? requests due to not having bugzilla <a href="https://bugzilla.mozilla.org/editwhines.cgi">whines</a> setup. Bugzilla whines should be enabled by default. 3) Bad review habits.  I met a number of Mozilla developers that like to batch their reviews up and then do them all on a single weekday. Please stop, you are killing all kinds of coding momentum/fun/etc.Lets make it our policy to set aside time every day to clear the review queue.</p>
+
+<p>Clearly people with existing backlogs will take a while to catch up, but most MoCo employees should be capable of this. I have yet to hear a good reason against doing daily reviews.</p>
+
+<p>It has been a few months since I proposed this on <a href="http://groups.google.com/group/mozilla.dev.platform/browse_thread/thread/d563bf8329089a5/cdc47838866b0bea">dev.platform</a>.  I have tried to live by the 24hour rule, I think a few others tried this too. I find that morning bugzilla r? whines work best for me. I still occasionally loose track of a patch for a few days, but nobody is perfect. I think people appreciate fast reviews, but nobody thanked me yet.</p>
+
+<p><strong>Dec 6 Update</strong>: My goal is to have <em>some</em> response within 24hours with an ETA for next followup in the worst case.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -559,76 +614,6 @@ Since the branch point for Aurora is approaching in less than a week, I don&#821
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011/06/30/dehyratreehydra-static-analysis-thoughts/">Dehyra/Treehydra Static Analysis Thoughts</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-06-30T05:07:20-07:00" pubdate data-updated="true">Jun 30<span>th</span>, 2011</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I was pleased to see Mozilla static analysis <a href="http://lwn.net/Articles/447916/">mentioned</a> on lwn. Yes indeed, the <a href="https://lists.mozilla.org/listinfo/dev-static-analysis">mailing list</a> has been pretty dead (most of our communication happens on irc.mozilla.org #static). I completely failed to build a community around my static analysis tools. Perhaps more people will try <a href="https://developer.mozilla.org/en/Dehydra">Dehydra</a> now that it&#8217;s <a href="http://packages.debian.org/experimental/dehydra">getting</a> into Debian. The hydras are still alive, <a href="http://hg.mozilla.org/rewriting-and-analysis/dehydra/">evidence</a> can be seen in the mercurial commit log. Development has slowed because the hydras are now considered to be feature-complete and my primary focus is elsewhere in Mozilla now.</p>
-
-<p>As to why open source static analysis has failed to take off, I have a few theories. I think the main problem is that static analysis requires a compiler/correctness/type-system-nerd/large-scale-development-nerd type personality. That&#8217;s a pretty rare intersection of hobbies to begin with. One also has to hate the <a href="http://people.mozilla.com/~tglek/lca2010/">stone age</a> that C/C++ ecosystem we are in, but not move on to shiny new Haskell/Ocaml/whatever communities.</p>
-
-<p><strong>Have I failed at igniting the static analysis revolution?</strong></p>
-
-<ol>
-<li>My goal primary goal was: provide a way to analyze Mozilla source code to speed up our development + refactoring efforts.</li>
-<li>My secondary goal was to make sure that whatever work I do, nobody else has to suffer through the unbelievably sucky infrastructure cruft I had to work through.</li>
-<li>Lastly, I did put in some effort at promoting open source static analysis (by giving talks at conferences, etc) since working in an active community is more fun.
-<em>Mozilla side</em>:</li>
-</ol>
-
-
-<p>I&#8217;m happy to report that I achieved a culture shift at Mozilla. Instead of people saying &#8220;oh god, I can&#8217;t find all instances of ___ issue in 3million lines of C++ code&#8221;, it&#8217;s pretty common to hear &#8220;lets solve this through static analysis&#8221;. Dehydra was designed to take the bitchwork (boilerplate of compiler integration, etc) out of static analysis so one can focus on the analysis part. New Dehydra users within Mozilla seem to confirm that. Instead of pondering whether certain tool-assisted refactorings are feasible, we plan to embark on some now (turned out we were understaffed to keep up with tool output and overburdened by api compatibility before; more on this in a future blog post).</p>
-
-<p><em>No More Static Analysis Bitchwork:</em></p>
-
-<p>The worst aspect of dealing with C++ is parsing it. The second worst aspect is dealing with the preprocessor. With respect to parsing C++ we went from weirdo-custom-frontends(ie Elsa, EDG, etc) and &#8220;GCC will never allow plugins, don&#8217;t waste your time&#8221; to GCC adopting a plugin architecture that suited my static analysis needs. I also implemented source-location transformation tracking(-K) in <a href="http://mcpp.sourceforge.net/">mcpp</a>, so nobody has to suffer through undoing braindamage inflicted by the C proprocessor again. I hear at least a couple of people benefited from MCPP work and I take partial credit for every new analysis GCC plugin. I suspect I saved a few person-months for somebody :)</p>
-
-<p>Btw, I think Chris Lattner&#8217;s from-scratch effort on <a href="http://clang.llvm.org/">Clang</a> is way awesomer than anything I could ever accomplish.</p>
-
-<p><em>Conferences &amp; Stuff:</em></p>
-
-<p>I admit complete and utter failure in this regard. Most open source people have low regard for static analysis. Linus seems to take a million-monkeys-with-type-writers approach (ala the open source eyeballs approach to security) to ensuring kernel code quality (which is a reasonable approach when you have mobs of contributors). Most other projects do not have the resources to spare on unproven tech such as static analysis.</p>
-
-<p>To make matters worse, at first people thought JavaScript was a toy language worth only cut&#8217;n&#8217;pasting from recipes online. Then just as JavaScript was getting more popular, SpiderMonkey embedding got buggier and made for some unpleasant first experiences with the Hydras.</p>
-
-<p><strong>Conclusion</strong></p>
-
-<p>There isn&#8217;t much to show for my work outside of Mozilla; that&#8217;s fine since my primary goal was Mozilla :) The Hydras aren&#8217;t dead, they are in maintenance mode.</p>
-
-<p>I&#8217;m glad to see <a href="http://lwn.net/Articles/448698/">python-as-gcc-plugin </a>approach, it seems to fill the same niche as <a href="https://developer.mozilla.org/en/Treehydra">Treehydra</a>. I regret not starting out with Python (I think it&#8217;s slightly better than JavaScript for this task), I hope David Malcolm succeeds in attracting wider interest.</p>
-
-<p>PS. I&#8217;m super-excited about the new <a href="http://quetzalcoatal.blogspot.com/2011/06/alpha-release-of-dxr.html">DXR work</a>. <a href="http://dxr.mozilla.org/">DXR</a> is something that makes my daily life easier. DXR is by far the smartest code-indexing system out there, it&#8217;s bound to transform my life as a developer far more than any static analysis ever could :)</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/9/">&larr; Older</a>
@@ -646,6 +631,10 @@ Since the branch point for Aurora is approaching in less than a week, I don&#821
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2012/12/17/hello-octopress/">Hello Octopress</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2012/11/26/coping-with-flash-hangs/">Coping with Flash hangs</a>
       </li>
     
@@ -659,10 +648,6 @@ Since the branch point for Aurora is approaching in less than a week, I don&#821
     
       <li class="post">
         <a href="/blog/2012/10/26/snappy-42/">Snappy #42</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/10/18/snappy-41/">Snappy #41</a>
       </li>
     
   </ul>

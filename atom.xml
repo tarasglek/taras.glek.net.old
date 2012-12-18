@@ -4,7 +4,7 @@
   <title><![CDATA[All About Performance]]></title>
   <link href="http://taras.glek.net/atom.xml" rel="self"/>
   <link href="http://taras.glek.net/"/>
-  <updated>2012-12-17T16:53:08-08:00</updated>
+  <updated>2012-12-17T17:35:11-08:00</updated>
   <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -12,6 +12,26 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Hello Octopress]]></title>
+    <link href="http://taras.glek.net/blog/2012/12/17/hello-octopress/"/>
+    <updated>2012-12-17T17:10:00-08:00</updated>
+    <id>http://taras.glek.net/blog/2012/12/17/hello-octopress</id>
+    <content type="html"><![CDATA[<p>I&#8217;m off work until January. I took this opportunity to partake in chores such as fixing a toilet and switching away from wordpress.</p>
+
+<p>After suffering wordpress for half a decade I finally switched to a combination of Octopress + Disqus.</p>
+
+<p>It took:
+* a few hours of tweaking the combination of <a href="https://github.com/thomasf/exitwp">exitwp.py</a>, html2text.py to convert my blog without busting links, images
+* a few hours of decyphering octopress/github documentation to setup a website
+* an hour to figure out where images should live (in <em>source/assets</em>)</p>
+
+<p>Thanks to everyone that suggested <a href="http://octopress.org/">Octopress</a>.</p>
+
+<p>Goodbye word-style wordpress bitchwork.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Coping with Flash hangs]]></title>
@@ -465,54 +485,6 @@ See Bill&#8217;s comments in bug <a href="https://bugzilla.mozilla.org/show_bug.
 <p><em>Taras</em> My blog is basically a collection of telemetry trivia :) I do not have testimonials from other people. However I heard that the silent-update team proved something about silent updates with telemetry, Necko team discovered that some optimizations were not, etc. I encourage other people who solved a problem with telemetry to either wrote a blog post or leave a comment.</p>
 
 <p>In part 3 I will cover flaws in the current Telemetry experience.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Telemetry and What It Is Good for: Part 1: Nuts and Bolts]]></title>
-    <link href="http://taras.glek.net/blog/2012/07/25/telemetry-and-what-it-is-good-for-part-1-nuts-and-bolts/"/>
-    <updated>2012-07-25T08:00:27-07:00</updated>
-    <id>http://taras.glek.net/blog/2012/07/25/telemetry-and-what-it-is-good-for-part-1-nuts-and-bolts</id>
-    <content type="html"><![CDATA[<p>Telemetry has been in production for about year. However, it turns out that many Mozillians do not know what it is good for. I presented <a href="http://people.mozilla.com/~tglek/fosdem2012/#/step-1">about</a> Telemetry at FOSDEM 2012, but have not had a chance to reach out to the core Mozilla developers because we haven&#8217;t had a Mozilla All-Hands since Telemetry got useful.</p>
-
-<p><strong>Why Would One Use Telemetry?</strong></p>
-
-<p>Telemetry exists for a single purpose: matching developer expectations with real Firefox behavior. My experience working on startup lead me to believe that is unreasonably complex to try to model real-world behavior in a lab setting and that it was actually easier to just measure real world behavior.</p>
-
-<p>Anything that varies with IO, system configuration, user input, user workloads is easier to measure with Telemetry than to develop a useful finite benchmark for.</p>
-
-<p><strong>Nuts &amp; Bolts</strong></p>
-
-<p>Telemetry consists of two parts: client-side collection code + serverside frontend.</p>
-
-<p>Client-side Telemetry currently records:</p>
-
-<ul>
-<li>simple measures: discrete numbers such as amount of ram, various startup times, flash version, etc</li>
-<li><a href="http://mxr.mozilla.org/mozilla-central/source//ipc/chromium/src/base/histogram.h">histograms</a>: efficient one-dimensional means of gathering a range of values such as memory usage, cycle collection times, types of events occurring, etc. These are all specified in <a href="http://mxr.mozilla.org/mozilla-central/source/toolkit/components/telemetry/TelemetryHistograms.h">TelemetryHistograms.h</a>. You can view your local histograms by enabling telemetry and installing <a href="https://addons.mozilla.org/en-US/firefox/addon/abouttelemetry/">about:telemetry</a>.</li>
-<li>slow sql statements: We record SQL statements that take over 100ms and whether they occur on main thread to prioritize <a href="https://wiki.mozilla.org/Performance/Snappy">Snappy</a> SQL work.</li>
-<li>chromehangs: Nightly builds ship with frame-pointers so we can detect when Firefox pauses for over 5 seconds. Every time Firefox pauses, we record the backtrace. We started sending those a month ago, processing them on the serverside is a work-in-progress. These should be very handy for prioritizing work on making Firefox more responsive
-One current limitation is that histograms are on-dimensional, there is no way to relate cycle collection times to uptime, memory usage, etc. We also go to great lengths to avoid collecting any personal identifiers. As a result we have no user UIDs and no ability to track how a user&#8217;s performance changes over time.</li>
-</ul>
-
-
-<p>Telemetry Frontend is a public dashboard that can be seen at <a href="http://arewesnappyyet.com/">arewesnappyyet.com</a>. Anyone can get a BrowserID login and look at our browser stats. Telemetry dashboard consists of two views:</p>
-
-<ul>
-<li>Telemetry Histograms: this is basically the same data as displayed in about:telemetry, but aggregated from our userbase. This was our original view and is likely to get folded into evolution in the future.</li>
-<li>Telemetry Evolution: This view tracks how medians/percentiles gathered by histograms change over time. This is the view that most developers use.
-Telemetry is not a technology unique to Firefox. I borrowed a lot of code from the Chromium implementation to get caught up. Microsoft also collects similar metrics.</li>
-</ul>
-
-
-<p>There are two differences between us and other browser vendors:</p>
-
-<ol>
-<li>We do not assign a unique id to every user. This sucks from a developer perspective as it makes it a lot harder to track performance over time, but we believe the privacy benefits are worth it.</li>
-<li>We made our dashboards public because we would like to have our community actively involved in helping us track Firefox performance.
-In part 2 I&#8217;ll discuss how various people at Mozilla use Telemetry.</li>
-</ol>
-
 ]]></content>
   </entry>
   

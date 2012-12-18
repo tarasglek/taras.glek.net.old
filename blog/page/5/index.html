@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="As I mentioned before, I&#8217;ve been a manager for a year. I&#8217;ve focused solely on paper pushing for the past 6 months. Even though I love &hellip;">
+  <meta name="description" content="Notes are here. Time was spent on administrative issues like overlap/conflict between Snappy and Kilimanjaro, plans for security review for Vladan&# &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -64,6 +64,52 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/04/16/snappy-april-12/">Snappy, April 12</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-04-16T06:45:17-07:00" pubdate data-updated="true">Apr 16<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Notes are<a href="https://wiki.mozilla.org/Performance/Snappy/2012-04-12"> here</a>. Time was spent on administrative issues like overlap/conflict between Snappy and Kilimanjaro, plans for security review for Vladan&#8217;s symbol server and bug triage.</p>
+
+<p>I&#8217;m usually really bad at noticing UI lag, but now my mind is focused on tab switching and I notice the lag every time click on tabs (keyboard switching is unaffected). We discussed how to fix tab lag I blogged about <a href="http://blog.mozilla.com/tglek/2012/04/10/argh-at-our-unresponsive-tab-strip-settimeoutfoo-0-can-be-very-harmful/">earlier</a>. It&#8217;s hard because there is some funny interaction between focus and drag &amp; drop and us switching tabs on mousedown. Neil will look into addressing focus issues this week.</p>
+
+<p>Tim is addressing thumbnail capture slowness in bugs: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=744388">744388</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=742594">742594</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=726347">726347</a>.</p>
+
+<p>Paolo is busy switching code away from synchronous places APIs: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=728168">728168</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=728174">728174</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=728142">728142 </a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=739213">739213</a>.</p>
+
+<p>The networking team is expected to make a decision this week on how to fix the big networking cache lock. See Nick&#8217;s <a href="https://wiki.mozilla.org/Performance/Snappy/2012-04-12#Fix_cache_-_hurley">notes</a> on options presented.</p>
+
+<p>Thanks for feedback on preferred snappy update format: we&#8217;ll stick with cherries.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -743,48 +789,6 @@ INSERT INTO webappsstore2_temp (scope, key, value, secure, owner) SELECT scope, 
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/03/01/24hour-code-reviews-still-aiming-for-it/">24hour Code Reviews: Still Aiming for It</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-03-01T06:32:17-08:00" pubdate data-updated="true">Mar 1<span>st</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I mainly review code written by team perf. You&#8217;d think a 6 person team would imply a fairly chill review queue. The team must&#8217;ve conspired to burn me out, for a few weeks I was spending half of my day reviewing patches. A few patches took >3 days to review. I think I even let a patch lapse for almost a week (don&#8217;t always have mental capacity to review linker code). Recently, my review inbox is often empty and recent patches have been &lt;10KB, I&#8217;m not falling behind anymore.</p>
-
-<p>My point is that 24hour reviews are not bounded by time. It&#8217;s an aspirational target. If you value time spent writing the patch, please review accordingly. Same goes for people requesting reviews, I&#8217;m a lot more likely to give you a quick review if your patches are broken up into reasonably small logical pieces.</p>
-
-<p>The 24hour-review-turn-around dream is still alive. I haven&#8217;t been making noise about it because I&#8217;m waiting on #metrics to provide us with hard review-latency data. I&#8217;m hoping my review turn-around is 24hours, but there is no easy way to find out atm.</p>
-
-<p>Thanks to everyone who adopted 24-hour review goal. I have noticed reviews flying by at a faster pace. One reviewer even let a team-perf patch jump to the front of his review in return for pushing on 24hour reviews.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/6/">&larr; Older</a>
@@ -802,6 +806,10 @@ INSERT INTO webappsstore2_temp (scope, key, value, secure, owner) SELECT scope, 
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2012/12/17/hello-octopress/">Hello Octopress</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2012/11/26/coping-with-flash-hangs/">Coping with Flash hangs</a>
       </li>
     
@@ -815,10 +823,6 @@ INSERT INTO webappsstore2_temp (scope, key, value, secure, owner) SELECT scope, 
     
       <li class="post">
         <a href="/blog/2012/10/26/snappy-42/">Snappy #42</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/10/18/snappy-41/">Snappy #41</a>
       </li>
     
   </ul>

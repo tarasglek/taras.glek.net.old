@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="There is a little bit of a disconnect between the kernel, the dynamic linker and compile-time linker. As I mentioned in my main &#8220;startup sucks &hellip;">
+  <meta name="description" content="The fastest review I ever got was when I deleted a bunch of code from libjar. It was so riddled crud it was next to impossible to modify the code. &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -64,6 +64,46 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/03/31/how-to-get-reviews-fast-delete-code/">How to Get Reviews Fast: Delete Code!</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-03-31T13:17:48-07:00" pubdate data-updated="true">Mar 31<span>st</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>The fastest review I ever got was when I deleted a bunch of code from libjar. It was so riddled crud it was next to impossible to modify the code. That was a mere <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=505784">24KB patch</a> produced manually.</p>
+
+<p><a href="http://ehren.wordpress.com/">Ehren</a> just put my personal records to shame with a <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=556446">94KB patch</a> that got r+ed at breakneck speed. Best part is that he generates these by plucking off dead parts of the Mozilla callgraph via static analysis. I bet if he tried he could land 90KB patches every day. Way to go Ehren!</p>
+
+<p>I expect more good code deletions to make themselves known via this <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=457262">meta bug</a>.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -567,75 +607,6 @@ This results in 200ms faster startup my 7200rpm laptop harddrive which is about 
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2010/01/21/state-of-static-analysis-at-mozilla/">State of Static Analysis at Mozilla</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-01-21T09:24:03-08:00" pubdate data-updated="true">Jan 21<span>st</span>, 2010</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Mozilla has static analyses built into the buildsystem that can be turned on with &#8211;with-static-checking= flag. The analyses live in <a href="http://mxr.mozilla.org/mozilla-central/source/xpcom/analyses">xpcom/analyses</a> directory. The testcases (aka documentation) are in <a href="http://mxr.mozilla.org/mozilla-central/source/xpcom/tests/static-checker/">xpcom/tests/static-checker</a>. Analyses are implemented in either <a href="https://developer.mozilla.org/En/Dehydra">Dehydra</a> or <a href="https://developer.mozilla.org/en/Treehydra">Treehydra</a> and run within a patched GCC 4.3.</p>
-
-<p>The currently landed checks are:</p>
-
-<ul>
-<li>final.js: Java-like &#8220;final&#8221; keyword for C++</li>
-<li>flow.js: Ensure code in a function flows through a particular label</li>
-<li>must-override.js: Force derived classes to override certain methods</li>
-<li>override.js: Ensure methods exist in base class</li>
-<li>outparams.js: Ensure outparameters and return error codes are in sync</li>
-<li>stack.js: Mark classes as stack-only
-A whole lot more analyses in various states of completion can be tracked in the static analysis <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=430328">bug</a>.</li>
-</ul>
-
-
-<p>Asynchronous discussion happens in the mailing list. #static irc channel is the place for interactive discussion.</p>
-
-<p><strong>Nearterm Plans For Plugins </strong></p>
-
-<p>GCC 4.5 has an official plugin framework enabled by default. I will try to switch to GCC 4.5 as soon as it is out. Currently 4.5 is still changing too often for me to bother fixing Treehydra (Dehydra usually works). As soon as 4.5 is out I will revise the installation instructions to use distribution GCC and JavaScript packages to avoid the current mess (draft can be found <a href="http://groups.google.com/group/mozilla.dev.static-analysis/browse_thread/thread/a773ebdbc5479f9a#">here</a>). Sometime after that I&#8217;ll switch Mozilla static analysis to GCC 4.5 and drop 4.3 support.</p>
-
-<p>Hopefully, this will make it easier for other open source projects to adapt the hydras.</p>
-
-<p><strong>Plans for Analyses</strong></p>
-
-<p>I&#8217;m a big believer into application-specific static analyses, but I would like to see some heavy duty open source analyzers built on top of GCC.</p>
-
-<p>Some of the not-so-Mozilla-specific analyses should be bundled together to make them easy to try out on other projects.</p>
-
-<p>Hopefully 2010 will be the year that open source static analysis catches on.</p>
-
-<p><strong>LCA2010</strong></p>
-
-<p>I posted my <a href="http://people.mozilla.com/~tglek/lca2010/">slides</a> from yesterday.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/13/">&larr; Older</a>
@@ -653,6 +624,10 @@ A whole lot more analyses in various states of completion can be tracked in the 
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2012/12/17/hello-octopress/">Hello Octopress</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2012/11/26/coping-with-flash-hangs/">Coping with Flash hangs</a>
       </li>
     
@@ -666,10 +641,6 @@ A whole lot more analyses in various states of completion can be tracked in the 
     
       <li class="post">
         <a href="/blog/2012/10/26/snappy-42/">Snappy #42</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/10/18/snappy-41/">Snappy #41</a>
       </li>
     
   </ul>

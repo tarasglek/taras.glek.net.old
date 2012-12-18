@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Looks like pork is slowly going to get merged back into oink. This makes me happy as it will result in decreased merging headaches and gives more &hellip;">
+  <meta name="description" content="Thanks to the 2-fold increase in manpower working on pork, we finally have an opportunity to work on the nice-to-have things. Progress Recently I &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -64,6 +64,62 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2008/01/08/dehydra-as-a-gcc-plugin/">Dehydra as a GCC Plugin</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-01-08T04:56:48-08:00" pubdate data-updated="true">Jan 8<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Thanks to the 2-fold increase in manpower working on pork, we finally have an opportunity to work on the nice-to-have things.</p>
+
+<p><strong>Progress</strong></p>
+
+<p>Recently I have been working on a GCC plugin to do Mozilla-specific analyses with GCC.</p>
+
+<p>Unfortunately, I didn&#8217;t notice that GCC had a<a href="http://gcc.gnu.org/svn.html"> plugin branch </a>so I reinvented the wheel there. Fortunately that part was rather easy and turned out that the plugin branch isn&#8217;t very useful to work with as it is in SVN, doesn&#8217;t link GCC with -rdynamic nor does it install the hooks I need in the C++ frontend. Overall the plugin shim is relatively trivial and it will be pretty easy to merge with other similar efforts.</p>
+
+<p>My first and only plugin is a C reimplementation of Dehydra. GCC sources are currently fairly hostile to C++, so I elected to not make my head spin by mixing in C++ in addition to C and JavaScript. I think the C Dehydra has reached the hello world state, to take it for a spin see the <a href="http://wiki.mozilla.org/Dehydra_GCC">wiki page</a>.</p>
+
+<p><strong>GCC Thoughts</strong></p>
+
+<p>Integrating with GCC is pretty awesome. So far I regret not jumping in earlier. I was reluctant to do so as everyone I&#8217;ve talked to (other than <a href="http://tromey.com/blog/">Tom Tromey</a>) claimed that GCC is ridiculously complicated and impossible to do stuff with. In fact academic people are so scared of GCC that they tend to opt to go with commercial frontends that have ridiculus licensing terms and make it impossible to release their work to general public.</p>
+
+<p>GCC internals are pretty crazy since everything is done with macros and the AST is dynamically typed so it&#8217;s fairly painful to figure out seemingly simple things like &#8220;what AST nodes does this AST node contain&#8221;. Additionally, GCC loves rewriting AST nodes inplace as the compilation progresses which sucks when one wants to analyze the AST while it looks as close as possible to the source. GCC parser also sucks to work with as it is implemented as a C code hodge-podge (technical term which applies to much code in GCC). Luckily, I am mainly concerned with poking at data that&#8217;s already in GCC.</p>
+
+<p>The upside is that GCC is a well-tested production compiler that most source compiles with. Integrating with GCC means that the AST is correct (Elsa is a frontend so there is no way of knowing if AST has mistakes in it) . Integration also means that the user doesn&#8217;t have to worry about making preprocessed files and maintain obsolete versions of GCC or old GCC headers. Unlike Elsa, GCC already has useful features like typedef tracking and doesn&#8217;t implement location tracking with a stupid programming trick. Additionally, I hope to reuse computations from from middle-end GCC passes to build my control flow graph, do value numbering and other useful, but tricky to implement stuff.</p>
+
+<p>GCC isn&#8217;t scary at all, it&#8217;s just another way of implementing a compiler. Some people elect to have more pain in life by electing to <a href="http://www.cs.berkeley.edu/~smcpeak/cpp/cplusplus.html">reinvent ML in C++</a> instead of using ML for compiler writing,  others get their pain dosage from working on a C compiler originally generated from LISP sources.</p>
+
+<p>Lastly, I&#8217;d like to thank patient gcc hackers in #gcc without whom I wouldn&#8217;t stand a chance in figuring out how to get this far.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -627,48 +683,6 @@ Checks 2 and 3 require the complete class hierachy of Mozilla so I finally made 
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2007/10/24/rewriting-javascript/">Rewriting JavaScript</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2007-10-24T08:36:00-07:00" pubdate data-updated="true">Oct 24<span>th</span>, 2007</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I&#8217;m having a very painful time rewriting Mozilla source code to switch it to garbage collection. So I took a little break to think about Myk&#8217;s <a href="http://www.melez.com/mykzilla/2007/10/automated-js-code-rewriting.html">JavaScript rewriting idea</a>.Then I found excellent info on <a href="http://siliconforks.com/doc/parsing-javascript-with-spidermonkey/">parsing JS</a> with <a href="http://www.mozilla.org/js/spidermonkey/">SpiderMonkey</a>. The downside to SpiderMonkey is that it is in C and thus hard to reuse, the upside is that will be able to parse all valid JavaScript.</p>
-
-<p>I think I shall find some free time to prototype a little tool to take a .js file and produce a JSON representation of it such that one could write transformation passes in JavaScript. This will be useful as it will complete DeHydra by enabling it to process JS in addition to C++ and it will save a lot of time for various JavaScript refactorings.</p>
-
-<p>I expect developing a JS refactoring tool to be relatively trivial compared to refactoring C++ as there is no source-code mangling going on due to lack of preprocessing (but JS is dynamic and can be embedded in various document types, so that could complicate things). Perhaps it would even be of use to mozpad people.</p>
-
-<p>Looking forward to playing more with this idea.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/21/">&larr; Older</a>
@@ -686,6 +700,10 @@ Checks 2 and 3 require the complete class hierachy of Mozilla so I finally made 
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2012/12/17/hello-octopress/">Hello Octopress</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2012/11/26/coping-with-flash-hangs/">Coping with Flash hangs</a>
       </li>
     
@@ -699,10 +717,6 @@ Checks 2 and 3 require the complete class hierachy of Mozilla so I finally made 
     
       <li class="post">
         <a href="/blog/2012/10/26/snappy-42/">Snappy #42</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/10/18/snappy-41/">Snappy #41</a>
       </li>
     
   </ul>

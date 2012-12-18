@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: personal | All About Performance]]></title>
+  <link href="http://taras.glek.net/blog/categories/personal/atom.xml" rel="self"/>
+  <link href="http://taras.glek.net/"/>
+  <updated>2012-12-17T17:35:11-08:00</updated>
+  <id>http://taras.glek.net/</id>
+  <author>
+    <name><![CDATA[Taras Glek]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Hello Octopress]]></title>
+    <link href="http://taras.glek.net/blog/2012/12/17/hello-octopress/"/>
+    <updated>2012-12-17T17:10:00-08:00</updated>
+    <id>http://taras.glek.net/blog/2012/12/17/hello-octopress</id>
+    <content type="html"><![CDATA[<p>I'm off work until January. I took this opportunity to partake in chores such as fixing a toilet and switching away from wordpress.</p>
+
+<p>After suffering wordpress for half a decade I finally switched to a combination of Octopress + Disqus.</p>
+
+<p>It took:
+* a few hours of tweaking the combination of <a href="https://github.com/thomasf/exitwp">exitwp.py</a>, html2text.py to convert my blog without busting links, images
+* a few hours of decyphering octopress/github documentation to setup a website
+* an hour to figure out where images should live (in <em>source/assets</em>)</p>
+
+<p>Thanks to everyone that suggested <a href="http://octopress.org/">Octopress</a>.</p>
+
+<p>Goodbye word-style wordpress bitchwork.</p>
+]]></content>
+  </entry>
+  
+</feed>
