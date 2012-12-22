@@ -92,14 +92,14 @@
 <p>Benoit Girard sped up shutdown with:</p>
 
 <ul>
-<li>not forcing startup cache flushes on shutdown: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=816656">bug 816656</a>. This speeds up exiting browser soon after startup.</li>
-<li><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=818296">bug 818296</a>: not nuking cross-compartment wrappers on shutdown. This may significantly reduce our shutdown times. We are waiting on more telemetry data to confirm.</li>
+<li>not forcing startup cache flushes on shutdown: <a title="[Shutdown] Startup cache slows shutdown with < 10 sec uptime" href="https://bugzilla.mozilla.org/show_bug.cgi?id=816656">bug 816656</a>. This speeds up exiting browser soon after startup.</li>
+<li><a title="[Shutdown] js::NukeCrossCompartmentWrappers takes up to 300ms on shutdown. Avoid doing it for optimized shutdown" href="https://bugzilla.mozilla.org/show_bug.cgi?id=818296">bug 818296</a>: [Shutdown] js::NukeCrossCompartmentWrappers takes up to 300ms on shutdown. Avoid doing it for optimized shutdown. This may significantly reduce our shutdown times. We are waiting on more telemetry data to confirm.</li>
 </ul>
 
 
-<p>Aaron Klotz made startup slightly faster by speeding up reading of some urlclassifier files in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=810101">bug 810101</a>.</p>
+<p>Aaron Klotz made startup slightly faster by speeding up reading of some urlclassifier files in <a title="loading the two safebrowsing files is not as fast as it could be" href="https://bugzilla.mozilla.org/show_bug.cgi?id=810101">bug 810101</a>.</p>
 
-<p>Vladimir Vukicevic landed <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=731974">bug 731974</a> which results in smoother browser animations and significantly improves the quality of tab-strip animations.</p>
+<p>Vladimir Vukicevic landed <a title="requestAnimationFrame generates too short/long frames, especially at the beginning of animation" href="https://bugzilla.mozilla.org/show_bug.cgi?id=731974">bug 731974</a> which results in smoother browser animations and significantly improves the quality of tab-strip animations.</p>
 </div>
   
   
