@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="To fight fragmentation it is best to tell the OS to allocate a continuous chunk of space for your file. With specialized APIs, the OS can do this &hellip;">
+  <meta name="description" content="I was digging through a MSVC++ map file for xul.dll. Turns out MSVC++ isn&#8217;t as naive about virtual initializers as the GNU toolchain. &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -58,108 +58,6 @@
     <div id="content">
       <div class="blog-index">
   
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2010/09/09/help-wanted-does-fcntlf_preallocate-work-as-advertised-on-osx/">Help Wanted: Does fcntl(F_PREALLOCATE) Work as Advertised on OSX?</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-09-09T07:06:11-07:00" pubdate data-updated="true">Sep 9<span>th</span>, 2010</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>To fight fragmentation it is best to tell the OS to allocate a continuous chunk of space for your file. With specialized APIs, the OS can do this without performing any IO (not counting metadata). I am adding support for this as part of <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=592520">bug 592520</a>.  Linux features <a href="http://linux.die.net/man/3/posix_fallocate">posix_fadvise</a> for preallocating files. Windows&#8217;s <a href="http://msdn.microsoft.com/en-us/library/aa365531%28VS.85%29.aspx">SetEndOfFile</a> achieves the same result. <a href="http://lists.apple.com/archives/darwin-dev/2007/Dec/msg00040.html">Supposedly</a> OSX can do this via <a href="http://www.manpages.info/macosx/fcntl.2.html">fcntl</a>(F_PREALLOCATE), but does it?</p>
-
-<p>I&#8217;ve experimented with posix_fadvise/SetEndOfFile and determined that they both change the file size and do their best to avoid fragmentation. Unfortunately I do not see any effect of fcntl(F_PREALLOCATE) on OS X 10.6 (the return code is successful). The file size does not change and if I then write to the file, it seems to fragment just as much as before. Can a Mac expert demonstrate that fcntl(F_PREALLOCATE) makes any difference at all?</p>
-
-<p><strong>Update:</strong> Thanks a lot for the useful feedback, it was extremely helpful in producing this <a href="https://bug592520.bugzilla.mozilla.org/attachment.cgi?id=474233">patch</a>. It appears that the posix_fallocate equivalent is to the fnctl followed by a truncate() call (which actually forces data to be written to the file).</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2010/09/07/fighting-fragmentation-sqlite/">Fighting Fragmentation: SQLite</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-09-07T02:57:56-07:00" pubdate data-updated="true">Sep 7<span>th</span>, 2010</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Thanks for all of those who commented on <a href="http://taras.glek.net/blog/2010/07/22/file-fragmentation/">previous post</a> on fragmentation. My first fragmentation <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=581606">fix</a> has landed. In current nightlies and future releases the main Firefox databases will grow more aggressively to avoid fragmentation. This should translate into better history/awesomebar/cookie performance for our most dedicated users.</p>
-
-<p>Unfortunately fixing existing profiles is <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=592678">hard</a> from within Firefox. In the meantime advanced users on non-Windows platforms who are suffering from fragmentation can manually copy *.sqlite files to another directory and back.</p>
-
-<p><strong>Windows: Ahead of the pack</strong></p>
-
-<p>Evidence suggests that the Windows fragmentation situation is slightly better than on other platforms. Firefox fragmentation behavior on Windows is similar to other OSes but Windows periodically defragments Firefox files opened on startup. So one ends up with a cycle of deteriorating performance, followed by better performance(ie right after defrag), followed by deteriorating performance, etc.</p>
-
-<p>I haven&#8217;t observed Windows defragmenting files for me, but it seems to do this for most users. Would love to learn more on how/when it decides to defragment files.</p>
-
-<p><strong>Horror Stories </strong></p>
-
-<p>I found a few other places that are horridly affected by fragmentation, will be blogging about those as I fix them. Fragmentation is an interesting problem to optimize because it affects dedicated users most, yet it is very tricky to replicate in a developer environment. Furthermore, there are a lot of misconceptions floating around:</p>
-
-<ol>
-<li>Fragmentation is a Windows problem that Linux is immune to due to having awesomer filesystems.</li>
-<li>Mac OSX automatically defragments files, so fragmentation isn&#8217;t a problem there.</li>
-<li>Fragmentation isn&#8217;t a problem on SSDs
-To which I say:</li>
-<li>Linux might be good at avoiding fragmentation for server workloads. It sucks for desktop users.</li>
-<li>OSX will defragment small files, but big ones hurt most.</li>
-<li>Cheap SSDs suck at tiny reads caused by fragmentation resulting in spectacularly bad IO. More on this in a future post.
-To summarize: there are a lot of misleading stories floating around. I am always happy to hear more measurements/docs/bugs/etc on this subject, but I have zero patience for folk stories and speculation.</li>
-</ol>
-
-
-<p>I should also mention that the fragmentation problem isn&#8217;t limited to Firefox. Other browsers suffer from it too.</p>
-</div>
-  
-  
-
-
-    </article>
   
   
     <article>
@@ -664,6 +562,151 @@ I blogged about 1, 2, 4, this post is about #3.</li>
 
 <p><strong>Update:</strong><br/>
 People seem to prefer to comment on <a href="http://www.reddit.com/r/programming/comments/bu2do/windows_sucks_at_memorymapped_io_during_startup/">reddit</a>. If you want me to not miss your comment, make sure you comment here.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/04/12/squeezing-every-last-bit-of-performance-out-of-the-linux-toolchain/">Squeezing Every Last Bit of Performance Out of the Linux Toolchain</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-04-12T08:16:08-07:00" pubdate data-updated="true">Apr 12<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><strong>Magic of GCC PGO</strong></p>
+
+<p>On Friday I finally got gold to produce a prelinkable static binary(<a href="http://sourceware.org/bugzilla/show_bug.cgi?id=11483">bug</a>). I also got around to trying out GCC <a href="https://developer.mozilla.org/en/Building_with_Profile-Guided_Optimization">profile-guided-optimization</a> with the debloatifying -freorder-blocks-and-partition option. This option breaks up every profiled function into cold and hot &#8220;functions&#8221;. It then lumps all of the hot functions together.</p>
+
+<p>PGO performance is amazingly close to that of binaries produced by <a href="http://taras.glek.net/blog/2010/04/07/icegrind-valgrind-plugin-for-optimizing-cold-startup/">icegrind </a>(within 10% based on page-counts).</p>
+
+<p><strong>Startup Time</strong>
+<strong>RSS (KB)</strong></p>
+
+<p>firefox.stock
+2515ms
+49452</p>
+
+<p>firefox.ordered
+1919ms
+45344</p>
+
+<p>firefox.static
+2321ms
+49616</p>
+
+<p>firefox.static.ordered
+1577ms
+37072</p>
+
+<p>firefox.static.pgo
+1619ms
+38436
+In above table, ordered means application of <a href="http://taras.glek.net/blog/2010/04/07/icegrind-valgrind-plugin-for-optimizing-cold-startup/">icegrind</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=525013">static</a> means a fat firefox-bin. To generate the PGO profile I just started and closed Firefox. So it&#8217;s not too surprising that the results are similar to those of an explicitly ordered binary. RSS refers to how much memory is mmap()ed into the process(lower RSS usage means we are paging in less junk). I was not able to control the layout of PGO builds; will need some linker hackery to deal with split functions.</p>
+
+<p>I think the numbers speak for themselves. Isn&#8217;t it scary how wasteful binaries are by default? It amazes me that Firefox can shrug off a significant amount of resource bloat without changing a single line of code. I think this is a good demonstration on why application developers should a) expect more out of their toolchain (Linux, GCC, Binutils) b) contribute to their toolchain.</p>
+
+<p>I think my next step is to tackle PGO Firefox builds(<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=418866">bug</a>). From there I would like to teach icegrind to play together with PGO.</p>
+
+<p><strong>Pieces of The Startup Puzzle</strong></p>
+
+<p>It took a long time since I <a href="http://taras.glek.net/blog/2009/10/20/large-apps-just-have-to-start-slow/">first noticed</a> the suckyness of library io. After much digging, help by smart people on #gcc + <a href="http://thread.gmane.org/gmane.linux.kernel/970483/focus=970920">LKML discussion</a>, I think I finally have a pretty clear list of the remaining/inprogress things needed for Linux applications to start faster.</p>
+
+<ol>
+<li>Wu Fengguang is making headway on <a href="http://lwn.net/Articles/372384/">smarter readahead</a> that makes better use of available RAM + disk bandwidth. Firefox could be read in 512kb chunks instead of 128 (4x page-fault reduction). Distributions should be aggressively testing this patch.</li>
+<li>Better agreement on binary organization between the compile-time <a href="http://sourceware.org/bugzilla/show_bug.cgi?id=11447">linker</a>, run-time <a href="http://sourceware.org/bugzilla/show_bug.cgi?id=11431">linker</a> and the kernel (see LKML discussion). Can shave off a handful of unneeded page-faults per file this way.</li>
+<li>A linker flag to specify how much of a particular library should be read-in via madvise(). For example any xulrunner apps will know ahead of time that they need large parts of libxul.so - might as well let the OS know.</li>
+<li>Transparent read-only per-file ext4 compression (<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=514083">like OSX</a>). Ted Tso indicated that this would be easy to add to ext4, but as far as I know nobody has jumped on this.
+I think with all of the above combined, we could load apps like Firefox at near-warm (0.5 second) speeds. Most of these are easy. #1 is hard, but it&#8217;s already being worked on. I&#8217;ll be happy to point someone at how to solve items 2-4 while I work on the Firefox side of things. The end result of all this should be a more instant gratification for all Linux users.</li>
+</ol>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/04/07/icegrind-valgrind-plugin-for-optimizing-cold-startup/">Icegrind - Valgrind Plugin for Optimizing Cold Startup</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-04-07T08:03:24-07:00" pubdate data-updated="true">Apr 7<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Most program binaries are laid out with little to no regard to how programs get loaded from disk. This disconnect between compile-time and runtime behaviour of binaries imposes a significant performance penalty to on large applications such as browsers, office suites, etc.</p>
+
+<p>It is incredibly difficult to observe both the cause (ie calling a random function) of binary-induced IO and the effect (the program gets suspended during startup while parts being loaded from disk), so this area doesn&#8217;t get as much optimization love as it deserves.</p>
+
+<p>My estimate is that around 50% of Firefox startup time is wasted on subobtimal binary layout. My previous <a href="http://taras.glek.net/blog/2010/04/05/linux-how-to-make-startup-suck-less-and-reduce-memory-usage/">post</a> demonstrated the kind of difference a better binary layout can make. Note that reordering executables isn&#8217;t the only solution, eliminating dead code should also speed things up (deleting <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=457262">dead code</a> is a <a href="http://ehren.wordpress.com/">hard</a>).</p>
+
+<p><strong>Optimizing Binary Layout</strong><em> Disclaimer:I just finished my 3rd rewrite of icegrind a few hours ago, be gentle.</em></p>
+
+<p>Ingredients: <a href="http://valgrind.org/">Valgrind</a> SVN trunk + <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=549749">icegrind patch</a>, GNU Gold + <a href="http://sourceware.org/ml/binutils/2010-03/msg00050.html">section-ordering-file patch</a>, a way to describe contents of binaries.</p>
+
+<p><em>Step 1a: Produce a build </em>Since I am interested in reorganizing program binaries, I build mozilla with &#8220;-ffunction-sections -fdata-sections&#8221; in CFLAGS/CXXFLAGS</p>
+
+<p>I also prelink the binaries in dist/bin such that my binaries better correspond to how they will be used: prelink $LD_LIBRARY_PATH/firefox-bin $LD_LIBRARY_PATH/*.so</p>
+
+<p><em>Step 1b: Produce a description of interesting files </em>I use my <a href="http://hg.mozilla.org/users/tglek_mozilla.com/startup/file/6453ad2a7906/elflog.cpp">elflog</a> utility to produce a .sections description of files I&#8217;m interested in. Elflog looks at the symbol table and tries to infer section names (produced by -ffunction-sections -fdata-sections) from symbol names/locations(see also &#8211;print-map option for ld).</p>
+
+<p>elflog  &#8211;contents  libxul.so >  libxul.so.sections elflog currently emits non-existent .comment.* sections because it gets confused by 0-length sections such as .bss. Note, one can also build tools to describe other kinds of files, such as jar or sqlite files. The only limitation is that Icegrind currently only tracks mmap()-caused disk IO, it would be trivial to extend it to deal with open/seek/read kind of disk IO.</p>
+
+<p><em>Step 2: Produce a log with icegrind! </em>Apply my icegrind <a href="https://bugzilla.mozilla.org/attachment.cgi?id=437664&amp;action=edit">patch</a>, build+install valgrind. Run Firefox valgrind &#8211;tool=icegrind firefox-bin -profile /tmp/ff -no-remote This will produce a .log file for every mmap()ed file with a .sections description. This log chronologically lists sections in the order of access.</p>
+
+<p><em>Step 3: Tell gold to link using the above log</em> Build/install binutils (I use a CVS checkout from a month ago) with the <a href="http://sourceware.org/ml/binutils/2010-03/msg00050.html">section ordering patch</a>, specify &#8211;enable-gold. To reorder the binary, I just add -Wl,&#8211;section-ordering-file,libxul.so.log to my linker commandline. Note there are still some teething issues with using this patch, it exhibits N<sup>2</sup> behavior (ie takes 10min to link libxul.so with it) and occasionally swaps order for .rela.plt and .rela.dyn, which makes prelink upset. But unlike my <a href="http://taras.glek.net/blog/2010/02/19/teaching-ld-to-optimize-binaries-for-startup/">earlier attempt</a> with linker scripts, it does not affect the binary size.</p>
+
+<p>Step 4: Enjoy! Now strip, install, prelink your binaries and enjoy faster startup.</p>
+
+<p><strong>Plans</strong></p>
+
+<p>I would like to see the gold patch fixed up and landed. Once that is done I&#8217;d like to turn this on for our Linux and mobile linux builds.</p>
+
+<p>I am hoping that some sort of sensible ordering of binaries will become commonplace in the future.</p>
 </div>
   
   

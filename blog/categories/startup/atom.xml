@@ -4,7 +4,7 @@
   <title><![CDATA[Category: startup | All About Performance]]></title>
   <link href="http://taras.glek.net/blog/categories/startup/atom.xml" rel="self"/>
   <link href="http://taras.glek.net/"/>
-  <updated>2012-12-22T10:23:26-08:00</updated>
+  <updated>2012-12-22T11:15:17-08:00</updated>
   <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -18,25 +18,22 @@
     <link href="http://taras.glek.net/blog/2011/09/20/firefox-7-cheating-the-operating-system-to-start-faster/"/>
     <updated>2011-09-20T07:54:07-07:00</updated>
     <id>http://taras.glek.net/blog/2011/09/20/firefox-7-cheating-the-operating-system-to-start-faster</id>
-    <content type="html"><![CDATA[<p>****Firefox 7 features improved startup speed. Our research has shown that most OSes are not capable of starting large programs efficiently (see my older blog entries). As a result, Firefox 7 will explicitly tell the OS to aggressively preload our xul.dll/libxul.so/XUL library before passing it on to the runtime linker. This marks the productization of the approach explored in "20-line patch that doubles Firefox startup" that got people so excited. See <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=552864">bug 552864</a> and dependent bugs for exciting technical details.</p>
+    <content type="html"><![CDATA[****Firefox 7 features improved startup speed. Our research has shown that most OSes are not capable of starting large programs efficiently (see my older blog entries). As a result, Firefox 7 will explicitly tell the OS to aggressively preload our xul.dll/libxul.so/XUL library before passing it on to the runtime linker. This marks the productization of the approach explored in "20-line patch that doubles Firefox startup" that got people so excited. See [bug 552864](https://bugzilla.mozilla.org/show_bug.cgi?id=552864) and dependent bugs for exciting technical details.  
+  
+**Do Not Try this at Home: Ugly Windows**  
+  
+_Note: Windows Prefetch does everything possible to thwart exciting startup optimizations._ Above optimization only works when prefetch is disabled/broken (ie Firefox should be faster with Windows Prefetch off). See [this comment](https://bugzilla.mozilla.org/show_bug.cgi?id=627591#c158) on disabling prefetch for Firefox. Alternatively one may get Windows Prefetch to not slow down Firefox startup by the following magic incantation: 
 
-<p><strong>Do Not Try this at Home: Ugly Windows</strong></p>
-
-<p><em>Note: Windows Prefetch does everything possible to thwart exciting startup optimizations.</em> Above optimization only works when prefetch is disabled/broken (ie Firefox should be faster with Windows Prefetch off). See <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=627591#c158">this comment</a> on disabling prefetch for Firefox. Alternatively one may get Windows Prefetch to not slow down Firefox startup by the following magic incantation:</p>
-
-<ol>
-<li>Install Firefox (or delete the windows prefetch entry for existing Firefox 7)</li>
-<li>Reboot (Do not start Firefox after installation!)</li>
-<li>Start Firefox.
-Above helps populate the Windows Prefetch in a less counter-productive way. Explanation: on warm startup Windows Prefetch records irrelevant IO operations and blocks Firefox startup to preload files that Firefox accesses <em>after</em> startup.</li>
-</ol>
-
-
-<p>Note: the <a href="http://mxr.mozilla.org/mozilla-central/source/browser/app/nsBrowserApp.cpp#224">heuristic</a> that we use to detect Windows Prefetch will also prevent this optimization from kicking in on some exceptionally slow hard drives when prefetch is off. This is unfortunate as this optimization is most dramatic on exceptionally slow machines.</p>
-
-<p>According to our preliminary telemetry data, less than 25% of our Windows users have Windows Prefetch off and can benefit from vastly improved startup. We expect to improve this in future Firefox releases by scheduling a prefetch cleanup operation similar to the script in above bugzilla comment.</p>
-
-<p>Operating systems without counter-productive startup heuristics (ie Mac/Linux) will simply allow Firefox 7 to start faster.</p>
+  1. Install Firefox (or delete the windows prefetch entry for existing Firefox 7)
+  2. Reboot (Do not start Firefox after installation!)
+  3. Start Firefox.
+Above helps populate the Windows Prefetch in a less counter-productive way. Explanation: on warm startup Windows Prefetch records irrelevant IO operations and blocks Firefox startup to preload files that Firefox accesses _after_ startup.  
+  
+Note: the [heuristic](http://mxr.mozilla.org/mozilla-central/source/browser/app/nsBrowserApp.cpp#224) that we use to detect Windows Prefetch will also prevent this optimization from kicking in on some exceptionally slow hard drives when prefetch is off. This is unfortunate as this optimization is most dramatic on exceptionally slow machines.  
+  
+According to our preliminary telemetry data, less than 25% of our Windows users have Windows Prefetch off and can benefit from vastly improved startup. We expect to improve this in future Firefox releases by scheduling a prefetch cleanup operation similar to the script in above bugzilla comment.  
+  
+Operating systems without counter-productive startup heuristics (ie Mac/Linux) will simply allow Firefox 7 to start faster.
 ]]></content>
   </entry>
   
@@ -45,13 +42,12 @@ Above helps populate the Windows Prefetch in a less counter-productive way. Expl
     <link href="http://taras.glek.net/blog/2011/04/26/measuring-startup-speed-correctly/"/>
     <updated>2011-04-26T07:34:02-07:00</updated>
     <id>http://taras.glek.net/blog/2011/04/26/measuring-startup-speed-correctly</id>
-    <content type="html"><![CDATA[<p>Until recently our state of the art method for measuring startup was to subtract a timestamp passed via commandline from a
-<code>
+    <content type="html"><![CDATA[Until recently our state of the art method for measuring startup was to subtract a timestamp passed via commandline from a 
+```
 new Date()
-</code>
-timestamp within a
-```</p>
-
+```
+timestamp within a 
+```
 <script>
 ```
 tag. Vlad [pioneered](http://blog.vlad1.com/2009/07/28/measuring-startup/) this approach, [me](http://taras.glek.net/blog/2010/01/19/chromium-vs-minefield-cold-startup-performance-comparison/) and others adopted it.  
@@ -63,7 +59,6 @@ Turns out there are two problems with this approach:
 Our oldest startup benchmark, ts,  has been gathering wrong numbers all along.  This resulted in a class of perverse optimizations that decreased the ts number, but increased the time taken for UI to appear (ie [bug 641691](http://bugzil.la/641691)). The new [tpaint (bug 612190)](https://bugzilla.mozilla.org/show_bug.cgi?id=612190) benchmark should should address this. On my machine measuring pageload vs paint-time results in a 50-100ms difference. See the [graph server](http://graphs.allizom.org/graph.html#tests=[[83,1,1],[83,1,17],[83,1,12],[83,1,13],[83,1,14],[16,1,12]]&sel=none&displayrange=7&datatype=running) for more data.  
   
 This is why AMO's [complicated method](http://xulforge.com/blog/2011/04/testing-add-on-startup-performance/) of measuring startup is wrong. Please use our shiny new [about:startup](https://wiki.mozilla.org/Firefox/Projects/StartupPerformance/MeasuringStartup) extension or if you absolutely want to avoid adding any overhead use [getStartupInfo](https://developer.mozilla.org/en/XPCOM_Interface_Reference/nsIAppStartup_MOZILLA_2_0#getStartupInfo%28%29) API directly.
-
 ]]></content>
   </entry>
   
@@ -72,13 +67,13 @@ This is why AMO's [complicated method](http://xulforge.com/blog/2011/04/testing-
     <link href="http://taras.glek.net/blog/2011/02/09/magic-patch-that-doubles-windows-startup/"/>
     <updated>2011-02-09T08:38:38-08:00</updated>
     <id>http://taras.glek.net/blog/2011/02/09/magic-patch-that-doubles-windows-startup</id>
-    <content type="html"><![CDATA[<p>Internet as of late have been obsessing over magically short patches that improve performance _ times(probably as a result of LKML cgroups patch from a few weeks ago). So my work in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=627591">bug 627591</a> got picked up in all kinds of news sources(mostly due to @limi's <a href="http://twitter.com/#!/limi/status/28983240966541312">manlove</a>). Apparently all that internet fame is good for is getting script-kiddies to upload viruses as bugzilla attachments. Dear Internet, please do not interrupt me in the middle of an investigation.</p>
-
-<p>To crux of the optimization lies in trading waiting for random io for fast sequential IO. Turned out that my patch worked great if windows prefetch wasn't trying to help (ie firefox ran faster without prefetch on my test systems). With prefetch on, the patch was either a smaller win or a downright loss. When I dug in deeper, it turned that the Windows Prefetch helpfully spends 3-6 seconds doing IO before any Firefox code gets to run. It also doesn't read in a very clever pattern, resulting in a very small speed up for Firefox, but preventing my exciting optimization.</p>
-
-<p>So I curled up into my defeated fetal position and pondered on how would I prevent Windows Prefetch from being so "helpful". One way would be to <a href="http://taras.glek.net/blog/2010/10/04/diagnosing-slow-startup/">install</a> some crapware to cripple prefetch (kidding!), another way is to do the sequential IO in a separate executable(ala<a href="http://glandium.org/blog/?p=1719"> run-mozilla.sh</a> on Unix). This way Windows doesn't try to do insane amounts of IO before my preloading logic gets to run. This seems to work (see wrapper.exe talk in the bug) and has potential to double Firefox startup times. It's also ugly as sin, but if that's what it takes...</p>
-
-<p>So now I need more reports to make sure the executable wrapper approach reliably/significantly speeds up cold(post-reboot) startup. Then we can make a decision on how to integrate this into Firefox. But until we have all the data, please don't jump to conclusions on what will and wont make Firefox 2x faster.</p>
+    <content type="html"><![CDATA[Internet as of late have been obsessing over magically short patches that improve performance _ times(probably as a result of LKML cgroups patch from a few weeks ago). So my work in [bug 627591](https://bugzilla.mozilla.org/show_bug.cgi?id=627591) got picked up in all kinds of news sources(mostly due to @limi's [manlove](http://twitter.com/#!/limi/status/28983240966541312)). Apparently all that internet fame is good for is getting script-kiddies to upload viruses as bugzilla attachments. Dear Internet, please do not interrupt me in the middle of an investigation.  
+  
+To crux of the optimization lies in trading waiting for random io for fast sequential IO. Turned out that my patch worked great if windows prefetch wasn't trying to help (ie firefox ran faster without prefetch on my test systems). With prefetch on, the patch was either a smaller win or a downright loss. When I dug in deeper, it turned that the Windows Prefetch helpfully spends 3-6 seconds doing IO before any Firefox code gets to run. It also doesn't read in a very clever pattern, resulting in a very small speed up for Firefox, but preventing my exciting optimization.  
+  
+So I curled up into my defeated fetal position and pondered on how would I prevent Windows Prefetch from being so "helpful". One way would be to [install](http://taras.glek.net/blog/2010/10/04/diagnosing-slow-startup/) some crapware to cripple prefetch (kidding!), another way is to do the sequential IO in a separate executable(ala[ run-mozilla.sh](http://glandium.org/blog/?p=1719) on Unix). This way Windows doesn't try to do insane amounts of IO before my preloading logic gets to run. This seems to work (see wrapper.exe talk in the bug) and has potential to double Firefox startup times. It's also ugly as sin, but if that's what it takes...  
+  
+So now I need more reports to make sure the executable wrapper approach reliably/significantly speeds up cold(post-reboot) startup. Then we can make a decision on how to integrate this into Firefox. But until we have all the data, please don't jump to conclusions on what will and wont make Firefox 2x faster.
 ]]></content>
   </entry>
   
@@ -87,31 +82,28 @@ This is why AMO's [complicated method](http://xulforge.com/blog/2011/04/testing-
     <link href="http://taras.glek.net/blog/2010/12/29/faster-plugin-enumeration-help-wanted/"/>
     <updated>2010-12-29T09:08:47-08:00</updated>
     <id>http://taras.glek.net/blog/2010/12/29/faster-plugin-enumeration-help-wanted</id>
-    <content type="html"><![CDATA[<p>In addition to slow <a href="http://taras.glek.net/blog/">font enumeration</a>, we were suffering from a similar problem: slow plugin enumeration. Just as with fonts, the plugin enumeration code is different on every platform. Unlike the font situation, plugin enumeration is done completely within our code(ie easy to fix).</p>
+    <content type="html"><![CDATA[In addition to slow [font enumeration](http://taras.glek.net/blog/), we were suffering from a similar problem: slow plugin enumeration. Just as with fonts, the plugin enumeration code is different on every platform. Unlike the font situation, plugin enumeration is done completely within our code(ie easy to fix).  
+  
+Plugin enumeration is often triggered by JavaScript code (for example by checking if a Java handler is present). This means that enumeration is a blocking operation that must happen quickly. XPerf made me wonder why so many plugin-like .dll files were being read. This lead me to a fun set of perf fixes.  
+  
+**The Algorithm**
 
-<p>Plugin enumeration is often triggered by JavaScript code (for example by checking if a Java handler is present). This means that enumeration is a blocking operation that must happen quickly. XPerf made me wonder why so many plugin-like .dll files were being read. This lead me to a fun set of perf fixes.</p>
-
-<p><strong>The Algorithm</strong></p>
-
-<ol>
-<li>Files in plugin directories are listed</li>
-<li>Platform-specific IsPluginFile function to determines what files look like plugins(ie np*.dll on Windows).</li>
-<li>Code then checks if the files + their timestamps are known by pluginreg.dat. If so, cached info is used and the following steps are skipped</li>
-<li>For each library-file that isn't found in pluginreg.dat, we use platform-specific GetPluginInfo to load the library-file to see if it is indeed a valid plugin (and to see what mimetypes it handles/etc).</li>
-<li>Valid plugins are recorded in pluginreg.dat.
-This process took up to 3 seconds on a user's computer. WTF? There were gotchas in almost every step of the way.</li>
-<li>Windows directory listing code would request metadata for <em>every bloody file in the directory</em>. Which resulted in an easiest optimization ever: <a href="https://bug616256.bugzilla.mozilla.org/attachment.cgi?id=494795">pure code deletion</a>.</li>
-<li>IsPluginFile on Windows/Mac sneakily did more than just check the filename. It also <a href="https://bugzilla.mozilla.org/attachment.cgi?id=494840&amp;action=edit">checked</a> if the file was loadable, which on Windows loaded the dll and all of the dependencies. Mac code was <a href="https://bugzilla.mozilla.org/attachment.cgi?id=499855&amp;action=edit">satisfied</a> with merely doing a little extra IO.</li>
-<li>This part was right</li>
-<li><h1>2 was easily fixed by moving file IO here.</h1></li>
-<li>Files that failed the check in #4 were doomed to cause extra IO for all of eternity. Scott Greenlay fixed that by <a href="https://bugzilla.mozilla.org/attachment.cgi?id=496518&amp;action=edit">recording</a> invalid plugin-like files too.
-This was a rare fix that resulted in seconds saved on crapware-loaded computers. Usually I have to count my progress in milliseconds :(</li>
-</ol>
-
-
-<p><strong>Help Wanted </strong></p>
-
-<p>I have plans for vastly improving Firefox startup, but I need help to get there. If you enjoy beating under-performing code into submission and want to work for Mozilla, please send me your resume(taras at mozilla dot com). Example projects: a better performance testsuite (ie tracking IO, cpu instructions, etc), better infrastructure for profiling addons, optimizing away various CSS/XUL markup, etc. A low-level approach to solving problems is helpful, compiler/linker/kernel hackers are well-suited (but not required) for this.</p>
+  1. Files in plugin directories are listed
+  2. Platform-specific IsPluginFile function to determines what files look like plugins(ie np*.dll on Windows).
+  3. Code then checks if the files + their timestamps are known by pluginreg.dat. If so, cached info is used and the following steps are skipped
+  4. For each library-file that isn't found in pluginreg.dat, we use platform-specific GetPluginInfo to load the library-file to see if it is indeed a valid plugin (and to see what mimetypes it handles/etc).
+  5. Valid plugins are recorded in pluginreg.dat.
+This process took up to 3 seconds on a user's computer. WTF? There were gotchas in almost every step of the way. 
+  1. Windows directory listing code would request metadata for _every bloody file in the directory_. Which resulted in an easiest optimization ever: [pure code deletion](https://bug616256.bugzilla.mozilla.org/attachment.cgi?id=494795).
+  2. IsPluginFile on Windows/Mac sneakily did more than just check the filename. It also [checked](https://bugzilla.mozilla.org/attachment.cgi?id=494840&action=edit) if the file was loadable, which on Windows loaded the dll and all of the dependencies. Mac code was [satisfied](https://bugzilla.mozilla.org/attachment.cgi?id=499855&action=edit) with merely doing a little extra IO.
+  3. This part was right
+  4. #2 was easily fixed by moving file IO here.
+  5. Files that failed the check in #4 were doomed to cause extra IO for all of eternity. Scott Greenlay fixed that by [recording](https://bugzilla.mozilla.org/attachment.cgi?id=496518&action=edit) invalid plugin-like files too.
+This was a rare fix that resulted in seconds saved on crapware-loaded computers. Usually I have to count my progress in milliseconds :(  
+  
+**Help Wanted **  
+  
+I have plans for vastly improving Firefox startup, but I need help to get there. If you enjoy beating under-performing code into submission and want to work for Mozilla, please send me your resume(taras at mozilla dot com). Example projects: a better performance testsuite (ie tracking IO, cpu instructions, etc), better infrastructure for profiling addons, optimizing away various CSS/XUL markup, etc. A low-level approach to solving problems is helpful, compiler/linker/kernel hackers are well-suited (but not required) for this.
 ]]></content>
   </entry>
   
@@ -120,15 +112,15 @@ This was a rare fix that resulted in seconds saved on crapware-loaded computers.
     <link href="http://taras.glek.net/blog/2010/12/21/rude-surprise-startup-overhead-of-windows-font-apis/"/>
     <updated>2010-12-21T05:33:14-08:00</updated>
     <id>http://taras.glek.net/blog/2010/12/21/rude-surprise-startup-overhead-of-windows-font-apis</id>
-    <content type="html"><![CDATA[<p>Imagine a typical Firefox user who starts their Windows computer in order to surf the web. First app they launch is Firefox 4. Turned out that on systems that support hardware-acceleration for 2D graphics, Firefox 4 takes minutes to startup. WTF? XPerf-aided investigation showed that, the Windows font enumeration code causes us to do 30x more disk IO (~300MB) than the rest of Firefox code.</p>
-
-<p>In order to hardware accelerate Firefox, we switched from GDI to using DirectWrite for font stuffs. Apparently, DirectWrite is a wonderful api, but the implementation has some teething issues. DirectWrite opens a connection to the Font Service (and starts it if it isn't already running), however if service fails to respond DirectWrite proceeds to enumerate all of the system fonts on the client-side. This isn't cool for multiple reasons: a) it is <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=602792">slow as hell</a> b) it causes Firefox to <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=617266">run out of memory</a>(installing IE9 helps!) sooner.  This means that currently Firefox 4 starts up a lot slower than 3.6. <a href="http://blog.mozilla.org/nattokirai/">John Daggett</a> is busy working on a workaround by using older GDI APIs to enumerate fonts. Firefox is one of the first popular Windows applications to switch to DirectWrite, so we get to suffer the consequences.</p>
-
-<p>Unfortunately it turns out that using Microsoft GDI APIs to <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=600713">enumerate fonts</a> still causes a significant amount of disk IO (~30-60MB), John plans to fix that next.</p>
-
-<p><strong>How Did We Miss This?</strong></p>
-
-<p>This bug came from a fundamental difference of how developers and users start Firefox. A developer will restart Firefox a dozen times an hour. This means we rarely get to observe true cold startup. Our tests only measure warm startup (because most operating systems make it difficult to test cold startup). Windows is also incredibly slow to develop on, so a lot of us test in a virtual machine to speed things up and avoid rebooting the computer all the time. This also makes observing cold startup hard. Fortunately xperf makes IO much easier to observe. We should deploy xperf on our <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=609111">test infrastructure</a> as soon as possible.</p>
+    <content type="html"><![CDATA[Imagine a typical Firefox user who starts their Windows computer in order to surf the web. First app they launch is Firefox 4. Turned out that on systems that support hardware-acceleration for 2D graphics, Firefox 4 takes minutes to startup. WTF? XPerf-aided investigation showed that, the Windows font enumeration code causes us to do 30x more disk IO (~300MB) than the rest of Firefox code.  
+  
+In order to hardware accelerate Firefox, we switched from GDI to using DirectWrite for font stuffs. Apparently, DirectWrite is a wonderful api, but the implementation has some teething issues. DirectWrite opens a connection to the Font Service (and starts it if it isn't already running), however if service fails to respond DirectWrite proceeds to enumerate all of the system fonts on the client-side. This isn't cool for multiple reasons: a) it is [slow as hell](https://bugzilla.mozilla.org/show_bug.cgi?id=602792) b) it causes Firefox to [run out of memory](https://bugzilla.mozilla.org/show_bug.cgi?id=617266)(installing IE9 helps!) sooner.  This means that currently Firefox 4 starts up a lot slower than 3.6. [John Daggett](http://blog.mozilla.org/nattokirai/) is busy working on a workaround by using older GDI APIs to enumerate fonts. Firefox is one of the first popular Windows applications to switch to DirectWrite, so we get to suffer the consequences.  
+  
+Unfortunately it turns out that using Microsoft GDI APIs to [enumerate fonts](https://bugzilla.mozilla.org/show_bug.cgi?id=600713) still causes a significant amount of disk IO (~30-60MB), John plans to fix that next.  
+  
+**How Did We Miss This?**  
+  
+This bug came from a fundamental difference of how developers and users start Firefox. A developer will restart Firefox a dozen times an hour. This means we rarely get to observe true cold startup. Our tests only measure warm startup (because most operating systems make it difficult to test cold startup). Windows is also incredibly slow to develop on, so a lot of us test in a virtual machine to speed things up and avoid rebooting the computer all the time. This also makes observing cold startup hard. Fortunately xperf makes IO much easier to observe. We should deploy xperf on our [test infrastructure](https://bugzilla.mozilla.org/show_bug.cgi?id=609111) as soon as possible.
 ]]></content>
   </entry>
   

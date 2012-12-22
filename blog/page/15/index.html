@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="When it comes to taking on crazy tasks involving disguising code, you can always count on Joshua. This time Joshua has gone deep in Pork territory to &hellip;">
+  <meta name="description" content="Python GDB Rocks! I wanted a non-painful way to figure out what&#8217;s causing bonus file IO. I&#8217;ve noticed that gtk likes to open files, but I &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -58,84 +58,6 @@
     <div id="content">
       <div class="blog-index">
   
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/07/21/those-crazy-comm-central-guys/">Those Crazy Comm-central Guys&#8230;</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-07-21T02:54:42-07:00" pubdate data-updated="true">Jul 21<span>st</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>When it comes to taking on crazy tasks involving disguising code, you can always count on Joshua. This time Joshua has gone deep in <a href="https://developer.mozilla.org/En/Pork">Pork</a> territory to do a very impressive rewrite (one that would not be even close to possible with anything other than Elsa-based tools) and he is blogging about it. He posted the <a href="http://quetzalcoatal.blogspot.com/2009/07/guide-to-pork-part-1.html">first installment</a> of his rewriting-with-Pork guide.</p>
-
-<p>Still on the subject on mad csc-entist Joshua: Andrew Sutherland has finally gotten sick of crappy JS documentation tools and took matters into his own hands thanks to Joshua&#8217;s JSHydra tool. Checkout his <a href="http://www.visophyte.org/blog/2009/07/20/doccelerator-javascript-documentation-via-jshydra-into-couchdb-with-an-ajax-ui/">blog post</a> on how the documentation world will be a better place thanks to being able to build tools on top of <em>the JavaScript parser</em>.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/07/14/virtualbox-rocks/">VirtualBox 3.0 Rocks</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-07-14T06:15:52-07:00" pubdate data-updated="true">Jul 14<span>th</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>With much pain I managed to convince a Vmware WinXP virtual machine to run in <a href="http://www.virtualbox.org/">VirtualBox</a>. At first it ran very sluggishly(>3 hours to do a build?), but after I turned off IO Apic stuff in Windows, it&#8217;s become disturbingly fast. It now takes 40minutes to build a wince fennec vs almost 80minutes it took on VMware server.</p>
-
-<p>VirtualBox&#8217;s disk throughput is phenomenal, in fact, this is the first time I&#8217;ve seen almost-native speed disk io in virtual machine. A benchmark I tried reported 45mb/s 4K read/writes (these were cached on the linux side).</p>
-
-<p>Unlike Vmware server, VirtualBox&#8217;s usb works without troubles, shared folders were easy to setup etc. It&#8217;s an awesome app, hope Sun/Oracle keeps it up.</p>
-</div>
-  
-  
-
-
-    </article>
   
   
     <article>
@@ -564,6 +486,104 @@
 
 
 <p>I finally landed the massively boring and annoying <a href="http://hg.mozilla.org/users/tglek_mozilla.com/gcc-moz-plugin-mq/file/24bbb11d7346/gty.diff">GTY patch</a>. I can barely believe that the patch went in so smoothly without excess complaining from GCC devs. From GCC perspective it&#8217;s merely a cosmetic cleanup that affects a large number of headers. For us it enables <a href="https://developer.mozilla.org/en/Treehydra">Treehydra</a> to be generated via <a href="https://developer.mozilla.org/En/Dehydra">Dehydra</a> with little manual effort. It basically makes Treehydra possible without patching GCC. I have another 3-4 patches that need to land before trunk GCC can run the hydras out of the box. Those are mainly localized bugfixes and cleanups so I fully expect them to go in and for GCC 4.5 to rock my world. Once GCC 4.5 ships. analyzing code will depend on a trivial matter of apt-getting(or equivalent) the hydras and specifying the analysis flags on the GCC commandline!</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/04/23/benchmarks-and-instrumentation-for-fennecetc/">Benchmarks and Instrumentation for Fennec/etc</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-04-23T03:19:14-07:00" pubdate data-updated="true">Apr 23<span>rd</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I wrote Fennecmark to automate some of the tasks that I did manually while doing performance debugging.</p>
+
+<p>I tried to capture some of the &#8220;perceived performance&#8221; in numbers. My goal is to focus on user-visible areas of performance. Ideally it will enable us to track performance better to ensure that key features do not regress in performance and enable us to compare Fennec speed on various platforms. I need to spend some quality time with QA people to figure out how to achieve that.</p>
+
+<p>Currently Fennecmark loads a slow-to-load webpage, zooms around it and then pans from the top to the bottom. This measures: responsiveness during pageload, zoom speed and panning lag.</p>
+
+<p>See code at <a href="http://hg.mozilla.org/users/tglek_mozilla.com/fennecmark">http://hg.mozilla.org/users/tglek_mozilla.com/fennecmark</a>.</p>
+
+<p><strong>JSD Instrumentation</strong></p>
+
+<p>Spidermonkey provides an API that allows one to get a notification on every method entry/exit. I was able to do most of my Fennec performance analysis via a component in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=470116">bug 470116</a>. My stopwatch component times the execution of every js function call and spits out a log that has been very useful in figuring out what is taking up time in Fennec chrome.</p>
+
+<p><strong>Porkstain</strong></p>
+
+<p>I am itching to write a tool that can instrument large portions of Mozilla code such that it can be profiled across C++/JS boundaries and without any external tool support. I am guessing this would be most useful on platforms with crappy sampling tools, but it would be cool if it made finding slow codepaths easier in general. If you know any lightweight instrumentation techniques, please share.</p>
+
+<p>I wrote a little prototype to insert stopwatch stuff into code deemed interesting by oprofile (stuff in the bug above). The code patching part works well, but it&#8217;s a big runtime hit and outputs too much data.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/04/15/misc-static-analysis-news-smmgcstatic-codecon-piglet/">Misc Static Analysis News: S/#mmgc/#static/, Codecon, Piglet, &#8230;</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-04-15T06:37:23-07:00" pubdate data-updated="true">Apr 15<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h1>static on irc.mozilla.org is now the correct irc channel for anything to do with static analysis.</h1>
+
+<p><strong>Codecon</strong> On Sunday, I will be presenting on <a href="https://developer.mozilla.org/En/Pork">Pork</a> at codecon. I have been meaning to attend <a href="http://www.codecon.org/">codecon</a> since the days when P2P was considered cool, was not able to make it until this year. It is a historical milestone for me. Codecon was how people at Mozilla first heard of Elsa, which is now the foundation of all our refactoring tools (it is also inherited baggage I get to maintain).</p>
+
+<p><strong>Piglet</strong></p>
+
+<p>I adopted <a href="http://hg.mozilla.org/users/tglek_mozilla.com/piglet">Piglet</a>, <a href="http://blog.mozilla.org/dmandelin/">Dave Mandelin</a>&#8217;s de-oinkification project, and imported it into hg. It feels really good to finally be able to do a make -j without disturbing people nearby with surprise explosions of foul language. I plan to move all relevant static analysis tools into piglet. After that I shall finally merge a dozen or so elsa repositories and end up with Pork consisting of elsa/ + piglet/.</p>
+
+<p><strong>Pork</strong>*</p>
+
+<p>Chris Jones is quietly working on making Pork magnitudes more useful to average developers. It&#8217;s exciting stuff and I&#8217;ll let him announce it when he&#8217;s ready. Between his work and <a href="http://vocamus.net/dave/">David Humphrey</a>&#8217;s DXR. I think we are finally going to make it easier to hack on Mozilla for a much wider audience than before.</p>
 </div>
   
   

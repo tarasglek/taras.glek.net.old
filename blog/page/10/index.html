@@ -386,78 +386,6 @@ This was a rare fix that resulted in seconds saved on crapware-loaded computers.
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2010/10/05/None/">Auto Draft</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-10-05T06:27:35-07:00" pubdate data-updated="true">Oct 5<span>th</span>, 2010</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>None</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2010/10/04/None/">Auto Draft</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-10-04T13:12:39-07:00" pubdate data-updated="true">Oct 4<span>th</span>, 2010</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>None</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
       <h1 class="entry-title"><a href="/blog/2010/10/04/diagnosing-slow-startup/">Diagnosing Slow Startup</a></h1>
     
     
@@ -585,6 +513,108 @@ Click on &#8220;IO Counts&#8221; or &#8220;Hard faults&#8221; graph, select &#82
 <p><strong>Other jar optimizations</strong></p>
 
 <p>Switching to jars via<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=520309"> startup cache</a> will allow us to further <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=562406">optimize</a> our first startup. There is option of halving our jar IO further by actually making use of that readahead integer I added to optimized jars.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/09/09/help-wanted-does-fcntlf_preallocate-work-as-advertised-on-osx/">Help Wanted: Does fcntl(F_PREALLOCATE) Work as Advertised on OSX?</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-09-09T07:06:11-07:00" pubdate data-updated="true">Sep 9<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>To fight fragmentation it is best to tell the OS to allocate a continuous chunk of space for your file. With specialized APIs, the OS can do this without performing any IO (not counting metadata). I am adding support for this as part of <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=592520">bug 592520</a>.  Linux features <a href="http://linux.die.net/man/3/posix_fallocate">posix_fadvise</a> for preallocating files. Windows&#8217;s <a href="http://msdn.microsoft.com/en-us/library/aa365531%28VS.85%29.aspx">SetEndOfFile</a> achieves the same result. <a href="http://lists.apple.com/archives/darwin-dev/2007/Dec/msg00040.html">Supposedly</a> OSX can do this via <a href="http://www.manpages.info/macosx/fcntl.2.html">fcntl</a>(F_PREALLOCATE), but does it?</p>
+
+<p>I&#8217;ve experimented with posix_fadvise/SetEndOfFile and determined that they both change the file size and do their best to avoid fragmentation. Unfortunately I do not see any effect of fcntl(F_PREALLOCATE) on OS X 10.6 (the return code is successful). The file size does not change and if I then write to the file, it seems to fragment just as much as before. Can a Mac expert demonstrate that fcntl(F_PREALLOCATE) makes any difference at all?</p>
+
+<p><strong>Update:</strong> Thanks a lot for the useful feedback, it was extremely helpful in producing this <a href="https://bug592520.bugzilla.mozilla.org/attachment.cgi?id=474233">patch</a>. It appears that the posix_fallocate equivalent is to the fnctl followed by a truncate() call (which actually forces data to be written to the file).</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/09/07/fighting-fragmentation-sqlite/">Fighting Fragmentation: SQLite</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-09-07T02:57:56-07:00" pubdate data-updated="true">Sep 7<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Thanks for all of those who commented on <a href="http://taras.glek.net/blog/2010/07/22/file-fragmentation/">previous post</a> on fragmentation. My first fragmentation <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=581606">fix</a> has landed. In current nightlies and future releases the main Firefox databases will grow more aggressively to avoid fragmentation. This should translate into better history/awesomebar/cookie performance for our most dedicated users.</p>
+
+<p>Unfortunately fixing existing profiles is <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=592678">hard</a> from within Firefox. In the meantime advanced users on non-Windows platforms who are suffering from fragmentation can manually copy *.sqlite files to another directory and back.</p>
+
+<p><strong>Windows: Ahead of the pack</strong></p>
+
+<p>Evidence suggests that the Windows fragmentation situation is slightly better than on other platforms. Firefox fragmentation behavior on Windows is similar to other OSes but Windows periodically defragments Firefox files opened on startup. So one ends up with a cycle of deteriorating performance, followed by better performance(ie right after defrag), followed by deteriorating performance, etc.</p>
+
+<p>I haven&#8217;t observed Windows defragmenting files for me, but it seems to do this for most users. Would love to learn more on how/when it decides to defragment files.</p>
+
+<p><strong>Horror Stories </strong></p>
+
+<p>I found a few other places that are horridly affected by fragmentation, will be blogging about those as I fix them. Fragmentation is an interesting problem to optimize because it affects dedicated users most, yet it is very tricky to replicate in a developer environment. Furthermore, there are a lot of misconceptions floating around:</p>
+
+<ol>
+<li>Fragmentation is a Windows problem that Linux is immune to due to having awesomer filesystems.</li>
+<li>Mac OSX automatically defragments files, so fragmentation isn&#8217;t a problem there.</li>
+<li>Fragmentation isn&#8217;t a problem on SSDs
+To which I say:</li>
+<li>Linux might be good at avoiding fragmentation for server workloads. It sucks for desktop users.</li>
+<li>OSX will defragment small files, but big ones hurt most.</li>
+<li>Cheap SSDs suck at tiny reads caused by fragmentation resulting in spectacularly bad IO. More on this in a future post.
+To summarize: there are a lot of misleading stories floating around. I am always happy to hear more measurements/docs/bugs/etc on this subject, but I have zero patience for folk stories and speculation.</li>
+</ol>
+
+
+<p>I should also mention that the fragmentation problem isn&#8217;t limited to Firefox. Other browsers suffer from it too.</p>
 </div>
   
   

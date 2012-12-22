@@ -4,7 +4,7 @@
   <title><![CDATA[Category: treehydra | All About Performance]]></title>
   <link href="http://taras.glek.net/blog/categories/treehydra/atom.xml" rel="self"/>
   <link href="http://taras.glek.net/"/>
-  <updated>2012-12-22T10:23:26-08:00</updated>
+  <updated>2012-12-22T11:15:17-08:00</updated>
   <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -18,21 +18,18 @@
     <link href="http://taras.glek.net/blog/2009/04/30/gcc-rant-progress/"/>
     <updated>2009-04-30T06:51:35-07:00</updated>
     <id>http://taras.glek.net/blog/2009/04/30/gcc-rant-progress</id>
-    <content type="html"><![CDATA[<p>I feel strange working on GCC-specific stuff and then discussing it on planet mozilla as mozilla work. However, without GCC, Dehydra and Treehydra would not be half as awesome (much less feasible even). The power of open source is that it allows us to leverage the entire open source ecosystem to achieve specific goals. When open source projects combine their efforts, not even the biggest software companies can compete as cross-project goals would be incredibly expensive and unpleasant otherwise.</p>
+    <content type="html"><![CDATA[I feel strange working on GCC-specific stuff and then discussing it on planet mozilla as mozilla work. However, without GCC, Dehydra and Treehydra would not be half as awesome (much less feasible even). The power of open source is that it allows us to leverage the entire open source ecosystem to achieve specific goals. When open source projects combine their efforts, not even the biggest software companies can compete as cross-project goals would be incredibly expensive and unpleasant otherwise.  
+  
+Occasionally, it is very frustrating to see people treat open source software as immutable and independent black boxes. In my personal experience, the browser and the compiler are viewed as finished products and therefore it is OK to bitch and complain about them. That's frustrating because the same users could be channeling that energy in a more positive way by reporting bugs, contributing code/documentation, etc.  
+  
+Sometimes these rants result in rather comical conclusions: Ingo's [rant](http://lwn.net/Articles/328685/) is priceless. My perspective on this: 
 
-<p>Occasionally, it is very frustrating to see people treat open source software as immutable and independent black boxes. In my personal experience, the browser and the compiler are viewed as finished products and therefore it is OK to bitch and complain about them. That's frustrating because the same users could be channeling that energy in a more positive way by reporting bugs, contributing code/documentation, etc.</p>
-
-<p>Sometimes these rants result in rather comical conclusions: Ingo's <a href="http://lwn.net/Articles/328685/">rant</a> is priceless. My perspective on this:</p>
-
-<ul>
-<li>what have Linux kernel devs done to help GCC help them?</li>
-<li><flame>Sparse is a deadend. Writing compiler code in C is silly, writing analysis code in C is sillier (and frustrating and limiting). Taking a crappy parser and bolting a crappy compiler backend onto it will result in bigger pile of crap :) Given how smart kernel devs are, they sure like wasting their time on crappy solutions in crappy languages.</flame></li>
-<li>Wouldn't it be cool if instead of complaining these talented people wrote a GCC plugin to do what they want?
-<strong>GCC Plugin Progress</strong></li>
-</ul>
-
-
-<p>I finally landed the massively boring and annoying <a href="http://hg.mozilla.org/users/tglek_mozilla.com/gcc-moz-plugin-mq/file/24bbb11d7346/gty.diff">GTY patch</a>. I can barely believe that the patch went in so smoothly without excess complaining from GCC devs. From GCC perspective it's merely a cosmetic cleanup that affects a large number of headers. For us it enables <a href="https://developer.mozilla.org/en/Treehydra">Treehydra</a> to be generated via <a href="https://developer.mozilla.org/En/Dehydra">Dehydra</a> with little manual effort. It basically makes Treehydra possible without patching GCC. I have another 3-4 patches that need to land before trunk GCC can run the hydras out of the box. Those are mainly localized bugfixes and cleanups so I fully expect them to go in and for GCC 4.5 to rock my world. Once GCC 4.5 ships. analyzing code will depend on a trivial matter of apt-getting(or equivalent) the hydras and specifying the analysis flags on the GCC commandline!</p>
+  * what have Linux kernel devs done to help GCC help them?
+  * <flame>Sparse is a deadend. Writing compiler code in C is silly, writing analysis code in C is sillier (and frustrating and limiting). Taking a crappy parser and bolting a crappy compiler backend onto it will result in bigger pile of crap :) Given how smart kernel devs are, they sure like wasting their time on crappy solutions in crappy languages.</flame>
+  * Wouldn't it be cool if instead of complaining these talented people wrote a GCC plugin to do what they want?
+**GCC Plugin Progress**  
+  
+I finally landed the massively boring and annoying [GTY patch](http://hg.mozilla.org/users/tglek_mozilla.com/gcc-moz-plugin-mq/file/24bbb11d7346/gty.diff). I can barely believe that the patch went in so smoothly without excess complaining from GCC devs. From GCC perspective it's merely a cosmetic cleanup that affects a large number of headers. For us it enables [Treehydra](https://developer.mozilla.org/en/Treehydra) to be generated via [Dehydra](https://developer.mozilla.org/En/Dehydra) with little manual effort. It basically makes Treehydra possible without patching GCC. I have another 3-4 patches that need to land before trunk GCC can run the hydras out of the box. Those are mainly localized bugfixes and cleanups so I fully expect them to go in and for GCC 4.5 to rock my world. Once GCC 4.5 ships. analyzing code will depend on a trivial matter of apt-getting(or equivalent) the hydras and specifying the analysis flags on the GCC commandline!
 ]]></content>
   </entry>
   
@@ -41,31 +38,31 @@
     <link href="http://taras.glek.net/blog/2008/06/24/status-report-nearterm-plans-for-pork-dehydra/"/>
     <updated>2008-06-24T06:36:19-07:00</updated>
     <id>http://taras.glek.net/blog/2008/06/24/status-report-nearterm-plans-for-pork-dehydra</id>
-    <content type="html"><![CDATA[<p><a href="http://developer.mozilla.org/en/docs/Pork"><strong>Pork</strong></a></p>
-
-<p>I planned to release Pork 1.0 for a while now. The tools work great, even if all the love is going to the GCC-based toolchain. However, after hearing grumpy comments from a certain coworker about the uglyness of the oink build system it dawned on me that it's rather mean to release such a mess and call it 1.0.</p>
-
-<p>So I think I'll release Pork 0.9 in the current state, so I can focus on near term GCC toolchain work. Pork in the current form means <a href="http://danielwilkerson.com/oink/">oink stack</a> + my refactoring tools + changes to elsa and other libs to support C/C++ refactoring needs.</p>
-
-<p>This will be followed up by Pork 1.0. 1.0 will involve changes to the build system to get rid of oink(we only use the oink build system and rarely use oink API). To put this another way: I don't expect any functionality changes between 0.9 and 1.0 other than an improved build system to make it easier to get started with writing new tools.</p>
-
-<p><strong>Pork - Future</strong></p>
-
-<p>I am pretty happy with Pork as it is. I think we've taken Elsa as far as it'll let us go. The only realistic improvement on the Pork side may be to have Dehydra generate a JS binding to Elsa's extensive AST to make rewriting stuff easier. However, I'm not sure if that's worth the effort nor that a C++ AST will reflect into JavaScript as well as GCC GIMPLE.</p>
-
-<p><em>Preprocessing</em></p>
-
-<p>On the other hand, something needs to be done about the main ingradient that makes Pork tick: MCPP. MCPP does a lovely job of annotating what the C preprocessor is doing, but configuring GCC to use a foreign preprocessor is a giant hassle and making sure it works correctly is troublesome. At the GCC summit, <a href="http://tromey.com/blog/">Tom</a> gave me an idea on how similar functionality can be added to GCC directly by extending the include backtrace with macro expansions. Not only would such integration simplify Pork setup and increase Pork's operating speed, but it is also a clean way to expose preprocessor constructs to the AST presented in De/Treehydra. It should allow for more preprocessor awareness directly in analysis stage of refactoring instead of only in the final rewriting stage as is currently done. As a side-effect, GCC would gain better error messages too.</p>
-
-<p>So while this isn't going to affect Pork directly, it will simplify the lives of Pork users while opening new analysis frontiers. Even though I hate working on preprocessor stuff, I think this work will need to happen sometime in the near future.</p>
-
-<p><a href="Dehydra">The Hydras</a></p>
-
-<p>Dehydra 0.9 has been out for a while, I planned to release 1.0 soon after unless there are major flaws discovered in the API. The situation changed at the GCC summit. The fact that FSF reversed their stance on GCC plugins means that we should be concentrating on getting the plugin stuff reviewed.</p>
-
-<p>So in the near term I'm forward porting the plugin stuff to trunk GCC, then I'll be generalize the plugin API to suit at least one other GCC plugin user that we met with at the summit. The downside is that I don't want to release Dehydra 1.0 and immediately break the plugin API. The upside is that the new API should be more general and more minimalistic and will likely be close to what will eventually become an official plugin API.</p>
-
-<p><em>Summary</em>: In my mind Dehydra and Pork are 1.0 quality, but I want to future-proof them a little bit before calling them 1.0.</p>
+    <content type="html"><![CDATA[[**Pork**](http://developer.mozilla.org/en/docs/Pork)  
+  
+I planned to release Pork 1.0 for a while now. The tools work great, even if all the love is going to the GCC-based toolchain. However, after hearing grumpy comments from a certain coworker about the uglyness of the oink build system it dawned on me that it's rather mean to release such a mess and call it 1.0.  
+  
+So I think I'll release Pork 0.9 in the current state, so I can focus on near term GCC toolchain work. Pork in the current form means [oink stack](http://danielwilkerson.com/oink/) + my refactoring tools + changes to elsa and other libs to support C/C++ refactoring needs.  
+  
+This will be followed up by Pork 1.0. 1.0 will involve changes to the build system to get rid of oink(we only use the oink build system and rarely use oink API). To put this another way: I don't expect any functionality changes between 0.9 and 1.0 other than an improved build system to make it easier to get started with writing new tools.  
+  
+**Pork - Future**  
+  
+I am pretty happy with Pork as it is. I think we've taken Elsa as far as it'll let us go. The only realistic improvement on the Pork side may be to have Dehydra generate a JS binding to Elsa's extensive AST to make rewriting stuff easier. However, I'm not sure if that's worth the effort nor that a C++ AST will reflect into JavaScript as well as GCC GIMPLE.  
+  
+_Preprocessing_  
+  
+On the other hand, something needs to be done about the main ingradient that makes Pork tick: MCPP. MCPP does a lovely job of annotating what the C preprocessor is doing, but configuring GCC to use a foreign preprocessor is a giant hassle and making sure it works correctly is troublesome. At the GCC summit, [Tom](http://tromey.com/blog/) gave me an idea on how similar functionality can be added to GCC directly by extending the include backtrace with macro expansions. Not only would such integration simplify Pork setup and increase Pork's operating speed, but it is also a clean way to expose preprocessor constructs to the AST presented in De/Treehydra. It should allow for more preprocessor awareness directly in analysis stage of refactoring instead of only in the final rewriting stage as is currently done. As a side-effect, GCC would gain better error messages too.  
+  
+So while this isn't going to affect Pork directly, it will simplify the lives of Pork users while opening new analysis frontiers. Even though I hate working on preprocessor stuff, I think this work will need to happen sometime in the near future.  
+  
+[The Hydras](Dehydra)  
+  
+Dehydra 0.9 has been out for a while, I planned to release 1.0 soon after unless there are major flaws discovered in the API. The situation changed at the GCC summit. The fact that FSF reversed their stance on GCC plugins means that we should be concentrating on getting the plugin stuff reviewed.  
+  
+So in the near term I'm forward porting the plugin stuff to trunk GCC, then I'll be generalize the plugin API to suit at least one other GCC plugin user that we met with at the summit. The downside is that I don't want to release Dehydra 1.0 and immediately break the plugin API. The upside is that the new API should be more general and more minimalistic and will likely be close to what will eventually become an official plugin API.  
+  
+_Summary_: In my mind Dehydra and Pork are 1.0 quality, but I want to future-proof them a little bit before calling them 1.0.
 ]]></content>
   </entry>
   
@@ -74,11 +71,11 @@
     <link href="http://taras.glek.net/blog/2008/06/18/gcc-summit/"/>
     <updated>2008-06-18T23:01:08-07:00</updated>
     <id>http://taras.glek.net/blog/2008/06/18/gcc-summit</id>
-    <content type="html"><![CDATA[<p>Our presentation on <a href="http://developer.mozilla.org/en/docs/Treehydra">Treehydra</a> and <a href="http://developer.mozilla.org/en/docs/Dehydra">Dehydra</a> GCC plugins was received well at the summit.</p>
-
-<p>The big news is that FSF is working on license changes to allow GPL-only GCC plugins. I'm looking forward to having our work be compatible with future GCC without any patching.</p>
-
-<p>In a few minutes we'll be having a meeting with users of other plugin frameworks to have an initial discussion on a common API. I'm working on forward porting my patches, so they can start getting reviewed ahead of license changes.</p>
+    <content type="html"><![CDATA[Our presentation on [Treehydra](http://developer.mozilla.org/en/docs/Treehydra) and [Dehydra](http://developer.mozilla.org/en/docs/Dehydra) GCC plugins was received well at the summit.  
+  
+The big news is that FSF is working on license changes to allow GPL-only GCC plugins. I'm looking forward to having our work be compatible with future GCC without any patching.  
+  
+In a few minutes we'll be having a meeting with users of other plugin frameworks to have an initial discussion on a common API. I'm working on forward porting my patches, so they can start getting reviewed ahead of license changes.
 ]]></content>
   </entry>
   
@@ -87,13 +84,13 @@
     <link href="http://taras.glek.net/blog/2008/06/09/dehydra-09-its-alive/"/>
     <updated>2008-06-09T04:14:05-07:00</updated>
     <id>http://taras.glek.net/blog/2008/06/09/dehydra-09-its-alive</id>
-    <content type="html"><![CDATA[<p>I am finally happy enough with Dehydra API and functionality to release 0.9. <a href="http://developer.mozilla.org/en/docs/Dehydra">Dehydra</a> is basically feature complete, the main reason I'm not calling it 1.0 is in case there are outstanding API bugs.</p>
-
-<p>I believe Dehydra is the first useful open source static analysis tool. I hope to see projects outside of Mozilla benefitting from it too.</p>
-
-<p>I would love to see someone package this up for various Linux distributions. You can grab there release <a href="http://ftp.mozilla.org/pub/mozilla.org/dehydra/dehydra-0.9.tar.gz">here</a>.</p>
-
-<p>Note, this release also features as a preview release of <a href="http://developer.mozilla.org/en/docs/Treehydra">Treehydra</a>. Most of the development lately has been focused on improving Treehydra and building analyses on top of it.</p>
+    <content type="html"><![CDATA[I am finally happy enough with Dehydra API and functionality to release 0.9. [Dehydra](http://developer.mozilla.org/en/docs/Dehydra) is basically feature complete, the main reason I'm not calling it 1.0 is in case there are outstanding API bugs.  
+  
+I believe Dehydra is the first useful open source static analysis tool. I hope to see projects outside of Mozilla benefitting from it too.  
+  
+I would love to see someone package this up for various Linux distributions. You can grab there release [here](http://ftp.mozilla.org/pub/mozilla.org/dehydra/dehydra-0.9.tar.gz).  
+  
+Note, this release also features as a preview release of [Treehydra](http://developer.mozilla.org/en/docs/Treehydra). Most of the development lately has been focused on improving Treehydra and building analyses on top of it.
 ]]></content>
   </entry>
   
@@ -102,19 +99,19 @@
     <link href="http://taras.glek.net/blog/2008/05/27/treehydra-goes-push-and-pop/"/>
     <updated>2008-05-27T06:48:03-07:00</updated>
     <id>http://taras.glek.net/blog/2008/05/27/treehydra-goes-push-and-pop</id>
-    <content type="html"><![CDATA[<p>After writing a ton of <a href="http://developer.mozilla.org/en/docs/Dehydra_Manual">docs</a> and working through other <a href="http://developer.mozilla.org/en/docs/Dehydra">Dehydra</a> <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=423898">0.9 blockers</a>, I decided to cool off by doing some actual analyses. Before I get to that, I'd like to say that the last big task is to setup a buildbot for Dehydra on Linux/OSX. Thanks to yet another awesome contribution from Vlad, that's <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=430321">mostly done</a>.</p>
-
-<p>So I got working on <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=421934">GC-safety static analysis</a>. Originally we tried to define a complete spec before writing a single line of code. That turned to be a bad idea and resulted in a spec full of bugs. <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=432915">This time</a> we are defining the analysis incrementally and as a surprise reward, it already caught <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=435546">a bug</a>.</p>
-
-<p><strong>Pushing and Popping Our Way</strong></p>
-
-<p>SpiderMonkey has a lot of complex code doing applying Push/Pop-like operations on variables in a function-local manner. Examples of functions that this analysis would look at are: JS_PUSH_TEMP_ROOT/JS_POP_TEMP_ROOT and JS_LOCK/JS_UNLOCK. See <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=432915">bug</a> for more. Essentially, this will help with "code must flow through here" comments on "out:" goto labels that inhabit the SpiderMonkey source.</p>
-
-<p>This is an example of control-flow-sensitive analysis. It impossible without a compiler-like view of the code that <a href="http://developer.mozilla.org/en/docs/Treehydra">Treehydra</a> provides. It also helps to have a scalable algorithm to iterate the CFG. Luckily, David Mandelin wrote such a beast by implementing <a href="http://www.cs.cornell.edu/courses/cs711/2005fa/papers/dls-pldi02.pdf">ESP</a> for his <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=420933">outparam analysis</a>. David factored-out the ESP analysis and made it available for reuse. See esp_lock.js in the <a href="http://hg.mozilla.org/users/tglek_mozilla.com/dehydra-gcc/index.cgi/file/8f6914b2aaf9/test/">test suite</a> for an example of how to write control-flow sensitive analyses. locks_valid<em>.cc and locks_bad</em>.cc illustrate the code patterns that can be scanned for.</p>
-
-<p>So if you know of any further push/pop patterns in the rest of Moz that can be checked in this manner, leave a comment.</p>
-
-<p>PS. This is yet another account of Treehydra rocking the static analysis world. Exposing the slightly scary, but awesome GCC gutts via JavaScript allows one to perform precise static analyses in a civilized manner. What could be more fun?</p>
+    <content type="html"><![CDATA[After writing a ton of [docs](http://developer.mozilla.org/en/docs/Dehydra_Manual) and working through other [Dehydra](http://developer.mozilla.org/en/docs/Dehydra) [0.9 blockers](https://bugzilla.mozilla.org/show_bug.cgi?id=423898), I decided to cool off by doing some actual analyses. Before I get to that, I'd like to say that the last big task is to setup a buildbot for Dehydra on Linux/OSX. Thanks to yet another awesome contribution from Vlad, that's [mostly done](https://bugzilla.mozilla.org/show_bug.cgi?id=430321).  
+  
+So I got working on [GC-safety static analysis](https://bugzilla.mozilla.org/show_bug.cgi?id=421934). Originally we tried to define a complete spec before writing a single line of code. That turned to be a bad idea and resulted in a spec full of bugs. [This time](https://bugzilla.mozilla.org/show_bug.cgi?id=432915) we are defining the analysis incrementally and as a surprise reward, it already caught [a bug](https://bugzilla.mozilla.org/show_bug.cgi?id=435546).  
+  
+**Pushing and Popping Our Way**  
+  
+SpiderMonkey has a lot of complex code doing applying Push/Pop-like operations on variables in a function-local manner. Examples of functions that this analysis would look at are: JS_PUSH_TEMP_ROOT/JS_POP_TEMP_ROOT and JS_LOCK/JS_UNLOCK. See [bug](https://bugzilla.mozilla.org/show_bug.cgi?id=432915) for more. Essentially, this will help with "code must flow through here" comments on "out:" goto labels that inhabit the SpiderMonkey source.  
+  
+This is an example of control-flow-sensitive analysis. It impossible without a compiler-like view of the code that [Treehydra](http://developer.mozilla.org/en/docs/Treehydra) provides. It also helps to have a scalable algorithm to iterate the CFG. Luckily, David Mandelin wrote such a beast by implementing [ESP](http://www.cs.cornell.edu/courses/cs711/2005fa/papers/dls-pldi02.pdf) for his [outparam analysis](https://bugzilla.mozilla.org/show_bug.cgi?id=420933). David factored-out the ESP analysis and made it available for reuse. See esp_lock.js in the [test suite](http://hg.mozilla.org/users/tglek_mozilla.com/dehydra-gcc/index.cgi/file/8f6914b2aaf9/test/) for an example of how to write control-flow sensitive analyses. locks_valid*.cc and locks_bad*.cc illustrate the code patterns that can be scanned for.  
+  
+So if you know of any further push/pop patterns in the rest of Moz that can be checked in this manner, leave a comment.  
+  
+PS. This is yet another account of Treehydra rocking the static analysis world. Exposing the slightly scary, but awesome GCC gutts via JavaScript allows one to perform precise static analyses in a civilized manner. What could be more fun?
 ]]></content>
   </entry>
   

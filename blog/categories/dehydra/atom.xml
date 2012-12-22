@@ -4,7 +4,7 @@
   <title><![CDATA[Category: dehydra | All About Performance]]></title>
   <link href="http://taras.glek.net/blog/categories/dehydra/atom.xml" rel="self"/>
   <link href="http://taras.glek.net/"/>
-  <updated>2012-12-22T10:23:26-08:00</updated>
+  <updated>2012-12-22T11:15:17-08:00</updated>
   <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -18,41 +18,38 @@
     <link href="http://taras.glek.net/blog/2011/06/30/dehyratreehydra-static-analysis-thoughts/"/>
     <updated>2011-06-30T05:07:20-07:00</updated>
     <id>http://taras.glek.net/blog/2011/06/30/dehyratreehydra-static-analysis-thoughts</id>
-    <content type="html"><![CDATA[<p>I was pleased to see Mozilla static analysis <a href="http://lwn.net/Articles/447916/">mentioned</a> on lwn. Yes indeed, the <a href="https://lists.mozilla.org/listinfo/dev-static-analysis">mailing list</a> has been pretty dead (most of our communication happens on irc.mozilla.org #static). I completely failed to build a community around my static analysis tools. Perhaps more people will try <a href="https://developer.mozilla.org/en/Dehydra">Dehydra</a> now that it's <a href="http://packages.debian.org/experimental/dehydra">getting</a> into Debian. The hydras are still alive, <a href="http://hg.mozilla.org/rewriting-and-analysis/dehydra/">evidence</a> can be seen in the mercurial commit log. Development has slowed because the hydras are now considered to be feature-complete and my primary focus is elsewhere in Mozilla now.</p>
+    <content type="html"><![CDATA[I was pleased to see Mozilla static analysis [mentioned](http://lwn.net/Articles/447916/) on lwn. Yes indeed, the [mailing list](https://lists.mozilla.org/listinfo/dev-static-analysis) has been pretty dead (most of our communication happens on irc.mozilla.org #static). I completely failed to build a community around my static analysis tools. Perhaps more people will try [Dehydra](https://developer.mozilla.org/en/Dehydra) now that it's [getting](http://packages.debian.org/experimental/dehydra) into Debian. The hydras are still alive, [evidence](http://hg.mozilla.org/rewriting-and-analysis/dehydra/) can be seen in the mercurial commit log. Development has slowed because the hydras are now considered to be feature-complete and my primary focus is elsewhere in Mozilla now.  
+  
+As to why open source static analysis has failed to take off, I have a few theories. I think the main problem is that static analysis requires a compiler/correctness/type-system-nerd/large-scale-development-nerd type personality. That's a pretty rare intersection of hobbies to begin with. One also has to hate the [stone age](http://people.mozilla.com/~tglek/lca2010/) that C/C++ ecosystem we are in, but not move on to shiny new Haskell/Ocaml/whatever communities.  
+  
+**Have I failed at igniting the static analysis revolution?**
 
-<p>As to why open source static analysis has failed to take off, I have a few theories. I think the main problem is that static analysis requires a compiler/correctness/type-system-nerd/large-scale-development-nerd type personality. That's a pretty rare intersection of hobbies to begin with. One also has to hate the <a href="http://people.mozilla.com/~tglek/lca2010/">stone age</a> that C/C++ ecosystem we are in, but not move on to shiny new Haskell/Ocaml/whatever communities.</p>
-
-<p><strong>Have I failed at igniting the static analysis revolution?</strong></p>
-
-<ol>
-<li>My goal primary goal was: provide a way to analyze Mozilla source code to speed up our development + refactoring efforts.</li>
-<li>My secondary goal was to make sure that whatever work I do, nobody else has to suffer through the unbelievably sucky infrastructure cruft I had to work through.</li>
-<li>Lastly, I did put in some effort at promoting open source static analysis (by giving talks at conferences, etc) since working in an active community is more fun.
-<em>Mozilla side</em>:</li>
-</ol>
-
-
-<p>I'm happy to report that I achieved a culture shift at Mozilla. Instead of people saying "oh god, I can't find all instances of ___ issue in 3million lines of C++ code", it's pretty common to hear "lets solve this through static analysis". Dehydra was designed to take the bitchwork (boilerplate of compiler integration, etc) out of static analysis so one can focus on the analysis part. New Dehydra users within Mozilla seem to confirm that. Instead of pondering whether certain tool-assisted refactorings are feasible, we plan to embark on some now (turned out we were understaffed to keep up with tool output and overburdened by api compatibility before; more on this in a future blog post).</p>
-
-<p><em>No More Static Analysis Bitchwork:</em></p>
-
-<p>The worst aspect of dealing with C++ is parsing it. The second worst aspect is dealing with the preprocessor. With respect to parsing C++ we went from weirdo-custom-frontends(ie Elsa, EDG, etc) and "GCC will never allow plugins, don't waste your time" to GCC adopting a plugin architecture that suited my static analysis needs. I also implemented source-location transformation tracking(-K) in <a href="http://mcpp.sourceforge.net/">mcpp</a>, so nobody has to suffer through undoing braindamage inflicted by the C proprocessor again. I hear at least a couple of people benefited from MCPP work and I take partial credit for every new analysis GCC plugin. I suspect I saved a few person-months for somebody :)</p>
-
-<p>Btw, I think Chris Lattner's from-scratch effort on <a href="http://clang.llvm.org/">Clang</a> is way awesomer than anything I could ever accomplish.</p>
-
-<p><em>Conferences &amp; Stuff:</em></p>
-
-<p>I admit complete and utter failure in this regard. Most open source people have low regard for static analysis. Linus seems to take a million-monkeys-with-type-writers approach (ala the open source eyeballs approach to security) to ensuring kernel code quality (which is a reasonable approach when you have mobs of contributors). Most other projects do not have the resources to spare on unproven tech such as static analysis.</p>
-
-<p>To make matters worse, at first people thought JavaScript was a toy language worth only cut'n'pasting from recipes online. Then just as JavaScript was getting more popular, SpiderMonkey embedding got buggier and made for some unpleasant first experiences with the Hydras.</p>
-
-<p><strong>Conclusion</strong></p>
-
-<p>There isn't much to show for my work outside of Mozilla; that's fine since my primary goal was Mozilla :) The Hydras aren't dead, they are in maintenance mode.</p>
-
-<p>I'm glad to see <a href="http://lwn.net/Articles/448698/">python-as-gcc-plugin </a>approach, it seems to fill the same niche as <a href="https://developer.mozilla.org/en/Treehydra">Treehydra</a>. I regret not starting out with Python (I think it's slightly better than JavaScript for this task), I hope David Malcolm succeeds in attracting wider interest.</p>
-
-<p>PS. I'm super-excited about the new <a href="http://quetzalcoatal.blogspot.com/2011/06/alpha-release-of-dxr.html">DXR work</a>. <a href="http://dxr.mozilla.org/">DXR</a> is something that makes my daily life easier. DXR is by far the smartest code-indexing system out there, it's bound to transform my life as a developer far more than any static analysis ever could :)</p>
+  1. My goal primary goal was: provide a way to analyze Mozilla source code to speed up our development + refactoring efforts.
+  2. My secondary goal was to make sure that whatever work I do, nobody else has to suffer through the unbelievably sucky infrastructure cruft I had to work through.
+  3. Lastly, I did put in some effort at promoting open source static analysis (by giving talks at conferences, etc) since working in an active community is more fun.
+_Mozilla side_:  
+  
+I'm happy to report that I achieved a culture shift at Mozilla. Instead of people saying "oh god, I can't find all instances of ___ issue in 3million lines of C++ code", it's pretty common to hear "lets solve this through static analysis". Dehydra was designed to take the bitchwork (boilerplate of compiler integration, etc) out of static analysis so one can focus on the analysis part. New Dehydra users within Mozilla seem to confirm that. Instead of pondering whether certain tool-assisted refactorings are feasible, we plan to embark on some now (turned out we were understaffed to keep up with tool output and overburdened by api compatibility before; more on this in a future blog post).  
+  
+_No More Static Analysis Bitchwork:_  
+  
+The worst aspect of dealing with C++ is parsing it. The second worst aspect is dealing with the preprocessor. With respect to parsing C++ we went from weirdo-custom-frontends(ie Elsa, EDG, etc) and "GCC will never allow plugins, don't waste your time" to GCC adopting a plugin architecture that suited my static analysis needs. I also implemented source-location transformation tracking(-K) in [mcpp](http://mcpp.sourceforge.net/), so nobody has to suffer through undoing braindamage inflicted by the C proprocessor again. I hear at least a couple of people benefited from MCPP work and I take partial credit for every new analysis GCC plugin. I suspect I saved a few person-months for somebody :)  
+  
+Btw, I think Chris Lattner's from-scratch effort on [Clang](http://clang.llvm.org/) is way awesomer than anything I could ever accomplish.  
+  
+_Conferences & Stuff:_  
+  
+I admit complete and utter failure in this regard. Most open source people have low regard for static analysis. Linus seems to take a million-monkeys-with-type-writers approach (ala the open source eyeballs approach to security) to ensuring kernel code quality (which is a reasonable approach when you have mobs of contributors). Most other projects do not have the resources to spare on unproven tech such as static analysis.  
+  
+To make matters worse, at first people thought JavaScript was a toy language worth only cut'n'pasting from recipes online. Then just as JavaScript was getting more popular, SpiderMonkey embedding got buggier and made for some unpleasant first experiences with the Hydras.  
+  
+**Conclusion**  
+  
+There isn't much to show for my work outside of Mozilla; that's fine since my primary goal was Mozilla :) The Hydras aren't dead, they are in maintenance mode.  
+  
+I'm glad to see [python-as-gcc-plugin ](http://lwn.net/Articles/448698/)approach, it seems to fill the same niche as [Treehydra](https://developer.mozilla.org/en/Treehydra). I regret not starting out with Python (I think it's slightly better than JavaScript for this task), I hope David Malcolm succeeds in attracting wider interest.  
+  
+PS. I'm super-excited about the new [DXR work](http://quetzalcoatal.blogspot.com/2011/06/alpha-release-of-dxr.html). [DXR](http://dxr.mozilla.org/) is something that makes my daily life easier. DXR is by far the smartest code-indexing system out there, it's bound to transform my life as a developer far more than any static analysis ever could :)
 ]]></content>
   </entry>
   
@@ -61,17 +58,17 @@
     <link href="http://taras.glek.net/blog/2010/06/09/galois-talk/"/>
     <updated>2010-06-09T03:08:44-07:00</updated>
     <id>http://taras.glek.net/blog/2010/06/09/galois-talk</id>
-    <content type="html"><![CDATA[<p>I was invited to present a <a href="http://www.galois.com/blog/2010/06/03/tech-talk-large-scale-static-analysis-at-mozilla/">Galois tech talk</a> on Mozilla static analysis. It was really cool to give a talk locally to such an expert audience. I was surprised to discover a vibrant Programming Languages + Analysis community in Portland.</p>
-
-<p>Edward Z. Yang did an <a href="http://blog.ezyang.com/2010/06/static-analysis-mozilla/">excellent write-up</a> on the talk.</p>
-
-<p><strong>PLDi</strong></p>
-
-<p>Robert O'Callahan mentioned Dehydra in his <a href="http://weblogs.mozillazine.org/roc/archives/2010/06/sleepless_in_to.html">PLDI talk</a>.</p>
-
-<p><strong>Dehydra/Treehydra in GCC 4.5</strong></p>
-
-<p>There a few fixes that are about to land. I'm hoping that by the end of the week GCC 4.5 support will be production-quality. Sorry that it's taken so long, but I've been busy focusing on startup. <a href="http://ehren.wordpress.com/">Ehren</a> has picked up the slack, we should be able to produce a fairly polished Dehydra 1.0 by the end of the summer.</p>
+    <content type="html"><![CDATA[I was invited to present a [Galois tech talk](http://www.galois.com/blog/2010/06/03/tech-talk-large-scale-static-analysis-at-mozilla/) on Mozilla static analysis. It was really cool to give a talk locally to such an expert audience. I was surprised to discover a vibrant Programming Languages + Analysis community in Portland.  
+  
+Edward Z. Yang did an [excellent write-up](http://blog.ezyang.com/2010/06/static-analysis-mozilla/) on the talk.  
+  
+**PLDi**  
+  
+Robert O'Callahan mentioned Dehydra in his [PLDI talk](http://weblogs.mozillazine.org/roc/archives/2010/06/sleepless_in_to.html).  
+  
+**Dehydra/Treehydra in GCC 4.5**  
+  
+There a few fixes that are about to land. I'm hoping that by the end of the week GCC 4.5 support will be production-quality. Sorry that it's taken so long, but I've been busy focusing on startup. [Ehren](http://ehren.wordpress.com/) has picked up the slack, we should be able to produce a fairly polished Dehydra 1.0 by the end of the summer.
 ]]></content>
   </entry>
   
@@ -80,13 +77,13 @@
     <link href="http://taras.glek.net/blog/2010/01/04/some-developers-manually-grope-around-in-the-dark/"/>
     <updated>2010-01-04T12:27:03-08:00</updated>
     <id>http://taras.glek.net/blog/2010/01/04/some-developers-manually-grope-around-in-the-dark</id>
-    <content type="html"><![CDATA[<p>Cool thing about static analysis is that you can ask painful-for-humans questions about your codebase AND have them answered. Here are two that got answered by Ehren:</p>
-
-<p>Where do function bodies continue after return statements (ie obviously dead/broken code)? <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=535646">Bug 535646</a>.</p>
-
-<p>How many functions in Mozilla could/should be marked static? <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=536427">Bug 536427</a>.</p>
-
-<p>Awesome!</p>
+    <content type="html"><![CDATA[Cool thing about static analysis is that you can ask painful-for-humans questions about your codebase AND have them answered. Here are two that got answered by Ehren:  
+  
+Where do function bodies continue after return statements (ie obviously dead/broken code)? [Bug 535646](https://bugzilla.mozilla.org/show_bug.cgi?id=535646).  
+  
+How many functions in Mozilla could/should be marked static? [Bug 536427](https://bugzilla.mozilla.org/show_bug.cgi?id=536427).  
+  
+Awesome!
 ]]></content>
   </entry>
   
@@ -95,13 +92,13 @@
     <link href="http://taras.glek.net/blog/2009/11/20/dehydra-testsuite-passes-on-gcc-4-5/"/>
     <updated>2009-11-20T08:24:04-08:00</updated>
     <id>http://taras.glek.net/blog/2009/11/20/dehydra-testsuite-passes-on-gcc-4-5</id>
-    <content type="html"><![CDATA[<p>I spent couple of days fixing the remaining test-suite failures on GCC 4.5 trunk for <a href="https://developer.mozilla.org/En/Dehydra">Dehydra</a>. Since the last time I looked into this, GCC went from crashing all over the place to only crashing if I did something bad. It was nice to discover that as a result of switching to 4.5 Dehydra users will get saner .isExplicit behavior and more precise location info.</p>
-
-<p>Treehydra will take more work due to me <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=510190">misunderstanding</a> GTY annotations.</p>
-
-<p>By the way, I am really grateful for all of the people who contributed GCC 4.5 fixes so far. You guys have been a big help in getting Dehydra testsuite to 100% on 4.5. Looks like I will meet my goals to finish De+Treehydra by the end of the year in time for GCC 4.5 release and my "Introducing Dehydra to the Developer World"-type talk at <a href="http://www.lca2010.org.nz/programme/schedule/view_talk/50151?day=thursday">LinuxConf.au.nz 2010</a>.</p>
-
-<p><strong>Startup</strong> I reduced my focus on startup speed at the moment to catch up on Dehydra. I plan to work on reducing xpconnect overhead during startup next, ie more of <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=512584">this bug</a>.</p>
+    <content type="html"><![CDATA[I spent couple of days fixing the remaining test-suite failures on GCC 4.5 trunk for [Dehydra](https://developer.mozilla.org/En/Dehydra). Since the last time I looked into this, GCC went from crashing all over the place to only crashing if I did something bad. It was nice to discover that as a result of switching to 4.5 Dehydra users will get saner .isExplicit behavior and more precise location info.  
+  
+Treehydra will take more work due to me [misunderstanding](https://bugzilla.mozilla.org/show_bug.cgi?id=510190) GTY annotations.  
+  
+By the way, I am really grateful for all of the people who contributed GCC 4.5 fixes so far. You guys have been a big help in getting Dehydra testsuite to 100% on 4.5. Looks like I will meet my goals to finish De+Treehydra by the end of the year in time for GCC 4.5 release and my "Introducing Dehydra to the Developer World"-type talk at [LinuxConf.au.nz 2010](http://www.lca2010.org.nz/programme/schedule/view_talk/50151?day=thursday).  
+  
+**Startup** I reduced my focus on startup speed at the moment to catch up on Dehydra. I plan to work on reducing xpconnect overhead during startup next, ie more of [this bug](https://bugzilla.mozilla.org/show_bug.cgi?id=512584).
 ]]></content>
   </entry>
   
@@ -110,25 +107,27 @@
     <link href="http://taras.glek.net/blog/2009/11/06/fsoss-dehydra-update/"/>
     <updated>2009-11-06T09:27:53-08:00</updated>
     <id>http://taras.glek.net/blog/2009/11/06/fsoss-dehydra-update</id>
-    <content type="html"><![CDATA[<p>Last week I was in Canada to present at <a href="http://fsoss.senecac.on.ca/2009/">FSOSS</a> with <a href="http://vocamus.net/dave/">David Humphrey</a> on awesome Mozilla Tools: Dehydra, DXR, Pork, etc. I think we managed to convey the message regarding what a sad affair that current developer development tools are.</p>
-
-<p><strong>General-Purpose Dehydra Scripts</strong></p>
-
-<p>Dehydra grew out of Mozilla's constant need to figure out what is going on in the source code. As a result most of our scripts are very Mozilla API-specific. This makes harder for people outside of Mozilla to learn Dehydra. There is no library of Dehydra code that one can just plugin to start analyzing their codebase. Instead one has to sit down, figure out what Dehydra is capable of and then see if any of the problems facing the developer can be solved this way. If anyone wants to contribute such a library, let me know.</p>
-
-<p>In the meantime, more general-purpose analyses are surfacing.</p>
-
-<p><strong>Shadowed Members</strong></p>
-
-<p>My favourite script so far is the member-shadowing checker. I ran into a member-shadowing warning that is unique to Sun's C++ compiler. It was triggered by some code that I just landed on the tree. I fixed the warning, but within a few days a coworker ran into a bug caused by that member shadowing(due to having an unlucky revision of the code). The following example shows how simple it was to implement the warning in GCC/Dehydra.</p>
-
-<p>See <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=522776">bug 522776</a> for the complete story on adding the member shadowing check to Mozilla.</p>
-
-<p><strong>Printf</strong> Another general purpose analysis was done outside of Mozilla by Philip Taylor for <a href="http://os.wildfiregames.com/">his game</a>. His <a href="http://svn.wildfiregames.com/public/ps/trunk/build/dehydra/printf-type-check.js">script</a> checks wide printf format strings (which are overlooked by gcc). Independently, Benjamin wrote a printf checker for Mozilla printf-like code, see <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=493996">bug 493996</a>.</p>
-
-<p><strong>Custom Sections in Object Files</strong> We have long speculated about how nice it would be if Dehydra could emit info into object files that could then be yanked out of the resulting binary (by say, valgrind). <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=523435">bug 523435</a> will soon make that a reality.</p>
-
-<p><strong>Update:</strong> <a href="http://www.flickr.com/photos/mhoye/4058902208/in/photostream/">Two</a> <a href="http://www.flickr.com/photos/mhoye/4058902456/sizes/l/in/photostream/">photos</a> from FSOSS.</p>
+    <content type="html"><![CDATA[Last week I was in Canada to present at [FSOSS](http://fsoss.senecac.on.ca/2009/) with [David Humphrey](http://vocamus.net/dave/) on awesome Mozilla Tools: Dehydra, DXR, Pork, etc. I think we managed to convey the message regarding what a sad affair that current developer development tools are.  
+  
+**General-Purpose Dehydra Scripts**  
+  
+Dehydra grew out of Mozilla's constant need to figure out what is going on in the source code. As a result most of our scripts are very Mozilla API-specific. This makes harder for people outside of Mozilla to learn Dehydra. There is no library of Dehydra code that one can just plugin to start analyzing their codebase. Instead one has to sit down, figure out what Dehydra is capable of and then see if any of the problems facing the developer can be solved this way. If anyone wants to contribute such a library, let me know.  
+  
+In the meantime, more general-purpose analyses are surfacing.  
+  
+**Shadowed Members**  
+  
+My favourite script so far is the member-shadowing checker. I ran into a member-shadowing warning that is unique to Sun's C++ compiler. It was triggered by some code that I just landed on the tree. I fixed the warning, but within a few days a coworker ran into a bug caused by that member shadowing(due to having an unlucky revision of the code). The following example shows how simple it was to implement the warning in GCC/Dehydra.  
+  
+  
+  
+See [bug 522776](https://bugzilla.mozilla.org/show_bug.cgi?id=522776) for the complete story on adding the member shadowing check to Mozilla.  
+  
+**Printf** Another general purpose analysis was done outside of Mozilla by Philip Taylor for [his game](http://os.wildfiregames.com/). His [script](http://svn.wildfiregames.com/public/ps/trunk/build/dehydra/printf-type-check.js) checks wide printf format strings (which are overlooked by gcc). Independently, Benjamin wrote a printf checker for Mozilla printf-like code, see [bug 493996](https://bugzilla.mozilla.org/show_bug.cgi?id=493996).  
+  
+**Custom Sections in Object Files** We have long speculated about how nice it would be if Dehydra could emit info into object files that could then be yanked out of the resulting binary (by say, valgrind). [bug 523435](https://bugzilla.mozilla.org/show_bug.cgi?id=523435) will soon make that a reality.  
+  
+**Update:** [Two](http://www.flickr.com/photos/mhoye/4058902208/in/photostream/) [photos](http://www.flickr.com/photos/mhoye/4058902456/sizes/l/in/photostream/) from FSOSS.
 ]]></content>
   </entry>
   

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: thrower | All About Performance]]></title>
   <link href="http://taras.glek.net/blog/categories/thrower/atom.xml" rel="self"/>
   <link href="http://taras.glek.net/"/>
-  <updated>2012-12-22T10:23:26-08:00</updated>
+  <updated>2012-12-22T11:15:17-08:00</updated>
   <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -18,37 +18,34 @@
     <link href="http://taras.glek.net/blog/2007/12/19/exceptions/"/>
     <updated>2007-12-19T07:26:30-08:00</updated>
     <id>http://taras.glek.net/blog/2007/12/19/exceptions</id>
-    <content type="html"><![CDATA[<p>Often there are two ways to write code. One way is to design an API and have code patterns adhere to how the API is supposed to be used. Another way is to rely on language features to accomplish the same thing. Typically API-pattern approaches are chosen because compilers are too immature or just don't provide the necessary features. Sometimes compilers do catch up and the possibility of utilizing newer language features appears.</p>
+    <content type="html"><![CDATA[Often there are two ways to write code. One way is to design an API and have code patterns adhere to how the API is supposed to be used. Another way is to rely on language features to accomplish the same thing. Typically API-pattern approaches are chosen because compilers are too immature or just don't provide the necessary features. Sometimes compilers do catch up and the possibility of utilizing newer language features appears.  
+  
+In the case of the exception rewrite the task is to rewrite code from a pattern-based (compiler in your head) approach to a more strict C++ construct-based exception paradigm. Unfortunately APIs don't enforce their usage as much as a compiler (in part because we don't have [app-spefic compiler plugins](http://taras.glek.net/blog/2007/11/29/gcc-plugins-under-my-xmas-tree/)) so transforming that into a strict compiler-friendly form automatically isn't always realistic ([example](http://lxr.mozilla.org/seamonkey/source/xpcom/glue/nsIInterfaceRequestorUtils.cpp#43)). See my previous post for more examples.  
+  
+Having done more work on the exception conversion I believe that it is possible to switch Mozilla to exceptions to the point of getting it to compile. Unfortunately, I don't think that it's possible to do this in the Mozilla2 timeframe due to the large amount of manual labour required.  
+  
+Due to various use cases that don't fit the exception model there is a need for an nsresult-lint tool to detect funny (see above) nsresult patterns so code can be manually fixed to enable thrower to transform code correctly.  
+  
+I expect conversion to exceptions to consist of the following large steps:  
+  
+XPCOMGC -> nsresult-lint -> thrower automatic conversion -> nsexception-lint -> outparamdel 
 
-<p>In the case of the exception rewrite the task is to rewrite code from a pattern-based (compiler in your head) approach to a more strict C++ construct-based exception paradigm. Unfortunately APIs don't enforce their usage as much as a compiler (in part because we don't have <a href="http://taras.glek.net/blog/2007/11/29/gcc-plugins-under-my-xmas-tree/">app-spefic compiler plugins</a>) so transforming that into a strict compiler-friendly form automatically isn't always realistic (<a href="http://lxr.mozilla.org/seamonkey/source/xpcom/glue/nsIInterfaceRequestorUtils.cpp#43">example</a>). See my previous post for more examples.</p>
-
-<p>Having done more work on the exception conversion I believe that it is possible to switch Mozilla to exceptions to the point of getting it to compile. Unfortunately, I don't think that it's possible to do this in the Mozilla2 timeframe due to the large amount of manual labour required.</p>
-
-<p>Due to various use cases that don't fit the exception model there is a need for an nsresult-lint tool to detect funny (see above) nsresult patterns so code can be manually fixed to enable thrower to transform code correctly.</p>
-
-<p>I expect conversion to exceptions to consist of the following large steps:</p>
-
-<p>XPCOMGC -> nsresult-lint -> thrower automatic conversion -> nsexception-lint -> outparamdel</p>
-
-<ol>
-<li>XPCOMGC needs to land first to simplify memory management. Otherwise there will be a lot more nsCOMPtr&lt;>s already_AddRefed&lt;>s and friends.</li>
-<li>nsresult-lint would flag code for clean up to assist with the multitude of special cases in the code preventing it from transformation</li>
-<li>thrower needs to do some reasonably sophisticated static analysis (sensitive to control flow) to ensure that code is rewritten correctly. The analysis step isn't ridiculously hard, but it is considerably more complex than what is done in existing tools.</li>
-<li>nsexception-lint tool will flag exception-unsafe code. I expect this to highlight a fair amount of code that needs to be converted to RAII. It will take more manual labour to fix flagged code here than in than step2.</li>
-<li>Once exceptions are used the return value is freed up for outparamdel to utilize. This will be a nice optimization and code clean up.
-I think the best bet with exceptions would be to start working on them during the moz2 development cycle to have them land early in post-moz2.</li>
-</ol>
-
-
-<p>Or as an alternative we could try to do just the OOM exceptions which are less frequent which would look like:</p>
-
-<p>XPCOMGC -> thrower automatic conversion(OOM cases are easier) -> nsexception-lint</p>
-
-<p>In this case the only significant piece of work is nsexception-lint which would be needed later for a full-blown exception rewrite. It wouldn't be so bad to convert code to RAII even before that is required for the full exception rewrite.</p>
-
-<p>For now I'm going let thrower rest in the pork hg repository while I try to make a <a href="http://wiki.mozilla.org/XPCOMGC/Static_Checker">static checker plugin</a> for gcc. Feel free to ask for clarification. I'm dealing with after-effects of insomnia so this may not be completely clear.</p>
-
-<p><strong>Update</strong>: Reasonable <a href="http://www.hackcraft.net/raii/">description of RAII</a>.</p>
+  1. XPCOMGC needs to land first to simplify memory management. Otherwise there will be a lot more nsCOMPtr<>s already_AddRefed<>s and friends.
+  2. nsresult-lint would flag code for clean up to assist with the multitude of special cases in the code preventing it from transformation
+  3. thrower needs to do some reasonably sophisticated static analysis (sensitive to control flow) to ensure that code is rewritten correctly. The analysis step isn't ridiculously hard, but it is considerably more complex than what is done in existing tools.
+  4. nsexception-lint tool will flag exception-unsafe code. I expect this to highlight a fair amount of code that needs to be converted to RAII. It will take more manual labour to fix flagged code here than in than step2.
+  5. Once exceptions are used the return value is freed up for outparamdel to utilize. This will be a nice optimization and code clean up.
+I think the best bet with exceptions would be to start working on them during the moz2 development cycle to have them land early in post-moz2.  
+  
+Or as an alternative we could try to do just the OOM exceptions which are less frequent which would look like:  
+  
+XPCOMGC -> thrower automatic conversion(OOM cases are easier) -> nsexception-lint  
+  
+In this case the only significant piece of work is nsexception-lint which would be needed later for a full-blown exception rewrite. It wouldn't be so bad to convert code to RAII even before that is required for the full exception rewrite.  
+  
+For now I'm going let thrower rest in the pork hg repository while I try to make a [static checker plugin](http://wiki.mozilla.org/XPCOMGC/Static_Checker) for gcc. Feel free to ask for clarification. I'm dealing with after-effects of insomnia so this may not be completely clear.  
+  
+**Update**: Reasonable [description of RAII](http://www.hackcraft.net/raii/).
 ]]></content>
   </entry>
   
@@ -57,29 +54,26 @@ I think the best bet with exceptions would be to start working on them during th
     <link href="http://taras.glek.net/blog/2007/12/11/switching-to-exceptions-makes-head-spin/"/>
     <updated>2007-12-11T04:10:19-08:00</updated>
     <id>http://taras.glek.net/blog/2007/12/11/switching-to-exceptions-makes-head-spin</id>
-    <content type="html"><![CDATA[<p><strong>Typical</strong></p>
+    <content type="html"><![CDATA[**Typical**  
+  
+It seems that there are 3 stages to doing a rewrite in Moz: 
 
-<p>It seems that there are 3 stages to doing a rewrite in Moz:</p>
-
-<ol>
-<li>Start a new tool. Make sure that it can rewrite some trivial testcases. Add lots of asserts for cases you are unsure about.</li>
-<li>Run tool on Mozilla and fix crashes caused by above asserts. Get 80% of the code rewriting correctly.</li>
-<li>Get the other 20% rewriting. This often involves major overhauls to rewriting logic due to patterns that weren't expected when the spec was written
-Usually stage 3 is a few times harder than 2. For garburator rewriting got really hard in stage 3. 90% of my time ended up being spent in stage 3 due to fun issues like figuring out what to do with <a href="http://benjamin.smedbergs.us/blog/2007-11-08/perils-in-rewriting/">unforeseen</a>(in spec) combination of references and nsCOMPtr&lt;>s.</li>
-</ol>
-
-
-<p><strong>Exceptions</strong></p>
-
-<p>With exceptions step 2 is already getting hard. So far I've had to extend elsa to support pattern matching,  and reworked the code patcher to support recursive rewriting.</p>
-
-<p>Now looks like I'll need to do some flow-sensitive analysis to rewrite cases like <a href="http://lxr.mozilla.org/seamonkey/source/xpcom/base/nsMemoryImpl.cpp#217">nsMemoryImpl::FlushMemory</a>. I'm not sure if it is possible to automatically deal with functions like <a href="http://lxr.mozilla.org/seamonkey/source/xpcom/base/nsExceptionService.cpp#290">nsExceptionService::DoGetExceptionFromProvider</a>.</p>
-
-<p>Also, I'm not yet rewriting code to be bugfree, just trying to get it to compile. Once exceptioned code compiles, step two will be to statically check code to verify that it is exception-safe and convert it to RAII or something.</p>
-
-<p>Here is an <a href="http://people.mozilla.org/~tglek/xpcom.diff">current patch</a> for xpcom/ produced by thrower. At the moment there are still a lot of pattern matches to be added. It mostly handles rv = foo(); if (NS_FAILED(rv)) and a few other simple <a href="http://hg.mozilla.org/oink/?file/fbbcc3e9056b/thrower_tests/">cases</a>.</p>
-
-<p>This is exciting stuff, but really hard, so if anyone has exciting problem solving ideas feel free to ping me.</p>
+  1. Start a new tool. Make sure that it can rewrite some trivial testcases. Add lots of asserts for cases you are unsure about.
+  2. Run tool on Mozilla and fix crashes caused by above asserts. Get 80% of the code rewriting correctly.
+  3. Get the other 20% rewriting. This often involves major overhauls to rewriting logic due to patterns that weren't expected when the spec was written
+Usually stage 3 is a few times harder than 2. For garburator rewriting got really hard in stage 3. 90% of my time ended up being spent in stage 3 due to fun issues like figuring out what to do with [unforeseen](http://benjamin.smedbergs.us/blog/2007-11-08/perils-in-rewriting/)(in spec) combination of references and nsCOMPtr<>s.  
+  
+**Exceptions**  
+  
+With exceptions step 2 is already getting hard. So far I've had to extend elsa to support pattern matching,  and reworked the code patcher to support recursive rewriting.  
+  
+Now looks like I'll need to do some flow-sensitive analysis to rewrite cases like [nsMemoryImpl::FlushMemory](http://lxr.mozilla.org/seamonkey/source/xpcom/base/nsMemoryImpl.cpp#217). I'm not sure if it is possible to automatically deal with functions like [nsExceptionService::DoGetExceptionFromProvider](http://lxr.mozilla.org/seamonkey/source/xpcom/base/nsExceptionService.cpp#290).  
+  
+Also, I'm not yet rewriting code to be bugfree, just trying to get it to compile. Once exceptioned code compiles, step two will be to statically check code to verify that it is exception-safe and convert it to RAII or something.  
+  
+Here is an [current patch](http://people.mozilla.org/~tglek/xpcom.diff) for xpcom/ produced by thrower. At the moment there are still a lot of pattern matches to be added. It mostly handles rv = foo(); if (NS_FAILED(rv)) and a few other simple [cases](http://hg.mozilla.org/oink/?file/fbbcc3e9056b/thrower_tests/).  
+  
+This is exciting stuff, but really hard, so if anyone has exciting problem solving ideas feel free to ping me.
 ]]></content>
   </entry>
   
@@ -88,35 +82,35 @@ Usually stage 3 is a few times harder than 2. For garburator rewriting got reall
     <link href="http://taras.glek.net/blog/2007/12/05/exceptional-circumstances/"/>
     <updated>2007-12-05T06:23:38-08:00</updated>
     <id>http://taras.glek.net/blog/2007/12/05/exceptional-circumstances</id>
-    <content type="html"><![CDATA[<p>My previous post on outparam rewriting <a href="http://taras.glek.net/blog/2007/11/28/volume-of-refactoring-ahead/">described</a> the wealth of functions that can be rewritten. Unfortunately, most functions in Mozilla are declared in XPIDL interfaces.</p>
-
-<p>I have been convinced that my plan to rewrite xpidlgen to avoid outparameters wont be possible because most XPIDLinterfaces can be implemented by JavaScript in a few different ways. That is problematic because in addition to return values, JavaScript can also have an exception thrown at any point and have that converted to an nsresult error code by XPConnect. That means that the getters implemented in JavaScript are not in the set of functions that only return NS_OK+outparam/someerror. I wouldn't be at all disappointed if someone proved me wrong here.</p>
-
-<p><strong>nsexception</strong></p>
-
-<p>There is one other way to rid the code of outparameters (including getter_AddRefs and friends). Time to face my greatest reluctance: rewriting Mozilla to use exceptions. Brendan has been talking about it for a long time, but I have been skeptical until now, mostly due to the complexity of rewriting that much code. However, I have more confidence in rewriting huge amounts of code now since the XPCOMGC rewrite which touched most functions in Mozilla without too much trouble (in relative terms).</p>
-
-<p><strong>Motivation</strong></p>
-
-<p>There are some obvious benefits to be gained from switching to exceptions other than a reduction in code-size (and footprint?) and having code that looks more like common C++.</p>
-
-<p>We would like to modify tamarin to use C++ exceptions such that an exception thrown from JavaScript would unroll the mixed C++/JS stack. This would simplify and enable significant optimizations for XPConnect.</p>
-
-<p>I am dreaming of JITed marshaling code for C++->JS calls and having a low level FFI interface(ie being able to call most C/C++ methods <a href="http://starkravingfinkle.org/blog/2007/09/hello-js-ctypes-goodbye-binary-components/">directly</a>) on the JavaScript side such that tracing JIT could automatically optimize common XPConnect calls. This an exciting area and there are lots of details to be worked out, so I'd love to see some feedback (or better yet proof of concept code!) on this.</p>
-
-<p><strong>The Plan</strong> - Rewriting</p>
-
-<p>I have started implementing thrower (I am not a great namer), a tool for converting various code patterns involving nsresult into something that uses an nsexception wrapper.</p>
-
-<p>Since this rewrite requires a lot more scanning for code patterns I added an elsa feature to allow pattern matching on AST nodes in C++ (also using exceptions). Since there are lot of patterns to transform, for documentation I will be writing many minimal testcases documenting(and testing) exactly what gets rewritten. Any interested parties are welcome to contribute Mozilla error handling patterns as testcases.</p>
-
-<p><strong>Verifying the Result </strong></p>
-
-<p>Just like in the XPCOMGC rewrite, code will have to be scanned to verify that it fits in the "new world order". Unlike XPCOMGC, there are additional flow-sensitive issues to scan for to ensure that the code is thread-safe. The scans are at a lower level than dehydra currently works at, so it's a perfect opportunity to either extend dehydra or write the new tool.</p>
-
-<p>It would be especially cool to implement the code analysis tool as a <a href="http://taras.glek.net/blog/2007/11/29/gcc-plugins-under-my-xmas-tree/">gcc plugin</a>.  Sean Callanan's "Extending GCC with Modular GIMPLE Optimizations" paper in the <a href="http://ols2006.108.redhat.com/2007/GCC-Reprints/GCC2007-Proceedings.pdf">GCC summit proceedings</a> should be an excellent starting point.</p>
-
-<p>This is an exciting experiment. I look forward to reducing speculation on the risks/benefits of switching the codebase to use exceptions with some concrete data.</p>
+    <content type="html"><![CDATA[My previous post on outparam rewriting [described](http://taras.glek.net/blog/2007/11/28/volume-of-refactoring-ahead/) the wealth of functions that can be rewritten. Unfortunately, most functions in Mozilla are declared in XPIDL interfaces.  
+  
+I have been convinced that my plan to rewrite xpidlgen to avoid outparameters wont be possible because most XPIDLinterfaces can be implemented by JavaScript in a few different ways. That is problematic because in addition to return values, JavaScript can also have an exception thrown at any point and have that converted to an nsresult error code by XPConnect. That means that the getters implemented in JavaScript are not in the set of functions that only return NS_OK+outparam/someerror. I wouldn't be at all disappointed if someone proved me wrong here.  
+  
+**nsexception**  
+  
+There is one other way to rid the code of outparameters (including getter_AddRefs and friends). Time to face my greatest reluctance: rewriting Mozilla to use exceptions. Brendan has been talking about it for a long time, but I have been skeptical until now, mostly due to the complexity of rewriting that much code. However, I have more confidence in rewriting huge amounts of code now since the XPCOMGC rewrite which touched most functions in Mozilla without too much trouble (in relative terms).  
+  
+**Motivation**  
+  
+There are some obvious benefits to be gained from switching to exceptions other than a reduction in code-size (and footprint?) and having code that looks more like common C++.  
+  
+We would like to modify tamarin to use C++ exceptions such that an exception thrown from JavaScript would unroll the mixed C++/JS stack. This would simplify and enable significant optimizations for XPConnect.  
+  
+I am dreaming of JITed marshaling code for C++->JS calls and having a low level FFI interface(ie being able to call most C/C++ methods [directly](http://starkravingfinkle.org/blog/2007/09/hello-js-ctypes-goodbye-binary-components/)) on the JavaScript side such that tracing JIT could automatically optimize common XPConnect calls. This an exciting area and there are lots of details to be worked out, so I'd love to see some feedback (or better yet proof of concept code!) on this.  
+  
+**The Plan** - Rewriting  
+  
+I have started implementing thrower (I am not a great namer), a tool for converting various code patterns involving nsresult into something that uses an nsexception wrapper.  
+  
+Since this rewrite requires a lot more scanning for code patterns I added an elsa feature to allow pattern matching on AST nodes in C++ (also using exceptions). Since there are lot of patterns to transform, for documentation I will be writing many minimal testcases documenting(and testing) exactly what gets rewritten. Any interested parties are welcome to contribute Mozilla error handling patterns as testcases.  
+  
+**Verifying the Result **  
+  
+Just like in the XPCOMGC rewrite, code will have to be scanned to verify that it fits in the "new world order". Unlike XPCOMGC, there are additional flow-sensitive issues to scan for to ensure that the code is thread-safe. The scans are at a lower level than dehydra currently works at, so it's a perfect opportunity to either extend dehydra or write the new tool.  
+  
+It would be especially cool to implement the code analysis tool as a [gcc plugin](http://taras.glek.net/blog/2007/11/29/gcc-plugins-under-my-xmas-tree/).  Sean Callanan's "Extending GCC with Modular GIMPLE Optimizations" paper in the [GCC summit proceedings](http://ols2006.108.redhat.com/2007/GCC-Reprints/GCC2007-Proceedings.pdf) should be an excellent starting point.  
+  
+This is an exciting experiment. I look forward to reducing speculation on the risks/benefits of switching the codebase to use exceptions with some concrete data.
 ]]></content>
   </entry>
   

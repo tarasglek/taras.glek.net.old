@@ -4,7 +4,7 @@
   <title><![CDATA[Category: outparamdel | All About Performance]]></title>
   <link href="http://taras.glek.net/blog/categories/outparamdel/atom.xml" rel="self"/>
   <link href="http://taras.glek.net/"/>
-  <updated>2012-12-22T10:23:26-08:00</updated>
+  <updated>2012-12-22T11:15:17-08:00</updated>
   <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -18,27 +18,24 @@
     <link href="http://taras.glek.net/blog/2009/01/28/semantic-rewriting-of-code-with-pork-a-bitter-recap/"/>
     <updated>2009-01-28T16:17:47-08:00</updated>
     <id>http://taras.glek.net/blog/2009/01/28/semantic-rewriting-of-code-with-pork-a-bitter-recap</id>
-    <content type="html"><![CDATA[<p>LWN <a href="http://lwn.net/Articles/315686/">published</a> an article about a tool that does refactoring of C code. Guess what, it's yet another tool on top of a crappy C-parser that will never grok C well or even hope to support C++. To my great disappointment the author was not aware of my work on Pork. Clearly I have failed in letting people know that complex C and C++ can be refactored with (somewhat raw, but powerful) open source tools.</p>
+    <content type="html"><![CDATA[LWN [published](http://lwn.net/Articles/315686/) an article about a tool that does refactoring of C code. Guess what, it's yet another tool on top of a crappy C-parser that will never grok C well or even hope to support C++. To my great disappointment the author was not aware of my work on Pork. Clearly I have failed in letting people know that complex C and C++ can be refactored with (somewhat raw, but powerful) open source tools.  
+  
+In addition to [Dehydra](https://developer.mozilla.org/En/Dehydra) (which is even mentioned in the first comment, yay!), I also maintain [Pork](https://developer.mozilla.org/En/Pork) - a fork of oink that is well suited to large-scale refactoring of real-world C/C++ code.  
+  
+So far pork has been used for "minor" things like renaming classes&functions, rotating [outparameters](http://taras.glek.net/blog/2007/08/06/outparams-take-2/) and correcting [prbool](http://taras.glek.net/blog/2007/06/26/status-report-recent-work/) bugs. Additionally, Pork proved itself in an [experiment](http://taras.glek.net/blog/2007/11/02/garburator-works/#comments) which involved rewriting almost every function(ie generating a 3+MB patch) in Mozilla to use garbage collection instead of reference-counting.  
+  
+So to summarize: 
 
-<p>In addition to <a href="https://developer.mozilla.org/En/Dehydra">Dehydra</a> (which is even mentioned in the first comment, yay!), I also maintain <a href="https://developer.mozilla.org/En/Pork">Pork</a> - a fork of oink that is well suited to large-scale refactoring of real-world C/C++ code.</p>
-
-<p>So far pork has been used for "minor" things like renaming classes&amp;functions, rotating <a href="http://taras.glek.net/blog/2007/08/06/outparams-take-2/">outparameters</a> and correcting <a href="http://taras.glek.net/blog/2007/06/26/status-report-recent-work/">prbool</a> bugs. Additionally, Pork proved itself in an <a href="http://taras.glek.net/blog/2007/11/02/garburator-works/#comments">experiment</a> which involved rewriting almost every function(ie generating a 3+MB patch) in Mozilla to use garbage collection instead of reference-counting.</p>
-
-<p>So to summarize:</p>
-
-<ul>
-<li>Refactoring C is hard, but C++ is much harder</li>
-<li>For refactoring C++ there is no better toolchain to start with than Pork</li>
-<li>Pork shares no code with Dehydra.</li>
-<li>Pork is built on the Elsa parser which makes it well-suited for rewriting large amounts of code. Dehydra's isn't suitable for rewriting code due to GCC providing a very lossy AST and incomplete location information.</li>
-<li>Pork is not as convenient for analysis needs as Dehydra
-For any questions regarding Pork feel free to post on the <a href="https://lists.mozilla.org/listinfo/dev-static-analysis">mailing list</a> or ping me on IRC.</li>
-</ul>
-
-
-<p><strong>Language Wars</strong></p>
-
-<p>I find it depressing that the comments to the LWN article ended up being about language wars rather than the refactoring topic. Pork is written in C++ which is much more widely known than OCaml. However, I seriously doubt it's easier for anyone to hack on advanced compiler frontend pieces in a language as ill-suited for the task as C++.</p>
+  * Refactoring C is hard, but C++ is much harder
+  * For refactoring C++ there is no better toolchain to start with than Pork
+  * Pork shares no code with Dehydra.
+  * Pork is built on the Elsa parser which makes it well-suited for rewriting large amounts of code. Dehydra's isn't suitable for rewriting code due to GCC providing a very lossy AST and incomplete location information.
+  * Pork is not as convenient for analysis needs as Dehydra
+For any questions regarding Pork feel free to post on the [mailing list](https://lists.mozilla.org/listinfo/dev-static-analysis) or ping me on IRC.  
+  
+**Language Wars**  
+  
+I find it depressing that the comments to the LWN article ended up being about language wars rather than the refactoring topic. Pork is written in C++ which is much more widely known than OCaml. However, I seriously doubt it's easier for anyone to hack on advanced compiler frontend pieces in a language as ill-suited for the task as C++.
 ]]></content>
   </entry>
   
@@ -47,39 +44,37 @@ For any questions regarding Pork feel free to post on the <a href="https://lists
     <link href="http://taras.glek.net/blog/2008/09/19/outparamdelling-this-way-comes/"/>
     <updated>2008-09-19T07:06:08-07:00</updated>
     <id>http://taras.glek.net/blog/2008/09/19/outparamdelling-this-way-comes</id>
-    <content type="html"><![CDATA[<p>Recently I dusted off outparamdel to see if I can get some refactorings landed. About a year ago, with the great QueryInterface outparamdelling experiment we ended up with a smaller binary footprint and tiny performance gain, but that never landed due to us not wanting to break compatability yet. Ever since, outparamdel has been patiently bitrotting within <a href="http://developer.mozilla.org/en/docs/Pork">Pork</a> waiting for the day it's allowed to break APIs.</p>
+    <content type="html"><![CDATA[Recently I dusted off outparamdel to see if I can get some refactorings landed. About a year ago, with the great QueryInterface outparamdelling experiment we ended up with a smaller binary footprint and tiny performance gain, but that never landed due to us not wanting to break compatability yet. Ever since, outparamdel has been patiently bitrotting within [Pork](http://developer.mozilla.org/en/docs/Pork) waiting for the day it's allowed to break APIs.  
+  
+Recently jst [listed](http://wiki.mozilla.org/Gecko:DeCOMtamination) some private API candidates for deCOMtamination and I have been letting outparamdel loose on them for the past week. So far only one such [change](http://hg.mozilla.org/mozilla-central/raw-rev/ec4733eb1bd8) has been committed, the rest are sitting in jst's review queue. It's exciting, as it's the first ever application of outparamdel that didn't get canned. For the whole list see the most recent bugs blocking my [analysis metabug](https://bugzilla.mozilla.org/show_bug.cgi?id=430328).  
+  
+Cool part about these patches is that after various outparamdel special-casing and manual cleanup the line count is reduced by 10-30% while maintaining existing functionality!  
+  
+So far I haven't touched much outside of content/, so if you know of any APIs that could have the outparam rotated into the return value, file some rewriting bugs against me.  
+  
+**Rewriting with Mercurial**  
+  
+Mercurial is now my favourite python program ever. It makes rewrites so easy. Here is my typical workflow:  
+  
 
-<p>Recently jst <a href="http://wiki.mozilla.org/Gecko:DeCOMtamination">listed</a> some private API candidates for deCOMtamination and I have been letting outparamdel loose on them for the past week. So far only one such <a href="http://hg.mozilla.org/mozilla-central/raw-rev/ec4733eb1bd8">change</a> has been committed, the rest are sitting in jst's review queue. It's exciting, as it's the first ever application of outparamdel that didn't get canned. For the whole list see the most recent bugs blocking my <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=430328">analysis metabug</a>.</p>
+```
 
-<p>Cool part about these patches is that after various outparamdel special-casing and manual cleanup the line count is reduced by 10-30% while maintaining existing functionality!</p>
+# Write an outparamdel input file specifying functions to rewrite..run outparamdel with pork-barrel to generate patch
+hg qimport -f autopatch.diff && hg qpush && hg qref #make the patch nice and readable
+hg qnew manual.diff #create a manual cleanup patch for cosmetic touchups and rewrites screwed up by macros#of course to submit patch for review, those two patches need to be combined
+#do manual stuff
+hg diff -r 19277 #produce a combined diff without loosing ability to edit each applied patch individually! For example, can regenerate the autopatch.diff with different outparamdel parameters or a bugfixed outparamdel. 19277 is a revision that has to be looked up with hg log, unfortunately there isn't a relative syntax to do hg diff -r "tip - 2"
 
-<p>So far I haven't touched much outside of content/, so if you know of any APIs that could have the outparam rotated into the return value, file some rewriting bugs against me.</p>
-
-<p><strong>Rewriting with Mercurial</strong></p>
-
-<p>Mercurial is now my favourite python program ever. It makes rewrites so easy. Here is my typical workflow:</p>
-
-<p>```</p>
-
-<h1>Write an outparamdel input file specifying functions to rewrite..run outparamdel with pork-barrel to generate patch</h1>
-
-<p>hg qimport -f autopatch.diff &amp;&amp; hg qpush &amp;&amp; hg qref #make the patch nice and readable
-hg qnew manual.diff #create a manual cleanup patch for cosmetic touchups and rewrites screwed up by macros#of course to submit patch for review, those two patches need to be combined</p>
-
-<h1>do manual stuff</h1>
-
-<p>hg diff -r 19277 #produce a combined diff without loosing ability to edit each applied patch individually! For example, can regenerate the autopatch.diff with different outparamdel parameters or a bugfixed outparamdel. 19277 is a revision that has to be looked up with hg log, unfortunately there isn't a relative syntax to do hg diff -r "tip - 2"</p>
-
-<p>```
-This is a huge improvement over the ad-hoc workflow prior to hg switch when I was prototyping my tools. CVS + quilt don't hold a candle to a modern revision control system.</p>
-
-<p><strong>Prcheck</strong></p>
-
-<p>I also have been doing another round of <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=266048">prbool corrections</a>. Somehow I didn't notice that the system stopped working due to the CVS->hg switch. Once again when reviving my nightly checker scripts, it was a pleasure to substitute all of the CVS hacks with mercurial commands.</p>
-
-<p>I am waiting for the few remaining largeish (ie 3-4 bugs per file) patches to land before I can start submitting whackamole bugs with a single prbool correction per module.</p>
-
-<p>It also seems that cairo and every other pre-C99 project have the same set of issues as Mozilla with their typedefed-int boolean types. Perhaps prcheck isn't mozilla-specific at all.</p>
+```
+This is a huge improvement over the ad-hoc workflow prior to hg switch when I was prototyping my tools. CVS + quilt don't hold a candle to a modern revision control system.  
+  
+**Prcheck**  
+  
+I also have been doing another round of [prbool corrections](https://bugzilla.mozilla.org/show_bug.cgi?id=266048). Somehow I didn't notice that the system stopped working due to the CVS->hg switch. Once again when reviving my nightly checker scripts, it was a pleasure to substitute all of the CVS hacks with mercurial commands.  
+  
+I am waiting for the few remaining largeish (ie 3-4 bugs per file) patches to land before I can start submitting whackamole bugs with a single prbool correction per module.  
+  
+It also seems that cairo and every other pre-C99 project have the same set of issues as Mozilla with their typedefed-int boolean types. Perhaps prcheck isn't mozilla-specific at all.
 ]]></content>
   </entry>
   
@@ -88,37 +83,34 @@ This is a huge improvement over the ad-hoc workflow prior to hg switch when I wa
     <link href="http://taras.glek.net/blog/2007/12/19/exceptions/"/>
     <updated>2007-12-19T07:26:30-08:00</updated>
     <id>http://taras.glek.net/blog/2007/12/19/exceptions</id>
-    <content type="html"><![CDATA[<p>Often there are two ways to write code. One way is to design an API and have code patterns adhere to how the API is supposed to be used. Another way is to rely on language features to accomplish the same thing. Typically API-pattern approaches are chosen because compilers are too immature or just don't provide the necessary features. Sometimes compilers do catch up and the possibility of utilizing newer language features appears.</p>
+    <content type="html"><![CDATA[Often there are two ways to write code. One way is to design an API and have code patterns adhere to how the API is supposed to be used. Another way is to rely on language features to accomplish the same thing. Typically API-pattern approaches are chosen because compilers are too immature or just don't provide the necessary features. Sometimes compilers do catch up and the possibility of utilizing newer language features appears.  
+  
+In the case of the exception rewrite the task is to rewrite code from a pattern-based (compiler in your head) approach to a more strict C++ construct-based exception paradigm. Unfortunately APIs don't enforce their usage as much as a compiler (in part because we don't have [app-spefic compiler plugins](http://taras.glek.net/blog/2007/11/29/gcc-plugins-under-my-xmas-tree/)) so transforming that into a strict compiler-friendly form automatically isn't always realistic ([example](http://lxr.mozilla.org/seamonkey/source/xpcom/glue/nsIInterfaceRequestorUtils.cpp#43)). See my previous post for more examples.  
+  
+Having done more work on the exception conversion I believe that it is possible to switch Mozilla to exceptions to the point of getting it to compile. Unfortunately, I don't think that it's possible to do this in the Mozilla2 timeframe due to the large amount of manual labour required.  
+  
+Due to various use cases that don't fit the exception model there is a need for an nsresult-lint tool to detect funny (see above) nsresult patterns so code can be manually fixed to enable thrower to transform code correctly.  
+  
+I expect conversion to exceptions to consist of the following large steps:  
+  
+XPCOMGC -> nsresult-lint -> thrower automatic conversion -> nsexception-lint -> outparamdel 
 
-<p>In the case of the exception rewrite the task is to rewrite code from a pattern-based (compiler in your head) approach to a more strict C++ construct-based exception paradigm. Unfortunately APIs don't enforce their usage as much as a compiler (in part because we don't have <a href="http://taras.glek.net/blog/2007/11/29/gcc-plugins-under-my-xmas-tree/">app-spefic compiler plugins</a>) so transforming that into a strict compiler-friendly form automatically isn't always realistic (<a href="http://lxr.mozilla.org/seamonkey/source/xpcom/glue/nsIInterfaceRequestorUtils.cpp#43">example</a>). See my previous post for more examples.</p>
-
-<p>Having done more work on the exception conversion I believe that it is possible to switch Mozilla to exceptions to the point of getting it to compile. Unfortunately, I don't think that it's possible to do this in the Mozilla2 timeframe due to the large amount of manual labour required.</p>
-
-<p>Due to various use cases that don't fit the exception model there is a need for an nsresult-lint tool to detect funny (see above) nsresult patterns so code can be manually fixed to enable thrower to transform code correctly.</p>
-
-<p>I expect conversion to exceptions to consist of the following large steps:</p>
-
-<p>XPCOMGC -> nsresult-lint -> thrower automatic conversion -> nsexception-lint -> outparamdel</p>
-
-<ol>
-<li>XPCOMGC needs to land first to simplify memory management. Otherwise there will be a lot more nsCOMPtr&lt;>s already_AddRefed&lt;>s and friends.</li>
-<li>nsresult-lint would flag code for clean up to assist with the multitude of special cases in the code preventing it from transformation</li>
-<li>thrower needs to do some reasonably sophisticated static analysis (sensitive to control flow) to ensure that code is rewritten correctly. The analysis step isn't ridiculously hard, but it is considerably more complex than what is done in existing tools.</li>
-<li>nsexception-lint tool will flag exception-unsafe code. I expect this to highlight a fair amount of code that needs to be converted to RAII. It will take more manual labour to fix flagged code here than in than step2.</li>
-<li>Once exceptions are used the return value is freed up for outparamdel to utilize. This will be a nice optimization and code clean up.
-I think the best bet with exceptions would be to start working on them during the moz2 development cycle to have them land early in post-moz2.</li>
-</ol>
-
-
-<p>Or as an alternative we could try to do just the OOM exceptions which are less frequent which would look like:</p>
-
-<p>XPCOMGC -> thrower automatic conversion(OOM cases are easier) -> nsexception-lint</p>
-
-<p>In this case the only significant piece of work is nsexception-lint which would be needed later for a full-blown exception rewrite. It wouldn't be so bad to convert code to RAII even before that is required for the full exception rewrite.</p>
-
-<p>For now I'm going let thrower rest in the pork hg repository while I try to make a <a href="http://wiki.mozilla.org/XPCOMGC/Static_Checker">static checker plugin</a> for gcc. Feel free to ask for clarification. I'm dealing with after-effects of insomnia so this may not be completely clear.</p>
-
-<p><strong>Update</strong>: Reasonable <a href="http://www.hackcraft.net/raii/">description of RAII</a>.</p>
+  1. XPCOMGC needs to land first to simplify memory management. Otherwise there will be a lot more nsCOMPtr<>s already_AddRefed<>s and friends.
+  2. nsresult-lint would flag code for clean up to assist with the multitude of special cases in the code preventing it from transformation
+  3. thrower needs to do some reasonably sophisticated static analysis (sensitive to control flow) to ensure that code is rewritten correctly. The analysis step isn't ridiculously hard, but it is considerably more complex than what is done in existing tools.
+  4. nsexception-lint tool will flag exception-unsafe code. I expect this to highlight a fair amount of code that needs to be converted to RAII. It will take more manual labour to fix flagged code here than in than step2.
+  5. Once exceptions are used the return value is freed up for outparamdel to utilize. This will be a nice optimization and code clean up.
+I think the best bet with exceptions would be to start working on them during the moz2 development cycle to have them land early in post-moz2.  
+  
+Or as an alternative we could try to do just the OOM exceptions which are less frequent which would look like:  
+  
+XPCOMGC -> thrower automatic conversion(OOM cases are easier) -> nsexception-lint  
+  
+In this case the only significant piece of work is nsexception-lint which would be needed later for a full-blown exception rewrite. It wouldn't be so bad to convert code to RAII even before that is required for the full exception rewrite.  
+  
+For now I'm going let thrower rest in the pork hg repository while I try to make a [static checker plugin](http://wiki.mozilla.org/XPCOMGC/Static_Checker) for gcc. Feel free to ask for clarification. I'm dealing with after-effects of insomnia so this may not be completely clear.  
+  
+**Update**: Reasonable [description of RAII](http://www.hackcraft.net/raii/).
 ]]></content>
   </entry>
   
@@ -127,35 +119,35 @@ I think the best bet with exceptions would be to start working on them during th
     <link href="http://taras.glek.net/blog/2007/12/05/exceptional-circumstances/"/>
     <updated>2007-12-05T06:23:38-08:00</updated>
     <id>http://taras.glek.net/blog/2007/12/05/exceptional-circumstances</id>
-    <content type="html"><![CDATA[<p>My previous post on outparam rewriting <a href="http://taras.glek.net/blog/2007/11/28/volume-of-refactoring-ahead/">described</a> the wealth of functions that can be rewritten. Unfortunately, most functions in Mozilla are declared in XPIDL interfaces.</p>
-
-<p>I have been convinced that my plan to rewrite xpidlgen to avoid outparameters wont be possible because most XPIDLinterfaces can be implemented by JavaScript in a few different ways. That is problematic because in addition to return values, JavaScript can also have an exception thrown at any point and have that converted to an nsresult error code by XPConnect. That means that the getters implemented in JavaScript are not in the set of functions that only return NS_OK+outparam/someerror. I wouldn't be at all disappointed if someone proved me wrong here.</p>
-
-<p><strong>nsexception</strong></p>
-
-<p>There is one other way to rid the code of outparameters (including getter_AddRefs and friends). Time to face my greatest reluctance: rewriting Mozilla to use exceptions. Brendan has been talking about it for a long time, but I have been skeptical until now, mostly due to the complexity of rewriting that much code. However, I have more confidence in rewriting huge amounts of code now since the XPCOMGC rewrite which touched most functions in Mozilla without too much trouble (in relative terms).</p>
-
-<p><strong>Motivation</strong></p>
-
-<p>There are some obvious benefits to be gained from switching to exceptions other than a reduction in code-size (and footprint?) and having code that looks more like common C++.</p>
-
-<p>We would like to modify tamarin to use C++ exceptions such that an exception thrown from JavaScript would unroll the mixed C++/JS stack. This would simplify and enable significant optimizations for XPConnect.</p>
-
-<p>I am dreaming of JITed marshaling code for C++->JS calls and having a low level FFI interface(ie being able to call most C/C++ methods <a href="http://starkravingfinkle.org/blog/2007/09/hello-js-ctypes-goodbye-binary-components/">directly</a>) on the JavaScript side such that tracing JIT could automatically optimize common XPConnect calls. This an exciting area and there are lots of details to be worked out, so I'd love to see some feedback (or better yet proof of concept code!) on this.</p>
-
-<p><strong>The Plan</strong> - Rewriting</p>
-
-<p>I have started implementing thrower (I am not a great namer), a tool for converting various code patterns involving nsresult into something that uses an nsexception wrapper.</p>
-
-<p>Since this rewrite requires a lot more scanning for code patterns I added an elsa feature to allow pattern matching on AST nodes in C++ (also using exceptions). Since there are lot of patterns to transform, for documentation I will be writing many minimal testcases documenting(and testing) exactly what gets rewritten. Any interested parties are welcome to contribute Mozilla error handling patterns as testcases.</p>
-
-<p><strong>Verifying the Result </strong></p>
-
-<p>Just like in the XPCOMGC rewrite, code will have to be scanned to verify that it fits in the "new world order". Unlike XPCOMGC, there are additional flow-sensitive issues to scan for to ensure that the code is thread-safe. The scans are at a lower level than dehydra currently works at, so it's a perfect opportunity to either extend dehydra or write the new tool.</p>
-
-<p>It would be especially cool to implement the code analysis tool as a <a href="http://taras.glek.net/blog/2007/11/29/gcc-plugins-under-my-xmas-tree/">gcc plugin</a>.  Sean Callanan's "Extending GCC with Modular GIMPLE Optimizations" paper in the <a href="http://ols2006.108.redhat.com/2007/GCC-Reprints/GCC2007-Proceedings.pdf">GCC summit proceedings</a> should be an excellent starting point.</p>
-
-<p>This is an exciting experiment. I look forward to reducing speculation on the risks/benefits of switching the codebase to use exceptions with some concrete data.</p>
+    <content type="html"><![CDATA[My previous post on outparam rewriting [described](http://taras.glek.net/blog/2007/11/28/volume-of-refactoring-ahead/) the wealth of functions that can be rewritten. Unfortunately, most functions in Mozilla are declared in XPIDL interfaces.  
+  
+I have been convinced that my plan to rewrite xpidlgen to avoid outparameters wont be possible because most XPIDLinterfaces can be implemented by JavaScript in a few different ways. That is problematic because in addition to return values, JavaScript can also have an exception thrown at any point and have that converted to an nsresult error code by XPConnect. That means that the getters implemented in JavaScript are not in the set of functions that only return NS_OK+outparam/someerror. I wouldn't be at all disappointed if someone proved me wrong here.  
+  
+**nsexception**  
+  
+There is one other way to rid the code of outparameters (including getter_AddRefs and friends). Time to face my greatest reluctance: rewriting Mozilla to use exceptions. Brendan has been talking about it for a long time, but I have been skeptical until now, mostly due to the complexity of rewriting that much code. However, I have more confidence in rewriting huge amounts of code now since the XPCOMGC rewrite which touched most functions in Mozilla without too much trouble (in relative terms).  
+  
+**Motivation**  
+  
+There are some obvious benefits to be gained from switching to exceptions other than a reduction in code-size (and footprint?) and having code that looks more like common C++.  
+  
+We would like to modify tamarin to use C++ exceptions such that an exception thrown from JavaScript would unroll the mixed C++/JS stack. This would simplify and enable significant optimizations for XPConnect.  
+  
+I am dreaming of JITed marshaling code for C++->JS calls and having a low level FFI interface(ie being able to call most C/C++ methods [directly](http://starkravingfinkle.org/blog/2007/09/hello-js-ctypes-goodbye-binary-components/)) on the JavaScript side such that tracing JIT could automatically optimize common XPConnect calls. This an exciting area and there are lots of details to be worked out, so I'd love to see some feedback (or better yet proof of concept code!) on this.  
+  
+**The Plan** - Rewriting  
+  
+I have started implementing thrower (I am not a great namer), a tool for converting various code patterns involving nsresult into something that uses an nsexception wrapper.  
+  
+Since this rewrite requires a lot more scanning for code patterns I added an elsa feature to allow pattern matching on AST nodes in C++ (also using exceptions). Since there are lot of patterns to transform, for documentation I will be writing many minimal testcases documenting(and testing) exactly what gets rewritten. Any interested parties are welcome to contribute Mozilla error handling patterns as testcases.  
+  
+**Verifying the Result **  
+  
+Just like in the XPCOMGC rewrite, code will have to be scanned to verify that it fits in the "new world order". Unlike XPCOMGC, there are additional flow-sensitive issues to scan for to ensure that the code is thread-safe. The scans are at a lower level than dehydra currently works at, so it's a perfect opportunity to either extend dehydra or write the new tool.  
+  
+It would be especially cool to implement the code analysis tool as a [gcc plugin](http://taras.glek.net/blog/2007/11/29/gcc-plugins-under-my-xmas-tree/).  Sean Callanan's "Extending GCC with Modular GIMPLE Optimizations" paper in the [GCC summit proceedings](http://ols2006.108.redhat.com/2007/GCC-Reprints/GCC2007-Proceedings.pdf) should be an excellent starting point.  
+  
+This is an exciting experiment. I look forward to reducing speculation on the risks/benefits of switching the codebase to use exceptions with some concrete data.
 ]]></content>
   </entry>
   
@@ -164,15 +156,15 @@ I think the best bet with exceptions would be to start working on them during th
     <link href="http://taras.glek.net/blog/2007/11/28/volume-of-refactoring-ahead/"/>
     <updated>2007-11-28T09:53:42-08:00</updated>
     <id>http://taras.glek.net/blog/2007/11/28/volume-of-refactoring-ahead</id>
-    <content type="html"><![CDATA[<p>In the previous post, I described the simple rewriting case that I am working on at the moment. Someone was quick to point out that the approach wouldn't work for all methods (XPIDL Arrays were the example). Indeed, anything more complicated than simple getters can't be rewritten to "Succeeded/Failed" pattern without switching to C++ exceptions. However, in the codebase the size of Mozilla there are several megabytes worth outparam getters to be rewritten.</p>
-
-<p>Currently my wimpy little <a href="http://hg.mozilla.org/oink/?file/0ab46e97549e/dehydra_scripts/outparams.js">outparams.js</a> script identifies 100 methods that can be rewritten by outparamdel without any manual intervention. However doing a search for ::Get with a ** parameter yields over 2700 candidates, of which most look like they can be rewritten. Reason for the laughable detection rate is that the detection script currently refuses to flag methods that are defined in XPIDL interface or are implemented by more than one class. Soon the script will make heavier use of the class hierarchy and we will probably change XPIDL to support more efficient getters.</p>
-
-<p><strong>Complete Class Hierarchy</strong></p>
-
-<p>I finally managed to convince Dehydra to serialize the Mozilla class hierarchy into JSON files without running out of virtual memory. This will generate lots of input for refactoring and analysis tools. All kinds of <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=405855">interesting stats</a> can be produced with <a href="http://hg.mozilla.org/oink/?file/0ab46e97549e/dehydra_scripts/find_single_impl.js">simple scripts</a>. Generating the index is relatively <a href="http://wiki.mozilla.org/index.php?title=DeHydra#Capturing_the_Moz_Class_Hierarchy">straightforward</a>. It would be awesome if someone could figure out how to expose this data as a web app. Since there is so much being loaded incrementally, I don't see how one can keep things simple but use an asynchronous API.</p>
-
-<p>In the coming months, I am looking forward to extending this to be a complete callgraph to find dead code and other fun data.</p>
+    <content type="html"><![CDATA[In the previous post, I described the simple rewriting case that I am working on at the moment. Someone was quick to point out that the approach wouldn't work for all methods (XPIDL Arrays were the example). Indeed, anything more complicated than simple getters can't be rewritten to "Succeeded/Failed" pattern without switching to C++ exceptions. However, in the codebase the size of Mozilla there are several megabytes worth outparam getters to be rewritten.  
+  
+Currently my wimpy little [outparams.js](http://hg.mozilla.org/oink/?file/0ab46e97549e/dehydra_scripts/outparams.js) script identifies 100 methods that can be rewritten by outparamdel without any manual intervention. However doing a search for ::Get with a ** parameter yields over 2700 candidates, of which most look like they can be rewritten. Reason for the laughable detection rate is that the detection script currently refuses to flag methods that are defined in XPIDL interface or are implemented by more than one class. Soon the script will make heavier use of the class hierarchy and we will probably change XPIDL to support more efficient getters.  
+  
+**Complete Class Hierarchy**  
+  
+I finally managed to convince Dehydra to serialize the Mozilla class hierarchy into JSON files without running out of virtual memory. This will generate lots of input for refactoring and analysis tools. All kinds of [interesting stats](https://bugzilla.mozilla.org/show_bug.cgi?id=405855) can be produced with [simple scripts](http://hg.mozilla.org/oink/?file/0ab46e97549e/dehydra_scripts/find_single_impl.js). Generating the index is relatively [straightforward](http://wiki.mozilla.org/index.php?title=DeHydra#Capturing_the_Moz_Class_Hierarchy). It would be awesome if someone could figure out how to expose this data as a web app. Since there is so much being loaded incrementally, I don't see how one can keep things simple but use an asynchronous API.  
+  
+In the coming months, I am looking forward to extending this to be a complete callgraph to find dead code and other fun data.
 ]]></content>
   </entry>
   
