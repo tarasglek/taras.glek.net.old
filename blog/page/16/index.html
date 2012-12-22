@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="A couple of months ago Stuart casually asked me to investigate Fennec performance for moving about a page, zooming and loading pages in general. Beta &hellip;">
+  <meta name="description" content="I wrote Fennecmark to automate some of the tasks that I did manually while doing performance debugging. I tried to capture some of the &#8220; &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -58,6 +58,155 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/04/23/benchmarks-and-instrumentation-for-fennecetc/">Benchmarks and Instrumentation for Fennec/etc</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-04-23T03:19:14-07:00" pubdate data-updated="true">Apr 23<span>rd</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I wrote Fennecmark to automate some of the tasks that I did manually while doing performance debugging.</p>
+
+<p>I tried to capture some of the &#8220;perceived performance&#8221; in numbers. My goal is to focus on user-visible areas of performance. Ideally it will enable us to track performance better to ensure that key features do not regress in performance and enable us to compare Fennec speed on various platforms. I need to spend some quality time with QA people to figure out how to achieve that.</p>
+
+<p>Currently Fennecmark loads a slow-to-load webpage, zooms around it and then pans from the top to the bottom. This measures: responsiveness during pageload, zoom speed and panning lag.</p>
+
+<p>See code at <a href="http://hg.mozilla.org/users/tglek_mozilla.com/fennecmark">http://hg.mozilla.org/users/tglek_mozilla.com/fennecmark</a>.</p>
+
+<p><strong>JSD Instrumentation</strong></p>
+
+<p>Spidermonkey provides an API that allows one to get a notification on every method entry/exit. I was able to do most of my Fennec performance analysis via a component in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=470116">bug 470116</a>. My stopwatch component times the execution of every js function call and spits out a log that has been very useful in figuring out what is taking up time in Fennec chrome.</p>
+
+<p><strong>Porkstain</strong></p>
+
+<p>I am itching to write a tool that can instrument large portions of Mozilla code such that it can be profiled across C++/JS boundaries and without any external tool support. I am guessing this would be most useful on platforms with crappy sampling tools, but it would be cool if it made finding slow codepaths easier in general. If you know any lightweight instrumentation techniques, please share.</p>
+
+<p>I wrote a little prototype to insert stopwatch stuff into code deemed interesting by oprofile (stuff in the bug above). The code patching part works well, but it&#8217;s a big runtime hit and outputs too much data.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/04/15/misc-static-analysis-news-smmgcstatic-codecon-piglet/">Misc Static Analysis News: S/#mmgc/#static/, Codecon, Piglet, &#8230;</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-04-15T06:37:23-07:00" pubdate data-updated="true">Apr 15<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h1>static on irc.mozilla.org is now the correct irc channel for anything to do with static analysis.</h1>
+
+<p><strong>Codecon</strong> On Sunday, I will be presenting on <a href="https://developer.mozilla.org/En/Pork">Pork</a> at codecon. I have been meaning to attend <a href="http://www.codecon.org/">codecon</a> since the days when P2P was considered cool, was not able to make it until this year. It is a historical milestone for me. Codecon was how people at Mozilla first heard of Elsa, which is now the foundation of all our refactoring tools (it is also inherited baggage I get to maintain).</p>
+
+<p><strong>Piglet</strong></p>
+
+<p>I adopted <a href="http://hg.mozilla.org/users/tglek_mozilla.com/piglet">Piglet</a>, <a href="http://blog.mozilla.org/dmandelin/">Dave Mandelin</a>&#8217;s de-oinkification project, and imported it into hg. It feels really good to finally be able to do a make -j without disturbing people nearby with surprise explosions of foul language. I plan to move all relevant static analysis tools into piglet. After that I shall finally merge a dozen or so elsa repositories and end up with Pork consisting of elsa/ + piglet/.</p>
+
+<p><strong>Pork</strong>*</p>
+
+<p>Chris Jones is quietly working on making Pork magnitudes more useful to average developers. It&#8217;s exciting stuff and I&#8217;ll let him announce it when he&#8217;s ready. Between his work and <a href="http://vocamus.net/dave/">David Humphrey</a>&#8217;s DXR. I think we are finally going to make it easier to hack on Mozilla for a much wider audience than before.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/03/31/nsresult-analysis/">Nsresult Analysis</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-03-31T07:16:18-07:00" pubdate data-updated="true">Mar 31<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>After I wrote <a href="http://taras.glek.net/blog/2008/11/07/enabling-prcheck-email-notifications/">prcheck</a>, I was surprised by the errors it found. I expected to find lots of cases of prbool variables having integers assigned into them. Indeed there were some of those, but the most frequent offenders were things like</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>
+</span><span class='line'>NS_ENSURE_SUCCESS(rv,rv);
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>in methods with a PRBool return value. In this case (and many similar  return values within macros) the function will likely do the opposite of what was intended if there is an error condition. Here is a less hypothetical <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=483589">example</a> in bugzilla.</p>
+
+<p>So I&#8217;m thinking that instead of porting the prbool analysis to <a href="https://developer.mozilla.org/en/Treehydra">Treehydra</a> (such that it&#8217;d based on a less buggy <a href="https://developer.mozilla.org/En/Pork">backend</a> and can be integrated into the build) it might be more interesting to ensure that nsresults do not mix with other integer types. That would catch all of the worst prbool offenders and possibly other nsresult misfortunes.</p>
+
+<p><em>Has anyone run into bugs like this that do not involve prbools?</em></p>
+
+<p>I suppose a general solution would be to define a lattice of typedefs with rules specifying which typedefs can be assigned to each other. This would make GCC distinguish certain typedefs as discrete and incompatible types. Thoughts?</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -425,137 +574,6 @@ For any questions regarding Pork feel free to post on the <a href="https://lists
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2008/11/07/enabling-prcheck-email-notifications/">Enabling Prcheck Email Notifications</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-11-07T07:58:08-08:00" pubdate data-updated="true">Nov 7<span>th</span>, 2008</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I&#8217;ve been running my prbool checker with nightly notifications for about a year now. There are some false positivies, but mostly it picks up real bugs. The checker pulls the blame source to try to guess who is responsible for the error, but so far it has only been emailing me.</p>
-
-<p>I&#8217;m going to make it emailed the hg blamed person starting this weekend, so if you commit something and get an email from me complaining about it don&#8217;t take it too personally. Hopefully this will keep the amount of new detectable prbool bugs at 0. If you do get an email and decide you don&#8217;t want to get these in the future, please complain and we&#8217;ll try to come up with a better notification solution.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2008/10/09/cool-stuff-in-foreign-realms/">Cool Stuff in Foreign Realms</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-10-09T02:18:29-07:00" pubdate data-updated="true">Oct 9<span>th</span>, 2008</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Open Source projects are often like parallel worlds. People reach the same conclusions, attempt similar solutions and are typically blissfully unaware of each other&#8217;s existance.</p>
-
-<p>Here are two projects that came to my attention this week:</p>
-
-<ul>
-<li>Via Planet KDE I stumbled on <a href="http://www.englishbreakfastnetwork.org/krazy/">Krazy</a>. It&#8217;s neat if not somewhat depressing that even if C++ parsers are finally becoming accessible all this is still Perl.</li>
-<li>Helpful comment on my previous entry pointed me to <a href="http://blogs.linux.ie/caolan/">dead method hunting</a> in OpenOffice.
-<strong>Uncool Open Source Rant</strong></li>
-</ul>
-
-
-<p>Reason I switched to linux was because it seemed like a developer&#8217;s dream come true. Compilers are a package manager operation away (and generally aren&#8217;t tied to OS versions, I&#8217;m looking at you Apple), everything can be recompiled to address any particular concerns and there are crapload of weird languages to write your software in. This is especially awesome when compared to a typical proprietory software stack where one can&#8217;t easily fix problems that involve multiple components due to licensing issues or due to not having the code available(or due to not having the development environment available). So one would think that Linux distributions hold the ultimate software power: unlimited pass to modify their offering to their target audience&#8217;s content.</p>
-
-<p>Unfortunately my view of Linux ways is unrealistic. For example when people do <a href="http://lwn.net/Articles/299483/">friggin&#8217; awesome work</a> knocking down boot time to 5 seconds by hacking and slashing their way through the entire software stack involved in boottime delays, distributions claim that it&#8217;s not somethin they can seriously consider because they are too set in their ways of general purpose(and generally bloated) init systems and stock kernels(worst case: why can&#8217;t we recompile the kernel on the user&#8217;s machine or ship a couple of custom variations for common hardware out there). What&#8217;s the point of open source if we continue pretending that everything is a general purpose black box that doesn&#8217;t like to play together? It&#8217;s been two weeks and I haven&#8217;t seen a single distro bite the bullet and attempt to list 5 second boot in their goals. Come on guys, don&#8217;t you like to be challenged?</p>
-
-<p>Hope someone proves me wrong.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2008/10/07/note-this-is-not-called-yet-its-just-a-placeholder-for-future-changes/">&#8220;NOTE: This Is Not Called YET. It&#8217;s Just a Placeholder for Future Changes.&#8221;</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-10-07T08:53:44-07:00" pubdate data-updated="true">Oct 7<span>th</span>, 2008</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>In my quest to rid Firefox of code that doesn&#8217;t do anything it is possible to screw up and delete a method that is only used by outside code. So far, I&#8217;ve hit a <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=457302">component</a> that isn&#8217;t used in Firefox, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=457965">methods</a> that aren&#8217;t used in Firefox and methods that <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=458983">claim</a> someone is about to use them (with a timestamp from 8 years ago). That and I discovered some code only appears to be used from BeOS or OS/2 specific ifdefs.</p>
-
-<p>Not surprisingly, I had someone comment that I do some &#8220;dangerous shit&#8221;. Sure, I can see why someone would think that.</p>
-
-<p>My protection: I use the try server to make sure that everything builds on supported platforms. On top of that every patch gets reviewed.</p>
-
-<p>Furthermore, I would like to point out that methods that aren&#8217;t called within Firefox are less likely to be tested and correct. So if one leaves code that should only be called from other projects, it&#8217;d be appropriate if we had some unit tests for it, which would flag the code as in-use. That would let us move to the next level and setup a tinderbox to detect dead code as soon as it is orphaned.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/17/">&larr; Older</a>
@@ -573,6 +591,10 @@ For any questions regarding Pork feel free to post on the <a href="https://lists
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2012/12/21/interesting-bugzilla-activity/">Snappy #45: The view from home</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2012/12/17/hello-octopress/">Hello Octopress</a>
       </li>
     
@@ -586,10 +608,6 @@ For any questions regarding Pork feel free to post on the <a href="https://lists
     
       <li class="post">
         <a href="/blog/2012/11/05/snappy-43-big-improvements-faster-startup-smoother-tabstrip/">Snappy #43: Big improvements: faster startup? Smoother tabstrip!</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/10/26/snappy-42/">Snappy #42</a>
       </li>
     
   </ul>

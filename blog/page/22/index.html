@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="New Repository Since I do not yet have write access to oink svn, I have been doing all of my development in ad-hoc repositories within the svn &hellip;">
+  <meta name="description" content="It is always frustrating to see a compiler complain about something trivial. It is especially annoying since most of the trivial complaints are &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -58,6 +58,195 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2007/07/27/superity-complex-static-analysis/">Superity Complex & Static Analysis</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-07-27T07:57:23-07:00" pubdate data-updated="true">Jul 27<span>th</span>, 2007</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>It is always frustrating to see a compiler complain about something trivial. It is especially annoying since most of the trivial complaints are trivial to fix automatically (eg. superfluous semicolon).</p>
+
+<p>I think this is a bigger problem in the static analysis industry. Vendors/researchers ship their tools with a superiority complex built-in. Most of the error messages produced by error checking tools can be paraphrased as &#8220;Gee look, I found some trivial to fix bugs in your code, but I ain&#8217;t gonna do nothing about them! Neeener! Go worker-human!&#8221;</p>
+
+<p>My policy is to make my tools more polite than that. Starting from prcheck, all of my tools will point out simple errors by suggesting patches (when possible). It is impossible to produce a correct patch every time, but I am not worried about that since developers are quite good at disregarding stupid suggestions.</p>
+
+<p><strong>Automatic Whining</strong></p>
+
+<p>Now I have a few extra scripts that lay the foundation for regular code inspection via static analysis. PRBool checks are my first step. Here is a sample email:
+&#8220;`</p>
+
+<p>&#8220;`</p>
+
+<pre><code>Subject: Prbool violation in nsPlainTextSerializer.cpp
+
+vidur@netscape.com introduced a new PRBool problem in revision 1.1 of nsPlainTextSerializer.cpp.
+
+Commit message: branches:  1.1.2;  
+
+Error: /content/base/src/nsPlainTextSerializer.cpp: 614:
+
+-          PRInt32 semiOffset = style.Find("ch", widthOffset+6);
++          PRInt32 semiOffset = style.Find("ch", 0 != (widthOffset+6));
+</code></pre>
+
+<p><a href="http://bonsai.mozilla.org/cvsblame.cgi?file=mozilla/content/base/src/nsPlainTextSerializer.cpp&amp;rev=&amp;cvsroot=/cvsroot#614">http://bonsai.mozilla.org/cvsblame.cgi?file=mozilla/content/base/src/nsPlainTextSerializer.cpp&amp;rev=&amp;cvsroot=/cvsroot#614</a></p>
+
+<p>This an example of an incorrect suggestion. The actual problem is due to the incorrect method overload being chosen.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2007/07/18/cpp-aware-c-rewriting-can-be-fun/">CPP-Aware C++ Rewriting Can Be Fun</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-07-18T07:29:16-07:00" pubdate data-updated="true">Jul 18<span>th</span>, 2007</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Recently MCPP started working well enough to process all of Mozilla with the special macro-expansion undoing markup. Below is the most exciting patch line I have produced so far. A few months ago, I didn&#8217;t think was possible to rewrite macro parameters with elsa.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>
+</span><span class='line'>-    ENCODE_SIMPLE_ARRAY(PRBool, Bool, (PRUint16) values[i]);
+</span><span class='line'>+    ENCODE_SIMPLE_ARRAY(PRBool, Bool, 0 != ((PRUint16) values[i]));
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>To produce this:</p>
+
+<ol>
+<li>Elsa consumed the expanded .ii file</li>
+<li>Boolean checker found the problematic subexpression</li>
+<li>Original source position was calculated from the expansion log</li>
+<li>Then prcheck figured out that only the macro parameter needs to be rewritten.</li>
+<li>Original source was read in and enclosed within 0 != ()
+<strong>Integrating Static Checks - PRBool check </strong></li>
+</ol>
+
+
+<p><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=266048">This bug</a> contains the rest of the rewriting results. Prcheck checks every assignment to a prbool and outputs a patch if the expression may evaluate to anything other than 0/1. A message is produced if a patch can not be generated because the expression is within a macro.</p>
+
+<p>The goal is to have prcheck run on every commit(or every day) and send out an email or another form of a complaint when a new prbool violation is introduced. Since the current prbool misuses aren&#8217;t going to be fixed overnight, there should be a db kept somewhere with the old misuses to prevent the new ones from being introduced and old ones from being annoying. I&#8217;m thinking of associating misuse counts with a filename, so when the number goes up an error gets mailed out. Anyone get a better idea?</p>
+
+<p><strong>Latest Recipe to Running Oink Tools </strong></p>
+
+<ol>
+<li>If you want to rewrite sources either wait for the next mcpp release or use my <a href="http://people.mozilla.org/~tglek/mcpp-post2.6.4.tar.gz">tarball</a>.</li>
+<li>Install gcc 3.4.x. If using mcpp, configure mcpp with &#8211;enable-replace-system so it replaces the gcc preprocessor</li>
+<li><a href="http://taras.glek.net/blog/2007/07/13/dehydra-prcheck-squash-in-mercurial/">Checkout</a> and build my oink version.</li>
+<li>Build mozilla with -save-temps gcc option. If using mcpp set environment variables CC=&#8221;gcc -Wp,-K -Wp,-W0 -save-temps &#8221; and CXX=&#8221;g++ -Wp,-K -Wp,-W0 -save-temps &#8221; and do make -f client.mk build as usual. The extra gcc parameters tell it to save intermediate files to pass -K and -W0 to enable macro expansion annotation and silence warnings.</li>
+<li>Run tools individual files</li>
+<li>Produce a global patch with ./pork-barrel 4 /path/to/prcheck /tmp/input.txt where input.txt is a list of absolute filenames of all of the .i and .ii files produced by the build process</li>
+</ol>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2007/07/13/pondering-prepost-conditions-to-enforce-software-correctness/">Pondering Pre/Post Conditions to Enforce Software Correctness</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-07-13T02:12:55-07:00" pubdate data-updated="true">Jul 13<span>th</span>, 2007</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>That other software company has a some brilliant people working on verifying their source code. Their approach is hardcore and seems quite good. Their recipe to robust C# (applying this to C is research-in-progress, C++ isn&#8217;t yet considered) code is:</p>
+
+<ul>
+<li>sprinkle pre/post-conditions for functions. Reduce annotation labour by additional rule inference</li>
+<li>dataflow analysis to verify type-system stuff like not-null annotations</li>
+<li>Abstract interpretation + model checker to enforce pre/post-conditions</li>
+<li><a href="http://research.microsoft.com/research/pubs/view.aspx?type=Technical%20Report&amp;id=923">BoogiePL</a> intermediate language. Anything can be accomplished by an awesomely named intermediate language!
+Resulting code runs fast has a lot fewer bugs than code without all this fancy machinery. Unfortunately, the benefits can only be reaped if a whole program gets annotated. Otherwise, the model checker gets frustrated. Essentially the language being checked is turned into another much safer (more boogie!) language. I&#8217;m looking forward to the day (that will never come) when all new C code is written this way.</li>
+</ul>
+
+
+<p>If adding these to source code makes you rewrite the whole program, wouldn&#8217;t it be easier to invent another low-level language that comes with safety by default?</p>
+
+<p>I am guessing that the dehydra method of checking for a relatively small number of application specific bugs is the most practical approach available and it will get us 60% towards Boogieing. Now that elsa has support for preprocessor macros it should be possible to specify non-formal pre/post-conditions to check for common errors. It&#8217;s merely a complicated question of defining what should be checked for.</p>
+
+<p>I don&#8217;t have the motivation to write/buy/adopt/integrate a formal tool like a model checker, but it seems that it&#8217;s possible to write application specific checks in JavaScript that can run circles around what most model checkers can do.</p>
+
+<p>That other company isn&#8217;t the only vendor working on this stuff. There <a href="http://www.cs.princeton.edu/~appel/cminor/">brilliant people</a> taking a somewhat different (and open source) approach.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -634,194 +823,6 @@ The MCPP maintainer is almost done with 1. I have a prototype implementation of 
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2007/05/10/nicely-rewriting-outparams/">Nicely Rewriting Outparams</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2007-05-10T07:52:07-07:00" pubdate data-updated="true">May 10<span>th</span>, 2007</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Automatic code rewriting business can be a little depressing sometimes. I tend to run into funny issues caused by CPP, oink limitations or just unpleasant-to-rewrite parts of C++. After banging my head against the wall due to all these issues I finally arrived at a workable approach for the easy part of the outparam rewrite.</p>
-
-<p>Currently I have a dehydra script that finds all non-virtual getters that return either NS_OK or <em>NS_SOMETHING_IS_WRONG</em>. The script then outputs data for squash to base the rewrites on. Then squash takes over.</p>
-
-<p>In order to preserve sanity, pretty-printing is not used at all for rewriting the getter functions. This way one doesn&#8217;t have to worry about oink generating invalid C++ and the output is much more aesthetically pleasing. Instead, squash finds interesting expressions in the .i file. Then it extracts the corresponding strings from .h/.cpp files. The strings are used to fudge the position information obtained from the .i file to vaguely correspond to the original source files. After various C++ string-foo, squash produces a promising looking patch like <a href="http://people.mozilla.org/~tglek/outparams.May10.diff">this</a>.</p>
-
-<p>This also relies on a fair amount of semantic information provided by elsa/oink. For example when removing a parameter, squash inserts a local variable with the same name and then removes all of the derefences of the old parameter. Since there could be multiple variables with the same name, squash relies on elsa&#8217;s variable resolution.</p>
-
-<p>I think squash is now 50% feature complete with respect to outparam stuff. The other 50% is the hard part of rewriting all of the call-sites. I&#8217;m not counting easy parts like wrapping the return type in already_AddRefed&lt;>, eliminating redundant assignments in the getter or removing the error variable once it is no longer needed.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2007/05/07/status-update-outparam-work/">Status Update: Outparam Work</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2007-05-07T02:58:43-07:00" pubdate data-updated="true">May 7<span>th</span>, 2007</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><strong>Squash Outparams</strong></p>
-
-<p>The following took me a few days to achieve.</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>./squash -sq-rewrite-outparams out2.txt -sq-implementation nsBidiPresUtils  -sq-no-squash -o-lang GNU_Cplusplus ~/work/ff-build/dom/src/base/nsFocusController.i</span></code></pre></td></tr></table></div></figure>
-
-
-<p>where out2.txt contains instructions on which functions to modify</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>nsFocusController::GetFocusedElement,0=mCurrentElement,</span></code></pre></td></tr></table></div></figure>
-
-
-<p>produces</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>--- /Users/tarasglek/work/mozilla/dom/src/base/nsFocusController.h
-</span><span class='line'>+++ /Users/tarasglek/work/mozilla/dom/src/base/nsFocusController.h
-</span><span class='line'>@@ -72,1 +72,1 @@
-</span><span class='line'>-  NS_IMETHOD GetFocusedElement(nsIDOMElement** aResult);
-</span><span class='line'>+  nsIDOMElement* GetFocusedElement();
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This still doesn&#8217;t add the already_AddRefed or other important attributes, but that should be easy. The result looks simple, but getting squash from working with a testcase to an actual source file was a little on the painful side.</p>
-
-<p>After my experience with renaming I have realized that squash should avoid the C++ pretty printer for now. Thus the result is produced in a verbose AST-sensitive regexp-like way. However figuring out where things start and end is incredibly painful due to the presence of the preprocessor.</p>
-
-<p>My plan is to get squash rewriting some basic Mozilla code the painful way and then I use what I learned to integrate <a href="http://mcpp.sourceforge.net/">mcpp</a> along with the much coveted end-of-ast-node info into elsa.</p>
-
-<p><strong>JavaScript is an AST&#8217;s Best Friend </strong></p>
-
-<p>Until recently I have been doing a lot of work with dehydra. Now that it is feature-complete I am back to working on squash fulltime and I miss JavaScript already. JS is much better suited for messing about with Abstract Syntax Trees. It is so nice to be able to print out any data structure, create new ones without modifying a billion files and the lack of C++ compile/linking delay is nice too. It&#8217;s amazing how much simpler it is to analyze functions for out-param rewriting in JS compared to checking for simpler patterns in C++. I am seriously excited about Tamarin/ES4 and the productivity boost that it will provide.</p>
-
-<p>I wonder whether a complete JS binding for Elsa would be a good idea.</p>
-
-<p><strong>Emacs</strong></p>
-
-<p>Switching to a Mac finally made me switch to Emacs. I could not find any other editors that would be support the workflow I was used to with SciTE or Kate. Other than absolutely hating the majoring of Emacs shortcuts (who&#8217;s idea was Ctrl-^ and the crazy undo/redo) I love the editor for the amazing term mode. It&#8217;s a little buggy in the current version, but the CVS version is good enough to comfortably run vim in it for quick edits :). It&#8217;s so nice to keep all of my terminals and code in the same window. I am dreaming of the day when Emacs will undergo the Mozilla->Firefox-like modernization.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2007/05/01/status-report/">Status Report</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2007-05-01T07:13:01-07:00" pubdate data-updated="true">May 1<span>st</span>, 2007</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><strong>Automated Analyses and Rewrites</strong></p>
-
-<p>Dehydra and Squash are now mature enough to assist with mundane tasks like renames and various kinds of tedious code inspection. If you ever suspect that part of the Mozilla hacking you are doing could be done by a tool, contact me to see if I have a suitable tool for you.</p>
-
-<p>Also, these tools are in no way limited to working with Mozilla source code. I would be happy to see people use them for other projects too.</p>
-
-<p><strong>Short-term Plans</strong></p>
-
-<p>For the next week or two I plan to focus on out-parameter rewriting and the Mozilla-wide C++ callgraph.</p>
-
-<p><strong>Mozilla-wide Callgraph</strong> This is proving to be a little painful. Things work for basic test-cases, but I am running into scalability issues with Mozilla (as expected). My current approach of serializing everything into a giant JSON graph blows the 32bit address space after a few hundred files. Even doing a Mozilla-wide inheritance graph causes out of memory errors, but that runs almost to competition. The best solution to this will be to break up the graph into as many smaller JSON files as possible and only load ones that are absolutely required into memory.</p>
-
-<p>The callgraph will be a useful starting point for many other useful analyses (dead code one is going to be lots of fun) and it&#8217;s a good test of dehydra&#8217;s scalability, but I have suspended work on it for a few days to focus on more productive tasks.</p>
-
-<p><strong>Out-parameter Rewriting</strong></p>
-
-<p>Due to XPCOM, Mozilla getters typically return an error code and a value via an out parameter. This requires checking the error code and likely propagating it at the callsite.</p>
-
-<p>For many places in the code there are performance and aesthetical reasons to stop using error codes. Brendan talks discusses some reasons <a href="http://weblogs.mozillazine.org/roadmap/archives/2006/10/mozilla_2.html">here</a>. This would be cool stuff, but switching to exceptions isn&#8217;t going to happen right away. However, I can already start working on my tools to assist with simpler cases (like <a href="http://www.google.com/codesearch?hl=en&amp;q=+nsBidiPresUtils::GetBidiEngine+show:kW5gzhxHJvU:iRn_dfI9xJY:Y5Gdp6b4NgE&amp;sa=N&amp;cd=1&amp;ct=rc&amp;cs_p=http://ftp.mozilla.org/pub/mozilla.org/mozilla/releases/mozilla1.7a/src/mozilla-source-1.7a.tar.bz2&amp;cs_f=mozilla/layout/base/src/nsBidiPresUtils.cpp#a0">nsBidiPresUtils::GetBidiEngine</a>?). I&#8217;m focusing on getters that return NS_OK/(some error) and a value and rewriting them to return NULL on error and non-NULL on success. This could be ready in time for Firefox 3. Once I&#8217;m done with the tool, I&#8217;ll just need someone to help me figure which functions are ok to simplify like that.</p>
-
-<p>I suspended work on out-param rewriting <a href="http://taras.glek.net/blog/2007/01/11/squash-progress-and-plans/">some time ago</a>. It was proving to be too complicated to do within squash. Now that I can use dehydra to verify the control flow graph, things are a lot simpler. Current plan is to have the <a href="http://people.mozilla.org/~tglek/outparams.js">dehydra script</a> produce a list of candidates for out-param surgery and have squash consume that list and produce the appropriate patches. Currently, the script works for some very simple cases and I am working on the squash side.</p>
-
-<p><strong>Smaller Tasks</strong></p>
-
-<ul>
-<li>Sayrer&#8217;s uninitialized member analysis: added more complete constructor support to dehyra, wrote a <a href="http://people.mozilla.org/~tglek/member-init.js">sample script</a> to get sayrer started. Fixed dehydra&#8217;s 64bit support. <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=378763">Bug 378763</a></li>
-<li>Made some squash-generated patches for bz, helped me find a bug in squash. <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=378780">Bug 378780</a></li>
-<li>Pushing squash upstream into oink. This is time consuming because it is a combination of legal and many minor technical issues. Dehydra will follow later.</li>
-</ul>
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/23/">&larr; Older</a>
@@ -839,6 +840,10 @@ The MCPP maintainer is almost done with 1. I have a prototype implementation of 
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2012/12/21/interesting-bugzilla-activity/">Snappy #45: The view from home</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2012/12/17/hello-octopress/">Hello Octopress</a>
       </li>
     
@@ -852,10 +857,6 @@ The MCPP maintainer is almost done with 1. I have a prototype implementation of 
     
       <li class="post">
         <a href="/blog/2012/11/05/snappy-43-big-improvements-faster-startup-smoother-tabstrip/">Snappy #43: Big improvements: faster startup? Smoother tabstrip!</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/10/26/snappy-42/">Snappy #42</a>
       </li>
     
   </ul>

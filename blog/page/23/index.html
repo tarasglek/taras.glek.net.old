@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="My last attempt at visualizing the Mozilla class hierarchy ended up being way too slow to be useful. So I based my second attempt on using a &hellip;">
+  <meta name="description" content="Automatic code rewriting business can be a little depressing sometimes. I tend to run into funny issues caused by CPP, oink limitations or just &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -58,6 +58,194 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2007/05/10/nicely-rewriting-outparams/">Nicely Rewriting Outparams</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-05-10T07:52:07-07:00" pubdate data-updated="true">May 10<span>th</span>, 2007</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Automatic code rewriting business can be a little depressing sometimes. I tend to run into funny issues caused by CPP, oink limitations or just unpleasant-to-rewrite parts of C++. After banging my head against the wall due to all these issues I finally arrived at a workable approach for the easy part of the outparam rewrite.</p>
+
+<p>Currently I have a dehydra script that finds all non-virtual getters that return either NS_OK or <em>NS_SOMETHING_IS_WRONG</em>. The script then outputs data for squash to base the rewrites on. Then squash takes over.</p>
+
+<p>In order to preserve sanity, pretty-printing is not used at all for rewriting the getter functions. This way one doesn&#8217;t have to worry about oink generating invalid C++ and the output is much more aesthetically pleasing. Instead, squash finds interesting expressions in the .i file. Then it extracts the corresponding strings from .h/.cpp files. The strings are used to fudge the position information obtained from the .i file to vaguely correspond to the original source files. After various C++ string-foo, squash produces a promising looking patch like <a href="http://people.mozilla.org/~tglek/outparams.May10.diff">this</a>.</p>
+
+<p>This also relies on a fair amount of semantic information provided by elsa/oink. For example when removing a parameter, squash inserts a local variable with the same name and then removes all of the derefences of the old parameter. Since there could be multiple variables with the same name, squash relies on elsa&#8217;s variable resolution.</p>
+
+<p>I think squash is now 50% feature complete with respect to outparam stuff. The other 50% is the hard part of rewriting all of the call-sites. I&#8217;m not counting easy parts like wrapping the return type in already_AddRefed&lt;>, eliminating redundant assignments in the getter or removing the error variable once it is no longer needed.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2007/05/07/status-update-outparam-work/">Status Update: Outparam Work</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-05-07T02:58:43-07:00" pubdate data-updated="true">May 7<span>th</span>, 2007</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><strong>Squash Outparams</strong></p>
+
+<p>The following took me a few days to achieve.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>./squash -sq-rewrite-outparams out2.txt -sq-implementation nsBidiPresUtils  -sq-no-squash -o-lang GNU_Cplusplus ~/work/ff-build/dom/src/base/nsFocusController.i</span></code></pre></td></tr></table></div></figure>
+
+
+<p>where out2.txt contains instructions on which functions to modify</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>nsFocusController::GetFocusedElement,0=mCurrentElement,</span></code></pre></td></tr></table></div></figure>
+
+
+<p>produces</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>--- /Users/tarasglek/work/mozilla/dom/src/base/nsFocusController.h
+</span><span class='line'>+++ /Users/tarasglek/work/mozilla/dom/src/base/nsFocusController.h
+</span><span class='line'>@@ -72,1 +72,1 @@
+</span><span class='line'>-  NS_IMETHOD GetFocusedElement(nsIDOMElement** aResult);
+</span><span class='line'>+  nsIDOMElement* GetFocusedElement();
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This still doesn&#8217;t add the already_AddRefed or other important attributes, but that should be easy. The result looks simple, but getting squash from working with a testcase to an actual source file was a little on the painful side.</p>
+
+<p>After my experience with renaming I have realized that squash should avoid the C++ pretty printer for now. Thus the result is produced in a verbose AST-sensitive regexp-like way. However figuring out where things start and end is incredibly painful due to the presence of the preprocessor.</p>
+
+<p>My plan is to get squash rewriting some basic Mozilla code the painful way and then I use what I learned to integrate <a href="http://mcpp.sourceforge.net/">mcpp</a> along with the much coveted end-of-ast-node info into elsa.</p>
+
+<p><strong>JavaScript is an AST&#8217;s Best Friend </strong></p>
+
+<p>Until recently I have been doing a lot of work with dehydra. Now that it is feature-complete I am back to working on squash fulltime and I miss JavaScript already. JS is much better suited for messing about with Abstract Syntax Trees. It is so nice to be able to print out any data structure, create new ones without modifying a billion files and the lack of C++ compile/linking delay is nice too. It&#8217;s amazing how much simpler it is to analyze functions for out-param rewriting in JS compared to checking for simpler patterns in C++. I am seriously excited about Tamarin/ES4 and the productivity boost that it will provide.</p>
+
+<p>I wonder whether a complete JS binding for Elsa would be a good idea.</p>
+
+<p><strong>Emacs</strong></p>
+
+<p>Switching to a Mac finally made me switch to Emacs. I could not find any other editors that would be support the workflow I was used to with SciTE or Kate. Other than absolutely hating the majoring of Emacs shortcuts (who&#8217;s idea was Ctrl-^ and the crazy undo/redo) I love the editor for the amazing term mode. It&#8217;s a little buggy in the current version, but the CVS version is good enough to comfortably run vim in it for quick edits :). It&#8217;s so nice to keep all of my terminals and code in the same window. I am dreaming of the day when Emacs will undergo the Mozilla->Firefox-like modernization.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2007/05/01/status-report/">Status Report</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-05-01T07:13:01-07:00" pubdate data-updated="true">May 1<span>st</span>, 2007</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><strong>Automated Analyses and Rewrites</strong></p>
+
+<p>Dehydra and Squash are now mature enough to assist with mundane tasks like renames and various kinds of tedious code inspection. If you ever suspect that part of the Mozilla hacking you are doing could be done by a tool, contact me to see if I have a suitable tool for you.</p>
+
+<p>Also, these tools are in no way limited to working with Mozilla source code. I would be happy to see people use them for other projects too.</p>
+
+<p><strong>Short-term Plans</strong></p>
+
+<p>For the next week or two I plan to focus on out-parameter rewriting and the Mozilla-wide C++ callgraph.</p>
+
+<p><strong>Mozilla-wide Callgraph</strong> This is proving to be a little painful. Things work for basic test-cases, but I am running into scalability issues with Mozilla (as expected). My current approach of serializing everything into a giant JSON graph blows the 32bit address space after a few hundred files. Even doing a Mozilla-wide inheritance graph causes out of memory errors, but that runs almost to competition. The best solution to this will be to break up the graph into as many smaller JSON files as possible and only load ones that are absolutely required into memory.</p>
+
+<p>The callgraph will be a useful starting point for many other useful analyses (dead code one is going to be lots of fun) and it&#8217;s a good test of dehydra&#8217;s scalability, but I have suspended work on it for a few days to focus on more productive tasks.</p>
+
+<p><strong>Out-parameter Rewriting</strong></p>
+
+<p>Due to XPCOM, Mozilla getters typically return an error code and a value via an out parameter. This requires checking the error code and likely propagating it at the callsite.</p>
+
+<p>For many places in the code there are performance and aesthetical reasons to stop using error codes. Brendan talks discusses some reasons <a href="http://weblogs.mozillazine.org/roadmap/archives/2006/10/mozilla_2.html">here</a>. This would be cool stuff, but switching to exceptions isn&#8217;t going to happen right away. However, I can already start working on my tools to assist with simpler cases (like <a href="http://www.google.com/codesearch?hl=en&amp;q=+nsBidiPresUtils::GetBidiEngine+show:kW5gzhxHJvU:iRn_dfI9xJY:Y5Gdp6b4NgE&amp;sa=N&amp;cd=1&amp;ct=rc&amp;cs_p=http://ftp.mozilla.org/pub/mozilla.org/mozilla/releases/mozilla1.7a/src/mozilla-source-1.7a.tar.bz2&amp;cs_f=mozilla/layout/base/src/nsBidiPresUtils.cpp#a0">nsBidiPresUtils::GetBidiEngine</a>?). I&#8217;m focusing on getters that return NS_OK/(some error) and a value and rewriting them to return NULL on error and non-NULL on success. This could be ready in time for Firefox 3. Once I&#8217;m done with the tool, I&#8217;ll just need someone to help me figure which functions are ok to simplify like that.</p>
+
+<p>I suspended work on out-param rewriting <a href="http://taras.glek.net/blog/2007/01/11/squash-progress-and-plans/">some time ago</a>. It was proving to be too complicated to do within squash. Now that I can use dehydra to verify the control flow graph, things are a lot simpler. Current plan is to have the <a href="http://people.mozilla.org/~tglek/outparams.js">dehydra script</a> produce a list of candidates for out-param surgery and have squash consume that list and produce the appropriate patches. Currently, the script works for some very simple cases and I am working on the squash side.</p>
+
+<p><strong>Smaller Tasks</strong></p>
+
+<ul>
+<li>Sayrer&#8217;s uninitialized member analysis: added more complete constructor support to dehyra, wrote a <a href="http://people.mozilla.org/~tglek/member-init.js">sample script</a> to get sayrer started. Fixed dehydra&#8217;s 64bit support. <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=378763">Bug 378763</a></li>
+<li>Made some squash-generated patches for bz, helped me find a bug in squash. <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=378780">Bug 378780</a></li>
+<li>Pushing squash upstream into oink. This is time consuming because it is a combination of legal and many minor technical issues. Dehydra will follow later.</li>
+</ul>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -437,258 +625,6 @@ For the above to work will also need support for a user-correctable/suggestable 
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2007/02/01/lossy-ast-traversals-for-good-code-health/">Lossy AST Traversals for Good Code Health</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2007-02-01T10:34:28-08:00" pubdate data-updated="true">Feb 1<span>st</span>, 2007</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Two weeks ago I finally listened to <a href="http://blog.mozilla.org/graydon">Graydon</a> and spent some quality time playing with <a href="http://spinroot.com/uno/">UNO</a> and reading the <a href="http://spinroot.com/uno/uno_long.pdf">paper</a> on it. UNO provides a simple DSL language to traverse interesting parts of the C abstract syntax tree. It simplifies the AST down to the bare minimum of variable and function call info and iterates user-defined scripts over that.</p>
-
-<p>Since I was looking for a way to get away from C++ for code analysis I was very excited and decided to implement the ideas in UNO in my own tool which goes by a temporarily name of &#8220;dos&#8221;. There limitations in UNO: it has no hope of parsing C++ without switching parsers and the DSL is rather limited. Thus, dos is built on the incredible <a href="http://www.cubewano.org/oink/">Elsa/Oink</a> C/C++ parser and uses SpiderMonkey to provide JavaScript as a scripting language.</p>
-
-<p><strong>Status</strong></p>
-
-<ul>
-<li>dos builds a Control Flow Graph from the Elsa AST. It isn&#8217;t finished and while for/while loops, break/continue/return and if statements are supported (as opposed to the trinary operator or goto), but the CFG isn&#8217;t quite right yet. However, it&#8217;s good enough for proof of concept purposes.</li>
-<li>Dos does not do DFS traversal when iterating the script like UNO, but instead iterates through statements sequentially because I did not feel like writing my own traversal of the massive Elsa AST.</li>
-<li><p>I mostly implemented an UNO-compatibility JS lib in <a href="http://people.mozilla.com/~tglek/system.js">system.js</a> which should allow for easy ports of UNO analyses like <a href="http://people.mozilla.com/~tglek/malloc.js">malloc.js</a>. It&#8217;s missing the negation conditions from UNO, but those should be quick to implement.
-<strong>Instructions</strong></p></li>
-<li><p>Download my oink <a href="http://people.mozilla.com/~tglek/dos_and_squash-0.0.tar.gz">tarball</a> with the squash &amp; dos additions.</p></li>
-<li>Install ossp spidermonkey distribution: cd dos_and_squash-0.0/js-1.6.20060820 ; configure &#8211;prefix=/usr (or use /usr/include) &amp;&amp; make install</li>
-<li>Build the oink suite: cd ../oink ; ./configure &amp;&amp; make</li>
-<li>I ported a simple UNO analysis which checks that malloc() is always paired with a corresponding free() statement. To run it: ./dos -dos-javascript malloc.js simple.cpp Now modify line 12 of simple.cpp by putting ; after the while statement. The error will be detected: func:test Error at simple.cpp:13: malloc without free
-<strong>Writing Scripts</strong></li>
-</ul>
-
-
-<p>Take a look at <a href="http://people.mozilla.com/~tglek/simple.js">simple.js</a> for a barebone analysis. There should be at least 2 functions in every script <em>uno_check(vars, state)</em> and <em>path_end(state)</em>. <em>uno_check()</em> is called for every statement in a control flow path. <em>vars</em> is an array of interesting variables and function calls in the current AST statement and <em>state</em> is where the script should store all state info. <em>state</em> gets copied on CFG block transitions with an optionally user-provided <em>clone()</em> function (see system.js for an example). <em>path_end()</em> is called when the end of the CFG path is reached.</p>
-
-<p>./dos -dos-javascript simple.js simple.cpp # this runs the user script</p>
-
-<p><strong>UNO-compatibility</strong></p>
-
-<p>UNO and the corresponding paper on it is currently the best documentation for dos. Thus I also assign <em>vars</em> and <em>state</em> to the global object to achieve UNO-like scripting feel. See malloc.js and system.js for details.</p>
-
-<p><strong>Goals</strong></p>
-
-<ul>
-<li>My foremost goal is to find a better name for dos. I&#8217;m open to suggestions that are both humorous and somehow related to source analysis.</li>
-<li>Easy: finish UNO compatibility functions. I&#8217;ll do that as I port more scripts, but I wont mind if anyone does it for me.</li>
-<li>Improve the CFG, do some value analysis to reduce the graph and provide more info to the scripts</li>
-<li>Easy: Add types to the variable info, should get dos closer to doing the <a href="http://wiki.mozilla.org/GC_SafetySpec">GC safety-analysis</a>.</li>
-<li>Reuse the JS parser to build a JS CFG to allow the same kind of analyses for JavaScript. This would be great for verifying API usage in extensions. For bonus points one can allow the user to tie the JS and C/C++ analysis together for cross-language analyses.</li>
-<li>UNO has a fairly complicated global variable analyses that is not very scriptable and thus boring. I would be interested in scripting intra-procedural analyses to figure out call-graphs, do some sort of behavior inference (ie figure out indirect malloc calls, certain other heap modifying behaviors and propagate them as attributes to function calls), etc.
-<strong>Update: New name for dos -> DeHydra</strong></li>
-</ul>
-
-
-<p>The tool is now named DeHydra since it is supposed identify bugs in the multi-headed Control Flow Graph monster.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2007/01/24/will-rename-class-members-for-food/">Will Rename Class Members for Food</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2007-01-24T10:04:39-08:00" pubdate data-updated="true">Jan 24<span>th</span>, 2007</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Squash may now be ready as a class member renaming tool for early adopters. I would like people to use me as a frontend to squash. Email me your requests for renames and I will reply with giant patches. This way squash can be immediately useful. Plus I can fix bugs in squash and figure out actual usecase while I get the frontend set up.Progress</p>
-
-<p>Squash can now produce a good looking <a href="http://glek.net:8080/~taras/nsiframe.diff">92K patch</a> for renaming nsIFrame::GetPresContext. This means that squash can now correctly traverse 167 files and produce a patch that affects 103 of them. I am going to work on the web frontend next.</p>
-
-<p>Some issues below.</p>
-
-<p><strong>Tool Explosion</strong></p>
-
-<p>I wrote a creatively named frontend: run_squash. It prevents squash from running out of address space by running squash unit-at-a-time and combining patch output from multiple runs. It runs squash in parallel similar to make -j. This decreases runtime proportionally with the number of cores. I would be curious to see how Sun&#8217;s Rock-based systems fare for this. For example on the 4way Opteron a 20 minute squash run takes around 5 minutes. Having lots of CPU cores will become important down the road once multiple users are running multiple analysis tasks on a single machine through a web frontend.</p>
-
-<p>There is another temporarly named tool, prepare.py, which greps .cpp files looking for candidates for renaming, produces matching .i files, figures out number of cpus and then invokes run_squash.</p>
-
-<p>More special purpose tools will need to be written. For example roc mentioned that it would be nice to check when generated interface files are being modified and to have the corresponding IDL updated instead while refusing to modify frozen IDL interfaces. Classes with IIDs would need to have them changed too.</p>
-
-<p><em>Tool Rant</em> I am trying to decide how to manage the tool growth such that things evolve sanely. Should squash be a giant swiss-army-knife binary capable of doing everything but incredibly hard to modify? Or should it be broken up into a dozen of separate programs &amp; scripts that work together in an ad-hoc way? The latter would be what some people describe as UNIX way, whatever that means. In the 90s, the former would&#8217;ve been done by making everything a COM component and still just as hard to modify. Alternatively, I could use some strong ROPE and SOAP to tie everything together with SOA. Kidding aside, it would be nice to have a strategy to deal with this so people could run squash on their own machines too without spending a week setting up dependencies.</p>
-
-<p><strong>CPP – To Invert or Not to Invert</strong></p>
-
-<p>A large part of squash is hacks and workarounds for preprocessor-induced pain. Recently, I ran into two interesting cases where blind string substitution fails.</p>
-
-<p><em>Multiline macro parameters</em></p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>if (NS_SUCCEEDED(
-</span><span class='line'>nsSVGUtils::GetReferencedFrame(&nextPattern, targetURI,
-</span><span class='line'>mContent,
-</span><span class='line'>GetPresContext()-&gt;PresShell()))) {
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Squash works on an AST produced from .i files. When cpp expands this macro, everything ends up on the same line as the if keyword. That&#8217;s a problem because when squash wants to replace GetPresContext() the parser gives it the wrong line. Initially I was tempted to remove the newline in a few cases from the original source, but then I realized that this analogous to looking for the closing } in class declarations when end-of-AST-node info isn&#8217;t available. Now if a string substitution fails squash will go to the next line until a match is found or one of ;{} characters is encountered. Yes, that&#8217;s also an emoticon of me looking at yet another CPP-induced problem.</p>
-
-<p><em>Replacing Code Within a Macro Definition. </em>Mozilla has whole functions defined within macros. Squash can not deal with that. Is it worth it to do a limited preprocessor inversion to fix these or to fail and let a developer do it by hand? For example one could mark up the .i file with metadata on which sections came from a macro expansion and which sections were passed into macros as parameters. Then an intelligent rewrite decision could be made. This would solve most of the CPP-induced problems I can think of, but would require hacking a good C preprocessor. This is probably not worth the pain, but apparently someone bolted on a bsd-licensed preprocessor onto Elsa. If that&#8217;s true, the patch may get me most of the way to a macro-aware squash.</p>
-
-<p><strong>Quick Analyses</strong></p>
-
-<p>There are hundreds of useful analyses that can be done on Elsa&#8217;s AST of Mozilla. However using C++ is too verbose and error prone do many of the simpler tasks. It would be nice to make a first-class binding to Oink/Elsa that easily extract all interesting info from the AST. Olmar is one way of doing that, but converting Elsa-style OO into ML datatypes produces incredibly verbose data structures and requires careful conversion of code such that information isn&#8217;t lost.</p>
-
-<p>A language that can query the C++ AST in the way that the author&#8217;s intended it, may be an easier way to go. ES4 JavaScript would be interesting for that because the script could traverse the cast-happy Elsa-AST, extract information of interested and present that as a structured type which could then be manipulated using type-safe pattern matching.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2007/01/11/squash-progress-and-plans/">Squash Progress and Plans</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2007-01-11T06:34:59-08:00" pubdate data-updated="true">Jan 11<span>th</span>, 2007</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><strong>Out-param Rewriting Work</strong></p>
-
-<p>Since the last post I worked on rewriting functions that use out-parameters to use return values instead. I got as far as rewriting method definitions and simple call sites, but decided to hold off further work until the rest of squash is more complete.</p>
-
-<p><strong>Squash Development Roadmap</strong> <a href="http://weblogs.mozillazine.org/roc/">Robert O&#8217;Callahan</a> helped me devise a near term roadmap. I am going to focus getting squash to be production quality for member renames and to produce commit-quality patches. An example query would be to rename sIFrame::GetPresContext to nsIFrame::PresContext. This involves a couple of big details:</p>
-
-<ul>
-<li>Produce aesthetically pleasing code via text substitution instead of oink pretty printing. The advantage of this is that the original coding style, comments and indentation will all be preserved. This involves reparsing the resulting code to verify correctness (doubles-memory usage &amp; processing time).</li>
-<li>To produce a complete patch squash needs to process all of the relevant source code. This increases memory usage and processing time linearly. I&#8217;ll use grep to narrow down candidates for processing and in the future will use a AST database of mozilla to figure out exactly what needs changing.</li>
-<li>It is useful to be able to process all interesting source code in one invocation but just processing the layout/generic directory sequentially uses over 2GB of RAM (Elsa&#8217;s AST does not support deallocation) and takes 3 minutes on a quad Opteron. So in order to reduce RAM usage and be a trendy multi-core developer I&#8217;ll fork() a process for every file and use that for both parallelism and memory cleanup purposes.</li>
-<li>Develop a web frontend that maintains an up-to-date mozilla source tree and has squash setup on it where one would be able to enter their rename operation and have patch emailed back to them. Rob even had a cool idea to have the user enter a bugzilla id and have the patch automatically attached to that. This will be useful so I don&#8217;t have to work so hard on packaging squash and users will get instant gratification. Plus people without quad Opterons will be able to test squash too :)
-All that is Milestone 1. After that I&#8217;ll work on infrastructure like AST-node-location info, cleaning up pretty printing and defining the exact goal for the next milestone.</li>
-</ul>
-
-
-<p><strong>Current Status</strong></p>
-
-<p>Over the past 3 days I refactored squash to be able to do renames without having to go through class squashing, etc. I added the ability to rename class members and now it can produce ugly patches for that.</p>
-
-<p>The current workflow to rename nsIFrame::GetPresContext to nsIFrame::PresContext is:</p>
-
-<ol>
-<li>Identify possible targets</li>
-</ol>
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>find ~/work/ff-build -name \*.o |xargs grep nsIFrame &gt; /tmp/output.sh</span></code></pre></td></tr></table></div></figure>
-
-
-<ol>
-<li>My sed is rusty so I used regexps in <a href="http://kate-editor.org/">Kate</a> to convert resulting lines into something like</li>
-</ol>
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>make -C ./layout/generic/ nsSpacerFrame.i
-</span><span class='line'>make -C ./layout/generic/ nsFrameSetFrame.i
-</span><span class='line'>make -C ./layout/generic/ nsBlockFrame.i</span></code></pre></td></tr></table></div></figure>
-
-
-<ol>
-<li>Run the script to produce the needed .i files</li>
-</ol>
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>. /tmp/output.sh</span></code></pre></td></tr></table></div></figure>
-
-
-<ol>
-<li>Grand-finale:</li>
-</ol>
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>find ~/work/ff-build/ -name \*.i |time xargs  ./squash -o-lang GNU_Cplusplus  -sq-implementation nsIFrame  -sq-no-squash -sq-rename-member GetPresContext PresContext &gt; [nsiframe.diff](http://glek.net:8080/~taras/nsiframe.diff)
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Note that find outputs absolutely filenames which is essensial for squash to resolve relative include files.
-The setup and squashing itself is a bit laborious and RAM/CPU intensive and is the reason for a web frontend. I am going to be ecstatic once this all works.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/24/">&larr; Older</a>
@@ -706,6 +642,10 @@ The setup and squashing itself is a bit laborious and RAM/CPU intensive and is t
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2012/12/21/interesting-bugzilla-activity/">Snappy #45: The view from home</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2012/12/17/hello-octopress/">Hello Octopress</a>
       </li>
     
@@ -719,10 +659,6 @@ The setup and squashing itself is a bit laborious and RAM/CPU intensive and is t
     
       <li class="post">
         <a href="/blog/2012/11/05/snappy-43-big-improvements-faster-startup-smoother-tabstrip/">Snappy #43: Big improvements: faster startup? Smoother tabstrip!</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/10/26/snappy-42/">Snappy #42</a>
       </li>
     
   </ul>

@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="In addition to slow font enumeration, we were suffering from a similar problem: slow plugin enumeration. Just as with fonts, the plugin enumeration &hellip;">
+  <meta name="description" content="I got used to measuring startup the complicated way (example here). It&#8217;s complicated enough that many people prefer to use stopwatches. Turns &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -58,6 +58,90 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/01/14/builtin-startup-measurement/">Builtin Startup Measurement</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-01-14T05:25:20-08:00" pubdate data-updated="true">Jan 14<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I got used to measuring startup the complicated way (example <a href="http://taras.glek.net/blog/2010/01/04/windows-7-startup-exploration/">here</a>). It&#8217;s complicated enough that many people prefer to use stopwatches.</p>
+
+<p>Turns out modern operating systems can help applications self-diagnose startup speed. Thanks to landing <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=522375">bug 522375</a> we now provide an API for measuring startup speed. For example, now I know that xpcshell takes forever to startup on mac</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>
+</span><span class='line'>./xpcshell -e 'print(new Date() - Components.classes["@mozilla.org/toolkit/app-startup;1"].getService(Components.interfaces.nsIAppStartup_MOZILLA_2_0).getStartupInfo().process)'
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>At any point one can now go to the error console and type in</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>
+</span><span class='line'>uneval(Components.classes["@mozilla.org/toolkit/app-startup;1"].getService(Components.interfaces.nsIAppStartup_MOZILLA_2_0).getStartupInfo())
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>or</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>
+</span><span class='line'>var si=Components.classes["@mozilla.org/toolkit/app-startup;1"].getService(Components.interfaces.nsIAppStartup_MOZILLA_2_0).getStartupInfo(); si.sessionRestored-si.process
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>to get various interesting timestamps. So next time you see a startup take a surprising amount of time, you can go and poke around to see where that time was spent. At the moment there are 4 datapoints:</p>
+
+<ol>
+<li>.process - Process creation timestamp. This is cool because this happens before any library code is executed.</li>
+<li>.main - XRE_main timestamp. My favourite thing to do is to subtract .process from .main. This demonstrates huge overheads that many application programmers refuse to believe in.</li>
+<li>.firstPaint - Timestamp of the first intended paint. This coincides with when the user sees the first sign of life.</li>
+<li>.sessionRestore - Timestamp of session restore, ie when the browser becomes useful.
+Lots of people helped in getting this feature landed, but two people stand out. Daniel Brooks originally figured how to expose Windows/Linux startup speed in Mozilla. Mike Hommey devised a morally-reprehensible way to get precise startup speed out of the idiotic way that Linux presents it.</li>
+</ol>
+
+
+<p><strong>Linux Sucks </strong></p>
+
+<p>Mac and Windows expose process creation times via human time. It&#8217;s just like any other API with time in it. Linux provides process startup speed in imbecile jiffies-since-boot. That&#8217;d be irritating enough, but to piss people off further there is no way to convert that into human time. Clever ps developers resort to calculating jiffies/second by comparing against seconds-since-start in /proc/uptime. Unfortunately that does not even come close to providing anything close to millisecond resolution needed for useful numbers. Mike&#8217;s idea of timing startup of another thread/task to get a known jiffy-stamp got us precise-enough numbers (around 10ms resolution with most kernels, see <a href="http://hg.mozilla.org/mozilla-central/rev/dfdf3e5dc749">patch</a> for details). At least Linus was kind enough to let mere user-space devs obtain the current tick-rate.</p>
+
+<p><strong>Update:</strong></p>
+
+<p>Linux doesn&#8217;t suck anymore, a commenter pointed me to a relatively new(2006) taskstats interface which appears to work sanely like the BSD one.</p>
+
+<p>Mike Hommey made an <a href="http://glandium.org/blog/?p=1575">about:startup extension</a> using this API.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -302,6 +386,78 @@ This was a rare fix that resulted in seconds saved on crapware-loaded computers.
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2010/10/05/None/">Auto Draft</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-10-05T06:27:35-07:00" pubdate data-updated="true">Oct 5<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>None</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/10/04/None/">Auto Draft</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-10-04T13:12:39-07:00" pubdate data-updated="true">Oct 4<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>None</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2010/10/04/diagnosing-slow-startup/">Diagnosing Slow Startup</a></h1>
     
     
@@ -436,163 +592,6 @@ Click on &#8220;IO Counts&#8221; or &#8220;Hard faults&#8221; graph, select &#82
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2010/09/09/help-wanted-does-fcntlf_preallocate-work-as-advertised-on-osx/">Help Wanted: Does fcntl(F_PREALLOCATE) Work as Advertised on OSX?</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-09-09T07:06:11-07:00" pubdate data-updated="true">Sep 9<span>th</span>, 2010</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>To fight fragmentation it is best to tell the OS to allocate a continuous chunk of space for your file. With specialized APIs, the OS can do this without performing any IO (not counting metadata). I am adding support for this as part of <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=592520">bug 592520</a>.  Linux features <a href="http://linux.die.net/man/3/posix_fallocate">posix_fadvise</a> for preallocating files. Windows&#8217;s <a href="http://msdn.microsoft.com/en-us/library/aa365531%28VS.85%29.aspx">SetEndOfFile</a> achieves the same result. <a href="http://lists.apple.com/archives/darwin-dev/2007/Dec/msg00040.html">Supposedly</a> OSX can do this via <a href="http://www.manpages.info/macosx/fcntl.2.html">fcntl</a>(F_PREALLOCATE), but does it?</p>
-
-<p>I&#8217;ve experimented with posix_fadvise/SetEndOfFile and determined that they both change the file size and do their best to avoid fragmentation. Unfortunately I do not see any effect of fcntl(F_PREALLOCATE) on OS X 10.6 (the return code is successful). The file size does not change and if I then write to the file, it seems to fragment just as much as before. Can a Mac expert demonstrate that fcntl(F_PREALLOCATE) makes any difference at all?</p>
-
-<p><strong>Update:</strong> Thanks a lot for the useful feedback, it was extremely helpful in producing this <a href="https://bug592520.bugzilla.mozilla.org/attachment.cgi?id=474233">patch</a>. It appears that the posix_fallocate equivalent is to the fnctl followed by a truncate() call (which actually forces data to be written to the file).</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2010/09/07/fighting-fragmentation-sqlite/">Fighting Fragmentation: SQLite</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-09-07T02:57:56-07:00" pubdate data-updated="true">Sep 7<span>th</span>, 2010</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Thanks for all of those who commented on <a href="http://taras.glek.net/blog/2010/07/22/file-fragmentation/">previous post</a> on fragmentation. My first fragmentation <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=581606">fix</a> has landed. In current nightlies and future releases the main Firefox databases will grow more aggressively to avoid fragmentation. This should translate into better history/awesomebar/cookie performance for our most dedicated users.</p>
-
-<p>Unfortunately fixing existing profiles is <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=592678">hard</a> from within Firefox. In the meantime advanced users on non-Windows platforms who are suffering from fragmentation can manually copy *.sqlite files to another directory and back.</p>
-
-<p><strong>Windows: Ahead of the pack</strong></p>
-
-<p>Evidence suggests that the Windows fragmentation situation is slightly better than on other platforms. Firefox fragmentation behavior on Windows is similar to other OSes but Windows periodically defragments Firefox files opened on startup. So one ends up with a cycle of deteriorating performance, followed by better performance(ie right after defrag), followed by deteriorating performance, etc.</p>
-
-<p>I haven&#8217;t observed Windows defragmenting files for me, but it seems to do this for most users. Would love to learn more on how/when it decides to defragment files.</p>
-
-<p><strong>Horror Stories </strong></p>
-
-<p>I found a few other places that are horridly affected by fragmentation, will be blogging about those as I fix them. Fragmentation is an interesting problem to optimize because it affects dedicated users most, yet it is very tricky to replicate in a developer environment. Furthermore, there are a lot of misconceptions floating around:</p>
-
-<ol>
-<li>Fragmentation is a Windows problem that Linux is immune to due to having awesomer filesystems.</li>
-<li>Mac OSX automatically defragments files, so fragmentation isn&#8217;t a problem there.</li>
-<li>Fragmentation isn&#8217;t a problem on SSDs
-To which I say:</li>
-<li>Linux might be good at avoiding fragmentation for server workloads. It sucks for desktop users.</li>
-<li>OSX will defragment small files, but big ones hurt most.</li>
-<li>Cheap SSDs suck at tiny reads caused by fragmentation resulting in spectacularly bad IO. More on this in a future post.
-To summarize: there are a lot of misleading stories floating around. I am always happy to hear more measurements/docs/bugs/etc on this subject, but I have zero patience for folk stories and speculation.</li>
-</ol>
-
-
-<p>I should also mention that the fragmentation problem isn&#8217;t limited to Firefox. Other browsers suffer from it too.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2010/07/30/msvc-static-initializers-decent-stuff/">MSVC Static Initializers - Decent Stuff</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-07-30T05:56:17-07:00" pubdate data-updated="true">Jul 30<span>th</span>, 2010</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I was digging through a MSVC++ <a href="http://msdn.microsoft.com/en-us/library/k7xkk3e2%28v=VS.80%29.aspx">map file</a> for xul.dll. Turns out MSVC++ isn&#8217;t as <a href="http://taras.glek.net/blog/2010/05/27/startup-backward-constructors/">naive</a> about virtual initializers as the GNU toolchain. Initializers are all laid out next to each other. Same goes for what looks like finalizers and exception unwinding stuff. Initializers have an __E prefix and look like this:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>
-</span><span class='line'>0001:0089b470       ??__E?config@AvmCore@avmplus@@2UConfig@nanojit@@A@@YAXXZ 1089c470 f    CIL library: CIL module
-</span><span class='line'>0001:0089b475       ??__EkStaticModules@@YAXXZ 1089c475 f   nsStaticXULComponents.obj
-</span><span class='line'>0001:0089b638       ??__E?sSnifferEntries@nsUnknownDecoder@@1PAUnsSnifferEntry@1@A@@YAXXZ 1089c638 f   necko:nsUnknownDecoder.obj
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now if only Microsoft fixed their kernel to do [</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>memory-mapped IO</span></code></pre></td></tr></table></div></figure>
-
-
-<p>](http://taras.glek.net/blog/2010/04/19/windows-sucks-at-memory-mapped-io-during-startup/) efficiently, it&#8217;d be a superior OS for starting Firefox.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/11/">&larr; Older</a>
@@ -610,6 +609,10 @@ To summarize: there are a lot of misleading stories floating around. I am always
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2012/12/21/interesting-bugzilla-activity/">Snappy #45: The view from home</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2012/12/17/hello-octopress/">Hello Octopress</a>
       </li>
     
@@ -623,10 +626,6 @@ To summarize: there are a lot of misleading stories floating around. I am always
     
       <li class="post">
         <a href="/blog/2012/11/05/snappy-43-big-improvements-faster-startup-smoother-tabstrip/">Snappy #43: Big improvements: faster startup? Smoother tabstrip!</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/10/26/snappy-42/">Snappy #42</a>
       </li>
     
   </ul>

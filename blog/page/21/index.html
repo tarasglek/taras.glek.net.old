@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="I&#8217;m having a very painful time rewriting Mozilla source code to switch it to garbage collection. So I took a little break to think about Myk&# &hellip;">
+  <meta name="description" content="There will be a lot of under-the-hood code changes in Mozilla 2. Our goal is to end up with a simpler, safer and faster codebase. This is my &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -58,6 +58,244 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2007/11/26/mozilla-2-outparamdel/">Mozilla 2: Outparamdel</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-11-26T07:26:17-08:00" pubdate data-updated="true">Nov 26<span>th</span>, 2007</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>There will be a lot of under-the-hood code changes in Mozilla 2. Our goal is to end up with a simpler, safer and faster codebase.</p>
+
+<p>This is my perspective on the work ahead with respect to outparamdel.</p>
+
+<p><strong>Outparamdel</strong></p>
+
+<p>In the presence of a garbage collector we will be getting rid of stack nsCOMPtr&lt;> usage (using raw pointers instead), but the getter_Addrefs() will still be needed to pass references to heap-allocated nsCOMPtr so they can be assigned to. Eliminating as many outparams as possible will eliminate much getter_Addrefs() footprint/perf/code bloat.</p>
+
+<p>Within the next week I hope to attempt to rewrite all of the auto-detectable outparamdel candidates.</p>
+
+<p><strong>Determining What To Rewrite</strong></p>
+
+<p>outparams.js is a dehydra script for flagging code that can be rewritten to use outparameters. It turned out a bit trickier than I initially expected. Here are the checks required</p>
+
+<ol>
+<li>Check that a function only ever returns 1 failure error code (NS_OK and something else). This enough if a function is not virtual.</li>
+<li>Ensure that either a) This is the only implementation of a particular virtual function or b) All other implementations of this function satisfy 1 Currently I only do a).</li>
+<li>Also check that all overloads of this function have the same outparameter type. This is required since C++ (thankfully) doesn&#8217;t not allow function overloading by varying the return type.</li>
+<li>Checks 1-3 ensure that the function can be rewritten, however one also needs to determine if the return type should be wrapped in getter_Addrefs&lt;>. This can not be deterministically done from looking at the getter. So one has to scan the code for usage of the function to see if the outparam is ever passed getter_Addrefs.</li>
+<li>Check that none of the callers are within macros to minimize non-automatic rewriting.
+Checks 2 and 3 require the complete class hierachy of Mozilla so I finally made a few more dehydra scripts to produce that. This was on my TODO list for a while and should make a few other interesting analyses possible (my favourite one is finding interfaces which only have 1 implementation to get rid of excessive virtual functions).</li>
+</ol>
+
+
+<p>Checks 4 and 5 were easiest to implement as warnings in outparamdel.</p>
+
+<p>One should keep in mind transitivity. Once the first outparamdel candidates are rewritten, some of their callers should become flagged for rewriting in the same manner.</p>
+
+<p><strong>Rewriting Code </strong></p>
+
+<p>Here is an example of how code will be simplified.</p>
+
+<p>given a function:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>
+</span><span class='line'>nsresult getFoo(nsIFoo **out);
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And usage like:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>
+</span><span class='line'>nsCOMPtr&lt;nsIFoo&gt; bla;
+</span><span class='line'>nsresult rv = getFoo(getter_Addrefs(bla));</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>if ((NS_SUCCEEDED(rv) && bla) {
+</span><span class='line'>...
+</span><span class='line'>} else {
+</span><span class='line'>return rv;
+</span><span class='line'>}
+</span><span class='line'>nsCOMPtr&lt;nsIFoo&gt; bla2;
+</span><span class='line'>return getFoo(getter_Addrefs(bla2));
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The function definition will become:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>nsIFoo* getFoo();
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Before this can be done, several issues come up</p>
+
+<ol>
+<li>It is not clear if the original getFoo() is allowed to always override the value passed to it. This is hard to determine automatically, so we make the assumption that in the general case it is ok.</li>
+<li>It isn&#8217;t obvious if getFoo() is returns null in the outparam to indicate some non-error condition. This is rare so the parameter shall be annotated. Currently, the plan is to annotate with a NULLABLE_OUTPARAM() macro which would be detectable by dehydra and serve as documentation for the function behavior.</li>
+</ol>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>nsCOMPtr&lt;nsIFoo&gt; bla = getFoo(); //after XPCOMGC rewrite the left side will become nsIFoo* bla
+</span><span class='line'>if (bla) { // could even merge the above declaration into the if condition
+</span><span class='line'>...
+</span><span class='line'>} else {
+</span><span class='line'>return NS_ERROR;// or NULL if this is another outparamdel candidate
+</span><span class='line'>}
+</span><span class='line'>nsCOMPtr&lt;nsIFoo&gt; bla2 = getFoo();
+</span><span class='line'>return bla2 ? NS_OK : NS_ERROR_SOMETHING; // I'm not sure if outparamdel should use an explicit ternary operator or an inline function to convert new style errors into nsresult
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Currently the code is being rewritten in a much uglier way. So this cleaner version will likely be implemented as an optimization pass (probably with a new tool outparamdel-opt?). There several tricks here:</p>
+
+<ol>
+<li>Connect the declaration with initialization of bla and bla2</li>
+<li>Detect the error check and replace it with &#8220;bla&#8221;(or !bla for NS_FAILED).Then realize that bla &amp;&amp; bla contains a redundant statement and take it out.</li>
+<li>Do something similar to return statements.
+<strong>Result</strong></li>
+</ol>
+
+
+<p>This should result in prettier code that compiles quicker and to a smaller, more efficient binary. It will also be more GC-friendly.</p>
+
+<p><strong>C++ Exceptions</strong></p>
+
+<p>Right now outparamdel does rewrites that are useful even if C++ exceptions will not be introduced. There are further code reduction gains possible if above error checks were converted into C++ exceptions, but I am not clear on performance characteristics of exceptions. We would also need to change tamarin exceptions to match C++ ones before any experimentation can be done.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2007/11/12/cleaning-up-my-act/">Cleaning Up My Act</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-11-12T05:10:19-08:00" pubdate data-updated="true">Nov 12<span>th</span>, 2007</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I added an &#8220;ongoing work&#8221; and &#8220;tools&#8221; sections to the <a href="http://wiki.mozilla.org/Mozilla_2">Mozilla 2</a> page.</p>
+
+<p>The pork suite now has a <a href="http://wiki.mozilla.org/Pork">wiki page</a>.</p>
+
+<h1>mercurial regulars kindly educated me about hg branches. Turned out hgimportsvn tries to map some subversion concepts onto hg branches which causes problems for people checking out pork using never versions of hg. For people googling for this issue: do &#8220;hg up trunk ; hg branch -f default; hg commit&#8221; to produce a magic empty revision to fix this problem.</h1>
+
+<p>If you have tried to compile pork before and gave up in despair, please try again using the <a href="http://wiki.mozilla.org/Pork">pork wiki page</a> for instructions.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2007/11/02/garburator-works/">Garburator Works!</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-11-02T09:02:15-07:00" pubdate data-updated="true">Nov 2<span>nd</span>, 2007</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>A <a href="http://taras.glek.net/blog/2007/10/12/rewriting-tools-for-mozilla-2-moving-forward-as-planned/">few weeks</a> ago I convinced myself that is possible to rewrite Mozilla to avoid COMPtrs on the stack. Since then I&#8217;ve changed my mind a few times and felt like I may not be able to get this rewrite working. However, after three or four false starts, I finally managed to work out a metal model of the stack nsCOMPtr usage. With a combination of automatic blacklisting of tricky code, manual demacroing and lots of help from <a href="http://benjamin.smedbergs.us/">Benjamin</a> I got the generated 3.2MB patch to compile.</p>
+
+<p>I am sure that there are lots of bugs to be found still, but at least we&#8217;ve discovered the pattern that the code follows. I am also sure that there are lots of unpleasant surprises to be discovered and dealt with in the near future.</p>
+
+<p>The bright side is that the result of these rewrites we should get a less buggy codebase that is easier to work on, more efficient and compiles to smaller binaries. My other big wish is to significantly reduce the amount of C++ magic in the codebase.</p>
+
+<p>I am happy that garburator works as it means I can go back to playing <a href="http://taras.glek.net/blog/category/outparamdel/">outparamdel</a>. Hopefully, once garburator+outparamdel are applied on all possible methods we&#8217;ll end up with relatively nice looking C++ code and a healthy performance boost.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -518,195 +756,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2007/07/27/superity-complex-static-analysis/">Superity Complex & Static Analysis</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2007-07-27T07:57:23-07:00" pubdate data-updated="true">Jul 27<span>th</span>, 2007</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>It is always frustrating to see a compiler complain about something trivial. It is especially annoying since most of the trivial complaints are trivial to fix automatically (eg. superfluous semicolon).</p>
-
-<p>I think this is a bigger problem in the static analysis industry. Vendors/researchers ship their tools with a superiority complex built-in. Most of the error messages produced by error checking tools can be paraphrased as &#8220;Gee look, I found some trivial to fix bugs in your code, but I ain&#8217;t gonna do nothing about them! Neeener! Go worker-human!&#8221;</p>
-
-<p>My policy is to make my tools more polite than that. Starting from prcheck, all of my tools will point out simple errors by suggesting patches (when possible). It is impossible to produce a correct patch every time, but I am not worried about that since developers are quite good at disregarding stupid suggestions.</p>
-
-<p><strong>Automatic Whining</strong></p>
-
-<p>Now I have a few extra scripts that lay the foundation for regular code inspection via static analysis. PRBool checks are my first step. Here is a sample email:
-&#8220;`</p>
-
-<p>&#8220;`</p>
-
-<pre><code>Subject: Prbool violation in nsPlainTextSerializer.cpp
-
-vidur@netscape.com introduced a new PRBool problem in revision 1.1 of nsPlainTextSerializer.cpp.
-
-Commit message: branches:  1.1.2;  
-
-Error: /content/base/src/nsPlainTextSerializer.cpp: 614:
-
--          PRInt32 semiOffset = style.Find("ch", widthOffset+6);
-+          PRInt32 semiOffset = style.Find("ch", 0 != (widthOffset+6));
-</code></pre>
-
-<p><a href="http://bonsai.mozilla.org/cvsblame.cgi?file=mozilla/content/base/src/nsPlainTextSerializer.cpp&amp;rev=&amp;cvsroot=/cvsroot#614">http://bonsai.mozilla.org/cvsblame.cgi?file=mozilla/content/base/src/nsPlainTextSerializer.cpp&amp;rev=&amp;cvsroot=/cvsroot#614</a></p>
-
-<p>This an example of an incorrect suggestion. The actual problem is due to the incorrect method overload being chosen.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2007/07/18/cpp-aware-c-rewriting-can-be-fun/">CPP-Aware C++ Rewriting Can Be Fun</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2007-07-18T07:29:16-07:00" pubdate data-updated="true">Jul 18<span>th</span>, 2007</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Recently MCPP started working well enough to process all of Mozilla with the special macro-expansion undoing markup. Below is the most exciting patch line I have produced so far. A few months ago, I didn&#8217;t think was possible to rewrite macro parameters with elsa.</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>
-</span><span class='line'>-    ENCODE_SIMPLE_ARRAY(PRBool, Bool, (PRUint16) values[i]);
-</span><span class='line'>+    ENCODE_SIMPLE_ARRAY(PRBool, Bool, 0 != ((PRUint16) values[i]));
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>To produce this:</p>
-
-<ol>
-<li>Elsa consumed the expanded .ii file</li>
-<li>Boolean checker found the problematic subexpression</li>
-<li>Original source position was calculated from the expansion log</li>
-<li>Then prcheck figured out that only the macro parameter needs to be rewritten.</li>
-<li>Original source was read in and enclosed within 0 != ()
-<strong>Integrating Static Checks - PRBool check </strong></li>
-</ol>
-
-
-<p><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=266048">This bug</a> contains the rest of the rewriting results. Prcheck checks every assignment to a prbool and outputs a patch if the expression may evaluate to anything other than 0/1. A message is produced if a patch can not be generated because the expression is within a macro.</p>
-
-<p>The goal is to have prcheck run on every commit(or every day) and send out an email or another form of a complaint when a new prbool violation is introduced. Since the current prbool misuses aren&#8217;t going to be fixed overnight, there should be a db kept somewhere with the old misuses to prevent the new ones from being introduced and old ones from being annoying. I&#8217;m thinking of associating misuse counts with a filename, so when the number goes up an error gets mailed out. Anyone get a better idea?</p>
-
-<p><strong>Latest Recipe to Running Oink Tools </strong></p>
-
-<ol>
-<li>If you want to rewrite sources either wait for the next mcpp release or use my <a href="http://people.mozilla.org/~tglek/mcpp-post2.6.4.tar.gz">tarball</a>.</li>
-<li>Install gcc 3.4.x. If using mcpp, configure mcpp with &#8211;enable-replace-system so it replaces the gcc preprocessor</li>
-<li><a href="http://taras.glek.net/blog/2007/07/13/dehydra-prcheck-squash-in-mercurial/">Checkout</a> and build my oink version.</li>
-<li>Build mozilla with -save-temps gcc option. If using mcpp set environment variables CC=&#8221;gcc -Wp,-K -Wp,-W0 -save-temps &#8221; and CXX=&#8221;g++ -Wp,-K -Wp,-W0 -save-temps &#8221; and do make -f client.mk build as usual. The extra gcc parameters tell it to save intermediate files to pass -K and -W0 to enable macro expansion annotation and silence warnings.</li>
-<li>Run tools individual files</li>
-<li>Produce a global patch with ./pork-barrel 4 /path/to/prcheck /tmp/input.txt where input.txt is a list of absolute filenames of all of the .i and .ii files produced by the build process</li>
-</ol>
-
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2007/07/13/pondering-prepost-conditions-to-enforce-software-correctness/">Pondering Pre/Post Conditions to Enforce Software Correctness</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2007-07-13T02:12:55-07:00" pubdate data-updated="true">Jul 13<span>th</span>, 2007</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>That other software company has a some brilliant people working on verifying their source code. Their approach is hardcore and seems quite good. Their recipe to robust C# (applying this to C is research-in-progress, C++ isn&#8217;t yet considered) code is:</p>
-
-<ul>
-<li>sprinkle pre/post-conditions for functions. Reduce annotation labour by additional rule inference</li>
-<li>dataflow analysis to verify type-system stuff like not-null annotations</li>
-<li>Abstract interpretation + model checker to enforce pre/post-conditions</li>
-<li><a href="http://research.microsoft.com/research/pubs/view.aspx?type=Technical%20Report&amp;id=923">BoogiePL</a> intermediate language. Anything can be accomplished by an awesomely named intermediate language!
-Resulting code runs fast has a lot fewer bugs than code without all this fancy machinery. Unfortunately, the benefits can only be reaped if a whole program gets annotated. Otherwise, the model checker gets frustrated. Essentially the language being checked is turned into another much safer (more boogie!) language. I&#8217;m looking forward to the day (that will never come) when all new C code is written this way.</li>
-</ul>
-
-
-<p>If adding these to source code makes you rewrite the whole program, wouldn&#8217;t it be easier to invent another low-level language that comes with safety by default?</p>
-
-<p>I am guessing that the dehydra method of checking for a relatively small number of application specific bugs is the most practical approach available and it will get us 60% towards Boogieing. Now that elsa has support for preprocessor macros it should be possible to specify non-formal pre/post-conditions to check for common errors. It&#8217;s merely a complicated question of defining what should be checked for.</p>
-
-<p>I don&#8217;t have the motivation to write/buy/adopt/integrate a formal tool like a model checker, but it seems that it&#8217;s possible to write application specific checks in JavaScript that can run circles around what most model checkers can do.</p>
-
-<p>That other company isn&#8217;t the only vendor working on this stuff. There <a href="http://www.cs.princeton.edu/~appel/cminor/">brilliant people</a> taking a somewhat different (and open source) approach.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/22/">&larr; Older</a>
@@ -724,6 +773,10 @@ Resulting code runs fast has a lot fewer bugs than code without all this fancy m
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2012/12/21/interesting-bugzilla-activity/">Snappy #45: The view from home</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2012/12/17/hello-octopress/">Hello Octopress</a>
       </li>
     
@@ -737,10 +790,6 @@ Resulting code runs fast has a lot fewer bugs than code without all this fancy m
     
       <li class="post">
         <a href="/blog/2012/11/05/snappy-43-big-improvements-faster-startup-smoother-tabstrip/">Snappy #43: Big improvements: faster startup? Smoother tabstrip!</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/10/26/snappy-42/">Snappy #42</a>
       </li>
     
   </ul>

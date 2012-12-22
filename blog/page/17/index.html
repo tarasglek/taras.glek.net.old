@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="The coolest part about my job is that I get to work on tasks that are cool, but typically are forever laid to rest in the would-be-cool-if-we-could- &hellip;">
+  <meta name="description" content="I&#8217;ve been running my prbool checker with nightly notifications for about a year now. There are some false positivies, but mostly it picks up &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -58,6 +58,137 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2008/11/07/enabling-prcheck-email-notifications/">Enabling Prcheck Email Notifications</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-11-07T07:58:08-08:00" pubdate data-updated="true">Nov 7<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I&#8217;ve been running my prbool checker with nightly notifications for about a year now. There are some false positivies, but mostly it picks up real bugs. The checker pulls the blame source to try to guess who is responsible for the error, but so far it has only been emailing me.</p>
+
+<p>I&#8217;m going to make it emailed the hg blamed person starting this weekend, so if you commit something and get an email from me complaining about it don&#8217;t take it too personally. Hopefully this will keep the amount of new detectable prbool bugs at 0. If you do get an email and decide you don&#8217;t want to get these in the future, please complain and we&#8217;ll try to come up with a better notification solution.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2008/10/09/cool-stuff-in-foreign-realms/">Cool Stuff in Foreign Realms</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-10-09T02:18:29-07:00" pubdate data-updated="true">Oct 9<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Open Source projects are often like parallel worlds. People reach the same conclusions, attempt similar solutions and are typically blissfully unaware of each other&#8217;s existance.</p>
+
+<p>Here are two projects that came to my attention this week:</p>
+
+<ul>
+<li>Via Planet KDE I stumbled on <a href="http://www.englishbreakfastnetwork.org/krazy/">Krazy</a>. It&#8217;s neat if not somewhat depressing that even if C++ parsers are finally becoming accessible all this is still Perl.</li>
+<li>Helpful comment on my previous entry pointed me to <a href="http://blogs.linux.ie/caolan/">dead method hunting</a> in OpenOffice.
+<strong>Uncool Open Source Rant</strong></li>
+</ul>
+
+
+<p>Reason I switched to linux was because it seemed like a developer&#8217;s dream come true. Compilers are a package manager operation away (and generally aren&#8217;t tied to OS versions, I&#8217;m looking at you Apple), everything can be recompiled to address any particular concerns and there are crapload of weird languages to write your software in. This is especially awesome when compared to a typical proprietory software stack where one can&#8217;t easily fix problems that involve multiple components due to licensing issues or due to not having the code available(or due to not having the development environment available). So one would think that Linux distributions hold the ultimate software power: unlimited pass to modify their offering to their target audience&#8217;s content.</p>
+
+<p>Unfortunately my view of Linux ways is unrealistic. For example when people do <a href="http://lwn.net/Articles/299483/">friggin&#8217; awesome work</a> knocking down boot time to 5 seconds by hacking and slashing their way through the entire software stack involved in boottime delays, distributions claim that it&#8217;s not somethin they can seriously consider because they are too set in their ways of general purpose(and generally bloated) init systems and stock kernels(worst case: why can&#8217;t we recompile the kernel on the user&#8217;s machine or ship a couple of custom variations for common hardware out there). What&#8217;s the point of open source if we continue pretending that everything is a general purpose black box that doesn&#8217;t like to play together? It&#8217;s been two weeks and I haven&#8217;t seen a single distro bite the bullet and attempt to list 5 second boot in their goals. Come on guys, don&#8217;t you like to be challenged?</p>
+
+<p>Hope someone proves me wrong.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2008/10/07/note-this-is-not-called-yet-its-just-a-placeholder-for-future-changes/">&#8220;NOTE: This Is Not Called YET. It&#8217;s Just a Placeholder for Future Changes.&#8221;</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-10-07T08:53:44-07:00" pubdate data-updated="true">Oct 7<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>In my quest to rid Firefox of code that doesn&#8217;t do anything it is possible to screw up and delete a method that is only used by outside code. So far, I&#8217;ve hit a <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=457302">component</a> that isn&#8217;t used in Firefox, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=457965">methods</a> that aren&#8217;t used in Firefox and methods that <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=458983">claim</a> someone is about to use them (with a timestamp from 8 years ago). That and I discovered some code only appears to be used from BeOS or OS/2 specific ifdefs.</p>
+
+<p>Not surprisingly, I had someone comment that I do some &#8220;dangerous shit&#8221;. Sure, I can see why someone would think that.</p>
+
+<p>My protection: I use the try server to make sure that everything builds on supported platforms. On top of that every patch gets reviewed.</p>
+
+<p>Furthermore, I would like to point out that methods that aren&#8217;t called within Firefox are less likely to be tested and correct. So if one leaves code that should only be called from other projects, it&#8217;d be appropriate if we had some unit tests for it, which would flag the code as in-use. That would let us move to the next level and setup a tinderbox to detect dead code as soon as it is orphaned.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -435,136 +566,6 @@ Both of these projects are interested in converging on a single codebase. It sou
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2008/08/11/oink-testsuite-within-pork-passes/">Oink Testsuite Within Pork Passes</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-08-11T07:49:28-07:00" pubdate data-updated="true">Aug 11<span>th</span>, 2008</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I have never enjoyed the theory behind software engineering. It seems particularly depressing as it can be summarized as: &#8220;What can we learn from past software development experience in order to not repeat old mistakes such that we can come up with newer and shinier mistakes?&#8221;.</p>
-
-<p>For that reason I haven&#8217;t been able to stick to any particular software development doctrine (paired, test-driven, OO, SOA, etc) and instead taken shortcuts to whatever is practical at the time.</p>
-
-<p>One unfortunate result of such neglect is that the oink test suite ended up not being utilized. I tried it a couple of times while starting out with oink and it failed in many cumbersome ways. However, as pork evolved out of oink, I learned more about the &#8220;architecture&#8221; behind it, I fixed a couple of the issues that were causing funny make errors.</p>
-
-<p>However one giant bug remained. Turned out other people were able to run the original oink testsuite, but not the equivalent one in pork. Fearing that I somehow screwed up Elsa, I spent way too long investigating the failure only to learn it wasn&#8217;t my <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=444805">fault</a>. Pork users: rejoice, the testsuite should run as expected now.</p>
-
-<p>PS. I may not be a SENG believer, but I do think that open source + good version control + testsuites result in better software.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2008/08/04/summit/">Summit</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-08-04T11:40:28-07:00" pubdate data-updated="true">Aug 4<span>th</span>, 2008</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>The past week rocked. I was especially impressed with the localizers. The guys who bear through translating an entire browser with associated websites to expose their country to an awesome browsing experience are simply electrifying.</p>
-
-<p>It was great to see the South American guys again and to meet hordes of Europeans.</p>
-
-<p>The most exciting outcome of the summit in my neck of the static analysis woods is that DXR (a semantically aware successor to MXR) will be rewritten from scratch in Python. Another reason to rejoice is that a tracing spidermonkey should make Treehydra ridiculously fast without much (or any) effort on my part.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2008/07/25/pull-pork-with-care/">Pull Pork With Care</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-07-25T07:01:04-07:00" pubdate data-updated="true">Jul 25<span>th</span>, 2008</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I just committed the large giant change to bring down elsa&#8217;s namespace pollution to reasonable levels. Elsa code now is now using std::foo style, or using namespace std. As I mentioned before, Elsa&#8217;s string is now sm::string, a summary of how to perform similar renames is <a href="http://developer.mozilla.org/en/docs/Renaming_With_Pork">here</a>. The good news is that Pork will soon work out of the box with a modern toolchain.</p>
-
-<p>For the handful of porkers out there, you need to hg pull &amp; hg up all of the pork repositories. This has been a use-case in why splitting up a codebase into a billion repositories is a bad idea:</p>
-
-<p>a) Lovely, I have to do many commits instead of one</p>
-
-<p>b) To top it off, now my users will curse my name while updating whatever pork repository that interests them most.</p>
-
-<p>I feel like I&#8217;m going to throw up if I see any more C++ code diffs in the next 10minutes.</p>
-
-<p>In contrast, while rewriting things on the Mozilla-scale is a lot less feasible manually, it is very rewarding to automate. Gotta love big C++ codebases.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/18/">&larr; Older</a>
@@ -582,6 +583,10 @@ Both of these projects are interested in converging on a single codebase. It sou
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2012/12/21/interesting-bugzilla-activity/">Snappy #45: The view from home</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2012/12/17/hello-octopress/">Hello Octopress</a>
       </li>
     
@@ -595,10 +600,6 @@ Both of these projects are interested in converging on a single codebase. It sou
     
       <li class="post">
         <a href="/blog/2012/11/05/snappy-43-big-improvements-faster-startup-smoother-tabstrip/">Snappy #43: Big improvements: faster startup? Smoother tabstrip!</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/10/26/snappy-42/">Snappy #42</a>
       </li>
     
   </ul>
