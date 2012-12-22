@@ -4,7 +4,7 @@
   <title><![CDATA[All About Performance]]></title>
   <link href="http://taras.glek.net/atom.xml" rel="self"/>
   <link href="http://taras.glek.net/"/>
-  <updated>2012-12-21T12:16:56-08:00</updated>
+  <updated>2012-12-21T16:38:22-08:00</updated>
   <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -12,6 +12,27 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Snappy #45: The view from home]]></title>
+    <link href="http://taras.glek.net/blog/2012/12/21/interesting-bugzilla-activity/"/>
+    <updated>2012-12-21T12:09:00-08:00</updated>
+    <id>http://taras.glek.net/blog/2012/12/21/interesting-bugzilla-activity</id>
+    <content type="html"><![CDATA[<p>I&#8217;m out until January. However, I setup a <a href="http://taras.glek.net/blog/2012/12/17/hello-octopress/">new blog</a>, so why not test it with a snappy update.</p>
+
+<p>Benoit Girard sped up shutdown with:</p>
+
+<ul>
+<li>not forcing startup cache flushes on shutdown: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=816656">bug 816656</a>. This speeds up exiting browser soon after startup.</li>
+<li><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=818296">bug 818296</a>: not nuking cross-compartment wrappers on shutdown. This may significantly reduce our shutdown times. We are waiting on more telemetry data to confirm.</li>
+</ul>
+
+
+<p>Aaron Klotz made startup slightly faster by speeding up reading of some urlclassifier files in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=810101">bug 810101</a>.</p>
+
+<p>Vladimir Vukicevic landed <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=731974">bug 731974</a> which results in smoother browser animations and significantly improves the quality of tab-strip animations.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Hello Octopress]]></title>
@@ -468,27 +489,6 @@ See Bill&#8217;s comments in bug <a href="https://bugzilla.mozilla.org/show_bug.
 <p><strong>GC</strong></p>
 
 <p>Jon Coppeard enabled incremental sweeping: bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=729760">729760</a>. This should result in slightly smaller GC pauses.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[ Telemetry and What It Is Good for: Part 2: Telemetry Achievements ]]></title>
-    <link href="http://taras.glek.net/blog/2012/07/25/telemetry-and-what-it-is-good-for-part-2-telemetry-achievements/"/>
-    <updated>2012-07-25T08:55:21-07:00</updated>
-    <id>http://taras.glek.net/blog/2012/07/25/telemetry-and-what-it-is-good-for-part-2-telemetry-achievements</id>
-    <content type="html"><![CDATA[<p>An inquisitive mind sent me an email with a pointed question:</p>
-
-<p>&#8220;Is there an example of someone who&#8217;s not you that had a burning question that would drive some sort of research or development activity and got it answered by telemetry?&#8221;</p>
-
-<p>I forwarded his email and got a pretty fun survey. See below for a slightly edited version of emails I got. In addition to positive experiences below, people had a lot of complains about the telemetry experience.</p>
-
-<p><em>Justin Lebar</em> Justin is probably the most vocal telemetry user who isn&#8217;t me. He <a href="http://jlebar.com/2012/5/30/A_ghost_story.html">blogged</a> about one of his more successful telemetry experiences. <em>Andrew McCreight</em> One telemetry stat I added is <a href="https://metrics.mozilla.com/data/content/pentaho-cdf-dd/Render?solution=metrics2&amp;path=%2Ftelemetry&amp;file=telemetryHistogram.wcdf&amp;bookmarkState={%22impl%22%3A%22client%22%2C%22params%22%3A{%22startDate%22%3A%222012-06-25%22%2C%22endDate%22%3A%222012-07-24%22%2C%22appVersion%22%3A%22%22%2C%22appName%22%3A%22Firefox%22%2C%22arch%22%3A%22%22%2C%22OS%22%3A%22%22%2C%22version%22%3A%22%22%2C%22channel%22%3A%22nightly%22%2C%22reason%22%3A%22idle-daily%22%2C%22appBuildID%22%3A%22%22%2C%22fromPlatformBuildID%22%3A%22%22%2C%22toPlatformBuildID%22%3A%22%22%2C%22excludeParam%22%3A%22%22%2C%22measure%22%3A%22CYCLE_COLLECTOR_NEED_GC%22%2C%22histogramCompareParam%22%3A%22appVersion%22%2C%22histogramVariablesParam%22%3A%22%22%2C%22platformBuildIDMode%22%3A%22LATEST%22%2C%22platformBuildIDTopCount%22%3A%2230%22%2C%22conditionsStatistic%22%3A%22%23conditionsStatistic%22%2C%22submissionsParameter%22%3A[[172394]]}}">CYCLE_COLLECTOR_NEED_GC</a>.  Sometimes a read barrier fails and we need to do a GC synchronously at the start of a CC, which is terrible for pause times.  Using telemetry, I confirmed my suspicion that this is very rare, and thus not worth trying to improve. Another state Olli added is <a href="https://metrics.mozilla.com/data/content/pentaho-cdf-dd/Render?solution=metrics2&amp;path=%2Ftelemetry&amp;file=telemetryEvolution.wcdf&amp;bookmarkState=%7B%22impl%22%3A%22client%22%2C%22params%22%3A%7B%22referenceDate%22%3A%222012-07-25%22%2C%22appNameParameter%22%3A%22%5BApplication%5D.%5BFirefox%5D%22%2C%22osParameter%22%3A%22%5BOS%5D.%5BWINNT%5D%22%2C%22channelParameter%22%3A%22%5BChannel%5D.%5Bnightly%5D%22%2C%22reasonParameter%22%3A%22%5BReason%5D.%5Bidle-daily%5D%22%2C%22histogramParameter%22%3A%22%5BHistogram%5D.%5BFORGET_SKIPPABLE_MAX%5D%22%2C%22histogramPopupTools%22%3A%22%22%2C%22duplicateHistogram%22%3A%22%23duplicateHistogram%22%2C%22medianButtonParam%22%3A0%2C%22scatterChart%22%3A%22%22%7D%7D">FORGET_SKIPPABLE_MAX</a>, which tracks the length of the CC cleanup phases we run.  As we made the cleanup more and more thorough, the times of these got longer and longer.  I think eventually this led Olli to try to fix the worst case cleanup phases, in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=747675">747675</a>.  He had this comment in there: &#8220;Based on the initial telemetry data, the patch doesn&#8217;t affect too much to the already low median times, but helps significantly with the worst 5%, so mean time decreases quite nicely.&#8221; Also, back around Firefox 13, Olli was using telemetry to observe the results of various CC optimizations, to assess their effectiveness, which he then used to decide whether or not to nominate various patches for landing on Aurora 12.  Telemetry let us see the reward part of the risk vs. reward tradeoff, and get some pretty big improvements into 12. Locally, I use <a href="https://addons.mozilla.org/en-US/firefox/addon/abouttelemetry/">about:telemetry</a> to get a sense of what the behavior on my local machine has been, but I suppose that doesn&#8217;t really fall under &#8220;telemetry&#8221; per se.  But it was quite useful during the Cycle Collector Crisis to see what CC behavior people had been seeing on their machines.</p>
-
-<p><em>Olli Pettay</em> Thanks Andrew, very accurate summary of what I&#8217;ve been doing I tend to look at CC telemetry data daily. I very rarely use the histogram, since evolution is more interesting to me. Especially median time and also how P75 and P95 evolve. (The focus in this Q is to get lower bad times, so we should manage to drop P75 and P95) I use also <a href="about:telemetry">about:telemetry</a> locally since I tend to run builds with some patch, and I want to see if they affect badly to CC or GC times.</p>
-
-<p><em>Taras</em> My blog is basically a collection of telemetry trivia :) I do not have testimonials from other people. However I heard that the silent-update team proved something about silent updates with telemetry, Necko team discovered that some optimizations were not, etc. I encourage other people who solved a problem with telemetry to either wrote a blog post or leave a comment.</p>
-
-<p>In part 3 I will cover flaws in the current Telemetry experience.</p>
 ]]></content>
   </entry>
   

@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Garburator: Another day, Another rewrite tool - All About Performance</title>
+  <title>Snappy #45: The view from home - All About Performance</title>
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="I&#8217;m going to be on vacation until September 25th. I started the day by planning out how to do the rewriting tool to implement Benjamin&#8217;s &hellip;">
+  <meta name="description" content="I&#8217;m out until January. However, I setup a new blog, so why not test it with a snappy update. Benoit Girard sped up shutdown with: not forcing &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://taras.glek.net/blog/2007/09/12/garburator-another-day-another-rewrite-tool/">
+  <link rel="canonical" href="http://taras.glek.net/blog/2012/12/21/interesting-bugzilla-activity/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -61,7 +61,7 @@
   
   <header>
     
-      <h1 class="entry-title">Garburator: Another Day, Another Rewrite Tool</h1>
+      <h1 class="entry-title">Snappy #45: The View From Home</h1>
     
     
       <p class="meta">
@@ -77,16 +77,26 @@
   
 
 
-<time datetime="2007-09-12T05:54:45-07:00" pubdate data-updated="true">Sep 12<span>th</span>, 2007</time>
+<time datetime="2012-12-21T12:09:00-08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2012</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>I&#8217;m going to be on vacation until September 25th. I started the day by planning out how to do the rewriting tool to implement Benjamin&#8217;s <a href="http://wiki.mozilla.org/XPCOMGC/Stack_Pointers">spec.</a> I&#8217;ll have to add more position information to elsa to do things properly and that might take a week or two. However, I&#8217;m into instant gratification so I wrote up a hacky prototype that results in a patch <a href="http://people.mozilla.org/~tglek/garburator.diff">like this.</a></p>
+<div class="entry-content"><p>I&#8217;m out until January. However, I setup a <a href="/blog/2012/12/17/hello-octopress/">new blog</a>, so why not test it with a snappy update.</p>
 
-<p>Say hi to garburator, a tool that will assist with the reference counting -> MMgc transition. The tool is less than 100 lines long, so someone could finish the hacky version while I am away. Either that or one could teach elsa to keep detailed position information in declarations and identifier names and clean up the postvisitS_decl() method in garburator.</p>
+<p>Benoit Girard sped up shutdown with:</p>
+
+<ul>
+<li>not forcing startup cache flushes on shutdown: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=816656">bug 816656</a>. This speeds up exiting browser soon after startup.</li>
+<li><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=818296">bug 818296</a>: not nuking cross-compartment wrappers on shutdown. This may significantly reduce our shutdown times. We are waiting on more telemetry data to confirm.</li>
+</ul>
+
+
+<p>Aaron Klotz made startup slightly faster by speeding up reading of some urlclassifier files in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=810101">bug 810101</a>.</p>
+
+<p>Vladimir Vukicevic landed <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=731974">bug 731974</a> which results in smoother browser animations and significantly improves the quality of tab-strip animations.</p>
 </div>
 
 
@@ -109,12 +119,12 @@
   
 
 
-<time datetime="2007-09-12T05:54:45-07:00" pubdate data-updated="true">Sep 12<span>th</span>, 2007</time>
+<time datetime="2012-12-21T12:09:00-08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2012</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/mozilla/'>mozilla</a>
+    <a class='category' href='/blog/categories/mozilla/'>mozilla</a>, <a class='category' href='/blog/categories/snappy/'>snappy</a>
   
 </span>
 
@@ -123,7 +133,7 @@
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://taras.glek.net/blog/2007/09/12/garburator-another-day-another-rewrite-tool/" data-via="tarasglek" data-counturl="http://taras.glek.net/blog/2007/09/12/garburator-another-day-another-rewrite-tool/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://taras.glek.net/blog/2012/12/21/interesting-bugzilla-activity/" data-via="tarasglek" data-counturl="http://taras.glek.net/blog/2012/12/21/interesting-bugzilla-activity/" >Tweet</a>
   
   
   
@@ -132,10 +142,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2007/09/10/automatic-decomtamination-roadmap-for-automated-refactorings/" title="Previous Post: Automatic DeCOMtamination: Roadmap For Automated Refactorings">&laquo; Automatic DeCOMtamination: Roadmap For Automated Refactorings</a>
+        <a class="basic-alignment left" href="/blog/2012/12/17/hello-octopress/" title="Previous Post: Hello Octopress">&laquo; Hello Octopress</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2007/10/04/multiple-degrees-of-correctness/" title="Next Post: Multiple Degrees of Correctness">Multiple Degrees of Correctness &raquo;</a>
       
     </p>
   </footer>
@@ -220,8 +228,8 @@ Creative Commons Attribution Share-Alike License v3.0 or any later version.
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://taras.glek.net/blog/2007/09/12/garburator-another-day-another-rewrite-tool/';
-        var disqus_url = 'http://taras.glek.net/blog/2007/09/12/garburator-another-day-another-rewrite-tool/';
+        var disqus_identifier = 'http://taras.glek.net/blog/2012/12/21/interesting-bugzilla-activity/';
+        var disqus_url = 'http://taras.glek.net/blog/2012/12/21/interesting-bugzilla-activity/';
         var disqus_script = 'embed.js';
       
     (function () {

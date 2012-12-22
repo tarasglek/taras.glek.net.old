@@ -4,7 +4,7 @@
   <title><![CDATA[Category: mozilla | All About Performance]]></title>
   <link href="http://taras.glek.net/blog/categories/mozilla/atom.xml" rel="self"/>
   <link href="http://taras.glek.net/"/>
-  <updated>2012-12-21T12:16:56-08:00</updated>
+  <updated>2012-12-21T16:38:22-08:00</updated>
   <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -12,6 +12,27 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Snappy #45: The view from home]]></title>
+    <link href="http://taras.glek.net/blog/2012/12/21/interesting-bugzilla-activity/"/>
+    <updated>2012-12-21T12:09:00-08:00</updated>
+    <id>http://taras.glek.net/blog/2012/12/21/interesting-bugzilla-activity</id>
+    <content type="html"><![CDATA[<p>I'm out until January. However, I setup a <a href="/blog/2012/12/17/hello-octopress/">new blog</a>, so why not test it with a snappy update.</p>
+
+<p>Benoit Girard sped up shutdown with:</p>
+
+<ul>
+<li>not forcing startup cache flushes on shutdown: {%bug 816656%}. This speeds up exiting browser soon after startup.</li>
+<li>{%bug 818296%}: not nuking cross-compartment wrappers on shutdown. This may significantly reduce our shutdown times. We are waiting on more telemetry data to confirm.</li>
+</ul>
+
+
+<p>Aaron Klotz made startup slightly faster by speeding up reading of some urlclassifier files in {%bug 810101%}.</p>
+
+<p>Vladimir Vukicevic landed {%bug 731974%} which results in smoother browser animations and significantly improves the quality of tab-strip animations.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Coping with Flash hangs]]></title>
@@ -100,17 +121,6 @@
 <p><strong>Moving Blogs Soon</strong></p>
 
 <p>I will be moving to a new blog location as soon as I decide on a better blog setup. I've been irritated by Wordpress since I started at Mozilla in 2006. The volume of comment spam has increased exponentially this year. After 6 years of suffering a terrible UI, spam, slowness, lossyness, I'm ready to move on to a blogging service elsewhere. If you have any suggestions for blog providers, ping me on <a href="https://twitter.com/tarasglek">twitter</a> as I likely wont see your comment in the mountain of spam.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Snappy #41]]></title>
-    <link href="http://taras.glek.net/blog/2012/10/18/snappy-41/"/>
-    <updated>2012-10-18T08:53:19-07:00</updated>
-    <id>http://taras.glek.net/blog/2012/10/18/snappy-41</id>
-    <content type="html"><![CDATA[<p>Jeff Muizelaar may not have cut tab switch times in half in my <a href="http://taras.glek.net/blog/2012/10/15/snappy-40-faster-tabswitching-startup-analysis/">last update</a>. The overhead moved to a later part of the process that we were not measuring before the change landed. We'll be able to tell the magnitude of the tab-switch improvement was by landing bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=800031">800031</a> on Aurora.</p>
-
-<p>Matt Woodrow reduced tab-close animation jank in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=750417">bug 750417</a>.</p>
 ]]></content>
   </entry>
   

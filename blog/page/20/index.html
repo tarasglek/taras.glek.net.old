@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Thanks to the 2-fold increase in manpower working on pork, we finally have an opportunity to work on the nice-to-have things. Progress Recently I &hellip;">
+  <meta name="description" content="Analysis GCC Dehydra is starting to work. I encourage people try it out for their code scanning needs. The main missing feature is control-flow- &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -58,6 +58,69 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2008/01/17/gcc-spidermonkey-gcc-dehydra/">GCC + SpiderMonkey = GCC Dehydra</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-01-17T08:16:07-08:00" pubdate data-updated="true">Jan 17<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><strong>Analysis</strong></p>
+
+<p><a href="http://wiki.mozilla.org/Dehydra_GCC">GCC Dehydra</a> is starting to work. I encourage people try it out for their code scanning needs. The main missing feature is control-flow-sensitive traversal, which means that currently function bodies are traversed represented in a sequential fashion. It is the most complicated part of <a href="http://wiki.mozilla.org/DeHydra">Dehydra</a>, but most of the time this feature is not needed.</p>
+
+<p>So far I got Benjamin&#8217;s <a href="http://hg.mozilla.org/users/bsmedberg_mozilla.com/xpcomgc-patches/?file/de1d37e87cf4/find-stack-comptrs.js">stack-nsCOMPtr finding script</a> to do stuff, which indicates that most of the features are working.</p>
+
+<p>My vision is to switch to the GCC backend for all of our code analysis needs since it is well tested, fairly feature complete works with new versions of GCC (by definition).</p>
+
+<p>Not everything is perfect in GCC land. There are some frustrating typedef issues to <a href="http://gcc.gnu.org/ml/gcc/2008-01/msg00280.html">solve</a>.</p>
+
+<p><strong>Source Re-factoring</strong></p>
+
+<p>Elsa still holds its own when it comes to refactoring code because it has a much cleaner lexer/parser and rarely opts to &#8220;optimize away&#8221; original AST structure. We should stick with Elsa&#8217;s arcane requirement of having to preprocess files with gcc &lt;= 3.4 until either GCC becomes viable as a platform for refactoring or <a href="http://clang.llvm.org/">clang</a> matures.</p>
+
+<p>GCC is not suitable for refactoring work because it:</p>
+
+<ol>
+<li>Starts simplifying the AST  too early</li>
+<li>The parser is handwritten and therefore would be hard to modify to maintain end-of-AST-node location info.</li>
+<li>GCC reuses many AST nodes which means their locations point at the declaration rather than usage-point.</li>
+<li>Handwritten nature of GCC makes any of these above improvements time-consuming to implement and the political issues are something I&#8217;d rather not deal with.
+Most of these wouldn&#8217;t have been an issue if GCC was written in <a href="http://en.wikipedia.org/wiki/ML_programming_language">ML</a> :) <strong>What&#8217;s Next?</strong></li>
+</ol>
+
+
+<p>Time to start using GCC Dehydra to enforce GC-safety and lots of fun exception-rewrite preparation work.</p>
+
+<p>Stay tuned for more exciting developments regarding regaining control over source code here and on <a href="http://blog.mozilla.org/dmandelin/2008/01/15/hello-world/">Dave Mandelin&#8217;s blog</a>.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -635,48 +698,6 @@ Checks 2 and 3 require the complete class hierachy of Mozilla so I finally made 
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2007/11/02/garburator-works/">Garburator Works!</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2007-11-02T09:02:15-07:00" pubdate data-updated="true">Nov 2<span>nd</span>, 2007</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>A <a href="http://taras.glek.net/blog/2007/10/12/rewriting-tools-for-mozilla-2-moving-forward-as-planned/">few weeks</a> ago I convinced myself that is possible to rewrite Mozilla to avoid COMPtrs on the stack. Since then I&#8217;ve changed my mind a few times and felt like I may not be able to get this rewrite working. However, after three or four false starts, I finally managed to work out a metal model of the stack nsCOMPtr usage. With a combination of automatic blacklisting of tricky code, manual demacroing and lots of help from <a href="http://benjamin.smedbergs.us/">Benjamin</a> I got the generated 3.2MB patch to compile.</p>
-
-<p>I am sure that there are lots of bugs to be found still, but at least we&#8217;ve discovered the pattern that the code follows. I am also sure that there are lots of unpleasant surprises to be discovered and dealt with in the near future.</p>
-
-<p>The bright side is that the result of these rewrites we should get a less buggy codebase that is easier to work on, more efficient and compiles to smaller binaries. My other big wish is to significantly reduce the amount of C++ magic in the codebase.</p>
-
-<p>I am happy that garburator works as it means I can go back to playing <a href="http://taras.glek.net/blog/category/outparamdel/">outparamdel</a>. Hopefully, once garburator+outparamdel are applied on all possible methods we&#8217;ll end up with relatively nice looking C++ code and a healthy performance boost.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/21/">&larr; Older</a>
@@ -694,6 +715,10 @@ Checks 2 and 3 require the complete class hierachy of Mozilla so I finally made 
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2012/12/21/interesting-bugzilla-activity/">Snappy #45: The view from home</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2012/12/17/hello-octopress/">Hello Octopress</a>
       </li>
     
@@ -707,10 +732,6 @@ Checks 2 and 3 require the complete class hierachy of Mozilla so I finally made 
     
       <li class="post">
         <a href="/blog/2012/11/05/snappy-43-big-improvements-faster-startup-smoother-tabstrip/">Snappy #43: Big improvements: faster startup? Smoother tabstrip!</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/10/26/snappy-42/">Snappy #42</a>
       </li>
     
   </ul>
