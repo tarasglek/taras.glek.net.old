@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Slow Sessions - Tabs-on-Demand Armed to the teeth with about:jank, I was testing session restore scenarios that people reported. While at it I came &hellip;">
+  <meta name="description" content="Meeting notes. Network Cache Horrors Last week we discovered that our cache uses main thread locks to successfully block on off-main thread io. See ( &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -58,64 +58,6 @@
     <div id="content">
       <div class="blog-index">
   
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/01/26/snappy-january-26/">Snappy, January 26</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-01-26T07:22:09-08:00" pubdate data-updated="true">Jan 26<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><strong>Slow Sessions - Tabs-on-Demand</strong></p>
-
-<p>Armed to the teeth with <a href="https://addons.mozilla.org/en-US/firefox/addon/aboutjank/">about:jank</a>, I was testing session restore scenarios that people <a href="http://taras.glek.net/blog/2012/01/11/call-for-snappy-help-looking-for-a-lots-of-tabs-sessions-with-lag/">reported</a>. While at it I came up with a <a href="https://plus.google.com/108936502671219351445/posts/UMzBAQr3xDS">testcase</a> for bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=711193">711193</a>. At first we were going to use telemetry to debate the merits of tabs on demand by default, but I feel my example illustrates responsiveness problems with session-restore well enough. Gavin is looking into this so we can make a decision this week.</p>
-
-<p><strong>Laggy </strong><strong>Sessions </strong></p>
-
-<p>On my machine about:jank indicated that most lag was caused by our direct2d accelerated drawing code, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=721273">bug 721273</a>. Turning off graphics acceleration made things a lot less slow (Options/Advanced/use hardware acceleration) . It would be nice if people experiencing lots of lag in their sessions (on youtube, blogs with high quality backgrounds, etc) could try <a href="https://addons.mozilla.org/en-US/firefox/addon/aboutjank/">about:jank</a>. This requires running a very recent nightly.</p>
-
-<p>Install the extension, go to about:jank, browse around, then refresh about:jank. In the case of gfx lag, DrawThebesLayers shows up on top.</p>
-
-<p><strong>Imminent Cycle Collector + GC Improvements </strong></p>
-
-<p>Olli is landing huge cycle collector improvements (half of the patches landed so far), <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=705582">bug 705582</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=717500">bug 717500</a>. If that doesn&#8217;t solve all CC problems by Tuesday, Andrew is standing by with bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=710496">710496</a> to limit how often CC can run. If we are lucky, incremental JS GC will land before Tuesday too (bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=641025">641025</a>). Landing by Tuesday means that these improvements have a good chance of showing up in Firefox 12. CC + GC are the most well-known causes of pauses in Firefox, so this is very exciting.</p>
-
-<p><strong>Other stuff</strong> ****</p>
-
-<p>Profiling tools are moving along at a good clip. Benoit&#8217;s <a href="https://developer.mozilla.org/en/Performance/Profiling_with_the_Built-in_Profiler">profiler</a> works well on Mac now, hopefully Windows support will happen next week. Non-destructive chromehang is <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=712109">almost</a> landed.</p>
-
-<p>Telemetry histograms should now survive restarts (so we can do shutdown telemetry, etc), <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=707320">bug 707320</a>.</p>
-
-<p>Peptest didn&#8217;t manage to survive deployment on try due to <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=719618">bug 719618</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=719511">719511</a>.</p>
-
-<p>We are now transitioning from identifying issues to fixing identified issues. It&#8217;s exciting to move from speculation as to what sucks to actual results. For more details see <a href="https://wiki.mozilla.org/Performance/Snappy/2012-01-26">meeting notes</a>.</p>
-</div>
-  
-  
-
-
-    </article>
   
   
     <article>
@@ -530,6 +472,52 @@ These files of the format: sql, count, average time per query.</li>
 
     </article>
   
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/12/13/snappy-summary-for-dec-8/">Snappy Summary for Dec 8</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-12-13T02:55:47-08:00" pubdate data-updated="true">Dec 13<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Our last meeting was last Thursday, at 11am PST (<a href="https://wiki.mozilla.org/Performance/Snappy/2011-12-08">meeting notes</a>). This blog post is late because of a combination of email disasters and travel.</p>
+
+<p>Cheng from the SUMO team mined SUMO inputs to see what our users are complaining most about. There were complaints about things were slow, unresponsive, frozen, etc. See meeting notes the complete blurb.</p>
+
+<p>The networking team has identified issues leading to slow <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=709297">shutdown</a> and <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=695003">startup</a>.</p>
+
+<p>Most of the the <a href="https://developer.mozilla.org/en/Performance/Profiling_with_the_Built-in_Profiler#Running%20the%20profiler">responsiveness profiler</a> landed.</p>
+
+<p>UX team provided an extensive list of Firefox features that needed tweaking, see meeting notes for details.  We are working on improving tab interactions and scrolling.</p>
+
+<p>I&#8217;ll post a beefier summary of plans/accomplishments next week.</p>
+</div>
+  
+  
+
+
+    </article>
+  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/8/">&larr; Older</a>
@@ -547,10 +535,6 @@ These files of the format: sql, count, average time per query.</li>
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2012/12/21/interesting-bugzilla-activity/">Snappy #45: The view from home</a>
-      </li>
-    
-      <li class="post">
         <a href="/blog/2012/12/17/hello-octopress/">Hello Octopress</a>
       </li>
     
@@ -564,6 +548,10 @@ These files of the format: sql, count, average time per query.</li>
     
       <li class="post">
         <a href="/blog/2012/11/05/snappy-43-big-improvements-faster-startup-smoother-tabstrip/">Snappy #43: Big improvements: faster startup? Smoother tabstrip!</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/10/26/snappy-42/">Snappy #42</a>
       </li>
     
   </ul>

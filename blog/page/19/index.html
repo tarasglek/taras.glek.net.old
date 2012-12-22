@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="I work on static analysis by lamp-light and proudly cycle wearing Firefox imagery by daylight. Today I was pleased to discover that the flyer for the &hellip;">
+  <meta name="description" content="I hope to release Dehydra 0.9  within a couple of weeks. There is already a community of users, but there are still too many barriers to entry &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -58,46 +58,6 @@
     <div id="content">
       <div class="blog-index">
   
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2008/05/16/my-other-job-as-a-rolling-billboard/">My Other Job as a Rolling Billboard</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-05-16T14:53:24-07:00" pubdate data-updated="true">May 16<span>th</span>, 2008</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I work on static analysis by lamp-light and proudly cycle wearing Firefox imagery by daylight. Today I was pleased to discover that the flyer for the <a href="http://www.portlandcentury.com/">Portland Century</a> ride now prominently features the Firefox logo in one of the 4 photos. It&#8217;s also in the scrolling thing on the website =D</p>
-
-<p>This picture was taken on one ride with the most firefox fans ever. On parts of the course, it felt like every 5 minutes someone was volunteering info on how awesome firefox is.</p>
-
-<p><img src="http://myslider.com/v1/1484023162/IMG%5f4723%2ejpg" alt="" /></p>
-</div>
-  
-  
-
-
-    </article>
   
   
     <article>
@@ -593,6 +553,69 @@ I have elaborate plans on how to take over the world with static analysis, more 
 
     </article>
   
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2008/01/17/gcc-spidermonkey-gcc-dehydra/">GCC + SpiderMonkey = GCC Dehydra</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-01-17T08:16:07-08:00" pubdate data-updated="true">Jan 17<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><strong>Analysis</strong></p>
+
+<p><a href="http://wiki.mozilla.org/Dehydra_GCC">GCC Dehydra</a> is starting to work. I encourage people try it out for their code scanning needs. The main missing feature is control-flow-sensitive traversal, which means that currently function bodies are traversed represented in a sequential fashion. It is the most complicated part of <a href="http://wiki.mozilla.org/DeHydra">Dehydra</a>, but most of the time this feature is not needed.</p>
+
+<p>So far I got Benjamin&#8217;s <a href="http://hg.mozilla.org/users/bsmedberg_mozilla.com/xpcomgc-patches/?file/de1d37e87cf4/find-stack-comptrs.js">stack-nsCOMPtr finding script</a> to do stuff, which indicates that most of the features are working.</p>
+
+<p>My vision is to switch to the GCC backend for all of our code analysis needs since it is well tested, fairly feature complete works with new versions of GCC (by definition).</p>
+
+<p>Not everything is perfect in GCC land. There are some frustrating typedef issues to <a href="http://gcc.gnu.org/ml/gcc/2008-01/msg00280.html">solve</a>.</p>
+
+<p><strong>Source Re-factoring</strong></p>
+
+<p>Elsa still holds its own when it comes to refactoring code because it has a much cleaner lexer/parser and rarely opts to &#8220;optimize away&#8221; original AST structure. We should stick with Elsa&#8217;s arcane requirement of having to preprocess files with gcc &lt;= 3.4 until either GCC becomes viable as a platform for refactoring or <a href="http://clang.llvm.org/">clang</a> matures.</p>
+
+<p>GCC is not suitable for refactoring work because it:</p>
+
+<ol>
+<li>Starts simplifying the AST  too early</li>
+<li>The parser is handwritten and therefore would be hard to modify to maintain end-of-AST-node location info.</li>
+<li>GCC reuses many AST nodes which means their locations point at the declaration rather than usage-point.</li>
+<li>Handwritten nature of GCC makes any of these above improvements time-consuming to implement and the political issues are something I&#8217;d rather not deal with.
+Most of these wouldn&#8217;t have been an issue if GCC was written in <a href="http://en.wikipedia.org/wiki/ML_programming_language">ML</a> :) <strong>What&#8217;s Next?</strong></li>
+</ol>
+
+
+<p>Time to start using GCC Dehydra to enforce GC-safety and lots of fun exception-rewrite preparation work.</p>
+
+<p>Stay tuned for more exciting developments regarding regaining control over source code here and on <a href="http://blog.mozilla.org/dmandelin/2008/01/15/hello-world/">Dave Mandelin&#8217;s blog</a>.</p>
+</div>
+  
+  
+
+
+    </article>
+  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/20/">&larr; Older</a>
@@ -610,10 +633,6 @@ I have elaborate plans on how to take over the world with static analysis, more 
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2012/12/21/interesting-bugzilla-activity/">Snappy #45: The view from home</a>
-      </li>
-    
-      <li class="post">
         <a href="/blog/2012/12/17/hello-octopress/">Hello Octopress</a>
       </li>
     
@@ -627,6 +646,10 @@ I have elaborate plans on how to take over the world with static analysis, more 
     
       <li class="post">
         <a href="/blog/2012/11/05/snappy-43-big-improvements-faster-startup-smoother-tabstrip/">Snappy #43: Big improvements: faster startup? Smoother tabstrip!</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/10/26/snappy-42/">Snappy #42</a>
       </li>
     
   </ul>

@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Automated Analyses and Rewrites Dehydra and Squash are now mature enough to assist with mundane tasks like renames and various kinds of tedious code &hellip;">
+  <meta name="description" content="My last attempt at visualizing the Mozilla class hierarchy ended up being way too slow to be useful. So I based my second attempt on using a &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -58,71 +58,6 @@
     <div id="content">
       <div class="blog-index">
   
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2007/05/01/status-report/">Status Report</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2007-05-01T07:13:01-07:00" pubdate data-updated="true">May 1<span>st</span>, 2007</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><strong>Automated Analyses and Rewrites</strong></p>
-
-<p>Dehydra and Squash are now mature enough to assist with mundane tasks like renames and various kinds of tedious code inspection. If you ever suspect that part of the Mozilla hacking you are doing could be done by a tool, contact me to see if I have a suitable tool for you.</p>
-
-<p>Also, these tools are in no way limited to working with Mozilla source code. I would be happy to see people use them for other projects too.</p>
-
-<p><strong>Short-term Plans</strong></p>
-
-<p>For the next week or two I plan to focus on out-parameter rewriting and the Mozilla-wide C++ callgraph.</p>
-
-<p><strong>Mozilla-wide Callgraph</strong> This is proving to be a little painful. Things work for basic test-cases, but I am running into scalability issues with Mozilla (as expected). My current approach of serializing everything into a giant JSON graph blows the 32bit address space after a few hundred files. Even doing a Mozilla-wide inheritance graph causes out of memory errors, but that runs almost to competition. The best solution to this will be to break up the graph into as many smaller JSON files as possible and only load ones that are absolutely required into memory.</p>
-
-<p>The callgraph will be a useful starting point for many other useful analyses (dead code one is going to be lots of fun) and it&#8217;s a good test of dehydra&#8217;s scalability, but I have suspended work on it for a few days to focus on more productive tasks.</p>
-
-<p><strong>Out-parameter Rewriting</strong></p>
-
-<p>Due to XPCOM, Mozilla getters typically return an error code and a value via an out parameter. This requires checking the error code and likely propagating it at the callsite.</p>
-
-<p>For many places in the code there are performance and aesthetical reasons to stop using error codes. Brendan talks discusses some reasons <a href="http://weblogs.mozillazine.org/roadmap/archives/2006/10/mozilla_2.html">here</a>. This would be cool stuff, but switching to exceptions isn&#8217;t going to happen right away. However, I can already start working on my tools to assist with simpler cases (like <a href="http://www.google.com/codesearch?hl=en&amp;q=+nsBidiPresUtils::GetBidiEngine+show:kW5gzhxHJvU:iRn_dfI9xJY:Y5Gdp6b4NgE&amp;sa=N&amp;cd=1&amp;ct=rc&amp;cs_p=http://ftp.mozilla.org/pub/mozilla.org/mozilla/releases/mozilla1.7a/src/mozilla-source-1.7a.tar.bz2&amp;cs_f=mozilla/layout/base/src/nsBidiPresUtils.cpp#a0">nsBidiPresUtils::GetBidiEngine</a>?). I&#8217;m focusing on getters that return NS_OK/(some error) and a value and rewriting them to return NULL on error and non-NULL on success. This could be ready in time for Firefox 3. Once I&#8217;m done with the tool, I&#8217;ll just need someone to help me figure which functions are ok to simplify like that.</p>
-
-<p>I suspended work on out-param rewriting <a href="http://taras.glek.net/blog/2007/01/11/squash-progress-and-plans/">some time ago</a>. It was proving to be too complicated to do within squash. Now that I can use dehydra to verify the control flow graph, things are a lot simpler. Current plan is to have the <a href="http://people.mozilla.org/~tglek/outparams.js">dehydra script</a> produce a list of candidates for out-param surgery and have squash consume that list and produce the appropriate patches. Currently, the script works for some very simple cases and I am working on the squash side.</p>
-
-<p><strong>Smaller Tasks</strong></p>
-
-<ul>
-<li>Sayrer&#8217;s uninitialized member analysis: added more complete constructor support to dehyra, wrote a <a href="http://people.mozilla.org/~tglek/member-init.js">sample script</a> to get sayrer started. Fixed dehydra&#8217;s 64bit support. <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=378763">Bug 378763</a></li>
-<li>Made some squash-generated patches for bz, helped me find a bug in squash. <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=378780">Bug 378780</a></li>
-<li>Pushing squash upstream into oink. This is time consuming because it is a combination of legal and many minor technical issues. Dehydra will follow later.</li>
-</ul>
-
-</div>
-  
-  
-
-
-    </article>
   
   
     <article>
@@ -655,6 +590,105 @@ For the above to work will also need support for a user-correctable/suggestable 
 
     </article>
   
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2007/01/11/squash-progress-and-plans/">Squash Progress and Plans</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-01-11T06:34:59-08:00" pubdate data-updated="true">Jan 11<span>th</span>, 2007</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><strong>Out-param Rewriting Work</strong></p>
+
+<p>Since the last post I worked on rewriting functions that use out-parameters to use return values instead. I got as far as rewriting method definitions and simple call sites, but decided to hold off further work until the rest of squash is more complete.</p>
+
+<p><strong>Squash Development Roadmap</strong> <a href="http://weblogs.mozillazine.org/roc/">Robert O&#8217;Callahan</a> helped me devise a near term roadmap. I am going to focus getting squash to be production quality for member renames and to produce commit-quality patches. An example query would be to rename sIFrame::GetPresContext to nsIFrame::PresContext. This involves a couple of big details:</p>
+
+<ul>
+<li>Produce aesthetically pleasing code via text substitution instead of oink pretty printing. The advantage of this is that the original coding style, comments and indentation will all be preserved. This involves reparsing the resulting code to verify correctness (doubles-memory usage &amp; processing time).</li>
+<li>To produce a complete patch squash needs to process all of the relevant source code. This increases memory usage and processing time linearly. I&#8217;ll use grep to narrow down candidates for processing and in the future will use a AST database of mozilla to figure out exactly what needs changing.</li>
+<li>It is useful to be able to process all interesting source code in one invocation but just processing the layout/generic directory sequentially uses over 2GB of RAM (Elsa&#8217;s AST does not support deallocation) and takes 3 minutes on a quad Opteron. So in order to reduce RAM usage and be a trendy multi-core developer I&#8217;ll fork() a process for every file and use that for both parallelism and memory cleanup purposes.</li>
+<li>Develop a web frontend that maintains an up-to-date mozilla source tree and has squash setup on it where one would be able to enter their rename operation and have patch emailed back to them. Rob even had a cool idea to have the user enter a bugzilla id and have the patch automatically attached to that. This will be useful so I don&#8217;t have to work so hard on packaging squash and users will get instant gratification. Plus people without quad Opterons will be able to test squash too :)
+All that is Milestone 1. After that I&#8217;ll work on infrastructure like AST-node-location info, cleaning up pretty printing and defining the exact goal for the next milestone.</li>
+</ul>
+
+
+<p><strong>Current Status</strong></p>
+
+<p>Over the past 3 days I refactored squash to be able to do renames without having to go through class squashing, etc. I added the ability to rename class members and now it can produce ugly patches for that.</p>
+
+<p>The current workflow to rename nsIFrame::GetPresContext to nsIFrame::PresContext is:</p>
+
+<ol>
+<li>Identify possible targets</li>
+</ol>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>find ~/work/ff-build -name \*.o |xargs grep nsIFrame &gt; /tmp/output.sh</span></code></pre></td></tr></table></div></figure>
+
+
+<ol>
+<li>My sed is rusty so I used regexps in <a href="http://kate-editor.org/">Kate</a> to convert resulting lines into something like</li>
+</ol>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>make -C ./layout/generic/ nsSpacerFrame.i
+</span><span class='line'>make -C ./layout/generic/ nsFrameSetFrame.i
+</span><span class='line'>make -C ./layout/generic/ nsBlockFrame.i</span></code></pre></td></tr></table></div></figure>
+
+
+<ol>
+<li>Run the script to produce the needed .i files</li>
+</ol>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>. /tmp/output.sh</span></code></pre></td></tr></table></div></figure>
+
+
+<ol>
+<li>Grand-finale:</li>
+</ol>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>find ~/work/ff-build/ -name \*.i |time xargs  ./squash -o-lang GNU_Cplusplus  -sq-implementation nsIFrame  -sq-no-squash -sq-rename-member GetPresContext PresContext &gt; [nsiframe.diff](http://glek.net:8080/~taras/nsiframe.diff)
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Note that find outputs absolutely filenames which is essensial for squash to resolve relative include files.
+The setup and squashing itself is a bit laborious and RAM/CPU intensive and is the reason for a web frontend. I am going to be ecstatic once this all works.</p>
+</div>
+  
+  
+
+
+    </article>
+  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/24/">&larr; Older</a>
@@ -672,10 +706,6 @@ For the above to work will also need support for a user-correctable/suggestable 
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2012/12/21/interesting-bugzilla-activity/">Snappy #45: The view from home</a>
-      </li>
-    
-      <li class="post">
         <a href="/blog/2012/12/17/hello-octopress/">Hello Octopress</a>
       </li>
     
@@ -689,6 +719,10 @@ For the above to work will also need support for a user-correctable/suggestable 
     
       <li class="post">
         <a href="/blog/2012/11/05/snappy-43-big-improvements-faster-startup-smoother-tabstrip/">Snappy #43: Big improvements: faster startup? Smoother tabstrip!</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/10/26/snappy-42/">Snappy #42</a>
       </li>
     
   </ul>

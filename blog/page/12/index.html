@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="As I explained before, loading binaries from disk sucks. Aside from switching glibc to use madvise/fadvise, what can application developers do to &hellip;">
+  <meta name="description" content="The fastest review I ever got was when I deleted a bunch of code from libjar. It was so riddled crud it was next to impossible to modify the code. &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -58,131 +58,6 @@
     <div id="content">
       <div class="blog-index">
   
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2010/04/05/linux-how-to-make-startup-suck-less-and-reduce-memory-usage/">Linux: How to Make Startup Suck Less (Also Reduce Memory Usage!)</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-04-05T05:36:01-07:00" pubdate data-updated="true">Apr 5<span>th</span>, 2010</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>As I explained before, loading binaries from disk <a href="http://taras.glek.net/blog/2010/03/24/linux-why-loading-binaries-from-disk-sucks/">sucks</a>. Aside from <a href="http://taras.glek.net/blog/2010/03/25/madvise-prelink-update/">switching</a> glibc to use madvise/fadvise, what can application developers do to minimize this suckyness?</p>
-
-<p>I am going to start with numbers to give an idea of the magnitudes involved here. I&#8217;m still using my 1.8ghz core2duo laptop with a 7200 200GB harddrive.</p>
-
-<p>Time(ms)</p>
-
-<h1>of libxul.so reads</h1>
-
-<p>Typical Firefox build
-2300
-147</p>
-
-<p>Prelinked Firefox
-2130
-139</p>
-
-<p>Ordered Firefox
-2500
-131</p>
-
-<p>Ordered+Prelinked
-2065
-124</p>
-
-<p>Prelinked-Ordered Firefox
-1860
-72</p>
-
-<p>Prelink-Ordered + Prelinked Firefox
-1636
-66
-Additionally, proper binary reordering results in >2mb reduction in memory usage(out of 14mb that&#8217;s mapped in for code) since less random code gets paged in during readahead. This should be interesting for mobile where our binaries are RISC-bloated and there is less RAM is available.</p>
-
-<p><strong>Analysis</strong></p>
-
-<p>****A commonly-suggested linux adage is to <a href="http://en.wikipedia.org/wiki/Prelink">prelink</a> if your binaries are loading slowly. All of the good Linux distributions are doing using it. Unfortunately that alone gives pretty pathetic improvements. Beyond the weak 8.5% speed one has to do own tools to speed things up.</p>
-
-<p>As I mentioned before, application binaries are laid out in a basically random order. This seemed like an obvious optimization so I embarked on a non-obvious quest to capture every single memory access and to use that info to order our binaries sensibly.</p>
-
-<p><strong>Valgrind Adventures</strong></p>
-
-<p>Due to disappointing results I had to change my strategies a few times. The happy numbers(easy 30% speedup) in the above table were produced after the 3rd rewrite of my valgrind plugin. Before I seemed perpetually stuck at 10%.</p>
-
-<p>In the current revision of my valgrind plugin I produce a section listing by inferring section names from symbol names via a libelf-based program(unfortunately I do not know of a way get ld to retain function sections in the final binary). This turned out to be easier to get right than abusing Valgrind&#8217;s symbol-lookup APIs into figuring out what sections they came from.</p>
-
-<p>Also in addition to reordering executable code in .text, the plugin now reorders the various .data sections. Turned out that even though data is a relatively small portion of the executable, it is located on the opposite end of the executable from code. This means that every page fault in the .data section kills continuous reading of the .text section.</p>
-
-<p>I also switched to using gold with a section-ordering patch, it seems to produce binaries that are basically the same size as unordered ones(unlike ones produced by my linker script hack).</p>
-
-<p><strong>What is a Prelink-Ordered binary?</strong></p>
-
-<p>In the end, turned out prelink was the key to my problem. I realized that I am measuring memory accesses in valgrind on a non-prelinked binary causing the linker-induced memory accesses  to drive my binary layout. During symbol relocation, the dynamic linker rummages through the .text and .data sections (which I am trying to layout correctly) in order that does not correlate later execution of the program. Unfortunately I was using that data to order my binary even if the final result was meant to be prelinked.</p>
-
-<p>Perhaps that explains why, in the above table, ordered non-prelinked firefox is actually slower than default non-prelinked firefox. Another explanation is that this could be to additional disk fragmentation or other factors. Cold startup numbers depend hard-drive&#8217;s luck at seeking + filesystem fragmentation, so the only reliably comparator is the number of reads/page-faults.</p>
-
-<p>As of now my recipe to producing fast-starting binaries is:</p>
-
-<ol>
-<li>Build firefox</li>
-<li>Switch to root, set LD_LIBRARY_PATH to /dist/bin/ in the object directory, run: prelink $LD_LIBRARY_PATH/firefox-bin $LD_LIBRARY_PATH/*.so</li>
-<li>Run my libelf utility: elflog  &#8211;contents  dist/bin/libxul.so > dist/bin/libxul.so.sections</li>
-<li>As a normal user run Firefox under my valgrind plugin. It will output a list of section names to dist/bin/libxul.so.log</li>
-<li>Relink libxul.so with -Wl,&#8211;section-ordering-file,$HOME/builds/minefield.release/dist/bin/libxul.so.log</li>
-<li>make dist, copy resulting binaries somewhere, prelink em</li>
-<li>Enjoy faster startup
-<strong>Conclusion</strong></li>
-</ol>
-
-
-<p>Using prelink incorrectly can cause massive performance variation.</p>
-
-<p>My plugin does .data reordering now, but it would be very hard to do .data reordering as part of profile-guided optimization. Valgrind is the best tool for this job.</p>
-
-<p>I will try to cleanup the code and release my plugin this week. Pretty much every significant application can benefit from this, might as well let this loose. I need to decide on a name: ldgrind? startupgrind? binarymaidgrind?</p>
-
-<p>We need to develop a built-in diagnostic for detecting when the user isn&#8217;t using prelink (or has other startup misconfiguration issues).</p>
-
-<p>Measuring startup times is highly machine-specific and varies even on individual machines. A much better metric is to measure the amount of io(ie number and size of pagefaults and non-cached reads) serviced by the kernel, that&#8217;s very consistent.</p>
-
-<p><strong>Misc</strong></p>
-
-<p>Prelink sure gets upset easily. The last (fastest) result in the table above causes:</p>
-
-<p>prelink $LD_LIBRARY_PATH/firefox-bin prelink: /hd/startup.test/firefox//firefox-bin: section file offsets not monotonically increasing</p>
-
-<p>What&#8217;s going on? I&#8217;m only modifying libxul inbetween prelink runs, why is prelink complaining about firefox-bin which stays constant?</p>
-
-<p>prelink: /hd/startup.test/firefox.ordered.static/firefox-bin: DT_JMPREL tag not adjacent to DT_REL relocations</p>
-
-<p>What does that mean?</p>
-</div>
-  
-  
-
-
-    </article>
   
   
     <article>
@@ -684,6 +559,48 @@ This results in 200ms faster startup my 7200rpm laptop harddrive which is about 
 
     </article>
   
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/02/09/static-analysis-articles/">Static Analysis Articles</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-02-09T06:22:40-08:00" pubdate data-updated="true">Feb 9<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>A really good <a href="http://cacm.acm.org/magazines/2010/2/69354-a-few-billion-lines-of-code-later/fulltext">ACM article</a> about static analysis from Coverity&#8217;s perspective has been making rounds in Mozilla. What struck me most was the following paragraph:_ _</p>
+
+<p><em>At the most basic level, errors found with little analysis are often better than errors found with deeper tricks. A good error is probable, a true error, easy to diagnose; best is difficult to misdiagnose. As the number of analysis steps increases, so, too, does the chance of analysis mistake, user confusion, or the perceived improbability of event sequence. No analysis equals no mistake.</em></p>
+
+<p>My personal view has been that &#8220;dumb&#8221; analyses are the most effective ones in terms of mistakes spotted vs time wasted writing/landing the analysis. It is interesting to see that sophisticated analyses are difficult to deploy even for Coverity.</p>
+
+<p>In other news, LCA 2010 was my favourite conference so far. I met a number of awesome developers there. Mozilla&#8217;s static analysis work finally got <a href="http://lwn.net/Articles/370717/">mentioned</a> in LWN!</p>
+</div>
+  
+  
+
+
+    </article>
+  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/13/">&larr; Older</a>
@@ -701,10 +618,6 @@ This results in 200ms faster startup my 7200rpm laptop harddrive which is about 
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2012/12/21/interesting-bugzilla-activity/">Snappy #45: The view from home</a>
-      </li>
-    
-      <li class="post">
         <a href="/blog/2012/12/17/hello-octopress/">Hello Octopress</a>
       </li>
     
@@ -718,6 +631,10 @@ This results in 200ms faster startup my 7200rpm laptop harddrive which is about 
     
       <li class="post">
         <a href="/blog/2012/11/05/snappy-43-big-improvements-faster-startup-smoother-tabstrip/">Snappy #43: Big improvements: faster startup? Smoother tabstrip!</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/10/26/snappy-42/">Snappy #42</a>
       </li>
     
   </ul>

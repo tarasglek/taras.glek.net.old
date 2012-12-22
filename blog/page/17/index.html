@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="In my quest to rid Firefox of code that doesn&#8217;t do anything it is possible to screw up and delete a method that is only used by outside code. &hellip;">
+  <meta name="description" content="The coolest part about my job is that I get to work on tasks that are cool, but typically are forever laid to rest in the would-be-cool-if-we-could- &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -58,48 +58,6 @@
     <div id="content">
       <div class="blog-index">
   
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2008/10/07/note-this-is-not-called-yet-its-just-a-placeholder-for-future-changes/">&#8220;NOTE: This Is Not Called YET. It&#8217;s Just a Placeholder for Future Changes.&#8221;</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-10-07T08:53:44-07:00" pubdate data-updated="true">Oct 7<span>th</span>, 2008</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>In my quest to rid Firefox of code that doesn&#8217;t do anything it is possible to screw up and delete a method that is only used by outside code. So far, I&#8217;ve hit a <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=457302">component</a> that isn&#8217;t used in Firefox, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=457965">methods</a> that aren&#8217;t used in Firefox and methods that <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=458983">claim</a> someone is about to use them (with a timestamp from 8 years ago). That and I discovered some code only appears to be used from BeOS or OS/2 specific ifdefs.</p>
-
-<p>Not surprisingly, I had someone comment that I do some &#8220;dangerous shit&#8221;. Sure, I can see why someone would think that.</p>
-
-<p>My protection: I use the try server to make sure that everything builds on supported platforms. On top of that every patch gets reviewed.</p>
-
-<p>Furthermore, I would like to point out that methods that aren&#8217;t called within Firefox are less likely to be tested and correct. So if one leaves code that should only be called from other projects, it&#8217;d be appropriate if we had some unit tests for it, which would flag the code as in-use. That would let us move to the next level and setup a tinderbox to detect dead code as soon as it is orphaned.</p>
-</div>
-  
-  
-
-
-    </article>
   
   
     <article>
@@ -561,6 +519,52 @@ Both of these projects are interested in converging on a single codebase. It sou
 
     </article>
   
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2008/07/25/pull-pork-with-care/">Pull Pork With Care</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-07-25T07:01:04-07:00" pubdate data-updated="true">Jul 25<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I just committed the large giant change to bring down elsa&#8217;s namespace pollution to reasonable levels. Elsa code now is now using std::foo style, or using namespace std. As I mentioned before, Elsa&#8217;s string is now sm::string, a summary of how to perform similar renames is <a href="http://developer.mozilla.org/en/docs/Renaming_With_Pork">here</a>. The good news is that Pork will soon work out of the box with a modern toolchain.</p>
+
+<p>For the handful of porkers out there, you need to hg pull &amp; hg up all of the pork repositories. This has been a use-case in why splitting up a codebase into a billion repositories is a bad idea:</p>
+
+<p>a) Lovely, I have to do many commits instead of one</p>
+
+<p>b) To top it off, now my users will curse my name while updating whatever pork repository that interests them most.</p>
+
+<p>I feel like I&#8217;m going to throw up if I see any more C++ code diffs in the next 10minutes.</p>
+
+<p>In contrast, while rewriting things on the Mozilla-scale is a lot less feasible manually, it is very rewarding to automate. Gotta love big C++ codebases.</p>
+</div>
+  
+  
+
+
+    </article>
+  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/18/">&larr; Older</a>
@@ -578,10 +582,6 @@ Both of these projects are interested in converging on a single codebase. It sou
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2012/12/21/interesting-bugzilla-activity/">Snappy #45: The view from home</a>
-      </li>
-    
-      <li class="post">
         <a href="/blog/2012/12/17/hello-octopress/">Hello Octopress</a>
       </li>
     
@@ -595,6 +595,10 @@ Both of these projects are interested in converging on a single codebase. It sou
     
       <li class="post">
         <a href="/blog/2012/11/05/snappy-43-big-improvements-faster-startup-smoother-tabstrip/">Snappy #43: Big improvements: faster startup? Smoother tabstrip!</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/10/26/snappy-42/">Snappy #42</a>
       </li>
     
   </ul>

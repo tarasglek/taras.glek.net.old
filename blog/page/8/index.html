@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Our last meeting was last Thursday, at 11am PST (meeting notes). This blog post is late because of a combination of email disasters and travel. Cheng &hellip;">
+  <meta name="description" content="I would like to see Firefox developers switch to 24hour review turn-around times. Note that in my definition review turn-around means any of the &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -58,52 +58,6 @@
     <div id="content">
       <div class="blog-index">
   
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011/12/13/snappy-summary-for-dec-8/">Snappy Summary for Dec 8</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-12-13T02:55:47-08:00" pubdate data-updated="true">Dec 13<span>th</span>, 2011</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Our last meeting was last Thursday, at 11am PST (<a href="https://wiki.mozilla.org/Performance/Snappy/2011-12-08">meeting notes</a>). This blog post is late because of a combination of email disasters and travel.</p>
-
-<p>Cheng from the SUMO team mined SUMO inputs to see what our users are complaining most about. There were complaints about things were slow, unresponsive, frozen, etc. See meeting notes the complete blurb.</p>
-
-<p>The networking team has identified issues leading to slow <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=709297">shutdown</a> and <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=695003">startup</a>.</p>
-
-<p>Most of the the <a href="https://developer.mozilla.org/en/Performance/Profiling_with_the_Built-in_Profiler#Running%20the%20profiler">responsiveness profiler</a> landed.</p>
-
-<p>UX team provided an extensive list of Firefox features that needed tweaking, see meeting notes for details.  We are working on improving tab interactions and scrolling.</p>
-
-<p>I&#8217;ll post a beefier summary of plans/accomplishments next week.</p>
-</div>
-  
-  
-
-
-    </article>
   
   
     <article>
@@ -601,6 +555,59 @@ Above helps populate the Windows Prefetch in a less counter-productive way. Expl
 
     </article>
   
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/07/01/telemetry-status/">Telemetry Status</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-07-01T04:48:33-07:00" pubdate data-updated="true">Jul 1<span>st</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><strong>Telemetry Present</strong></p>
+
+<p>Telemetry infrastructure has only been deployed for week, but we are already gathering interesting data<em>:</em></p>
+
+<ul>
+<li><em>Memory usage </em>from about:memory gives us an idea of what constitutes typical memory usage for Firefox</li>
+<li><em>Cycle-collection overhead, stats</em> tell us about browser pauses due to memory cleanup</li>
+<li><em>Detailed startup profiling</em> tells us whether our new <a href="http://glandium.org/blog/?p=2105">library preloading logic</a> is effective</li>
+<li>Info on whether the browser was <em>shutdown</em> correctly will help us diagnose shutdown problems</li>
+<li><em>Plugin enumeration timing</em> to make sure my <a href="http://taras.glek.net/blog/2010/12/29/faster-plugin-enumeration-help-wanted/">faster plugin enumeration</a> stays fast</li>
+<li><em>HTTP connection profiling</em> to help optimize page loads
+Since the branch point for Aurora is approaching in less than a week, I don&#8217;t expect many more probes for Firefox 7.</li>
+</ul>
+
+
+<p><strong>Telemetry Future</strong></p>
+
+<p>One problem with doing awesome optimizations that as code changes, they frequently get accidentally undone. I plan to add telemetry to keep tabs on every significant optimization that I do in the future, in addition to retroactively adding it to the past ones. I expect other Mozilla developers to do the same. In addition to keeping tabs on Firefox performance, we can also learn about JavaScript feature adoption, the kind of hardware (and OS) that users run Firefox on, etc to better match users&#8217; needs.</p>
+</div>
+  
+  
+
+
+    </article>
+  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/9/">&larr; Older</a>
@@ -618,10 +625,6 @@ Above helps populate the Windows Prefetch in a less counter-productive way. Expl
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2012/12/21/interesting-bugzilla-activity/">Snappy #45: The view from home</a>
-      </li>
-    
-      <li class="post">
         <a href="/blog/2012/12/17/hello-octopress/">Hello Octopress</a>
       </li>
     
@@ -635,6 +638,10 @@ Above helps populate the Windows Prefetch in a less counter-productive way. Expl
     
       <li class="post">
         <a href="/blog/2012/11/05/snappy-43-big-improvements-faster-startup-smoother-tabstrip/">Snappy #43: Big improvements: faster startup? Smoother tabstrip!</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/10/26/snappy-42/">Snappy #42</a>
       </li>
     
   </ul>
