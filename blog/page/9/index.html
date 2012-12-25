@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Telemetry Present Telemetry infrastructure has only been deployed for week, but we are already gathering interesting data: Memory usage from about: &hellip;">
+  <meta name="description" content="****Firefox 7 marks a turning point in how we measure Firefox performance. Traditionally we measured Firefox performance on individual developer &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -58,6 +58,288 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/09/20/firefox-7-telemetry-faster-startup/">Firefox 7: Telemetry</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-09-20T07:59:43-07:00" pubdate data-updated="true">Sep 20<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>****Firefox 7 marks a turning point in how we measure Firefox performance. Traditionally we measured Firefox performance on individual developer machines and our build &amp; release infrastructure. However it turns out synthetic benchmarks do not correspond to real-world Firefox usage: it is difficult to model a &#8220;typical&#8221; computer in a lab environment. Surprisingly slow consumer hardware, changes in usage patterns, preinstalled bloatware all affect Firefox performance in surprising ways.</p>
+
+<p>Firefox 7 telemetry will prompt users to opt-in to reporting performance data to Mozilla. This data will supplement our existing benchmarking infrastructure to help us optimize future Firefox releases. Telemetry performance metrics are very lightweight and will not negatively impact Firefox performance.</p>
+
+<p>In addition to transmitting data via SSL, Mozilla privacy team worked tirelessly to ensure that no personally-identifiable information is sent via telemetry. Whereas many other software projects stamp this kind of data with a unique per-user id, we opted for a per-session id which is reset every time the browser restarts. Telemetry is also disabled while in private-browsing mode.</p>
+
+<p>The following telemetry data will be gathered in Firefox 7:</p>
+
+<ul>
+<li>Memory usage</li>
+<li>CPU core count</li>
+<li>Cycle collection times</li>
+<li>Startup speed
+Use the <a href="https://addons.mozilla.org/en-US/firefox/addon/abouttelemetry/">about:telemetry</a> extension to check on your browser performance. The following screenshot shows how to enable telemetry:</li>
+</ul>
+
+
+<p><img src="http://people.mozilla.com/~tglek/telemetry/telemetry-ff7.jpg" alt="" /></p>
+
+<p>I&#8217;m very excited that Firefox finally joins the ranks of cars, airplanes and other software projects in making performance decisions based on real evidence gathered in the wild.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/09/20/firefox-7-cheating-the-operating-system-to-start-faster/">Firefox 7: Cheating the Operating System to Start Faster</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-09-20T07:54:07-07:00" pubdate data-updated="true">Sep 20<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>****Firefox 7 features improved startup speed. Our research has shown that most OSes are not capable of starting large programs efficiently (see my older blog entries). As a result, Firefox 7 will explicitly tell the OS to aggressively preload our xul.dll/libxul.so/XUL library before passing it on to the runtime linker. This marks the productization of the approach explored in &#8220;20-line patch that doubles Firefox startup&#8221; that got people so excited. See <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=552864">bug 552864</a> and dependent bugs for exciting technical details.</p>
+
+<p><strong>Do Not Try this at Home: Ugly Windows</strong></p>
+
+<p><em>Note: Windows Prefetch does everything possible to thwart exciting startup optimizations.</em> Above optimization only works when prefetch is disabled/broken (ie Firefox should be faster with Windows Prefetch off). See <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=627591#c158">this comment</a> on disabling prefetch for Firefox. Alternatively one may get Windows Prefetch to not slow down Firefox startup by the following magic incantation:</p>
+
+<ol>
+<li>Install Firefox (or delete the windows prefetch entry for existing Firefox 7)</li>
+<li>Reboot (Do not start Firefox after installation!)</li>
+<li>Start Firefox.
+Above helps populate the Windows Prefetch in a less counter-productive way. Explanation: on warm startup Windows Prefetch records irrelevant IO operations and blocks Firefox startup to preload files that Firefox accesses <em>after</em> startup.</li>
+</ol>
+
+
+<p>Note: the <a href="http://mxr.mozilla.org/mozilla-central/source/browser/app/nsBrowserApp.cpp#224">heuristic</a> that we use to detect Windows Prefetch will also prevent this optimization from kicking in on some exceptionally slow hard drives when prefetch is off. This is unfortunate as this optimization is most dramatic on exceptionally slow machines.</p>
+
+<p>According to our preliminary telemetry data, less than 25% of our Windows users have Windows Prefetch off and can benefit from vastly improved startup. We expect to improve this in future Firefox releases by scheduling a prefetch cleanup operation similar to the script in above bugzilla comment.</p>
+
+<p>Operating systems without counter-productive startup heuristics (ie Mac/Linux) will simply allow Firefox 7 to start faster.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/08/09/ride-to-the-coast/">Ride to the Coast</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-08-09T14:45:55-07:00" pubdate data-updated="true">Aug 9<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I like having guests who bike. So when Brian came over I decided this would be a great opportunity to explore going to the coast and back by bike (<a href="http://velodirt.com">velodirt</a> style). The following is a map of our trip (190miles, 2 nights).</p>
+
+<p><a href="http://taras.glek.net/blog/files/2011/08/map.jpg"><img src="/assets/images/2011-08-09-ride-to-the-coast/bike.jpg" alt="" /></a></p>
+
+<p>The gravel roads were somewhat challenging. It was hard to climb in the heat so at times we had to push our bikes.</p>
+
+<p><a href="/assets/images/2011-08-09-ride-to-the-coast/push_small.jpg"><img src="/assets/images/2011-08-09-ride-to-the-coast/push_small.jpg" alt="" /></a></p>
+
+<p>Things got more unpleasant when we encountered loose gravel by Tillamook which sent Brian sliding over the edge :(</p>
+
+<p><a href="/assets/images/2011-08-09-ride-to-the-coast/205869_704363319326_122500004_37237117_241562_n.jpg"><img src="/assets/images/2011-08-09-ride-to-the-coast/205869_704363319326_122500004_37237117_241562_n.jpg" alt="" /></a></p>
+
+<p>Amazingly he got off without a single scratch (type-inference will go on!).</p>
+
+<p>Eventually we got to <a href="http://www.oregonstateparks.org/park_186.php">Cape Lookout</a>.</p>
+
+<p><a href="/assets/images/2011-08-09-ride-to-the-coast/beach1_small.jpg"><img src="/assets/images/2011-08-09-ride-to-the-coast/beach1_small.jpg" alt="" /></a></p>
+
+<p>The next day we biked to and spent the night in <a href="http://www.oregonstateparks.org/park_201.php">Nehalem Bay</a>.</p>
+
+<p><a href="/assets/images/2011-08-09-ride-to-the-coast/beach2_small.jpg"><img src="/assets/images/2011-08-09-ride-to-the-coast/beach2_small.jpg" alt="" /></a></p>
+
+<p>Then it was time to head back :(</p>
+
+<p>On the way back we did some more gravel roads, this time they were really nice. The road took us through a berry-laden forest and rewarded us with some pretty awesome views.</p>
+
+<p><a href="/assets/images/2011-08-09-ride-to-the-coast/brian_far.jpg"><img src="/assets/images/2011-08-09-ride-to-the-coast/brian_far.jpg" alt="" /></a></p>
+
+<p><em>(If you squint you can see Brian)</em></p>
+
+<p><a href="/assets/images/2011-08-09-ride-to-the-coast/view1_small.jpg"><img src="/assets/images/2011-08-09-ride-to-the-coast/view1_small.jpg" alt="" /></a></p>
+
+<p>The thing to keep in mind about gravel roads is that they like to get out of sync with the maps. We had to reroute due to roads going in a different direction, and due to various kinds of deadends.</p>
+
+<p>In one extreme case a road was clearly on the map, but had a &#8220;DEAD END&#8221; sign on it. Which got us thinking &#8220;is this a dead end for cars or is it for real?&#8221;. After some climbing, the gravel road reduced to a nice forest path.</p>
+
+<p><a href="/assets/images/2011-08-09-ride-to-the-coast/dead1_small.jpg"><img src="/assets/images/2011-08-09-ride-to-the-coast/dead1_small.jpg" alt="" /></a></p>
+
+<p>Further on it became obvious that someone tried hard to kill this road. Some road hater put up over a dozen tree pile barriers, with some reaching my height.</p>
+
+<p><a href="/assets/images/2011-08-09-ride-to-the-coast/piles.jpg"><img src="/assets/images/2011-08-09-ride-to-the-coast/piles.jpg" alt="" /></a></p>
+
+<p>Turned out the road did indeed go through. Perhaps some day someone will start a cyclocross race dedicated to bringing this road back :)</p>
+
+<p>The last highlight of the trip was this delicious-looking buffalo herd.</p>
+
+<p><a href="/assets/images/2011-08-09-ride-to-the-coast/buffalo.jpg"><img src="/assets/images/2011-08-09-ride-to-the-coast/buffalo.jpg" alt="" /></a></p>
+
+<p>I love cycling in Oregon.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/08/03/effective-static-analysis/">Effective Static Analysis</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-08-03T13:27:54-07:00" pubdate data-updated="true">Aug 3<span>rd</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Static analysis can be a very fun pastime. One gets to sift through giant codebases looking for interesting clues, what could be more fun? A couple things qualify: a) static analysis accompanied by cool rewrites b) static analysis accompanied by cool visualizations.</p>
+
+<p><strong>Cool Rewrite</strong></p>
+
+<p>Michael Wu&#8217;s <a href="http://blog.mozilla.org/mwu/2011/07/28/the-twelve-booleans-of-mozilla/">boolcheck</a> tool is awesome. He wrote it to check that &#8220;typedef int&#8221; bools are really being used as booleans and aren&#8217;t perversely carrying integer values. The process of writing the tool is cool. As Michael is discovers bugs/disagreements stemming from setting &#8220;typedef bool PRBool&#8221;, he just adds another pattern to check for to the tool and never has to worry about that pattern again. I hope to see someone apply boolcheck to the linux kernel, GTK projects or anything else with int booleans. Some projects don&#8217;t have the luxury of switching to real bools, so they can continue using a static checker to make up for it.</p>
+
+<p><strong>Pretty Code</strong></p>
+
+<p>I&#8217;ve blogged about <a href="http://dxr.mozilla.org/clang/">DXR</a> many times. As of this week clang-based DXR is on par with the old Dehydra-based one. Callgraph, inheritance, etc queries now work. <a href="http://quetzalcoatal.blogspot.com/">Joshua</a> did an outstanding job gutting and rewriting the DXR backend this summer and is now going back to school. I&#8217;m extremely impressed with his work this summer. I didn&#8217;t think it was possible to get as far as he did.</p>
+
+<p>We are looking for more help with DXR. Please deploy it on your pet project, contribute plugins for various languages, simplify deployment, etc.</p>
+
+<p>Additionally, now that the backed is in a fairly decent shape, we are looking for someone to help us turn DXR into the slickest code browsing tool ever(we have some ideas <a href="https://wiki.mozilla.org/DXR_Future_Work_Plan">written down</a>). I&#8217;d like interactive graphs, various code visualizations, integration with bugzilla, etc. This needs a JSON-query frontend and a few other bits &amp; pieces to be implemented.</p>
+
+<p><strong>Interns Wanted</strong></p>
+
+<p>We would love to hire more static analysis interns. Are you student who dreams about making large codebases easy to grasp? Do you want to spend a few months making Control Flow Graphs behave? If that sounds like your calling: leave a comment, send me an email.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/07/16/my-nas-is-smaller-than-yours/">My NAS Is Smaller Than Yours</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-07-16T19:29:00-07:00" pubdate data-updated="true">Jul 16<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><div class='post'>
+<div class="separator" style="clear: both; text-align: center;"><a href="http://2.bp.blogspot.com/-NyjNccrtMm4/ThfcarpyIvI/AAAAAAAABT4/gYYcP66XgE8/s1600/IMGP4287.JPG" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="640" src="http://2.bp.blogspot.com/-NyjNccrtMm4/ThfcarpyIvI/AAAAAAAABT4/gYYcP66XgE8/s640/IMGP4287.JPG" width="424" /></a></div>&nbsp;I once <a href="/blog/2009/11/from-arms-and-mips.html">blogged</a> that ARM devices are useless and how one shouldn&#8217;t buy them cos they run weird forked kernels on weird bootloaders. I also blogged on how awesome and low power my <a href="/blog/2009/12/rooter-hardware.html">Atom box</a> was.<br /><br />Since then my Atom box died (probably the power supply), so faced with the option of rebuying various components until I find one that broke I decided that I&#8217;d rather forgo that. Instead I got an $40 Seagate Goflex.<br /><br />The atom box idled at 13W and maxed out around 20W, which was pretty impressive. Goflex can idle at 4W and maxes out at 7W. The 1ghz CPU is no x86 in speed, but it can keep up.<br /><br />Clever people developed a fully-featured Uboot bootloader for it so it takes care of that typical non-x86 suck. I opted to run  <a href="http://archlinuxarm.org/platforms/armv5/seagate-goflex-net">arch linux for arm</a> since Debian support isn&#8217;t particularly mature. In some ways Arch is better, it doesn&#8217;t play games with proprietary firmware and stays up to date better.<br /><br />So yeah with a $40 pricepoint, dual native sata, 4W idle even I will run ARM :)<br /><br /><i>Bonus:</i> In theory I should be able to run the static binaries I compile on the goflex on my android phones.</div>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -335,253 +617,6 @@ Since the branch point for Aurora is approaching in less than a week, I don&#821
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011/05/13/firefox-telemetry/">Firefox Telemetry</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-05-13T09:35:45-07:00" pubdate data-updated="true">May 13<span>th</span>, 2011</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><strong>Benchmarks Suck</strong></p>
-
-<p>Mozilla has traditionally relied on [Talos, Sunspider, Kraken, etc] benchmarks to optimize Firefox. Unfortunately there are two problems with benchmarks: a) it is hard to write good benchmarks (see all of the complaints about Sunspider) b) the most perfect synthetic benchmarks do not completely correspond to actual user usage. Firefox with a well-used profile, anti-viral software, well-aged Windows and 30 addons will not perform the same as it does in our clean benchmarking environment.</p>
-
-<p>For my team this became obvious in Firefox 4 once we started recording Firefox startup times. Turned out that it is easier to work on fixing startup performance than make our synthetic test closely reflect real world startup speed.</p>
-
-<p><strong>Telemetry</strong></p>
-
-<p>There is only one solution to this problem: develop telemetry infrastructure to measure Firefox performance in the wild. Beginning with version 6, Firefox will ask users to opt-in to sending anonymous usage statistics about performance, user interface feature usage, memory usage, and responsiveness to Mozilla. This information will help us improve future versions of Firefox to better fit actual usage patterns.</p>
-
-<p>This functionality is already present in our major competitors. Unlike our competition we do not plan to tag reported data with unique identifiers. This will make it harder for us see how Firefox performance changes over time for particular users (or easily tell whether some users are disproportionately represented due to sending more reports). We take our users&#8217; privacy seriously, so this seems like a reasonable trade off.</p>
-
-<p>Yesterday I landed the reporting part of telemetry (bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=585196">585196</a>). We are still working on UI, official server-side and on updating the privacy policy.</p>
-
-<p><img src="http://people.mozilla.com/~tglek/telemetry/telemetry.jpg" alt="" /></p>
-
-<p>Above screenshot shows some of the data that will be gathered for users that opt-in to telemetry.</p>
-
-<p>Please help us get a headstart on telemetry. In the recent nightlies, go to about:config and set toolkit.telemetry.enabled to true. Once the pref is set, Firefox will send interesting performance data to the telemetry test server. The metrics are very compact and are sent out no more than once a day.</p>
-
-<p>Since there is no UI yet, install my <a href="https://addons.mozilla.org/en-US/firefox/addon/abouttelemetry/">about:telemetry</a> extension and navigate to &#8220;about:telemetry&#8221; to see the metrics collected.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011/04/26/measuring-startup-speed-correctly/">Measuring Startup Speed Correctly</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-04-26T07:34:02-07:00" pubdate data-updated="true">Apr 26<span>th</span>, 2011</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Until recently our state of the art method for measuring startup was to subtract a timestamp passed via commandline from a</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>new Date()</span></code></pre></td></tr></table></div></figure>
-
-
-<p>timestamp within a</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;script&gt;</span></code></pre></td></tr></table></div></figure>
-
-
-<p>tag. Vlad <a href="http://blog.vlad1.com/2009/07/28/measuring-startup/">pioneered</a> this approach, <a href="http://taras.glek.net/blog/2010/01/19/chromium-vs-minefield-cold-startup-performance-comparison/">me</a> and others adopted it.</p>
-
-<p>Turns out there are two problems with this approach:</p>
-
-<ol>
-<li>It is cumbersome, especially on Windows where there is no easy way to pass a timestamp via the commandline.</li>
-<li>It is wrong. Turns out that Firefox starts loading web pages before the UI is shown. One can&#8217;t be sure that the page being loaded is within a visible browser
-Our oldest startup benchmark, ts,  has been gathering wrong numbers all along.  This resulted in a class of perverse optimizations that decreased the ts number, but increased the time taken for UI to appear (ie <a href="http://bugzil.la/641691">bug 641691</a>). The new <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=612190">tpaint (bug 612190)</a> benchmark should should address this. On my machine measuring pageload vs paint-time results in a 50-100ms difference. See the <a href="http://graphs.allizom.org/graph.html#tests=[[83,1,1],[83,1,17],[83,1,12],[83,1,13],[83,1,14],[16,1,12]]&amp;sel=none&amp;displayrange=7&amp;datatype=running">graph server</a> for more data.</li>
-</ol>
-
-
-<p>This is why AMO&#8217;s <a href="http://xulforge.com/blog/2011/04/testing-add-on-startup-performance/">complicated method</a> of measuring startup is wrong. Please use our shiny new <a href="https://wiki.mozilla.org/Firefox/Projects/StartupPerformance/MeasuringStartup">about:startup</a> extension or if you absolutely want to avoid adding any overhead use <a href="https://developer.mozilla.org/en/XPCOM_Interface_Reference/nsIAppStartup_MOZILLA_2_0#getStartupInfo%28%29">getStartupInfo</a> API directly.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011/04/14/arguing-about-startup-communicating-performance/">Arguing About Startup: Communicating Performance</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-04-14T04:15:46-07:00" pubdate data-updated="true">Apr 14<span>th</span>, 2011</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Recently the addon team started working towards penalizing addons that penalize our startup. We have solid data shows that startup gets worse as more addons installed so the effort is justified. Justin published this picture to illustrate the problem: <img src="http://people.mozilla.com/~fligtar/performance/num-addons-med.png" alt="" /></p>
-
-<p>However some technical mistakes were made. Wladimir (AdBlock+ guy!) has been busy exposing them on his <a href="http://adblockplus.org/blog/the-wrong-way-of-allowing-users-to-make-informed-decisions">blog</a>. Thanks Wladimir! I spent a couple of years understanding Firefox startup, so I really appreciate Wladimir&#8217;s remarkable speed/quality in poking holes in AMO approach.</p>
-
-<p><strong>Rating Addon Performance</strong>****</p>
-
-<p>Wlad&#8217;s latest <a href="http://adblockplus.org/blog/the-wrong-way-of-allowing-users-to-make-informed-decisions">point</a> is regarding how addon impact is measured on warm startup with an empty profile. I agree that addon impact on warm startup with clean profile is going to be different from that of cold startup with a dirty real-world profile. I also agree that it is weird to primarily measure warm startup given that our data clearly indicates that most users are experiencing cold startup.</p>
-
-<p>However startup is an irritating multidimensional problem influenced by a large number of factors. Should we suck it up and let addons kill warm startup (and risk ruining firefox upgrade times, pissing off web developers)? How does one choose a typical dirty profile? Creating a &#8220;typical&#8221; dirty profile is a tough problem (ie due to privacy, disk fragmentation) and there is no reason to let clean profile performance be degraded.</p>
-
-<p>So an addon performance rating will not be perfect. Time added by addon during warm startup is the easiest starting point and is one of the more deterministic measures (Wlad&#8217;s blog says otherwise, but measuring other startup kinds have even more noise). This is no worse than choosing browsers based on their JavaScript benchmark performance.</p>
-
-<p>I think a much awesomer addon performance rating may be obtainable by clever statistics boffins by analyzing our aggregated startup data. Perhaps the Mozilla Metrics will make it a reality, but in the meantime we&#8217;ll have to make do with an imperfect approach.</p>
-
-<p><em><strong>Coming soon:</strong> Why is the measurement approach in Jorge&#8217;s <a href="http://xulforge.com/blog/2011/04/testing-add-on-startup-performance/">post</a> is overly complicated and somewhat incorrect.</em></p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011/03/10/start-faster-addon/">&#8220;Start Faster&#8221; Addon</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-03-10T08:24:13-08:00" pubdate data-updated="true">Mar 10<span>th</span>, 2011</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>A large proportion of our startup time is spent on loading the Firefox library(.dll, etc) files. This is true on all of our platforms. In my <a href="http://taras.glek.net/blog/2011/02/09/magic-patch-that-doubles-windows-startup/">previous pos</a>t I thought I discovered a way to load the Firefox binaries more efficiently on Windows(bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=627591">627591</a>). Further testing revealed that to not be true in all cases and that the Windows Prefetch service was still killing our startup speed. Microsoft does not seem to provide a way to opt out of the Windows Prefetch &#8216;service&#8217;.</p>
-
-<p>There is a DIY way to opt out of prefetch by gaining Administrator privileges and deleting files out of the prefetch directory. Our is plan is to provide a Windows service to handle Firefox updates (bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=481815">481815</a>). Additionally the service would be able to do useful things like delete prefetch files, defragment Firefox databases(or at least help report on fragmentation levels). This is all tricky stuff.</p>
-
-<p>In the meantime, to test my theory I wrote a <a href="https://addons.mozilla.org/en-US/firefox/addon/startupservice/">test extension</a>. This is a restartless extension that adds a Windows service and a wrapper executable to significantly speed up Firefox startup after rebooting (oh the irony!). After installing the extension, &#8220;Faster Firefox&#8221; shortcut on the Desktop should result in up to 2x speed up in Firefox startup. This addon is a rough proof of concept to play with while I bake this functionality into Firefox. Comments, improvements are welcome. Note that launching Firefox by shortcuts other &#8220;Faster Firefox&#8221; is slower while this extension is installed (this will be fixed once preloading functionality is integrated into Firefox properly). This addon does not yet work on XP because I do not yet have an XP enviroment to test/develop in (patches are welcome).</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011/02/09/magic-patch-that-doubles-windows-startup/">Magic Patch That Halves Windows Startup</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-02-09T08:38:38-08:00" pubdate data-updated="true">Feb 9<span>th</span>, 2011</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Internet as of late have been obsessing over magically short patches that improve performance _ times(probably as a result of LKML cgroups patch from a few weeks ago). So my work in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=627591">bug 627591</a> got picked up in all kinds of news sources(mostly due to @limi&#8217;s <a href="http://twitter.com/#!/limi/status/28983240966541312">manlove</a>). Apparently all that internet fame is good for is getting script-kiddies to upload viruses as bugzilla attachments. Dear Internet, please do not interrupt me in the middle of an investigation.</p>
-
-<p>To crux of the optimization lies in trading waiting for random io for fast sequential IO. Turned out that my patch worked great if windows prefetch wasn&#8217;t trying to help (ie firefox ran faster without prefetch on my test systems). With prefetch on, the patch was either a smaller win or a downright loss. When I dug in deeper, it turned that the Windows Prefetch helpfully spends 3-6 seconds doing IO before any Firefox code gets to run. It also doesn&#8217;t read in a very clever pattern, resulting in a very small speed up for Firefox, but preventing my exciting optimization.</p>
-
-<p>So I curled up into my defeated fetal position and pondered on how would I prevent Windows Prefetch from being so &#8220;helpful&#8221;. One way would be to <a href="http://taras.glek.net/blog/2010/10/04/diagnosing-slow-startup/">install</a> some crapware to cripple prefetch (kidding!), another way is to do the sequential IO in a separate executable(ala<a href="http://glandium.org/blog/?p=1719"> run-mozilla.sh</a> on Unix). This way Windows doesn&#8217;t try to do insane amounts of IO before my preloading logic gets to run. This seems to work (see wrapper.exe talk in the bug) and has potential to double Firefox startup times. It&#8217;s also ugly as sin, but if that&#8217;s what it takes&#8230;</p>
-
-<p>So now I need more reports to make sure the executable wrapper approach reliably/significantly speeds up cold(post-reboot) startup. Then we can make a decision on how to integrate this into Firefox. But until we have all the data, please don&#8217;t jump to conclusions on what will and wont make Firefox 2x faster.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/10/">&larr; Older</a>
@@ -599,11 +634,11 @@ Our oldest startup benchmark, ts,  has been gathering wrong numbers all along.�
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2012/12/21/interesting-bugzilla-activity/">Snappy #45: The view from home</a>
+        <a href="/blog/2012/12/24/making-pages-load-faster/">Making pages load faster</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2012/12/17/hello-octopress/">Hello Octopress</a>
+        <a href="/blog/2012/12/21/interesting-bugzilla-activity/">Snappy #45: The view from home</a>
       </li>
     
       <li class="post">

@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="A few weeks ago I convinced myself that is possible to rewrite Mozilla to avoid COMPtrs on the stack. Since then I&#8217;ve changed my mind a few &hellip;">
+  <meta name="description" content="David Mandelin has been going through Pork fixing bugs and now it is almost working with GCC4. Prior to Dave&#8217;s involvement people would run &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -64,7 +64,7 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2007/11/02/garburator-works/">Garburator Works!</a></h1>
+      <h1 class="entry-title"><a href="/blog/2008/02/06/gcc4-elsa-together-at-last/">GCC4 + Elsa, Together at Last?</a></h1>
     
     
       <p class="meta">
@@ -80,20 +80,18 @@
   
 
 
-<time datetime="2007-11-02T09:02:15-07:00" pubdate data-updated="true">Nov 2<span>nd</span>, 2007</time>
+<time datetime="2008-02-06T05:26:44-08:00" pubdate data-updated="true">Feb 6<span>th</span>, 2008</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>A <a href="http://taras.glek.net/blog/2007/10/12/rewriting-tools-for-mozilla-2-moving-forward-as-planned/">few weeks</a> ago I convinced myself that is possible to rewrite Mozilla to avoid COMPtrs on the stack. Since then I&#8217;ve changed my mind a few times and felt like I may not be able to get this rewrite working. However, after three or four false starts, I finally managed to work out a metal model of the stack nsCOMPtr usage. With a combination of automatic blacklisting of tricky code, manual demacroing and lots of help from <a href="http://benjamin.smedbergs.us/">Benjamin</a> I got the generated 3.2MB patch to compile.</p>
+  <div class="entry-content"><p>David Mandelin has been going through <a href="http://wiki.mozilla.org/Pork">Pork</a> fixing bugs and now it is almost working with GCC4. Prior to Dave&#8217;s involvement people would run into Elsa&#8217;s scary template bugs and switch back to GCC3.4 while trembling with fear. I asked Dave to fix a few easily work-aroundable (in Moz, not in Elsa) crashes in Elsa caused by Mozilla source and he did. Recently, I accidentally ran Elsa on a Mozilla .ii file produced by GCC4 and magically it processed! Turns out that the 3-4 bugs that Dave fixed also fixed 90% of the failures caused by GCC4 headers. The good news is that soon people won&#8217;t have to worry about that pesky GCC3.4 dependancy and run rewriting tools easier.</p>
 
-<p>I am sure that there are lots of bugs to be found still, but at least we&#8217;ve discovered the pattern that the code follows. I am also sure that there are lots of unpleasant surprises to be discovered and dealt with in the near future.</p>
+<p><a href="http://wiki.mozilla.org/Dehydra_GCC"><strong>GCC Dehydra</strong></a></p>
 
-<p>The bright side is that the result of these rewrites we should get a less buggy codebase that is easier to work on, more efficient and compiles to smaller binaries. My other big wish is to significantly reduce the amount of C++ magic in the codebase.</p>
-
-<p>I am happy that garburator works as it means I can go back to playing <a href="http://taras.glek.net/blog/category/outparamdel/">outparamdel</a>. Hopefully, once garburator+outparamdel are applied on all possible methods we&#8217;ll end up with relatively nice looking C++ code and a healthy performance boost.</p>
+<p>I feel like I&#8217;m nearing the feature-complete milestone. I plan to have Dehydra generate conversion code from GCC tree structures to JavaScript objects so we&#8217;ll be able to easily hook into any GCC middle-end pass in pure JS.  Dynamic, GCed, introspective nature of JavaScript should allow for very rapid development of code police/extraction/grep tools. This should result in a consistent codebase for Mozilla 2.</p>
 </div>
   
   
@@ -106,7 +104,7 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2007/10/24/rewriting-javascript/">Rewriting JavaScript</a></h1>
+      <h1 class="entry-title"><a href="/blog/2008/01/25/dehydra-progress/">Dehydra Progress</a></h1>
     
     
       <p class="meta">
@@ -122,20 +120,36 @@
   
 
 
-<time datetime="2007-10-24T08:36:00-07:00" pubdate data-updated="true">Oct 24<span>th</span>, 2007</time>
+<time datetime="2008-01-25T09:39:30-08:00" pubdate data-updated="true">Jan 25<span>th</span>, 2008</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>I&#8217;m having a very painful time rewriting Mozilla source code to switch it to garbage collection. So I took a little break to think about Myk&#8217;s <a href="http://www.melez.com/mykzilla/2007/10/automated-js-code-rewriting.html">JavaScript rewriting idea</a>.Then I found excellent info on <a href="http://siliconforks.com/doc/parsing-javascript-with-spidermonkey/">parsing JS</a> with <a href="http://www.mozilla.org/js/spidermonkey/">SpiderMonkey</a>. The downside to SpiderMonkey is that it is in C and thus hard to reuse, the upside is that will be able to parse all valid JavaScript.</p>
+  <div class="entry-content"><p><a href="http://wiki.mozilla.org/Dehydra_GCC">GCC Dehydra</a> is evolving much faster than the Elsa version did and it is easier to use. Once I implemented virtual methods correctly, Joshua was able to <a href="http://quetzalcoatal.blogspot.com/2008/01/more-fun-and-games.html">do his thing</a> in no time at all. All it takes is a custom GCC (I&#8217;d love to see it packaged) and specifying plugin parameters in CXXFLAGS.</p>
 
-<p>I think I shall find some free time to prototype a little tool to take a .js file and produce a JSON representation of it such that one could write transformation passes in JavaScript. This will be useful as it will complete DeHydra by enabling it to process JS in addition to C++ and it will save a lot of time for various JavaScript refactorings.</p>
+<p>Dehydra has some new tricks now like a tree representation of types (instead of a string) with full typedef support. Lisp remnants in GCC are getting a new life as JavaScript objects.</p>
 
-<p>I expect developing a JS refactoring tool to be relatively trivial compared to refactoring C++ as there is no source-code mangling going on due to lack of preprocessing (but JS is dynamic and can be embedded in various document types, so that could complicate things). Perhaps it would even be of use to mozpad people.</p>
+<p>I&#8217;m current working on exposing the full GCC tree structure in JavaScript so one could do any analysis they wanted in pure JS. Dynamically typed GCC tree nodes are great for that. I&#8217;m starting with middle-end GIMPLE representation so in theory one will be able to analyze anything gcc can compile (Java, C++, C, ObjC, ObjC++, FORTRAN?). Eventually this will be expanded to support frontend specific tree nodes to be able to look at code closer to the way it was written. Oh and I expect people will be able to script large parts of C++ -> JavaScript rewrites with Dehydra.</p>
 
-<p>Looking forward to playing more with this idea.</p>
+<p>In theory, one could make tree node conversion two way which would enable writing optimization passes in JS, but that would be silly.</p>
+
+<p><strong>What&#8217;s the point?</strong></p>
+
+<p>I want to be able to do <a href="http://wiki.mozilla.org/Exceptions">Exception-safety analysis</a> in pure JS. I want to enable <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=265084">unit checking </a>(thought typedefs and inline conversion functions) in pure JS.</p>
+
+<p>Additionally, Dehydra should be awesome for generating bindings. For example, I&#8217;ll be able use Dehydra to import GCC&#8217;s autogenerated enums to get string names for nodes.</p>
+
+<p>Also it will become easy to extract callgraphs and various other stats out of the code if they are accessible in JS. Eventually we&#8217;ll be switching Dehydra to Tamarin to do all of the above really really fast.</p>
+
+<p><strong>GCC Plugins</strong></p>
+
+<p>While I am messing with the GCC AST, Dave is working on utilizing GCC&#8217;s <a href="http://blog.mozilla.org/dmandelin/">control flow graphs</a> with a separate plugin. Eventually we&#8217;ll merge our work, but for now it&#8217;s nice to not step on each others toes while adding features to the compiler. Given how easy life is with plugins I am amazed that people chose to go uphill bothways and not collaborate on a plugin interface for their crazy GCC extensions. Yes, I&#8217;m looking at you: <a href="http://mygcc.free.fr/">mygcc</a> and <a href="http://www.gccxml.org/HTML/Index.html">gccxml</a>.</p>
+
+<p>Aren&#8217;t there <a href="http://www.eclipse.org/cdt/">IDEs</a> interested in making use of GCC internals too or is everybody interested in maintaining <a href="http://git.kernel.org/?p=devel/sparse/sparse.git;a=blob;f=expression.c;h=289927ac7c88eb5bffbbb450915a7b829394d5a0;hb=a02aeb329d5a8f9047c0b75b7e7f64ee2db3ffcf">yet another crappy C parser</a> like Linux&#8217;s Sparse tool?</p>
+
+<p>I&#8217;m looking forward to exploring the many ways we can reuse what&#8217;s in the compiler to empower developers for Mozilla 2.</p>
 </div>
   
   
@@ -148,7 +162,7 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2007/10/12/rewriting-tools-for-mozilla-2-moving-forward-as-planned/">Rewriting Tools for Mozilla 2: Moving Forward as Planned</a></h1>
+      <h1 class="entry-title"><a href="/blog/2008/01/17/gcc-spidermonkey-gcc-dehydra/">GCC + SpiderMonkey = GCC Dehydra</a></h1>
     
     
       <p class="meta">
@@ -164,531 +178,421 @@
   
 
 
-<time datetime="2007-10-12T08:31:35-07:00" pubdate data-updated="true">Oct 12<span>th</span>, 2007</time>
+<time datetime="2008-01-17T08:16:07-08:00" pubdate data-updated="true">Jan 17<span>th</span>, 2008</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p><strong>In the Beginning There Was a Void</strong></p>
+  <div class="entry-content"><p><strong>Analysis</strong></p>
 
-<p>Approximately a year ago, Brendan discussed with me the crazy possibility of rewriting most of the Mozilla code automatically to modernize the codebase. The benefits were huge. Gecko would use the C++ standard library to improve code readability and reducing size, XPCOM would be ripped out of the core to improve performance and decrease footprint, etc.</p>
+<p><a href="http://wiki.mozilla.org/Dehydra_GCC">GCC Dehydra</a> is starting to work. I encourage people try it out for their code scanning needs. The main missing feature is control-flow-sensitive traversal, which means that currently function bodies are traversed represented in a sequential fashion. It is the most complicated part of <a href="http://wiki.mozilla.org/DeHydra">Dehydra</a>, but most of the time this feature is not needed.</p>
 
-<p>It seemed like a good idea, but in reality no other giant C++ project has attempted this before so we were not sure of how realistic it was. I spent a year in a <a href="http://benjamin.smedbergs.us/blog/2007-10-11/dehydra-ftw/">lonely corner</a> of Mozilla trying to materialize the idea.</p>
+<p>So far I got Benjamin&#8217;s <a href="http://hg.mozilla.org/users/bsmedberg_mozilla.com/xpcomgc-patches/?file/de1d37e87cf4/find-stack-comptrs.js">stack-nsCOMPtr finding script</a> to do stuff, which indicates that most of the features are working.</p>
 
-<p>Brendan &amp; Graydon pointed me to <a href="http://www.cs.berkeley.edu/~smcpeak/elkhound/sources/elsa/">elsa</a>, the C++ parser that supposedly could parse Mozilla. However, it turned out that it was only able to parse an old version of Mozilla and rejected the new source. One of the elsa maintainers even tried to convince us to it was not designed for source-to-source transformations and wouldn&#8217;t work that way.</p>
+<p>My vision is to switch to the GCC backend for all of our code analysis needs since it is well tested, fairly feature complete works with new versions of GCC (by definition).</p>
 
-<p>After I patched up elsa and started devising ways to use it for source rewriting I ran into more pain. After a few false starts, I realized that C++ in Mozilla is actually a mix of CPP and C++ and one can not rewrite C++ without dealing with the <a href="http://taras.glek.net/blog/2007/05/11/cpp-strikes-back/">mess that is macro expansion</a>. <a href="http://mcpp.sourceforge.net/">MCPP</a> was pointed out to me as a good starting point for hacking on a preprocessor. So I <a href="http://taras.glek.net/blog/2007/06/12/undoing-cpp-expansion-in-3-simple-steps.-say-hello-to-easier-c-rewriting./">designed</a> an inline log for macro expansion. To my surprise the maintainer of MCPP, Kiyoshi MATSUI, volunteered to implement the spec and thus saved me from a world of pain. (For which I am eternally grateful as I can&#8217;t imagine a more depressing pastime than working on the root of all evil: the C preprocessor).</p>
+<p>Not everything is perfect in GCC land. There are some frustrating typedef issues to <a href="http://gcc.gnu.org/ml/gcc/2008-01/msg00280.html">solve</a>.</p>
 
-<p>In parallel with Kiyoshi&#8217;s work I modified <a href="http://www.cs.berkeley.edu/~smcpeak/elkhound/">elkhound</a> &amp; elsa to make the C++ parser a lot more suitable for source transformations. I learned about LR &amp; GLR parsing and confirmed my suspicion that I don&#8217;t want to write parser generators for a living.</p>
+<p><strong>Source Re-factoring</strong></p>
 
-<p><strong>Happy Conclusion </strong></p>
+<p>Elsa still holds its own when it comes to refactoring code because it has a much cleaner lexer/parser and rarely opts to &#8220;optimize away&#8221; original AST structure. We should stick with Elsa&#8217;s arcane requirement of having to preprocess files with gcc &lt;= 3.4 until either GCC becomes viable as a platform for refactoring or <a href="http://clang.llvm.org/">clang</a> matures.</p>
 
-<p>All this work finally got us what we discussed last September: a framework for doing lots of <a href="http://wiki.mozilla.org/XPCOMGC/Stack_Pointers">boring code rewrites</a>.</p>
-
-<p>The first big Moz2 task is <a href="http://wiki.mozilla.org/XPCOMGC">switching</a> from reference counting to garbage collection. Today, <a href="http://taras.glek.net/blog/2007/09/12/garburator-another-day-another-rewrite-tool/">garburator</a> produced a <a href="http://people.mozilla.org/~tglek/garburator/nsgenerichtmlelement.diff">gigantic patch</a> for subset of the content/ module and all of the affected files compiled. Hopefully next week I&#8217;ll have a multi-megabyte patch for the whole of Mozilla that compiles and possibly runs.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2007/10/04/multiple-degrees-of-correctness/">Multiple Degrees of Correctness</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2007-10-04T10:05:05-07:00" pubdate data-updated="true">Oct 4<span>th</span>, 2007</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><strong>Prcheck</strong></p>
-
-<p>The trouble with prcheck and the automated <a href="http://taras.glek.net/blog/2007/06/26/status-report-recent-work/">prbool validation</a> is that one can&#8217;t attach the giant patch it produces to bugzilla and expect it to get committed. So I am spending this week combing through prcheck output  and patch-bombing bugzilla with per-module patches.</p>
-
-<p>I find going through the errors manually to be a lot of fun than I expected. I am finding types of errors that I was not considering when I was writing prcheck. For example, I expected the biggest gains to come at runtime from making all prbool values 0/1, but it seems that most of the cool errors are due to PRBool &amp; PRInt32 resolving to the same type. That results in code mayhem ranging from wrong method overloads being called to method signatures claiming to return PRBool where method bodies act like the function returns nsresults.</p>
-
-<p>The prbool check is just an incredibly minor restriction of the C++ system, yet it resulted in hundreds of errors(almost all of which are typos). In my mind this reinforces the importance of static typing (which C++ doesn&#8217;t do enough of).</p>
-
-<p>The main lesson I learned today is that <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=398624">code</a> doesn&#8217;t have to be correct in order to work correctly.</p>
-
-<p><strong>Mobile</strong></p>
-
-<p>While on vacation in Ukraine I finally got to try out GPRS Internet through my cellphone. Sure EDGE is slow, but the convenience of having internet everywhere I go while traveling is unparalleled. It&#8217;s just too bad that I had to go to a developing country to be able to afford mobile internet. In Canada I would&#8217;ve paid over $750 for the $10 worth of Internet in Ukraine. So I am very excited that governments are starting to regulate mobile pricing. Looks like <a href="http://news.yahoo.com/s/afp/20071004/bs_afp/eutelecommobilesectorregulateconsumer">EU is first</a>. I hope the <a href="http://telus.ca">local</a> <a href="http://www.rogers.com">cellular</a> <a href="http://bell.ca/home/">oligopoly</a> gets a kick to the head soon.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2007/09/12/garburator-another-day-another-rewrite-tool/">Garburator: Another Day, Another Rewrite Tool</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2007-09-12T05:54:45-07:00" pubdate data-updated="true">Sep 12<span>th</span>, 2007</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I&#8217;m going to be on vacation until September 25th. I started the day by planning out how to do the rewriting tool to implement Benjamin&#8217;s <a href="http://wiki.mozilla.org/XPCOMGC/Stack_Pointers">spec.</a> I&#8217;ll have to add more position information to elsa to do things properly and that might take a week or two. However, I&#8217;m into instant gratification so I wrote up a hacky prototype that results in a patch <a href="http://people.mozilla.org/~tglek/garburator.diff">like this.</a></p>
-
-<p>Say hi to garburator, a tool that will assist with the reference counting -> MMgc transition. The tool is less than 100 lines long, so someone could finish the hacky version while I am away. Either that or one could teach elsa to keep detailed position information in declarations and identifier names and clean up the postvisitS_decl() method in garburator.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2007/09/10/automatic-decomtamination-roadmap-for-automated-refactorings/">Automatic DeCOMtamination: Roadmap for Automated Refactorings</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2007-09-10T11:26:36-07:00" pubdate data-updated="true">Sep 10<span>th</span>, 2007</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>This is an update on the ongoing <a href="http://wiki.mozilla.org/Gecko:DeCOMtamination">deCOMtamination</a> work from the automated rewriting perspective. I think it&#8217;s pretty exciting that Mozilla is the first large-scale C++ project to attempt automated large scale source code cleanups and optimizations. I think the tools are finally getting mature enough for the job.</p>
-
-<p>The downside is that there isn&#8217;t a published roadmap of what we are planning to achieve with deCOMtamination as we are still in the planning stages. The upside is that there is still time for any interested parties to think up the next great improvement on how things are done, <a href="http://taras.glek.net/blog/2007/07/13/dehydra-prcheck-squash-in-mercurial/">checkout</a> the refactoring toolchain and either extend an existing tool or implement a new one.</p>
-
-<p>Below is a list of things that I plan to have working in the near future. The idea is to try to implement various optimizations that would be impractical(or impossible?) to do manually and see if they yield the expected performance and code quality benefits.</p>
-
-<p><strong>Step 1: Outparam Elimination</strong></p>
-
-<p>QueryInterface() and other ok/fail methods have a redundant nsresult value which can be eliminated without changing any logic in the code. The QueryInterface() rewrite is my first serious tree-wide refactoring attempt. QueryInterface() is probably the most well known and frequently-used method within Mozilla. It also one of the most CPP-encumbered methods in the tree, so it made for a good test of my CPP-aware elsa work.</p>
-
-<p>The <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=391275">getting code to compile</a> phase is over. Currently Benjamin is working on getting the modified code to run which requires XPConnect changes, debugging the manually-rewritten macros and verifying that the generated patch is correct.</p>
-
-<p>The next step will be to eliminate local nsresult variables in the callees when they are used to store &amp; check return values of QueryInteface(). This is basically a make-resulting-source-look-prettier optimization.</p>
-
-<p>I hope to measure a speed-up and slight footprint decrease with the new QueryInterface call.</p>
-
-<p><strong>Step 2: Try Mozilla Without Reference Counting?</strong></p>
-
-<p>In my mind the most exciting part of Moz2 is Tamarin. Few things are cooler than an elegant JIT VM.</p>
-
-<p>Tamarin comes with a modern <a href="http://developer.mozilla.org/en/docs/MMgc">garbage collector</a>.</p>
-
-<p>The goal of this rewrite is to aid <a href="http://blog.mozilla.org/jorendorff/">Jason</a> and <a href="http://benjamin.smedbergs.us/">Benjamin</a> with switching XPCOM from reference counting to garbage collection. This might end up in gigantic patches to rid the stack of nsCOMPtr objects. This might be hard as it will be affecting a lot of code and might reveal more shortcomings in <a href="http://taras.glek.net/blog/2007/08/30/pork-the-brave-new-world/">my version</a> of elsa and MCPP. <a href="http://wiki.mozilla.org/XPCOMGC">Details</a> are in the wiki.</p>
-
-<p><strong>Step 3: Try C++ Exceptions</strong></p>
-
-<p>This is the most ambitious rewrite I know of for Mozilla 2. It&#8217;s similar to step 1 in that the goal is to eliminate outparameters and nsresult error codes, except in this case it would happen for all functions. Brendan <a href="http://weblogs.mozillazine.org/roadmap/archives/2006/02/fresh_xpcom_thinking.html">mentioned</a> this is in his blog.</p>
-
-<p>The idea is that exceptions in Mozilla happen in exceptional circumstances, thus most of the time the return value will be NS_OK and the outparameter will have something valid in it. So we should rewrite all methods that return nsresult to return the outparameter value through the return value and have the errors thrown as exceptions.</p>
-
-<p>In the simplest case this would involve rewriting return statements into throw statements and rewrite callers to use try/catch. Instead of</p>
-
-<p>rv = bla(&amp;outparam)&#8230;if(rv == foo) .. else if(rv == boo) return rv</p>
-
-<p>the code would be</p>
-
-<p>try{ outparam=bla() } catch(foo) {&#8230;} catch(boo) {throw boo}</p>
-
-<p>Note this is still inefficient since the code would be manually unrolling the stack instead of letting the exceptions do that. So the next iteration of the rewrite would get rid of the</p>
-
-<p>catch(boo) {throw boo}</p>
-
-<p>code to streamline the execution path. Ideally this would provide a significant reduction of footprint (due to getting rid of the error propagation code) and provide a speed boost.</p>
-
-<p>However, there are a lot of issues that need to be solved. How to ensure that the C++ code is exception-safe (everything has destructors to do appropriate cleanup)? How to deal with the case of the stack being a mix of platform C, C++, JavaScript, Python, etc? Most runtimes are not aware of C++ exceptions.</p>
-
-<p><strong>Infrastructure Work</strong></p>
-
-<p>Unfortunately, not all of the automated refactoring work is about exciting rewrites. Elsa is still tied to the stone-age gcc 3.4 as it can&#8217;t yet process C++ headers from the newer gcc releases due to template complexity.</p>
-
-<p>There is also work that needs to be done to get OSX supported as well as Linux by elsa &amp; mcpp. I think very little work remains there.</p>
-
-<p>Another big issue is getting elsa/mcpp to work on Windows. This may involve teaching elsa about the Microsoft windows flavour of C++ or getting Mozilla to reliably build with mingw and merely teaching elsa about mingw&#8217;s flavour of windows C++.</p>
-
-<p>There is also an issue of maturity. Mozilla is probably the biggest codebase to make use of elsa and mcpp, so there are teething issues to solve. Having said that, the current version of MCPP in svn should be able to compile Mozilla. Elsa can process all of Mozilla with a small patch to two files attached in the QueryInterface() bug.</p>
-
-<p>Overall I&#8217;m doing less and less infrastructure work as time goes by, hopefully the tools will mostly just work from now on.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2007/08/30/pork-the-brave-new-world/">Pork: The Brave New World</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2007-08-30T08:31:43-07:00" pubdate data-updated="true">Aug 30<span>th</span>, 2007</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>It doesn&#8217;t look like my oink patches are going to reach upstream anytime soon. In fact, in the past year no patches have landed in the oink tree. I think this is unfortunate, but I have my own repository at <a href="http://hg.mozilla.org">http://hg.mozilla.org</a> and will continue working on my fork. So allow me to introduce Pork, the Oink fork. So if anyone has any exciting source location, pretty printing or other elsa improvements, I hope to eventually see those land in pork.</p>
-
-<p>Note, pork is just an informal name for the fork, I am not currently planning to do any source renaming or repository renaming.</p>
-
-<p><strong>Pork: Now in a VMware flavour</strong></p>
-
-<p>bsmedberg pointed out that oink seems a bit intimidating to setup and it would be nice if it came in virtual machine. So I have oink/mcpp/etc packaged up in a virtual machine that can build Mozilla with gcc3.4, run dehydra analyses and produce automated patches. If you want to play with that, post a comment and I&#8217;ll reply with a download link.</p>
-
-<p>A couple of people asked me about some simple code-scans to see for problems and optimization opportunities. Next week I am going to post few simple dehydra recipes on how to look for patterns in the code. It&#8217;s dead simple with JavaScript and some minimal shell knowledge to aggregate the results. The VM should provide a good way to get started.</p>
-
-<p><strong>Outparams: QueryInterface Rewrite Milestone Reached </strong> I finally got Mozilla to compile with the outparam-less qi call. The outparamdel part of that was surprisingly easy and straightforward. I   also learned all kinds of fun details about multiple inheritance and fun ways to construct functions out of macro segments. The next step is to get the code to run. I&#8217;ll also have to look into a few minor MCPP issues that the rewrite uncovered. See QI <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=391275">bug</a> for the gory details.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2007/08/06/outparams-take-2/">Outparams: Take 2</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2007-08-06T09:02:10-07:00" pubdate data-updated="true">Aug 6<span>th</span>, 2007</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><strong>Will Rid Code of Outparams!</strong></p>
-
-<p>I resumed my outparam rewriting work last week. Having fixed the <a href="http://taras.glek.net/blog/2007/05/11/cpp-strikes-back/">CPP induced</a> architectural limitation that I ran into, it was quite straight-forward to factor out squash&#8217;s rewriting code into a new tool. Unlike squash, outparamdel (creatively named new tool), can rewrite code precisely and reliably. I still don&#8217;t have end-of-ast-node information in every Elsa AST member, but I think I have added position info to enough AST nodes to be able to do most of the Mozilla 2 rewrites.</p>
-
-<p>Last time I was working on this, I was a little unhappy with the amount of code that had to be changed in the callee. I also wasn&#8217;t sure how to handle the complexity of callsites where control flow depends on the error code returned by the callee. This time I chose the path of least resistance.</p>
-
-<p>In the callee two variables replace the out-parameter. The first holds the return value and the second points at the first and is declared in the same way as the out-parameter.</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>@@ -2358,6 +2358,5 @@
-</span><span class='line'>-nsresult
-</span><span class='line'>-nsCSSFrameConstructor::CreateHTMLImageFrame(nsIContent* aContent,
-</span><span class='line'>-                                            nsStyleContext* aStyleContext,
-</span><span class='line'>-                                            ImageFrameCreatorFunc aFunc,
-</span><span class='line'>-                                            nsIFrame** aFrame)
-</span><span class='line'>-{
-</span><span class='line'>+nsIFrame*
-</span><span class='line'>+nsCSSFrameConstructor::CreateHTMLImageFrame(nsIContent* aContent,
-</span><span class='line'>+                                            nsStyleContext* aStyleContext,
-</span><span class='line'>+                                            ImageFrameCreatorFunc aFunc)
-</span><span class='line'>+{
-</span><span class='line'>@@ -2364,1 +2364,3 @@
-</span><span class='line'>-  *aFrame = nsnull;
-</span><span class='line'>+  nsIFrame* __aFrame = 0;
-</span><span class='line'>+  nsIFrame** aFrame = &__aFrame;
-</span><span class='line'>+  *aFrame = nsnull;
-</span><span class='line'>@@ -2371,1 +2371,1 @@
-</span><span class='line'>-      return NS_ERROR_OUT_OF_MEMORY;
-</span><span class='line'>+      return nsnull;
-</span><span class='line'>@@ -2374,1 +2374,1 @@
-</span><span class='line'>-  return NS_OK;
-</span><span class='line'>+  return __aFrame;
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>With a little more work one can get of one or even both local variables, but that will require more heuristics.</p>
-
-<p>I also simplified call-site rewriting by wrapping the call to the callee function into a ternary expression when the error code is evaluated.</p>
-
-<p>@@ -5290,2 +5290,1 @@</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>-    rv = CreateHTMLImageFrame(aContent, aStyleContext, NS_NewImageFrame,
-</span><span class='line'>-                              &newFrame);
-</span><span class='line'>+    rv = ((newFrame = CreateHTMLImageFrame(aContent, aStyleContext, NS_NewImageFrame)) ? NS_OK : NS_ERROR_OUT_OF_MEMORY);
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Obviously this could be improved upon by getting rid of rv altogether, but the trick works in all cases and can be improved-upon incrementally.</p>
-
-<p><strong>Problems &amp; Limitations</strong></p>
-
-<ul>
-<li>Code within macros is detected, but not modified. Since macros are something that is easier to modify manually than with a tool, this isn&#8217;t a problem.</li>
-<li>Indentation isn&#8217;t updated. I think this is solvable with a few more heuristics in the patcher.</li>
-<li>Expression rewriting doesn&#8217;t work on Mac or Windows source-code. Mac is going to be relatively straight-forward to support. MCPP doesn&#8217;t understand all of the Mac strangeness yet and needs a loving and affectionate mac user to teach it the ways of Darwin. Windows is more work as it will require both updating the mingw Mozilla port and porting MCPP.
-<strong>Coolness</strong></li>
-</ul>
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>nsCSSFrameConstructor.cpp:10383: nsCSSFrameConstructor::CreateContinuingTableFrame,6=newFrame,
-</span><span class='line'>nsCSSFrameConstructor.cpp:10993: nsCSSFrameConstructor::GetInsertionPoint,2=aParentFrame,
-</span><span class='line'>nsCSSFrameConstructor.cpp:2374: nsCSSFrameConstructor::CreateHTMLImageFrame,3=aFunc,
-</span><span class='line'>nsCSSFrameConstructor.cpp:4080: nsCSSFrameConstructor::ConstructDocElementTableFrame,2=childList,
-</span><span class='line'>nsCSSFrameConstructor.cpp:4477: nsCSSFrameConstructor::ConstructRootFrame,1=viewportFrame,
-</span><span class='line'>nsCSSFrameConstructor.cpp:4720: nsCSSFrameConstructor::ConstructRadioControlFrame,0=NS_NewGfxRadioControlFrame,
-</span><span class='line'>nsCSSFrameConstructor.cpp:4741: nsCSSFrameConstructor::ConstructCheckboxControlFrame,0=NS_NewGfxCheckboxControlFrame,
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>I wrote outparamdel and tested it on a convoluted manual testcase. Then I ran outparamdel mozilla-wide with the above input and the resulting code compiled! This was never the case prior to MCPP work since I found find new and exciting preprocessor madness to work-around and special case with every new rewrite.</p>
-
-<p><strong>Future</strong></p>
-
-<p>Going to make this a little more challenging by rewriting QueryInterface to return result by a return value which should affect the majority of functions in Mozilla.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2007/07/27/superity-complex-static-analysis/">Superity Complex & Static Analysis</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2007-07-27T07:57:23-07:00" pubdate data-updated="true">Jul 27<span>th</span>, 2007</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>It is always frustrating to see a compiler complain about something trivial. It is especially annoying since most of the trivial complaints are trivial to fix automatically (eg. superfluous semicolon).</p>
-
-<p>I think this is a bigger problem in the static analysis industry. Vendors/researchers ship their tools with a superiority complex built-in. Most of the error messages produced by error checking tools can be paraphrased as &#8220;Gee look, I found some trivial to fix bugs in your code, but I ain&#8217;t gonna do nothing about them! Neeener! Go worker-human!&#8221;</p>
-
-<p>My policy is to make my tools more polite than that. Starting from prcheck, all of my tools will point out simple errors by suggesting patches (when possible). It is impossible to produce a correct patch every time, but I am not worried about that since developers are quite good at disregarding stupid suggestions.</p>
-
-<p><strong>Automatic Whining</strong></p>
-
-<p>Now I have a few extra scripts that lay the foundation for regular code inspection via static analysis. PRBool checks are my first step. Here is a sample email:
-&#8220;`</p>
-
-<p>&#8220;`</p>
-
-<pre><code>Subject: Prbool violation in nsPlainTextSerializer.cpp
-
-vidur@netscape.com introduced a new PRBool problem in revision 1.1 of nsPlainTextSerializer.cpp.
-
-Commit message: branches:  1.1.2;  
-
-Error: /content/base/src/nsPlainTextSerializer.cpp: 614:
-
--          PRInt32 semiOffset = style.Find("ch", widthOffset+6);
-+          PRInt32 semiOffset = style.Find("ch", 0 != (widthOffset+6));
-</code></pre>
-
-<p><a href="http://bonsai.mozilla.org/cvsblame.cgi?file=mozilla/content/base/src/nsPlainTextSerializer.cpp&amp;rev=&amp;cvsroot=/cvsroot#614">http://bonsai.mozilla.org/cvsblame.cgi?file=mozilla/content/base/src/nsPlainTextSerializer.cpp&amp;rev=&amp;cvsroot=/cvsroot#614</a></p>
-
-<p>This an example of an incorrect suggestion. The actual problem is due to the incorrect method overload being chosen.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2007/07/18/cpp-aware-c-rewriting-can-be-fun/">CPP-Aware C++ Rewriting Can Be Fun</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2007-07-18T07:29:16-07:00" pubdate data-updated="true">Jul 18<span>th</span>, 2007</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Recently MCPP started working well enough to process all of Mozilla with the special macro-expansion undoing markup. Below is the most exciting patch line I have produced so far. A few months ago, I didn&#8217;t think was possible to rewrite macro parameters with elsa.</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>
-</span><span class='line'>-    ENCODE_SIMPLE_ARRAY(PRBool, Bool, (PRUint16) values[i]);
-</span><span class='line'>+    ENCODE_SIMPLE_ARRAY(PRBool, Bool, 0 != ((PRUint16) values[i]));
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>To produce this:</p>
+<p>GCC is not suitable for refactoring work because it:</p>
 
 <ol>
-<li>Elsa consumed the expanded .ii file</li>
-<li>Boolean checker found the problematic subexpression</li>
-<li>Original source position was calculated from the expansion log</li>
-<li>Then prcheck figured out that only the macro parameter needs to be rewritten.</li>
-<li>Original source was read in and enclosed within 0 != ()
-<strong>Integrating Static Checks - PRBool check </strong></li>
+<li>Starts simplifying the AST  too early</li>
+<li>The parser is handwritten and therefore would be hard to modify to maintain end-of-AST-node location info.</li>
+<li>GCC reuses many AST nodes which means their locations point at the declaration rather than usage-point.</li>
+<li>Handwritten nature of GCC makes any of these above improvements time-consuming to implement and the political issues are something I&#8217;d rather not deal with.
+Most of these wouldn&#8217;t have been an issue if GCC was written in <a href="http://en.wikipedia.org/wiki/ML_programming_language">ML</a> :) <strong>What&#8217;s Next?</strong></li>
 </ol>
 
 
-<p><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=266048">This bug</a> contains the rest of the rewriting results. Prcheck checks every assignment to a prbool and outputs a patch if the expression may evaluate to anything other than 0/1. A message is produced if a patch can not be generated because the expression is within a macro.</p>
+<p>Time to start using GCC Dehydra to enforce GC-safety and lots of fun exception-rewrite preparation work.</p>
 
-<p>The goal is to have prcheck run on every commit(or every day) and send out an email or another form of a complaint when a new prbool violation is introduced. Since the current prbool misuses aren&#8217;t going to be fixed overnight, there should be a db kept somewhere with the old misuses to prevent the new ones from being introduced and old ones from being annoying. I&#8217;m thinking of associating misuse counts with a filename, so when the number goes up an error gets mailed out. Anyone get a better idea?</p>
+<p>Stay tuned for more exciting developments regarding regaining control over source code here and on <a href="http://blog.mozilla.org/dmandelin/2008/01/15/hello-world/">Dave Mandelin&#8217;s blog</a>.</p>
+</div>
+  
+  
 
-<p><strong>Latest Recipe to Running Oink Tools </strong></p>
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2008/01/08/dehydra-as-a-gcc-plugin/">Dehydra as a GCC Plugin</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-01-08T04:56:48-08:00" pubdate data-updated="true">Jan 8<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Thanks to the 2-fold increase in manpower working on pork, we finally have an opportunity to work on the nice-to-have things.</p>
+
+<p><strong>Progress</strong></p>
+
+<p>Recently I have been working on a GCC plugin to do Mozilla-specific analyses with GCC.</p>
+
+<p>Unfortunately, I didn&#8217;t notice that GCC had a<a href="http://gcc.gnu.org/svn.html"> plugin branch </a>so I reinvented the wheel there. Fortunately that part was rather easy and turned out that the plugin branch isn&#8217;t very useful to work with as it is in SVN, doesn&#8217;t link GCC with -rdynamic nor does it install the hooks I need in the C++ frontend. Overall the plugin shim is relatively trivial and it will be pretty easy to merge with other similar efforts.</p>
+
+<p>My first and only plugin is a C reimplementation of Dehydra. GCC sources are currently fairly hostile to C++, so I elected to not make my head spin by mixing in C++ in addition to C and JavaScript. I think the C Dehydra has reached the hello world state, to take it for a spin see the <a href="http://wiki.mozilla.org/Dehydra_GCC">wiki page</a>.</p>
+
+<p><strong>GCC Thoughts</strong></p>
+
+<p>Integrating with GCC is pretty awesome. So far I regret not jumping in earlier. I was reluctant to do so as everyone I&#8217;ve talked to (other than <a href="http://tromey.com/blog/">Tom Tromey</a>) claimed that GCC is ridiculously complicated and impossible to do stuff with. In fact academic people are so scared of GCC that they tend to opt to go with commercial frontends that have ridiculus licensing terms and make it impossible to release their work to general public.</p>
+
+<p>GCC internals are pretty crazy since everything is done with macros and the AST is dynamically typed so it&#8217;s fairly painful to figure out seemingly simple things like &#8220;what AST nodes does this AST node contain&#8221;. Additionally, GCC loves rewriting AST nodes inplace as the compilation progresses which sucks when one wants to analyze the AST while it looks as close as possible to the source. GCC parser also sucks to work with as it is implemented as a C code hodge-podge (technical term which applies to much code in GCC). Luckily, I am mainly concerned with poking at data that&#8217;s already in GCC.</p>
+
+<p>The upside is that GCC is a well-tested production compiler that most source compiles with. Integrating with GCC means that the AST is correct (Elsa is a frontend so there is no way of knowing if AST has mistakes in it) . Integration also means that the user doesn&#8217;t have to worry about making preprocessed files and maintain obsolete versions of GCC or old GCC headers. Unlike Elsa, GCC already has useful features like typedef tracking and doesn&#8217;t implement location tracking with a stupid programming trick. Additionally, I hope to reuse computations from from middle-end GCC passes to build my control flow graph, do value numbering and other useful, but tricky to implement stuff.</p>
+
+<p>GCC isn&#8217;t scary at all, it&#8217;s just another way of implementing a compiler. Some people elect to have more pain in life by electing to <a href="http://www.cs.berkeley.edu/~smcpeak/cpp/cplusplus.html">reinvent ML in C++</a> instead of using ML for compiler writing,  others get their pain dosage from working on a C compiler originally generated from LISP sources.</p>
+
+<p>Lastly, I&#8217;d like to thank patient gcc hackers in #gcc without whom I wouldn&#8217;t stand a chance in figuring out how to get this far.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2007/12/28/recent-progress/">Recent Progress</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-12-28T05:39:45-08:00" pubdate data-updated="true">Dec 28<span>th</span>, 2007</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Looks like <a href="http://wiki.mozilla.org/Pork">pork</a> is slowly going to get merged back into oink. This makes me happy as it will result in decreased merging headaches and gives more visibility to my work outside of Mozilla. My elkhound changes are already in!</p>
+
+<p>Recently I added support for retaining gnu attributes to elsa and corresponding features dehydra and garburator. Now dehydra can verify things based on attributes and  garburator gained a way to rewrite special cases like classes that are always <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=409088">allocated on the stack</a>. Elsa still drops most attributes, but at least classes, methods and variable declarations are covered.</p>
+
+<p>I also spent a couple of days investigating gcc plugins. Turns out modifying gcc to support plugins is dead easy, but getting anything useful done in GCC requires a steep learning curve. I tried to find how to enumerate all of the toplevel declarations in the source, but I couldn&#8217;t find the correct global variable that corresponds to the toplevel scope(aka the Translation Unit?). I have a few more ideas of what to try next. Once I do that, it shouldn&#8217;t take much work to make a basic gcc-hosted version of dehydra. There is also a gcc plugin branch hosted in the gcc svn, but I can&#8217;t find any example code for it. It isn&#8217;t a big deal since none of the plugins I&#8217;ve seen mentioned venture outside of intra-function analyses.</p>
+
+<p>I am still pondering on how to tackle rewriting Mozilla to use exceptions. It is the key to improving overall readability/perf of Moz C++, but the logistics of writing the corresponding analyses+rewrites followed by a parallel manual correction step are still making my head spin. All I&#8217;m sure about is that the first step to exceptions would be to enable the OOM exceptions and do the corresponding exception safe analysis+rewrite.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2007/12/19/exceptions/">Exceptions</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-12-19T07:26:30-08:00" pubdate data-updated="true">Dec 19<span>th</span>, 2007</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Often there are two ways to write code. One way is to design an API and have code patterns adhere to how the API is supposed to be used. Another way is to rely on language features to accomplish the same thing. Typically API-pattern approaches are chosen because compilers are too immature or just don&#8217;t provide the necessary features. Sometimes compilers do catch up and the possibility of utilizing newer language features appears.</p>
+
+<p>In the case of the exception rewrite the task is to rewrite code from a pattern-based (compiler in your head) approach to a more strict C++ construct-based exception paradigm. Unfortunately APIs don&#8217;t enforce their usage as much as a compiler (in part because we don&#8217;t have <a href="http://taras.glek.net/blog/2007/11/29/gcc-plugins-under-my-xmas-tree/">app-spefic compiler plugins</a>) so transforming that into a strict compiler-friendly form automatically isn&#8217;t always realistic (<a href="http://lxr.mozilla.org/seamonkey/source/xpcom/glue/nsIInterfaceRequestorUtils.cpp#43">example</a>). See my previous post for more examples.</p>
+
+<p>Having done more work on the exception conversion I believe that it is possible to switch Mozilla to exceptions to the point of getting it to compile. Unfortunately, I don&#8217;t think that it&#8217;s possible to do this in the Mozilla2 timeframe due to the large amount of manual labour required.</p>
+
+<p>Due to various use cases that don&#8217;t fit the exception model there is a need for an nsresult-lint tool to detect funny (see above) nsresult patterns so code can be manually fixed to enable thrower to transform code correctly.</p>
+
+<p>I expect conversion to exceptions to consist of the following large steps:</p>
+
+<p>XPCOMGC -> nsresult-lint -> thrower automatic conversion -> nsexception-lint -> outparamdel</p>
 
 <ol>
-<li>If you want to rewrite sources either wait for the next mcpp release or use my <a href="http://people.mozilla.org/~tglek/mcpp-post2.6.4.tar.gz">tarball</a>.</li>
-<li>Install gcc 3.4.x. If using mcpp, configure mcpp with &#8211;enable-replace-system so it replaces the gcc preprocessor</li>
-<li><a href="http://taras.glek.net/blog/2007/07/13/dehydra-prcheck-squash-in-mercurial/">Checkout</a> and build my oink version.</li>
-<li>Build mozilla with -save-temps gcc option. If using mcpp set environment variables CC=&#8221;gcc -Wp,-K -Wp,-W0 -save-temps &#8221; and CXX=&#8221;g++ -Wp,-K -Wp,-W0 -save-temps &#8221; and do make -f client.mk build as usual. The extra gcc parameters tell it to save intermediate files to pass -K and -W0 to enable macro expansion annotation and silence warnings.</li>
-<li>Run tools individual files</li>
-<li>Produce a global patch with ./pork-barrel 4 /path/to/prcheck /tmp/input.txt where input.txt is a list of absolute filenames of all of the .i and .ii files produced by the build process</li>
+<li>XPCOMGC needs to land first to simplify memory management. Otherwise there will be a lot more nsCOMPtr&lt;>s already_AddRefed&lt;>s and friends.</li>
+<li>nsresult-lint would flag code for clean up to assist with the multitude of special cases in the code preventing it from transformation</li>
+<li>thrower needs to do some reasonably sophisticated static analysis (sensitive to control flow) to ensure that code is rewritten correctly. The analysis step isn&#8217;t ridiculously hard, but it is considerably more complex than what is done in existing tools.</li>
+<li>nsexception-lint tool will flag exception-unsafe code. I expect this to highlight a fair amount of code that needs to be converted to RAII. It will take more manual labour to fix flagged code here than in than step2.</li>
+<li>Once exceptions are used the return value is freed up for outparamdel to utilize. This will be a nice optimization and code clean up.
+I think the best bet with exceptions would be to start working on them during the moz2 development cycle to have them land early in post-moz2.</li>
 </ol>
 
+
+<p>Or as an alternative we could try to do just the OOM exceptions which are less frequent which would look like:</p>
+
+<p>XPCOMGC -> thrower automatic conversion(OOM cases are easier) -> nsexception-lint</p>
+
+<p>In this case the only significant piece of work is nsexception-lint which would be needed later for a full-blown exception rewrite. It wouldn&#8217;t be so bad to convert code to RAII even before that is required for the full exception rewrite.</p>
+
+<p>For now I&#8217;m going let thrower rest in the pork hg repository while I try to make a <a href="http://wiki.mozilla.org/XPCOMGC/Static_Checker">static checker plugin</a> for gcc. Feel free to ask for clarification. I&#8217;m dealing with after-effects of insomnia so this may not be completely clear.</p>
+
+<p><strong>Update</strong>: Reasonable <a href="http://www.hackcraft.net/raii/">description of RAII</a>.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2007/12/11/switching-to-exceptions-makes-head-spin/">Switching to Exceptions: Makes Head Spin</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-12-11T04:10:19-08:00" pubdate data-updated="true">Dec 11<span>th</span>, 2007</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><strong>Typical</strong></p>
+
+<p>It seems that there are 3 stages to doing a rewrite in Moz:</p>
+
+<ol>
+<li>Start a new tool. Make sure that it can rewrite some trivial testcases. Add lots of asserts for cases you are unsure about.</li>
+<li>Run tool on Mozilla and fix crashes caused by above asserts. Get 80% of the code rewriting correctly.</li>
+<li>Get the other 20% rewriting. This often involves major overhauls to rewriting logic due to patterns that weren&#8217;t expected when the spec was written
+Usually stage 3 is a few times harder than 2. For garburator rewriting got really hard in stage 3. 90% of my time ended up being spent in stage 3 due to fun issues like figuring out what to do with <a href="http://benjamin.smedbergs.us/blog/2007-11-08/perils-in-rewriting/">unforeseen</a>(in spec) combination of references and nsCOMPtr&lt;>s.</li>
+</ol>
+
+
+<p><strong>Exceptions</strong></p>
+
+<p>With exceptions step 2 is already getting hard. So far I&#8217;ve had to extend elsa to support pattern matching,  and reworked the code patcher to support recursive rewriting.</p>
+
+<p>Now looks like I&#8217;ll need to do some flow-sensitive analysis to rewrite cases like <a href="http://lxr.mozilla.org/seamonkey/source/xpcom/base/nsMemoryImpl.cpp#217">nsMemoryImpl::FlushMemory</a>. I&#8217;m not sure if it is possible to automatically deal with functions like <a href="http://lxr.mozilla.org/seamonkey/source/xpcom/base/nsExceptionService.cpp#290">nsExceptionService::DoGetExceptionFromProvider</a>.</p>
+
+<p>Also, I&#8217;m not yet rewriting code to be bugfree, just trying to get it to compile. Once exceptioned code compiles, step two will be to statically check code to verify that it is exception-safe and convert it to RAII or something.</p>
+
+<p>Here is an <a href="http://people.mozilla.org/~tglek/xpcom.diff">current patch</a> for xpcom/ produced by thrower. At the moment there are still a lot of pattern matches to be added. It mostly handles rv = foo(); if (NS_FAILED(rv)) and a few other simple <a href="http://hg.mozilla.org/oink/?file/fbbcc3e9056b/thrower_tests/">cases</a>.</p>
+
+<p>This is exciting stuff, but really hard, so if anyone has exciting problem solving ideas feel free to ping me.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2007/12/05/exceptional-circumstances/">Exceptional Circumstances</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-12-05T06:23:38-08:00" pubdate data-updated="true">Dec 5<span>th</span>, 2007</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>My previous post on outparam rewriting <a href="http://taras.glek.net/blog/2007/11/28/volume-of-refactoring-ahead/">described</a> the wealth of functions that can be rewritten. Unfortunately, most functions in Mozilla are declared in XPIDL interfaces.</p>
+
+<p>I have been convinced that my plan to rewrite xpidlgen to avoid outparameters wont be possible because most XPIDLinterfaces can be implemented by JavaScript in a few different ways. That is problematic because in addition to return values, JavaScript can also have an exception thrown at any point and have that converted to an nsresult error code by XPConnect. That means that the getters implemented in JavaScript are not in the set of functions that only return NS_OK+outparam/someerror. I wouldn&#8217;t be at all disappointed if someone proved me wrong here.</p>
+
+<p><strong>nsexception</strong></p>
+
+<p>There is one other way to rid the code of outparameters (including getter_AddRefs and friends). Time to face my greatest reluctance: rewriting Mozilla to use exceptions. Brendan has been talking about it for a long time, but I have been skeptical until now, mostly due to the complexity of rewriting that much code. However, I have more confidence in rewriting huge amounts of code now since the XPCOMGC rewrite which touched most functions in Mozilla without too much trouble (in relative terms).</p>
+
+<p><strong>Motivation</strong></p>
+
+<p>There are some obvious benefits to be gained from switching to exceptions other than a reduction in code-size (and footprint?) and having code that looks more like common C++.</p>
+
+<p>We would like to modify tamarin to use C++ exceptions such that an exception thrown from JavaScript would unroll the mixed C++/JS stack. This would simplify and enable significant optimizations for XPConnect.</p>
+
+<p>I am dreaming of JITed marshaling code for C++->JS calls and having a low level FFI interface(ie being able to call most C/C++ methods <a href="http://starkravingfinkle.org/blog/2007/09/hello-js-ctypes-goodbye-binary-components/">directly</a>) on the JavaScript side such that tracing JIT could automatically optimize common XPConnect calls. This an exciting area and there are lots of details to be worked out, so I&#8217;d love to see some feedback (or better yet proof of concept code!) on this.</p>
+
+<p><strong>The Plan</strong> - Rewriting</p>
+
+<p>I have started implementing thrower (I am not a great namer), a tool for converting various code patterns involving nsresult into something that uses an nsexception wrapper.</p>
+
+<p>Since this rewrite requires a lot more scanning for code patterns I added an elsa feature to allow pattern matching on AST nodes in C++ (also using exceptions). Since there are lot of patterns to transform, for documentation I will be writing many minimal testcases documenting(and testing) exactly what gets rewritten. Any interested parties are welcome to contribute Mozilla error handling patterns as testcases.</p>
+
+<p><strong>Verifying the Result </strong></p>
+
+<p>Just like in the XPCOMGC rewrite, code will have to be scanned to verify that it fits in the &#8220;new world order&#8221;. Unlike XPCOMGC, there are additional flow-sensitive issues to scan for to ensure that the code is thread-safe. The scans are at a lower level than dehydra currently works at, so it&#8217;s a perfect opportunity to either extend dehydra or write the new tool.</p>
+
+<p>It would be especially cool to implement the code analysis tool as a <a href="http://taras.glek.net/blog/2007/11/29/gcc-plugins-under-my-xmas-tree/">gcc plugin</a>.  Sean Callanan&#8217;s &#8220;Extending GCC with Modular GIMPLE Optimizations&#8221; paper in the <a href="http://ols2006.108.redhat.com/2007/GCC-Reprints/GCC2007-Proceedings.pdf">GCC summit proceedings</a> should be an excellent starting point.</p>
+
+<p>This is an exciting experiment. I look forward to reducing speculation on the risks/benefits of switching the codebase to use exceptions with some concrete data.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2007/11/29/gcc-plugins-under-my-xmas-tree/">GCC Plugins Under My Xmas Tree?</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-11-29T13:59:41-08:00" pubdate data-updated="true">Nov 29<span>th</span>, 2007</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Over at LWN there is an article on <a href="http://lwn.net/Articles/258700/">GCC plugins</a>. It touches onto how it would be useful to implement static analysis tools as GCC plugins.</p>
+
+<p>It does not mention that certain optimizations are not feasible without interfacing with the compiler and that there could be a very significant decrease in errors if we the compiler were pluggable with API-specific checks. Wouldn&#8217;t it be nice if less developer time had to be spent hunting for common bugs and more implementing awesome new features?</p>
+
+<p>Typically safety is accomplished by executing code in a Virtual Machine that does extra runtime checks with Just In Time compilation to make up for performance losses. This approach has many known performance and footprint disadvantages. It is used by languages like Java and Scheme.</p>
+
+<p>Applications in these languages are slow and/or ship with a JIT compiler to optimize them during their runtime. C++ is compiled ahead of run time and has a reputation for running faster than these dynamic languages. However it also makes it a lot easier to make mistakes such as leak memory and buffer overflows. One can use the C++ OO system to perform extra-runtime checks to avoid some of these issues but that tends to cancel out any performance advantages of writing code in C++.</p>
+
+<p>Another approach is to enforce various safety-related properties through the compiler. Awesome existing languages such as <a href="http://en.wikipedia.org/wiki/OCaml">OCaml</a> come with a strict type system that ensures that once code compiles it will run fast and have a lower bug percentages than comparable code in other languages. EcmaScript4 will feature a rocking type system similar to OCaml.</p>
+
+<p>C++ does not have such an awesome typesystem. However, there are many C++ errors that occur frequently and should be detected by the compiler, however long as there is no way to specify Mozilla-specific type system restrictions the compiler has no way of getting that information. Such plugins provide a certain piece of mind that once code complies with whatever rules we set for it, it is more likely to run correctly. Furthermore, some optimizations that we have in mind for Mozilla 2 (such as incremental garbage collection) will be much easier to work with if the compiler flags memory misuse at compile time.</p>
+
+<p>Currently we can use dehydra to scan the codebase, but it would be much more efficient to be able to plug such verification abilities into every developer&#8217;s GCC. I sincerely hope that whoever is in charge of the plugin decision at GCC will realize the massive advantage this would give to GCC over other compilers.</p>
+
+<p>ps. Another use for plugins is to enable more aggressive optimizations. Small changes in the sourcecode can affect how conservative the generated code this. A clever plugin could warn whenever gcc cancels an optimization due to misbehaving source.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2007/11/28/volume-of-refactoring-ahead/">Volume of Refactoring Ahead</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-11-28T09:53:42-08:00" pubdate data-updated="true">Nov 28<span>th</span>, 2007</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>In the previous post, I described the simple rewriting case that I am working on at the moment. Someone was quick to point out that the approach wouldn&#8217;t work for all methods (XPIDL Arrays were the example). Indeed, anything more complicated than simple getters can&#8217;t be rewritten to &#8220;Succeeded/Failed&#8221; pattern without switching to C++ exceptions. However, in the codebase the size of Mozilla there are several megabytes worth outparam getters to be rewritten.</p>
+
+<p>Currently my wimpy little <a href="http://hg.mozilla.org/oink/?file/0ab46e97549e/dehydra_scripts/outparams.js">outparams.js</a> script identifies 100 methods that can be rewritten by outparamdel without any manual intervention. However doing a search for ::Get with a ** parameter yields over 2700 candidates, of which most look like they can be rewritten. Reason for the laughable detection rate is that the detection script currently refuses to flag methods that are defined in XPIDL interface or are implemented by more than one class. Soon the script will make heavier use of the class hierarchy and we will probably change XPIDL to support more efficient getters.</p>
+
+<p><strong>Complete Class Hierarchy</strong></p>
+
+<p>I finally managed to convince Dehydra to serialize the Mozilla class hierarchy into JSON files without running out of virtual memory. This will generate lots of input for refactoring and analysis tools. All kinds of <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=405855">interesting stats</a> can be produced with <a href="http://hg.mozilla.org/oink/?file/0ab46e97549e/dehydra_scripts/find_single_impl.js">simple scripts</a>. Generating the index is relatively <a href="http://wiki.mozilla.org/index.php?title=DeHydra#Capturing_the_Moz_Class_Hierarchy">straightforward</a>. It would be awesome if someone could figure out how to expose this data as a web app. Since there is so much being loaded incrementally, I don&#8217;t see how one can keep things simple but use an asynchronous API.</p>
+
+<p>In the coming months, I am looking forward to extending this to be a complete callgraph to find dead code and other fun data.</p>
 </div>
   
   
@@ -713,11 +617,11 @@ Error: /content/base/src/nsPlainTextSerializer.cpp: 614:
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2012/12/21/interesting-bugzilla-activity/">Snappy #45: The view from home</a>
+        <a href="/blog/2012/12/24/making-pages-load-faster/">Making pages load faster</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2012/12/17/hello-octopress/">Hello Octopress</a>
+        <a href="/blog/2012/12/21/interesting-bugzilla-activity/">Snappy #45: The view from home</a>
       </li>
     
       <li class="post">

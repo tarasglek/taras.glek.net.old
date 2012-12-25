@@ -1,0 +1,258 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Home automation via Mi Casa Verde Vera 3 + Z-Wave - All About Performance</title>
+  <meta name="author" content="Taras Glek">
+
+  
+  <meta name="description" content="Our baby girl was born recently. We had the house heat off while we stayed at the birth center.Because we live in the future, we were able to to &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://taras.glek.net/blog/2012/03/29/home-automation-via-mi-casa-verde-vera/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="All About Performance" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">All RSS</a></li>
+  
+  <li><a href="/blog/categories/mozilla/atom.xml" rel="subscribe-rss" title="subscribe via RSS">Mozilla RSS</a></li>
+</ul>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <header role="banner"><hgroup>
+  <h1><a href="/">All About Performance</a></h1>
+  
+    <h2>and other stuff by Taras Glek</h2>
+  
+</hgroup>
+
+</header>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Home Automation via Mi Casa Verde Vera 3 + Z-Wave</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-03-29T18:06:00-07:00" pubdate data-updated="true">Mar 29<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><div class='post'>
+Our baby girl was born recently. We had the house heat off while we stayed at the birth center.<br /><br />Because we live in the future, we were able to to turn on the house heat(&amp; unlock front door) from the car while driving home. The house got down to 10C (50F) while we were away. Thanks to technology, we did not have to endure that temperature upon return :)<br /><br /><b>Vera/Z-Wave</b><br /><br />So far I have my thermostat, door lock, audio amp and some lights hooked up via Z-Wave. Mi Casa Verde <a href="http://www.amazon.com/gp/product/B0074WIVJ4/ref=as_li_qf_sp_asin_tl?ie=UTF8&amp;tag=stuff05e-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=B0074WIVJ4">Vera 3</a> controller is the brains of the operation. It took a couple years before I got everything hooked up because the Vera 3 controller is the only viable option, yet is so damn expensive (fair cost should be ~$100). <br />I waited on opensource stuff to get good (ie <a href="http://linuxmce.com/">LinuxMCE</a> + o<a href="http://code.google.com/p/open-zwave/">penzwave</a>), but it seems like Z-Wave will be obsolete before there is any useful open source support for it.<br /><br /><b>Impressions</b><br />So far controlling the <a href="http://www.amazon.com/dp/B0052MHPP4/ref=as_li_ss_til?tag=stuff05e-20&amp;camp=0&amp;creative=0&amp;linkCode=as4&amp;creativeASIN=B0052MHPP4&amp;adid=06SXD7JN1SWXKBYY9W71">thermostat</a> from my phone/laptop is the killer feature of the system. We like to keep our house barely warm enough. Unfortunately we have an idiotic gas-powered hot air heating system which guarantees that some rooms are too hot while others are freezing. We can finally adjust house temperate depending on what room in the house we are using without running back/forth to the thermostat.<br />This became even more valuable once the baby arrived. Ellen can control temperature/light with one hand without yelling at me to help :)<br /><br />Controlling lights is cool, but it wasn&#8217;t a life-changer.&nbsp; Time taken for unlocking phone, connecting to the controller + execution lag are fairly similar to walking over to the damn light switch. I suspect Ellen will appreciate this more while she has her hands full with baby and can&#8217;t move easily.<br /><br />Same goes for the door lock. We have a code lock on one side of the house and a<a href="http://www.amazon.com/gp/product/B001NEK6JM/ref=as_li_ss_tl?ie=UTF8&amp;tag=stuff05e-20&amp;linkCode=as2&amp;camp=1789&amp;creative=390957&amp;creativeASIN=B001NEK6JM"> z-wave/code lock</a> on the other. Frankly it takes longer to open the door via phone than to punch in the code. We haven&#8217;t used house-keys since we moved into the house&#8230;cos keys are a pain. Z-Wave makes it easy to change lock combination, check that the door is locked, etc, so it&#8217;s somewhat valuable.<br /><br />The coolest part of the system is ability to group individual device actions. We have a &#8220;house off&#8221; command that locks the door, turns off thermostat, turns of various lights/etc. It&#8217;s great to crawl into bed, poke at the phone and hear various things around the house shutting off.<br /><br /><b>Future</b><br />The Vera controller supports a lot more than just Z-Wave. It can do X10, custom scripts, respond to UPnP commands, schedule commands based on sun-set/rise times, etc. Various Z-Wave doodads also act as status indicators. In the future I plan to setup the thermostat to turn off while the door is open, open/close windows + turn on fans based of indoor/outdoor temp + time of night, etc. It is also possible to have the DHCP server on my lan report for when my phone appears/disappears so vera can turn off thermostat/lights automagically when we leave the house.<br /><br /><b>Alternatives</b><br />I probably spent $300 of real money on various Z-Wave gear + $300 of money suckered out of credit cards on this setup. There are alternatives.<br /><i> </i><br /><i>Lots of time approach</i>: I think one can do a lot of this on the cheap with xbee + atmega + relays. The thermostat is a little trickier, door lock is harder yet. This will involve reinventing the state machine behind Vera and interfacing with android, web, etc clients. I think it would be cool if open source people moved in this direction&#8230;google even made some noise about android-controlled light bulbs(and went quiet), but at the moment one would&nbsp; have to start from scratch.<br /><br /><i>I do what TV tells me:</i> People with more money than sense can pay Verizon/etc a <a href="https://shop.verizon.com/buy/Monitoring-Energy-Saving/Home-Control/Verizon-Home-Monitoring-and-Control/cat30006#order_tab">monthly fee</a> to do a lot of this. Verizon supports a strict subset of what the Vera controller does..but hey, they have TV ads.<br /><br /><i>Less-weird-stuff approach:</i> There are a couple different wifi thermostats on the market atm. <a href="http://www.amazon.com/dp/B004YZFU1Q/ref=as_li_ss_til?tag=stuff05e-20&amp;camp=0&amp;creative=0&amp;linkCode=as4&amp;creativeASIN=B004YZFU1Q&amp;adid=0T7A7B6RT7YD3PY5NJE1">This one</a> seems like a cheap way to go. Wifi is a lot less weird and proprietary than Z-Wave, but this gets you no closer to controlling lights, doors :)<br /><b><br /></b><br /><b>Conclusion</b><br />Now that the initial time/$$$ investment is made,<b> </b>I look forward to tightly coupling my security video, door bell, phone, sound, cooling systems. Motorized blind/window control is stupidly-expensive, so I&#8217;ll probably be rolling my own. There is lots of room left for energy savings + coolness factor improvements.<br /><br /></div>
+<h2>Comments</h2>
+<div class='comments'>
+<div class='comment'>
+<div class='author'>Taras</div>
+<div class='content'>
+Apparently blogger doesn&#39;t send comment notifications by default. micasaverde forums are probably your best bet. </div>
+</div>
+<div class='comment'>
+<div class='author'>Pedle Zelnip</div>
+<div class='content'>
+Awesome stuff, very cool.  Any tips for those of us who just bought a house and are thinking of looking into all this stuff (ie good resources on getting up to speed on it all)?</div>
+</div>
+</div>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Taras Glek</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-03-29T18:06:00-07:00" pubdate data-updated="true">Mar 29<span>th</span>, 2012</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/personal/'>personal</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://taras.glek.net/blog/2012/03/29/home-automation-via-mi-casa-verde-vera/" data-via="tarasglek" data-counturl="http://taras.glek.net/blog/2012/03/29/home-automation-via-mi-casa-verde-vera/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2012/03/16/snappy-march-15th/" title="Previous Post: Snappy, March 15th">&laquo; Snappy, March 15th</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2012/04/04/powering-speakers-etc-with-bike-dynamo/" title="Next Post: Powering speakers, etc with a bike dynamo">Powering speakers, etc with a bike dynamo &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2012/12/24/making-pages-load-faster/">Making pages load faster</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/12/21/interesting-bugzilla-activity/">Snappy #45: The view from home</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/11/26/coping-with-flash-hangs/">Coping with Flash hangs</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/11/16/snappy-44-fixing-tab-switching-in-vancouver/">Snappy #44: Fixing tab switching in Vancouver</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/11/05/snappy-43-big-improvements-faster-startup-smoother-tabstrip/">Snappy #43: Big improvements: faster startup? Smoother tabstrip!</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("tarasglek", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/tarasglek" class="twitter-follow-button" data-show-count="false">Follow @tarasglek</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p><h6>
+  Copyright &copy; 2012 - Taras Glek - content on this site is licensed under the
+Creative Commons Attribution Share-Alike License v3.0 or any later version.
+
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span></h6>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'allaboutperformance-tarasglek';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

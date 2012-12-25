@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="After I wrote prcheck, I was surprised by the errors it found. I expected to find lots of cases of prbool variables having integers assigned into &hellip;">
+  <meta name="description" content="When it comes to taking on crazy tasks involving disguising code, you can always count on Joshua. This time Joshua has gone deep in Pork territory to &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -64,7 +64,7 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2009/03/31/nsresult-analysis/">Nsresult Analysis</a></h1>
+      <h1 class="entry-title"><a href="/blog/2009/07/21/those-crazy-comm-central-guys/">Those Crazy Comm-central Guys&#8230;</a></h1>
     
     
       <p class="meta">
@@ -80,29 +80,297 @@
   
 
 
-<time datetime="2009-03-31T07:16:18-07:00" pubdate data-updated="true">Mar 31<span>st</span>, 2009</time>
+<time datetime="2009-07-21T02:54:42-07:00" pubdate data-updated="true">Jul 21<span>st</span>, 2009</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>After I wrote <a href="http://taras.glek.net/blog/2008/11/07/enabling-prcheck-email-notifications/">prcheck</a>, I was surprised by the errors it found. I expected to find lots of cases of prbool variables having integers assigned into them. Indeed there were some of those, but the most frequent offenders were things like</p>
+  <div class="entry-content"><p>When it comes to taking on crazy tasks involving disguising code, you can always count on Joshua. This time Joshua has gone deep in <a href="https://developer.mozilla.org/En/Pork">Pork</a> territory to do a very impressive rewrite (one that would not be even close to possible with anything other than Elsa-based tools) and he is blogging about it. He posted the <a href="http://quetzalcoatal.blogspot.com/2009/07/guide-to-pork-part-1.html">first installment</a> of his rewriting-with-Pork guide.</p>
+
+<p>Still on the subject on mad csc-entist Joshua: Andrew Sutherland has finally gotten sick of crappy JS documentation tools and took matters into his own hands thanks to Joshua&#8217;s JSHydra tool. Checkout his <a href="http://www.visophyte.org/blog/2009/07/20/doccelerator-javascript-documentation-via-jshydra-into-couchdb-with-an-ajax-ui/">blog post</a> on how the documentation world will be a better place thanks to being able to build tools on top of <em>the JavaScript parser</em>.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/07/14/virtualbox-rocks/">VirtualBox 3.0 Rocks</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-07-14T06:15:52-07:00" pubdate data-updated="true">Jul 14<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>With much pain I managed to convince a Vmware WinXP virtual machine to run in <a href="http://www.virtualbox.org/">VirtualBox</a>. At first it ran very sluggishly(>3 hours to do a build?), but after I turned off IO Apic stuff in Windows, it&#8217;s become disturbingly fast. It now takes 40minutes to build a wince fennec vs almost 80minutes it took on VMware server.</p>
+
+<p>VirtualBox&#8217;s disk throughput is phenomenal, in fact, this is the first time I&#8217;ve seen almost-native speed disk io in virtual machine. A benchmark I tried reported 45mb/s 4K read/writes (these were cached on the linux side).</p>
+
+<p>Unlike Vmware server, VirtualBox&#8217;s usb works without troubles, shared folders were easy to setup etc. It&#8217;s an awesome app, hope Sun/Oracle keeps it up.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/07/01/python-gdb-logging-file-io/">Python GDB - Logging File IO</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-07-01T08:05:42-07:00" pubdate data-updated="true">Jul 1<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><strong>Python GDB Rocks!</strong></p>
+
+<p>I wanted a non-painful way to figure out what&#8217;s causing bonus file IO. I&#8217;ve noticed that gtk likes to open files, but I didn&#8217;t have the exact details. So I grabbed <a href="http://sourceware.org/gdb/wiki/PythonGdb">python gdb</a>, and with some tips on syscalls from gdb old-timers managed to produce a <a href="http://people.mozilla.com/~tglek/fennec/files.txt">report</a> to assign blame for open()ing files to relevant Mozilla functions.</p>
+
+<p>Other than the gdb-hating syscalls issue, achieving this was simple</p>
+
+<ol>
+<li>Compile python-enabled gdb(Next set of distribution releases should have it..I hope)</li>
+<li>Define a new gdb command in a python file. I called mine &#8220;taras&#8221; for lack of a better name.</li>
+<li>Set a breakpoint, attach your command to it. :</li>
+</ol>
+
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>break open  
+</span><span class='line'>
+</span><span class='line'>source -p /path/to/your/script.py  
+</span><span class='line'>
+</span><span class='line'>command 1  
+</span><span class='line'>
+</span><span class='line'>taras  
+</span><span class='line'>
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+
+<ol>
+<li>Have the script walk the backtrace to figure out the filename and the last Mozilla function. Log the info, issue gdb continue command.</li>
+<li>Print out a report and profit:</li>
+</ol>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>python report()</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Here is my <a href="http://people.mozilla.com/~tglek/gdblog.py">script</a>. The only nasty part here is that I had to read the filename out of a register (i&#8217;m on amd64, on 32 it&#8217;d be $esi instead of $rdi) because gdb doesn&#8217;t deal well with system calls.</p>
+
+<p>I&#8217;ve never throught it would be this fun to use gdb. I always thought debuggers should be scriptable, thanks to <a href="http://tromey.com/blog/">Tom Tromey</a> (lots of gdb tutorials on Tom&#8217;s blog) and any others who finally made this a reality.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/06/29/dxr-the-most-impressive-code-navigation-tool-ever/">DXR: The Most Impressive Code Navigation Tool Ever</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-06-29T02:19:16-07:00" pubdate data-updated="true">Jun 29<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Are you are a developer who has been frustrated by the pathetic state of the art in code search engines and code browsing experience on the web? Have you been longing for being able to view code with more aid than coloured words?</p>
+
+<p>David Humphrey just <a href="http://vocamus.net/dave/?p=557">released</a> his DXR bombshell. The &#8220;basic&#8221; concept behind DXR is extraction of the rich semantic information gathered by tools like GCC, Spidermonkey and <a href="https://developer.mozilla.org/en/XPIDL/xpidl">xpidl</a>. This data is then coherently linked together into a pretty UI in order to provide cleverness during code browsing sessions.</p>
+
+<p>DXR will be happy to answer seemingly trivial queries:</p>
+
+<ul>
+<li>List implementations of interfaces in C++ (and soon JS).</li>
+<li>Provide relevant search results by searching semantic data first. No, grep is no longer state of the art for searching code.</li>
+<li>Switch between definition and declaration.</li>
+<li>Walk up/down class hierarchies.</li>
+<li>Lookup typedefs, types, etc.</li>
+</ul>
+
+
+<p>I&#8217;ve been wanting to see this sort of tool built on top information exposed by <a href="https://developer.mozilla.org/En/Dehydra">Dehydra</a> since I got it working. Words can not express how pumped I am about DXR and the magic powers that we will be granting it.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/06/26/studying-fennec-performance/">Studying Fennec Performance</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-06-26T07:31:36-07:00" pubdate data-updated="true">Jun 26<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Working on Fennec performance N810 has been very educational. I have been learning more and more about performance profiling on crappy platforms. I define a platform as crap if it has poor development tools, limited OS or other significant limitations. Linux is a crappy platform in this case because it&#8217;s running on ARM where oprofile barely does anything and there are no other performance tools for N810 (more modern ARM cpus should user-space perf counters and be more useful for instrumentation).</p>
+
+<p><strong>JSD Secret Sauce for JS Optimization</strong></p>
+
+<p>In general there is a misconception that implementing stuff in JavaScript will result in slower code than doing the same in C++. That may be true if the code is implemented in the exact same manner. But in real life the expressiveness and safety of a high-level language like JavaScript permits algorithmic optimizations that would often not be realistic to do in C++ because of time/safety constraints.</p>
+
+<p>So how does one figure out what&#8217;s slow in JS? timeless suggested that I checkout the JavaScript Debugging API. Using the API and a small hack in spidermonkey(JSD doesn&#8217;t expose fast dom calls) I was able to hook into chrome code to get a timed trace of JavaScript functions being run.</p>
+
+<p>Once I had a trace it was relatively easy to figure out to &#8220;do not call this slow thing all the time&#8221; dance (aka optimize code). I collected that work in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=470116">bug 470116</a>. Last I checked there was relatively little room for optimization left on the JS side of Fennec, so then I went to look at what&#8217;s lurking in C++.</p>
+
+<p>PS. Firebug is a popular consumer of the JSD API for those times when one isn&#8217;t willing to write JS components to figure out why something is slow.</p>
+
+<p><strong>C++ Is Harder</strong></p>
+
+<p>I&#8217;ve some success with inserting probes into C++ code. I would find interesting code by running oprofile on the desktop (while doing things that I felt were slow on N810). Oprofile would then provide me a callgraph which I would visualize with <a href="http://code.google.com/p/jrfonseca/wiki/Gprof2Dot">this awesome little script</a>. Then I would stick <a href="http://people.mozilla.com/~tglek/fennec/patches/measurer.diff">MeasurerOfTime</a> timing blocks into interesting &#8220;hot&#8221; code and hope that I would learn something useful.</p>
+
+<p>This got me thinking. Wouldn&#8217;t it be nice if there existed a JSD for C++? It&#8217;d be cool to inspect the C++ callgraph just like one does for JS. It seems like it would help on platforms that aren&#8217;t gcc and can&#8217;t inject tracing code via -finstrument-functions. Even -finstrument-functions is of limited use due to the pain of looking up symbols in shared libraries. Stay tuned.</p>
+
+<p><strong>Measuring Progress</strong></p>
+
+<p>The worst part of doing optimizations is knowing that some time in a future an innocent programmer will slightly change some seemingly innocent code and things will no longer happen quickly. Short of policing every single patch by people who previously optimized code in question there is only one thing one can do: performance tests.</p>
+
+<p><a href="http://hg.mozilla.org/users/tglek_mozilla.com/fennecmark">Fennecmark</a> is a benchmark for measuring responsiveness of the Fennec features that I worked on most: panning, zooming and lag during pageload. I <a href="http://taras.glek.net/blog/2009/04/23/benchmarks-and-instrumentation-for-fennecetc/">blogged</a> about it before. Since then Joel Maher has <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=493057">gotten Fennecmark</a> to run automatically and produce results on the graph server. I think we should be logging more numbers (Tpan, Tzoom), but it&#8217;s an excellent first step in monitoring performance regressions.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/06/25/dehydra-pork-sources-moved/">Dehydra & Pork Sources Moved</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-06-25T08:32:57-07:00" pubdate data-updated="true">Jun 25<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I moved dehydra to a more official location, please update your scripts and hg settings. New dehydra url: http://hg.mozilla.org/rewriting-and-analysis/dehydra/</p>
+
+<p>Pork got reshuffled during the move, it&#8217;s now 2 repositories. oink is dead. It now depends on current versions of flex (as opposed to flex-old) and features a cleaned up buildsystem.</p>
+
+<p>New way to checkout pork:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>
-</span><span class='line'>NS_ENSURE_SUCCESS(rv,rv);
+</span><span class='line'>hg clone http://hg.mozilla.org/rewriting-and-analysis/pork
+</span><span class='line'>hg clone http://hg.mozilla.org/rewriting-and-analysis/elsa pork/elsa
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>in methods with a PRBool return value. In this case (and many similar  return values within macros) the function will likely do the opposite of what was intended if there is an error condition. Here is a less hypothetical <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=483589">example</a> in bugzilla.</p>
 
-<p>So I&#8217;m thinking that instead of porting the prbool analysis to <a href="https://developer.mozilla.org/en/Treehydra">Treehydra</a> (such that it&#8217;d based on a less buggy <a href="https://developer.mozilla.org/En/Pork">backend</a> and can be integrated into the build) it might be more interesting to ensure that nsresults do not mix with other integer types. That would catch all of the worst prbool offenders and possibly other nsresult misfortunes.</p>
-
-<p><em>Has anyone run into bugs like this that do not involve prbools?</em></p>
-
-<p>I suppose a general solution would be to define a lattice of typedefs with rules specifying which typedefs can be assigned to each other. This would make GCC distinguish certain typedefs as discrete and incompatible types. Thoughts?</p>
 </div>
   
   
@@ -115,7 +383,7 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2009/03/17/fennec-beta-1-need-for-speed/">Fennec Beta 1 - Need for Speed</a></h1>
+      <h1 class="entry-title"><a href="/blog/2009/06/17/dehydratreehydra-c-support/">Dehydra/Treehydra C Support</a></h1>
     
     
       <p class="meta">
@@ -131,433 +399,171 @@
   
 
 
-<time datetime="2009-03-17T23:52:42-07:00" pubdate data-updated="true">Mar 17<span>th</span>, 2009</time>
+<time datetime="2009-06-17T04:22:53-07:00" pubdate data-updated="true">Jun 17<span>th</span>, 2009</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>A couple of months ago Stuart casually asked me to investigate Fennec performance for moving about a page, zooming and loading pages in general. Beta 1 contains the result of that:</p>
+  <div class="entry-content"><p>Every once in a while people want to be analyze C code. If you are one of those people, checkout <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=494960">bug 494960</a>. For GCC 4.3, you&#8217;ll need to update your patch queue. If you you followed the <a href="https://developer.mozilla.org/En/Dehydra/Installing_Dehydra">Dehydra install instructions</a> do something like:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>
+</span><span class='line'>cd gcc-4.3.0/.hg/patches
+</span><span class='line'>hg pull -u
+</span><span class='line'>cd ../..
+</span><span class='line'>hg qpush -a
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>and rebuild gcc to get C support in the plugin framework for GCC 4.5 (patch for trunk is in the bug).</p>
+
+<p>Everything other than process_function should work in both treehydra and dehydra. Note that the objects provided by GCC will be slightly different in structure due to the underlying difference between gcc/g++, so scripts that were written for C++ may need to be updated.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/05/14/gcc-45-dehydra-is-a-go-and-other-updates/">GCC 4.5 + Dehydra Is a Go and Other Updates</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-05-14T14:06:59-07:00" pubdate data-updated="true">May 14<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I finally landed the remaining GCC patches needed to get a useful <a href="https://developer.mozilla.org/En/Dehydra">Dehydra</a> without any of that gcc-patching pain!</p>
+
+<p>This week I also got some nice contributions from a contributor with a masterplan.</p>
+
+<p>Overall I expect cool things to happen once GCC 4.5 ships with plugin support. It&#8217;ll open up a jar of whoopass like C++ has not seen before.</p>
+
+<p><strong>Dehydra Docs</strong></p>
+
+<p>Benjamin redid the <a href="http://benjamin.smedbergs.us/blog/">Dehydra</a> documentation, it should be easier than ever to get started.</p>
+
+<p><strong>Static Analysis in Mozilla</strong></p>
+
+<p>Slowly but surely we are gathering static analysis momentum. More and more developers are pausing and thinking &#8220;I need to make sure this code has an analysis to go with it because there is no way I can prove it correct, time to write a <a href="https://developer.mozilla.org/en/Treehydra">Treehydra</a> script&#8230;or ask someone else to make one for me&#8221;. This mindset is important for being able to introduce complex changes in a controlled manner.</p>
+
+<p>On the refactoring side, things are held up a little by API compatibility. Perhaps multi-process stuff will shake things up. However, nothing can hold <a href="https://blog.mozilla.org/cjones/">Chris</a> up from letting his piglet/porky gremlins chew through locking code.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/05/11/dehydra-updates/">Dehydra Updates</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-05-11T03:55:14-07:00" pubdate data-updated="true">May 11<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><strong>How well are you packing your structs?</strong> Arpad asked that question with an awesome <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=492185">Dehydra scrip</a>t and came up with an interesting list.</p>
+
+<p><strong>GCC 4.3.3 Is supported</strong> GCC 4.3.3(4.3.[210] worked) broke C++ compatibility in the headers used by <a href="https://developer.mozilla.org/En/Dehydra">Dehydra</a>. Zach pointed out that passing -fpermissive to g++ solves the problem. Sorry to all the people who had issues building the hydras with GCC 4.3.3, that&#8217;s fixed now.</p>
+
+<p>As I mentioned before, we are skipping GCC 4.4 support in Dehydra and aiming for supporting unpatched GCC 4.5. I wish that the small GCC patches were as quick to land as that big one I landed a couple of weeks ago :(.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/04/30/gcc-rant-progress/">GCC Rant + Progress</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-04-30T06:51:35-07:00" pubdate data-updated="true">Apr 30<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I feel strange working on GCC-specific stuff and then discussing it on planet mozilla as mozilla work. However, without GCC, Dehydra and Treehydra would not be half as awesome (much less feasible even). The power of open source is that it allows us to leverage the entire open source ecosystem to achieve specific goals. When open source projects combine their efforts, not even the biggest software companies can compete as cross-project goals would be incredibly expensive and unpleasant otherwise.</p>
+
+<p>Occasionally, it is very frustrating to see people treat open source software as immutable and independent black boxes. In my personal experience, the browser and the compiler are viewed as finished products and therefore it is OK to bitch and complain about them. That&#8217;s frustrating because the same users could be channeling that energy in a more positive way by reporting bugs, contributing code/documentation, etc.</p>
+
+<p>Sometimes these rants result in rather comical conclusions: Ingo&#8217;s <a href="http://lwn.net/Articles/328685/">rant</a> is priceless. My perspective on this:</p>
 
 <ul>
-<li>There is little to no hardware graphics acceleration on mobile arm device. That combined with low memory bandwidth results in painfully slow screen updates (10x slower than crappy gfx on the desktop?). The painting engine now works hard to skip redundant draws of the page.</li>
-<li>During loading pages or zooming Fennec now only draws the minimum required. In my testing complicated pages load 2-5 times faster. Zooming is now 5 times faster.</li>
-<li>There is less DOM querying now. Things like checking an element&#8217;s size can cause pages to reflow resulting in a less responsive UI</li>
+<li>what have Linux kernel devs done to help GCC help them?</li>
+<li><flame>Sparse is a deadend. Writing compiler code in C is silly, writing analysis code in C is sillier (and frustrating and limiting). Taking a crappy parser and bolting a crappy compiler backend onto it will result in bigger pile of crap :) Given how smart kernel devs are, they sure like wasting their time on crappy solutions in crappy languages.</flame></li>
+<li>Wouldn&#8217;t it be cool if instead of complaining these talented people wrote a GCC plugin to do what they want?
+<strong>GCC Plugin Progress</strong></li>
 </ul>
 
 
-<p>Other performance highlights:</p>
-
-<ul>
-<li>Fennec now features a redesigned firstrun page which not only looks better, but also contributed to a 0.5second startup speedup. Overall Beta 1 should startup is almost a second quicker than the previous release</li>
-<li>The JavaScript JIT is now on by default providing a noticeable performance boost throughout Fennec.</li>
-</ul>
-
-
-<p>For more info on Fennec Beta 1 and where to get it see <a href="http://blog.pavlov.net/2009/03/17/fennec-1-beta-1/">Stuart&#8217;s blog</a>.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/02/19/quickfix-model-of-develoment/">Quickfix Model of Develoment</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-02-19T03:20:51-08:00" pubdate data-updated="true">Feb 19<span>th</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I love new programming toys and this week is a good one for those. Ever since I laid the foundations for Dehydra I&#8217;ve been dreaming of a world where I can quickly lookup a piece of code(say something that someone complains about on IRC), fix it, get it reviewed and pushed in the most efficient manner possible. Seems that the pieces are finally falling into place.</p>
-
-<ol>
-<li>I want quick semantically aware code lookup via <a href="http://zenit.senecac.on.ca/wiki/dxr/">DXR</a>. And guess what, there is <a href="http://www.visophyte.org/blog/2009/02/19/dxrpy-with-references-against-mailnews-plus-bespin-wishes/">progress</a> in that direction.</li>
-<li>I want to DXR to provide a link to edit the code. <a href="http://bespin.mozilla.com/">Bespin</a> looks like the most promising candidate for editing. As an aside, using canvas to do text editing is badass. I salute devs who are crazy enough to prove their point by reimplementing something (hopefully better) from scratch using an approach that hasn&#8217;t been tried before.</li>
-<li>I want my changes to be saved as a diff into bugzilla. I want that to be two way so I can edit existing patches and save them as new bugzilla attachments.</li>
-<li>From there I&#8217;d like a commit feature in bugzilla so the patch would go through try-then-push cycle that Jesse <a href="http://www.squarefree.com/">described</a>.</li>
-<li>Having all this inplace would make it trivial to integrate random features such as crash stack trace navigation or <a href="https://developer.mozilla.org/En/Pork">Pork</a> automagic refactoring.
-Now I&#8217;m sure that most of us would still run Emacs and other desktop editors for longer development tasks. But just imagine being bored with a computer at a webcafe, boring friend, etc and having the ability to quickly jump into in the development process as easily as logging into webmail.</li>
-</ol>
-
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/02/16/security-with-dehydra/">Security With Dehydra</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-02-16T08:36:38-08:00" pubdate data-updated="true">Feb 16<span>th</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>When I wrote the initial prototype of Dehydra I pondered how long it would take before it&#8217;s adopted by security guys. Unfortunately, until now take-up has been non-existent. Grep and Perl still seem to rule in that community even though the plain text approach restricts the range of possible security scans.</p>
-
-<p>Normally I would be tempted to rant on how grep is convenient yet limiting. However Ben Kurtz <a href="http://www.awgh.org/?p=73">discovered Dehydra for security scans</a> and did a great job explaining the issues involved. Thanks to Georgi for linking me to Ben&#8217;s post.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/01/28/semantic-rewriting-of-code-with-pork-a-bitter-recap/">Semantic Rewriting of Code With Pork - a Bitter Recap</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-01-28T16:17:47-08:00" pubdate data-updated="true">Jan 28<span>th</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>LWN <a href="http://lwn.net/Articles/315686/">published</a> an article about a tool that does refactoring of C code. Guess what, it&#8217;s yet another tool on top of a crappy C-parser that will never grok C well or even hope to support C++. To my great disappointment the author was not aware of my work on Pork. Clearly I have failed in letting people know that complex C and C++ can be refactored with (somewhat raw, but powerful) open source tools.</p>
-
-<p>In addition to <a href="https://developer.mozilla.org/En/Dehydra">Dehydra</a> (which is even mentioned in the first comment, yay!), I also maintain <a href="https://developer.mozilla.org/En/Pork">Pork</a> - a fork of oink that is well suited to large-scale refactoring of real-world C/C++ code.</p>
-
-<p>So far pork has been used for &#8220;minor&#8221; things like renaming classes&amp;functions, rotating <a href="http://taras.glek.net/blog/2007/08/06/outparams-take-2/">outparameters</a> and correcting <a href="http://taras.glek.net/blog/2007/06/26/status-report-recent-work/">prbool</a> bugs. Additionally, Pork proved itself in an <a href="http://taras.glek.net/blog/2007/11/02/garburator-works/#comments">experiment</a> which involved rewriting almost every function(ie generating a 3+MB patch) in Mozilla to use garbage collection instead of reference-counting.</p>
-
-<p>So to summarize:</p>
-
-<ul>
-<li>Refactoring C is hard, but C++ is much harder</li>
-<li>For refactoring C++ there is no better toolchain to start with than Pork</li>
-<li>Pork shares no code with Dehydra.</li>
-<li>Pork is built on the Elsa parser which makes it well-suited for rewriting large amounts of code. Dehydra&#8217;s isn&#8217;t suitable for rewriting code due to GCC providing a very lossy AST and incomplete location information.</li>
-<li>Pork is not as convenient for analysis needs as Dehydra
-For any questions regarding Pork feel free to post on the <a href="https://lists.mozilla.org/listinfo/dev-static-analysis">mailing list</a> or ping me on IRC.</li>
-</ul>
-
-
-<p><strong>Language Wars</strong></p>
-
-<p>I find it depressing that the comments to the LWN article ended up being about language wars rather than the refactoring topic. Pork is written in C++ which is much more widely known than OCaml. However, I seriously doubt it&#8217;s easier for anyone to hack on advanced compiler frontend pieces in a language as ill-suited for the task as C++.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/01/27/gcc-plugins-are-a-go/">GCC Plugins Are a Go!</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-01-27T08:38:35-08:00" pubdate data-updated="true">Jan 27<span>th</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>The nice folks at FSF <a href="http://gcc.gnu.org/ml/gcc-announce/2009/msg00000.html">allowed</a> GCC have plugins. In a couple of GCC releases, Dehydra(4.5 if we are lucky) will work with distribution GCCs. Of course the API is yet to be decided on, but we have been coordinating with authors of other GCC plugin efforts to ensure that the final API meets reasonable needs.</p>
-
-<p>In the future enabling static analysis checks will involve little more than specifying &#8211;with-static-checking in your Mozilla build!</p>
-
-<p><strong>JSHydra</strong></p>
-
-<p>The other breakthrough news is that Joshua Cranmer has been working on hooking up a *hydra style API to the Spidermonkey parser. This resulted in <a href="http://quetzalcoatal.blogspot.com/2009/01/jshydra.html">JSHydra</a>. Ability to look into JavaScript has been sorely missing from our stack, so this is extremely exciting.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/01/13/seven-things-you-may-not-know-about-me/">Seven Things You May Not Know About Me</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-01-13T11:17:49-08:00" pubdate data-updated="true">Jan 13<span>th</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I got tagged by <a href="http://benjamin.smedbergs.us/blog/2009-01-12/seven-things-you-may-not-know-about-me/">Benjamin</a>, so I better comply and get my blog memed.</p>
-
-<h4>Rules</h4>
-
-<ol>
-<li>Link back to your original tagger and list the rules in your post.</li>
-<li>Share seven facts about yourself.</li>
-<li>Tag some (seven?) people by leaving names and links to their blogs.</li>
-<li><p>Let them know they’ve been tagged.
-<strong>Seven Things</strong></p></li>
-<li><p>In Soviet Ukraine, kindergarten failed me (luckily they don&#8217;t make you retake that). Apparently when I was six, my handwriting and reading skills were not up to the communist standards of time. I still fondly remember excepts of various communist hymns we got to sing along.</p></li>
-<li>Grade 1 coincided with the fall of communism and me getting the most kickass grades of my academic career.</li>
-<li>I have owned two cars, but I have since traded that lifestyle for a garage full of bikes. I never liked the effects that driving had on my health nor the effect that crappy German engineering had on my savings.</li>
-<li>I met my wife on my first <a href="http://www.momentumplanet.com/features/moonlight-midnight-mystery-ride">midnight mystery ride</a>. Riding at midnight is awesome because that&#8217;s the only time that traffic dies down enough that one sees nothing but fellow bikers and drunk pedestrians.</li>
-<li>To buy groceries I ride a comical contraption called an adult tricycle. We even worked the trike into our wedding.</li>
-<li><img src="http://photos-e.ak.fbcdn.net/photos-ak-snc1/v1925/118/14/122504458/n122504458_33849548_3260.jpg" alt="" /></li>
-</ol>
-
-
-<p>I never had a real job. For some reason all of the Burger Kings and Subways that I applied at never took an interest in me. Instead, in grade 8 my first source of income was teaching Java to someone 2.5x my age for $3 an hour. From then on I bounced around various part-time jobs and internships until I ended up at Mozilla, my first real job.
-  7. For a something like six years I wore long hair to go along with my taste for Metal. I&#8217;m always looking for more awesome metal music, currently in heavy rotation are Testament, Winds of Plague, Dying Fetus and Opeth. If you think there is an awesome metal band I might be missing out on, let me know.
-<strong>Tags</strong></p>
-
-<p><a href="http://mozilla.damon.sicore.org/">Damon Sicore</a> - There are seven random things I need to know about my boss.</p>
-
-<p><a href="http://quetzalcoatal.blogspot.com/">Joshua Cranmer</a> - lets hear seven things about you without mentioning dem0rkification.</p>
-
-<p><a href="http://www.bluishcoder.co.nz/">Chris Double</a> - I hope to hear seven reasons for one to program in Reverse Polish Notation</p>
-
-<p><a href="http://blog.mozilla.org/graydon/">Graydon Hoare</a> -  because his blog hasn&#8217;t been memed. It&#8217;s also getting a bit dated</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2008/12/23/fennec-a2-performance/">Fennec A2 - Performance</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-12-23T03:23:12-08:00" pubdate data-updated="true">Dec 23<span>rd</span>, 2008</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><strong>Static Analysis vs Performance</strong></p>
-
-<p>Two months ago I got the feeling that I gotta take a break from static analysis and do something that obviously affects Firefox at runtime. Luckily that coincided with ramp-up on Fennec performance work.</p>
-
-<p>I find that I enjoy fixing existing code a lot more than other sorts of programming, so I was extremely happy to switch focus from the static analysis way of fixing code to my other favourite: optimization. Both are peculiar programming endeavours because after a bunch of gruntwork the program ends up doing the exact same thing as before, but better.</p>
-
-<p>In static analysis I focus more on how different pieces fit together, whereas in an optimization I get to focus on what various pieces are trying to achieve so I learned a lot more random Mozilla mysteries.</p>
-
-<p><strong>Fennec</strong></p>
-
-<p>Fennec is pure joy to optimize because it runs in such a constrained Linux environment (compared to desktop Linux). Things seem to happen roughly 10x slower on the arm processor than on my core2duo laptop. Thus performance details that are hard to spot on the desktop almost trivial to discover.</p>
-
-<p>There is no hard drive seeks to introduce unpleasant surprise latency. This simplifies things a lot - there is a lot less variance between hot and cold start on <a href="http://en.wikipedia.org/wiki/Nokia_N810">n810</a> than on hard drived desktop.</p>
-
-<p>Unfortunately the N810 linux environment also leaves a lot to be desired. Compiling stuff is a chore. It turns out the oprofile produces nonsense results when a compiler of <a href="https://wiki.mozilla.org/Mobile/Build/cs2007q3">recent</a> vintage is used (ancient one cant really compile Mozilla).</p>
-
-<p>I had a lot of fun digging deep into Mozilla code and dealing with <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=465128">mischievous</a> timestamps, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=465556">misbehaving</a> caches and <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=466877">rude</a> GC interruptions. All this was done using <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=470116">stone-age</a> instrumentation techniques on N810.</p>
-
-<p>Mark Finkle blogged some <a href="http://starkravingfinkle.org/blog/2008/12/fennec-alpha2-performance/">details</a> on Fennec Alpha2 performance. Alpha2 is magnitudes faster than Alpha1, I expect more of the same in subsequent releases.</p>
-
-<p><strong>Software Improvements That  Santa Claus Should Get Me </strong></p>
-
-<p>Even though <a href="http://oprofile.sourceforge.net/news/">oprofile</a> is useless on N810, one can get a pretty good idea of what the performance issues are from running it on x86. OProfile is a little rough to use, but I&#8217;ve learned to love it when sugared with <a href="http://code.google.com/p/jrfonseca/wiki/Gprof2Dot">gprof2dot</a> and <a href="http://code.google.com/p/jrfonseca/wiki/XDot">xdot</a>. It&#8217;s great for locating places in the code to stick printf()s into.</p>
-
-<p>OProfile has taught me that what I really want is Dtrace (or some knockoff) running on n810.</p>
-
-<p>Also, I really hate how embedded Linux takes away one of coolest things about Desktop Linux: ability to compile own kernel. I haven&#8217;t been able to get a more modern kernel to run on N810 which means I can&#8217;t try a newer version of oprofile or the new omap high res timers. I would also like to get a working image of N810 under qemu, but success has avoided me there too.</p>
-
-<p><strong>Static Stuff</strong></p>
-
-<p>Unfortunately I found that can&#8217;t effectively work on static analysis stuff without giving it my full and undivided attention. Right now I&#8217;m hoping to set aside time to focus on writing a more general dead code finder and catch up on other misc things sometime in Janurary or February.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2008/11/07/enabling-prcheck-email-notifications/">Enabling Prcheck Email Notifications</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-11-07T07:58:08-08:00" pubdate data-updated="true">Nov 7<span>th</span>, 2008</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I&#8217;ve been running my prbool checker with nightly notifications for about a year now. There are some false positivies, but mostly it picks up real bugs. The checker pulls the blame source to try to guess who is responsible for the error, but so far it has only been emailing me.</p>
-
-<p>I&#8217;m going to make it emailed the hg blamed person starting this weekend, so if you commit something and get an email from me complaining about it don&#8217;t take it too personally. Hopefully this will keep the amount of new detectable prbool bugs at 0. If you do get an email and decide you don&#8217;t want to get these in the future, please complain and we&#8217;ll try to come up with a better notification solution.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2008/10/09/cool-stuff-in-foreign-realms/">Cool Stuff in Foreign Realms</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-10-09T02:18:29-07:00" pubdate data-updated="true">Oct 9<span>th</span>, 2008</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Open Source projects are often like parallel worlds. People reach the same conclusions, attempt similar solutions and are typically blissfully unaware of each other&#8217;s existance.</p>
-
-<p>Here are two projects that came to my attention this week:</p>
-
-<ul>
-<li>Via Planet KDE I stumbled on <a href="http://www.englishbreakfastnetwork.org/krazy/">Krazy</a>. It&#8217;s neat if not somewhat depressing that even if C++ parsers are finally becoming accessible all this is still Perl.</li>
-<li>Helpful comment on my previous entry pointed me to <a href="http://blogs.linux.ie/caolan/">dead method hunting</a> in OpenOffice.
-<strong>Uncool Open Source Rant</strong></li>
-</ul>
-
-
-<p>Reason I switched to linux was because it seemed like a developer&#8217;s dream come true. Compilers are a package manager operation away (and generally aren&#8217;t tied to OS versions, I&#8217;m looking at you Apple), everything can be recompiled to address any particular concerns and there are crapload of weird languages to write your software in. This is especially awesome when compared to a typical proprietory software stack where one can&#8217;t easily fix problems that involve multiple components due to licensing issues or due to not having the code available(or due to not having the development environment available). So one would think that Linux distributions hold the ultimate software power: unlimited pass to modify their offering to their target audience&#8217;s content.</p>
-
-<p>Unfortunately my view of Linux ways is unrealistic. For example when people do <a href="http://lwn.net/Articles/299483/">friggin&#8217; awesome work</a> knocking down boot time to 5 seconds by hacking and slashing their way through the entire software stack involved in boottime delays, distributions claim that it&#8217;s not somethin they can seriously consider because they are too set in their ways of general purpose(and generally bloated) init systems and stock kernels(worst case: why can&#8217;t we recompile the kernel on the user&#8217;s machine or ship a couple of custom variations for common hardware out there). What&#8217;s the point of open source if we continue pretending that everything is a general purpose black box that doesn&#8217;t like to play together? It&#8217;s been two weeks and I haven&#8217;t seen a single distro bite the bullet and attempt to list 5 second boot in their goals. Come on guys, don&#8217;t you like to be challenged?</p>
-
-<p>Hope someone proves me wrong.</p>
+<p>I finally landed the massively boring and annoying <a href="http://hg.mozilla.org/users/tglek_mozilla.com/gcc-moz-plugin-mq/file/24bbb11d7346/gty.diff">GTY patch</a>. I can barely believe that the patch went in so smoothly without excess complaining from GCC devs. From GCC perspective it&#8217;s merely a cosmetic cleanup that affects a large number of headers. For us it enables <a href="https://developer.mozilla.org/en/Treehydra">Treehydra</a> to be generated via <a href="https://developer.mozilla.org/En/Dehydra">Dehydra</a> with little manual effort. It basically makes Treehydra possible without patching GCC. I have another 3-4 patches that need to land before trunk GCC can run the hydras out of the box. Those are mainly localized bugfixes and cleanups so I fully expect them to go in and for GCC 4.5 to rock my world. Once GCC 4.5 ships. analyzing code will depend on a trivial matter of apt-getting(or equivalent) the hydras and specifying the analysis flags on the GCC commandline!</p>
 </div>
   
   
@@ -582,11 +588,11 @@ For any questions regarding Pork feel free to post on the <a href="https://lists
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2012/12/21/interesting-bugzilla-activity/">Snappy #45: The view from home</a>
+        <a href="/blog/2012/12/24/making-pages-load-faster/">Making pages load faster</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2012/12/17/hello-octopress/">Hello Octopress</a>
+        <a href="/blog/2012/12/21/interesting-bugzilla-activity/">Snappy #45: The view from home</a>
       </li>
     
       <li class="post">

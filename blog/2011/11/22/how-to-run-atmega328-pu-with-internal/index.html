@@ -1,0 +1,253 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>How to run a bare ATMEGA328-PU with an internal oscilator (at 8Mhz) - All About Performance</title>
+  <meta name="author" content="Taras Glek">
+
+  
+  <meta name="description" content="Arduino Ecosystem rocksArduino is a great way to minimize the amount of variables when getting into microcontrollers. Flashing, cross-compilation, &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://taras.glek.net/blog/2011/11/22/how-to-run-atmega328-pu-with-internal/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="All About Performance" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">All RSS</a></li>
+  
+  <li><a href="/blog/categories/mozilla/atom.xml" rel="subscribe-rss" title="subscribe via RSS">Mozilla RSS</a></li>
+</ul>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <header role="banner"><hgroup>
+  <h1><a href="/">All About Performance</a></h1>
+  
+    <h2>and other stuff by Taras Glek</h2>
+  
+</hgroup>
+
+</header>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">How to Run a Bare ATMEGA328-PU With an Internal Oscilator (at 8Mhz)</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-11-22T20:43:00-08:00" pubdate data-updated="true">Nov 22<span>nd</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><div class='post'>
+<div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-Wjl3NiOdbBw/Tsx73JSqnBI/AAAAAAAAB80/u_yyMB6-iFg/s1600/IMG_20111122_204421.jpg" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="320" src="http://4.bp.blogspot.com/-Wjl3NiOdbBw/Tsx73JSqnBI/AAAAAAAAB80/u_yyMB6-iFg/s320/IMG_20111122_204421.jpg" width="240" /></a></div><br /><b>Arduino Ecosystem rocks</b><br />Arduino is a great way to minimize the amount of variables when getting into microcontrollers. Flashing, cross-compilation, libraries, dongles are much easier(and cheaper!) when standardized.<br /><br />I bought an expensive&nbsp; <a href="http://www.arduino.cc/en/Main/ArduinoBoardNano">arduino nano v3</a>, I got comfortable enough with it to blink an led and do with pwm. Unfortunately arduinos(except lilypad) feature lame 5V voltage regulators which require 6.2V to do anything useful; though atmega chips will supposedly run at as low as 1.8V. End result was that the NanoV3 did not run properly when hooked up to my 5V power supply on the bike.<br /><br />So in the in the interests of not building a new power supply and not using a board with a whole bunch of pointless components I bought some straight-up <a href="http://www.mouser.com/ProductDetail/Atmel/ATMEGA328-PU/?qs=sGAEpiMZZMuHCAZ7U3Ea2vH90mYkP45F">ATMEGA328-PU</a>s and a <a href="http://www.sparkfun.com/products/9825">USB flasher</a>.<br /><br />The rest of this post documents various gotchas.<br /><br /><i>Pinout on Sparkfun is mirrored!</i><br />Red stripe on the cable indicates top. However the pinout is mirrored. One is supposed to look at it with the stripe on top and holes facing away.<br /><i> </i><br /><i> ATMEGA328-PU ~= ATMEGA328<b>P</b>-PU</i><br />I wondered why seemingly identical chips were selling for a different price. P in 328P stands for picopower and as far as I can tell it allows one to turn off <a href="http://www.arduino.cc/cgi-bin/yabb2/YaBB.pl?num=1210260031">brownout protection</a>. In my case brownout protection is something I want. However, fucking avrdude does not recognize ATMEGA328(without P) and bitches that one should pass -F when specifying -p atmega328p(there is no atmega328). This prevents Arduino IDE from functioning. In order to get a functioning IDE I needed to:<br /><ol><li> Modify signature for atmega328p in avrdude.conf:<br /><code><br />- signature&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 0x1e 0x95 0x0F;<br />+ signature&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 0x1e 0x95 0x14;<br /></code><br />(Obviously the proper thing to do here is to add the new chip to avrdude)</li><li>Use breadboard.zip from <a href="http://arduino.cc/en/Tutorial/ArduinoToBreadboard">http://arduino.cc/en/Tutorial/ArduinoToBreadboard</a> as an inspiration for the following boards.txt entry:<br /><code><br />usbtiny328.name=[usbtinyisp]ATmega328 8mhz<br /><br />usbtiny328.upload.using=usbtinyisp<br />usbtiny328.upload.maximum_size=32768<br /><br />usbtiny328.build.mcu=atmega328p<br />usbtiny328.build.f_cpu=8000000L<br />usbtiny328.build.core=arduino:arduino<br /><br />usbtiny328.bootloader.low_fuses=0xE2<br />usbtiny328.bootloader.high_fuses=0xDA<br />usbtiny328.bootloader.extended_fuses=0x05<br />usbtiny328.bootloader.path=arduino:atmega<br />usbtiny328.bootloader.file=ATmegaBOOT_168_atmega328_pro_8MHz.hex<br />usbtiny328.bootloader.unlock_bits=0x3F<br />usbtiny328.bootloader.lock_bits=0x0F</code><br /></li><li>Burn bootloader with tools-&gt;burn bootloader-&gt;UsbTinyIsp</li><li>Assemble board as per <a href="http://arduino.cc/en/Tutorial/ArduinoToBreadboard">http://arduino.cc/en/Tutorial/ArduinoToBreadboard</a>. One does not need to hook up GND(pin 22) or AVCC(pin 20). Connect ATMEGA RESET(pin 1), VCC(pin 7), GND(pin 8), MISO, MOSI, SCK(pin 19) to the flasher. </li><li>Check the <a href="http://arduino.cc/en/Hacking/PinMapping168">pin mapping</a>. Note that Arduino software pins do not match physical pins(this cost me a few hours).</li><li>Proceed to use Arduino tools with a convenient $2.82 chip* + $15 programmer rather than an inconvenient/overpriced Arduino board. </li></ol><ol></ol>&nbsp;* I would&#8217;ve spent an extra $1 to get the ATMEGA328P had I known the many hours of agony it would&#8217;ve avoided.<br /><ol></ol><i> </i><br /><br /><i> </i></div>
+<h2>Comments</h2>
+<div class='comments'>
+<div class='comment'>
+<div class='author'>cefn</div>
+<div class='content'>
+I found it really useful to use Optiloader. <br />https://github.com/WestfW/OptiLoader<br /><br />This is a sketch you can push to a regular Arduino, which turns it into an chip programmer, with auto-detection support which includes the ATMEGA328-PU (without Pico-Power). I&#39;ve just flashed a load of cheap chips from Mouser this way with good results, as you can see at&#8230;<br />https://vimeo.com/44535515</div>
+</div>
+</div>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Taras Glek</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-11-22T20:43:00-08:00" pubdate data-updated="true">Nov 22<span>nd</span>, 2011</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/personal/'>personal</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://taras.glek.net/blog/2011/11/22/how-to-run-atmega328-pu-with-internal/" data-via="tarasglek" data-counturl="http://taras.glek.net/blog/2011/11/22/how-to-run-atmega328-pu-with-internal/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2011/10/20/emacs-cmd-exe/" title="Previous Post: Emacs > CMD.EXE">&laquo; Emacs > CMD.EXE</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2011/12/01/introducing-project-snappy/" title="Next Post: Introducing Project Snappy">Introducing Project Snappy &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2012/12/24/making-pages-load-faster/">Making pages load faster</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/12/21/interesting-bugzilla-activity/">Snappy #45: The view from home</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/11/26/coping-with-flash-hangs/">Coping with Flash hangs</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/11/16/snappy-44-fixing-tab-switching-in-vancouver/">Snappy #44: Fixing tab switching in Vancouver</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/11/05/snappy-43-big-improvements-faster-startup-smoother-tabstrip/">Snappy #43: Big improvements: faster startup? Smoother tabstrip!</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("tarasglek", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/tarasglek" class="twitter-follow-button" data-show-count="false">Follow @tarasglek</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p><h6>
+  Copyright &copy; 2012 - Taras Glek - content on this site is licensed under the
+Creative Commons Attribution Share-Alike License v3.0 or any later version.
+
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span></h6>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'allaboutperformance-tarasglek';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

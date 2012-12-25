@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="I spent the past couple weeks analyzing and improving fastload performance. I&#8217;ve long been suspicious of fastload, but only finally got around &hellip;">
+  <meta name="description" content="A really good ACM article about static analysis from Coverity&#8217;s perspective has been making rounds in Mozilla. What struck me most was the &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -64,7 +64,7 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2009/10/08/restless-bug-fixing/">Restless Bug Fixing</a></h1>
+      <h1 class="entry-title"><a href="/blog/2010/02/09/static-analysis-articles/">Static Analysis Articles</a></h1>
     
     
       <p class="meta">
@@ -80,22 +80,20 @@
   
 
 
-<time datetime="2009-10-08T03:13:01-07:00" pubdate data-updated="true">Oct 8<span>th</span>, 2009</time>
+<time datetime="2010-02-09T06:22:40-08:00" pubdate data-updated="true">Feb 9<span>th</span>, 2010</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>I spent the past couple weeks analyzing and improving fastload performance. I&#8217;ve long been suspicious of fastload, but only finally got around to investigating it in detail. I think there is some fundamentally ironic rule in software that if you put the word “fast” in the name of a component, it is bound to eventually become a performance bottleneck.</p>
+  <div class="entry-content"><p>A really good <a href="http://cacm.acm.org/magazines/2010/2/69354-a-few-billion-lines-of-code-later/fulltext">ACM article</a> about static analysis from Coverity&#8217;s perspective has been making rounds in Mozilla. What struck me most was the following paragraph:_ _</p>
 
-<p>Almost a decade has passed since the conception of this code, so it was time to update code&#8217;s assumptions to reflect the capabilities of modern OSes. I landed the <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=412796">fix</a> today. It results in startup performance gains of 1-20% on various platforms I tested, making this the most exiting perf bug I&#8217;ve worked on.</p>
+<p><em>At the most basic level, errors found with little analysis are often better than errors found with deeper tricks. A good error is probable, a true error, easy to diagnose; best is difficult to misdiagnose. As the number of analysis steps increases, so, too, does the chance of analysis mistake, user confusion, or the perceived improbability of event sequence. No analysis equals no mistake.</em></p>
 
-<p><strong>Plans</strong></p>
+<p>My personal view has been that &#8220;dumb&#8221; analyses are the most effective ones in terms of mistakes spotted vs time wasted writing/landing the analysis. It is interesting to see that sophisticated analyses are difficult to deploy even for Coverity.</p>
 
-<p>Now that I&#8217;ve had my fill of almost a year&#8217;s worth of startup performance analysis, for the remainder of the year I plan to refocus on static analysis. My main goal is decent  C support on Dehydra(not to mention the ever elusive GCC 4.5 compatibility) and to facilitate a production-quality DXR.</p>
-
-<p>I&#8217;m hoping that we&#8217;ll end up with cool ways of dealing with the painful/slow boilerplate (bugs <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=520626">520626</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=516085">516085</a> and <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=517370">517370</a>)</p>
+<p>In other news, LCA 2010 was my favourite conference so far. I met a number of awesome developers there. Mozilla&#8217;s static analysis work finally got <a href="http://lwn.net/Articles/370717/">mentioned</a> in LWN!</p>
 </div>
   
   
@@ -108,7 +106,7 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2009/09/30/corrupting-innocent-minds-with-gcc/">Corrupting Innocent Minds With GCC</a></h1>
+      <h1 class="entry-title"><a href="/blog/2010/01/21/state-of-static-analysis-at-mozilla/">State of Static Analysis at Mozilla</a></h1>
     
     
       <p class="meta">
@@ -124,233 +122,47 @@
   
 
 
-<time datetime="2009-09-30T10:32:38-07:00" pubdate data-updated="true">Sep 30<span>th</span>, 2009</time>
+<time datetime="2010-01-21T09:24:03-08:00" pubdate data-updated="true">Jan 21<span>st</span>, 2010</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>Ever since the plugin branch landed in GCC, I have been itching to explore the application-specific optimization space that it opens up. It&#8217;s really hard to optimize code in the general case, but it&#8217;s relatively easy to optimize for something for specific use-cases. We can rely on API-specific static analysis in order to get rid of the API-imposed overheads at compile time. Let me repeat, we can get rid of some API-induced suck (OO frameworks  usually have a lot of it) without sacrificing any of the benefits.</p>
+  <div class="entry-content"><p>Mozilla has static analyses built into the buildsystem that can be turned on with &#8211;with-static-checking= flag. The analyses live in <a href="http://mxr.mozilla.org/mozilla-central/source/xpcom/analyses">xpcom/analyses</a> directory. The testcases (aka documentation) are in <a href="http://mxr.mozilla.org/mozilla-central/source/xpcom/tests/static-checker/">xpcom/tests/static-checker</a>. Analyses are implemented in either <a href="https://developer.mozilla.org/En/Dehydra">Dehydra</a> or <a href="https://developer.mozilla.org/en/Treehydra">Treehydra</a> and run within a patched GCC 4.3.</p>
 
-<p>Unfortunally, I got busy working on, supposedly, more important stuff such as making Firefox startup quicker, so my<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=517370"> de-error-handling</a> and de-virtualizer (basically possible with LTO, but we can prove that certain classes will never be overloaded via dynamic linking) ideas had to be put on indefinite hold. Luckily, one of David Humphrey&#8217;s students decided to take on the first task, see his <a href="http://ehren.wordpress.com/2009/09/30/popping-my-gimples-a-plan/">blog post</a> here. I&#8217;m really psyched about this, few things that are cooler than cross-project open source work involving the most important open source projects of our time :)</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/09/18/enforcing-inheritance-rules/">Enforcing Inheritance Rules</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-09-18T03:01:48-07:00" pubdate data-updated="true">Sep 18<span>th</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>While writing C++ sometimes one wishes that one could squeeze a little more out of the type system. In this particular case, Zack Weinberg (layout-refactorer extraordinaire), wanted to make sure that certain methods always get overridden in derived classes. Unfortunately, in that particular design, those methods were not pure-virtual. At this point most C++ hackers would cry a little and move on without any compiler assistance.</p>
-
-<p>Instead of crying, Zack added a NS_MUST_OVERRIDE attribute to methods along with a matching <a href="https://developer.mozilla.org/En/Dehydra">Dehydra</a> script. See the <a href="http://hg.mozilla.org/mozilla-central/file/2047ed35d947/xpcom/analysis/must-override.js">source code</a> and the <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=512726">bug</a> for how simple it can be to extend C++ with a useful new check.</p>
-
-<p>Nothing makes me happier than seeing developers land big code changes and accompany them with compiler checks instead of relying on programming folklore to maintain important invariants.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/08/27/moving-files-into-jars/">Moving Files Into JARs</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-08-27T03:40:09-07:00" pubdate data-updated="true">Aug 27<span>th</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Moving files into jars reduces amount of seeks on startup, and has miscellaneous other performance/organization benefits. I added resource://gre-resources/ which maps to jar:toolkit.jar!/res/.</p>
-
-<p>To move a file into a jar:</p>
-
-<ol>
-<li>Add a jar.mn entry.</li>
-<li>Remove existing references to the file in Makefile.in, packages-static files</li>
-<li>Add file to the removed-files.in list of dead files</li>
-<li>Update urls refering to the file in the source. Sometimes one has to switch from using file streams and filenames to using channels and URIs. This is the hard part.</li>
-<li>Set your bug as blocking bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=513027">513027</a>.
-For an example see <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=508421">bug 508421</a>.</li>
-</ol>
-
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/08/20/cleaning-up-startup-disk-io/">Cleaning Up Startup Disk IO</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-08-20T08:50:12-07:00" pubdate data-updated="true">Aug 20<span>th</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><strong>Maintaining a module, killing off another one </strong></p>
-
-<p>I was granted ownership of the <a href="http://benjamin.smedbergs.us/blog/2009-08-19/taras-owns-libjar/">jar module</a>. Today, I resumed my quest to <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=457949">kill off </a>the barely limping stopwatch module. Together with nuking <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=505784">STANDALONE</a> mode in jar stuff, I will have landed 75KB worth of -ve diffs this month. It feels so good to delete code.</p>
-
-<p><strong>IO Report</strong></p>
-
-<p>Currently I am focusing on application IO (excluding libraries and IO caused by libraries).</p>
-
-<p>From my empirical measurements, opening individual files on a 7200RPM hard drive costs around 0-40ms. This is on Linux. I presume files open quickly when they are located near previously opened files and slower if a full disk seek is required for them. Combining files is usually a significant win in terms of throughput. It turns out that even warm starts and reading from SSDs can benefit from combined IO. Currently small file throughput ranges from &lt;1KB/s to &lt;200KB/s for files &lt; 500K. Combining files into memory mapped jars bumps that up to 1-1.5MB/s (currently jar files are relatively small, making them responsible for a higher proportion of IO should boost that further).</p>
-
-<p>The biggest gains are to be had on Windows Mobile where almost every seemingly trivial filesystem operation takes 2-3ms.</p>
-
-<p>I would like to reduce the number of files read on startup to a dozen or so to be able to crank up disk throughput. Unfortunately, there is a lot to be done, I could use a great deal of help.</p>
-
-<p>Below is a long list of files gathered by stracing firefox-bin, and what I know about them:  /home/taras/builds/minefield/dist/bin/application.ini /home/taras/builds/minefield/dist/bin/browserconfig.properties /home/taras/builds/minefield/dist/bin/platform.ini Haven&#8217;t investigated these yet. Perhaps, instead of reading these files should be compiling this info into the xulrunner launcher app?</p>
-
-<p><strong>Update</strong>: ted says application.ini used to be compiled in: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=383167">bug 383167 </a> /home/taras/builds/minefield/dist/bin/plugins</p>
-
-<p>I&#8217;m ignoring plugins at the moment. /home/taras/builds/minefield/dist/bin/chrome /home/taras/builds/minefield/dist/bin/chrome/browser.jar /home/taras/builds/minefield/dist/bin/chrome/browser.manifest /home/taras/builds/minefield/dist/bin/chrome/comm.manifest /home/taras/builds/minefield/dist/bin/chrome/en-US.jar /home/taras/builds/minefield/dist/bin/chrome/en-US.manifest /home/taras/builds/minefield/dist/bin/chrome/pageloader.manifest /home/taras/builds/minefield/dist/bin/chrome/pippki.manifest /home/taras/builds/minefield/dist/bin/chrome/reftest.manifest /home/taras/builds/minefield/dist/bin/chrome/toolkit.jar /home/taras/builds/minefield/dist/bin/chrome/toolkit.manifest /home/taras/builds/minefield/dist/bin/chrome/xslt-qa.manifest</p>
-
-<p>The .manifest files describe how to find stuff in chrome jars. Parsing .manifest files is inefficient due to disk seeks. Additionally, current .manifest parsing code appears to be slow on mobile devices. <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=506392">bug 506392</a> I would like to move .manifest files within jars(and look for manifests within jars when a manifest isn&#8217;t found alongside the .jar in the filesystem)</p>
-
-<p>.jar files are a little bit of  a  cpu hog when it comes  to parse the zip file index. This can be done lazily: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=511754">bug 511754</a> /home/taras/builds/minefield/dist/bin/chrome/icons/default/default16.png /home/taras/builds/minefield/dist/bin/chrome/icons/default/default32.png /home/taras/builds/minefield/dist/bin/chrome/icons/default/default48.png These icons are parsed by gnome libs 3 times during startup. I wonder if we are initializing some gnome thing 3 times?</p>
-
-<p>/home/taras/builds/minefield/dist/bin/components /home/taras/builds/minefield/dist/bin/components/aboutCertError.js /home/taras/builds/minefield/dist/bin/components/aboutPrivateBrowsing.js /home/taras/builds/minefield/dist/bin/components/aboutRights.js /home/taras/builds/minefield/dist/bin/components/aboutRobots.js /home/taras/builds/minefield/dist/bin/components/aboutSessionRestore.js /home/taras/builds/minefield/dist/bin/components/FeedConverter.js /home/taras/builds/minefield/dist/bin/components/FeedWriter.js /home/taras/builds/minefield/dist/bin/components/fuelApplication.js /home/taras/builds/minefield/dist/bin/components/httpd.js /home/taras/builds/minefield/dist/bin/components/NetworkGeolocationProvider.js /home/taras/builds/minefield/dist/bin/components/nsAddonRepository.js /home/taras/builds/minefield/dist/bin/components/nsBadCertHandler.js /home/taras/builds/minefield/dist/bin/components/nsBlocklistService.js /home/taras/builds/minefield/dist/bin/components/nsBrowserContentHandler.js /home/taras/builds/minefield/dist/bin/components/nsBrowserGlue.js /home/taras/builds/minefield/dist/bin/components/nsContentDispatchChooser.js /home/taras/builds/minefield/dist/bin/components/nsContentPrefService.js /home/taras/builds/minefield/dist/bin/components/nsDefaultCLH.js /home/taras/builds/minefield/dist/bin/components/nsDownloadManagerUI.js /home/taras/builds/minefield/dist/bin/components/nsExtensionManager.js /home/taras/builds/minefield/dist/bin/components/nsFilePicker.js /home/taras/builds/minefield/dist/bin/components/nsFormAutoComplete.js /home/taras/builds/minefield/dist/bin/components/nsHandlerService.js /home/taras/builds/minefield/dist/bin/components/nsHelperAppDlg.js /home/taras/builds/minefield/dist/bin/components/nsLivemarkService.js /home/taras/builds/minefield/dist/bin/components/nsLoginInfo.js /home/taras/builds/minefield/dist/bin/components/nsLoginManager.js /home/taras/builds/minefield/dist/bin/components/nsLoginManagerPrompter.js /home/taras/builds/minefield/dist/bin/components/nsMicrosummaryService.js /home/taras/builds/minefield/dist/bin/components/nsPlacesAutoComplete.js /home/taras/builds/minefield/dist/bin/components/nsPlacesDBFlush.js /home/taras/builds/minefield/dist/bin/components/nsPlacesTransactionsService.js /home/taras/builds/minefield/dist/bin/components/nsPrivateBrowsingService.js /home/taras/builds/minefield/dist/bin/components/nsProgressDialog.js /home/taras/builds/minefield/dist/bin/components/nsProxyAutoConfig.js /home/taras/builds/minefield/dist/bin/components/nsSafebrowsingApplication.js /home/taras/builds/minefield/dist/bin/components/nsSample.js /home/taras/builds/minefield/dist/bin/components/nsSearchService.js /home/taras/builds/minefield/dist/bin/components/nsSearchSuggestions.js /home/taras/builds/minefield/dist/bin/components/nsSessionStartup.js /home/taras/builds/minefield/dist/bin/components/nsSessionStore.js /home/taras/builds/minefield/dist/bin/components/nsSetDefaultBrowser.js /home/taras/builds/minefield/dist/bin/components/nsSidebar.js /home/taras/builds/minefield/dist/bin/components/nsTaggingService.js /home/taras/builds/minefield/dist/bin/components/nsTryToClose.js /home/taras/builds/minefield/dist/bin/components/nsUpdateService.js /home/taras/builds/minefield/dist/bin/components/nsUrlClassifierLib.js /home/taras/builds/minefield/dist/bin/components/nsUrlClassifierListManager.js /home/taras/builds/minefield/dist/bin/components/nsURLFormatter.js /home/taras/builds/minefield/dist/bin/components/nsWebHandlerApp.js /home/taras/builds/minefield/dist/bin/components/pluginGlue.js /home/taras/builds/minefield/dist/bin/components/reftest-cmdline.js /home/taras/builds/minefield/dist/bin/components/storage-Legacy.js /home/taras/builds/minefield/dist/bin/components/storage-mozStorage.js /home/taras/builds/minefield/dist/bin/components/tp-cmdline.js /home/taras/builds/minefield/dist/bin/components/txEXSLTRegExFunctions.js /home/taras/builds/minefield/dist/bin/components/WebContentConverter.js Above files are only read in during the &#8220;slow&#8221; startup and are &#8220;fastloaded&#8221; afterward. However, they are stat()ed to make sure the fastload stuff isn&#8217;t stale. This is bad: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=511761">bug 511761</a>. Making these depend on .autoreg seems reasonable.</p>
-
-<p>/home/taras/builds/minefield/dist/bin/extensions This probably should depend on .autoreg too</p>
-
-<p>/home/taras/builds/minefield/dist/bin/updates /home/taras/builds/minefield/dist/bin/updates/0/update.test /home/taras/builds/minefield/dist/bin/update.test This too?</p>
-
-<p>/home/taras/builds/minefield/dist/bin/greprefs /home/taras/builds/minefield/dist/bin/greprefs/all.js /home/taras/builds/minefield/dist/bin/greprefs/security-prefs.js /home/taras/builds/minefield/dist/bin/greprefs/xpinstall.js Reading a directory full of pref files that never change is crazy. <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=507288">bug 507288</a> provides 10-100x throughput improvement in reading gre prefs.</p>
-
-<p>/home/taras/builds/minefield/dist/bin/defaults/pref /home/taras/builds/minefield/dist/bin/defaults/pref/channel-prefs.js /home/taras/builds/minefield/dist/bin/defaults/pref/firefox-branding.js /home/taras/builds/minefield/dist/bin/defaults/pref/firefox.js /home/taras/builds/minefield/dist/bin/defaults/pref/firefox-l10n.js /home/taras/builds/minefield/dist/bin/defaults/pref/reporter.js This is similar to gre pref situation, but worse because there are more pref files. This is also harder to refactor. I propose having 2 hardcoded pref names for xulrunner applications: app.js burried in a jar file speed and l10n.js for localization convenience.</p>
-
-<p>/home/taras/builds/minefield/dist/bin/dictionaries /home/taras/builds/minefield/dist/bin/dictionaries/en-US.aff /home/taras/builds/minefield/dist/bin/dictionaries/en-US.dic For some reason only one of my computers is reading the spellcheck dictionary at startup, but it is costing me 70ms. I wonder if these can be moved to a locale jar.</p>
-
-<p>/home/taras/builds/minefield/dist/bin/modules/distribution.js /home/taras/builds/minefield/dist/bin/modules/DownloadLastDir.jsm /home/taras/builds/minefield/dist/bin/modules/ISO8601DateUtils.jsm /home/taras/builds/minefield/dist/bin/modules/NetUtil.jsm /home/taras/builds/minefield/dist/bin/modules/utils.js /home/taras/builds/minefield/dist/bin/modules/XPCOMUtils.jsm These modules should be moved into toolkit.jar: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=509755">bug 509755</a></p>
-
-<p>/home/taras/builds/minefield/dist/bin/res/broken-image.png /home/taras/builds/minefield/dist/bin/res/charsetalias.properties /home/taras/builds/minefield/dist/bin/res/charsetData.properties /home/taras/builds/minefield/dist/bin/res/forms.css /home/taras/builds/minefield/dist/bin/res/hiddenWindow.html /home/taras/builds/minefield/dist/bin/res/html.css /home/taras/builds/minefield/dist/bin/res/loading-image.png /home/taras/builds/minefield/dist/bin/res/quirk.css /home/taras/builds/minefield/dist/bin/res/ua.css</p>
-
-<p>These need to be in a jar too: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=508421">bug 508421</a> /home/taras/builds/minefield/dist/bin/searchplugins /home/taras/builds/minefield/dist/bin/searchplugins/amazondotcom.xml /home/taras/builds/minefield/dist/bin/searchplugins/answers.xml /home/taras/builds/minefield/dist/bin/searchplugins/creativecommons.xml /home/taras/builds/minefield/dist/bin/searchplugins/eBay.xml /home/taras/builds/minefield/dist/bin/searchplugins/google.xml /home/taras/builds/minefield/dist/bin/searchplugins/wikipedia.xml /home/taras/builds/minefield/dist/bin/searchplugins/yahoo.xml I think these should be in a jar too.</p>
-
-<p>This concludes the list of Firefox application files read at startup. I haven&#8217;t touched the stuff in the profile directories or libraries. I think it is realistic to get a tenfold reduction in physical files read by Firefox 3.6.</p>
-
-<p>https://bugzilla.mozilla.org/show_bug.cgi?id=383167</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/08/14/there-is-nothing-exciting-about-filesystems/">There Is Nothing Exciting About Filesystems</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-08-14T07:22:22-07:00" pubdate data-updated="true">Aug 14<span>th</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>When I originally started at Mozilla, I only knew the people who interviewed me. But I quickly discovered beltzner when he uttered a sacrilegious statement that went something like: &#8220;&#8230;.. nothing could be as boring as filesystems&#8230;.&#8221;. Mike Beltzner is one of my favourite characters at Mozilla for his ability to speak his mind, but this quote has troubled me greatly. How can one not care about filesystems? Linux&#8217;s ability to do file stuff efficiently makes it magnitudes faster than other operating systems. Plan 9&#8217;s file-system-centric layout proved that OSes don&#8217;t have to consist of a series of poorly named and categorized system calls. In fact, a clean file layout allows many awesome optimizations. ZFS is one of the few things keeping Solaris relevant. HFS+ is one of the things keeping OSX from being fast.</p>
-
-<p>Being a Linux user, I was disappointed by the pointlessness of optimizing application IO. Sure we inefficiently open tons of files on startup, sure we hit the filesystem 10-100x more than we could, why would one optimize when there when there is no more than a few percent of startup being take up by terrible io patterns?</p>
-
-<p><strong>Excitingly Crappy Filesystems</strong></p>
-
-<p>Luckily Firefox runs on OSX and we are making it run on WinCE. I was delighted to discover that on wince* we paid 1-5ms per file existence check, modification date, size, etc. I was shocked to see that the throughput while reading certain files could be expressed in bytes per second (most crappy flash media seems to be able to pull in >1mb/s).  This brought upon switching our<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=504864"> jar io to mmap</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=468011">amalgamating</a> jar files, moving more <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=508421">files into jars</a>, etc. I&#8217;ll blog about the details later. My basic idea is that we can utilize jar files as &#8220;controlled filesystem environments&#8221; to deal with having to run on crappy OSes with exceptionally bad filesystems. OSes such as OSX where file IO is barely faster than that of a WinCE phone.</p>
-
-<p>Beltzner, wouldn&#8217;t it be exciting if OSes like Mac OSX had file systems worth being excited about?</p>
+<p>The currently landed checks are:</p>
 
 <ul>
-<li>MS likes to use puns for their product names</li>
+<li>final.js: Java-like &#8220;final&#8221; keyword for C++</li>
+<li>flow.js: Ensure code in a function flows through a particular label</li>
+<li>must-override.js: Force derived classes to override certain methods</li>
+<li>override.js: Ensure methods exist in base class</li>
+<li>outparams.js: Ensure outparameters and return error codes are in sync</li>
+<li>stack.js: Mark classes as stack-only
+A whole lot more analyses in various states of completion can be tracked in the static analysis <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=430328">bug</a>.</li>
 </ul>
 
+
+<p>Asynchronous discussion happens in the mailing list. #static irc channel is the place for interactive discussion.</p>
+
+<p><strong>Nearterm Plans For Plugins </strong></p>
+
+<p>GCC 4.5 has an official plugin framework enabled by default. I will try to switch to GCC 4.5 as soon as it is out. Currently 4.5 is still changing too often for me to bother fixing Treehydra (Dehydra usually works). As soon as 4.5 is out I will revise the installation instructions to use distribution GCC and JavaScript packages to avoid the current mess (draft can be found <a href="http://groups.google.com/group/mozilla.dev.static-analysis/browse_thread/thread/a773ebdbc5479f9a#">here</a>). Sometime after that I&#8217;ll switch Mozilla static analysis to GCC 4.5 and drop 4.3 support.</p>
+
+<p>Hopefully, this will make it easier for other open source projects to adapt the hydras.</p>
+
+<p><strong>Plans for Analyses</strong></p>
+
+<p>I&#8217;m a big believer into application-specific static analyses, but I would like to see some heavy duty open source analyzers built on top of GCC.</p>
+
+<p>Some of the not-so-Mozilla-specific analyses should be bundled together to make them easy to try out on other projects.</p>
+
+<p>Hopefully 2010 will be the year that open source static analysis catches on.</p>
+
+<p><strong>LCA2010</strong></p>
+
+<p>I posted my <a href="http://people.mozilla.com/~tglek/lca2010/">slides</a> from yesterday.</p>
 </div>
   
   
@@ -363,7 +175,7 @@ For an example see <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=508421"
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2009/08/03/this-month-in-static-analysis/">This Month in Static Analysis</a></h1>
+      <h1 class="entry-title"><a href="/blog/2010/01/19/chromium-vs-minefield-cold-startup-performance-comparison/">Chromium vs Minefield: Cold Startup Performance Comparison</a></h1>
     
     
       <p class="meta">
@@ -379,30 +191,56 @@ For an example see <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=508421"
   
 
 
-<time datetime="2009-08-03T14:19:55-07:00" pubdate data-updated="true">Aug 3<span>rd</span>, 2009</time>
+<time datetime="2010-01-19T09:05:28-08:00" pubdate data-updated="true">Jan 19<span>th</span>, 2010</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>Lately I have been focusing on optimizing Fennec startup on a delightfully inadequate platform: Windows Mobile. More on fascinating startup, performance problems and solutions later. As a result I have been doing relatively little static analysis stuff.</p>
+  <div class="entry-content"><p><strong>Hunting Down Mythical &#8220;Slowness&#8221;</strong></p>
 
-<p>The main reason for taking a break is that I feel that I went from having no way to do any analysis to having production-quality tools for <a href="https://developer.mozilla.org/En/Dehydra">analysis</a> and <a href="https://developer.mozilla.org/En/Pork">rewriting</a>.  I finally have a chance to move on from developing tools to using them in everyday development. The main puzzle piece that needs completion is GCC 4.5 support in Dehydra. We are feature-complete on 4.5, just need to stabilize once the trunk stabilizes.</p>
+<p>I recently met a developer who used Chromium instead of Firefox. Chromium&#8217;s superior startup speed was his reason for using it.This got me excited because said developer was running Linux, so it was relatively easy to measure cold startup and get a complete <a href="http://taras.glek.net/blog/2009/10/23/studying-library-io-systemtap-style/">IO breakdown</a>.</p>
 
-<p><strong>Drowning In Pork </strong></p>
+<p>Turned out Firefox took roughly 23 seconds to start. After much cursing about how I&#8217;ve never seen Firefox startup this slow, I eventually gave up on figuring out what&#8217;s slowing his startup and instead we measured Chromium startup. It also turned out to also be roughly 23 seconds. The super-slow hard drive made everything slow. Turned out Chromium&#8217;s superior startup was a myth in this case.</p>
 
-<p>A number of other people did some cool stuff in the meantime. First and foremost: Joshua Cranmer has ventured into the land of <a href="https://developer.mozilla.org/En/Pork">Pork</a> and is publishing a guide to doing refactoring tools on this blog (<a href="http://quetzalcoatal.blogspot.com/2009/07/guide-to-pork-part-1.html">part 1</a>, <a href="http://quetzalcoatal.blogspot.com/2009/07/guide-to-pork-part-2.html">part 2</a>, <a href="http://quetzalcoatal.blogspot.com/2009/08/guide-to-pork-part-3.html">part 3</a>). This is cool, because until now, there were no Pork docs and nothing I write could ever match Joshua&#8217;s documenting talents.  Thanks a bunch, Joshua.</p>
+<p><strong>Measuring Startup</strong></p>
 
-<p>I have also received my first-ever bugfix patches to Elsa. Previously, I&#8217;ve received miscellaneous build fixes, etc, but these are the first patches that involved somebody pounding their head against the wall until they figured out why things were crashing or not accepting valid C++ code.</p>
+<p>As a result of investigating the startup myth above, my kiwi coworkers encouraged me to post a comparison of Chrome/Firefox startup. I am at <a href="http://www.lca2010.org.nz/">linuxconf</a> at the moment so I did the comparison on my laptop.</p>
 
-<p><strong>Introducing Dan Witte</strong></p>
+<p>Laptop configuration:</p>
 
-<p>Dan is the new static analysis go-to person. So far he facilitated an explosion of static analysis ideas (they are tracked in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=430328">bug 430328</a>). A lot of these can be expressed as &lt;10line Dehydra analyses, so they are excellent introductory projects. If you are dying to start analyzing code, but don&#8217;t know where to begin, look in that bug. Dan has written an interesting analysis to do with finding accidental temporaries due to C++&#8217;s &#8220;wonderful&#8221; implicit conversions/etc (expect to see a blog post on that). He is also working on the holy grail of Mozilla static analysis: a full callgraph. It&#8217;s a little embarrassing that we don&#8217;t have that yet, but it&#8217;s hard and once we do have it, a whole new world of analyses will be possible.</p>
+<ul>
+<li>Intel(R) Core(TM)2 Duo CPU  L9400 running at 800Mhz to amplify any performance differences.</li>
+<li>HITACHI HTS722020K9SA00 harddrive for the user profile and browser binaries</li>
+<li>OCZ Vertex 30GB SSD for system libraries/configuration.</li>
+<li>Fedora 12, Minefield 20100119 tarball, chromium-4.0.285.0-0.1.20091230svn35370.fc12.i686</li>
+<li>sudo sync &amp;&amp; sudo sysctl -w vm.drop_caches=3 &amp;&amp; sudo sysctl -w vm.drop_caches=0 to clear the disk cache inbetween runs
+What am I testing? I am measuring the time between invoking the browser until a JavaScript snippet embedded within a basic webpage is executed (ie <a href="http://blog.vlad1.com/2009/07/28/measuring-startup/">Vlad&#8217;s approach</a>, with a slightly modified <a href="http://people.mozilla.com/~tglek/startup/startup.html">startup.html</a>). The above sysctl command clears disk caches, this creates a similar situation to when one turns on the computer and it hasn&#8217;t yet loaded all of the browser libraries from disk into memory. This is a blackbox approach to measuring how long it takes from clicking on the browser icon to get an interactive browser.</li>
+</ul>
 
-<p><strong>Speaking of Callgraphs&#8230;</strong></p>
 
-<p>So while various Mozillians were pondering how awesome it would be to do inter-function analysis, an intern has beat us to writing the first useful inter-function analysis! Sully had a problem, after a tiny bit of  Dehydra coaching, he solved his problem in the amount of time it took me to eat my lunch. Brilliant! See his <a href="http://www.msully.net/blog/2009/08/03/doing-whole-tree-analysis-with-dehydra/">blog post</a> for details. My conclusion: either Dehydra is pretty easy to use and/or we get mad genius interns :).</p>
+<p>Firefox commandline: firefox -profile /mnt/startup/profile/firefox  -no-remote file://<code>pwd</code>/startup.html#<code>python -c 'import time; print int(time.time() * 1000);'</code></p>
+
+<p>Chromium commandline: chromium-browser &#8211;user-data-dir=/mnt/startup/profile/chrome  file://<code>pwd</code>/startup.html#<code>python -c 'import time; print int(time.time() * 1000);'</code></p>
+
+<p>Both of these tests are done with an empty profile that was populated and has settled after running the browser a few times.</p>
+
+<p><strong>Results</strong></p>
+
+<p>The following numbers are milliseconds reported by the startup.html above.</p>
+
+<p>Running Chromium five times: 4685, 4168, 4222, 4197, 4232</p>
+
+<p>Running Minefield five times: 3155, 3273, 3352, 3311, 3322</p>
+
+<p>I picked Minefield because that&#8217;s the browser that I run and the codebase that I focus on. The linux Chromium channel seems to be the closest parallel to Minefield. I did not test on Windows because it is a bit of a <a href="http://taras.glek.net/blog/2010/01/04/windows-7-startup-exploration/">nightmare</a> to measure cold startup there.</p>
+
+<p><strong>Conclusion</strong></p>
+
+<p>On my system Minefield is around 30% faster at starting up with  an empty profile than Chromium (the difference is amplified by running the CPU at 800Mhz). For comparison of Minefield against older Firefox versions, see <a href="http://autonome.wordpress.com/2009/11/21/firefox-startup-performance-weekly-summary-11/">Dietrich&#8217;s post</a>.</p>
+
+<p>I suspect that there is a relatively small difference between the two browsers because we are running into the fundamental limitations of loading large applications into memory (<a href="http://taras.glek.net/blog/2009/10/20/large-apps-just-have-to-start-slow/">my rant</a>).</p>
 </div>
   
   
@@ -415,7 +253,7 @@ For an example see <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=508421"
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2009/07/22/chasewamu-fraud-friendlyness/">Chase/WaMu Fraud-friendlyness</a></h1>
+      <h1 class="entry-title"><a href="/blog/2010/01/04/some-developers-manually-grope-around-in-the-dark/">Some Developers Manually Grope Around in the Dark</a></h1>
     
     
       <p class="meta">
@@ -431,14 +269,20 @@ For an example see <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=508421"
   
 
 
-<time datetime="2009-07-22T01:09:24-07:00" pubdate data-updated="true">Jul 22<span>nd</span>, 2009</time>
+<time datetime="2010-01-04T12:27:03-08:00" pubdate data-updated="true">Jan 4<span>th</span>, 2010</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>Turns out that if someone compromises a merchant that you shop with, such as bikenashbar.com, then they are entitled to your money as long as they can show to the bank that they have your billing/shipping information. According to Chase it&#8217;s not fraud if they steal your address along with the card number.  I recommend that people use a bank that protects their customer&#8217;s finances, one that isn&#8217;t called <a href="http://chase.com/">Chase</a>.</p>
+  <div class="entry-content"><p>Cool thing about static analysis is that you can ask painful-for-humans questions about your codebase AND have them answered. Here are two that got answered by Ehren:</p>
+
+<p>Where do function bodies continue after return statements (ie obviously dead/broken code)? <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=535646">Bug 535646</a>.</p>
+
+<p>How many functions in Mozilla could/should be marked static? <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=536427">Bug 536427</a>.</p>
+
+<p>Awesome!</p>
 </div>
   
   
@@ -451,7 +295,7 @@ For an example see <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=508421"
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2009/07/21/those-crazy-comm-central-guys/">Those Crazy Comm-central Guys&#8230;</a></h1>
+      <h1 class="entry-title"><a href="/blog/2010/01/04/windows-7-startup-exploration/">Windows 7 Startup Exploration</a></h1>
     
     
       <p class="meta">
@@ -467,16 +311,80 @@ For an example see <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=508421"
   
 
 
-<time datetime="2009-07-21T02:54:42-07:00" pubdate data-updated="true">Jul 21<span>st</span>, 2009</time>
+<time datetime="2010-01-04T03:28:49-08:00" pubdate data-updated="true">Jan 4<span>th</span>, 2010</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>When it comes to taking on crazy tasks involving disguising code, you can always count on Joshua. This time Joshua has gone deep in <a href="https://developer.mozilla.org/En/Pork">Pork</a> territory to do a very impressive rewrite (one that would not be even close to possible with anything other than Elsa-based tools) and he is blogging about it. He posted the <a href="http://quetzalcoatal.blogspot.com/2009/07/guide-to-pork-part-1.html">first installment</a> of his rewriting-with-Pork guide.</p>
+  <div class="entry-content"><p>I did some digging to figure out if one can setup cold-startup testing in Windows 7 without nasty hacks. My conclusion is: sorta-kinda.</p>
 
-<p>Still on the subject on mad csc-entist Joshua: Andrew Sutherland has finally gotten sick of crappy JS documentation tools and took matters into his own hands thanks to Joshua&#8217;s JSHydra tool. Checkout his <a href="http://www.visophyte.org/blog/2009/07/20/doccelerator-javascript-documentation-via-jshydra-into-couchdb-with-an-ajax-ui/">blog post</a> on how the documentation world will be a better place thanks to being able to build tools on top of <em>the JavaScript parser</em>.</p>
+<p><strong>The Good - Most of the Ingredients Are Present </strong></p>
+
+<p>I haven&#8217;t actively used Windows since pre-XP days. It looks like it has come a long way since then: there is now a decent interactive shell, all kinds of settings/services can be controlled from the commandline and there is even sudo-like functionality.</p>
+
+<p>PowerShell takes inspiration from the korn shell and throws in .net which allows for much nicer &#8220;shell programming&#8221; than the dominant bash shell.</p>
+
+<p>mountvol is a terrible equivalent to mount in linux - but it exists, so I&#8217;m happy.</p>
+
+<p>NTFS junctions are frustrating equivalents to links in a unix filesystem.</p>
+
+<p><strong>The Bad</strong></p>
+
+<p>The essential ability to completely flush filesystem caches isn&#8217;t there. This isn&#8217;t quite as embarrassing as it seems as Mac OS X&#8217;s purge command does not flush the page cache (resulting in mmapped files not purged from cache), so technically OS X has the same limitation and only Linux gets it right.</p>
+
+<p><strong>The Ugly Workaround</strong></p>
+
+<p>After much brainstorming we figured out that we can clear all relevant caches on Mac OS X by putting files that we care about on a separate partition and mounting/unmounting it for every measurement.</p>
+
+<p>Ridiculously, Windows is &#8220;smarter&#8221; than that and appears to cache stuff per-drive, such that mounting/unmounting a partition has no effect on the cache. The best workaround I could come up with involves putting the said partition onto a USB disk and unplugging it in-between unmount/mount testing cycle.</p>
+
+<p><strong>Windows 7 Startup Recipe</strong></p>
+
+<p>1) Set up junctions for the 2 profile directories to point to the USB partition, unzip firefox onto that partition.</p>
+
+<p>2)</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$old = (get-location)
+</span><span class='line'>$mountpoint = $env:userprofile + "\cold"
+</span><span class='line'># magic name given by running mountvol
+</span><span class='line'>$drive = "\\?\Volume{885d5bc3-e918-11de-a4e5-002268e3077c}\"
+</span><span class='line'># Based on http://poshcode.org/696 + fiddling with UAC settings to avoid prompts
+</span><span class='line'>sudo mountvol $mountpoint $drive
+</span><span class='line'># Mountvol doesn't seem to block until drive is mounted
+</span><span class='line'>sleep 1
+</span><span class='line'>#mountvol
+</span><span class='line'>cd $mountpoint\firefox
+</span><span class='line'>echo (pwd)
+</span><span class='line'># The following command shows PowerShell awesomeness
+</span><span class='line'># based on [Vlad's approach](http://blog.vlad1.com/2009/07/28/measuring-startup/)
+</span><span class='line'>./firefox.exe -no-remote "file://$(pwd)\startup.html#$([Int64](([DateTime]::utcnow - (new-object DateTime 1970,1,1)).ticks/10000))"
+</span><span class='line'>cd $old
+</span><span class='line'># I haven't yet figured out how to wait on firefox.exe to finish
+</span><span class='line'>sleep 10
+</span><span class='line'>sudo mountvol $mountpoint /d</span></code></pre></td></tr></table></div></figure>
+
+
+<p>3) Unplug USB drive</p>
 </div>
   
   
@@ -489,7 +397,7 @@ For an example see <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=508421"
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2009/07/14/virtualbox-rocks/">VirtualBox 3.0 Rocks</a></h1>
+      <h1 class="entry-title"><a href="/blog/2009/12/17/javascript-dom/">JavaScript DOM</a></h1>
     
     
       <p class="meta">
@@ -505,18 +413,204 @@ For an example see <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=508421"
   
 
 
-<time datetime="2009-07-14T06:15:52-07:00" pubdate data-updated="true">Jul 14<span>th</span>, 2009</time>
+<time datetime="2009-12-17T07:43:01-08:00" pubdate data-updated="true">Dec 17<span>th</span>, 2009</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>With much pain I managed to convince a Vmware WinXP virtual machine to run in <a href="http://www.virtualbox.org/">VirtualBox</a>. At first it ran very sluggishly(>3 hours to do a build?), but after I turned off IO Apic stuff in Windows, it&#8217;s become disturbingly fast. It now takes 40minutes to build a wince fennec vs almost 80minutes it took on VMware server.</p>
+  <div class="entry-content"><p>I filed<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=533874"> bug 533874</a> to expose the JavaScript AST to JS, but turns out I need to explain why it&#8217;s important to expose the JavaScript AST. So lets start from the beginning.</p>
 
-<p>VirtualBox&#8217;s disk throughput is phenomenal, in fact, this is the first time I&#8217;ve seen almost-native speed disk io in virtual machine. A benchmark I tried reported 45mb/s 4K read/writes (these were cached on the linux side).</p>
+<p>My name is Taras and I like to wrestle useful information out of tools that do not think to offer it. I firmly believe that writing/maintaining code is more difficult than it should be. I think the current organization of compilers is partially responsible for it.</p>
 
-<p>Unlike Vmware server, VirtualBox&#8217;s usb works without troubles, shared folders were easy to setup etc. It&#8217;s an awesome app, hope Sun/Oracle keeps it up.</p>
+<p><strong>Related Prior Work </strong>Some groups at Mozilla have realized that inspection and refactoring of code are tasks that will often consume as many people as can be thrown at it so there has to be a better way. That better way is through tools: get computers to do things that are difficult for humans. We do that a lot for other kinds of tasks, but not so much for computers. For example, when was the last something you googled something using telnet? Yet our tools for presenting and analyzing code are about as sophisticated as telnet. For some reason it is easier to find some random piece of information on the web than it is to find what code implements a function that is being called from my code.</p>
+
+<p>As the original author, I think <a href="https://developer.mozilla.org/En/Dehydra">Dehydra</a>, <a href="https://developer.mozilla.org/en/Treehydra">Treehydra</a> on top of the GCC plugin <a href="http://gcc.gnu.org/wiki/GCC_PluginAPI">API</a> give us a pretty reasonable way to extract useful information out of our C++ code. I feel lost and confused without Dave&#8217;s <a href="http://australia.proximity.on.ca/dxr/">DXR</a>, the JS team routinely breaks (and fixes) invariants in the JS engine and we&#8217;ve been able to wipe out certain classes of bugs (ie code patterns that cause them) mozilla-wide. I&#8217;m looking forward to reducing the footprint of Mozilla by deleting <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=457262">more</a> dead code.</p>
+
+<p><strong>JavaScript Needs</strong> My efforts so far have focused on C++ because it is finicky language and developers need all the help they can get with it. I think we need to the same thing for JavaScript. I think there is a lot of useful information in JavaScript code that is burried and hard to get to. <a href="http://quetzalcoatal.blogspot.com/">Joshua Cranmer</a> broke new ground in building <a href="https://developer.mozilla.org/en/JSHydra">JSHydra</a> on top of SpiderMonkey. This way one can parse JavaScript in exact same way as Spidermonkey sees it (something that can only be approximated with other approaches). I think we should offer the ability to analyze js code within Spidermonkey. Unfortunately, he is a busy student so he doesn&#8217;t have the time to develop JSHydra this to the next level. <strong> How Would JavaScript Developers Benefit?</strong> Currently we have jshydra deployed on AMO to scan javascript for potential issues to make the reviewer&#8217;s job more productive. Dave Humphrey is working away on integrating JSHydra into DXR so we can have semantic navigation of JavaScript: what components are implemented JavaScript, wouldn&#8217;t it be nice to know who calls certain methods(including javascript callsites), etc. Gandalf has a cool idea where he needs to be able to extract translatable strings out of JetPacks. I believe JetPack people in general would like to be able to analyze JS code more.</p>
+
+<p>I think it&#8217;s clear that the common trend in all these tasks is to turn an opaque text blob into something that can be easily navigated programatically. Wouldn&#8217;t it suck to not to be able to walk the DOM for HTML? Why is it ok to accept that handicap for the essense of all programs?</p>
+
+<p><strong>How Should This Be Solved?</strong> I don&#8217;t know for sure, but my friend Jim Blandy, came up with a good suggestion. We already have eval/uneval in SpiderMonkey. it would be really cool to extend uneval to produce a iteratable data structure instead of a text blob. So I filed a <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=533874">bug 533874</a> on this, and this my explanation of why I think that would be a very empowering feature to expose ASTs in JavaScript.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/12/03/rooter-hardware/">Rooter Hardware</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-03T03:11:00-08:00" pubdate data-updated="true">Dec 3<span>rd</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><div class='post'>
+Rooter - British pronunciation of router. This is post describes the hardware in my Atom router.<br /><br />I wanted a low power x86 router. There a number of things that I want to be able to do with it on my lan: DNS for naming/tracking a few dozen devices, VOIP, media serving with MPD + PulseAudio.<br /><br />I choose Atom because it is cheap to buy and to run. CPU/Mobo combos start at $50. There are two flavours of Atom boards: cheap ones with desktop chipsets and more expensive ones with laptop chipsets (which consume 50% less power).  I also needed to have 2 nics and to have gigE on the LAN side. Most boards ship with RealTek NICs which have absolutely terrible drivers. Unfortunately there is only one (<a href="http://www.tweaktown.com/reviews/1675/msi_im_945gse_a_mini_itx_fanless_atom_motherboard/index2.html">MSI IM-955GSE-A</a>) massmarket dual Intel-gigE board that doesn&#8217;t suck and it costs $150. <br /><br />Due to a misleading ebay listing I ended up buying MSI IM-955GSE-B on Ebay. It is the former boards&#8217; wierdo industrial sibling(no VGA, 1 gigE, but 6 serial ports!). It features a builtin DC2DC power supply which connects via a floppy-power-connector to a 12V DC source.<br /><br />To make up for a missing Ethernet port I opted for a USB2.0 100Mbit nic (Trendnet TU2-ET100,which uses the &#8216;asix&#8217; driver). This NIC is a true full-speed device and easily sustains 11MB/s transfers, so it&#8217;s perfectly good enough for a WAN port.<br /><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://ep.yimg.com/ca/I/yhst-27518546784426_2079_116848138" imageanchor="1" style="clear: left; float: left; margin-bottom: 1em; margin-right: 1em;"><img border="0" src="http://ep.yimg.com/ca/I/yhst-27518546784426_2079_116848138" /></a><br /></div>I got the cheapest Mini-ITX case on ebay. It came with a great 65W Seasonic power supply.<br /><br />Cost:<br />Case - $30<br />Mobo/CPU - $82<br />2GB RAM - $30<br />USB NIC - $18<br />Total: $160 <br /><br />I installed Fedora onto a spare 4gb usb stick. I am really happy with the resulting computer. It is very quiet because it has no moving fans.<br /><br /><b>PSU Hack</b> <br />Current 13W idle power draw is reasonable given that the PSU is likely underloaded and thus less efficient .<br />Currently, the mobo is powered by shorting the ON pins on the PSU(+ducttape for robustness) and a custom Molex2Berg adapter cable(made for me by a very resourceful friend). Eventually I plan to switch over the EEE power supplies as they are better specced for such low power motherboards. This would also avoid redundant dc2dc conversion going on in the case.<br /><br /><b>Power-On AC</b><br />I considered using busted netbook for rooter duties but laptops do not usually have the Power-On-AC option (or power-on-lan-activity). With power-on-ac Rooter turns On/Off just like any other appliance when one messes with the power cord. That&#8217;s as wife-safe as a computer can get :)</div>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/11/20/dehydra-testsuite-passes-on-gcc-4-5/">Dehydra Testsuite Passes on GCC 4.5</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-11-20T08:24:04-08:00" pubdate data-updated="true">Nov 20<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I spent couple of days fixing the remaining test-suite failures on GCC 4.5 trunk for <a href="https://developer.mozilla.org/En/Dehydra">Dehydra</a>. Since the last time I looked into this, GCC went from crashing all over the place to only crashing if I did something bad. It was nice to discover that as a result of switching to 4.5 Dehydra users will get saner .isExplicit behavior and more precise location info.</p>
+
+<p>Treehydra will take more work due to me <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=510190">misunderstanding</a> GTY annotations.</p>
+
+<p>By the way, I am really grateful for all of the people who contributed GCC 4.5 fixes so far. You guys have been a big help in getting Dehydra testsuite to 100% on 4.5. Looks like I will meet my goals to finish De+Treehydra by the end of the year in time for GCC 4.5 release and my &#8220;Introducing Dehydra to the Developer World&#8221;-type talk at <a href="http://www.lca2010.org.nz/programme/schedule/view_talk/50151?day=thursday">LinuxConf.au.nz 2010</a>.</p>
+
+<p><strong>Startup</strong> I reduced my focus on startup speed at the moment to catch up on Dehydra. I plan to work on reducing xpconnect overhead during startup next, ie more of <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=512584">this bug</a>.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/11/16/from-arms-and-mips/">Of ARMs and MIPS</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-11-16T20:12:00-08:00" pubdate data-updated="true">Nov 16<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><div class='post'>
+A few years ago I to ran my website off a Linksys WRT54GS. With a OpenWRT firmware and a little OCaml web app I ended up with a  robust <a href="http://web.archive.org/web/20070128135523/http://glek.net/">web site</a>. I thought ARM was so cool. I bought 2 other hackable routers based on the platform(another wrt54gs and an asus wl500w).<br /><br />Wireless routers + custom firmware were attractive because once one sets them up there is not much to go wrong. No moving parts, no particularly hot parts and the thing turns back on automagically after power-outages. That and the wireless router  used around 5-6W of power.<br /><br />A couple of years passed&#8230;<br />Then kernel 2.6 acquired cool features that I wanted to use (mainly <a href="http://fuse.sourceforge.net/">fuse</a>). But due to proprietary Broadcom wifi I was stuck on 2.6. So I sucked it up and stuck with 2.4. Soon after the wifi started misbehaving and I had to reflash back to proprietary firmware&#8230;and the problems magically went away.<br /><br />I got the Asus wl500w when I moved out. It had mini-pci-e(aka swappable!) N wifi and usb 2.0 port. I thought I could replace an x86 desktop with it. I figured with a custom mini-pci-E card, I would no longer be stuck on 2.4 and would be able to enjoy 2.6 + infinite storage via USB. But I figured wrong. USB was slow(crappy IRQ handling on embedded MIPS), kernels were buggy, hard to update. Proprietary bootloaders (which differ on every embedded board) + custom board layout means that MIPS/ARM kernels are board-specific, less tested and generally more buggy. That combined with the dismal state of linux wireless made me give up on the whole Linux on non-x86 idea. I can no longer be bothered to blindly flash kernels(with weird build environments) onto quirky and under-performing hardware.<br /><br />For work I have to work with Nokia N810 arm thing. It&#8217;s a great little device when it works, but it often doesn&#8217;t. However I can&#8217;t install a modern kernel on it because of obscure hw(which is only kind of supported in mainline). Without a custom kernel I loose tight integration with my hardware, cool new kernel features, etc. So much like MIPS, ARM = funny bootloader + funny SoC configuration => waste of time.<br /><br />I also have a WinMo device for work. It makes the linux situation look  like heaven.<br /><br /><span style="font-weight: bold;">Non-x86 is an Evolutionary Deadend</span><br />So what&#8217;s the point of this? I&#8217;m gonna predict the future. I think presently ARM&amp;friends exist because so far they managed to undercut x86 at power consumption. They are also appealing to companies that design their products from the ground up, such as cellphone vendors.<br /><br />I believe that the supposed onslaught from ARM nettops/smartbooks/shit is going to flop. NVidia is gonna burn through a pile of cash developing WinCE doo-dads (seriously guys, who came up with that idea?) to showcase the awesomeness of their hw(I am sure they can make good hw) and completely fail in market due to users rejecting crappy software.</div>
+<h2>Comments</h2>
+<div class='comments'>
+<div class='comment'>
+<div class='author'>Jessica</div>
+<div class='content'>
+Bring on Atom! :D</div>
+</div>
+</div>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/11/06/fsoss-dehydra-update/">FSOSS & Dehydra Update</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-11-06T09:27:53-08:00" pubdate data-updated="true">Nov 6<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Last week I was in Canada to present at <a href="http://fsoss.senecac.on.ca/2009/">FSOSS</a> with <a href="http://vocamus.net/dave/">David Humphrey</a> on awesome Mozilla Tools: Dehydra, DXR, Pork, etc. I think we managed to convey the message regarding what a sad affair that current developer development tools are.</p>
+
+<p><strong>General-Purpose Dehydra Scripts</strong></p>
+
+<p>Dehydra grew out of Mozilla&#8217;s constant need to figure out what is going on in the source code. As a result most of our scripts are very Mozilla API-specific. This makes harder for people outside of Mozilla to learn Dehydra. There is no library of Dehydra code that one can just plugin to start analyzing their codebase. Instead one has to sit down, figure out what Dehydra is capable of and then see if any of the problems facing the developer can be solved this way. If anyone wants to contribute such a library, let me know.</p>
+
+<p>In the meantime, more general-purpose analyses are surfacing.</p>
+
+<p><strong>Shadowed Members</strong></p>
+
+<p>My favourite script so far is the member-shadowing checker. I ran into a member-shadowing warning that is unique to Sun&#8217;s C++ compiler. It was triggered by some code that I just landed on the tree. I fixed the warning, but within a few days a coworker ran into a bug caused by that member shadowing(due to having an unlucky revision of the code). The following example shows how simple it was to implement the warning in GCC/Dehydra.</p>
+
+<p>See <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=522776">bug 522776</a> for the complete story on adding the member shadowing check to Mozilla.</p>
+
+<p><strong>Printf</strong> Another general purpose analysis was done outside of Mozilla by Philip Taylor for <a href="http://os.wildfiregames.com/">his game</a>. His <a href="http://svn.wildfiregames.com/public/ps/trunk/build/dehydra/printf-type-check.js">script</a> checks wide printf format strings (which are overlooked by gcc). Independently, Benjamin wrote a printf checker for Mozilla printf-like code, see <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=493996">bug 493996</a>.</p>
+
+<p><strong>Custom Sections in Object Files</strong> We have long speculated about how nice it would be if Dehydra could emit info into object files that could then be yanked out of the resulting binary (by say, valgrind). <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=523435">bug 523435</a> will soon make that a reality.</p>
+
+<p><strong>Update:</strong> <a href="http://www.flickr.com/photos/mhoye/4058902208/in/photostream/">Two</a> <a href="http://www.flickr.com/photos/mhoye/4058902456/sizes/l/in/photostream/">photos</a> from FSOSS.</p>
 </div>
   
   
@@ -541,11 +635,11 @@ For an example see <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=508421"
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2012/12/21/interesting-bugzilla-activity/">Snappy #45: The view from home</a>
+        <a href="/blog/2012/12/24/making-pages-load-faster/">Making pages load faster</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2012/12/17/hello-octopress/">Hello Octopress</a>
+        <a href="/blog/2012/12/21/interesting-bugzilla-activity/">Snappy #45: The view from home</a>
       </li>
     
       <li class="post">

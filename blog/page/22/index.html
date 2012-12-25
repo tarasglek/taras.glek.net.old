@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="That other software company has a some brilliant people working on verifying their source code. Their approach is hardcore and seems quite good. &hellip;">
+  <meta name="description" content="There will be a lot of under-the-hood code changes in Mozilla 2. Our goal is to end up with a simpler, safer and faster codebase. This is my &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -64,7 +64,7 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2007/07/13/pondering-prepost-conditions-to-enforce-software-correctness/">Pondering Pre/Post Conditions to Enforce Software Correctness</a></h1>
+      <h1 class="entry-title"><a href="/blog/2007/11/26/mozilla-2-outparamdel/">Mozilla 2: Outparamdel</a></h1>
     
     
       <p class="meta">
@@ -80,296 +80,65 @@
   
 
 
-<time datetime="2007-07-13T02:12:55-07:00" pubdate data-updated="true">Jul 13<span>th</span>, 2007</time>
+<time datetime="2007-11-26T07:26:17-08:00" pubdate data-updated="true">Nov 26<span>th</span>, 2007</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>That other software company has a some brilliant people working on verifying their source code. Their approach is hardcore and seems quite good. Their recipe to robust C# (applying this to C is research-in-progress, C++ isn&#8217;t yet considered) code is:</p>
+  <div class="entry-content"><p>There will be a lot of under-the-hood code changes in Mozilla 2. Our goal is to end up with a simpler, safer and faster codebase.</p>
 
-<ul>
-<li>sprinkle pre/post-conditions for functions. Reduce annotation labour by additional rule inference</li>
-<li>dataflow analysis to verify type-system stuff like not-null annotations</li>
-<li>Abstract interpretation + model checker to enforce pre/post-conditions</li>
-<li><a href="http://research.microsoft.com/research/pubs/view.aspx?type=Technical%20Report&amp;id=923">BoogiePL</a> intermediate language. Anything can be accomplished by an awesomely named intermediate language!
-Resulting code runs fast has a lot fewer bugs than code without all this fancy machinery. Unfortunately, the benefits can only be reaped if a whole program gets annotated. Otherwise, the model checker gets frustrated. Essentially the language being checked is turned into another much safer (more boogie!) language. I&#8217;m looking forward to the day (that will never come) when all new C code is written this way.</li>
-</ul>
+<p>This is my perspective on the work ahead with respect to outparamdel.</p>
 
+<p><strong>Outparamdel</strong></p>
 
-<p>If adding these to source code makes you rewrite the whole program, wouldn&#8217;t it be easier to invent another low-level language that comes with safety by default?</p>
+<p>In the presence of a garbage collector we will be getting rid of stack nsCOMPtr&lt;> usage (using raw pointers instead), but the getter_Addrefs() will still be needed to pass references to heap-allocated nsCOMPtr so they can be assigned to. Eliminating as many outparams as possible will eliminate much getter_Addrefs() footprint/perf/code bloat.</p>
 
-<p>I am guessing that the dehydra method of checking for a relatively small number of application specific bugs is the most practical approach available and it will get us 60% towards Boogieing. Now that elsa has support for preprocessor macros it should be possible to specify non-formal pre/post-conditions to check for common errors. It&#8217;s merely a complicated question of defining what should be checked for.</p>
+<p>Within the next week I hope to attempt to rewrite all of the auto-detectable outparamdel candidates.</p>
 
-<p>I don&#8217;t have the motivation to write/buy/adopt/integrate a formal tool like a model checker, but it seems that it&#8217;s possible to write application specific checks in JavaScript that can run circles around what most model checkers can do.</p>
+<p><strong>Determining What To Rewrite</strong></p>
 
-<p>That other company isn&#8217;t the only vendor working on this stuff. There <a href="http://www.cs.princeton.edu/~appel/cminor/">brilliant people</a> taking a somewhat different (and open source) approach.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2007/07/13/dehydra-prcheck-squash-in-mercurial/">Dehydra, Prcheck, Squash - in Mercurial</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2007-07-13T01:54:08-07:00" pubdate data-updated="true">Jul 13<span>th</span>, 2007</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><strong>New Repository</strong></p>
-
-<p>Since I do not yet have write access to oink svn, I have been doing all of my development in ad-hoc repositories within the svn checkout. This made it rather hard to collaborate with others. I finally got sick of the situation (and stumbled upon <a href="http://cheeseshop.python.org/pypi/hgsvn/">hgsvn</a>) and converted all 11 svn repositories to mercurial. To my surprise, mercurial even let me merge my repositories while preserving history (hg has yet to fail me!).</p>
-
-<p>oink uses svn-externals to aggregate the repositories into a single checkout. hg doesn&#8217;t have anything similar, so to checkout all 11 repositories use a script:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>[checkout.sh](http://people.mozilla.org/~tglek/checkout.sh) http://hg.mozilla.org
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>Released Differences from Oink Mainline </strong></p>
-
-<ul>
-<li>New oink tool - <a href="http://taras.glek.net/blog/2007/06/26/status-report-recent-work/">prcheck</a>: ensures that bool-like integer typedefs behave like bools</li>
-<li>New oink tool - <a href="http://wiki.mozilla.org/DeHydra">dehydra</a>: source query tool with queries specified in JavaScript</li>
-<li>New oink tool - <a href="http://wiki.mozilla.org/Squash">squash</a>: source refactoring tool. This is now deprecated since most of the code in it dealt with working around elsa limitations to do with macro expansion &amp; lack of precise locations. The patching engine used in squash lives on to provide a simple refactoring API for use in other tools (like prcheck).</li>
-<li>Minor grammar changes to parse more of Mozilla</li>
-<li>Compilation fixes for OSX</li>
-<li>Elsa fixes to parse OSX headers</li>
-<li>make -j support for elsa</li>
-<li>end-of-ast-node location support for elkhound &amp; elsa</li>
-<li><p>preprocessor expansion markup support for elsa
-<strong>Coming Soon</strong></p></li>
-<li><p>Amazing new version of <a href="http://mcpp.sourceforge.net/">MCPP</a> capable of preprocessing mozilla while outputting refactoring-friendly annotations.</p></li>
-<li>Web front-end for squash which will likely be refactored to be tool-agnostic.</li>
-<li><p>Front-end to run patch-producing tools in parallel for multi-core machines
-<strong>Near Future</strong></p></li>
-<li><p>squash will be split up into a library with each major feature ripped out into a standalone tool. Two tools coming soon:outparam rewriter &amp; class member renamer.</p></li>
-<li><p>RAD for static analysis: oink tool templates to make it trivial to write custom new tools with minimal amount of boilerplate
-<strong>Some time in the Future</strong></p></li>
-<li><p>Collaboration with the author of <a href="http://www.cs.ru.nl/~tews/olmar/">Olmar</a> to provide an OCaml API for Elsa. If everything goes as expected it will be possible to write analyses that are more powerful and more concise than DeHydra ones except they will perform at C/C++ speeds. Plus it should be possible to perform them from a native interactive OCaml toplevel. Most of this work already exists in bits and pieces. It&#8217;s a matter of adding some AST transformations, fixing a few issues and tying it all together.</p></li>
-<li>MapReduce inspired front-end: generic framework for executing transformations/analyses in-parallel and Mozilla-wide without blowing the 32bit address space (as it typical when static analysis tools meet Mozilla).</li>
-</ul>
-
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2007/06/26/status-report-recent-work/">Status Report: Recent Work</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2007-06-26T04:08:52-07:00" pubdate data-updated="true">Jun 26<span>th</span>, 2007</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><strong>New Tool: Prcheck - PRBool&#8217;s best friend </strong></p>
-
-<p>Mozilla has a number boolean types and most of them are a form of an int. People expect them to behave like a bool, but since they can be assigned more than 1 value for true, this assumption can lead to bugs. Prcheck will mandate that prbools can only be assigned 1 or 0. Typically static checkers output errors, but prcheck outputs errors &amp; fixes for them in diff format so they can be fixed automatically. See <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=266048">this bug</a> for more info. I think the tool is almost complete. Hopefully, once the MCPP issues described below are addressed, I&#8217;ll have one giant patch to eliminate this problem.</p>
-
-<p><strong>MCPP Teething Troubles</strong></p>
-
-<p>Even in the open-source world there are some problems with vendor monoculture. For example we a single vendor providing the C++ compiler and one C preprocessor that is widely used. Even though MCPP is a portable preprocessor that can plug into multiple compilers, it still chokes on some GCCisms. Things are slowly changing and new open source compilers are on the horizon: I can&#8217;t wait.</p>
-
-<p>Additionally, since Mozilla is one of the largest projects to be preprocessed with MCPP, we found some scalability bugs in MCPP. The MCPP maintainer addressed those.</p>
-
-<p><strong>Elsa Backend Source Location Work - Works Well?</strong></p>
-
-<p>I am amazed, but hack &amp; slash approach to adding end-of-ast-node info to elkhound still seems to work correctly! It mostly required consulting wikipedia on LR &amp; GLR parsing algorithms to understand how to modify the data structures used in elkhound. I love the combination of Wikipedia and pretty &amp; easy to modify source code.</p>
-
-<p>The preprocessor undo-log appears to function exactly as intended too. That combined with the end-of-ast-node info means that I finally have the ability to easily cut&#8217;n&#8217;paste code to move it around programmatically. It basically makes the C/C++ pretty printer in oink obsolete for my purposes. This is cool because now I can output prettier source code AND rely on less oink C++ code to do so (ie no need to call the pretty printer[s]), so more refactoring tools could be written in higher level languages such as OCaml or JavaScript in the future.</p>
-
-<p><strong>Publishing My Oink Mods</strong></p>
-
-<p>I have been sending people tarballs on request, due to not being able to integrate my changes into the upstream svn repository. I tried a few svn2hg tools, but they didn&#8217;t work very well. <a href="http://cheeseshop.python.org/pypi/hgsvn/">hgsvn</a> is good enough to work for OpenJDK, so it might work for me. I&#8217;ll try to publish an hg repository of my work within the next week or two.</p>
-
-<p>I&#8217;m sorry for not doing this earlier, but it&#8217;s extremely time consuming to switch gears from coding oink stuff to trying to package it, especially due to all of the politics involved. Hopefully once the repository is easier to work with I&#8217;ll have more people sharing the oink worldload with me. Now that dust settled and the major missing pieces are either implemented or decided upon, a lot of exciting possibilities opened up.</p>
-
-<p><strong>libgcc</strong></p>
-
-<p>Another day, another piece of preprocessor trivia. Turned out there was an alternative to MCPP that I could have used: gcc&#8217;s libcpp. It is common knowledge that gcc uses an integrated preprocessor. It is not so well known that the preprocessor is factored out into what appears to be a mostly standalone library inside of gcc called libgcc. Google barely knows about it and there are no docs or other webpages pointing to it, so i missed it in my search.</p>
-
-<p>This could be a useful project, take libcpp turn it back into a standalone preprocessor and add the cpp undo log comments to it. The only downside of libgcc is that it is GPL which would normally be a pain for BSD-licensed projects, but by turning it back into a standalone tool there is no linking to to worry about.</p>
-
-<p>So if anyone finds implementing the macro-undo log with libgcc interesting, please feel free to do so :)</p>
-
-<p><strong>Random Rant on Parallels vs VMWare Fusion vs BootCamp vs 64bit Linux</strong></p>
-
-<p>I installed 64bit ubuntu on my MBP. Compilers &amp; other tools are ridiculously fast when running linux natively on core2duo. Due to some performance bugs that I can&#8217;t track down (shark isn&#8217;t working for and recently OSX&#8217;s gdb stopped working too) oink runs much faster on the linux side of the MBP. If any mac people want to profile oink on OSX, that&#8217;d be awesome. However OSX has some nice things (such as a display driver that works well and good battery life). I wish ati wasn&#8217;t such a pain with releasing specs for their cards so linux could support them properly. I hope the recent reverse engineered driver work stabilizes soon. So I figured it would be nice to access &amp; work on the linux partition from within OSX.</p>
-
-<p>I was pretty excited when I heard that Parallels 3 supports BootCamp. Problem was that nothing could see the bootcamp linux install. Turned the problem was caused because I used fdisk + refit to do the partitioning and turned on the bootable flag. To fix this I turned off the bootable flag on the linux partition using parted(which can sync the gpt partition table!) .</p>
-
-<p>Then I realized that Parallels has very slow disk access AND doesn&#8217;t do 64bit and doesn&#8217;t appear to support SMP.</p>
-
-<p>VMWare Fusion on the other hand supports bootcamp &amp; 64bit &amp; smp and appears to have much faster IO. However it lacks UI for accessing a linux bootcamp install or documentation. So here is the secret recipe to save time for others in my situation:</p>
-
-<p>1) Create a vmware disk for the bootcamp partition using vmware-rawdiskCreator in /Library/Application Support/VMware Fusion.</p>
-
-<p>2) Create a new machine, point at the file created in 1.</p>
-
-<p>Fusion&#8217;s performance is remarkable. Oink runs almost as fast as it does natively. Plus VMWare support the VMI interface in Linux which combined with a tickless kernel should make the virtualizing overhead minimal. Too bad Linux doesn&#8217;t have these features yet for amd64.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2007/06/19/it-works/">It Works!</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2007-06-19T05:51:23-07:00" pubdate data-updated="true">Jun 19<span>th</span>, 2007</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><strong>Back to Real Life</strong></p>
-
-<p>Just over a month ago I ran into <a href="http://taras.glek.net/blog/2007/05/11/cpp-strikes-back/">this problem</a>. Before last month I hoped to never have to work on the C preprocessor or a parser generator. So much for that plan. Now my head is full of CPP-expansion-related trivia.</p>
-
-<p>After a month of design and implementing changes to mcpp, elsa, elkhound and oink I can finally move on. During the last week all of the pieces of the puzzle finally came together ( without any nasty surprises other than bugs). Now I can go back to solving real problems.</p>
-
-<p><strong>Upcoming Features</strong></p>
-
-<p>Benefits of having CPP support don&#8217;t stop at actually being able to rewrite code. Now that the Oink C++ parser is aware of the C preprocessor, it should be possible to refactor C++ almost as easily as Java. Here are some cool things that are possible now:</p>
-
-<ul>
-<li>Nicer UI. Exact source position info allows for eclipse-style context menus for renaming &amp; other refactorings in lxr (or other online code browsers).</li>
-<li>Richer type system. It should be possible to detect macro constants. Tools will be able to tell the difference between a prnull and 0. Should also be able to detect and maintain NSRESULT and other macros used for declarations.</li>
-<li>Macro refactoring. Now it&#8217;s possible to write a tool to automate the process of converting function-like macro calls to actual function calls. For example, PR_MAX could be converted into std::max calls with all of the accompanying casts to ensure that the resulting C++ is correct.</li>
-<li>Other nasty tricks like rewriting code within macro declarations.
-I&#8217;m not sure how much of these features I will work on, but they are relatively easy to implement now.</li>
-</ul>
-
-
-<p>I plan to write a minimalistic successor to squash and develop more aggressive refactorings than renames.</p>
-
-<p>Additionally, I will continue pushing above changes upstream and trying to facilitate a more open oink development community.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2007/06/12/undoing-cpp-expansion-in-3-simple-steps-say-hello-to-easier-c-rewriting/">Undoing CPP Expansion in 3 Simple Steps. Say &#8220;Hello&#8221; to Easier C++ Rewriting.</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2007-06-12T03:26:01-07:00" pubdate data-updated="true">Jun 12<span>th</span>, 2007</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>This is incredibly exciting: I believe that I finally solved the messy and mind-numbingly boring CPP/C++ integration problem! Having code displaced or generated due to CPP-expansion should no longer be a fatal problem for <a href="http://wiki.mozilla.org/Squash">Squash</a>. I believe macro-expansion is (or was) the single biggest problem between me and large-scale automated refactoring of the Mozilla codebase.</p>
-
-<p>What&#8217;s even more exciting is that I think my solution is both incredibly simple to implement and more general than prior work. Most other tools combine the CPP expansion &amp; C parsing into a single step and then integrate (or should I say violently shove?) CPP constructs into the AST. This results in complete lack of separation between preprocessing and program analysis. For example, due to this tight coupling existing solutions were useless to me because the fancy CPP logic could not be separated from the C parser. I would also have a hard time submitting a more convoluted C++ parser upstream to the Elsa maintainer.</p>
-
-<p><strong>Design</strong></p>
-
-<p>There are three parts to my solution:</p>
+<p>outparams.js is a dehydra script for flagging code that can be rewritten to use outparameters. It turned out a bit trickier than I initially expected. Here are the checks required</p>
 
 <ol>
-<li><em>Critical component</em>. A CPP expansion undo-log injected during CPP-expansion by a modified C preprocessor (upcoming version of MCPP). The statements are wrapped in C comments such that the preprocessed result can be parsed by any C/C++/etc parser or compiler. Implementation-wise this is the hardest part since MCPP(as most other C proprocessors) was never designed it keep track of macro expansion info.</li>
-<li>A small modification to the Elsa lexer to parse the undo-log and set it aside in a separate data structure.</li>
-<li><em>Tricky</em>. A function that utilizes the cpp undo-log to map the preprocessed source locations to the unpreprocessed ones. This is a a ridiculously simple solution to a tricky design problem of how to efficiently advertise the fact that every AST node has at least 2 different source positions (pre expansion, post expansion &amp; a stack of positions resulting from expanding nested macros).
-The MCPP maintainer is almost done with 1. I have a prototype implementation of 2 &amp; 3 weighing in at less than 500lines. Now that the design phase is complete, the amount of changes to Elsa is trivial, so I should be done with those real soon now.</li>
+<li>Check that a function only ever returns 1 failure error code (NS_OK and something else). This enough if a function is not virtual.</li>
+<li>Ensure that either a) This is the only implementation of a particular virtual function or b) All other implementations of this function satisfy 1 Currently I only do a).</li>
+<li>Also check that all overloads of this function have the same outparameter type. This is required since C++ (thankfully) doesn&#8217;t not allow function overloading by varying the return type.</li>
+<li>Checks 1-3 ensure that the function can be rewritten, however one also needs to determine if the return type should be wrapped in getter_Addrefs&lt;>. This can not be deterministically done from looking at the getter. So one has to scan the code for usage of the function to see if the outparam is ever passed getter_Addrefs.</li>
+<li>Check that none of the callers are within macros to minimize non-automatic rewriting.
+Checks 2 and 3 require the complete class hierachy of Mozilla so I finally made a few more dehydra scripts to produce that. This was on my TODO list for a while and should make a few other interesting analyses possible (my favourite one is finding interfaces which only have 1 implementation to get rid of excessive virtual functions).</li>
 </ol>
 
 
-<p><strong>Looking Ahead</strong></p>
+<p>Checks 4 and 5 were easiest to implement as warnings in outparamdel.</p>
 
-<p>Now I need to modify Elsa to retain more precise source locations. This includes adding end-of-ast-node-location and adding positions to nodes(such as expressions) that don&#8217;t even have a start position at the moment. This combined with cpp-undo-log enhanced precise positions should allow for code rewrites to retain as much original source code as possible. This reduces the amount of ugly machine-generated code and results in better correctness (existing code is likely to work).</p>
+<p>One should keep in mind transitivity. Once the first outparamdel candidates are rewritten, some of their callers should become flagged for rewriting in the same manner.</p>
 
-<p><strong>CPP Undo-log Example</strong></p>
+<p><strong>Rewriting Code </strong></p>
 
-<p>The undo-log took a couple of tries to get right. Now macro-parameters have a notion of scope and sensible names. The following example features macro-induced column displacement and macro-expansion causing line shrinkage.</p>
+<p>Here is an example of how code will be simplified.</p>
+
+<p>given a function:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>
+</span><span class='line'>nsresult getFoo(nsIFoo **out);
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And usage like:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>
+</span><span class='line'>nsCOMPtr&lt;nsIFoo&gt; bla;
+</span><span class='line'>nsresult rv = getFoo(getter_Addrefs(bla));</span></code></pre></td></tr></table></div></figure>
+
+
+
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -378,33 +147,65 @@ The MCPP maintainer is almost done with 1. I have a prototype implementation of 
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>
-</span><span class='line'>#define NULL 0L
-</span><span class='line'>#define FOO(a, b) a + b
-</span><span class='line'>int i = NULL; int j;
-</span><span class='line'>int k = FOO(
-</span><span class='line'>FOO(NULL , 1),
-</span><span class='line'>2);
+</pre></td><td class='code'><pre><code class=''><span class='line'>if ((NS_SUCCEEDED(rv) && bla) {
+</span><span class='line'>...
+</span><span class='line'>} else {
+</span><span class='line'>return rv;
+</span><span class='line'>}
+</span><span class='line'>nsCOMPtr&lt;nsIFoo&gt; bla2;
+</span><span class='line'>return getFoo(getter_Addrefs(bla2));
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Preprocessed version</p>
+<p>The function definition will become:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>nsIFoo* getFoo();
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Before this can be done, several issues come up</p>
+
+<ol>
+<li>It is not clear if the original getFoo() is allowed to always override the value passed to it. This is hard to determine automatically, so we make the assumption that in the general case it is ok.</li>
+<li>It isn&#8217;t obvious if getFoo() is returns null in the outparam to indicate some non-error condition. This is rare so the parameter shall be annotated. Currently, the plan is to annotate with a NULLABLE_OUTPARAM() macro which would be detectable by dehydra and serve as documentation for the function behavior.</li>
+</ol>
+
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>
-</span><span class='line'># 1 "testcase4.c"
-</span><span class='line'>/*mNULL 1:8-1:15*/
-</span><span class='line'>/*mFOO 2:8-2:23*/</span></code></pre></td></tr></table></div></figure>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>nsCOMPtr&lt;nsIFoo&gt; bla = getFoo(); //after XPCOMGC rewrite the left side will become nsIFoo* bla
+</span><span class='line'>if (bla) { // could even merge the above declaration into the if condition
+</span><span class='line'>...
+</span><span class='line'>} else {
+</span><span class='line'>return NS_ERROR;// or NULL if this is another outparamdel candidate
+</span><span class='line'>}
+</span><span class='line'>nsCOMPtr&lt;nsIFoo&gt; bla2 = getFoo();
+</span><span class='line'>return bla2 ? NS_OK : NS_ERROR_SOMETHING; // I'm not sure if outparamdel should use an explicit ternary operator or an inline function to convert new style errors into nsresult
+</span></code></pre></td></tr></table></div></figure>
 
 
-<p>int i = /<em><NULL 3:8-3:12*/0L/*></em>/; # 3 &#8220;testcase4.c&#8221; int j; int k = /<em><FOO 4:8-6:3*//*!FOO#0-0 5:0-5:13*//*!FOO#0-1 6:1-6:2*//*<FOO#0-0*//*<FOO*//*!FOO#1-0*//*!FOO#1-1*//*<FOO#1-0*//*<NULL*/0L/*></em>//<em>></em>/ + /<em>&lt;FOO#1-1</em>/1/<em>></em>//<em>></em>//<em>></em>/ + /<em>&lt;FOO#0-1</em>/2/<em>></em>//<em>></em>/;</p>
+<p>Currently the code is being rewritten in a much uglier way. So this cleaner version will likely be implemented as an optimization pass (probably with a new tool outparamdel-opt?). There several tricks here:</p>
 
-<p><strong>Conclusion</strong></p>
+<ol>
+<li>Connect the declaration with initialization of bla and bla2</li>
+<li>Detect the error check and replace it with &#8220;bla&#8221;(or !bla for NS_FAILED).Then realize that bla &amp;&amp; bla contains a redundant statement and take it out.</li>
+<li>Do something similar to return statements.
+<strong>Result</strong></li>
+</ol>
 
-<p>It took a lot to arrive at such a simple solution. I expect that all of my work is likely to end up upstream in BSD-licensed projects: MCPP &amp; and Elsa/Oink. I sincerely hope that other people will be able to build on it for their CPP-infested analysis needs and avoid the unbearable mind-numbing discomfort associated with making CPP play along.</p>
+
+<p>This should result in prettier code that compiles quicker and to a smaller, more efficient binary. It will also be more GC-friendly.</p>
+
+<p><strong>C++ Exceptions</strong></p>
+
+<p>Right now outparamdel does rewrites that are useful even if C++ exceptions will not be introduced. There are further code reduction gains possible if above error checks were converted into C++ exceptions, but I am not clear on performance characteristics of exceptions. We would also need to change tamarin exceptions to match C++ ones before any experimentation can be done.</p>
 </div>
   
   
@@ -417,7 +218,7 @@ The MCPP maintainer is almost done with 1. I have a prototype implementation of 
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2007/05/29/cpp-integration-progress/">CPP Integration Progress</a></h1>
+      <h1 class="entry-title"><a href="/blog/2007/11/12/cleaning-up-my-act/">Cleaning Up My Act</a></h1>
     
     
       <p class="meta">
@@ -433,38 +234,422 @@ The MCPP maintainer is almost done with 1. I have a prototype implementation of 
   
 
 
-<time datetime="2007-05-29T03:36:26-07:00" pubdate data-updated="true">May 29<span>th</span>, 2007</time>
+<time datetime="2007-11-12T05:10:19-08:00" pubdate data-updated="true">Nov 12<span>th</span>, 2007</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p><strong>Existing Work</strong></p>
+  <div class="entry-content"><p>I added an &#8220;ongoing work&#8221; and &#8220;tools&#8221; sections to the <a href="http://wiki.mozilla.org/Mozilla_2">Mozilla 2</a> page.</p>
 
-<p>All of existing work is based on basic C parsers so it can&#8217;t be directly applied to C++.</p>
+<p>The pork suite now has a <a href="http://wiki.mozilla.org/Pork">wiki page</a>.</p>
 
-<p>I found out that someone did a PhD on refactoring C code resulting in the <a href="https://netfiles.uiuc.edu/garrido/www/CRefactory.html">CRefactory</a>(down atm) project. Looks like reversing the C preprocessor was by far the hardest task to address. Languages consisting of stacked lexical syntaxes (like OCaml &amp; camlp4) or preprocessorless ones like Java don&#8217;t even have this problem.</p>
+<h1>mercurial regulars kindly educated me about hg branches. Turned out hgimportsvn tries to map some subversion concepts onto hg branches which causes problems for people checking out pork using never versions of hg. For people googling for this issue: do &#8220;hg up trunk ; hg branch -f default; hg commit&#8221; to produce a magic empty revision to fix this problem.</h1>
 
-<p>A way to tackle the problem is to violently shove the some of the preprocessor markup into the C AST. Unfortunately this is an incredibly hard task because CPP is purely lexical and works at the token level, whereas the C compilers works with higher level AST syntax trees. Combining the two can result in an ambiguous grammar which is useless for refactoring.</p>
+<p>If you have tried to compile pork before and gave up in despair, please try again using the <a href="http://wiki.mozilla.org/Pork">pork wiki page</a> for instructions.</p>
+</div>
+  
+  
 
-<p>CRefactory integrates CPP into the AST where possible, it even handles some CPP conditionals. The author&#8217;s argument is that every CPP conditional represents a separate configuration and processing one configuration at a time will result in a combinatorial explosion of configurations to process thus conditionals must be integrated into the AST.</p>
 
-<p>However, CPP-in-AST solution is error prone and has issues scaling to large projects. Besides I think processing every configuration within the AST is still potentially a combinatorial explosion, the major benefit being that one can eliminate unfeasible conditionals if they cause syntax errors. This conditional elimination would be incredibly slow for C++. I also don&#8217;t believe that this would be enough to solve Mozilla&#8217;s conditionals since most of the troublesome macros are platform specific and would have dependencies on the system headers. Having said that, I appreciate seeing people prove that with enough effort even seemingly impossible tasks can be accomplished.</p>
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2007/11/02/garburator-works/">Garburator Works!</a></h1>
+    
+    
+      <p class="meta">
+        
 
-<p>A <a href="http://www.cs.berkeley.edu/~billm/astec-fse.pdf">paper</a> on ASTEC presents another solution which involves translating [lexical] CPP constructs into a CPP-like AST-based language. This works great in theory, but the translation process is only semi-automatic and requires a lot of hand-holding. I have mixed feeling about this approach. A simpler intermediate language is an excellent thing but as soon as it becomes &#8220;CPP sux, so I invented this better language: use it&#8221; the world gains yet another troublesome programming language.</p>
 
-<p><strong>My Approach</strong></p>
 
-<p>It took me a few weeks to figure out how to tackle the CPP problem in squash. I think I have a solution that will work real soon(TM).</p>
 
-<p>I like to avoid solving unsolvable problems and stick with works-for-me approach. Thus I probably wont make squash aware of CPP conditionals. My existing approach of combining output of running squash on Mac/Linux(and Windows in the future) should take care of 99% of cases in Mozilla. The rest will be flagged by a compiler and will be trivial to fix by hand.</p>
 
-<p><strong>Macro Expansion</strong></p>
 
-<p>I also don&#8217;t see the benefit of a partially integrated CPP within the C++ AST. Instead I am modifying MCPP to log the macro expansions with special markup enclosed in comments. Afterwards I plan to modify elsa to parse the macro-expansion log and modify the position tags on AST nodes accordingly. Then I&#8217;ll be able to do cool things like &#8220;cut out the piece of code that was parsed as 0&#8221; which will reference the source locations, figure out that 0 was a result of macro expansion and return &#8220;NULL&#8221;. Or when I try to rewrite a member in PR_MAX(something->GetPresContext()->foo, 0), the code will know that the the two GetPresContext() calls in the AST correspond to the same code fragment.</p>
 
-<p>Besides, isn&#8217;t this marked-up code pretty?</p>
+
+  
+
+
+<time datetime="2007-11-02T09:02:15-07:00" pubdate data-updated="true">Nov 2<span>nd</span>, 2007</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>A <a href="http://taras.glek.net/blog/2007/10/12/rewriting-tools-for-mozilla-2-moving-forward-as-planned/">few weeks</a> ago I convinced myself that is possible to rewrite Mozilla to avoid COMPtrs on the stack. Since then I&#8217;ve changed my mind a few times and felt like I may not be able to get this rewrite working. However, after three or four false starts, I finally managed to work out a metal model of the stack nsCOMPtr usage. With a combination of automatic blacklisting of tricky code, manual demacroing and lots of help from <a href="http://benjamin.smedbergs.us/">Benjamin</a> I got the generated 3.2MB patch to compile.</p>
+
+<p>I am sure that there are lots of bugs to be found still, but at least we&#8217;ve discovered the pattern that the code follows. I am also sure that there are lots of unpleasant surprises to be discovered and dealt with in the near future.</p>
+
+<p>The bright side is that the result of these rewrites we should get a less buggy codebase that is easier to work on, more efficient and compiles to smaller binaries. My other big wish is to significantly reduce the amount of C++ magic in the codebase.</p>
+
+<p>I am happy that garburator works as it means I can go back to playing <a href="http://taras.glek.net/blog/category/outparamdel/">outparamdel</a>. Hopefully, once garburator+outparamdel are applied on all possible methods we&#8217;ll end up with relatively nice looking C++ code and a healthy performance boost.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2007/10/24/rewriting-javascript/">Rewriting JavaScript</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-10-24T08:36:00-07:00" pubdate data-updated="true">Oct 24<span>th</span>, 2007</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I&#8217;m having a very painful time rewriting Mozilla source code to switch it to garbage collection. So I took a little break to think about Myk&#8217;s <a href="http://www.melez.com/mykzilla/2007/10/automated-js-code-rewriting.html">JavaScript rewriting idea</a>.Then I found excellent info on <a href="http://siliconforks.com/doc/parsing-javascript-with-spidermonkey/">parsing JS</a> with <a href="http://www.mozilla.org/js/spidermonkey/">SpiderMonkey</a>. The downside to SpiderMonkey is that it is in C and thus hard to reuse, the upside is that will be able to parse all valid JavaScript.</p>
+
+<p>I think I shall find some free time to prototype a little tool to take a .js file and produce a JSON representation of it such that one could write transformation passes in JavaScript. This will be useful as it will complete DeHydra by enabling it to process JS in addition to C++ and it will save a lot of time for various JavaScript refactorings.</p>
+
+<p>I expect developing a JS refactoring tool to be relatively trivial compared to refactoring C++ as there is no source-code mangling going on due to lack of preprocessing (but JS is dynamic and can be embedded in various document types, so that could complicate things). Perhaps it would even be of use to mozpad people.</p>
+
+<p>Looking forward to playing more with this idea.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2007/10/12/rewriting-tools-for-mozilla-2-moving-forward-as-planned/">Rewriting Tools for Mozilla 2: Moving Forward as Planned</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-10-12T08:31:35-07:00" pubdate data-updated="true">Oct 12<span>th</span>, 2007</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><strong>In the Beginning There Was a Void</strong></p>
+
+<p>Approximately a year ago, Brendan discussed with me the crazy possibility of rewriting most of the Mozilla code automatically to modernize the codebase. The benefits were huge. Gecko would use the C++ standard library to improve code readability and reducing size, XPCOM would be ripped out of the core to improve performance and decrease footprint, etc.</p>
+
+<p>It seemed like a good idea, but in reality no other giant C++ project has attempted this before so we were not sure of how realistic it was. I spent a year in a <a href="http://benjamin.smedbergs.us/blog/2007-10-11/dehydra-ftw/">lonely corner</a> of Mozilla trying to materialize the idea.</p>
+
+<p>Brendan &amp; Graydon pointed me to <a href="http://www.cs.berkeley.edu/~smcpeak/elkhound/sources/elsa/">elsa</a>, the C++ parser that supposedly could parse Mozilla. However, it turned out that it was only able to parse an old version of Mozilla and rejected the new source. One of the elsa maintainers even tried to convince us to it was not designed for source-to-source transformations and wouldn&#8217;t work that way.</p>
+
+<p>After I patched up elsa and started devising ways to use it for source rewriting I ran into more pain. After a few false starts, I realized that C++ in Mozilla is actually a mix of CPP and C++ and one can not rewrite C++ without dealing with the <a href="http://taras.glek.net/blog/2007/05/11/cpp-strikes-back/">mess that is macro expansion</a>. <a href="http://mcpp.sourceforge.net/">MCPP</a> was pointed out to me as a good starting point for hacking on a preprocessor. So I <a href="http://taras.glek.net/blog/2007/06/12/undoing-cpp-expansion-in-3-simple-steps.-say-hello-to-easier-c-rewriting./">designed</a> an inline log for macro expansion. To my surprise the maintainer of MCPP, Kiyoshi MATSUI, volunteered to implement the spec and thus saved me from a world of pain. (For which I am eternally grateful as I can&#8217;t imagine a more depressing pastime than working on the root of all evil: the C preprocessor).</p>
+
+<p>In parallel with Kiyoshi&#8217;s work I modified <a href="http://www.cs.berkeley.edu/~smcpeak/elkhound/">elkhound</a> &amp; elsa to make the C++ parser a lot more suitable for source transformations. I learned about LR &amp; GLR parsing and confirmed my suspicion that I don&#8217;t want to write parser generators for a living.</p>
+
+<p><strong>Happy Conclusion </strong></p>
+
+<p>All this work finally got us what we discussed last September: a framework for doing lots of <a href="http://wiki.mozilla.org/XPCOMGC/Stack_Pointers">boring code rewrites</a>.</p>
+
+<p>The first big Moz2 task is <a href="http://wiki.mozilla.org/XPCOMGC">switching</a> from reference counting to garbage collection. Today, <a href="http://taras.glek.net/blog/2007/09/12/garburator-another-day-another-rewrite-tool/">garburator</a> produced a <a href="http://people.mozilla.org/~tglek/garburator/nsgenerichtmlelement.diff">gigantic patch</a> for subset of the content/ module and all of the affected files compiled. Hopefully next week I&#8217;ll have a multi-megabyte patch for the whole of Mozilla that compiles and possibly runs.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2007/10/04/multiple-degrees-of-correctness/">Multiple Degrees of Correctness</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-10-04T10:05:05-07:00" pubdate data-updated="true">Oct 4<span>th</span>, 2007</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><strong>Prcheck</strong></p>
+
+<p>The trouble with prcheck and the automated <a href="http://taras.glek.net/blog/2007/06/26/status-report-recent-work/">prbool validation</a> is that one can&#8217;t attach the giant patch it produces to bugzilla and expect it to get committed. So I am spending this week combing through prcheck output  and patch-bombing bugzilla with per-module patches.</p>
+
+<p>I find going through the errors manually to be a lot of fun than I expected. I am finding types of errors that I was not considering when I was writing prcheck. For example, I expected the biggest gains to come at runtime from making all prbool values 0/1, but it seems that most of the cool errors are due to PRBool &amp; PRInt32 resolving to the same type. That results in code mayhem ranging from wrong method overloads being called to method signatures claiming to return PRBool where method bodies act like the function returns nsresults.</p>
+
+<p>The prbool check is just an incredibly minor restriction of the C++ system, yet it resulted in hundreds of errors(almost all of which are typos). In my mind this reinforces the importance of static typing (which C++ doesn&#8217;t do enough of).</p>
+
+<p>The main lesson I learned today is that <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=398624">code</a> doesn&#8217;t have to be correct in order to work correctly.</p>
+
+<p><strong>Mobile</strong></p>
+
+<p>While on vacation in Ukraine I finally got to try out GPRS Internet through my cellphone. Sure EDGE is slow, but the convenience of having internet everywhere I go while traveling is unparalleled. It&#8217;s just too bad that I had to go to a developing country to be able to afford mobile internet. In Canada I would&#8217;ve paid over $750 for the $10 worth of Internet in Ukraine. So I am very excited that governments are starting to regulate mobile pricing. Looks like <a href="http://news.yahoo.com/s/afp/20071004/bs_afp/eutelecommobilesectorregulateconsumer">EU is first</a>. I hope the <a href="http://telus.ca">local</a> <a href="http://www.rogers.com">cellular</a> <a href="http://bell.ca/home/">oligopoly</a> gets a kick to the head soon.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2007/09/12/garburator-another-day-another-rewrite-tool/">Garburator: Another Day, Another Rewrite Tool</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-09-12T05:54:45-07:00" pubdate data-updated="true">Sep 12<span>th</span>, 2007</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I&#8217;m going to be on vacation until September 25th. I started the day by planning out how to do the rewriting tool to implement Benjamin&#8217;s <a href="http://wiki.mozilla.org/XPCOMGC/Stack_Pointers">spec.</a> I&#8217;ll have to add more position information to elsa to do things properly and that might take a week or two. However, I&#8217;m into instant gratification so I wrote up a hacky prototype that results in a patch <a href="http://people.mozilla.org/~tglek/garburator.diff">like this.</a></p>
+
+<p>Say hi to garburator, a tool that will assist with the reference counting -> MMgc transition. The tool is less than 100 lines long, so someone could finish the hacky version while I am away. Either that or one could teach elsa to keep detailed position information in declarations and identifier names and clean up the postvisitS_decl() method in garburator.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2007/09/10/automatic-decomtamination-roadmap-for-automated-refactorings/">Automatic DeCOMtamination: Roadmap for Automated Refactorings</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-09-10T11:26:36-07:00" pubdate data-updated="true">Sep 10<span>th</span>, 2007</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>This is an update on the ongoing <a href="http://wiki.mozilla.org/Gecko:DeCOMtamination">deCOMtamination</a> work from the automated rewriting perspective. I think it&#8217;s pretty exciting that Mozilla is the first large-scale C++ project to attempt automated large scale source code cleanups and optimizations. I think the tools are finally getting mature enough for the job.</p>
+
+<p>The downside is that there isn&#8217;t a published roadmap of what we are planning to achieve with deCOMtamination as we are still in the planning stages. The upside is that there is still time for any interested parties to think up the next great improvement on how things are done, <a href="http://taras.glek.net/blog/2007/07/13/dehydra-prcheck-squash-in-mercurial/">checkout</a> the refactoring toolchain and either extend an existing tool or implement a new one.</p>
+
+<p>Below is a list of things that I plan to have working in the near future. The idea is to try to implement various optimizations that would be impractical(or impossible?) to do manually and see if they yield the expected performance and code quality benefits.</p>
+
+<p><strong>Step 1: Outparam Elimination</strong></p>
+
+<p>QueryInterface() and other ok/fail methods have a redundant nsresult value which can be eliminated without changing any logic in the code. The QueryInterface() rewrite is my first serious tree-wide refactoring attempt. QueryInterface() is probably the most well known and frequently-used method within Mozilla. It also one of the most CPP-encumbered methods in the tree, so it made for a good test of my CPP-aware elsa work.</p>
+
+<p>The <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=391275">getting code to compile</a> phase is over. Currently Benjamin is working on getting the modified code to run which requires XPConnect changes, debugging the manually-rewritten macros and verifying that the generated patch is correct.</p>
+
+<p>The next step will be to eliminate local nsresult variables in the callees when they are used to store &amp; check return values of QueryInteface(). This is basically a make-resulting-source-look-prettier optimization.</p>
+
+<p>I hope to measure a speed-up and slight footprint decrease with the new QueryInterface call.</p>
+
+<p><strong>Step 2: Try Mozilla Without Reference Counting?</strong></p>
+
+<p>In my mind the most exciting part of Moz2 is Tamarin. Few things are cooler than an elegant JIT VM.</p>
+
+<p>Tamarin comes with a modern <a href="http://developer.mozilla.org/en/docs/MMgc">garbage collector</a>.</p>
+
+<p>The goal of this rewrite is to aid <a href="http://blog.mozilla.org/jorendorff/">Jason</a> and <a href="http://benjamin.smedbergs.us/">Benjamin</a> with switching XPCOM from reference counting to garbage collection. This might end up in gigantic patches to rid the stack of nsCOMPtr objects. This might be hard as it will be affecting a lot of code and might reveal more shortcomings in <a href="http://taras.glek.net/blog/2007/08/30/pork-the-brave-new-world/">my version</a> of elsa and MCPP. <a href="http://wiki.mozilla.org/XPCOMGC">Details</a> are in the wiki.</p>
+
+<p><strong>Step 3: Try C++ Exceptions</strong></p>
+
+<p>This is the most ambitious rewrite I know of for Mozilla 2. It&#8217;s similar to step 1 in that the goal is to eliminate outparameters and nsresult error codes, except in this case it would happen for all functions. Brendan <a href="http://weblogs.mozillazine.org/roadmap/archives/2006/02/fresh_xpcom_thinking.html">mentioned</a> this is in his blog.</p>
+
+<p>The idea is that exceptions in Mozilla happen in exceptional circumstances, thus most of the time the return value will be NS_OK and the outparameter will have something valid in it. So we should rewrite all methods that return nsresult to return the outparameter value through the return value and have the errors thrown as exceptions.</p>
+
+<p>In the simplest case this would involve rewriting return statements into throw statements and rewrite callers to use try/catch. Instead of</p>
+
+<p>rv = bla(&amp;outparam)&#8230;if(rv == foo) .. else if(rv == boo) return rv</p>
+
+<p>the code would be</p>
+
+<p>try{ outparam=bla() } catch(foo) {&#8230;} catch(boo) {throw boo}</p>
+
+<p>Note this is still inefficient since the code would be manually unrolling the stack instead of letting the exceptions do that. So the next iteration of the rewrite would get rid of the</p>
+
+<p>catch(boo) {throw boo}</p>
+
+<p>code to streamline the execution path. Ideally this would provide a significant reduction of footprint (due to getting rid of the error propagation code) and provide a speed boost.</p>
+
+<p>However, there are a lot of issues that need to be solved. How to ensure that the C++ code is exception-safe (everything has destructors to do appropriate cleanup)? How to deal with the case of the stack being a mix of platform C, C++, JavaScript, Python, etc? Most runtimes are not aware of C++ exceptions.</p>
+
+<p><strong>Infrastructure Work</strong></p>
+
+<p>Unfortunately, not all of the automated refactoring work is about exciting rewrites. Elsa is still tied to the stone-age gcc 3.4 as it can&#8217;t yet process C++ headers from the newer gcc releases due to template complexity.</p>
+
+<p>There is also work that needs to be done to get OSX supported as well as Linux by elsa &amp; mcpp. I think very little work remains there.</p>
+
+<p>Another big issue is getting elsa/mcpp to work on Windows. This may involve teaching elsa about the Microsoft windows flavour of C++ or getting Mozilla to reliably build with mingw and merely teaching elsa about mingw&#8217;s flavour of windows C++.</p>
+
+<p>There is also an issue of maturity. Mozilla is probably the biggest codebase to make use of elsa and mcpp, so there are teething issues to solve. Having said that, the current version of MCPP in svn should be able to compile Mozilla. Elsa can process all of Mozilla with a small patch to two files attached in the QueryInterface() bug.</p>
+
+<p>Overall I&#8217;m doing less and less infrastructure work as time goes by, hopefully the tools will mostly just work from now on.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2007/08/30/pork-the-brave-new-world/">Pork: The Brave New World</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-08-30T08:31:43-07:00" pubdate data-updated="true">Aug 30<span>th</span>, 2007</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>It doesn&#8217;t look like my oink patches are going to reach upstream anytime soon. In fact, in the past year no patches have landed in the oink tree. I think this is unfortunate, but I have my own repository at <a href="http://hg.mozilla.org">http://hg.mozilla.org</a> and will continue working on my fork. So allow me to introduce Pork, the Oink fork. So if anyone has any exciting source location, pretty printing or other elsa improvements, I hope to eventually see those land in pork.</p>
+
+<p>Note, pork is just an informal name for the fork, I am not currently planning to do any source renaming or repository renaming.</p>
+
+<p><strong>Pork: Now in a VMware flavour</strong></p>
+
+<p>bsmedberg pointed out that oink seems a bit intimidating to setup and it would be nice if it came in virtual machine. So I have oink/mcpp/etc packaged up in a virtual machine that can build Mozilla with gcc3.4, run dehydra analyses and produce automated patches. If you want to play with that, post a comment and I&#8217;ll reply with a download link.</p>
+
+<p>A couple of people asked me about some simple code-scans to see for problems and optimization opportunities. Next week I am going to post few simple dehydra recipes on how to look for patterns in the code. It&#8217;s dead simple with JavaScript and some minimal shell knowledge to aggregate the results. The VM should provide a good way to get started.</p>
+
+<p><strong>Outparams: QueryInterface Rewrite Milestone Reached </strong> I finally got Mozilla to compile with the outparam-less qi call. The outparamdel part of that was surprisingly easy and straightforward. I   also learned all kinds of fun details about multiple inheritance and fun ways to construct functions out of macro segments. The next step is to get the code to run. I&#8217;ll also have to look into a few minor MCPP issues that the rewrite uncovered. See QI <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=391275">bug</a> for the gory details.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2007/08/06/outparams-take-2/">Outparams: Take 2</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-08-06T09:02:10-07:00" pubdate data-updated="true">Aug 6<span>th</span>, 2007</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><strong>Will Rid Code of Outparams!</strong></p>
+
+<p>I resumed my outparam rewriting work last week. Having fixed the <a href="http://taras.glek.net/blog/2007/05/11/cpp-strikes-back/">CPP induced</a> architectural limitation that I ran into, it was quite straight-forward to factor out squash&#8217;s rewriting code into a new tool. Unlike squash, outparamdel (creatively named new tool), can rewrite code precisely and reliably. I still don&#8217;t have end-of-ast-node information in every Elsa AST member, but I think I have added position info to enough AST nodes to be able to do most of the Mozilla 2 rewrites.</p>
+
+<p>Last time I was working on this, I was a little unhappy with the amount of code that had to be changed in the callee. I also wasn&#8217;t sure how to handle the complexity of callsites where control flow depends on the error code returned by the callee. This time I chose the path of least resistance.</p>
+
+<p>In the callee two variables replace the out-parameter. The first holds the return value and the second points at the first and is declared in the same way as the out-parameter.</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -488,174 +673,59 @@ The MCPP maintainer is almost done with 1. I have a prototype implementation of 
 <span class='line-number'>20</span>
 <span class='line-number'>21</span>
 <span class='line-number'>22</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>
-</span><span class='line'>/*m__CONCAT,"testcase3.c",2,*/
-</span><span class='line'>/*m__MATHDECL_1,"testcase3.c",5,*/
-</span><span class='line'>/*m__MATH_PRECNAME,"testcase3.c",8,*/
-</span><span class='line'># 10 "testcase3.c"
-</span><span class='line'>/*!0x2adfbaa6e010 _*/
-</span><span class='line'>/*!0x2adfbaa6e015 b*/
-</span><span class='line'># 10 "testcase3.c"
-</span><span class='line'>/*&lt;__CONCAT*/__boo/*&gt;*/
-</span><span class='line'>/*!0x2adfbaa6e010 _*/
-</span><span class='line'>/*!0x2adfbaa6e029 _*/
-</span><span class='line'># 11 "testcase3.c"
-</span><span class='line'># 11 "testcase3.c"
-</span><span class='line'># 11 "testcase3.c"
-</span><span class='line'>testcase3.c:11: error: Not a valid preprocessing token "//"
-</span><span class='line'>macro "__CONCAT" defined as: #define __CONCAT(x,y) x ## y   /* testcase3.c:*
-</span><span class='line'>/
-</span><span class='line'>macro "__MATHDECL_1" defined as: #define __MATHDECL_1(function,suffix) __CON
-</span><span class='line'>CAT(function,suffix)    /* testcase3.c:5        */
-</span><span class='line'>from testcase3.c: 11:    int __MATHDECL_1( __CONCAT(__, lgamma),_r);
-</span><span class='line'>int  /*&lt;__MATHDECL_1*/ /*&lt;__CONCAT*//*&lt;0x2adfbaa6e010*/ /*&lt;__CONCAT*/__lgamma/*&gt;
-</span><span class='line'>*//*&gt;*// *&lt;0x2adfbaa6e029*/_r/*&gt;*//*&gt;*/ /*&gt;*/ ;
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>@@ -2358,6 +2358,5 @@
+</span><span class='line'>-nsresult
+</span><span class='line'>-nsCSSFrameConstructor::CreateHTMLImageFrame(nsIContent* aContent,
+</span><span class='line'>-                                            nsStyleContext* aStyleContext,
+</span><span class='line'>-                                            ImageFrameCreatorFunc aFunc,
+</span><span class='line'>-                                            nsIFrame** aFrame)
+</span><span class='line'>-{
+</span><span class='line'>+nsIFrame*
+</span><span class='line'>+nsCSSFrameConstructor::CreateHTMLImageFrame(nsIContent* aContent,
+</span><span class='line'>+                                            nsStyleContext* aStyleContext,
+</span><span class='line'>+                                            ImageFrameCreatorFunc aFunc)
+</span><span class='line'>+{
+</span><span class='line'>@@ -2364,1 +2364,3 @@
+</span><span class='line'>-  *aFrame = nsnull;
+</span><span class='line'>+  nsIFrame* __aFrame = 0;
+</span><span class='line'>+  nsIFrame** aFrame = &__aFrame;
+</span><span class='line'>+  *aFrame = nsnull;
+</span><span class='line'>@@ -2371,1 +2371,1 @@
+</span><span class='line'>-      return NS_ERROR_OUT_OF_MEMORY;
+</span><span class='line'>+      return nsnull;
+</span><span class='line'>@@ -2374,1 +2374,1 @@
+</span><span class='line'>-  return NS_OK;
+</span><span class='line'>+  return __aFrame;
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>This is the original testcase:</p>
+<p>With a little more work one can get of one or even both local variables, but that will require more heuristics.</p>
+
+<p>I also simplified call-site rewriting by wrapping the call to the callee function into a ternary expression when the error code is evaluated.</p>
+
+<p>@@ -5290,2 +5290,1 @@</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>
-</span><span class='line'>#define __CONCAT(x,y)   x ## y</span></code></pre></td></tr></table></div></figure>
-
-
-<h1>define <strong>MATHDECL_1(function,suffix) \ </strong>CONCAT(function,suffix)</h1>
-
-<h1>define <strong>MATH_PRECNAME(name,r) </strong>CONCAT(name,r)</h1>
-
-<p><strong>CONCAT(</strong>, boo) int <strong>MATHDECL_1( </strong>CONCAT(<em>_, lgamma),</em>r); <strong>Code</strong></p>
-
-<p>The MCPP maintainer is absolutely awesome work with. MCPP needs to be modified to preserve horizontal whitespace(which preprocessors don&#8217;t do) and to provide the above expansion info. He volunteered to do a lot of the MCPP modifications for me and has been a lot of help in guiding me through his code.</p>
-
-<p>At this point looks like we&#8217;ll be able to integrate this work into the MCPP trunk. This is great news because to the best of my knowledge all of the other C refactoring tools either use a bitrotting fork of some C preprocessor or reimplement a yet another buggy version of CPP resulting in a lot of collectively wasted effort.</p>
-
-<p>I hope to have this working in squash within two weeks so I can finish the outparam rewrite and hopefully rid squash of a large portion of code that details with the non-deterministic source positions due to macro expansion.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2007/05/17/undoing-cpp-deep-in-enemy-territory/">Undoing CPP - Deep in Enemy Territory</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2007-05-17T08:30:43-07:00" pubdate data-updated="true">May 17<span>th</span>, 2007</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><strong>Positive</strong></p>
-
-<p>Since the last blog post, I have been investigating on how to teach elsa about the C preprocessor. Overall, I am really happy that <a href="http://mcpp.sourceforge.net/">MCPP</a> exists and is actively maintained. Preprocessed source code may not be invertible into the original form, but at least it can be undone enough for refactoring purposes.</p>
-
-<p>Looks like I should be able to preprocess the source code, and while at it record macro expansion information and then have elsa fed with a somewhat xml-escue data structure.</p>
-
-<p>The way I see it, a line of code like</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>foo = PR_MAX(boo(), nsnull)</span></code></pre></td></tr></table></div></figure>
-
-
-<p>which expands into</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>foo =  boo() &gt; 0 ? boo() : 0;</span></code></pre></td></tr></table></div></figure>
-
-
-<p>will get fed to elsa as something like</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;fragment&gt;foo = &lt;macro id=somemacro_instance&gt;PR_MAX(boo(), nsnull)&lt;/macro&gt;;&lt;/fragment&gt;
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>-    rv = CreateHTMLImageFrame(aContent, aStyleContext, NS_NewImageFrame,
+</span><span class='line'>-                              &newFrame);
+</span><span class='line'>+    rv = ((newFrame = CreateHTMLImageFrame(aContent, aStyleContext, NS_NewImageFrame)) ? NS_OK : NS_ERROR_OUT_OF_MEMORY);
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>where somemacro_instance is defined as</p>
+<p>Obviously this could be improved upon by getting rid of rv altogether, but the trick works in all cases and can be improved-upon incrementally.</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;fragment&gt;&lt;fragment ref=some_fragment/&gt; &gt; 0 ? &lt;fragment ref=some_fragment/&gt; : &lt;macro id=some_staticmacro&gt;0&lt;/macro&gt;&lt;/fragment&gt;
-</span></code></pre></td></tr></table></div></figure>
+<p><strong>Problems &amp; Limitations</strong></p>
 
+<ul>
+<li>Code within macros is detected, but not modified. Since macros are something that is easier to modify manually than with a tool, this isn&#8217;t a problem.</li>
+<li>Indentation isn&#8217;t updated. I think this is solvable with a few more heuristics in the patcher.</li>
+<li>Expression rewriting doesn&#8217;t work on Mac or Windows source-code. Mac is going to be relatively straight-forward to support. MCPP doesn&#8217;t understand all of the Mac strangeness yet and needs a loving and affectionate mac user to teach it the ways of Darwin. Windows is more work as it will require both updating the mingw Mozilla port and porting MCPP.
+<strong>Coolness</strong></li>
+</ul>
 
-<p>where some_staticmacro is defined as</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;fragment&gt;0&lt;/fragment&gt;</span></code></pre></td></tr></table></div></figure>
-
-
-<p>I think this is a cute scheme because fragments are basically regions of source-code. This is exciting because once a macro is used in the code, the text fragment that defines the macro can be parsed as C++ and rewritten accordingly. Obviously, this wouldn&#8217;t be the default behavior.</p>
-
-<p>If you see a fatal flow in the above model, let me know.</p>
-
-<p><strong>Negative</strong></p>
-
-<p>My main reason for adding preprocessor support to elsa is to obtain precise source locations from elsa. Ironically, MCPP &#8220;compresses&#8221; whitespace, so column information is basically thrown out of the window. Means I&#8217;ll have to do some extensive culling of the compression code (which is everywhere).</p>
-
-<p>Another fun issue is that the general structure of MCPP encourages the &#8220;lots of global variables and defines&#8221; mode of programming. It also uses strings-as-a-data-structure pattern which may make me give up on the fancy onion-peel model I described above and instead have mcpp generate preprocessed code along with an &#8220;undo&#8221; type log.</p>
-
-<p>MCPP is also a bit on the slow side compared to GCC, but I&#8217;ll trade a second or two slowdown per file for never having to cry due to CPP again.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2007/05/11/cpp-strikes-back/">CPP Strikes Back</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2007-05-11T09:07:26-07:00" pubdate data-updated="true">May 11<span>th</span>, 2007</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I have gotten used to dodging CPP-expansion issues by fudging column &amp; line information until the position info in squash mostly matches the source positions in the original source code. That sufficed for rewriting declarations, but I have finally hit a brick wall.</p>
-
-<p><strong>CPP Fun</strong></p>
-
-<p>I got as far with call-site outparam rewriting as <a href="http://people.mozilla.org/~tglek/outparams.May11.diff">this patch</a>. It demonstrates an interesting flaw.</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -663,146 +733,22 @@ The MCPP maintainer is almost done with 1. I have a prototype implementation of 
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>@@ -8297,1 +8297,1 @@
-</span><span class='line'>-  GetInsertionPoint(parentFrame, nsnull, &insertionPoint, &multiple);
-</span><span class='line'>+  insertionPoint = GetInsertionPoint(parentFrame, &insertionPoint, &multiple);
-</span><span class='line'>@@ -8346,1 +8346,1 @@
-</span><span class='line'>-          GetInsertionPoint(parentFrame, child, &insertionPoint);
-</span><span class='line'>+          insertionPoint = GetInsertionPoint(parentFrame, child);</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Due to macro expansion, nsnull contracts to 0 such that the .i file has &amp;insertionpoint positioned right in the middle of nsnull (in the .cpp file). So when squash trims the param including the surrounding commas, it ends up removing the wrong parameter.</p>
-
-<p><strong>Elsa Limitation</strong></p>
-
-<p>I have mentioned lack of end-of-ast-node position information in Elsa. It also lacks start-of-ast-node information for most expressions. This makes selectively rewriting source code rather difficult.</p>
-
-<p><strong>Plan</strong></p>
-
-<p>Instead of fighting an uphill fudging battle against CPP, I am going to have to suspend outparam rewriting yet again to work on better position information and integrating a preprocessor into elsa. This is unfortunate because I was looking forward to finally doing something more sophisticated than renames. Now my elsa fork is going to grow even bigger before I get commit access.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2007/05/10/nicely-rewriting-outparams/">Nicely Rewriting Outparams</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2007-05-10T07:52:07-07:00" pubdate data-updated="true">May 10<span>th</span>, 2007</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Automatic code rewriting business can be a little depressing sometimes. I tend to run into funny issues caused by CPP, oink limitations or just unpleasant-to-rewrite parts of C++. After banging my head against the wall due to all these issues I finally arrived at a workable approach for the easy part of the outparam rewrite.</p>
-
-<p>Currently I have a dehydra script that finds all non-virtual getters that return either NS_OK or <em>NS_SOMETHING_IS_WRONG</em>. The script then outputs data for squash to base the rewrites on. Then squash takes over.</p>
-
-<p>In order to preserve sanity, pretty-printing is not used at all for rewriting the getter functions. This way one doesn&#8217;t have to worry about oink generating invalid C++ and the output is much more aesthetically pleasing. Instead, squash finds interesting expressions in the .i file. Then it extracts the corresponding strings from .h/.cpp files. The strings are used to fudge the position information obtained from the .i file to vaguely correspond to the original source files. After various C++ string-foo, squash produces a promising looking patch like <a href="http://people.mozilla.org/~tglek/outparams.May10.diff">this</a>.</p>
-
-<p>This also relies on a fair amount of semantic information provided by elsa/oink. For example when removing a parameter, squash inserts a local variable with the same name and then removes all of the derefences of the old parameter. Since there could be multiple variables with the same name, squash relies on elsa&#8217;s variable resolution.</p>
-
-<p>I think squash is now 50% feature complete with respect to outparam stuff. The other 50% is the hard part of rewriting all of the call-sites. I&#8217;m not counting easy parts like wrapping the return type in already_AddRefed&lt;>, eliminating redundant assignments in the getter or removing the error variable once it is no longer needed.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2007/05/07/status-update-outparam-work/">Status Update: Outparam Work</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2007-05-07T02:58:43-07:00" pubdate data-updated="true">May 7<span>th</span>, 2007</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><strong>Squash Outparams</strong></p>
-
-<p>The following took me a few days to achieve.</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>./squash -sq-rewrite-outparams out2.txt -sq-implementation nsBidiPresUtils  -sq-no-squash -o-lang GNU_Cplusplus ~/work/ff-build/dom/src/base/nsFocusController.i</span></code></pre></td></tr></table></div></figure>
-
-
-<p>where out2.txt contains instructions on which functions to modify</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>nsFocusController::GetFocusedElement,0=mCurrentElement,</span></code></pre></td></tr></table></div></figure>
-
-
-<p>produces</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>--- /Users/tarasglek/work/mozilla/dom/src/base/nsFocusController.h
-</span><span class='line'>+++ /Users/tarasglek/work/mozilla/dom/src/base/nsFocusController.h
-</span><span class='line'>@@ -72,1 +72,1 @@
-</span><span class='line'>-  NS_IMETHOD GetFocusedElement(nsIDOMElement** aResult);
-</span><span class='line'>+  nsIDOMElement* GetFocusedElement();
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>nsCSSFrameConstructor.cpp:10383: nsCSSFrameConstructor::CreateContinuingTableFrame,6=newFrame,
+</span><span class='line'>nsCSSFrameConstructor.cpp:10993: nsCSSFrameConstructor::GetInsertionPoint,2=aParentFrame,
+</span><span class='line'>nsCSSFrameConstructor.cpp:2374: nsCSSFrameConstructor::CreateHTMLImageFrame,3=aFunc,
+</span><span class='line'>nsCSSFrameConstructor.cpp:4080: nsCSSFrameConstructor::ConstructDocElementTableFrame,2=childList,
+</span><span class='line'>nsCSSFrameConstructor.cpp:4477: nsCSSFrameConstructor::ConstructRootFrame,1=viewportFrame,
+</span><span class='line'>nsCSSFrameConstructor.cpp:4720: nsCSSFrameConstructor::ConstructRadioControlFrame,0=NS_NewGfxRadioControlFrame,
+</span><span class='line'>nsCSSFrameConstructor.cpp:4741: nsCSSFrameConstructor::ConstructCheckboxControlFrame,0=NS_NewGfxCheckboxControlFrame,
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>This still doesn&#8217;t add the already_AddRefed or other important attributes, but that should be easy. The result looks simple, but getting squash from working with a testcase to an actual source file was a little on the painful side.</p>
+<p>I wrote outparamdel and tested it on a convoluted manual testcase. Then I ran outparamdel mozilla-wide with the above input and the resulting code compiled! This was never the case prior to MCPP work since I found find new and exciting preprocessor madness to work-around and special case with every new rewrite.</p>
 
-<p>After my experience with renaming I have realized that squash should avoid the C++ pretty printer for now. Thus the result is produced in a verbose AST-sensitive regexp-like way. However figuring out where things start and end is incredibly painful due to the presence of the preprocessor.</p>
+<p><strong>Future</strong></p>
 
-<p>My plan is to get squash rewriting some basic Mozilla code the painful way and then I use what I learned to integrate <a href="http://mcpp.sourceforge.net/">mcpp</a> along with the much coveted end-of-ast-node info into elsa.</p>
-
-<p><strong>JavaScript is an AST&#8217;s Best Friend </strong></p>
-
-<p>Until recently I have been doing a lot of work with dehydra. Now that it is feature-complete I am back to working on squash fulltime and I miss JavaScript already. JS is much better suited for messing about with Abstract Syntax Trees. It is so nice to be able to print out any data structure, create new ones without modifying a billion files and the lack of C++ compile/linking delay is nice too. It&#8217;s amazing how much simpler it is to analyze functions for out-param rewriting in JS compared to checking for simpler patterns in C++. I am seriously excited about Tamarin/ES4 and the productivity boost that it will provide.</p>
-
-<p>I wonder whether a complete JS binding for Elsa would be a good idea.</p>
-
-<p><strong>Emacs</strong></p>
-
-<p>Switching to a Mac finally made me switch to Emacs. I could not find any other editors that would be support the workflow I was used to with SciTE or Kate. Other than absolutely hating the majoring of Emacs shortcuts (who&#8217;s idea was Ctrl-^ and the crazy undo/redo) I love the editor for the amazing term mode. It&#8217;s a little buggy in the current version, but the CVS version is good enough to comfortably run vim in it for quick edits :). It&#8217;s so nice to keep all of my terminals and code in the same window. I am dreaming of the day when Emacs will undergo the Mozilla->Firefox-like modernization.</p>
+<p>Going to make this a little more challenging by rewriting QueryInterface to return result by a return value which should affect the majority of functions in Mozilla.</p>
 </div>
   
   
@@ -827,11 +773,11 @@ The MCPP maintainer is almost done with 1. I have a prototype implementation of 
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2012/12/21/interesting-bugzilla-activity/">Snappy #45: The view from home</a>
+        <a href="/blog/2012/12/24/making-pages-load-faster/">Making pages load faster</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2012/12/17/hello-octopress/">Hello Octopress</a>
+        <a href="/blog/2012/12/21/interesting-bugzilla-activity/">Snappy #45: The view from home</a>
       </li>
     
       <li class="post">

@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="I just committed the large giant change to bring down elsa&#8217;s namespace pollution to reasonable levels. Elsa code now is now using std::foo &hellip;">
+  <meta name="description" content="I&#8217;ve been running my prbool checker with nightly notifications for about a year now. There are some false positivies, but mostly it picks up &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -64,7 +64,7 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2008/07/25/pull-pork-with-care/">Pull Pork With Care</a></h1>
+      <h1 class="entry-title"><a href="/blog/2008/11/07/enabling-prcheck-email-notifications/">Enabling Prcheck Email Notifications</a></h1>
     
     
       <p class="meta">
@@ -80,24 +80,16 @@
   
 
 
-<time datetime="2008-07-25T07:01:04-07:00" pubdate data-updated="true">Jul 25<span>th</span>, 2008</time>
+<time datetime="2008-11-07T07:58:08-08:00" pubdate data-updated="true">Nov 7<span>th</span>, 2008</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>I just committed the large giant change to bring down elsa&#8217;s namespace pollution to reasonable levels. Elsa code now is now using std::foo style, or using namespace std. As I mentioned before, Elsa&#8217;s string is now sm::string, a summary of how to perform similar renames is <a href="http://developer.mozilla.org/en/docs/Renaming_With_Pork">here</a>. The good news is that Pork will soon work out of the box with a modern toolchain.</p>
+  <div class="entry-content"><p>I&#8217;ve been running my prbool checker with nightly notifications for about a year now. There are some false positivies, but mostly it picks up real bugs. The checker pulls the blame source to try to guess who is responsible for the error, but so far it has only been emailing me.</p>
 
-<p>For the handful of porkers out there, you need to hg pull &amp; hg up all of the pork repositories. This has been a use-case in why splitting up a codebase into a billion repositories is a bad idea:</p>
-
-<p>a) Lovely, I have to do many commits instead of one</p>
-
-<p>b) To top it off, now my users will curse my name while updating whatever pork repository that interests them most.</p>
-
-<p>I feel like I&#8217;m going to throw up if I see any more C++ code diffs in the next 10minutes.</p>
-
-<p>In contrast, while rewriting things on the Mozilla-scale is a lot less feasible manually, it is very rewarding to automate. Gotta love big C++ codebases.</p>
+<p>I&#8217;m going to make it emailed the hg blamed person starting this weekend, so if you commit something and get an email from me complaining about it don&#8217;t take it too personally. Hopefully this will keep the amount of new detectable prbool bugs at 0. If you do get an email and decide you don&#8217;t want to get these in the future, please complain and we&#8217;ll try to come up with a better notification solution.</p>
 </div>
   
   
@@ -110,7 +102,7 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2008/07/22/dogfooding-pork-oscon/">Dogfooding Pork & OSCON</a></h1>
+      <h1 class="entry-title"><a href="/blog/2008/10/09/cool-stuff-in-foreign-realms/">Cool Stuff in Foreign Realms</a></h1>
     
     
       <p class="meta">
@@ -126,114 +118,29 @@
   
 
 
-<time datetime="2008-07-22T03:26:19-07:00" pubdate data-updated="true">Jul 22<span>nd</span>, 2008</time>
+<time datetime="2008-10-09T02:18:29-07:00" pubdate data-updated="true">Oct 9<span>th</span>, 2008</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>I wrote a class renamer and used it to <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=445897">fix</a> my pork pet-pieve #1: a class named string that isn&#8217;t std::string. This has been a low priority goal for as long as I&#8217;ve been using Elsa. It&#8217;s pretty cool to apply a tool to fix itself.</p>
+  <div class="entry-content"><p>Open Source projects are often like parallel worlds. People reach the same conclusions, attempt similar solutions and are typically blissfully unaware of each other&#8217;s existance.</p>
 
-<p>The renamer is a 3x simpler than the next simplest tool. I plan to extend it to also rename class members. Renaming is the most trivial use-case for rewriting code, I plan to post a tutorial on using  the renamer in the near future.</p>
-
-<p><strong>OSCON</strong></p>
-
-<p>If you are at OSCON, you do not want to miss our <a href="http://en.oreilly.com/oscon2008/public/schedule/detail/4383">static analysis session</a> on Wednesday.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2008/07/18/pork-mcpp-oink-and-elsawhats-going-on/">Pork, MCPP, Oink and Elsa&#8230;What&#8217;s Going On?</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-07-18T03:29:28-07:00" pubdate data-updated="true">Jul 18<span>th</span>, 2008</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>It seems that there is some confusion as to what pork is and how it&#8217;s related to oink and elsa. So here is my view of it.</p>
-
-<p><a href="http://developer.mozilla.org/en/docs/Pork"><strong>Pork</strong></a> is my set of tools that use Elsa to rewrite sourcecode (mainly Mozilla code). Our use of Pork is solely for rewriting as it is not suited for <a href="http://developer.mozilla.org/en/docs/Dehydra">convenient</a> and <a href="http://developer.mozilla.org/en/docs/Treehydra">hardcore</a> analysis needs as much as the GCC based tools are.</p>
-
-<p><a href="http://mcpp.sf.net/">MCPP</a> is the secret sauce C preprocessor that makes C++ rewriting with Elsa possible by annotating preprocessed files with information to undo the lexical braindamage resulting from macro expansion.</p>
-
-<p><strong>Elsa</strong> is a awesome C++ parser. Awesome in that is can preserve more information regarding parsed code than any other C/C++ parser and it is easy to extend.</p>
-
-<p>We maintain our own version of Elsa within pork.</p>
-
-<p>I think our version of Elsa is the most up to date and most compatible with newer C++ features and headers used by newer GCC releases. We encourage other projects with C++ parsing/rewriting needs to collaborate with us. We will be parsing code with Elsa for a few years to come and it&#8217;s a lot of work to maintain a C++ parser by a single entity. I think elsa is a much better backend to build refactoring support onto than any other C++ parsing project out there right now.</p>
-
-<p><strong>The Messy Details</strong></p>
-
-<p>Now lets move on the more confusing parts: oink, oink-stack, and the oink mailing list.</p>
-
-<p><a href="http://www.cubewano.org/oink"><strong>oink</strong></a> consists of some static analysis tools and was meant to be a central place where all of the Elsa and Elsa-related development was supposed to happen. When people refer to oink, they usually mean the oink-stack which is a subversion meta repository that pulls in a dozen of subrepositoes(smbase, elkhound, elsa, oink(where static analysis tools live), etc).</p>
-
-<p>So when I started working on refactoring tools I was told that I should aim to have my tools added to oink, but there were some legal hassles to work out in the meantime so I cloned the oink-stack and developed my tools with minimal changes to oink-stack. This included various elsa extensions, bugfixes, etc.</p>
-
-<p>However, the little momentum that oink had has fizzled out due to various personality conflicts and various academics loosing interest. The code has been bitrotting for as long as I&#8217;ve been working at Mozilla.</p>
-
-<p>So the end result of oink is that we have pork which is a superset of oink. I&#8217;m not even sure if I mention the name pork anywhere in the sources. So pork at the moment means &#8220;Taras&#8217; continuation and extension of oink&#8221;. I am using the <a href="http://www.cubewano.org/lists/listinfo/oink-devel">oink mailing list</a> for any discussion on changes to Elsa/etc in hopes that at least some of the genius lurkers there will regain their interest in elsa.</p>
-
-<p><strong>Where do We Go From Here?</strong></p>
-
-<p>Onward! Due to the original authors vision of what C++ is and the state of C++ at the time Elsa was conceived, current pork code causes people to have many WTF moments (followed by banging head against keyboard) when they first start using it.</p>
-
-<p>The short version of my plan is:</p>
+<p>Here are two projects that came to my attention this week:</p>
 
 <ul>
-<li>allow one to do &#8220;using namespace std&#8221; when using elsa</li>
-<li>Restructure pork repositories such that there are only 3 of them rather than 11 (elsa, elkhound, pork)</li>
-<li>get rid of the oink repository (those tools do not work for us)</li>
-<li>Make pork only consist of just my tools (with a sane build system) rather than be mixed into unmainted oink stuff</li>
-<li>Make pork compile with new compilers (GCC 4.3 and recent MSVC++)</li>
-<li>Keep track of this in a <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=438061">bug</a></li>
-<li>Clean up various misc things
-Some of you might ask &#8220;But Taras, why now, why not just keep doing what you&#8217;ve been doing?&#8221;. I was doing what I was doing because I had an overwhelming goal of devising a way to automate static analysis and refactoring of Mozilla on my shoulders and I wasn&#8217;t convinced that it was feasible. I had to learn to split my time between tool development and actually using the tools. Naturally I cut corners on tool development :)</li>
+<li>Via Planet KDE I stumbled on <a href="http://www.englishbreakfastnetwork.org/krazy/">Krazy</a>. It&#8217;s neat if not somewhat depressing that even if C++ parsers are finally becoming accessible all this is still Perl.</li>
+<li>Helpful comment on my previous entry pointed me to <a href="http://blogs.linux.ie/caolan/">dead method hunting</a> in OpenOffice.
+<strong>Uncool Open Source Rant</strong></li>
 </ul>
 
 
-<p>Since then slowly, but surely various awesome hackers have started doing rewrites and analyses themselves freeing me up to focus more on development. To make matters sweeter, various hackers have started submitting bugreports, fixes, ports to my tools. This gives me more time to focus on the big picture.</p>
+<p>Reason I switched to linux was because it seemed like a developer&#8217;s dream come true. Compilers are a package manager operation away (and generally aren&#8217;t tied to OS versions, I&#8217;m looking at you Apple), everything can be recompiled to address any particular concerns and there are crapload of weird languages to write your software in. This is especially awesome when compared to a typical proprietory software stack where one can&#8217;t easily fix problems that involve multiple components due to licensing issues or due to not having the code available(or due to not having the development environment available). So one would think that Linux distributions hold the ultimate software power: unlimited pass to modify their offering to their target audience&#8217;s content.</p>
 
-<p>Finally, I belive that automation of the sort we are doing at Mozilla is something that has been missing from open source development practices and it will catch on once people realize what they&#8217;ve been missing. Reducing those WTF moments will help people think positively.</p>
+<p>Unfortunately my view of Linux ways is unrealistic. For example when people do <a href="http://lwn.net/Articles/299483/">friggin&#8217; awesome work</a> knocking down boot time to 5 seconds by hacking and slashing their way through the entire software stack involved in boottime delays, distributions claim that it&#8217;s not somethin they can seriously consider because they are too set in their ways of general purpose(and generally bloated) init systems and stock kernels(worst case: why can&#8217;t we recompile the kernel on the user&#8217;s machine or ship a couple of custom variations for common hardware out there). What&#8217;s the point of open source if we continue pretending that everything is a general purpose black box that doesn&#8217;t like to play together? It&#8217;s been two weeks and I haven&#8217;t seen a single distro bite the bullet and attempt to list 5 second boot in their goals. Come on guys, don&#8217;t you like to be challenged?</p>
 
-<p><strong>Update:</strong></p>
-
-<p><em>Why three repositories instead of one?</em></p>
-
-<ol>
-<li>The three will be elkhound, elsa, pork</li>
-<li>elkhound is useful on it&#8217;s own</li>
-<li>elsa is too and other elsa users are likely to not care about Mozilla&#8217;s rewriting tools
-<em>I__s oink really dead?</em></li>
-</ol>
-
-
-<p>Yes. The maintainers have moved on to other projects. When they were maintaining oink, outside contributors couldn&#8217;t get their code upstream.</p>
+<p>Hope someone proves me wrong.</p>
 </div>
   
   
@@ -246,7 +153,7 @@ Some of you might ask &#8220;But Taras, why now, why not just keep doing what yo
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2008/07/09/static-analysis-and-refactoring-tooling-updates/">Static Analysis and Refactoring Tooling Updates</a></h1>
+      <h1 class="entry-title"><a href="/blog/2008/10/07/note-this-is-not-called-yet-its-just-a-placeholder-for-future-changes/">&#8220;NOTE: This Is Not Called YET. It&#8217;s Just a Placeholder for Future Changes.&#8221;</a></h1>
     
     
       <p class="meta">
@@ -262,36 +169,20 @@ Some of you might ask &#8220;But Taras, why now, why not just keep doing what yo
   
 
 
-<time datetime="2008-07-09T07:59:00-07:00" pubdate data-updated="true">Jul 9<span>th</span>, 2008</time>
+<time datetime="2008-10-07T08:53:44-07:00" pubdate data-updated="true">Oct 7<span>th</span>, 2008</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p><strong>Hydras</strong></p>
+  <div class="entry-content"><p>In my quest to rid Firefox of code that doesn&#8217;t do anything it is possible to screw up and delete a method that is only used by outside code. So far, I&#8217;ve hit a <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=457302">component</a> that isn&#8217;t used in Firefox, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=457965">methods</a> that aren&#8217;t used in Firefox and methods that <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=458983">claim</a> someone is about to use them (with a timestamp from 8 years ago). That and I discovered some code only appears to be used from BeOS or OS/2 specific ifdefs.</p>
 
-<p>I am close to landing a <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=432917">flow</a> check. Turns out, it is super-easy to introduce new analyses into Mozilla due to a very nice build system hooks setup by bsmedberg.</p>
+<p>Not surprisingly, I had someone comment that I do some &#8220;dangerous shit&#8221;. Sure, I can see why someone would think that.</p>
 
-<p>Since coming back from the GCC summit I have forward-ported our GCC patches to GCC trunk. The FSF legal paperwork came through today so I posted the first and biggest patch to the GCC for <a href="http://gcc.gnu.org/ml/gcc-patches/2008-07/msg00741.html">review</a>.</p>
+<p>My protection: I use the try server to make sure that everything builds on supported platforms. On top of that every patch gets reviewed.</p>
 
-<p>I am not sure if I mentioned this before, but the C port of <a href="http://developer.mozilla.org/en/docs/Dehydra">Dehydra</a> is somewhat operational. It doesn&#8217;t yet have access to function bodies, but type traversal should work. Unfortunately, the C frontend has less features(pretty printing sucks, locations are even less reliable, etc) and thus is less awesome to work with than the C++ frontend.</p>
-
-<p><a href="http://wiki.mozilla.org/Pork"><strong>Pork</strong></a></p>
-
-<p>jst was awesome enough to list some interfaces that need some outparamdelling. The list is <a href="http://wiki.mozilla.org/Gecko:DeCOMtamination">here</a> (in the content/ section). This lead me to spent some time making outparamdel&#8217;s output prettier. There are still some improvements to be made, and I will be making them in the near future. However if someone is interested in refactoring of this kind land in the near future, they could easily complete outparamdel&#8217;s work with some clever scripting and a bit of manual labour. Sure beats doing the entire thing manually. From outparamdel&#8217;s perspective last 10% appear to be slightly painful and might take some time.</p>
-
-<p>Here is a <a href="http://people.mozilla.org/~tglek/nsinodeinfomanager_getnodeinfo.diff">patch</a> that takes about 30seconds to produce.</p>
-
-<p>Another exciting aspect of this is that a certain emacs wizard has confirmed that it would be possible to feed emacs such a patch file and have it correct indentation for the affected areas only.</p>
-
-<p>I am also very excited that a certain volunteer came forward and decided to start improving some of the stomach-turning areas of Pork. Hopefully in the near future we&#8217;ll modernize the C++ a little bit and a user&#8217;s first reaction wont be: &#8220;What the hell, why can&#8217;t I do &#8216;using namespace std;&#8217;&#8221;.</p>
-
-<p>To this end I have filed a bug to write a <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=441870">renamer tool</a> so we can dogfood renaming of unfortunately named pieces of code.</p>
-
-<p><strong>OSCON</strong></p>
-
-<p>The plan is to have some sort of a minisession on our static analysis efforts at Mozilla. So if you are attending OSCON and are interested in doing exciting things to depressingly large amounts of code, drop me a line.</p>
+<p>Furthermore, I would like to point out that methods that aren&#8217;t called within Firefox are less likely to be tested and correct. So if one leaves code that should only be called from other projects, it&#8217;d be appropriate if we had some unit tests for it, which would flag the code as in-use. That would let us move to the next level and setup a tinderbox to detect dead code as soon as it is orphaned.</p>
 </div>
   
   
@@ -304,7 +195,7 @@ Some of you might ask &#8220;But Taras, why now, why not just keep doing what yo
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2008/07/08/where-is-the-sanity-in-the-c-std-library/">Where Is the Sanity in the C++ Std Library?</a></h1>
+      <h1 class="entry-title"><a href="/blog/2008/09/26/living-dead-code/">Living Dead Code</a></h1>
     
     
       <p class="meta">
@@ -320,38 +211,123 @@ Some of you might ask &#8220;But Taras, why now, why not just keep doing what yo
   
 
 
-<time datetime="2008-07-08T03:52:42-07:00" pubdate data-updated="true">Jul 8<span>th</span>, 2008</time>
+<time datetime="2008-09-26T03:58:37-07:00" pubdate data-updated="true">Sep 26<span>th</span>, 2008</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>Dear lazyweb,</p>
+  <div class="entry-content"><p>The coolest part about my job is that I get to work on tasks that are cool, but typically are forever laid to rest in the would-be-cool-if-we-could-but-we-don&#8217;t-have-time-or-resources category. However as project code sizes increases, the usefulness/coolness ratio of static analysis grows and moves from would-be-cool, to nice-to-have to this-is-the-only-way. Now, I&#8217;m not sure where Mozilla lies on this scale, but I do know for sure that the giant codebase is an analysis treasure trove.</p>
 
-<p>Please explain to me why the following code works the way it does. From looking at the following code and stringstream::str(), stringstream::str(string) docs the behavior of the following code does not make sense to me.</p>
+<p><strong>Dead Code Motivation </strong></p>
+
+<p>I have been talking about dead code detection in Mozilla for ages. As software changes, some pieces of code unintentially get left behind, but often there is no way to tell. It results in unnessary maintanance burden and increased footprint. In <a href="http://weblogs.mozillazine.org/roc/">roc</a>&#8217;s case randomly spotting dead methods may also involve a little IRC griping at me about not having any tools for it, even rudimentary ones. Between that and <a href="http://www.0xdeadbeef.com/weblog/?p=766">blizzard&#8217;s cheering</a> over reduced code size, I had no choice, but to give it a try once I had enough outparamdelling being reviewed.</p>
+
+<p><strong>Dead Code Results</strong></p>
+
+<p>First of, the approach described below seems to work well: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=457262">see bug</a> with initial results. Now I get a few thousand reported methods to inspect and refine the results.</p>
+
+<p><strong>Dead Code Approach</strong></p>
+
+<p>I&#8217;ve been pondering dead code detection since I&#8217;ve started working on this stuff. There are lots of ways to do it, but I finally settled on the dead-simplest one: method-level granularity. <a href="http://hg.mozilla.org/users/tglek_mozilla.com/deadlive/">Ingredients</a> are:</p>
+
+<ul>
+<li>Dehydra/Treehydra extraction JavaScript: Dehydra makes it easy to enumerate methods and class hierarchies. Treehydra makes it possible to extract every mention of a method from the code(except for <a href="http://mxr.mozilla.org/mozilla-central/source/content/events/src/nsEventListenerManager.cpp#206">pointers to virtual functions that were casted</a>&#8230;in that case we are left with vtable index and a type that the pointer was cast to). Additionally, Treehydra counts the number of AST nodes visited in every function body.</li>
+<li>Shell script to aggregate the result of processing Mozilla source. Gotta admit, perl&#8217;s hashtables give GNU sort -u a run for its money.</li>
+<li>Ocaml program to do the super-dumb algorithm. Classes with the same names, are assumed to be the same class. Method overloads are assumed to be a single method. All methods are assumed to be virtual. Every ClassType::FUNCTION_CALL call walks down to all children &amp; up through all the parents and marks the derived methods as called. Then all derivatives of scriptable XPIDL are filtered out and the uncalled methods are printed out. In order to find most exciting functions first, methods in the results are sorted by their AST count =D. <strong>Language Nerd Trivia:</strong> Why OCaml - because ADTs are no fun in other languages. Why is my OCaml so bad - because I lost the hang out if due to not writing anything it for the past 2 years.
+I&#8217;m sure most people reading this will go: &#8220;Wait a minute, this is unsound if you don&#8217;t see the virtual function pointers?&#8221;, to which I reply: &#8220;Once I nuke the method and mozilla compiles successfully, it&#8217;s sound&#8221;. In reality someone could make a puny GCC patch to preserve more data in virtual function pointer assignments.</li>
+</ul>
+
+
+<p>Since this is all in early stages there a bunch of things I don&#8217;t deal with: method overloads, constructors, destructors and overloaded operators&#8230;.and templates. All function bodies are scanned, but some function names are a pain to deal with or they aren&#8217;t straightforward function calls in GCC so they don&#8217;t participate in the dead/alive contest.</p>
+
+<p><strong>Where To Go From Here</strong></p>
+
+<p>Well, once we run out of dead code detected by the primitive caveman approach above, we&#8217;ll have to investigate less conservative approaches possibly involving abstract interpretation and callgraphs.</p>
+
+<p><strong>How To Get Involved in Screwing With Software Cost Models By Contributing Negative Line Counts </strong></p>
+
+<p>This project has a lot of places to help out:</p>
+
+<ul>
+<li>work through the dead method list, filing bugs accordingly and deleting any related code</li>
+<li>Extend the machinery to work on all non-static function</li>
+<li>Try this on your favourite large codebase.</li>
+<li>Write the virtual function pointer annotation patch :)</li>
+</ul>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2008/09/19/outparamdelling-this-way-comes/">Outparamdelling This Way Comes</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-09-19T07:06:08-07:00" pubdate data-updated="true">Sep 19<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Recently I dusted off outparamdel to see if I can get some refactorings landed. About a year ago, with the great QueryInterface outparamdelling experiment we ended up with a smaller binary footprint and tiny performance gain, but that never landed due to us not wanting to break compatability yet. Ever since, outparamdel has been patiently bitrotting within <a href="http://developer.mozilla.org/en/docs/Pork">Pork</a> waiting for the day it&#8217;s allowed to break APIs.</p>
+
+<p>Recently jst <a href="http://wiki.mozilla.org/Gecko:DeCOMtamination">listed</a> some private API candidates for deCOMtamination and I have been letting outparamdel loose on them for the past week. So far only one such <a href="http://hg.mozilla.org/mozilla-central/raw-rev/ec4733eb1bd8">change</a> has been committed, the rest are sitting in jst&#8217;s review queue. It&#8217;s exciting, as it&#8217;s the first ever application of outparamdel that didn&#8217;t get canned. For the whole list see the most recent bugs blocking my <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=430328">analysis metabug</a>.</p>
+
+<p>Cool part about these patches is that after various outparamdel special-casing and manual cleanup the line count is reduced by 10-30% while maintaining existing functionality!</p>
+
+<p>So far I haven&#8217;t touched much outside of content/, so if you know of any APIs that could have the outparam rotated into the return value, file some rewriting bugs against me.</p>
+
+<p><strong>Rewriting with Mercurial</strong></p>
+
+<p>Mercurial is now my favourite python program ever. It makes rewrites so easy. Here is my typical workflow:</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>
-</span><span class='line'>#include &lt;sstream&gt;
-</span><span class='line'>#include &lt;iostream&gt;</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'># Write an outparamdel input file specifying functions to rewrite..run outparamdel with pork-barrel to generate patch
+</span><span class='line'>hg qimport -f autopatch.diff && hg qpush && hg qref #make the patch nice and readable
+</span><span class='line'>hg qnew manual.diff #create a manual cleanup patch for cosmetic touchups and rewrites screwed up by macros#of course to submit patch for review, those two patches need to be combined
+</span><span class='line'>#do manual stuff
+</span><span class='line'>hg diff -r 19277 #produce a combined diff without loosing ability to edit each applied patch individually! For example, can regenerate the autopatch.diff with different outparamdel parameters or a bugfixed outparamdel. 19277 is a revision that has to be looked up with hg log, unfortunately there isn't a relative syntax to do hg diff -r "tip - 2"
+</span></code></pre></td></tr></table></div></figure>
 
 
-<p>using namespace std;</p>
+<p>This is a huge improvement over the ad-hoc workflow prior to hg switch when I was prototyping my tools. CVS + quilt don&#8217;t hold a candle to a modern revision control system.</p>
 
-<p>int main(int argc, char**) { stringstream ss(&#8220;foo&#8221;); cout &lt;&lt; ss.str() &lt;&lt; endl; ss &lt;&lt; &#8220;bar&#8221;; cout &lt;&lt; ss.str() &lt;&lt; endl; ss &lt;&lt; &#8220;more&#8221;; cout &lt;&lt; ss.str() &lt;&lt; endl; }</p>
+<p><strong>Prcheck</strong></p>
 
-<p>Why is doing &lt;&lt; after str(string) causing this stringstream to loose the initialization string? What possible API usecase would justify such behavior?</p>
+<p>I also have been doing another round of <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=266048">prbool corrections</a>. Somehow I didn&#8217;t notice that the system stopped working due to the CVS->hg switch. Once again when reviving my nightly checker scripts, it was a pleasure to substitute all of the CVS hacks with mercurial commands.</p>
 
-<p>For the curious, output is:</p>
+<p>I am waiting for the few remaining largeish (ie 3-4 bugs per file) patches to land before I can start submitting whackamole bugs with a single prbool correction per module.</p>
 
-<p>foo bar barmore</p>
-
-<p>It seems that the only sensible way to use stringstream is to do ss.str(&#8220;&#8221;) unless you want to have your initial data reset for no reason. In that case why add a weird method overload instead of a .reset() method.</p>
-
-<p><strong>Update:</strong> Note that stringstream ss(&#8220;foo&#8221;) is equivalent to stringstream ss; ss.str(&#8220;foo&#8221;);</p>
+<p>It also seems that cairo and every other pre-C99 project have the same set of issues as Mozilla with their typedefed-int boolean types. Perhaps prcheck isn&#8217;t mozilla-specific at all.</p>
 </div>
   
   
@@ -364,7 +340,7 @@ Some of you might ask &#8220;But Taras, why now, why not just keep doing what yo
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2008/06/30/pork-09-in-the-wild/">Pork 0.9 in the Wild</a></h1>
+      <h1 class="entry-title"><a href="/blog/2008/09/08/must_flow_throughlabel/">MUST_FLOW_THROUGH(&#8220;label&#8221;)</a></h1>
     
     
       <p class="meta">
@@ -380,14 +356,16 @@ Some of you might ask &#8220;But Taras, why now, why not just keep doing what yo
   
 
 
-<time datetime="2008-06-30T06:08:26-07:00" pubdate data-updated="true">Jun 30<span>th</span>, 2008</time>
+<time datetime="2008-09-08T03:54:57-07:00" pubdate data-updated="true">Sep 8<span>th</span>, 2008</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>Those who would like to play with Pork, but are allergic to pulling sources from version control can now download an actual <a href="http://ftp.mozilla.org/pub/mozilla.org/static-analysis/pork/pork-0.9.tar.gz">pork release</a>. Now someone needs to hook this into a GUI to provide easy Eclipse-style refactoring for C++.</p>
+  <div class="entry-content"><p>Some time ago, Igor mentioned that there is code in SpiderMonkey that pleads to the programmer that from a certain point in a function code must flow through a label(ie a finalizer block). <a href="http://developer.mozilla.org/en/docs/Treehydra">Treehydra</a> made it to possible to turn that weak plea into an error message when static <a href="http://developer.mozilla.org/En/Building_with_static_checking">checking is enabled</a>. See the <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=432917">bug</a> for more details. My favourite static analyses are all about turning informal &#8220;gurantees&#8221; into angry compiler complaints.</p>
+
+<p>This is my first static analysis that landed in the mozilla-central tree. It&#8217;s also the simplest one and may be a decent starting point for solving similar problems. I&#8217;d be cool to see this particular feature utilized outside of SpiderMonkey. Unlike human-powered code-inspection, it excels at finding accidental early returns covered up by macros.</p>
 </div>
   
   
@@ -400,7 +378,7 @@ Some of you might ask &#8220;But Taras, why now, why not just keep doing what yo
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2008/06/24/status-report-nearterm-plans-for-pork-dehydra/">Status Report: Nearterm Plans for Pork, Dehydra</a></h1>
+      <h1 class="entry-title"><a href="/blog/2008/09/03/error-presentation/">Error Presentation</a></h1>
     
     
       <p class="meta">
@@ -416,38 +394,18 @@ Some of you might ask &#8220;But Taras, why now, why not just keep doing what yo
   
 
 
-<time datetime="2008-06-24T06:36:19-07:00" pubdate data-updated="true">Jun 24<span>th</span>, 2008</time>
+<time datetime="2008-09-03T07:09:53-07:00" pubdate data-updated="true">Sep 3<span>rd</span>, 2008</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p><a href="http://developer.mozilla.org/en/docs/Pork"><strong>Pork</strong></a></p>
+  <div class="entry-content"><p>Certain other cool open source projects are doing cool static analysis work. In this case, <a href="http://yoyodyne.ath.cx/ccc-analyze/buildkernel/2008-08-16-1/">here</a> is an analysis of one of my favourite operating systems projects, <a href="http://www.dragonflybsd.org/">DragonFly BSD</a>.</p>
 
-<p>I planned to release Pork 1.0 for a while now. The tools work great, even if all the love is going to the GCC-based toolchain. However, after hearing grumpy comments from a certain coworker about the uglyness of the oink build system it dawned on me that it&#8217;s rather mean to release such a mess and call it 1.0.</p>
+<p>I&#8217;m blown away by the clean UI. The error filter and the interleaving of static analysis results in the source code are drool-inducing. This is powered by the <a href="http://clang.llvm.org/StaticAnalysis.html">clang checker</a>. Clang&#8217;s checker doesn&#8217;t yet do C++, doesn&#8217;t do application-specific checks and has a lot of false positives, but it&#8217;s an exciting preview of things to come.</p>
 
-<p>So I think I&#8217;ll release Pork 0.9 in the current state, so I can focus on near term GCC toolchain work. Pork in the current form means <a href="http://danielwilkerson.com/oink/">oink stack</a> + my refactoring tools + changes to elsa and other libs to support C/C++ refactoring needs.</p>
-
-<p>This will be followed up by Pork 1.0. 1.0 will involve changes to the build system to get rid of oink(we only use the oink build system and rarely use oink API). To put this another way: I don&#8217;t expect any functionality changes between 0.9 and 1.0 other than an improved build system to make it easier to get started with writing new tools.</p>
-
-<p><strong>Pork - Future</strong></p>
-
-<p>I am pretty happy with Pork as it is. I think we&#8217;ve taken Elsa as far as it&#8217;ll let us go. The only realistic improvement on the Pork side may be to have Dehydra generate a JS binding to Elsa&#8217;s extensive AST to make rewriting stuff easier. However, I&#8217;m not sure if that&#8217;s worth the effort nor that a C++ AST will reflect into JavaScript as well as GCC GIMPLE.</p>
-
-<p><em>Preprocessing</em></p>
-
-<p>On the other hand, something needs to be done about the main ingradient that makes Pork tick: MCPP. MCPP does a lovely job of annotating what the C preprocessor is doing, but configuring GCC to use a foreign preprocessor is a giant hassle and making sure it works correctly is troublesome. At the GCC summit, <a href="http://tromey.com/blog/">Tom</a> gave me an idea on how similar functionality can be added to GCC directly by extending the include backtrace with macro expansions. Not only would such integration simplify Pork setup and increase Pork&#8217;s operating speed, but it is also a clean way to expose preprocessor constructs to the AST presented in De/Treehydra. It should allow for more preprocessor awareness directly in analysis stage of refactoring instead of only in the final rewriting stage as is currently done. As a side-effect, GCC would gain better error messages too.</p>
-
-<p>So while this isn&#8217;t going to affect Pork directly, it will simplify the lives of Pork users while opening new analysis frontiers. Even though I hate working on preprocessor stuff, I think this work will need to happen sometime in the near future.</p>
-
-<p><a href="Dehydra">The Hydras</a></p>
-
-<p>Dehydra 0.9 has been out for a while, I planned to release 1.0 soon after unless there are major flaws discovered in the API. The situation changed at the GCC summit. The fact that FSF reversed their stance on GCC plugins means that we should be concentrating on getting the plugin stuff reviewed.</p>
-
-<p>So in the near term I&#8217;m forward porting the plugin stuff to trunk GCC, then I&#8217;ll be generalize the plugin API to suit at least one other GCC plugin user that we met with at the summit. The downside is that I don&#8217;t want to release Dehydra 1.0 and immediately break the plugin API. The upside is that the new API should be more general and more minimalistic and will likely be close to what will eventually become an official plugin API.</p>
-
-<p><em>Summary</em>: In my mind Dehydra and Pork are 1.0 quality, but I want to future-proof them a little bit before calling them 1.0.</p>
+<p>Oh and I hope that DXR will have similar analysis awesomeness. In the future, I hope to see static analysis become almost as common as unit-testing.</p>
 </div>
   
   
@@ -460,7 +418,7 @@ Some of you might ask &#8220;But Taras, why now, why not just keep doing what yo
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2008/06/18/gcc-summit/">GCC Summit</a></h1>
+      <h1 class="entry-title"><a href="/blog/2008/09/02/converging-elsa-strains/">Converging Elsa Strains</a></h1>
     
     
       <p class="meta">
@@ -476,18 +434,27 @@ Some of you might ask &#8220;But Taras, why now, why not just keep doing what yo
   
 
 
-<time datetime="2008-06-18T23:01:08-07:00" pubdate data-updated="true">Jun 18<span>th</span>, 2008</time>
+<time datetime="2008-09-02T01:39:45-07:00" pubdate data-updated="true">Sep 2<span>nd</span>, 2008</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>Our presentation on <a href="http://developer.mozilla.org/en/docs/Treehydra">Treehydra</a> and <a href="http://developer.mozilla.org/en/docs/Dehydra">Dehydra</a> GCC plugins was received well at the summit.</p>
+  <div class="entry-content"><p>One of the purposes of this blog is to inform people that while the original <a href="http://www.cs.berkeley.edu/~smcpeak/elkhound/">Elsa author</a> is no longer actively developing it, Elsa is being used in production at Mozilla and is actively maintained within <a href="http://developer.mozilla.org/en/docs/Pork">Pork</a>.</p>
 
-<p>The big news is that FSF is working on license changes to allow GPL-only GCC plugins. I&#8217;m looking forward to having our work be compatible with future GCC without any patching.</p>
+<p>Recently two previously unknown to me Elsa forks have come to my attention via comments on my blog. Both of these are extrimely cool and something we have been wanting:</p>
 
-<p>In a few minutes we&#8217;ll be having a meeting with users of other plugin frameworks to have an initial discussion on a common API. I&#8217;m working on forward porting my patches, so they can start getting reviewed ahead of license changes.</p>
+<ul>
+<li><a href="http://ellcc.org/">ellcc</a> C (and soon C++) compiler via Elsa + LLVM. I&#8217;ve heard of attempts to get this to work before, but this looks like it is much further along than similar efforts.</li>
+<li>Alex Telia&#8217;s souped up elsa with parser error recovery and an integrated C preprocessor among other awesomeness. See <a href="http://taras.glek.net/blog/2008/06/30/pork-09-in-the-wild/#comment-18303">this comment</a> for more details. Some of <a href="http://www.win.tue.nl/~lvoinea/VCN.html">these tools</a> are built on this Elsa fork.
+Both of these projects are interested in converging on a single codebase. It sounds like Alex&#8217;s work will be ready for merging soon.</li>
+</ul>
+
+
+<p>I love open source.</p>
+
+<p><strong>I&#8217;m Back</strong> <img src="http://photos-e.ak.facebook.com/photos-ak-sf2p/v323/152/124/53600064/s53600064_30661500_3965.jpg" alt="" /> Some might&#8217;ve noticed that I disappeared off the net for two weeks. I have a good excuse: I was getting married.</p>
 </div>
   
   
@@ -500,7 +467,7 @@ Some of you might ask &#8220;But Taras, why now, why not just keep doing what yo
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2008/06/09/dehydra-09-its-alive/">Dehydra 0.9: It&#8217;s Alive!</a></h1>
+      <h1 class="entry-title"><a href="/blog/2008/08/14/meanwhile-in-a-parallel-universe/">Meanwhile in a Parallel Universe</a></h1>
     
     
       <p class="meta">
@@ -516,20 +483,18 @@ Some of you might ask &#8220;But Taras, why now, why not just keep doing what yo
   
 
 
-<time datetime="2008-06-09T04:14:05-07:00" pubdate data-updated="true">Jun 9<span>th</span>, 2008</time>
+<time datetime="2008-08-14T01:48:04-07:00" pubdate data-updated="true">Aug 14<span>th</span>, 2008</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>I am finally happy enough with Dehydra API and functionality to release 0.9. <a href="http://developer.mozilla.org/en/docs/Dehydra">Dehydra</a> is basically feature complete, the main reason I&#8217;m not calling it 1.0 is in case there are outstanding API bugs.</p>
+  <div class="entry-content"><p>Someone else is developing their own app-specific rewrite tools. In this case app-specific refers to <a href="http://people.imendio.com/richard/gtk-rewriter/">automating porting code</a> from gtk2 to gtk3. The approach is similar in that patches are produced, but it doesn&#8217;t look like a patch aggregating tool is written yet. Instead of the elsa/mcpp magic sauce, <a href="http://clang.llvm.org/">clang</a> is being used, so this is limited to C at the moment.</p>
 
-<p>I believe Dehydra is the first useful open source static analysis tool. I hope to see projects outside of Mozilla benefitting from it too.</p>
+<p>KDE folks are behind in automated code rewrites arms race, perhaps the trolls should try some <a href="http://developer.mozilla.org/en/docs/Pork">pork</a> to accelerate KDE3->4 transition :)</p>
 
-<p>I would love to see someone package this up for various Linux distributions. You can grab there release <a href="http://ftp.mozilla.org/pub/mozilla.org/dehydra/dehydra-0.9.tar.gz">here</a>.</p>
-
-<p>Note, this release also features as a preview release of <a href="http://developer.mozilla.org/en/docs/Treehydra">Treehydra</a>. Most of the development lately has been focused on improving Treehydra and building analyses on top of it.</p>
+<p>All kidding aside, it is awesome to see that less-manual-labour-through-compiler-assisted-refactoring approach is gaining mindshare.</p>
 </div>
   
   
@@ -542,7 +507,7 @@ Some of you might ask &#8220;But Taras, why now, why not just keep doing what yo
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2008/05/27/treehydra-goes-push-and-pop/">Treehydra Goes Push and Pop</a></h1>
+      <h1 class="entry-title"><a href="/blog/2008/08/13/this-week-in-the-static-analysis-corner/">This Week in the Static Analysis Corner</a></h1>
     
     
       <p class="meta">
@@ -558,26 +523,42 @@ Some of you might ask &#8220;But Taras, why now, why not just keep doing what yo
   
 
 
-<time datetime="2008-05-27T06:48:03-07:00" pubdate data-updated="true">May 27<span>th</span>, 2008</time>
+<time datetime="2008-08-13T08:55:50-07:00" pubdate data-updated="true">Aug 13<span>th</span>, 2008</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>After writing a ton of <a href="http://developer.mozilla.org/en/docs/Dehydra_Manual">docs</a> and working through other <a href="http://developer.mozilla.org/en/docs/Dehydra">Dehydra</a> <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=423898">0.9 blockers</a>, I decided to cool off by doing some actual analyses. Before I get to that, I&#8217;d like to say that the last big task is to setup a buildbot for Dehydra on Linux/OSX. Thanks to yet another awesome contribution from Vlad, that&#8217;s <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=430321">mostly done</a>.</p>
+  <div class="entry-content"><p><strong>New Static Analysis Toys</strong></p>
 
-<p>So I got working on <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=421934">GC-safety static analysis</a>. Originally we tried to define a complete spec before writing a single line of code. That turned to be a bad idea and resulted in a spec full of bugs. <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=432915">This time</a> we are defining the analysis incrementally and as a surprise reward, it already caught <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=435546">a bug</a>.</p>
+<p>I have been catching up on my backlog of little bugs, here are some of the most notable ones.</p>
 
-<p><strong>Pushing and Popping Our Way</strong></p>
+<p>Benjamin has been pushing the limits of what Dehydra can do for his DXR prototype which resulted in a couple of cool new features with one <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=449075">new feature</a> breaking backwards compatibility. Sorry about that, it is for the greater good.</p>
 
-<p>SpiderMonkey has a lot of complex code doing applying Push/Pop-like operations on variables in a function-local manner. Examples of functions that this analysis would look at are: JS_PUSH_TEMP_ROOT/JS_POP_TEMP_ROOT and JS_LOCK/JS_UNLOCK. See <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=432915">bug</a> for more. Essentially, this will help with &#8220;code must flow through here&#8221; comments on &#8220;out:&#8221; goto labels that inhabit the SpiderMonkey source.</p>
+<p>Dehydra now processes <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=449428">more declarations</a>.</p>
 
-<p>This is an example of control-flow-sensitive analysis. It impossible without a compiler-like view of the code that <a href="http://developer.mozilla.org/en/docs/Treehydra">Treehydra</a> provides. It also helps to have a scalable algorithm to iterate the CFG. Luckily, David Mandelin wrote such a beast by implementing <a href="http://www.cs.cornell.edu/courses/cs711/2005fa/papers/dls-pldi02.pdf">ESP</a> for his <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=420933">outparam analysis</a>. David factored-out the ESP analysis and made it available for reuse. See esp_lock.js in the <a href="http://hg.mozilla.org/users/tglek_mozilla.com/dehydra-gcc/index.cgi/file/8f6914b2aaf9/test/">test suite</a> for an example of how to write control-flow sensitive analyses. locks_valid<em>.cc and locks_bad</em>.cc illustrate the code patterns that can be scanned for.</p>
+<p>Dehydra uses JavaScript prototypes to <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=447679">distinguish</a> between types and declarations.</p>
 
-<p>So if you know of any further push/pop patterns in the rest of Moz that can be checked in this manner, leave a comment.</p>
+<p>Treehydra is now built by <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=437524">default</a> when building with a plugin-enabled compiler.</p>
 
-<p>PS. This is yet another account of Treehydra rocking the static analysis world. Exposing the slightly scary, but awesome GCC gutts via JavaScript allows one to perform precise static analyses in a civilized manner. What could be more fun?</p>
+<p>Treehydra now exposes the C++ frontend&#8217;s verbose and as-close-as-gcc-gets-to-written-code syntax tree via <a href="https://bugzilla.mozilla.org/attachment.cgi?id=332230">process_cp_pre_genericize</a>. Access to the early C++ AST should make it easier to automatically translate a certain class of C++ functions into JavaScript.</p>
+
+<p>Coming soon: buildbot setup for Dehydra along with autobuilt debian packages.</p>
+
+<p>Also, Benjamin&#8217;s GSoC student, Bo Yang, has been doing some awesome work making our static analysis toolchain work on mingw. In my mind, Bo sealed his awesomeness in not only getting Mozilla to build under mingw yet again, but also by fixing a couple of exciting compiler bugs on Win32.</p>
+
+<p><strong>Path to 1.0</strong></p>
+
+<p>For more information on these and other developments see the Dehydra 1.0 <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=437502">tracking bug</a>.</p>
+
+<p>I am not yet sure what the next release of Dehydra will be. My giant GTY patch to GCC is still awaiting review in a GCC developer&#8217;s inbox. Depending on whether that gets accepted I&#8217;ll continue releasing Dehydra 0.9.x with the current GCC patchset or delay a 1.0 release to work on getting the GCC plugin API reviewed and more or less finalized.</p>
+
+<p><strong>Plans for Near Future</strong></p>
+
+<p>I think I figured out the missing pieces needed to make outparamdel&#8217;s deCOMtamination patches acceptable, will work on that next. I&#8217;ll be continuing to clean up pork to be more developer-friendly. After the recent unhappyness involving bisection 10separate repositories at once, I&#8217;ve decided to merge pork into one giant repository and if someone just wants a couple smaller of pieces, those should be proken up at the package management level.</p>
+
+<p>Additionally, I would like to start landing the SpiderMonkey analyses soon.</p>
 </div>
   
   
@@ -602,11 +583,11 @@ Some of you might ask &#8220;But Taras, why now, why not just keep doing what yo
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2012/12/21/interesting-bugzilla-activity/">Snappy #45: The view from home</a>
+        <a href="/blog/2012/12/24/making-pages-load-faster/">Making pages load faster</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2012/12/17/hello-octopress/">Hello Octopress</a>
+        <a href="/blog/2012/12/21/interesting-bugzilla-activity/">Snappy #45: The view from home</a>
       </li>
     
       <li class="post">

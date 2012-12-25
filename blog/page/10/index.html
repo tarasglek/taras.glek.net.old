@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="I got used to measuring startup the complicated way (example here). It&#8217;s complicated enough that many people prefer to use stopwatches. Turns &hellip;">
+  <meta name="description" content="My phone is useful for doing GPSey things and staying connected. Unfortunately expecting more than a day of use is unrealistic. So I set out on a &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -58,6 +58,377 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/05/14/cheap-solar-power-for-my-phone/">Cheap Solar Power for My Phone</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-05-14T11:55:00-07:00" pubdate data-updated="true">May 14<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><div class='post'>
+My phone is useful for doing GPSey things and staying connected. Unfortunately expecting more than a day of use is unrealistic. So I set out on a quest for portable power. <br /><br />I spent way too much time choosing a dynamo hub, building a wheel, having a friend build a circuit so I could charge my phone while away from home. <br /><br />One day I was randomly surfing dealextreme/ebay and stumbled on something that was unbelievably awesome: cheapass solar power. Turns out a $25 solar panel and a spliced usb cable is enough.<br /><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://a7.sphotos.ak.fbcdn.net/hphotos-ak-snc6/229316_681609118926_122504458_36920657_6584253_n.jpg" imageanchor="1"><img border="0" height="540" src="http://a7.sphotos.ak.fbcdn.net/hphotos-ak-snc6/229316_681609118926_122504458_36920657_6584253_n.jpg" width="720" /></a></div><br />At this point the main benefit of a dynamo hub is that it works all year long(24x7 as long as I&#8217;m biking). Dynamo also has a benefit of being a bunch of metal that&#8217;s part of the bike. Attaching a solar panel will require some cleverness to avoid smashing it the first time the bike falls over. <br /><br />On the other hand the solar panel is light and will work great for camping while off the bike. It&#8217;s good to have options.<br /><b><br /></b><br /><b>Update:</b><br /><ul><li>I&#8217;ve had this for a while now. This solar panel is amazing. It is exactly as the seller claims: 5V and provides up to 700mA of current. There is a problem where if the panel gets in the shade, the current level drops off and stupid charging circutry on my Vibrant continues to try to charge. I documented it in this <a href="http://forum.xda-developers.com/showthread.php?p=15413618#post15413618">forum post</a>.</li><li><a href="http://cgi.ebay.com/ws/eBayISAPI.dll?ViewItem&amp;item=220768018461&amp;ssPageName=ADME:L:OU:US:1123">ebay listing</a> I bought this from.</li></ul></div>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/05/13/firefox-telemetry/">Firefox Telemetry</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-05-13T09:35:45-07:00" pubdate data-updated="true">May 13<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><strong>Benchmarks Suck</strong></p>
+
+<p>Mozilla has traditionally relied on [Talos, Sunspider, Kraken, etc] benchmarks to optimize Firefox. Unfortunately there are two problems with benchmarks: a) it is hard to write good benchmarks (see all of the complaints about Sunspider) b) the most perfect synthetic benchmarks do not completely correspond to actual user usage. Firefox with a well-used profile, anti-viral software, well-aged Windows and 30 addons will not perform the same as it does in our clean benchmarking environment.</p>
+
+<p>For my team this became obvious in Firefox 4 once we started recording Firefox startup times. Turned out that it is easier to work on fixing startup performance than make our synthetic test closely reflect real world startup speed.</p>
+
+<p><strong>Telemetry</strong></p>
+
+<p>There is only one solution to this problem: develop telemetry infrastructure to measure Firefox performance in the wild. Beginning with version 6, Firefox will ask users to opt-in to sending anonymous usage statistics about performance, user interface feature usage, memory usage, and responsiveness to Mozilla. This information will help us improve future versions of Firefox to better fit actual usage patterns.</p>
+
+<p>This functionality is already present in our major competitors. Unlike our competition we do not plan to tag reported data with unique identifiers. This will make it harder for us see how Firefox performance changes over time for particular users (or easily tell whether some users are disproportionately represented due to sending more reports). We take our users&#8217; privacy seriously, so this seems like a reasonable trade off.</p>
+
+<p>Yesterday I landed the reporting part of telemetry (bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=585196">585196</a>). We are still working on UI, official server-side and on updating the privacy policy.</p>
+
+<p><img src="http://people.mozilla.com/~tglek/telemetry/telemetry.jpg" alt="" /></p>
+
+<p>Above screenshot shows some of the data that will be gathered for users that opt-in to telemetry.</p>
+
+<p>Please help us get a headstart on telemetry. In the recent nightlies, go to about:config and set toolkit.telemetry.enabled to true. Once the pref is set, Firefox will send interesting performance data to the telemetry test server. The metrics are very compact and are sent out no more than once a day.</p>
+
+<p>Since there is no UI yet, install my <a href="https://addons.mozilla.org/en-US/firefox/addon/abouttelemetry/">about:telemetry</a> extension and navigate to &#8220;about:telemetry&#8221; to see the metrics collected.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/04/26/measuring-startup-speed-correctly/">Measuring Startup Speed Correctly</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-04-26T07:34:02-07:00" pubdate data-updated="true">Apr 26<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Until recently our state of the art method for measuring startup was to subtract a timestamp passed via commandline from a</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>new Date()</span></code></pre></td></tr></table></div></figure>
+
+
+<p>timestamp within a</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;script&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>tag. Vlad <a href="http://blog.vlad1.com/2009/07/28/measuring-startup/">pioneered</a> this approach, <a href="http://taras.glek.net/blog/2010/01/19/chromium-vs-minefield-cold-startup-performance-comparison/">me</a> and others adopted it.</p>
+
+<p>Turns out there are two problems with this approach:</p>
+
+<ol>
+<li>It is cumbersome, especially on Windows where there is no easy way to pass a timestamp via the commandline.</li>
+<li>It is wrong. Turns out that Firefox starts loading web pages before the UI is shown. One can&#8217;t be sure that the page being loaded is within a visible browser
+Our oldest startup benchmark, ts,  has been gathering wrong numbers all along.  This resulted in a class of perverse optimizations that decreased the ts number, but increased the time taken for UI to appear (ie <a href="http://bugzil.la/641691">bug 641691</a>). The new <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=612190">tpaint (bug 612190)</a> benchmark should should address this. On my machine measuring pageload vs paint-time results in a 50-100ms difference. See the <a href="http://graphs.allizom.org/graph.html#tests=[[83,1,1],[83,1,17],[83,1,12],[83,1,13],[83,1,14],[16,1,12]]&amp;sel=none&amp;displayrange=7&amp;datatype=running">graph server</a> for more data.</li>
+</ol>
+
+
+<p>This is why AMO&#8217;s <a href="http://xulforge.com/blog/2011/04/testing-add-on-startup-performance/">complicated method</a> of measuring startup is wrong. Please use our shiny new <a href="https://wiki.mozilla.org/Firefox/Projects/StartupPerformance/MeasuringStartup">about:startup</a> extension or if you absolutely want to avoid adding any overhead use <a href="https://developer.mozilla.org/en/XPCOM_Interface_Reference/nsIAppStartup_MOZILLA_2_0#getStartupInfo%28%29">getStartupInfo</a> API directly.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/04/14/arguing-about-startup-communicating-performance/">Arguing About Startup: Communicating Performance</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-04-14T04:15:46-07:00" pubdate data-updated="true">Apr 14<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Recently the addon team started working towards penalizing addons that penalize our startup. We have solid data shows that startup gets worse as more addons installed so the effort is justified. Justin published this picture to illustrate the problem: <img src="http://people.mozilla.com/~fligtar/performance/num-addons-med.png" alt="" /></p>
+
+<p>However some technical mistakes were made. Wladimir (AdBlock+ guy!) has been busy exposing them on his <a href="http://adblockplus.org/blog/the-wrong-way-of-allowing-users-to-make-informed-decisions">blog</a>. Thanks Wladimir! I spent a couple of years understanding Firefox startup, so I really appreciate Wladimir&#8217;s remarkable speed/quality in poking holes in AMO approach.</p>
+
+<p><strong>Rating Addon Performance</strong>****</p>
+
+<p>Wlad&#8217;s latest <a href="http://adblockplus.org/blog/the-wrong-way-of-allowing-users-to-make-informed-decisions">point</a> is regarding how addon impact is measured on warm startup with an empty profile. I agree that addon impact on warm startup with clean profile is going to be different from that of cold startup with a dirty real-world profile. I also agree that it is weird to primarily measure warm startup given that our data clearly indicates that most users are experiencing cold startup.</p>
+
+<p>However startup is an irritating multidimensional problem influenced by a large number of factors. Should we suck it up and let addons kill warm startup (and risk ruining firefox upgrade times, pissing off web developers)? How does one choose a typical dirty profile? Creating a &#8220;typical&#8221; dirty profile is a tough problem (ie due to privacy, disk fragmentation) and there is no reason to let clean profile performance be degraded.</p>
+
+<p>So an addon performance rating will not be perfect. Time added by addon during warm startup is the easiest starting point and is one of the more deterministic measures (Wlad&#8217;s blog says otherwise, but measuring other startup kinds have even more noise). This is no worse than choosing browsers based on their JavaScript benchmark performance.</p>
+
+<p>I think a much awesomer addon performance rating may be obtainable by clever statistics boffins by analyzing our aggregated startup data. Perhaps the Mozilla Metrics will make it a reality, but in the meantime we&#8217;ll have to make do with an imperfect approach.</p>
+
+<p><em><strong>Coming soon:</strong> Why is the measurement approach in Jorge&#8217;s <a href="http://xulforge.com/blog/2011/04/testing-add-on-startup-performance/">post</a> is overly complicated and somewhat incorrect.</em></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/03/10/start-faster-addon/">&#8220;Start Faster&#8221; Addon</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-03-10T08:24:13-08:00" pubdate data-updated="true">Mar 10<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>A large proportion of our startup time is spent on loading the Firefox library(.dll, etc) files. This is true on all of our platforms. In my <a href="http://taras.glek.net/blog/2011/02/09/magic-patch-that-doubles-windows-startup/">previous pos</a>t I thought I discovered a way to load the Firefox binaries more efficiently on Windows(bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=627591">627591</a>). Further testing revealed that to not be true in all cases and that the Windows Prefetch service was still killing our startup speed. Microsoft does not seem to provide a way to opt out of the Windows Prefetch &#8216;service&#8217;.</p>
+
+<p>There is a DIY way to opt out of prefetch by gaining Administrator privileges and deleting files out of the prefetch directory. Our is plan is to provide a Windows service to handle Firefox updates (bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=481815">481815</a>). Additionally the service would be able to do useful things like delete prefetch files, defragment Firefox databases(or at least help report on fragmentation levels). This is all tricky stuff.</p>
+
+<p>In the meantime, to test my theory I wrote a <a href="https://addons.mozilla.org/en-US/firefox/addon/startupservice/">test extension</a>. This is a restartless extension that adds a Windows service and a wrapper executable to significantly speed up Firefox startup after rebooting (oh the irony!). After installing the extension, &#8220;Faster Firefox&#8221; shortcut on the Desktop should result in up to 2x speed up in Firefox startup. This addon is a rough proof of concept to play with while I bake this functionality into Firefox. Comments, improvements are welcome. Note that launching Firefox by shortcuts other &#8220;Faster Firefox&#8221; is slower while this extension is installed (this will be fixed once preloading functionality is integrated into Firefox properly). This addon does not yet work on XP because I do not yet have an XP enviroment to test/develop in (patches are welcome).</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/03/05/i-have-road-disc-and-you-do-notneener/">I Have Road Disc and You Do not&#8230;neener!</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-03-05T11:24:00-08:00" pubdate data-updated="true">Mar 5<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><div class='post'>
+I always found sidepull brakes to be pathetic. The current generation of road brakes are much better than the old style mount-bike I&#8217;ve used before, but they still suck. Unfortunately most roadies are imitation whores and will never ever sport components that a pro rider wouldn&#8217;t ride(which they can&#8217;t cos of stupidly conservative racing rules). As a result no road carbon forks on the market feature disc brakes. So I suffered and suffered. I refused to buy stupidly expensive brake pads to make up for sidepull suck.<br /><br />After years of suffering the indignity of under-performing brakes, I met my friend Adam. Adam got mad carbon skills. He turned my oldish carbon fork into a sexy postmount disc fork. <br /><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-XMIu2jDNjf8/TXKMKF7PVlI/AAAAAAAABGo/ENcJlXL8kkU/s1600/disc2.JPG" imageanchor="1" style=""><img border="0" height="334" width="400" src="http://4.bp.blogspot.com/-XMIu2jDNjf8/TXKMKF7PVlI/AAAAAAAABGo/ENcJlXL8kkU/s400/disc2.JPG" /></a></div><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://2.bp.blogspot.com/-6SGGpgtc1qM/TXKMRi4XNSI/AAAAAAAABGw/1sWWVWJa2Oc/s1600/disc1.JPG" imageanchor="1" style=""><img border="0" height="400" width="266" src="http://2.bp.blogspot.com/-6SGGpgtc1qM/TXKMRi4XNSI/AAAAAAAABGw/1sWWVWJa2Oc/s400/disc1.JPG" /></a></div></div>
+<h2>Comments</h2>
+<div class='comments'>
+<div class='comment'>
+<div class='author'>Taras</div>
+<div class='content'>
+disc cx forks are not compatible with road bikes. It&#39;s a different fork rake, would make the bike handle like crap. </div>
+</div>
+<div class='comment'>
+<div class='author'>reverend dick</div>
+<div class='content'>
+Dude. You suffered and you suffered? No you didn&#39;t. Side pulls work pretty dang well. No, they aren&#39;t discs- but they work pretty dang well. And if you wanted discs, there have been cross forks available with disc mounts for years.<br /><br />Neener neener.</div>
+</div>
+</div>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/02/19/phone-mount-that-doesnt-suck/">Phone Mount That Doesn&#8217;t Suck</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-02-19T22:22:00-08:00" pubdate data-updated="true">Feb 19<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><div class='post'>
+This has been on a long quest, but I finally have my phone mounted on my bike the way I want to.<br /><br />I always thought it was stupid to have the phone(or bike computer) mounted way below field of sight. Now I addressed this in my carbon fiber mount. I also dealt with flimsy construction aspects of bike mounts(had a couple of commercial mount eject my phone)<br /><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://hphotos-snc6.fbcdn.net/171675_631094775076_122504458_36643314_2302551_o.jpg" imageanchor="1" style="clear:left; float:left;margin-right:1em; margin-bottom:1em"><img border="0" height="597" width="900" src="http://hphotos-snc6.fbcdn.net/171675_631094775076_122504458_36643314_2302551_o.jpg" /></a></div><i>My prototype(hacksaw blade wrapped in carbon + conduit clamp)</i><br /><br /><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://hphotos-snc6.fbcdn.net/170589_631386729996_122504458_36650309_3355921_o.jpg" imageanchor="1" style="clear:left; float:left;margin-right:1em; margin-bottom:1em"><img border="0" height="597" width="900" src="http://hphotos-snc6.fbcdn.net/170589_631386729996_122504458_36650309_3355921_o.jpg" /></a></div><i><br />I made the case out of carbon tow held together with paper tape :). It came out a little flexible, so i could bend it to get phone in/out. I was going to devise an elaborate locking mechanism for it, but carbon ended with the right mix of flexibility/stiffness(yay luck)</i><br /><br /><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://hphotos-snc6.fbcdn.net/172383_632964717696_122504458_36690008_2894342_o.jpg" imageanchor="1" style="clear:left; float:left;margin-right:1em; margin-bottom:1em"><img border="0" height="597" width="900" src="http://hphotos-snc6.fbcdn.net/172383_632964717696_122504458_36690008_2894342_o.jpg" /></a></div><i>I added a carbon hoop to the case and used a rubber band keep it from sliding around</i><br /><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://hphotos-snc6.fbcdn.net/172145_632964742646_122504458_36690009_4350159_o.jpg" imageanchor="1" style="clear:left; float:left;margin-right:1em; margin-bottom:1em"><img border="0" height="597" width="900" src="http://hphotos-snc6.fbcdn.net/172145_632964742646_122504458_36690009_4350159_o.jpg" /></a></div><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://hphotos-snc6.fbcdn.net/171475_632964862406_122504458_36690014_6129155_o.jpg" imageanchor="1" style="clear:left; float:left;margin-right:1em; margin-bottom:1em"><img border="0" height="597" width="900" src="http://hphotos-snc6.fbcdn.net/171475_632964862406_122504458_36690014_6129155_o.jpg" /></a></div><i>Still using a carbon-wrapped blade + one more layer of carbon + a composite clamp(it&#8217;s 5x lighter and fits better than the steel one in the prototype)</i><br /><br /><br />Here is a video of me stress-testing it. E71 sucks at video :)<br /><br /><iframe title="YouTube video player" width="480" height="390" src="http://www.youtube.com/embed/FiApJwsMSUM" frameborder="0" allowfullscreen></iframe><br /><br /><br />And some video of the mounting mechanism. SLR video is sexy, even without AF.<br /><iframe title="YouTube video player" width="640" height="390" src="http://www.youtube.com/embed/Bwq-xy1lli0" frameborder="0" allowfullscreen></iframe><br /><br /><br />Anyway&#8230;hit a teeny teeny snag. Turned out adding the carbon attachment loop to the case had an unexpected effect. I wrapped it on with some more carbon tow and cut off the tow that covered the screen area(once it dried). This made the case not flex anymore. It became extremely stiff. So once I put the phone in for a testride, it didn&#8217;t want to come out anymore. Carbon is so unintuitively easy to stiffen up.<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://hphotos-ash1.fbcdn.net/173006_632964772586_122504458_36690010_5630214_o.jpg" imageanchor="1" style="clear:left; float:left;margin-right:1em; margin-bottom:1em"><img border="0" height="597" width="900" src="http://hphotos-ash1.fbcdn.net/173006_632964772586_122504458_36690010_5630214_o.jpg" /></a></div><i>With the precision of a drunk dentist, I cut the bottom of the case off so I could pull the phone out.</i><br /><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://hphotos-snc6.fbcdn.net/172440_632964837456_122504458_36690013_6189893_o.jpg" imageanchor="1" style="clear:left; float:left;margin-right:1em; margin-bottom:1em"><img border="0" height="896" width="597" src="http://hphotos-snc6.fbcdn.net/172440_632964837456_122504458_36690013_6189893_o.jpg" /></a></div><i>cut a little too deep :(</i><br /><br />Now the case is a slider. It is still extremely stiff(but 1.3 grams lighter). Since I made the case by using my phone as a mold, it fits it extremely snugly. I might add a little bendy stopper bit, but so far it seems like overkill.</div>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/02/09/magic-patch-that-doubles-windows-startup/">Magic Patch That Halves Windows Startup</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-02-09T08:38:38-08:00" pubdate data-updated="true">Feb 9<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Internet as of late have been obsessing over magically short patches that improve performance _ times(probably as a result of LKML cgroups patch from a few weeks ago). So my work in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=627591">bug 627591</a> got picked up in all kinds of news sources(mostly due to @limi&#8217;s <a href="http://twitter.com/#!/limi/status/28983240966541312">manlove</a>). Apparently all that internet fame is good for is getting script-kiddies to upload viruses as bugzilla attachments. Dear Internet, please do not interrupt me in the middle of an investigation.</p>
+
+<p>To crux of the optimization lies in trading waiting for random io for fast sequential IO. Turned out that my patch worked great if windows prefetch wasn&#8217;t trying to help (ie firefox ran faster without prefetch on my test systems). With prefetch on, the patch was either a smaller win or a downright loss. When I dug in deeper, it turned that the Windows Prefetch helpfully spends 3-6 seconds doing IO before any Firefox code gets to run. It also doesn&#8217;t read in a very clever pattern, resulting in a very small speed up for Firefox, but preventing my exciting optimization.</p>
+
+<p>So I curled up into my defeated fetal position and pondered on how would I prevent Windows Prefetch from being so &#8220;helpful&#8221;. One way would be to <a href="http://taras.glek.net/blog/2010/10/04/diagnosing-slow-startup/">install</a> some crapware to cripple prefetch (kidding!), another way is to do the sequential IO in a separate executable(ala<a href="http://glandium.org/blog/?p=1719"> run-mozilla.sh</a> on Unix). This way Windows doesn&#8217;t try to do insane amounts of IO before my preloading logic gets to run. This seems to work (see wrapper.exe talk in the bug) and has potential to double Firefox startup times. It&#8217;s also ugly as sin, but if that&#8217;s what it takes&#8230;</p>
+
+<p>So now I need more reports to make sure the executable wrapper approach reliably/significantly speeds up cold(post-reboot) startup. Then we can make a decision on how to integrate this into Firefox. But until we have all the data, please don&#8217;t jump to conclusions on what will and wont make Firefox 2x faster.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -203,425 +574,6 @@ This was a rare fix that resulted in seconds saved on crapware-loaded computers.
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2010/12/21/rude-surprise-startup-overhead-of-windows-font-apis/">Rude Surprise: Startup Overhead of Windows Font APIs</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-12-21T05:33:14-08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2010</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Imagine a typical Firefox user who starts their Windows computer in order to surf the web. First app they launch is Firefox 4. Turned out that on systems that support hardware-acceleration for 2D graphics, Firefox 4 takes minutes to startup. WTF? XPerf-aided investigation showed that, the Windows font enumeration code causes us to do 30x more disk IO (~300MB) than the rest of Firefox code.</p>
-
-<p>In order to hardware accelerate Firefox, we switched from GDI to using DirectWrite for font stuffs. Apparently, DirectWrite is a wonderful api, but the implementation has some teething issues. DirectWrite opens a connection to the Font Service (and starts it if it isn&#8217;t already running), however if service fails to respond DirectWrite proceeds to enumerate all of the system fonts on the client-side. This isn&#8217;t cool for multiple reasons: a) it is <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=602792">slow as hell</a> b) it causes Firefox to <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=617266">run out of memory</a>(installing IE9 helps!) sooner.  This means that currently Firefox 4 starts up a lot slower than 3.6. <a href="http://blog.mozilla.org/nattokirai/">John Daggett</a> is busy working on a workaround by using older GDI APIs to enumerate fonts. Firefox is one of the first popular Windows applications to switch to DirectWrite, so we get to suffer the consequences.</p>
-
-<p>Unfortunately it turns out that using Microsoft GDI APIs to <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=600713">enumerate fonts</a> still causes a significant amount of disk IO (~30-60MB), John plans to fix that next.</p>
-
-<p><strong>How Did We Miss This?</strong></p>
-
-<p>This bug came from a fundamental difference of how developers and users start Firefox. A developer will restart Firefox a dozen times an hour. This means we rarely get to observe true cold startup. Our tests only measure warm startup (because most operating systems make it difficult to test cold startup). Windows is also incredibly slow to develop on, so a lot of us test in a virtual machine to speed things up and avoid rebooting the computer all the time. This also makes observing cold startup hard. Fortunately xperf makes IO much easier to observe. We should deploy xperf on our <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=609111">test infrastructure</a> as soon as possible.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2010/11/30/crapware-and-firefox/">Crapware and Firefox</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-11-30T03:14:20-08:00" pubdate data-updated="true">Nov 30<span>th</span>, 2010</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I completely agree with <a href="http://weblogs.mozillazine.org/asa/archives/2010/11/why_do_they_think_th.html">Asa</a> that having unwanted crap forced upon the user is morally wrong. We should do a better job of undoing this kind of braindamage. In the meantime here is a brief rant on the parasitic underpinnings of crapware.</p>
-
-<p>Until recently, I have been testing Firefox on my own installs of Windows. I had no idea how aggressive bundleware could be. Then I got this piece-of-crap i7 Acer laptop with Windows 7 (and relatively little crapware preinstalled) and tried to use it as my primary machine. Suddenly, I could reproduce a lot more &#8220;slow&#8221; scenarios. I even went further and tried installing common crapware known as AVG to reproduce more bugs.</p>
-
-<p>Turns out almost every vendor tries to mix in crap into Firefox. Acer, Microsoft Office/Silverlight, Adobe flash/acrobat, Google, AVG, etc all added unwanted functionality to my Firefox. I marveled at all kinds of &#8220;helpful&#8221; functionality such as the wonderful ability to click on a link in a webpage and have Google chrome install without any warning that the webpage is about to execute a windows program. AVG adds a couple of extensions that make Firefox start up 0.5-4x slower.</p>
-
-<p>So far I noticed 2 vectors of attack: plugins and extensions. Plugins are fun because those get added by registering bonus plugin directories. Plugin directories are usually just application directories that contain plugins. This means Firefox gets to <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=614423">slowly</a> rummage through bonus application directories looking for what might be a plugin. Extensions are fun because unlike plugins (which affect most browsers on the computer), extensions are very browser-specific. Most extension crapware doesn&#8217;t yet support Chrome. Installing things like AVG retards Firefox performance while Chrome escapes unmolested.</p>
-
-<p><a href="http://benjamin.smedbergs.us/blog/2010-11-29/software-integration-is-not-evil/">Benjamin</a>, I don&#8217;t think these software vendors are &#8220;doing exactly as we ask of them.&#8221;</p>
-
-<p>Personally, I would like us to be a lot more aggressive about blacklisting ill-performing software. Ie we need to go above and beyond <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=476430">warning</a> users when crapware. I would like to to actively check performance of popular plugins/addons and ban them if they are substandard.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2010/11/23/of-linkers-and-avoiding-suck/">Of Linkers and Avoiding Suck</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-11-23T02:41:47-08:00" pubdate data-updated="true">Nov 23<span>rd</span>, 2010</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>There is a common fallacy that since linkers and compilers are written by really smart people, there aren&#8217;t any huge performance wins left in the toolchain. My theory is that the efficiency of any given codebase varies inversely with the number of people who tried to optimize it.</p>
-
-<p>I have long complained of suboptimal binaries generated from our code. Modern profiling tools such as <a href="http://taras.glek.net/blog/2009/10/23/studying-library-io-systemtap-style/">systemtap</a> and <a href="http://taras.glek.net/blog/2010/04/07/icegrind-valgrind-plugin-for-optimizing-cold-startup/">icegrind</a> made this painfully obvious. Mike Hommey opted for actually doing something about it. What started as a simple ld.so hack grew into a<a href="http://glandium.org/blog/?p=1177"> badass binary-rewriting tool</a> (and the most interesting blog post I&#8217;ve read this year).</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2010/11/16/performance-progress/">Performance Update. Fragmentation: Mostly Fixed. GCC: Work-in-progress.</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-11-16T07:14:02-08:00" pubdate data-updated="true">Nov 16<span>th</span>, 2010</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><strong>Fragmentation: SQLite &amp; Friends </strong></p>
-
-<p>I am happy to report that the SQLite fragmentation <a href="http://taras.glek.net/blog/2010/09/07/fighting-fragmentation-sqlite/">problem</a> is now <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=581606">solved</a>. I copied my profile a month ago, and my places.sqlite is still in a single fragment! There was a similar <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=592520">fix</a> done to Firefox disk cache. Thanks to helpful comments on my OSX preallocation <a href="http://taras.glek.net/blog/2010/09/09/help-wanted-does-fcntlf_preallocate-work-as-advertised-on-osx/">cry for help</a>, we now preallocate efficiently on OSX too.</p>
-
-<p>Startup cache is the last <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=593349">remaining</a> bastion of fragmentation, but that&#8217;s already 10x better than it was a month ago. I have two complimentary solutions for that: either <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=562406">omnijar startup cache generation</a> for core code and/or write the cache more <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=586859">efficiently</a>.</p>
-
-<p>Firefox 4 will be a lot more gentle on those spinning platters.</p>
-
-<p><strong>GCC</strong></p>
-
-<p>I helped Jan Hubicka on a GCC <a href="http://gcc.gnu.org/wiki/summit2010">summit paper</a>. Those nasty static initializers will not be a hassle in GCC 4.6!</p>
-
-<p>I keep wanting to blog about how we switched to <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=559964">GCC 4.5</a> and how life is wonderful, but life didn&#8217;t work out this way. So far we tried switching away from 4.3 compiler three times. The first time GCC completely failed in terms of -Os performance. C++ -Os is more bloated in 4.5 (because that option is benchmarked on C apps). Then it turned out that libffi was being <a href="http://gcc.gnu.org/bugzilla/show_bug.cgi?id=45623">miscompiled</a> (we also found a related bug in libffi). Last time, we tried switching to GCC 4.5 + -O3 since that performs much better than -Os, but that <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=609543#c45">broke</a> sunspider. Hopefully we can fix the sunspider issue and try again next week. I would really like to utilize GCC <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=418866">PGO</a> to produce fastest possible Linux Firefox builds.</p>
-
-<p>Nonetheless I happy with recent GCC progress. With Jan&#8217;s help, GCC will eventually be very good at compiling Mozilla. In my spare cycles I&#8217;ve been working on setting up GCC benchmarks using Mozilla to help avoid future surprises like we discovered in GCC 4.5. More on this later.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2010/10/04/diagnosing-slow-startup/">Diagnosing Slow Startup</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-10-04T10:30:56-07:00" pubdate data-updated="true">Oct 4<span>th</span>, 2010</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I spent last week trying to reproduce slow startup on Windows. Some users were reporting >30 second startup, supernova_00 has been feeding me <a href="https://developer.mozilla.org/En/Profiling_with_Xperf">xperf</a> traces on IRC reproducing slow startups.</p>
-
-<p><strong>Startup Bugs</strong></p>
-
-<p>Turns out that if a website uses non-standard font names this can trigger Firefox to start parsing every single font on the system, freezing the browser in the meantime. Turns out facebook does this :(. This is now a blocker <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=600713">bug 600713</a>. This bug has the unfortunate effect of overshadowing any startup improvements in Firefox 4.</p>
-
-<p>We have some code to keep our databases in good shape by VACUUMing them. This is getting revamped in Firefox in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=541373">bug 541373</a>. In the meantime, for many current users performance suffers due to missing vacuums. If you are suffering from slow Firefox startup, and/or slow Awesomebar try this <a href="http://mozillalinks.org/wp/2009/08/vacuum-firefox-databases-for-better-performance-now-with-no-restart/">manual vacuum</a>. This helps in older Firefox releases, but in Firefox 4 this has the effect of supercharging the SQLite database performance by switching to <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=416330">32K pages</a>.</p>
-
-<p><strong>Scareware</strong></p>
-
-<p>Another fun discovery was the effect of anti-virus software(AVG in this case). Like an annoying pet, AVG has to have a sniff and fondle every file that Firefox opens on startup. Apparently this is a feature called on-demand scanning, yuck.</p>
-
-<p>But the fun doesn&#8217;t stop there, Windows has a wonderful <a href="http://en.wikipedia.org/wiki/Prefetcher">prefetch</a> mechanism that speeds up app startup. Unfortunately for supernova_00, \Windows\Prefetch just wouldn&#8217;t get populated with Firefox info, meaning that Windows wasn&#8217;t optimizing Firefox startup. Once I installed AVG, I ran into the same problem. Uninstalling AVG didn&#8217;t help. For whatever reason deleting every file in \Windows\Prefetch fixes that problem. For both of us prefetch got repopulated after being cleaned.</p>
-
-<p><strong>XPerf</strong></p>
-
-<p>Microsoft XPerf makes trivial to optimize cold startup. None of the other OSes have precanned analyses showing how much each individual file access is contributing to slow startup.</p>
-
-<p>If you have a startup problem, I&#8217;m much more likely to be able to reproduce it if the report comes with an xperf trace. To get xperf run the Microsoft Platform SDK <a href="http://www.microsoft.com/downloads/en/details.aspx?FamilyID=6b6c21d2-2006-4afa-9702-529fa782d63b&amp;displaylang=en">installer</a>, select &#8220;Windows Performance Toolkit&#8221;.</p>
-
-<p>To record an IO trace:</p>
-
-<ol>
-<li>Reboot</li>
-<li>run cmd.exe as Administrator</li>
-<li>xperf -on latency+FILE_IO+FILE_IO_INIT+DISK_IO</li>
-<li>run Firefox, reproduce the bug</li>
-<li>xperf -d report.etl</li>
-<li>Run xperf report.etl to view the report.
-Click on &#8220;IO Counts&#8221; or &#8220;Hard faults&#8221; graph, select &#8220;Summary Table&#8221;. &#8220;IO Time (ms)&#8221; is the interesting column there. To get an idea of the sequence of IO operations, export the summary table to .csv and load it in a spreadsheet/grep/whatever. Every Firefox developer should give xperf a try, addon authors are encouraged too.</li>
-</ol>
-
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2010/09/14/firefox-4-jar-jar-jar/">Firefox 4: Jar Jar Jar</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-09-14T03:32:35-07:00" pubdate data-updated="true">Sep 14<span>th</span>, 2010</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Opening files is relatively expensive. There is a small syscall overhead and a higher overhead of fetching data from disk. Depending on physical data layout and disk type, this can leave modern CPUs twiddling their thumbs for a long time while the disk skips around fetching all of the different file pieces.</p>
-
-<p><strong>Optimization #1: Fewer naked files</strong></p>
-
-<p>About two years ago I started gathering naked files on disk and shoving them into jars (eg <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=508421">bug 508421</a>). We made jar reading as efficient as possible by cleaning up code and switching to <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=504864">mmap</a>. Eventually all application data files read from disk during &#8220;normal&#8221; startup ended up in jars. Unfortunately we ended up with four jars (toolkit, chrome + 2 locale jars), which felt silly. Due to limitations in XPCOM, a lot of naked files were still read from disk on version upgrades and extension installation.</p>
-
-<p><strong>Optimization #2: One jar to rule them all</strong></p>
-
-<p>Recently Michael Wu unleashed a can of <a href="http://blog.mozilla.org/mwu/2010/08/13/omnijar-how-does-it-work/">omnijar</a> whoopass. This was a massive effort driven by Android packaging requirements. Now application startup data is always being read from one file. This implies better data locality, less seeking, less waiting. One benefit of packing files tightly is that the OS speculatively reads data from disk in chunks that are usually larger than what the application requests. This makes reading nearby files free. Unfortunately there was no good way to predict the order that files will be accessed in without actually running Firefox, so there was more room for improvement.</p>
-
-<p><strong>Optimization #3: Optimized jar layout </strong></p>
-
-<p>So now that all of our data was in one file, the next logical step was to pack it intelligently. The only way to do this is to profile Firefox startup and then order the jar according to that. Unfortunately even once one lays out all of the jar entries sequentially we were still doing our io suboptimally. This was due to the fact that the zip index (jars are zip files) is traditionally located on the end of the file. Wikipedia <a href="http://en.wikipedia.org/wiki/ZIP_(file_format">entry</a>) has pictures to illustrate this.</p>
-
-<p>In order to maximize readahead benefits and minimize disk seeks it would be nice to have the file index in the front of the file. So I changed our zip layout from</p>
-
-<p><entry1><entry2>&#8230;<entryN><central directory><end of central directory></p>
-
-<p>to</p>
-
-<p><offset of the last entry read on startup><central directory><end of central directory><entry1><entry2>&#8230;<entryN><end of central directory></p>
-
-<p>So all I did was change the offset in <end of central directory> to always be 4 (it can&#8217;t be 0 because anal zip programs balk at &#8220;NULL&#8221; central directory offsets). Then I added a second identical <end of central directory> entry to keep the the rule that the central directory is always followed by one. I also used the extra space forced upon me by overly vigilant zip programs to store a number indicating how much data we can preread on startup.</p>
-
-<p>This yielded a 2-3x reduction in disk io over an unoptimized omnijar. This is on top of a >30-100x reduction achieved by going from naked files to omnijar.</p>
-
-<p>The downside of my interpretation of the zip spec is that some zip programs expect zip files to be more rigid than the spec allows. Older versions of Firefox, Microsoft zip support in windows, WinRAR, unix zip programs, etc accept my optimized jars. 7zip, broken antivirus (it&#8217;s a security risk to be overly picky) <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=595473">fail</a>.</p>
-
-<p>Trivia: this isn&#8217;t the first time we got tripped up by picky zip reading code. For example, the Android apk reader irritatingly insists at having a zip entry at byte zero of an Android package. This means that one can&#8217;t use apks to do the Android equivalent of self-extracting .exe files on Windows. Michael Wu is writing a custom library loader to deal with that :)</p>
-
-<p><strong>Optimization #4: More Omnijar</strong></p>
-
-<p>Feeling that omnijar wasn&#8217;t awesome enough, Michael Wu went ahead and <a href="http://blog.mozilla.org/mwu/2010/09/10/extensions-now-installed-packed/">omnijared extensions</a>. Most extensions will no longer need to be unpacked from xpi files. This also means that extension authors can opt to use the optimized jar format above to further speed up Firefox startup.</p>
-
-<p><strong>Other jar optimizations</strong></p>
-
-<p>Switching to jars via<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=520309"> startup cache</a> will allow us to further <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=562406">optimize</a> our first startup. There is option of halving our jar IO further by actually making use of that readahead integer I added to optimized jars.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2010/09/09/help-wanted-does-fcntlf_preallocate-work-as-advertised-on-osx/">Help Wanted: Does fcntl(F_PREALLOCATE) Work as Advertised on OSX?</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-09-09T07:06:11-07:00" pubdate data-updated="true">Sep 9<span>th</span>, 2010</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>To fight fragmentation it is best to tell the OS to allocate a continuous chunk of space for your file. With specialized APIs, the OS can do this without performing any IO (not counting metadata). I am adding support for this as part of <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=592520">bug 592520</a>.  Linux features <a href="http://linux.die.net/man/3/posix_fallocate">posix_fadvise</a> for preallocating files. Windows&#8217;s <a href="http://msdn.microsoft.com/en-us/library/aa365531%28VS.85%29.aspx">SetEndOfFile</a> achieves the same result. <a href="http://lists.apple.com/archives/darwin-dev/2007/Dec/msg00040.html">Supposedly</a> OSX can do this via <a href="http://www.manpages.info/macosx/fcntl.2.html">fcntl</a>(F_PREALLOCATE), but does it?</p>
-
-<p>I&#8217;ve experimented with posix_fadvise/SetEndOfFile and determined that they both change the file size and do their best to avoid fragmentation. Unfortunately I do not see any effect of fcntl(F_PREALLOCATE) on OS X 10.6 (the return code is successful). The file size does not change and if I then write to the file, it seems to fragment just as much as before. Can a Mac expert demonstrate that fcntl(F_PREALLOCATE) makes any difference at all?</p>
-
-<p><strong>Update:</strong> Thanks a lot for the useful feedback, it was extremely helpful in producing this <a href="https://bug592520.bugzilla.mozilla.org/attachment.cgi?id=474233">patch</a>. It appears that the posix_fallocate equivalent is to the fnctl followed by a truncate() call (which actually forces data to be written to the file).</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2010/09/07/fighting-fragmentation-sqlite/">Fighting Fragmentation: SQLite</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-09-07T02:57:56-07:00" pubdate data-updated="true">Sep 7<span>th</span>, 2010</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Thanks for all of those who commented on <a href="http://taras.glek.net/blog/2010/07/22/file-fragmentation/">previous post</a> on fragmentation. My first fragmentation <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=581606">fix</a> has landed. In current nightlies and future releases the main Firefox databases will grow more aggressively to avoid fragmentation. This should translate into better history/awesomebar/cookie performance for our most dedicated users.</p>
-
-<p>Unfortunately fixing existing profiles is <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=592678">hard</a> from within Firefox. In the meantime advanced users on non-Windows platforms who are suffering from fragmentation can manually copy *.sqlite files to another directory and back.</p>
-
-<p><strong>Windows: Ahead of the pack</strong></p>
-
-<p>Evidence suggests that the Windows fragmentation situation is slightly better than on other platforms. Firefox fragmentation behavior on Windows is similar to other OSes but Windows periodically defragments Firefox files opened on startup. So one ends up with a cycle of deteriorating performance, followed by better performance(ie right after defrag), followed by deteriorating performance, etc.</p>
-
-<p>I haven&#8217;t observed Windows defragmenting files for me, but it seems to do this for most users. Would love to learn more on how/when it decides to defragment files.</p>
-
-<p><strong>Horror Stories </strong></p>
-
-<p>I found a few other places that are horridly affected by fragmentation, will be blogging about those as I fix them. Fragmentation is an interesting problem to optimize because it affects dedicated users most, yet it is very tricky to replicate in a developer environment. Furthermore, there are a lot of misconceptions floating around:</p>
-
-<ol>
-<li>Fragmentation is a Windows problem that Linux is immune to due to having awesomer filesystems.</li>
-<li>Mac OSX automatically defragments files, so fragmentation isn&#8217;t a problem there.</li>
-<li>Fragmentation isn&#8217;t a problem on SSDs
-To which I say:</li>
-<li>Linux might be good at avoiding fragmentation for server workloads. It sucks for desktop users.</li>
-<li>OSX will defragment small files, but big ones hurt most.</li>
-<li>Cheap SSDs suck at tiny reads caused by fragmentation resulting in spectacularly bad IO. More on this in a future post.
-To summarize: there are a lot of misleading stories floating around. I am always happy to hear more measurements/docs/bugs/etc on this subject, but I have zero patience for folk stories and speculation.</li>
-</ol>
-
-
-<p>I should also mention that the fragmentation problem isn&#8217;t limited to Firefox. Other browsers suffer from it too.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/11/">&larr; Older</a>
@@ -639,11 +591,11 @@ To summarize: there are a lot of misleading stories floating around. I am always
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2012/12/21/interesting-bugzilla-activity/">Snappy #45: The view from home</a>
+        <a href="/blog/2012/12/24/making-pages-load-faster/">Making pages load faster</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2012/12/17/hello-octopress/">Hello Octopress</a>
+        <a href="/blog/2012/12/21/interesting-bugzilla-activity/">Snappy #45: The view from home</a>
       </li>
     
       <li class="post">

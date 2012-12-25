@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="I work on static analysis by lamp-light and proudly cycle wearing Firefox imagery by daylight. Today I was pleased to discover that the flyer for the &hellip;">
+  <meta name="description" content="I have never enjoyed the theory behind software engineering. It seems particularly depressing as it can be summarized as: &#8220;What can we learn &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -64,7 +64,7 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2008/05/16/my-other-job-as-a-rolling-billboard/">My Other Job as a Rolling Billboard</a></h1>
+      <h1 class="entry-title"><a href="/blog/2008/08/11/oink-testsuite-within-pork-passes/">Oink Testsuite Within Pork Passes</a></h1>
     
     
       <p class="meta">
@@ -80,18 +80,22 @@
   
 
 
-<time datetime="2008-05-16T14:53:24-07:00" pubdate data-updated="true">May 16<span>th</span>, 2008</time>
+<time datetime="2008-08-11T07:49:28-07:00" pubdate data-updated="true">Aug 11<span>th</span>, 2008</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>I work on static analysis by lamp-light and proudly cycle wearing Firefox imagery by daylight. Today I was pleased to discover that the flyer for the <a href="http://www.portlandcentury.com/">Portland Century</a> ride now prominently features the Firefox logo in one of the 4 photos. It&#8217;s also in the scrolling thing on the website =D</p>
+  <div class="entry-content"><p>I have never enjoyed the theory behind software engineering. It seems particularly depressing as it can be summarized as: &#8220;What can we learn from past software development experience in order to not repeat old mistakes such that we can come up with newer and shinier mistakes?&#8221;.</p>
 
-<p>This picture was taken on one ride with the most firefox fans ever. On parts of the course, it felt like every 5 minutes someone was volunteering info on how awesome firefox is.</p>
+<p>For that reason I haven&#8217;t been able to stick to any particular software development doctrine (paired, test-driven, OO, SOA, etc) and instead taken shortcuts to whatever is practical at the time.</p>
 
-<p><img src="http://myslider.com/v1/1484023162/IMG%5f4723%2ejpg" alt="" /></p>
+<p>One unfortunate result of such neglect is that the oink test suite ended up not being utilized. I tried it a couple of times while starting out with oink and it failed in many cumbersome ways. However, as pork evolved out of oink, I learned more about the &#8220;architecture&#8221; behind it, I fixed a couple of the issues that were causing funny make errors.</p>
+
+<p>However one giant bug remained. Turned out other people were able to run the original oink testsuite, but not the equivalent one in pork. Fearing that I somehow screwed up Elsa, I spent way too long investigating the failure only to learn it wasn&#8217;t my <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=444805">fault</a>. Pork users: rejoice, the testsuite should run as expected now.</p>
+
+<p>PS. I may not be a SENG believer, but I do think that open source + good version control + testsuites result in better software.</p>
 </div>
   
   
@@ -104,7 +108,7 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2008/04/29/counting-down-to-a-dehydra-release/">Counting Down to a Dehydra Release</a></h1>
+      <h1 class="entry-title"><a href="/blog/2008/08/04/summit/">Summit</a></h1>
     
     
       <p class="meta">
@@ -120,29 +124,200 @@
   
 
 
-<time datetime="2008-04-29T08:34:43-07:00" pubdate data-updated="true">Apr 29<span>th</span>, 2008</time>
+<time datetime="2008-08-04T11:40:28-07:00" pubdate data-updated="true">Aug 4<span>th</span>, 2008</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>I hope to release Dehydra 0.9  within a couple of weeks. There is already a community of users, but there are still too many barriers to entry keeping potential bug hunters away.</p>
+  <div class="entry-content"><p>The past week rocked. I was especially impressed with the localizers. The guys who bear through translating an entire browser with associated websites to expose their country to an awesome browsing experience are simply electrifying.</p>
 
-<p>In recent weeks there has been a lot of work on polishing rough areas. Now we have better error reporting, improved APIs for using libraries, etc. The remaining tasks are tracked in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=423898">this bug</a>.</p>
+<p>It was great to see the South American guys again and to meet hordes of Europeans.</p>
 
-<p>There few big remaining TODOs are low-tech:</p>
+<p>The most exciting outcome of the summit in my neck of the static analysis woods is that DXR (a semantically aware successor to MXR) will be rewritten from scratch in Python. Another reason to rejoice is that a tracing spidermonkey should make Treehydra ridiculously fast without much (or any) effort on my part.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2008/07/25/pull-pork-with-care/">Pull Pork With Care</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-07-25T07:01:04-07:00" pubdate data-updated="true">Jul 25<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I just committed the large giant change to bring down elsa&#8217;s namespace pollution to reasonable levels. Elsa code now is now using std::foo style, or using namespace std. As I mentioned before, Elsa&#8217;s string is now sm::string, a summary of how to perform similar renames is <a href="http://developer.mozilla.org/en/docs/Renaming_With_Pork">here</a>. The good news is that Pork will soon work out of the box with a modern toolchain.</p>
+
+<p>For the handful of porkers out there, you need to hg pull &amp; hg up all of the pork repositories. This has been a use-case in why splitting up a codebase into a billion repositories is a bad idea:</p>
+
+<p>a) Lovely, I have to do many commits instead of one</p>
+
+<p>b) To top it off, now my users will curse my name while updating whatever pork repository that interests them most.</p>
+
+<p>I feel like I&#8217;m going to throw up if I see any more C++ code diffs in the next 10minutes.</p>
+
+<p>In contrast, while rewriting things on the Mozilla-scale is a lot less feasible manually, it is very rewarding to automate. Gotta love big C++ codebases.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2008/07/22/dogfooding-pork-oscon/">Dogfooding Pork & OSCON</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-07-22T03:26:19-07:00" pubdate data-updated="true">Jul 22<span>nd</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I wrote a class renamer and used it to <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=445897">fix</a> my pork pet-pieve #1: a class named string that isn&#8217;t std::string. This has been a low priority goal for as long as I&#8217;ve been using Elsa. It&#8217;s pretty cool to apply a tool to fix itself.</p>
+
+<p>The renamer is a 3x simpler than the next simplest tool. I plan to extend it to also rename class members. Renaming is the most trivial use-case for rewriting code, I plan to post a tutorial on using  the renamer in the near future.</p>
+
+<p><strong>OSCON</strong></p>
+
+<p>If you are at OSCON, you do not want to miss our <a href="http://en.oreilly.com/oscon2008/public/schedule/detail/4383">static analysis session</a> on Wednesday.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2008/07/18/pork-mcpp-oink-and-elsawhats-going-on/">Pork, MCPP, Oink and Elsa&#8230;What&#8217;s Going On?</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-07-18T03:29:28-07:00" pubdate data-updated="true">Jul 18<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>It seems that there is some confusion as to what pork is and how it&#8217;s related to oink and elsa. So here is my view of it.</p>
+
+<p><a href="http://developer.mozilla.org/en/docs/Pork"><strong>Pork</strong></a> is my set of tools that use Elsa to rewrite sourcecode (mainly Mozilla code). Our use of Pork is solely for rewriting as it is not suited for <a href="http://developer.mozilla.org/en/docs/Dehydra">convenient</a> and <a href="http://developer.mozilla.org/en/docs/Treehydra">hardcore</a> analysis needs as much as the GCC based tools are.</p>
+
+<p><a href="http://mcpp.sf.net/">MCPP</a> is the secret sauce C preprocessor that makes C++ rewriting with Elsa possible by annotating preprocessed files with information to undo the lexical braindamage resulting from macro expansion.</p>
+
+<p><strong>Elsa</strong> is a awesome C++ parser. Awesome in that is can preserve more information regarding parsed code than any other C/C++ parser and it is easy to extend.</p>
+
+<p>We maintain our own version of Elsa within pork.</p>
+
+<p>I think our version of Elsa is the most up to date and most compatible with newer C++ features and headers used by newer GCC releases. We encourage other projects with C++ parsing/rewriting needs to collaborate with us. We will be parsing code with Elsa for a few years to come and it&#8217;s a lot of work to maintain a C++ parser by a single entity. I think elsa is a much better backend to build refactoring support onto than any other C++ parsing project out there right now.</p>
+
+<p><strong>The Messy Details</strong></p>
+
+<p>Now lets move on the more confusing parts: oink, oink-stack, and the oink mailing list.</p>
+
+<p><a href="http://www.cubewano.org/oink"><strong>oink</strong></a> consists of some static analysis tools and was meant to be a central place where all of the Elsa and Elsa-related development was supposed to happen. When people refer to oink, they usually mean the oink-stack which is a subversion meta repository that pulls in a dozen of subrepositoes(smbase, elkhound, elsa, oink(where static analysis tools live), etc).</p>
+
+<p>So when I started working on refactoring tools I was told that I should aim to have my tools added to oink, but there were some legal hassles to work out in the meantime so I cloned the oink-stack and developed my tools with minimal changes to oink-stack. This included various elsa extensions, bugfixes, etc.</p>
+
+<p>However, the little momentum that oink had has fizzled out due to various personality conflicts and various academics loosing interest. The code has been bitrotting for as long as I&#8217;ve been working at Mozilla.</p>
+
+<p>So the end result of oink is that we have pork which is a superset of oink. I&#8217;m not even sure if I mention the name pork anywhere in the sources. So pork at the moment means &#8220;Taras&#8217; continuation and extension of oink&#8221;. I am using the <a href="http://www.cubewano.org/lists/listinfo/oink-devel">oink mailing list</a> for any discussion on changes to Elsa/etc in hopes that at least some of the genius lurkers there will regain their interest in elsa.</p>
+
+<p><strong>Where do We Go From Here?</strong></p>
+
+<p>Onward! Due to the original authors vision of what C++ is and the state of C++ at the time Elsa was conceived, current pork code causes people to have many WTF moments (followed by banging head against keyboard) when they first start using it.</p>
+
+<p>The short version of my plan is:</p>
 
 <ul>
-<li>Need a better homepage than the <a href="http://wiki.mozilla.org/Dehydra_GCC">current one</a>.</li>
-<li>Docs, tutorials and more docs. Currently, the plan is to puts more documentation on MDC and  have it also serve as a webpage. Any dehydra/treehydra guides or API doc contributions are welcome. For now if you need help, feel free to ask on the <a href="https://lists.mozilla.org/listinfo/dev-static-analysis">mailing list</a> or #mmgc on irc.mozilla.org</li>
-<li>Verify, document and maintain the <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=415289">OSX port</a>. Vlad Sukhoy did a lot of heavy lifting to make this happen, now we need to cement his achievement by setting up a <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=430321">buildbot</a></li>
-<li>Spread the word! I would like to see other large projects such as KDE, OpenOffice, etc adopt application-specific static analysis in the form of <em>hydra. I am interested in seeing people use </em>hydra to scan code for security vunerabilities. Ok, so this isn&#8217;t really needed to release Dehydra 0.9, but I am impatient!
-<strong>RIP: Oink Dehydra</strong></li>
+<li>allow one to do &#8220;using namespace std&#8221; when using elsa</li>
+<li>Restructure pork repositories such that there are only 3 of them rather than 11 (elsa, elkhound, pork)</li>
+<li>get rid of the oink repository (those tools do not work for us)</li>
+<li>Make pork only consist of just my tools (with a sane build system) rather than be mixed into unmainted oink stuff</li>
+<li>Make pork compile with new compilers (GCC 4.3 and recent MSVC++)</li>
+<li>Keep track of this in a <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=438061">bug</a></li>
+<li>Clean up various misc things
+Some of you might ask &#8220;But Taras, why now, why not just keep doing what you&#8217;ve been doing?&#8221;. I was doing what I was doing because I had an overwhelming goal of devising a way to automate static analysis and refactoring of Mozilla on my shoulders and I wasn&#8217;t convinced that it was feasible. I had to learn to split my time between tool development and actually using the tools. Naturally I cut corners on tool development :)</li>
 </ul>
 
 
-<p>Between GCC Dehydra and Treehydra, there is nothing that pork Dehydra could do better, so I finally removed Dehydra from <a href="http://wiki.mozilla.org/Pork">Pork</a>. From now on Pork&#8217;s purpose is large-scale C/C++ refactoring. For everything else one should use <a href="http://wiki.mozilla.org/Dehydra_GCC">Dehydra</a>.</p>
+<p>Since then slowly, but surely various awesome hackers have started doing rewrites and analyses themselves freeing me up to focus more on development. To make matters sweeter, various hackers have started submitting bugreports, fixes, ports to my tools. This gives me more time to focus on the big picture.</p>
+
+<p>Finally, I belive that automation of the sort we are doing at Mozilla is something that has been missing from open source development practices and it will catch on once people realize what they&#8217;ve been missing. Reducing those WTF moments will help people think positively.</p>
+
+<p><strong>Update:</strong></p>
+
+<p><em>Why three repositories instead of one?</em></p>
+
+<ol>
+<li>The three will be elkhound, elsa, pork</li>
+<li>elkhound is useful on it&#8217;s own</li>
+<li>elsa is too and other elsa users are likely to not care about Mozilla&#8217;s rewriting tools
+<em>I__s oink really dead?</em></li>
+</ol>
+
+
+<p>Yes. The maintainers have moved on to other projects. When they were maintaining oink, outside contributors couldn&#8217;t get their code upstream.</p>
 </div>
   
   
@@ -155,7 +330,7 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2008/04/22/static-analyses-gadgets-of-mozilla-2-james-bonds/">Static Analyses: Gadgets of Mozilla 2 James Bonds</a></h1>
+      <h1 class="entry-title"><a href="/blog/2008/07/09/static-analysis-and-refactoring-tooling-updates/">Static Analysis and Refactoring Tooling Updates</a></h1>
     
     
       <p class="meta">
@@ -171,26 +346,36 @@
   
 
 
-<time datetime="2008-04-22T05:49:42-07:00" pubdate data-updated="true">Apr 22<span>nd</span>, 2008</time>
+<time datetime="2008-07-09T07:59:00-07:00" pubdate data-updated="true">Jul 9<span>th</span>, 2008</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>When started on my static analysis quest just over a year ago. I imagined a perfect world in which I make tools and people use them to do awesome analyses. Since I did not want to be disappointed, I imagined this, but did not think it would come true.</p>
+  <div class="entry-content"><p><strong>Hydras</strong></p>
 
-<p>Now we are at a point where static analysis use is growing rapidly, most analyses are done by people other than me as lately I barely have time to work on actual analyses. Treehydra and dehydra now have users and are well on their way to being released, which is taking up most of my time. Some of the most notable happenings:</p>
+<p>I am close to landing a <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=432917">flow</a> check. Turns out, it is super-easy to introduce new analyses into Mozilla due to a very nice build system hooks setup by bsmedberg.</p>
 
-<ul>
-<li>Vlad Sukhoy appeared out of nowhere and <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=415289">ported Dehydra</a> to GCC 4.2 on OSX. This is exciting because it showed that the plugin system is portable between GCC release, and it&#8217;s the biggest patch from a non-core dev.</li>
-<li>We finished the paper on our static analysis work to be presented at the <a href="https://www.gccsummit.org/2008/summary.php">GCC summit</a>. I am looking forward to meeting developers that built the GCC features that made the *hydras practical.</li>
-<li>There is a lot finishing touches being done such that we can release Dehydra 0.9 and eventually 1.0. <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=423898">Bug</a>.</li>
-<li>Dave Mandelin implemented a proper testsuite for the *hydras. This is a massive step up from what we had before.</li>
-<li>There is a massive amount of Treehydra work going on. Looks like it is boldly going where no static analysis has gone before, even faster than Dehydra did. So far it looks like Treehydra is going to be a bigger deal than Dehydra could ever be. It is turning out to be a very potent combination of GCC for features and JavaScript for ease of use.
-I have elaborate plans on how to take over the world with static analysis, more on that later. In the meantime I&#8217;ve started compiling a <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=430328">tracking bug</a> of ongoing analyses for Moz 2.</li>
-</ul>
+<p>Since coming back from the GCC summit I have forward-ported our GCC patches to GCC trunk. The FSF legal paperwork came through today so I posted the first and biggest patch to the GCC for <a href="http://gcc.gnu.org/ml/gcc-patches/2008-07/msg00741.html">review</a>.</p>
 
+<p>I am not sure if I mentioned this before, but the C port of <a href="http://developer.mozilla.org/en/docs/Dehydra">Dehydra</a> is somewhat operational. It doesn&#8217;t yet have access to function bodies, but type traversal should work. Unfortunately, the C frontend has less features(pretty printing sucks, locations are even less reliable, etc) and thus is less awesome to work with than the C++ frontend.</p>
+
+<p><a href="http://wiki.mozilla.org/Pork"><strong>Pork</strong></a></p>
+
+<p>jst was awesome enough to list some interfaces that need some outparamdelling. The list is <a href="http://wiki.mozilla.org/Gecko:DeCOMtamination">here</a> (in the content/ section). This lead me to spent some time making outparamdel&#8217;s output prettier. There are still some improvements to be made, and I will be making them in the near future. However if someone is interested in refactoring of this kind land in the near future, they could easily complete outparamdel&#8217;s work with some clever scripting and a bit of manual labour. Sure beats doing the entire thing manually. From outparamdel&#8217;s perspective last 10% appear to be slightly painful and might take some time.</p>
+
+<p>Here is a <a href="http://people.mozilla.org/~tglek/nsinodeinfomanager_getnodeinfo.diff">patch</a> that takes about 30seconds to produce.</p>
+
+<p>Another exciting aspect of this is that a certain emacs wizard has confirmed that it would be possible to feed emacs such a patch file and have it correct indentation for the affected areas only.</p>
+
+<p>I am also very excited that a certain volunteer came forward and decided to start improving some of the stomach-turning areas of Pork. Hopefully in the near future we&#8217;ll modernize the C++ a little bit and a user&#8217;s first reaction wont be: &#8220;What the hell, why can&#8217;t I do &#8216;using namespace std;&#8217;&#8221;.</p>
+
+<p>To this end I have filed a bug to write a <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=441870">renamer tool</a> so we can dogfood renaming of unfortunately named pieces of code.</p>
+
+<p><strong>OSCON</strong></p>
+
+<p>The plan is to have some sort of a minisession on our static analysis efforts at Mozilla. So if you are attending OSCON and are interested in doing exciting things to depressingly large amounts of code, drop me a line.</p>
 </div>
   
   
@@ -203,7 +388,7 @@ I have elaborate plans on how to take over the world with static analysis, more 
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2008/04/14/mozillafisl08/">Mozilla@FISL08</a></h1>
+      <h1 class="entry-title"><a href="/blog/2008/07/08/where-is-the-sanity-in-the-c-std-library/">Where Is the Sanity in the C++ Std Library?</a></h1>
     
     
       <p class="meta">
@@ -219,182 +404,38 @@ I have elaborate plans on how to take over the world with static analysis, more 
   
 
 
-<time datetime="2008-04-14T02:43:34-07:00" pubdate data-updated="true">Apr 14<span>th</span>, 2008</time>
+<time datetime="2008-07-08T03:52:42-07:00" pubdate data-updated="true">Jul 8<span>th</span>, 2008</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>I will be presenting on the work we are doing on Mozilla 2 at <a href="http://fisl.softwarelivre.org/9.0/www/">FISL08</a>. Chris posted an excellent <a href="http://www.0xdeadbeef.com/weblog/?p=344">breakdown</a> of Mozilla plans for the conference.</p>
+  <div class="entry-content"><p>Dear lazyweb,</p>
 
-<p>If you are at all interested in ground-breaking development happening in Mozilla 2, the challenges of static analysis then look me up!</p>
-
-<p>This is all very exciting as it&#8217;ll be a trip of many personal firsts: Brazil, the southern hemisphere and a conference of this scale.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2008/03/17/dehydra-world-tour/">Dehydra World Tour</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-03-17T06:57:35-07:00" pubdate data-updated="true">Mar 17<span>th</span>, 2008</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>After a few weeks of mindnumbing work on treehydra gutts, I finally have something exciting to talk about!</p>
-
-<p>We will be presenting  <a href="http://wiki.mozilla.org/Dehydra_GCC">Dehydra</a> at the <a href="http://www.gccsummit.org/2008/">GCC Developer&#8217;s Summit</a> in lovely Ottawa. The GCC version of Dehydra exceeded all of my expectations, so it will be exciting to meet awesome GCC hackers who lay the groundwork to make this possible. Got suggestions for other venues to present Dehydra?</p>
-
-<p><strong>Packaging Help Needed</strong></p>
-
-<p>I feel that the Dehydra concept is getting mature enough for a 1.0 release. Recently baked GCC 4.3 means I&#8217;ll be able to distribute a 4.3-specific <a href="http://hg.mozilla.org/users/tglek_mozilla.com/gcc-moz-plugin-mq/">plugin patch</a>(currently it&#8217;s against trunk, aka 4.4to-be). Now I need README, LICENSE, configure files, etc.</p>
-
-<p>I will need help with packaging dehydra + patched gcc into .dpkg and .rpm files. Leave a comment, email me/<a href="https://lists.mozilla.org/listinfo/dev-static-analysis">static analysis list</a> or poke me in #mmgc on irc.mozilla.org if you can help with packaging.</p>
-
-<p><strong>Logo/Mascot Wanted</strong></p>
-
-<p>Since every serious project has a cool mascot, it would be cool to get one for Dehydra. I&#8217;d be curious to see what people think could symbolize a code scanning monster that makes grep feel inadequate. I have a feeling a cartoon version of a giant <a href="http://photos-b.ak.facebook.com/photos-ak-sf2p/v181/152/124/53600064/n53600064_30549377_7914.jpg">Heavy Metal Duck</a> might be it, but I haven&#8217;t made up my mind yet.</p>
-
-<p><strong>Treehydra What?</strong></p>
-
-<p>Treehydra is a work-in-progress name for the low-level equivalent of Dehydra. Currently it is built as separate GCC plugin. I haven&#8217;t yet made up mind on whether Treehydra will end up extending Dehydra or stay a separate tool. Since treehydra needs dehydra for bootstrap, they&#8217;ll stay separate for now.</p>
-
-<p>Last week I managed to run treehydra to completition on my mozilla checkout and walk the resulting AST in JS correctly. Now comes the fun part of making it do useful tricks.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2008/03/12/recipe-how-many-classes-are-instantiated-in-mozilla/">Recipe: How Many Classes Are Instantiated in Mozilla?</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-03-12T03:59:27-07:00" pubdate data-updated="true">Mar 12<span>th</span>, 2008</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I got this question in the mail today.</p>
-
-<p>Seems like a simple enough question, but grep won&#8217;t provide that answer :) It also happens to be an excellent usecase for <a href="http://wiki.mozilla.org/Dehydra_GCC">Dehydra</a>.</p>
-
-<p>My script:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>
-</span><span class='line'>var classes = []
-</span><span class='line'>function process_type (c) {
-</span><span class='line'>if (!/class|struct/(c.kind)) return
-</span><span class='line'>classes.push (c.name)
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>
-</span><span class='line'>function input_end() {
-</span><span class='line'>var f = this.aux_base_name + ".counter"
-</span><span class='line'>print(f)
-</span><span class='line'>write_file (f, classes.join ("\n"))
-</span><span class='line'>}
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>process_type is called every time GCC hits a class declaration or a template is instantiated(also for enums and unions, but those get ignored with the .kind check). Then input_end is called when GCC is done processing the file. this.aux_base_name is the input filename.</p>
-
-<p>I hooked up this script to the mozilla build by adding the following to .mozconfig:</p>
+<p>Please explain to me why the following code works the way it does. From looking at the following code and stringstream::str(), stringstream::str(string) docs the behavior of the following code does not make sense to me.</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>
-</span><span class='line'>export CXX=$HOME/gcc/bin/g++
-</span><span class='line'>export CXXFLAGS="-fplugin=$HOME/work/gccplugin/gcc_dehydra.so -fplugin-arg=$HOME/work/gccplugin/test/count_classes.js"
-</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'>#include &lt;sstream&gt;
+</span><span class='line'>#include &lt;iostream&gt;</span></code></pre></td></tr></table></div></figure>
 
 
-<p>Then I built:</p>
+<p>using namespace std;</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>
-</span><span class='line'>make -f client.mk build WARNINGS_AS_ERRORS=
-</span></code></pre></td></tr></table></div></figure>
+<p>int main(int argc, char**) { stringstream ss(&#8220;foo&#8221;); cout &lt;&lt; ss.str() &lt;&lt; endl; ss &lt;&lt; &#8220;bar&#8221;; cout &lt;&lt; ss.str() &lt;&lt; endl; ss &lt;&lt; &#8220;more&#8221;; cout &lt;&lt; ss.str() &lt;&lt; endl; }</p>
 
+<p>Why is doing &lt;&lt; after str(string) causing this stringstream to loose the initialization string? What possible API usecase would justify such behavior?</p>
 
-<p>Count:</p>
+<p>For the curious, output is:</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>
-</span><span class='line'>find -name \*.counter|xargs cat |sort |uniq &gt; /tmp/classes.txt
-</span><span class='line'>wc /tmp/classes.txt
-</span></code></pre></td></tr></table></div></figure>
+<p>foo bar barmore</p>
 
+<p>It seems that the only sensible way to use stringstream is to do ss.str(&#8220;&#8221;) unless you want to have your initial data reset for no reason. In that case why add a weird method overload instead of a .reset() method.</p>
 
-<p>Answer: 15001</p>
-
-<p>There are a million other trivial queries that could be accomplished in a similar manner that weren&#8217;t easy or possible before.</p>
-
-<p><strong>Update</strong>: Fixed typo, had an extra zero in the answer</p>
+<p><strong>Update:</strong> Note that stringstream ss(&#8220;foo&#8221;) is equivalent to stringstream ss; ss.str(&#8220;foo&#8221;);</p>
 </div>
   
   
@@ -407,7 +448,7 @@ I have elaborate plans on how to take over the world with static analysis, more 
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2008/03/11/dehydra-as-pesticide/">Dehydra as Pesticide?</a></h1>
+      <h1 class="entry-title"><a href="/blog/2008/06/30/pork-09-in-the-wild/">Pork 0.9 in the Wild</a></h1>
     
     
       <p class="meta">
@@ -423,27 +464,14 @@ I have elaborate plans on how to take over the world with static analysis, more 
   
 
 
-<time datetime="2008-03-11T15:13:23-07:00" pubdate data-updated="true">Mar 11<span>th</span>, 2008</time>
+<time datetime="2008-06-30T06:08:26-07:00" pubdate data-updated="true">Jun 30<span>th</span>, 2008</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p><a href="http://quetzalcoatal.blogspot.com/">Joshua</a>, pointed me at a <a href="http://www.economist.com/printedition/displaystory.cfm?story_id=10789417">fabulous article</a> over at the Economist. The brave souls went to great deal of effort to compare, contrast static and dynamic analyses in an easy to understand fashion. My favourite part of the article:</p>
-
-<blockquote><p>Seth Hallem, the co-founder of Coverity, which makes a static-analysis tool, expects greater integration between programming and testing tools in future.</p></blockquote>
-
-<p>I suspect in the future, there will be awesome tools that even <a href="http://wiki.mozilla.org/Dehydra_GCC">integrate</a> into one&#8217;s compiler. Egads!</p>
-
-<p><strong>Treehydra</strong></p>
-
-<p>I spent a few days chasing my own tail looking for bugs in the C->JS conversion code. Turns it out it wasn&#8217;t bug, but a manifestation of GCC having slightly more AST mutation than I expected*. Bugs in the mental model hurt most :) The upside is that this forced me to switched the conversion process from eager to lazy which also gave a big performance boost. I hope to finally have something capable of doing initial analyses by the end of the week.</p>
-
-<ul>
-<li>In a perfect world compilers are written in functional languages where AST are transformed instead of mutated.</li>
-</ul>
-
+  <div class="entry-content"><p>Those who would like to play with Pork, but are allergic to pulling sources from version control can now download an actual <a href="http://ftp.mozilla.org/pub/mozilla.org/static-analysis/pork/pork-0.9.tar.gz">pork release</a>. Now someone needs to hook this into a GUI to provide easy Eclipse-style refactoring for C++.</p>
 </div>
   
   
@@ -456,7 +484,7 @@ I have elaborate plans on how to take over the world with static analysis, more 
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2008/03/03/random-news-in-the-dehydra-corner/">Random News in the Dehydra Corner</a></h1>
+      <h1 class="entry-title"><a href="/blog/2008/06/24/status-report-nearterm-plans-for-pork-dehydra/">Status Report: Nearterm Plans for Pork, Dehydra</a></h1>
     
     
       <p class="meta">
@@ -472,22 +500,38 @@ I have elaborate plans on how to take over the world with static analysis, more 
   
 
 
-<time datetime="2008-03-03T10:05:31-08:00" pubdate data-updated="true">Mar 3<span>rd</span>, 2008</time>
+<time datetime="2008-06-24T06:36:19-07:00" pubdate data-updated="true">Jun 24<span>th</span>, 2008</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>I have not blogged recently because I have been busy working on a rather fancy new mode for <a href="http://wiki.mozilla.org/Dehydra_GCC">Dehydra</a>. Turned out it is indeed possible to use JavaScript to walk and generate code to automagically convert thousands of recursive C structures into corresponding JS Objects. Now dehydra will have two modes: a simple pattern matcher that is easy to get started with and a hardcore mode for compiler geeks capable of advanced analyses. More on this later, for now subscribe to <a href="https://lists.mozilla.org/listinfo/dev-static-analysis">static analysis</a> mailing list for more information.</p>
+  <div class="entry-content"><p><a href="http://developer.mozilla.org/en/docs/Pork"><strong>Pork</strong></a></p>
 
-<p>Turns out that I&#8217;m not the first person to <a href="https://sourceforge.net/forum/forum.php?thread_id=1685933&amp;forum_id=624529">embed</a> SpiderMonkey into GCC.</p>
+<p>I planned to release Pork 1.0 for a while now. The tools work great, even if all the love is going to the GCC-based toolchain. However, after hearing grumpy comments from a certain coworker about the uglyness of the oink build system it dawned on me that it&#8217;s rather mean to release such a mess and call it 1.0.</p>
 
-<p>I have gotten in touch with two different GCC plugin projects. Seems that other projects are more academic in nature and still in the early design/development stages.</p>
+<p>So I think I&#8217;ll release Pork 0.9 in the current state, so I can focus on near term GCC toolchain work. Pork in the current form means <a href="http://danielwilkerson.com/oink/">oink stack</a> + my refactoring tools + changes to elsa and other libs to support C/C++ refactoring needs.</p>
 
-<p>In constrast, Dehydra efforts are driven by existing unmet needs. In two months we went from having a crazy idea about using GCC for static analysis to having Benjamin <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=419622">integrate</a> support for Dehydra checks into the moz 2 development repository to be run in a tinderbox.</p>
+<p>This will be followed up by Pork 1.0. 1.0 will involve changes to the build system to get rid of oink(we only use the oink build system and rarely use oink API). To put this another way: I don&#8217;t expect any functionality changes between 0.9 and 1.0 other than an improved build system to make it easier to get started with writing new tools.</p>
 
-<p>I am also excited to see that people are discovering that Dehydra can be used to explore the codebase. We are not quite at the stage where one can interactively query the codebase from an ajax UI, but we are making <a href="http://blog.mozilla.org/dmandelin/2008/02/14/dtrace-c-mysteries-solved/">steps</a> in the right direction. As part of this trend, dehydra documentation is starting to migrate to MDC.</p>
+<p><strong>Pork - Future</strong></p>
+
+<p>I am pretty happy with Pork as it is. I think we&#8217;ve taken Elsa as far as it&#8217;ll let us go. The only realistic improvement on the Pork side may be to have Dehydra generate a JS binding to Elsa&#8217;s extensive AST to make rewriting stuff easier. However, I&#8217;m not sure if that&#8217;s worth the effort nor that a C++ AST will reflect into JavaScript as well as GCC GIMPLE.</p>
+
+<p><em>Preprocessing</em></p>
+
+<p>On the other hand, something needs to be done about the main ingradient that makes Pork tick: MCPP. MCPP does a lovely job of annotating what the C preprocessor is doing, but configuring GCC to use a foreign preprocessor is a giant hassle and making sure it works correctly is troublesome. At the GCC summit, <a href="http://tromey.com/blog/">Tom</a> gave me an idea on how similar functionality can be added to GCC directly by extending the include backtrace with macro expansions. Not only would such integration simplify Pork setup and increase Pork&#8217;s operating speed, but it is also a clean way to expose preprocessor constructs to the AST presented in De/Treehydra. It should allow for more preprocessor awareness directly in analysis stage of refactoring instead of only in the final rewriting stage as is currently done. As a side-effect, GCC would gain better error messages too.</p>
+
+<p>So while this isn&#8217;t going to affect Pork directly, it will simplify the lives of Pork users while opening new analysis frontiers. Even though I hate working on preprocessor stuff, I think this work will need to happen sometime in the near future.</p>
+
+<p><a href="Dehydra">The Hydras</a></p>
+
+<p>Dehydra 0.9 has been out for a while, I planned to release 1.0 soon after unless there are major flaws discovered in the API. The situation changed at the GCC summit. The fact that FSF reversed their stance on GCC plugins means that we should be concentrating on getting the plugin stuff reviewed.</p>
+
+<p>So in the near term I&#8217;m forward porting the plugin stuff to trunk GCC, then I&#8217;ll be generalize the plugin API to suit at least one other GCC plugin user that we met with at the summit. The downside is that I don&#8217;t want to release Dehydra 1.0 and immediately break the plugin API. The upside is that the new API should be more general and more minimalistic and will likely be close to what will eventually become an official plugin API.</p>
+
+<p><em>Summary</em>: In my mind Dehydra and Pork are 1.0 quality, but I want to future-proof them a little bit before calling them 1.0.</p>
 </div>
   
   
@@ -500,7 +544,7 @@ I have elaborate plans on how to take over the world with static analysis, more 
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2008/02/06/gcc4-elsa-together-at-last/">GCC4 + Elsa, Together at Last?</a></h1>
+      <h1 class="entry-title"><a href="/blog/2008/06/18/gcc-summit/">GCC Summit</a></h1>
     
     
       <p class="meta">
@@ -516,76 +560,18 @@ I have elaborate plans on how to take over the world with static analysis, more 
   
 
 
-<time datetime="2008-02-06T05:26:44-08:00" pubdate data-updated="true">Feb 6<span>th</span>, 2008</time>
+<time datetime="2008-06-18T23:01:08-07:00" pubdate data-updated="true">Jun 18<span>th</span>, 2008</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>David Mandelin has been going through <a href="http://wiki.mozilla.org/Pork">Pork</a> fixing bugs and now it is almost working with GCC4. Prior to Dave&#8217;s involvement people would run into Elsa&#8217;s scary template bugs and switch back to GCC3.4 while trembling with fear. I asked Dave to fix a few easily work-aroundable (in Moz, not in Elsa) crashes in Elsa caused by Mozilla source and he did. Recently, I accidentally ran Elsa on a Mozilla .ii file produced by GCC4 and magically it processed! Turns out that the 3-4 bugs that Dave fixed also fixed 90% of the failures caused by GCC4 headers. The good news is that soon people won&#8217;t have to worry about that pesky GCC3.4 dependancy and run rewriting tools easier.</p>
+  <div class="entry-content"><p>Our presentation on <a href="http://developer.mozilla.org/en/docs/Treehydra">Treehydra</a> and <a href="http://developer.mozilla.org/en/docs/Dehydra">Dehydra</a> GCC plugins was received well at the summit.</p>
 
-<p><a href="http://wiki.mozilla.org/Dehydra_GCC"><strong>GCC Dehydra</strong></a></p>
+<p>The big news is that FSF is working on license changes to allow GPL-only GCC plugins. I&#8217;m looking forward to having our work be compatible with future GCC without any patching.</p>
 
-<p>I feel like I&#8217;m nearing the feature-complete milestone. I plan to have Dehydra generate conversion code from GCC tree structures to JavaScript objects so we&#8217;ll be able to easily hook into any GCC middle-end pass in pure JS.  Dynamic, GCed, introspective nature of JavaScript should allow for very rapid development of code police/extraction/grep tools. This should result in a consistent codebase for Mozilla 2.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2008/01/25/dehydra-progress/">Dehydra Progress</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-01-25T09:39:30-08:00" pubdate data-updated="true">Jan 25<span>th</span>, 2008</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><a href="http://wiki.mozilla.org/Dehydra_GCC">GCC Dehydra</a> is evolving much faster than the Elsa version did and it is easier to use. Once I implemented virtual methods correctly, Joshua was able to <a href="http://quetzalcoatal.blogspot.com/2008/01/more-fun-and-games.html">do his thing</a> in no time at all. All it takes is a custom GCC (I&#8217;d love to see it packaged) and specifying plugin parameters in CXXFLAGS.</p>
-
-<p>Dehydra has some new tricks now like a tree representation of types (instead of a string) with full typedef support. Lisp remnants in GCC are getting a new life as JavaScript objects.</p>
-
-<p>I&#8217;m current working on exposing the full GCC tree structure in JavaScript so one could do any analysis they wanted in pure JS. Dynamically typed GCC tree nodes are great for that. I&#8217;m starting with middle-end GIMPLE representation so in theory one will be able to analyze anything gcc can compile (Java, C++, C, ObjC, ObjC++, FORTRAN?). Eventually this will be expanded to support frontend specific tree nodes to be able to look at code closer to the way it was written. Oh and I expect people will be able to script large parts of C++ -> JavaScript rewrites with Dehydra.</p>
-
-<p>In theory, one could make tree node conversion two way which would enable writing optimization passes in JS, but that would be silly.</p>
-
-<p><strong>What&#8217;s the point?</strong></p>
-
-<p>I want to be able to do <a href="http://wiki.mozilla.org/Exceptions">Exception-safety analysis</a> in pure JS. I want to enable <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=265084">unit checking </a>(thought typedefs and inline conversion functions) in pure JS.</p>
-
-<p>Additionally, Dehydra should be awesome for generating bindings. For example, I&#8217;ll be able use Dehydra to import GCC&#8217;s autogenerated enums to get string names for nodes.</p>
-
-<p>Also it will become easy to extract callgraphs and various other stats out of the code if they are accessible in JS. Eventually we&#8217;ll be switching Dehydra to Tamarin to do all of the above really really fast.</p>
-
-<p><strong>GCC Plugins</strong></p>
-
-<p>While I am messing with the GCC AST, Dave is working on utilizing GCC&#8217;s <a href="http://blog.mozilla.org/dmandelin/">control flow graphs</a> with a separate plugin. Eventually we&#8217;ll merge our work, but for now it&#8217;s nice to not step on each others toes while adding features to the compiler. Given how easy life is with plugins I am amazed that people chose to go uphill bothways and not collaborate on a plugin interface for their crazy GCC extensions. Yes, I&#8217;m looking at you: <a href="http://mygcc.free.fr/">mygcc</a> and <a href="http://www.gccxml.org/HTML/Index.html">gccxml</a>.</p>
-
-<p>Aren&#8217;t there <a href="http://www.eclipse.org/cdt/">IDEs</a> interested in making use of GCC internals too or is everybody interested in maintaining <a href="http://git.kernel.org/?p=devel/sparse/sparse.git;a=blob;f=expression.c;h=289927ac7c88eb5bffbbb450915a7b829394d5a0;hb=a02aeb329d5a8f9047c0b75b7e7f64ee2db3ffcf">yet another crappy C parser</a> like Linux&#8217;s Sparse tool?</p>
-
-<p>I&#8217;m looking forward to exploring the many ways we can reuse what&#8217;s in the compiler to empower developers for Mozilla 2.</p>
+<p>In a few minutes we&#8217;ll be having a meeting with users of other plugin frameworks to have an initial discussion on a common API. I&#8217;m working on forward porting my patches, so they can start getting reviewed ahead of license changes.</p>
 </div>
   
   
@@ -610,11 +596,11 @@ I have elaborate plans on how to take over the world with static analysis, more 
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2012/12/21/interesting-bugzilla-activity/">Snappy #45: The view from home</a>
+        <a href="/blog/2012/12/24/making-pages-load-faster/">Making pages load faster</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2012/12/17/hello-octopress/">Hello Octopress</a>
+        <a href="/blog/2012/12/21/interesting-bugzilla-activity/">Snappy #45: The view from home</a>
       </li>
     
       <li class="post">

@@ -1,0 +1,245 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Rooter Hardware - All About Performance</title>
+  <meta name="author" content="Taras Glek">
+
+  
+  <meta name="description" content="Rooter - British pronunciation of router. This is post describes the hardware in my Atom router.I wanted a low power x86 router. There a number of &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://taras.glek.net/blog/2009/12/03/rooter-hardware/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="All About Performance" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">All RSS</a></li>
+  
+  <li><a href="/blog/categories/mozilla/atom.xml" rel="subscribe-rss" title="subscribe via RSS">Mozilla RSS</a></li>
+</ul>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <header role="banner"><hgroup>
+  <h1><a href="/">All About Performance</a></h1>
+  
+    <h2>and other stuff by Taras Glek</h2>
+  
+</hgroup>
+
+</header>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Rooter Hardware</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-03T03:11:00-08:00" pubdate data-updated="true">Dec 3<span>rd</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><div class='post'>
+Rooter - British pronunciation of router. This is post describes the hardware in my Atom router.<br /><br />I wanted a low power x86 router. There a number of things that I want to be able to do with it on my lan: DNS for naming/tracking a few dozen devices, VOIP, media serving with MPD + PulseAudio.<br /><br />I choose Atom because it is cheap to buy and to run. CPU/Mobo combos start at $50. There are two flavours of Atom boards: cheap ones with desktop chipsets and more expensive ones with laptop chipsets (which consume 50% less power).  I also needed to have 2 nics and to have gigE on the LAN side. Most boards ship with RealTek NICs which have absolutely terrible drivers. Unfortunately there is only one (<a href="http://www.tweaktown.com/reviews/1675/msi_im_945gse_a_mini_itx_fanless_atom_motherboard/index2.html">MSI IM-955GSE-A</a>) massmarket dual Intel-gigE board that doesn&#8217;t suck and it costs $150. <br /><br />Due to a misleading ebay listing I ended up buying MSI IM-955GSE-B on Ebay. It is the former boards&#8217; wierdo industrial sibling(no VGA, 1 gigE, but 6 serial ports!). It features a builtin DC2DC power supply which connects via a floppy-power-connector to a 12V DC source.<br /><br />To make up for a missing Ethernet port I opted for a USB2.0 100Mbit nic (Trendnet TU2-ET100,which uses the &#8216;asix&#8217; driver). This NIC is a true full-speed device and easily sustains 11MB/s transfers, so it&#8217;s perfectly good enough for a WAN port.<br /><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://ep.yimg.com/ca/I/yhst-27518546784426_2079_116848138" imageanchor="1" style="clear: left; float: left; margin-bottom: 1em; margin-right: 1em;"><img border="0" src="http://ep.yimg.com/ca/I/yhst-27518546784426_2079_116848138" /></a><br /></div>I got the cheapest Mini-ITX case on ebay. It came with a great 65W Seasonic power supply.<br /><br />Cost:<br />Case - $30<br />Mobo/CPU - $82<br />2GB RAM - $30<br />USB NIC - $18<br />Total: $160 <br /><br />I installed Fedora onto a spare 4gb usb stick. I am really happy with the resulting computer. It is very quiet because it has no moving fans.<br /><br /><b>PSU Hack</b> <br />Current 13W idle power draw is reasonable given that the PSU is likely underloaded and thus less efficient .<br />Currently, the mobo is powered by shorting the ON pins on the PSU(+ducttape for robustness) and a custom Molex2Berg adapter cable(made for me by a very resourceful friend). Eventually I plan to switch over the EEE power supplies as they are better specced for such low power motherboards. This would also avoid redundant dc2dc conversion going on in the case.<br /><br /><b>Power-On AC</b><br />I considered using busted netbook for rooter duties but laptops do not usually have the Power-On-AC option (or power-on-lan-activity). With power-on-ac Rooter turns On/Off just like any other appliance when one messes with the power cord. That&#8217;s as wife-safe as a computer can get :)</div>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Taras Glek</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-03T03:11:00-08:00" pubdate data-updated="true">Dec 3<span>rd</span>, 2009</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/personal/'>personal</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://taras.glek.net/blog/2009/12/03/rooter-hardware/" data-via="tarasglek" data-counturl="http://taras.glek.net/blog/2009/12/03/rooter-hardware/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2009/11/20/dehydra-testsuite-passes-on-gcc-4-5/" title="Previous Post: Dehydra Testsuite Passes on GCC 4.5">&laquo; Dehydra Testsuite Passes on GCC 4.5</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2009/12/17/javascript-dom/" title="Next Post: JavaScript DOM">JavaScript DOM &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2012/12/24/making-pages-load-faster/">Making pages load faster</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/12/21/interesting-bugzilla-activity/">Snappy #45: The view from home</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/11/26/coping-with-flash-hangs/">Coping with Flash hangs</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/11/16/snappy-44-fixing-tab-switching-in-vancouver/">Snappy #44: Fixing tab switching in Vancouver</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/11/05/snappy-43-big-improvements-faster-startup-smoother-tabstrip/">Snappy #43: Big improvements: faster startup? Smoother tabstrip!</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("tarasglek", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/tarasglek" class="twitter-follow-button" data-show-count="false">Follow @tarasglek</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p><h6>
+  Copyright &copy; 2012 - Taras Glek - content on this site is licensed under the
+Creative Commons Attribution Share-Alike License v3.0 or any later version.
+
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span></h6>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'allaboutperformance-tarasglek';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

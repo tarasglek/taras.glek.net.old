@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Our last meeting was last Thursday, at 11am PST (meeting notes). This blog post is late because of a combination of email disasters and travel. Cheng &hellip;">
+  <meta name="description" content="Team Perf and a significant number of other Mozillians will be attending FOSDEM this year. My team will be giving talks on android linkers, IO, &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -58,6 +58,129 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/12/20/fosdem-anyone/">FOSDEM Anyone?</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-12-20T06:57:10-08:00" pubdate data-updated="true">Dec 20<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Team Perf and a significant number of other Mozillians will be attending <a href="http://fosdem.org/2012/">FOSDEM</a> this year. My team will be giving talks on android linkers, IO, toolchain stuff, other TBD stuff. This will be my first FOSDEM, I&#8217;m really excited about it. There are a lot of European open sourcers to meet that don&#8217;t make it to this side of the pond much.</p>
+
+<p>Team perf &amp; other snappy people (10+ people) plan to spend the week before FOSDEM hacking on <a href="http://taras.glek.net/blog/category/snappy/">Snappy</a> and other perf projects. Does anyone have suggestions on a cool hackerspace (I sent an email to hackerspaces.be folks) or a coworking facility that could host us in Brussels?</p>
+
+<p><strong>Update:</strong> Looks like hackerspaces.be will be hosting us. Looking forward to checking out HSBXL-NG :)</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/12/16/snappy-update-for-dec-15/">Snappy Update for Dec 15</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-12-16T08:31:05-08:00" pubdate data-updated="true">Dec 16<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><a href="https://wiki.mozilla.org/Performance/Snappy/2011-12-15">Meeting notes</a>.</p>
+
+<p>Not much exciting new stuff happened this week. There was some progress on responsiveness profiler, snappy scrolling, dom storage. We are starting investigations into reporting per-tab overhead, interruptable JavaScript, etc</p>
+
+<p>Slow (>100ms) SQL telemetry landed in Thursday&#8217;s nightly. Here are some preliminary results:</p>
+
+<ul>
+<li>Slow SQL on <a href="http://people.mozilla.org/~xstevens/telemetry/main-bycount.txt">UI thread</a> (ie blocking our UI)</li>
+<li>Slow SQL on <a href="http://people.mozilla.org/~xstevens/telemetry/other-bycount.txt">other threads</a> (harmless, but annoying)
+These files of the format: sql, count, average time per query.</li>
+</ul>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/12/13/slow-sql-tracking/">Slow SQL Tracking</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-12-13T03:55:43-08:00" pubdate data-updated="true">Dec 13<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><a href="http://blog.mozilla.org/vdjeric">Vladan</a> is working on adding slow SQL tracking to Telemetry, part of that has <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=699051">already landed</a>. He recently exposed this information via the <a href="https://addons.mozilla.org/en-US/firefox/addon/abouttelemetry/">about:telemetry</a> addon. We are working out a few remaining issues so we can <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=709406">send</a> this data to our telemetry servers. In the meantime <a href="https://addons.mozilla.org/en-US/firefox/addon/abouttelemetry/">install</a> the addon in your nightly builds (if you are upgrading from an older version, you need to restart Firefox) and check for yourself whether SQL is to blame for pauses in Firefox.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -217,6 +340,51 @@ Multiple people have asked whether Snappy is appropriate for bugs caught by Chro
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2011/11/22/how-to-run-atmega328-pu-with-internal/">How to Run a Bare ATMEGA328-PU With an Internal Oscilator (at 8Mhz)</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-11-22T20:43:00-08:00" pubdate data-updated="true">Nov 22<span>nd</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><div class='post'>
+<div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-Wjl3NiOdbBw/Tsx73JSqnBI/AAAAAAAAB80/u_yyMB6-iFg/s1600/IMG_20111122_204421.jpg" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="320" src="http://4.bp.blogspot.com/-Wjl3NiOdbBw/Tsx73JSqnBI/AAAAAAAAB80/u_yyMB6-iFg/s320/IMG_20111122_204421.jpg" width="240" /></a></div><br /><b>Arduino Ecosystem rocks</b><br />Arduino is a great way to minimize the amount of variables when getting into microcontrollers. Flashing, cross-compilation, libraries, dongles are much easier(and cheaper!) when standardized.<br /><br />I bought an expensive&nbsp; <a href="http://www.arduino.cc/en/Main/ArduinoBoardNano">arduino nano v3</a>, I got comfortable enough with it to blink an led and do with pwm. Unfortunately arduinos(except lilypad) feature lame 5V voltage regulators which require 6.2V to do anything useful; though atmega chips will supposedly run at as low as 1.8V. End result was that the NanoV3 did not run properly when hooked up to my 5V power supply on the bike.<br /><br />So in the in the interests of not building a new power supply and not using a board with a whole bunch of pointless components I bought some straight-up <a href="http://www.mouser.com/ProductDetail/Atmel/ATMEGA328-PU/?qs=sGAEpiMZZMuHCAZ7U3Ea2vH90mYkP45F">ATMEGA328-PU</a>s and a <a href="http://www.sparkfun.com/products/9825">USB flasher</a>.<br /><br />The rest of this post documents various gotchas.<br /><br /><i>Pinout on Sparkfun is mirrored!</i><br />Red stripe on the cable indicates top. However the pinout is mirrored. One is supposed to look at it with the stripe on top and holes facing away.<br /><i> </i><br /><i> ATMEGA328-PU ~= ATMEGA328<b>P</b>-PU</i><br />I wondered why seemingly identical chips were selling for a different price. P in 328P stands for picopower and as far as I can tell it allows one to turn off <a href="http://www.arduino.cc/cgi-bin/yabb2/YaBB.pl?num=1210260031">brownout protection</a>. In my case brownout protection is something I want. However, fucking avrdude does not recognize ATMEGA328(without P) and bitches that one should pass -F when specifying -p atmega328p(there is no atmega328). This prevents Arduino IDE from functioning. In order to get a functioning IDE I needed to:<br /><ol><li> Modify signature for atmega328p in avrdude.conf:<br /><code><br />- signature&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 0x1e 0x95 0x0F;<br />+ signature&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 0x1e 0x95 0x14;<br /></code><br />(Obviously the proper thing to do here is to add the new chip to avrdude)</li><li>Use breadboard.zip from <a href="http://arduino.cc/en/Tutorial/ArduinoToBreadboard">http://arduino.cc/en/Tutorial/ArduinoToBreadboard</a> as an inspiration for the following boards.txt entry:<br /><code><br />usbtiny328.name=[usbtinyisp]ATmega328 8mhz<br /><br />usbtiny328.upload.using=usbtinyisp<br />usbtiny328.upload.maximum_size=32768<br /><br />usbtiny328.build.mcu=atmega328p<br />usbtiny328.build.f_cpu=8000000L<br />usbtiny328.build.core=arduino:arduino<br /><br />usbtiny328.bootloader.low_fuses=0xE2<br />usbtiny328.bootloader.high_fuses=0xDA<br />usbtiny328.bootloader.extended_fuses=0x05<br />usbtiny328.bootloader.path=arduino:atmega<br />usbtiny328.bootloader.file=ATmegaBOOT_168_atmega328_pro_8MHz.hex<br />usbtiny328.bootloader.unlock_bits=0x3F<br />usbtiny328.bootloader.lock_bits=0x0F</code><br /></li><li>Burn bootloader with tools-&gt;burn bootloader-&gt;UsbTinyIsp</li><li>Assemble board as per <a href="http://arduino.cc/en/Tutorial/ArduinoToBreadboard">http://arduino.cc/en/Tutorial/ArduinoToBreadboard</a>. One does not need to hook up GND(pin 22) or AVCC(pin 20). Connect ATMEGA RESET(pin 1), VCC(pin 7), GND(pin 8), MISO, MOSI, SCK(pin 19) to the flasher. </li><li>Check the <a href="http://arduino.cc/en/Hacking/PinMapping168">pin mapping</a>. Note that Arduino software pins do not match physical pins(this cost me a few hours).</li><li>Proceed to use Arduino tools with a convenient $2.82 chip* + $15 programmer rather than an inconvenient/overpriced Arduino board. </li></ol><ol></ol>&nbsp;* I would&#8217;ve spent an extra $1 to get the ATMEGA328P had I known the many hours of agony it would&#8217;ve avoided.<br /><ol></ol><i> </i><br /><br /><i> </i></div>
+<h2>Comments</h2>
+<div class='comments'>
+<div class='comment'>
+<div class='author'>cefn</div>
+<div class='content'>
+I found it really useful to use Optiloader. <br />https://github.com/WestfW/OptiLoader<br /><br />This is a sketch you can push to a regular Arduino, which turns it into an chip programmer, with auto-detection support which includes the ATMEGA328-PU (without Pico-Power). I&#39;ve just flashed a load of cheap chips from Mouser this way with good results, as you can see at&#8230;<br />https://vimeo.com/44535515</div>
+</div>
+</div>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2011/10/20/emacs-cmd-exe/">Emacs > CMD.EXE</a></h1>
     
     
@@ -356,251 +524,6 @@ Turns out that one can load a url with chrome privs (about:memory works too) and
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011/09/20/firefox-7-telemetry-faster-startup/">Firefox 7: Telemetry</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-09-20T07:59:43-07:00" pubdate data-updated="true">Sep 20<span>th</span>, 2011</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>****Firefox 7 marks a turning point in how we measure Firefox performance. Traditionally we measured Firefox performance on individual developer machines and our build &amp; release infrastructure. However it turns out synthetic benchmarks do not correspond to real-world Firefox usage: it is difficult to model a &#8220;typical&#8221; computer in a lab environment. Surprisingly slow consumer hardware, changes in usage patterns, preinstalled bloatware all affect Firefox performance in surprising ways.</p>
-
-<p>Firefox 7 telemetry will prompt users to opt-in to reporting performance data to Mozilla. This data will supplement our existing benchmarking infrastructure to help us optimize future Firefox releases. Telemetry performance metrics are very lightweight and will not negatively impact Firefox performance.</p>
-
-<p>In addition to transmitting data via SSL, Mozilla privacy team worked tirelessly to ensure that no personally-identifiable information is sent via telemetry. Whereas many other software projects stamp this kind of data with a unique per-user id, we opted for a per-session id which is reset every time the browser restarts. Telemetry is also disabled while in private-browsing mode.</p>
-
-<p>The following telemetry data will be gathered in Firefox 7:</p>
-
-<ul>
-<li>Memory usage</li>
-<li>CPU core count</li>
-<li>Cycle collection times</li>
-<li>Startup speed
-Use the <a href="https://addons.mozilla.org/en-US/firefox/addon/abouttelemetry/">about:telemetry</a> extension to check on your browser performance. The following screenshot shows how to enable telemetry:</li>
-</ul>
-
-
-<p><img src="http://people.mozilla.com/~tglek/telemetry/telemetry-ff7.jpg" alt="" /></p>
-
-<p>I&#8217;m very excited that Firefox finally joins the ranks of cars, airplanes and other software projects in making performance decisions based on real evidence gathered in the wild.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011/09/20/firefox-7-cheating-the-operating-system-to-start-faster/">Firefox 7: Cheating the Operating System to Start Faster</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-09-20T07:54:07-07:00" pubdate data-updated="true">Sep 20<span>th</span>, 2011</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>****Firefox 7 features improved startup speed. Our research has shown that most OSes are not capable of starting large programs efficiently (see my older blog entries). As a result, Firefox 7 will explicitly tell the OS to aggressively preload our xul.dll/libxul.so/XUL library before passing it on to the runtime linker. This marks the productization of the approach explored in &#8220;20-line patch that doubles Firefox startup&#8221; that got people so excited. See <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=552864">bug 552864</a> and dependent bugs for exciting technical details.</p>
-
-<p><strong>Do Not Try this at Home: Ugly Windows</strong></p>
-
-<p><em>Note: Windows Prefetch does everything possible to thwart exciting startup optimizations.</em> Above optimization only works when prefetch is disabled/broken (ie Firefox should be faster with Windows Prefetch off). See <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=627591#c158">this comment</a> on disabling prefetch for Firefox. Alternatively one may get Windows Prefetch to not slow down Firefox startup by the following magic incantation:</p>
-
-<ol>
-<li>Install Firefox (or delete the windows prefetch entry for existing Firefox 7)</li>
-<li>Reboot (Do not start Firefox after installation!)</li>
-<li>Start Firefox.
-Above helps populate the Windows Prefetch in a less counter-productive way. Explanation: on warm startup Windows Prefetch records irrelevant IO operations and blocks Firefox startup to preload files that Firefox accesses <em>after</em> startup.</li>
-</ol>
-
-
-<p>Note: the <a href="http://mxr.mozilla.org/mozilla-central/source/browser/app/nsBrowserApp.cpp#224">heuristic</a> that we use to detect Windows Prefetch will also prevent this optimization from kicking in on some exceptionally slow hard drives when prefetch is off. This is unfortunate as this optimization is most dramatic on exceptionally slow machines.</p>
-
-<p>According to our preliminary telemetry data, less than 25% of our Windows users have Windows Prefetch off and can benefit from vastly improved startup. We expect to improve this in future Firefox releases by scheduling a prefetch cleanup operation similar to the script in above bugzilla comment.</p>
-
-<p>Operating systems without counter-productive startup heuristics (ie Mac/Linux) will simply allow Firefox 7 to start faster.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011/08/09/ride-to-the-coast/">Ride to the Coast</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-08-09T14:45:55-07:00" pubdate data-updated="true">Aug 9<span>th</span>, 2011</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I like having guests who bike. So when Brian came over I decided this would be a great opportunity to explore going to the coast and back by bike (<a href="http://velodirt.com">velodirt</a> style). The following is a map of our trip (190miles, 2 nights).</p>
-
-<p><a href="http://taras.glek.net/blog/files/2011/08/map.jpg"><img src="/assets/images/2011-08-09-ride-to-the-coast/bike.jpg" alt="" /></a></p>
-
-<p>The gravel roads were somewhat challenging. It was hard to climb in the heat so at times we had to push our bikes.</p>
-
-<p><a href="/assets/images/2011-08-09-ride-to-the-coast/push_small.jpg"><img src="/assets/images/2011-08-09-ride-to-the-coast/push_small.jpg" alt="" /></a></p>
-
-<p>Things got more unpleasant when we encountered loose gravel by Tillamook which sent Brian sliding over the edge :(</p>
-
-<p><a href="/assets/images/2011-08-09-ride-to-the-coast/205869_704363319326_122500004_37237117_241562_n.jpg"><img src="/assets/images/2011-08-09-ride-to-the-coast/205869_704363319326_122500004_37237117_241562_n.jpg" alt="" /></a></p>
-
-<p>Amazingly he got off without a single scratch (type-inference will go on!).</p>
-
-<p>Eventually we got to <a href="http://www.oregonstateparks.org/park_186.php">Cape Lookout</a>.</p>
-
-<p><a href="/assets/images/2011-08-09-ride-to-the-coast/beach1_small.jpg"><img src="/assets/images/2011-08-09-ride-to-the-coast/beach1_small.jpg" alt="" /></a></p>
-
-<p>The next day we biked to and spent the night in <a href="http://www.oregonstateparks.org/park_201.php">Nehalem Bay</a>.</p>
-
-<p><a href="/assets/images/2011-08-09-ride-to-the-coast/beach2_small.jpg"><img src="/assets/images/2011-08-09-ride-to-the-coast/beach2_small.jpg" alt="" /></a></p>
-
-<p>Then it was time to head back :(</p>
-
-<p>On the way back we did some more gravel roads, this time they were really nice. The road took us through a berry-laden forest and rewarded us with some pretty awesome views.</p>
-
-<p><a href="/assets/images/2011-08-09-ride-to-the-coast/brian_far.jpg"><img src="/assets/images/2011-08-09-ride-to-the-coast/brian_far.jpg" alt="" /></a></p>
-
-<p><em>(If you squint you can see Brian)</em></p>
-
-<p><a href="/assets/images/2011-08-09-ride-to-the-coast/view1_small.jpg"><img src="/assets/images/2011-08-09-ride-to-the-coast/view1_small.jpg" alt="" /></a></p>
-
-<p>The thing to keep in mind about gravel roads is that they like to get out of sync with the maps. We had to reroute due to roads going in a different direction, and due to various kinds of deadends.</p>
-
-<p>In one extreme case a road was clearly on the map, but had a &#8220;DEAD END&#8221; sign on it. Which got us thinking &#8220;is this a dead end for cars or is it for real?&#8221;. After some climbing, the gravel road reduced to a nice forest path.</p>
-
-<p><a href="/assets/images/2011-08-09-ride-to-the-coast/dead1_small.jpg"><img src="/assets/images/2011-08-09-ride-to-the-coast/dead1_small.jpg" alt="" /></a></p>
-
-<p>Further on it became obvious that someone tried hard to kill this road. Some road hater put up over a dozen tree pile barriers, with some reaching my height.</p>
-
-<p><a href="/assets/images/2011-08-09-ride-to-the-coast/piles.jpg"><img src="/assets/images/2011-08-09-ride-to-the-coast/piles.jpg" alt="" /></a></p>
-
-<p>Turned out the road did indeed go through. Perhaps some day someone will start a cyclocross race dedicated to bringing this road back :)</p>
-
-<p>The last highlight of the trip was this delicious-looking buffalo herd.</p>
-
-<p><a href="/assets/images/2011-08-09-ride-to-the-coast/buffalo.jpg"><img src="/assets/images/2011-08-09-ride-to-the-coast/buffalo.jpg" alt="" /></a></p>
-
-<p>I love cycling in Oregon.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011/08/03/effective-static-analysis/">Effective Static Analysis</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-08-03T13:27:54-07:00" pubdate data-updated="true">Aug 3<span>rd</span>, 2011</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Static analysis can be a very fun pastime. One gets to sift through giant codebases looking for interesting clues, what could be more fun? A couple things qualify: a) static analysis accompanied by cool rewrites b) static analysis accompanied by cool visualizations.</p>
-
-<p><strong>Cool Rewrite</strong></p>
-
-<p>Michael Wu&#8217;s <a href="http://blog.mozilla.org/mwu/2011/07/28/the-twelve-booleans-of-mozilla/">boolcheck</a> tool is awesome. He wrote it to check that &#8220;typedef int&#8221; bools are really being used as booleans and aren&#8217;t perversely carrying integer values. The process of writing the tool is cool. As Michael is discovers bugs/disagreements stemming from setting &#8220;typedef bool PRBool&#8221;, he just adds another pattern to check for to the tool and never has to worry about that pattern again. I hope to see someone apply boolcheck to the linux kernel, GTK projects or anything else with int booleans. Some projects don&#8217;t have the luxury of switching to real bools, so they can continue using a static checker to make up for it.</p>
-
-<p><strong>Pretty Code</strong></p>
-
-<p>I&#8217;ve blogged about <a href="http://dxr.mozilla.org/clang/">DXR</a> many times. As of this week clang-based DXR is on par with the old Dehydra-based one. Callgraph, inheritance, etc queries now work. <a href="http://quetzalcoatal.blogspot.com/">Joshua</a> did an outstanding job gutting and rewriting the DXR backend this summer and is now going back to school. I&#8217;m extremely impressed with his work this summer. I didn&#8217;t think it was possible to get as far as he did.</p>
-
-<p>We are looking for more help with DXR. Please deploy it on your pet project, contribute plugins for various languages, simplify deployment, etc.</p>
-
-<p>Additionally, now that the backed is in a fairly decent shape, we are looking for someone to help us turn DXR into the slickest code browsing tool ever(we have some ideas <a href="https://wiki.mozilla.org/DXR_Future_Work_Plan">written down</a>). I&#8217;d like interactive graphs, various code visualizations, integration with bugzilla, etc. This needs a JSON-query frontend and a few other bits &amp; pieces to be implemented.</p>
-
-<p><strong>Interns Wanted</strong></p>
-
-<p>We would love to hire more static analysis interns. Are you student who dreams about making large codebases easy to grasp? Do you want to spend a few months making Control Flow Graphs behave? If that sounds like your calling: leave a comment, send me an email.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/9/">&larr; Older</a>
@@ -618,11 +541,11 @@ Above helps populate the Windows Prefetch in a less counter-productive way. Expl
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2012/12/21/interesting-bugzilla-activity/">Snappy #45: The view from home</a>
+        <a href="/blog/2012/12/24/making-pages-load-faster/">Making pages load faster</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2012/12/17/hello-octopress/">Hello Octopress</a>
+        <a href="/blog/2012/12/21/interesting-bugzilla-activity/">Snappy #45: The view from home</a>
       </li>
     
       <li class="post">

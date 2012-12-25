@@ -492,6 +492,93 @@ We do a lot of work outside of our goal process, so above goals represent only t
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2012/04/04/powering-speakers-etc-with-bike-dynamo/">Powering Speakers, Etc With a Bike Dynamo</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-04-04T22:15:00-07:00" pubdate data-updated="true">Apr 4<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><div class='post'>
+I recently got rid of an old Pioneer receiver in favour of a tiny Class D amplifier. The class D amp is more efficient, sounds better and is approximately 10x cheaper. Did I mention, it&#8217;s tiny?<br /><br />While shopping for a variable voltage regulator for a power supply I discovered that EBay sells fun-looking <a href="http://www.ebay.com/itm/3-5-28V-to-1-25-26V-DC-DC-Converter-Boost-Buck-Step-Up-Step-Down-Voltage-Module-/260978204562?pt=LH_DefaultDomain_0&amp;hash=item3cc3835f92">1.5V-26V regulators.</a>..for $10. I&#8217;ve been eyeing the Busch + Müller E-WERK universal power supply(up to 13.5V) for a while now, but those sell for $110. It&#8217;s no fun spending a hundred bucks on a bike accessory that may not prove useful. I had no choice but to buy the EBay regulator.<br /><br />As my first experiment I tried powering a 12V MR16 light&#8230; it worked, but flickered like mad. A fat capacitor on the regulated side calmed the flicker. Great, now I can use indoor lights to illuminate my outdoor bike rides.<br /><br />Next I tried a 1-meter 12V LED strip, the strip uses a lot less current than the light bulb so it was quite happy.<br /><br />Then I wondered&#8230;could I power decent speakers using dynamo power? $8 <a href="http://www.ebay.com/itm/ws/eBayISAPI.dll?ViewItem&amp;item=220950831774&amp;ssPageName=ADME:L:OU:US:1123">ebay amp</a> later&#8230;yes I can! <br /><div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/-Li9MPsIIXjI/T30nOwQeECI/AAAAAAAADCg/Ftik9IGKLlQ/s1600/IMGP4964.JPG" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="212" src="http://1.bp.blogspot.com/-Li9MPsIIXjI/T30nOwQeECI/AAAAAAAADCg/Ftik9IGKLlQ/s320/IMGP4964.JPG" width="320" /></a></div>Recipe: dynamo -&gt; rectifier bridge -&gt; high voltage smoothing capacitors -&gt; regulator -&gt; 16V 0.1F cap -&gt; (optional voltmeter) -&gt; ta2024 amp -&gt; speaker[s]<br /><br />By the way, do not buy this ta2024 amp, spend a few dollars extra and get a board with proper audio in. I had to desolder the weirdo 3pin connector and solder on a home-made audio cable. It also comes with extremely crappy capacitors and crappy terminals for remaining connections (vs decent stuff on the $14 ta204 amp).<br /><br />I think this voltage regulator will prove very handy for bike touring + camping. Should be especially fun once I combine the dynamo with a 3.5W solar panel. Buck/boost will prove very handy indeed.</div>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/03/29/home-automation-via-mi-casa-verde-vera/">Home Automation via Mi Casa Verde Vera 3 + Z-Wave</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-03-29T18:06:00-07:00" pubdate data-updated="true">Mar 29<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><div class='post'>
+Our baby girl was born recently. We had the house heat off while we stayed at the birth center.<br /><br />Because we live in the future, we were able to to turn on the house heat(&amp; unlock front door) from the car while driving home. The house got down to 10C (50F) while we were away. Thanks to technology, we did not have to endure that temperature upon return :)<br /><br /><b>Vera/Z-Wave</b><br /><br />So far I have my thermostat, door lock, audio amp and some lights hooked up via Z-Wave. Mi Casa Verde <a href="http://www.amazon.com/gp/product/B0074WIVJ4/ref=as_li_qf_sp_asin_tl?ie=UTF8&amp;tag=stuff05e-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=B0074WIVJ4">Vera 3</a> controller is the brains of the operation. It took a couple years before I got everything hooked up because the Vera 3 controller is the only viable option, yet is so damn expensive (fair cost should be ~$100). <br />I waited on opensource stuff to get good (ie <a href="http://linuxmce.com/">LinuxMCE</a> + o<a href="http://code.google.com/p/open-zwave/">penzwave</a>), but it seems like Z-Wave will be obsolete before there is any useful open source support for it.<br /><br /><b>Impressions</b><br />So far controlling the <a href="http://www.amazon.com/dp/B0052MHPP4/ref=as_li_ss_til?tag=stuff05e-20&amp;camp=0&amp;creative=0&amp;linkCode=as4&amp;creativeASIN=B0052MHPP4&amp;adid=06SXD7JN1SWXKBYY9W71">thermostat</a> from my phone/laptop is the killer feature of the system. We like to keep our house barely warm enough. Unfortunately we have an idiotic gas-powered hot air heating system which guarantees that some rooms are too hot while others are freezing. We can finally adjust house temperate depending on what room in the house we are using without running back/forth to the thermostat.<br />This became even more valuable once the baby arrived. Ellen can control temperature/light with one hand without yelling at me to help :)<br /><br />Controlling lights is cool, but it wasn&#8217;t a life-changer.&nbsp; Time taken for unlocking phone, connecting to the controller + execution lag are fairly similar to walking over to the damn light switch. I suspect Ellen will appreciate this more while she has her hands full with baby and can&#8217;t move easily.<br /><br />Same goes for the door lock. We have a code lock on one side of the house and a<a href="http://www.amazon.com/gp/product/B001NEK6JM/ref=as_li_ss_tl?ie=UTF8&amp;tag=stuff05e-20&amp;linkCode=as2&amp;camp=1789&amp;creative=390957&amp;creativeASIN=B001NEK6JM"> z-wave/code lock</a> on the other. Frankly it takes longer to open the door via phone than to punch in the code. We haven&#8217;t used house-keys since we moved into the house&#8230;cos keys are a pain. Z-Wave makes it easy to change lock combination, check that the door is locked, etc, so it&#8217;s somewhat valuable.<br /><br />The coolest part of the system is ability to group individual device actions. We have a &#8220;house off&#8221; command that locks the door, turns off thermostat, turns of various lights/etc. It&#8217;s great to crawl into bed, poke at the phone and hear various things around the house shutting off.<br /><br /><b>Future</b><br />The Vera controller supports a lot more than just Z-Wave. It can do X10, custom scripts, respond to UPnP commands, schedule commands based on sun-set/rise times, etc. Various Z-Wave doodads also act as status indicators. In the future I plan to setup the thermostat to turn off while the door is open, open/close windows + turn on fans based of indoor/outdoor temp + time of night, etc. It is also possible to have the DHCP server on my lan report for when my phone appears/disappears so vera can turn off thermostat/lights automagically when we leave the house.<br /><br /><b>Alternatives</b><br />I probably spent $300 of real money on various Z-Wave gear + $300 of money suckered out of credit cards on this setup. There are alternatives.<br /><i> </i><br /><i>Lots of time approach</i>: I think one can do a lot of this on the cheap with xbee + atmega + relays. The thermostat is a little trickier, door lock is harder yet. This will involve reinventing the state machine behind Vera and interfacing with android, web, etc clients. I think it would be cool if open source people moved in this direction&#8230;google even made some noise about android-controlled light bulbs(and went quiet), but at the moment one would&nbsp; have to start from scratch.<br /><br /><i>I do what TV tells me:</i> People with more money than sense can pay Verizon/etc a <a href="https://shop.verizon.com/buy/Monitoring-Energy-Saving/Home-Control/Verizon-Home-Monitoring-and-Control/cat30006#order_tab">monthly fee</a> to do a lot of this. Verizon supports a strict subset of what the Vera controller does..but hey, they have TV ads.<br /><br /><i>Less-weird-stuff approach:</i> There are a couple different wifi thermostats on the market atm. <a href="http://www.amazon.com/dp/B004YZFU1Q/ref=as_li_ss_til?tag=stuff05e-20&amp;camp=0&amp;creative=0&amp;linkCode=as4&amp;creativeASIN=B004YZFU1Q&amp;adid=0T7A7B6RT7YD3PY5NJE1">This one</a> seems like a cheap way to go. Wifi is a lot less weird and proprietary than Z-Wave, but this gets you no closer to controlling lights, doors :)<br /><b><br /></b><br /><b>Conclusion</b><br />Now that the initial time/$$$ investment is made,<b> </b>I look forward to tightly coupling my security video, door bell, phone, sound, cooling systems. Motorized blind/window control is stupidly-expensive, so I&#8217;ll probably be rolling my own. There is lots of room left for energy savings + coolness factor improvements.<br /><br /></div>
+<h2>Comments</h2>
+<div class='comments'>
+<div class='comment'>
+<div class='author'>Taras</div>
+<div class='content'>
+Apparently blogger doesn&#39;t send comment notifications by default. micasaverde forums are probably your best bet. </div>
+</div>
+<div class='comment'>
+<div class='author'>Pedle Zelnip</div>
+<div class='content'>
+Awesome stuff, very cool.  Any tips for those of us who just bought a house and are thinking of looking into all this stuff (ie good resources on getting up to speed on it all)?</div>
+</div>
+</div>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2012/03/16/snappy-march-15th/">Snappy, March 15th</a></h1>
     
     
@@ -673,102 +760,6 @@ INSERT INTO webappsstore2_temp (scope, key, value, secure, owner) SELECT scope, 
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/03/09/snappy-march-8/">Snappy, March 8</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-03-09T07:53:00-08:00" pubdate data-updated="true">Mar 9<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I was away on Thursday, so the following is based on Lawrence&#8217;s <a href="https://wiki.mozilla.org/Performance/Snappy/2012-03-08">notes</a>.</p>
-
-<p><strong>Work in Progress</strong></p>
-
-<p>The content team is working on reducing lag caused by background tabs (no specific bug numbers in notes, but I suspect <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=734015">734015</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=715376">715376</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=674779">674779</a>).</p>
-
-<p>Vlad is almost done with bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=722368">722368</a>. This will give us coverage of all SQL activity within Firefox. For queries with private data we will only report duration + database name. Locally, within about:telemetry, we&#8217;ll be able to report full sql strings if the pref for it is turned on.</p>
-
-<p>Vlad is aiming to wrap up cancelable SQL queries next week, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=722243">722243</a>. Apparently he&#8217;s also almost done with the python symbol server for bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=712109">712109</a>.</p>
-
-<p>Pointless-stat()-reducing bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=521264">521264 </a>is asymptotically reaching landing. Paolo is asyncing favicon consumers in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=728143">728143 </a>(on the way toward async places). Drew is asyncing content prefs in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=699859">699859</a>.</p>
-
-<p>Nick is still working on making cache async in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=723577">723577</a>.</p>
-
-<p>Mark decided to change <a href="https://wiki.mozilla.org/Auto-tools/Projects/peptest">peptest </a>to be more like talos and to integrate <a href="https://developer.mozilla.org/en/Performance/Profiling_with_the_Built-in_Profiler">SPS</a>. I am guessing he&#8217;ll blog about this.</p>
-
-<p><strong>Landed This Week</strong></p>
-
-<p>Andrews work in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=728460">728460 </a>should result in the cycle collector running less often.</p>
-
-<p>Most depressing bugfix of the week award goes to Rafael. Firefox no longer considers it appropriate to tickle idle-daily observers tasks late during shutdown, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=732368">732368</a>.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/03/07/planet-should-be-technical/">Planet Should Be Technical</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-03-07T06:12:18-08:00" pubdate data-updated="true">Mar 7<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I ask every new Mozilla person to follow planet Mozilla. It&#8217;s the only easiest way to keep an eye on what is going on in Mozilla. Because it is the single most useful source of mozilla news, it irritates me to no end to see funny pictures of cats mixed in with useful posts at a 9:1 ratio. It&#8217;s like the funny pictures, personal agenda people are taking the rest of us hostage. I understand that the official planet policy encourages personal noise, but policies can evolve.</p>
-
-<p>There are multiple proposals on how to fix this situation. IMHO the most correct one is to have planet refocus on relevant content and add noise.mozilla.org for everything else. People who like noise can subscribe to that. Polite people with personal blogs already syndicate moz-tech-only parts of the blogs to planet, others have personal blogs. Arguments on marriage, definition of hate speech, far leftyness, funny cats, other memes really drain the will to live when I want to get work done.</p>
-
-<p>I do think we could use a better code of conduct for people deeply involved in the community. Open source is a bit too good with letting assholes get away with being assholes.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/6/">&larr; Older</a>
@@ -786,11 +777,11 @@ INSERT INTO webappsstore2_temp (scope, key, value, secure, owner) SELECT scope, 
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2012/12/21/interesting-bugzilla-activity/">Snappy #45: The view from home</a>
+        <a href="/blog/2012/12/24/making-pages-load-faster/">Making pages load faster</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2012/12/17/hello-octopress/">Hello Octopress</a>
+        <a href="/blog/2012/12/21/interesting-bugzilla-activity/">Snappy #45: The view from home</a>
       </li>
     
       <li class="post">

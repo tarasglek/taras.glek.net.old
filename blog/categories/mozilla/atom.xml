@@ -4,7 +4,7 @@
   <title><![CDATA[Category: mozilla | All About Performance]]></title>
   <link href="http://taras.glek.net/blog/categories/mozilla/atom.xml" rel="self"/>
   <link href="http://taras.glek.net/"/>
-  <updated>2012-12-22T11:15:17-08:00</updated>
+  <updated>2012-12-24T22:50:48-08:00</updated>
   <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -12,6 +12,19 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Making pages load faster]]></title>
+    <link href="http://taras.glek.net/blog/2012/12/24/making-pages-load-faster/"/>
+    <updated>2012-12-24T21:44:00-08:00</updated>
+    <id>http://taras.glek.net/blog/2012/12/24/making-pages-load-faster</id>
+    <content type="html"><![CDATA[I am not a web developer. I often learn about modern web dev tricks/trends by noticing how they impact overall Firefox performance. I prefer learning about perf topics from well-written blog posts. Bryan of Google page speed team [blogged](http://calendar.perfplanet.com/2012/make-your-mobile-pages-render-in-under-one-second/) on optimizing pageload speeds on mobile. The advice is good, but I have two minor warnings about it.
+
+Suggestion to use `requestAnimationFrame` to delay loading resources is a good one. There is a gotcha: if you do something expensive in the requestAnimationFrame handler, it'll delay your first page draw (requestAnimationFrame fires as the browser prepares to paint. It's an ok place to start network requests, etc). If you do something expensive, use a chained requestAnimationFrame. Firefox recently started using a similar trick to display the UI faster in <a title="Wait until chrome is painted before executing code not critical to making the initial window visible" href="https://bugzilla.mozilla.org/show_bug.cgi?id=715402">bug 715402</a>.
+
+The suggestion to split up stylesheets is also good, but risky. I've seen this before, but I did not understand why websites sprinkled `<link rel="stylesheet">` throughout the page bodies. This can significantly degrade pageload times by causing redundant page restyles and reflows. Reflows can take hundreds of milliseconds on slow mobile devices, doing them multiple times is bad. Make sure to run your pages through a [profiler](http://anton.kovalyov.net/2012/12/17/firefox-profiler/) (or time the difference between relevant requestAnimationFrame callbacks). I saw a bad case of this in <a title="huffingtonpost loads up to 50% slower in Firefox than in opera" href="https://bugzilla.mozilla.org/show_bug.cgi?id=718864">bug 718864</a>.
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Snappy #45: The view from home]]></title>
@@ -91,35 +104,6 @@ Benoit Girard changed the [profiler ](https://addons.mozilla.org/en-us/firefox/a
 **Blog**  
   
 Thanks for the feedback on blogging platform alternatives. I turned on a better captcha plugin to deflect spam. A lot less spam gets through now (but I think it's also preventing legitimate users from getting through). If you are having trouble commenting, use twitter for now.
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Snappy #42]]></title>
-    <link href="http://taras.glek.net/blog/2012/10/26/snappy-42/"/>
-    <updated>2012-10-26T08:01:40-07:00</updated>
-    <id>http://taras.glek.net/blog/2012/10/26/snappy-42</id>
-    <content type="html"><![CDATA[Vladan Djeric landed a probe to directly measure various DOM Local Storage overheads, bug [802920](https://bugzilla.mozilla.org/show_bug.cgi?id=802920), [telemetry data](http://is.gd/BYJQkE).  
-  
-**Frontend Speedups**  
-  
-I thought our frontend optimization people did not have spare cycles for snappy UI fixes due to other important projects atm, but they proved me wrong this week.  
-  
-Jared Wein landed bug [804968](https://bugzilla.mozilla.org/show_bug.cgi?id=804968) which fixes jank where our awesomebar popup would appear then disappear while typing in the location bar. We were flushing layout for the top and bottom result on each adjustment to the awesomebar results, those flushes weren't necessary for each time, they are now skipped after the first pass in the browser session. 
-
-Dão Gottwald landed [bug 752376](https://bugzilla.mozilla.org/show_bug.cgi?id=752376) which removes some expensive layout flushes when switching tabs if the user isn't overflowing their tabbar.
-
-Dão also landed bug[ 715402](https://bugzilla.mozilla.org/show_bug.cgi?id=715402) which corrects certain initialization code to run after the Firefox is drawn. Previously this code would get delayed, but due to some undeterministic event madness it would still be likely to get scheduled to run before Firefox is drawn on the screen. This should result in 10% faster perceived startups in some cases.
-
-**Profiler-assisted Bug Reporting**  
-  
-I looked at bug[ 642257](https://bugzilla.mozilla.org/show_bug.cgi?id=642257) and gave up figuring out what causes the problem because I could not reproduce it. I asked the reporter to try to record a profile of the problem with the [gecko profiler](https://developer.mozilla.org/en-US/docs/Performance/Profiling_with_the_Built-in_Profiler). Within 2.5 hours of the profile being posted in the bug, Timothy Nikkel identified the problem and posted a patch for it.  
-  
-I'm very excited about this because the reporter has never used a profiler and yet on the first try helped fix a hard to reproduce bug. Thanks to a dedicated bug reporter, keen layout hackers and our new profiling infrastructure Flash in background tabs will no longer slow down our layout calculations. For many types of bugs identifying the problem is the hardest part, this is very promising.  
-  
-**Moving Blogs Soon**  
-  
-I will be moving to a new blog location as soon as I decide on a better blog setup. I've been irritated by Wordpress since I started at Mozilla in 2006. The volume of comment spam has increased exponentially this year. After 6 years of suffering a terrible UI, spam, slowness, lossyness, I'm ready to move on to a blogging service elsewhere. If you have any suggestions for blog providers, ping me on [twitter](https://twitter.com/tarasglek) as I likely wont see your comment in the mountain of spam.
 ]]></content>
   </entry>
   

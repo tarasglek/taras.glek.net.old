@@ -1,0 +1,253 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Of ARMs and MIPS - All About Performance</title>
+  <meta name="author" content="Taras Glek">
+
+  
+  <meta name="description" content="A few years ago I to ran my website off a Linksys WRT54GS. With a OpenWRT firmware and a little OCaml web app I ended up with a robust web site. I &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://taras.glek.net/blog/2009/11/16/from-arms-and-mips/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="All About Performance" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">All RSS</a></li>
+  
+  <li><a href="/blog/categories/mozilla/atom.xml" rel="subscribe-rss" title="subscribe via RSS">Mozilla RSS</a></li>
+</ul>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <header role="banner"><hgroup>
+  <h1><a href="/">All About Performance</a></h1>
+  
+    <h2>and other stuff by Taras Glek</h2>
+  
+</hgroup>
+
+</header>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Of ARMs and MIPS</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-11-16T20:12:00-08:00" pubdate data-updated="true">Nov 16<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><div class='post'>
+A few years ago I to ran my website off a Linksys WRT54GS. With a OpenWRT firmware and a little OCaml web app I ended up with a  robust <a href="http://web.archive.org/web/20070128135523/http://glek.net/">web site</a>. I thought ARM was so cool. I bought 2 other hackable routers based on the platform(another wrt54gs and an asus wl500w).<br /><br />Wireless routers + custom firmware were attractive because once one sets them up there is not much to go wrong. No moving parts, no particularly hot parts and the thing turns back on automagically after power-outages. That and the wireless router  used around 5-6W of power.<br /><br />A couple of years passed&#8230;<br />Then kernel 2.6 acquired cool features that I wanted to use (mainly <a href="http://fuse.sourceforge.net/">fuse</a>). But due to proprietary Broadcom wifi I was stuck on 2.6. So I sucked it up and stuck with 2.4. Soon after the wifi started misbehaving and I had to reflash back to proprietary firmware&#8230;and the problems magically went away.<br /><br />I got the Asus wl500w when I moved out. It had mini-pci-e(aka swappable!) N wifi and usb 2.0 port. I thought I could replace an x86 desktop with it. I figured with a custom mini-pci-E card, I would no longer be stuck on 2.4 and would be able to enjoy 2.6 + infinite storage via USB. But I figured wrong. USB was slow(crappy IRQ handling on embedded MIPS), kernels were buggy, hard to update. Proprietary bootloaders (which differ on every embedded board) + custom board layout means that MIPS/ARM kernels are board-specific, less tested and generally more buggy. That combined with the dismal state of linux wireless made me give up on the whole Linux on non-x86 idea. I can no longer be bothered to blindly flash kernels(with weird build environments) onto quirky and under-performing hardware.<br /><br />For work I have to work with Nokia N810 arm thing. It&#8217;s a great little device when it works, but it often doesn&#8217;t. However I can&#8217;t install a modern kernel on it because of obscure hw(which is only kind of supported in mainline). Without a custom kernel I loose tight integration with my hardware, cool new kernel features, etc. So much like MIPS, ARM = funny bootloader + funny SoC configuration => waste of time.<br /><br />I also have a WinMo device for work. It makes the linux situation look  like heaven.<br /><br /><span style="font-weight: bold;">Non-x86 is an Evolutionary Deadend</span><br />So what&#8217;s the point of this? I&#8217;m gonna predict the future. I think presently ARM&amp;friends exist because so far they managed to undercut x86 at power consumption. They are also appealing to companies that design their products from the ground up, such as cellphone vendors.<br /><br />I believe that the supposed onslaught from ARM nettops/smartbooks/shit is going to flop. NVidia is gonna burn through a pile of cash developing WinCE doo-dads (seriously guys, who came up with that idea?) to showcase the awesomeness of their hw(I am sure they can make good hw) and completely fail in market due to users rejecting crappy software.</div>
+<h2>Comments</h2>
+<div class='comments'>
+<div class='comment'>
+<div class='author'>Jessica</div>
+<div class='content'>
+Bring on Atom! :D</div>
+</div>
+</div>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Taras Glek</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-11-16T20:12:00-08:00" pubdate data-updated="true">Nov 16<span>th</span>, 2009</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/personal/'>personal</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://taras.glek.net/blog/2009/11/16/from-arms-and-mips/" data-via="tarasglek" data-counturl="http://taras.glek.net/blog/2009/11/16/from-arms-and-mips/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2009/11/06/fsoss-dehydra-update/" title="Previous Post: FSOSS & Dehydra Update">&laquo; FSOSS & Dehydra Update</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2009/11/20/dehydra-testsuite-passes-on-gcc-4-5/" title="Next Post: Dehydra Testsuite Passes on GCC 4.5">Dehydra Testsuite Passes on GCC 4.5 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2012/12/24/making-pages-load-faster/">Making pages load faster</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/12/21/interesting-bugzilla-activity/">Snappy #45: The view from home</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/11/26/coping-with-flash-hangs/">Coping with Flash hangs</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/11/16/snappy-44-fixing-tab-switching-in-vancouver/">Snappy #44: Fixing tab switching in Vancouver</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/11/05/snappy-43-big-improvements-faster-startup-smoother-tabstrip/">Snappy #43: Big improvements: faster startup? Smoother tabstrip!</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("tarasglek", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/tarasglek" class="twitter-follow-button" data-show-count="false">Follow @tarasglek</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p><h6>
+  Copyright &copy; 2012 - Taras Glek - content on this site is licensed under the
+Creative Commons Attribution Share-Alike License v3.0 or any later version.
+
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span></h6>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'allaboutperformance-tarasglek';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
