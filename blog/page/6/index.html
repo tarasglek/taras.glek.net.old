@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="I was away on Thursday, so the following is based on Lawrence&#8217;s notes. Work in Progress The content team is working on reducing lag caused by &hellip;">
+  <meta name="description" content="I cleaned up about:telemetry to be a bit less of a hack. It mostly generates charts using proper DOM manipulations now, so should be easier to &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -58,6 +58,56 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/03/14/abouttelemetry-diff-mode-search/">About:telemetry: Diff Mode + Search</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-03-14T08:27:53-07:00" pubdate data-updated="true">Mar 14<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><a href="/assets/images/2012-03-14-abouttelemetry-diff-mode-search/telemetry.png"><img src="/assets/images/2012-03-14-abouttelemetry-diff-mode-search/telemetry.png" alt="" /></a></p>
+
+<p>I cleaned up about:telemetry to be a bit less of a hack. It mostly generates charts using proper DOM manipulations now, so should be easier to contribute to.</p>
+
+<p><strong>Diff Mode</strong></p>
+
+<p>Now that we have a few hundred histograms in telemetry, it&#8217;s become a chore to figure out if something changed. I added a &#8216;Diff&#8217; button which re-polls telemetry since last telemetry-page-load/diff-press and highlights buckets with new activity in red. This is useful for cases when you see lag in the browser, but have no idea what&#8217;s causing it (sort of like <a href="https://addons.mozilla.org/en-US/firefox/addon/aboutjank/">about:jank</a>). This turns histogram bars red when stuff changed. Unfortunately one still needs a pretty intimate knowledge of the browser to figure out if any of the histograms are related to observed lag.</p>
+
+<p><strong>Search</strong></p>
+
+<p>I added a little input box to make finding relevant histograms quicker.</p>
+
+<p><strong>Help Wanted</strong></p>
+
+<p>If you find any bugs or have improvements to contribute, see <a href="https://github.com/tarasglek/about-telemetry">the source</a>. The updated addon is in the AMO review queue, in the meantime you can jump the queue via <a href="https://addons.mozilla.org/firefox/downloads/file/146870/abouttelemetry-0.11-tb+fx.xpi?src=devhub">this link</a>.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -572,46 +622,6 @@ We spent the weekend at FOSDEM. I re-presented my Plumbers talk on why Linux <a 
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/02/01/at-betagroup-in-brussels/">At BetaGroup in Brussels</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-02-01T18:01:50-08:00" pubdate data-updated="true">Feb 1<span>st</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>As the outside temperature reached -10C, the DIY heating system at hackerspace.be proved insufficient. On Wednesday the Perf/Snappy workweek was relocated to <a href="http://coworking.betagroup.be/">BetaGroup Coworking Brussels</a>. We&#8217;ll be here until FOSDEM.</p>
-
-<p>Betagroup Coworking Brussels is an industrial-strength coworking space with lots of desk space, internet, kitchen, ping-pong and a bunch of heavy metal&#8230;</p>
-
-<p><img src="http://farm8.staticflickr.com/7168/6800567379_2c052c4f55_z.jpg" alt="" /></p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/7/">&larr; Older</a>
@@ -637,15 +647,15 @@ We spent the weekend at FOSDEM. I re-presented my Plumbers talk on why Linux <a 
       </li>
     
       <li class="post">
+        <a href="/blog/2012/12/17/hello-octopress/">Hello Octopress</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2012/11/26/coping-with-flash-hangs/">Coping with Flash hangs</a>
       </li>
     
       <li class="post">
         <a href="/blog/2012/11/16/snappy-44-fixing-tab-switching-in-vancouver/">Snappy #44: Fixing tab switching in Vancouver</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/11/05/snappy-43-big-improvements-faster-startup-smoother-tabstrip/">Snappy #43: Big improvements: faster startup? Smoother tabstrip!</a>
       </li>
     
   </ul>

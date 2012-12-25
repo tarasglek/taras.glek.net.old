@@ -4,7 +4,7 @@
   <title><![CDATA[All About Performance]]></title>
   <link href="http://taras.glek.net/atom.xml" rel="self"/>
   <link href="http://taras.glek.net/"/>
-  <updated>2012-12-24T22:50:48-08:00</updated>
+  <updated>2012-12-25T10:06:53-08:00</updated>
   <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -44,6 +44,30 @@
 <p>Aaron Klotz made startup slightly faster by speeding up reading of some urlclassifier files in <a title="loading the two safebrowsing files is not as fast as it could be" href="https://bugzilla.mozilla.org/show_bug.cgi?id=810101">bug 810101</a>.</p>
 
 <p>Vladimir Vukicevic landed <a title="requestAnimationFrame generates too short/long frames, especially at the beginning of animation" href="https://bugzilla.mozilla.org/show_bug.cgi?id=731974">bug 731974</a> which results in smoother browser animations and significantly improves the quality of tab-strip animations.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Hello Octopress]]></title>
+    <link href="http://taras.glek.net/blog/2012/12/17/hello-octopress/"/>
+    <updated>2012-12-17T17:10:00-08:00</updated>
+    <id>http://taras.glek.net/blog/2012/12/17/hello-octopress</id>
+    <content type="html"><![CDATA[<p>I&#8217;m off work until January. I took this opportunity to partake in chores such as fixing a toilet and switching away from wordpress.</p>
+
+<p>After suffering wordpress for half a decade I finally switched to a combination of Octopress + Disqus.</p>
+
+<p>It took:</p>
+
+<ul>
+<li>a few hours of tweaking the combination of <a href="https://github.com/thomasf/exitwp">exitwp.py</a>, html2text.py to convert my blog without busting links, images</li>
+<li>a few hours of decyphering octopress/github documentation to setup a website</li>
+<li>an hour to figure out where images should live (in <em>source/assets</em>)</li>
+</ul>
+
+
+<p>Thanks to everyone that suggested <a href="http://octopress.org/">Octopress</a>.</p>
+
+<p>Goodbye word-style wordpress bitchwork.</p>
 ]]></content>
   </entry>
   
@@ -447,37 +471,6 @@ See Bill&#8217;s comments in bug <a href="https://bugzilla.mozilla.org/show_bug.
 <p>Some Snappy people will be attending <a href="https://wiki.mozilla.org/MozCampEU2012">MozCamp.eu 2012</a> in Warsaw, Poland on September 8, 9. Expect to see lots of talk on profiling and other performance tools.</p>
 
 <p>I hope to have above 15-20 Performance/Snappy people in Warsaw for the following week. This is not yet finalized. At the moment we are looking to see if there is a coworking space or a company in Warsaw who could host us.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Snappy, July 26: Go Try The Gecko Profiler!]]></title>
-    <link href="http://taras.glek.net/blog/2012/07/26/snappy-july-26-go-try-the-gecko-profiler/"/>
-    <updated>2012-07-26T08:43:17-07:00</updated>
-    <id>http://taras.glek.net/blog/2012/07/26/snappy-july-26-go-try-the-gecko-profiler</id>
-    <content type="html"><![CDATA[<p>See raw <a href="https://wiki.mozilla.org/Performance/Snappy/2012-07-26">notes</a> for details on mid-flight snappy work.</p>
-
-<p><strong>Checkout the SPS Profiler</strong>!</p>
-
-<p><a href="https://developer.mozilla.org/en/Performance/Profiling_with_the_Built-in_Profiler">SPS Gecko Profiler</a> has gotten a lot of praise this week on #perf. If you ever wonder the hell Firefox is doing with your CPU, give the profiler a try. For the past couple of weeks it has been able to label stacks with JS, URLs and even favicons. It&#8217;s likely that Mozilla may have shipped the world&#8217;s first profiler to feature favicons.</p>
-
-<p>Having JS support is nice, it lead to the first 2 snappy addon bugs: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=777266">777266</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=777397">777397</a>. I documented how to act on addon responsiveness issues in the <a href="https://wiki.mozilla.org/Performance/Snappy#Snappy_Addons">snappy wiki</a>.</p>
-
-<p>Whether you develop web pages, addons or are a core gecko hacker, the profiler may make the performance-analysis part of your life much more pleasant. Update: Benoit Girard <a href="http://benoitgirard.wordpress.com/2012/07/27/javascript-profiling-with-the-gecko-profiler-and-js-anti-pattern/">wrote</a> about the new profiler features.</p>
-
-<p><strong>Things To Not Do On Startup </strong></p>
-
-<p>Blair McBride did some <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=726125#c16">digging</a>, there may be 15million users with signed extensions which can cause Firefox to do network IO (ie stall for a long time) on startup.</p>
-
-<p>Brian Bondy landed a fix to lower IO priority of nuking our cache: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=773518">773518</a>. According to telemetry, 10-20% of startups feature cache nuking. It take a while to blow away 1GB of files on startup. Brian used telemetry to investigate causes for cache purges in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=774146">774146</a>. Based on this data, Brian will begin tackling what may be the oldest snappy bug so far: bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=105843">105843</a>. For more details on our cache see Nick Hurley&#8217;s <a href="http://todesschaf.org/posts/2012/07/25/cache-usage-results.html">blog post</a> (also see his link to a similar blog post from a Chrome person).</p>
-
-<p><strong>More Responsive Tabs</strong></p>
-
-<p>Tim Taubert made our new tab animation more pleasant in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=716108">716108</a>. Tim also landed a fix to halve jank caused by thumbnail capture in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=774811">774811</a>, this should result in better tab-switching experience. Stay tuned for more developer attention in this area.</p>
-
-<p><strong>GC</strong></p>
-
-<p>Jon Coppeard enabled incremental sweeping: bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=729760">729760</a>. This should result in slightly smaller GC pauses.</p>
 ]]></content>
   </entry>
   

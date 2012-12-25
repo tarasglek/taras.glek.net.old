@@ -4,7 +4,7 @@
   <title><![CDATA[Category: personal | All About Performance]]></title>
   <link href="http://taras.glek.net/blog/categories/personal/atom.xml" rel="self"/>
   <link href="http://taras.glek.net/"/>
-  <updated>2012-12-24T22:50:48-08:00</updated>
+  <updated>2012-12-25T10:06:53-08:00</updated>
   <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -12,6 +12,27 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Hello Octopress]]></title>
+    <link href="http://taras.glek.net/blog/2012/12/17/hello-octopress/"/>
+    <updated>2012-12-17T17:10:00-08:00</updated>
+    <id>http://taras.glek.net/blog/2012/12/17/hello-octopress</id>
+    <content type="html"><![CDATA[I'm off work until January. I took this opportunity to partake in chores such as fixing a toilet and switching away from wordpress.
+
+After suffering wordpress for half a decade I finally switched to a combination of Octopress + Disqus. 
+
+It took:
+
+* a few hours of tweaking the combination of [exitwp.py](https://github.com/thomasf/exitwp), html2text.py to convert my blog without busting links, images
+* a few hours of decyphering octopress/github documentation to setup a website
+* an hour to figure out where images should live (in *source/assets*)
+
+Thanks to everyone that suggested [Octopress](http://octopress.org/).
+
+Goodbye word-style wordpress bitchwork.
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Powering speakers, etc with a bike dynamo]]></title>
@@ -71,16 +92,6 @@ As people get older they gain clout, respect and other sorts of  undeserved cred
 I found it really useful to use Optiloader. <br />https://github.com/WestfW/OptiLoader<br /><br />This is a sketch you can push to a regular Arduino, which turns it into an chip programmer, with auto-detection support which includes the ATMEGA328-PU (without Pico-Power). I&#39;ve just flashed a load of cheap chips from Mouser this way with good results, as you can see at...<br />https://vimeo.com/44535515</div>
 </div>
 </div>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[My NAS is smaller than yours]]></title>
-    <link href="http://taras.glek.net/blog/2011/07/16/my-nas-is-smaller-than-yours/"/>
-    <updated>2011-07-16T19:29:00-07:00</updated>
-    <id>http://taras.glek.net/blog/2011/07/16/my-nas-is-smaller-than-yours</id>
-    <content type="html"><![CDATA[<div class='post'>
-<div class="separator" style="clear: both; text-align: center;"><a href="http://2.bp.blogspot.com/-NyjNccrtMm4/ThfcarpyIvI/AAAAAAAABT4/gYYcP66XgE8/s1600/IMGP4287.JPG" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="640" src="http://2.bp.blogspot.com/-NyjNccrtMm4/ThfcarpyIvI/AAAAAAAABT4/gYYcP66XgE8/s640/IMGP4287.JPG" width="424" /></a></div>&nbsp;I once <a href="http://taras.glek.net/blog/2009/11/from-arms-and-mips.html">blogged</a> that ARM devices are useless and how one shouldn't buy them cos they run weird forked kernels on weird bootloaders. I also blogged on how awesome and low power my <a href="http://taras.glek.net/blog/2009/12/rooter-hardware.html">Atom box</a> was.<br /><br />Since then my Atom box died (probably the power supply), so faced with the option of rebuying various components until I find one that broke I decided that I'd rather forgo that. Instead I got an $40 Seagate Goflex.<br /><br />The atom box idled at 13W and maxed out around 20W, which was pretty impressive. Goflex can idle at 4W and maxes out at 7W. The 1ghz CPU is no x86 in speed, but it can keep up.<br /><br />Clever people developed a fully-featured Uboot bootloader for it so it takes care of that typical non-x86 suck. I opted to run  <a href="http://archlinuxarm.org/platforms/armv5/seagate-goflex-net">arch linux for arm</a> since Debian support isn't particularly mature. In some ways Arch is better, it doesn't play games with proprietary firmware and stays up to date better.<br /><br />So yeah with a $40 pricepoint, dual native sata, 4W idle even I will run ARM :)<br /><br /><i>Bonus:</i> In theory I should be able to run the static binaries I compile on the goflex on my android phones.</div>
 ]]></content>
   </entry>
   
