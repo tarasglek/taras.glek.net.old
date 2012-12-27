@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="As the outside temperature reached -10C, the DIY heating system at hackerspace.be proved insufficient. On Wednesday the Perf/Snappy workweek was &hellip;">
+  <meta name="description" content="We cancelled last week&#8217;s snappy meeting due to Perf/Snappy workweek + FOSDEM. See Jared&#8217;s post for a summary of the workweek, I&#8217;ll &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -58,6 +58,60 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/02/07/snappy-feb-2nd-fosdem-help-wanted/">Snappy, Feb 2nd - FOSDEM, Help Wanted</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-02-07T08:52:06-08:00" pubdate data-updated="true">Feb 7<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>We cancelled last week&#8217;s snappy meeting due to Perf/Snappy workweek + FOSDEM. See Jared&#8217;s post for a <a href="http://msujaws.wordpress.com/2012/02/03/firefox-performancesnappy-work-week-recap/">summary</a> of the workweek, I&#8217;ll mention the rest below.</p>
+
+<p>We figured out a strategy for avoiding blocking DOM Storage IO (use scriptblocker to async preload relevant dom storage. Do async writeback to commit). We have a plan for cancellable SQL queries, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=722243">bug 722243</a>.</p>
+
+<p>SetTimeouts/30s telemetry landed in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=715953">715953</a>, I attached result of that in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=715376">715376</a>. Persistent telemetry was backed out while Nathan investigates problems, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=707320">bug 707320</a>.</p>
+
+<p>Brian Bondy has been fixing our usage of Windows APIs:</p>
+
+<ul>
+<li>bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=722225">722225 </a>- Firefox startup opt on Windows by optimizing D3D10CreateDevice1 (pending review)</li>
+<li>bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=722315">722315 </a>- Firefox startup opt on Windows by lazy loading CLSID_DragDropHelper (landed)</li>
+<li>bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=692255">692255 </a>- Find a way to get rid of prefetch files on Windows for faster startup (pending review)
+We spent the weekend at FOSDEM. I re-presented my Plumbers talk on why Linux <a href="http://people.mozilla.com/%7Etglek/lpc2011">sucks </a>for starting big apps. I also did a <a href="http://people.mozilla.com/%7Etglek/fosdem2012/">Telemetry talk</a>. The audience was great.</li>
+</ul>
+
+
+<p><strong>Help Wanted</strong></p>
+
+<p>To my great regret, I forgot to mention that Mozilla is <a href="http://www.mozilla.com/en-US/about/careers.html">hiring</a> in my talks. In particular, I&#8217;m looking for more performance hackers. If enjoy spending quality time with stack traces,writing profilers or analyzing performance logs leave a comment or send me an email. Compiler toolchain and/or kernel hacking experience would be a great bonus.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -480,46 +534,6 @@ As people get older they gain clout, respect and other sorts of  undeserved cred
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011/12/22/growing-reviewers/">Growing Reviewers</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-12-22T09:09:29-08:00" pubdate data-updated="true">Dec 22<span>nd</span>, 2011</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>One of the challenges of a growing organization is that people become managers and have less time for coding. A scary proportion of module owners are managers now.</p>
-
-<p>We were discussing this with Dietrich and he came up with a really simple solution: module owner&#8217;s entire team should be able to review patches for that module. Obviously new people can&#8217;t review every little detail, for those they can pass the buck to their manager(and learn in the process). I really like the new <a href="http://groups.google.com/group/mozilla.dev.apps.firefox/browse_thread/thread/9c6072c52cc5165c/fbc124d0fbe8782a?pli=1">Firefox review policy</a> of having a large set of candidates for reviews who have an option of passing the patch along.</p>
-
-<p>Perhaps bugzilla can change r?:taras queries into r?:taras+his+team and do this automagically.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/8/">&larr; Older</a>
@@ -537,6 +551,10 @@ As people get older they gain clout, respect and other sorts of  undeserved cred
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2012/12/26/test-rss/">test rss</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2012/12/24/making-pages-load-faster/">Making pages load faster</a>
       </li>
     
@@ -550,10 +568,6 @@ As people get older they gain clout, respect and other sorts of  undeserved cred
     
       <li class="post">
         <a href="/blog/2012/11/26/coping-with-flash-hangs/">Coping with Flash hangs</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/11/16/snappy-44-fixing-tab-switching-in-vancouver/">Snappy #44: Fixing tab switching in Vancouver</a>
       </li>
     
   </ul>

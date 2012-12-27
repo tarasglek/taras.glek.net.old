@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="I have been told that it should be possible to control the way the GNU linker lays out binaries. Unfortunately until recently I couldn&#8217;t figure &hellip;">
+  <meta name="description" content="The Dehydra installation instructions got to the point where they were more confusing than helpful. I spent this morning cutting out irrelevant crud &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -58,6 +58,42 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/02/26/updated-dehydra-installation-instructions/">Updated Dehydra Installation Instructions</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-02-26T03:02:46-08:00" pubdate data-updated="true">Feb 26<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>The <a href="https://developer.mozilla.org/En/Dehydra/Installing_Dehydra">Dehydra installation instructions</a> got to the point where they were more confusing than helpful. I spent this morning cutting out irrelevant crud, please let me know if there are any further cleanups that need to be done.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -580,51 +616,6 @@ Rooter - British pronunciation of router. This is post describes the hardware in
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/11/16/from-arms-and-mips/">Of ARMs and MIPS</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-11-16T20:12:00-08:00" pubdate data-updated="true">Nov 16<span>th</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><div class='post'>
-A few years ago I to ran my website off a Linksys WRT54GS. With a OpenWRT firmware and a little OCaml web app I ended up with a  robust <a href="http://web.archive.org/web/20070128135523/http://glek.net/">web site</a>. I thought ARM was so cool. I bought 2 other hackable routers based on the platform(another wrt54gs and an asus wl500w).<br /><br />Wireless routers + custom firmware were attractive because once one sets them up there is not much to go wrong. No moving parts, no particularly hot parts and the thing turns back on automagically after power-outages. That and the wireless router  used around 5-6W of power.<br /><br />A couple of years passed&#8230;<br />Then kernel 2.6 acquired cool features that I wanted to use (mainly <a href="http://fuse.sourceforge.net/">fuse</a>). But due to proprietary Broadcom wifi I was stuck on 2.6. So I sucked it up and stuck with 2.4. Soon after the wifi started misbehaving and I had to reflash back to proprietary firmware&#8230;and the problems magically went away.<br /><br />I got the Asus wl500w when I moved out. It had mini-pci-e(aka swappable!) N wifi and usb 2.0 port. I thought I could replace an x86 desktop with it. I figured with a custom mini-pci-E card, I would no longer be stuck on 2.4 and would be able to enjoy 2.6 + infinite storage via USB. But I figured wrong. USB was slow(crappy IRQ handling on embedded MIPS), kernels were buggy, hard to update. Proprietary bootloaders (which differ on every embedded board) + custom board layout means that MIPS/ARM kernels are board-specific, less tested and generally more buggy. That combined with the dismal state of linux wireless made me give up on the whole Linux on non-x86 idea. I can no longer be bothered to blindly flash kernels(with weird build environments) onto quirky and under-performing hardware.<br /><br />For work I have to work with Nokia N810 arm thing. It&#8217;s a great little device when it works, but it often doesn&#8217;t. However I can&#8217;t install a modern kernel on it because of obscure hw(which is only kind of supported in mainline). Without a custom kernel I loose tight integration with my hardware, cool new kernel features, etc. So much like MIPS, ARM = funny bootloader + funny SoC configuration => waste of time.<br /><br />I also have a WinMo device for work. It makes the linux situation look  like heaven.<br /><br /><span style="font-weight: bold;">Non-x86 is an Evolutionary Deadend</span><br />So what&#8217;s the point of this? I&#8217;m gonna predict the future. I think presently ARM&amp;friends exist because so far they managed to undercut x86 at power consumption. They are also appealing to companies that design their products from the ground up, such as cellphone vendors.<br /><br />I believe that the supposed onslaught from ARM nettops/smartbooks/shit is going to flop. NVidia is gonna burn through a pile of cash developing WinCE doo-dads (seriously guys, who came up with that idea?) to showcase the awesomeness of their hw(I am sure they can make good hw) and completely fail in market due to users rejecting crappy software.</div>
-<h2>Comments</h2>
-<div class='comments'>
-<div class='comment'>
-<div class='author'>Jessica</div>
-<div class='content'>
-Bring on Atom! :D</div>
-</div>
-</div>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/15/">&larr; Older</a>
@@ -642,6 +633,10 @@ Bring on Atom! :D</div>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2012/12/26/test-rss/">test rss</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2012/12/24/making-pages-load-faster/">Making pages load faster</a>
       </li>
     
@@ -655,10 +650,6 @@ Bring on Atom! :D</div>
     
       <li class="post">
         <a href="/blog/2012/11/26/coping-with-flash-hangs/">Coping with Flash hangs</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/11/16/snappy-44-fixing-tab-switching-in-vancouver/">Snappy #44: Fixing tab switching in Vancouver</a>
       </li>
     
   </ul>

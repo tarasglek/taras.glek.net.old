@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="In the previous post, I described the simple rewriting case that I am working on at the moment. Someone was quick to point out that the approach &hellip;">
+  <meta name="description" content="Over at LWN there is an article on GCC plugins. It touches onto how it would be useful to implement static analysis tools as GCC plugins. It does not &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -58,6 +58,56 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2007/11/29/gcc-plugins-under-my-xmas-tree/">GCC Plugins Under My Xmas Tree?</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-11-29T13:59:41-08:00" pubdate data-updated="true">Nov 29<span>th</span>, 2007</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Over at LWN there is an article on <a href="http://lwn.net/Articles/258700/">GCC plugins</a>. It touches onto how it would be useful to implement static analysis tools as GCC plugins.</p>
+
+<p>It does not mention that certain optimizations are not feasible without interfacing with the compiler and that there could be a very significant decrease in errors if we the compiler were pluggable with API-specific checks. Wouldn&#8217;t it be nice if less developer time had to be spent hunting for common bugs and more implementing awesome new features?</p>
+
+<p>Typically safety is accomplished by executing code in a Virtual Machine that does extra runtime checks with Just In Time compilation to make up for performance losses. This approach has many known performance and footprint disadvantages. It is used by languages like Java and Scheme.</p>
+
+<p>Applications in these languages are slow and/or ship with a JIT compiler to optimize them during their runtime. C++ is compiled ahead of run time and has a reputation for running faster than these dynamic languages. However it also makes it a lot easier to make mistakes such as leak memory and buffer overflows. One can use the C++ OO system to perform extra-runtime checks to avoid some of these issues but that tends to cancel out any performance advantages of writing code in C++.</p>
+
+<p>Another approach is to enforce various safety-related properties through the compiler. Awesome existing languages such as <a href="http://en.wikipedia.org/wiki/OCaml">OCaml</a> come with a strict type system that ensures that once code compiles it will run fast and have a lower bug percentages than comparable code in other languages. EcmaScript4 will feature a rocking type system similar to OCaml.</p>
+
+<p>C++ does not have such an awesome typesystem. However, there are many C++ errors that occur frequently and should be detected by the compiler, however long as there is no way to specify Mozilla-specific type system restrictions the compiler has no way of getting that information. Such plugins provide a certain piece of mind that once code complies with whatever rules we set for it, it is more likely to run correctly. Furthermore, some optimizations that we have in mind for Mozilla 2 (such as incremental garbage collection) will be much easier to work with if the compiler flags memory misuse at compile time.</p>
+
+<p>Currently we can use dehydra to scan the codebase, but it would be much more efficient to be able to plug such verification abilities into every developer&#8217;s GCC. I sincerely hope that whoever is in charge of the plugin decision at GCC will realize the massive advantage this would give to GCC over other compilers.</p>
+
+<p>ps. Another use for plugins is to enable more aggressive optimizations. Small changes in the sourcecode can affect how conservative the generated code this. A clever plugin could warn whenever gcc cancels an optimization due to misbehaving source.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -613,52 +663,6 @@ Checks 2 and 3 require the complete class hierachy of Mozilla so I finally made 
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2007/08/30/pork-the-brave-new-world/">Pork: The Brave New World</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2007-08-30T08:31:43-07:00" pubdate data-updated="true">Aug 30<span>th</span>, 2007</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>It doesn&#8217;t look like my oink patches are going to reach upstream anytime soon. In fact, in the past year no patches have landed in the oink tree. I think this is unfortunate, but I have my own repository at <a href="http://hg.mozilla.org">http://hg.mozilla.org</a> and will continue working on my fork. So allow me to introduce Pork, the Oink fork. So if anyone has any exciting source location, pretty printing or other elsa improvements, I hope to eventually see those land in pork.</p>
-
-<p>Note, pork is just an informal name for the fork, I am not currently planning to do any source renaming or repository renaming.</p>
-
-<p><strong>Pork: Now in a VMware flavour</strong></p>
-
-<p>bsmedberg pointed out that oink seems a bit intimidating to setup and it would be nice if it came in virtual machine. So I have oink/mcpp/etc packaged up in a virtual machine that can build Mozilla with gcc3.4, run dehydra analyses and produce automated patches. If you want to play with that, post a comment and I&#8217;ll reply with a download link.</p>
-
-<p>A couple of people asked me about some simple code-scans to see for problems and optimization opportunities. Next week I am going to post few simple dehydra recipes on how to look for patterns in the code. It&#8217;s dead simple with JavaScript and some minimal shell knowledge to aggregate the results. The VM should provide a good way to get started.</p>
-
-<p><strong>Outparams: QueryInterface Rewrite Milestone Reached </strong> I finally got Mozilla to compile with the outparam-less qi call. The outparamdel part of that was surprisingly easy and straightforward. I   also learned all kinds of fun details about multiple inheritance and fun ways to construct functions out of macro segments. The next step is to get the code to run. I&#8217;ll also have to look into a few minor MCPP issues that the rewrite uncovered. See QI <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=391275">bug</a> for the gory details.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/23/">&larr; Older</a>
@@ -676,6 +680,10 @@ Checks 2 and 3 require the complete class hierachy of Mozilla so I finally made 
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2012/12/26/test-rss/">test rss</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2012/12/24/making-pages-load-faster/">Making pages load faster</a>
       </li>
     
@@ -689,10 +697,6 @@ Checks 2 and 3 require the complete class hierachy of Mozilla so I finally made 
     
       <li class="post">
         <a href="/blog/2012/11/26/coping-with-flash-hangs/">Coping with Flash hangs</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/11/16/snappy-44-fixing-tab-switching-in-vancouver/">Snappy #44: Fixing tab switching in Vancouver</a>
       </li>
     
   </ul>
