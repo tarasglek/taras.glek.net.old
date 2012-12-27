@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="I got used to measuring startup the complicated way (example here). It&#8217;s complicated enough that many people prefer to use stopwatches. Turns &hellip;">
+  <meta name="description" content="In addition to slow font enumeration, we were suffering from a similar problem: slow plugin enumeration. Just as with fonts, the plugin enumeration &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -35,9 +35,9 @@
 
 <body   >
   <nav role="navigation"><ul class="subscription" data-subscription="rss">
-  <li><a href="https://raw.github.com/tarasglek/tarasglek.github.com/master/atom.xml" rel="subscribe-rss" title="subscribe via RSS">All RSS</a></li>
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">All RSS</a></li>
   
-  <li><a href="https://raw.github.com/tarasglek/tarasglek.github.com/master/mozilla.xml"  title="subscribe via RSS">Mozilla RSS</a></li>
+  <li><a href="/blog/categories/mozilla/atom.xml" rel="subscribe-rss" title="subscribe via RSS">Mozilla RSS</a></li>
 </ul>
   
 <ul class="main-navigation">
@@ -58,90 +58,6 @@
     <div id="content">
       <div class="blog-index">
   
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011/01/14/builtin-startup-measurement/">Builtin Startup Measurement</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-01-14T05:25:20-08:00" pubdate data-updated="true">Jan 14<span>th</span>, 2011</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I got used to measuring startup the complicated way (example <a href="http://taras.glek.net/blog/2010/01/04/windows-7-startup-exploration/">here</a>). It&#8217;s complicated enough that many people prefer to use stopwatches.</p>
-
-<p>Turns out modern operating systems can help applications self-diagnose startup speed. Thanks to landing <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=522375">bug 522375</a> we now provide an API for measuring startup speed. For example, now I know that xpcshell takes forever to startup on mac</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>
-</span><span class='line'>./xpcshell -e 'print(new Date() - Components.classes["@mozilla.org/toolkit/app-startup;1"].getService(Components.interfaces.nsIAppStartup_MOZILLA_2_0).getStartupInfo().process)'
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>At any point one can now go to the error console and type in</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>
-</span><span class='line'>uneval(Components.classes["@mozilla.org/toolkit/app-startup;1"].getService(Components.interfaces.nsIAppStartup_MOZILLA_2_0).getStartupInfo())
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>or</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>
-</span><span class='line'>var si=Components.classes["@mozilla.org/toolkit/app-startup;1"].getService(Components.interfaces.nsIAppStartup_MOZILLA_2_0).getStartupInfo(); si.sessionRestored-si.process
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>to get various interesting timestamps. So next time you see a startup take a surprising amount of time, you can go and poke around to see where that time was spent. At the moment there are 4 datapoints:</p>
-
-<ol>
-<li>.process - Process creation timestamp. This is cool because this happens before any library code is executed.</li>
-<li>.main - XRE_main timestamp. My favourite thing to do is to subtract .process from .main. This demonstrates huge overheads that many application programmers refuse to believe in.</li>
-<li>.firstPaint - Timestamp of the first intended paint. This coincides with when the user sees the first sign of life.</li>
-<li>.sessionRestore - Timestamp of session restore, ie when the browser becomes useful.
-Lots of people helped in getting this feature landed, but two people stand out. Daniel Brooks originally figured how to expose Windows/Linux startup speed in Mozilla. Mike Hommey devised a morally-reprehensible way to get precise startup speed out of the idiotic way that Linux presents it.</li>
-</ol>
-
-
-<p><strong>Linux Sucks </strong></p>
-
-<p>Mac and Windows expose process creation times via human time. It&#8217;s just like any other API with time in it. Linux provides process startup speed in imbecile jiffies-since-boot. That&#8217;d be irritating enough, but to piss people off further there is no way to convert that into human time. Clever ps developers resort to calculating jiffies/second by comparing against seconds-since-start in /proc/uptime. Unfortunately that does not even come close to providing anything close to millisecond resolution needed for useful numbers. Mike&#8217;s idea of timing startup of another thread/task to get a known jiffy-stamp got us precise-enough numbers (around 10ms resolution with most kernels, see <a href="http://hg.mozilla.org/mozilla-central/rev/dfdf3e5dc749">patch</a> for details). At least Linus was kind enough to let mere user-space devs obtain the current tick-rate.</p>
-
-<p><strong>Update:</strong></p>
-
-<p>Linux doesn&#8217;t suck anymore, a commenter pointed me to a relatively new(2006) taskstats interface which appears to work sanely like the BSD one.</p>
-
-<p>Mike Hommey made an <a href="http://glandium.org/blog/?p=1575">about:startup extension</a> using this API.</p>
-</div>
-  
-  
-
-
-    </article>
   
   
     <article>
@@ -622,6 +538,43 @@ To summarize: there are a lot of misleading stories floating around. I am always
 
     </article>
   
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/08/15/tethering-on-unrooted-vibrant/">Tethering on the Unrooted Vibrant</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-08-15T10:17:00-07:00" pubdate data-updated="true">Aug 15<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><div class='post'>
+Turned on USB debugging, plugged phone into laptop, told NetworkManager to connect to T-Mobile&#8230;Done. It&#8217;s amazing when you plug in a random device into Linux and right thing(tm) happens.<br /><br />3G seems a lot faster on T-mobile that on AT&T. Tethering on AT&T meant things like GMail loaded painfully slowly. Latency seems high(130ms to google, 90ms more than on my Comcast, I guess HSUPA isn&#8217;t kicking in), but at least it&#8217;s consistent. Throughput is pretty amazing, 450K/s.</div>
+</div>
+  
+  
+
+
+    </article>
+  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/12/">&larr; Older</a>
@@ -639,10 +592,6 @@ To summarize: there are a lot of misleading stories floating around. I am always
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2012/12/26/test-rss/">test rss</a>
-      </li>
-    
-      <li class="post">
         <a href="/blog/2012/12/24/making-pages-load-faster/">Making pages load faster</a>
       </li>
     
@@ -656,6 +605,10 @@ To summarize: there are a lot of misleading stories floating around. I am always
     
       <li class="post">
         <a href="/blog/2012/11/26/coping-with-flash-hangs/">Coping with Flash hangs</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/11/16/snappy-44-fixing-tab-switching-in-vancouver/">Snappy #44: Fixing tab switching in Vancouver</a>
       </li>
     
   </ul>

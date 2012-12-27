@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Turned on USB debugging, plugged phone into laptop, told NetworkManager to connect to T-Mobile&#8230;Done. It&#8217;s amazing when you plug in a &hellip;">
+  <meta name="description" content="The PastOver two years ago I bought the first and only Symbian phone worth paying for: Nokia E71. The knockoff-berry was the first smartphone with &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -35,9 +35,9 @@
 
 <body   >
   <nav role="navigation"><ul class="subscription" data-subscription="rss">
-  <li><a href="https://raw.github.com/tarasglek/tarasglek.github.com/master/atom.xml" rel="subscribe-rss" title="subscribe via RSS">All RSS</a></li>
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">All RSS</a></li>
   
-  <li><a href="https://raw.github.com/tarasglek/tarasglek.github.com/master/mozilla.xml"  title="subscribe via RSS">Mozilla RSS</a></li>
+  <li><a href="/blog/categories/mozilla/atom.xml" rel="subscribe-rss" title="subscribe via RSS">Mozilla RSS</a></li>
 </ul>
   
 <ul class="main-navigation">
@@ -58,43 +58,6 @@
     <div id="content">
       <div class="blog-index">
   
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2010/08/15/tethering-on-unrooted-vibrant/">Tethering on the Unrooted Vibrant</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-08-15T10:17:00-07:00" pubdate data-updated="true">Aug 15<span>th</span>, 2010</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><div class='post'>
-Turned on USB debugging, plugged phone into laptop, told NetworkManager to connect to T-Mobile&#8230;Done. It&#8217;s amazing when you plug in a random device into Linux and right thing(tm) happens.<br /><br />3G seems a lot faster on T-mobile that on AT&T. Tethering on AT&T meant things like GMail loaded painfully slowly. Latency seems high(130ms to google, 90ms more than on my Comcast, I guess HSUPA isn&#8217;t kicking in), but at least it&#8217;s consistent. Throughput is pretty amazing, 450K/s.</div>
-</div>
-  
-  
-
-
-    </article>
   
   
     <article>
@@ -643,6 +606,87 @@ People seem to prefer to comment on <a href="http://www.reddit.com/r/programming
 
     </article>
   
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/04/12/squeezing-every-last-bit-of-performance-out-of-the-linux-toolchain/">Squeezing Every Last Bit of Performance Out of the Linux Toolchain</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-04-12T08:16:08-07:00" pubdate data-updated="true">Apr 12<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><strong>Magic of GCC PGO</strong></p>
+
+<p>On Friday I finally got gold to produce a prelinkable static binary(<a href="http://sourceware.org/bugzilla/show_bug.cgi?id=11483">bug</a>). I also got around to trying out GCC <a href="https://developer.mozilla.org/en/Building_with_Profile-Guided_Optimization">profile-guided-optimization</a> with the debloatifying -freorder-blocks-and-partition option. This option breaks up every profiled function into cold and hot &#8220;functions&#8221;. It then lumps all of the hot functions together.</p>
+
+<p>PGO performance is amazingly close to that of binaries produced by <a href="http://taras.glek.net/blog/2010/04/07/icegrind-valgrind-plugin-for-optimizing-cold-startup/">icegrind </a>(within 10% based on page-counts).</p>
+
+<p><strong>Startup Time</strong>
+<strong>RSS (KB)</strong></p>
+
+<p>firefox.stock
+2515ms
+49452</p>
+
+<p>firefox.ordered
+1919ms
+45344</p>
+
+<p>firefox.static
+2321ms
+49616</p>
+
+<p>firefox.static.ordered
+1577ms
+37072</p>
+
+<p>firefox.static.pgo
+1619ms
+38436
+In above table, ordered means application of <a href="http://taras.glek.net/blog/2010/04/07/icegrind-valgrind-plugin-for-optimizing-cold-startup/">icegrind</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=525013">static</a> means a fat firefox-bin. To generate the PGO profile I just started and closed Firefox. So it&#8217;s not too surprising that the results are similar to those of an explicitly ordered binary. RSS refers to how much memory is mmap()ed into the process(lower RSS usage means we are paging in less junk). I was not able to control the layout of PGO builds; will need some linker hackery to deal with split functions.</p>
+
+<p>I think the numbers speak for themselves. Isn&#8217;t it scary how wasteful binaries are by default? It amazes me that Firefox can shrug off a significant amount of resource bloat without changing a single line of code. I think this is a good demonstration on why application developers should a) expect more out of their toolchain (Linux, GCC, Binutils) b) contribute to their toolchain.</p>
+
+<p>I think my next step is to tackle PGO Firefox builds(<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=418866">bug</a>). From there I would like to teach icegrind to play together with PGO.</p>
+
+<p><strong>Pieces of The Startup Puzzle</strong></p>
+
+<p>It took a long time since I <a href="http://taras.glek.net/blog/2009/10/20/large-apps-just-have-to-start-slow/">first noticed</a> the suckyness of library io. After much digging, help by smart people on #gcc + <a href="http://thread.gmane.org/gmane.linux.kernel/970483/focus=970920">LKML discussion</a>, I think I finally have a pretty clear list of the remaining/inprogress things needed for Linux applications to start faster.</p>
+
+<ol>
+<li>Wu Fengguang is making headway on <a href="http://lwn.net/Articles/372384/">smarter readahead</a> that makes better use of available RAM + disk bandwidth. Firefox could be read in 512kb chunks instead of 128 (4x page-fault reduction). Distributions should be aggressively testing this patch.</li>
+<li>Better agreement on binary organization between the compile-time <a href="http://sourceware.org/bugzilla/show_bug.cgi?id=11447">linker</a>, run-time <a href="http://sourceware.org/bugzilla/show_bug.cgi?id=11431">linker</a> and the kernel (see LKML discussion). Can shave off a handful of unneeded page-faults per file this way.</li>
+<li>A linker flag to specify how much of a particular library should be read-in via madvise(). For example any xulrunner apps will know ahead of time that they need large parts of libxul.so - might as well let the OS know.</li>
+<li>Transparent read-only per-file ext4 compression (<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=514083">like OSX</a>). Ted Tso indicated that this would be easy to add to ext4, but as far as I know nobody has jumped on this.
+I think with all of the above combined, we could load apps like Firefox at near-warm (0.5 second) speeds. Most of these are easy. #1 is hard, but it&#8217;s already being worked on. I&#8217;ll be happy to point someone at how to solve items 2-4 while I work on the Firefox side of things. The end result of all this should be a more instant gratification for all Linux users.</li>
+</ol>
+
+</div>
+  
+  
+
+
+    </article>
+  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/13/">&larr; Older</a>
@@ -660,10 +704,6 @@ People seem to prefer to comment on <a href="http://www.reddit.com/r/programming
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2012/12/26/test-rss/">test rss</a>
-      </li>
-    
-      <li class="post">
         <a href="/blog/2012/12/24/making-pages-load-faster/">Making pages load faster</a>
       </li>
     
@@ -677,6 +717,10 @@ People seem to prefer to comment on <a href="http://www.reddit.com/r/programming
     
       <li class="post">
         <a href="/blog/2012/11/26/coping-with-flash-hangs/">Coping with Flash hangs</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/11/16/snappy-44-fixing-tab-switching-in-vancouver/">Snappy #44: Fixing tab switching in Vancouver</a>
       </li>
     
   </ul>

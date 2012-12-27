@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="It doesn&#8217;t look like my oink patches are going to reach upstream anytime soon. In fact, in the past year no patches have landed in the oink &hellip;">
+  <meta name="description" content="Will Rid Code of Outparams! I resumed my outparam rewriting work last week. Having fixed the CPP induced architectural limitation that I ran into, it &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -35,9 +35,9 @@
 
 <body   >
   <nav role="navigation"><ul class="subscription" data-subscription="rss">
-  <li><a href="https://raw.github.com/tarasglek/tarasglek.github.com/master/atom.xml" rel="subscribe-rss" title="subscribe via RSS">All RSS</a></li>
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">All RSS</a></li>
   
-  <li><a href="https://raw.github.com/tarasglek/tarasglek.github.com/master/mozilla.xml"  title="subscribe via RSS">Mozilla RSS</a></li>
+  <li><a href="/blog/categories/mozilla/atom.xml" rel="subscribe-rss" title="subscribe via RSS">Mozilla RSS</a></li>
 </ul>
   
 <ul class="main-navigation">
@@ -58,52 +58,6 @@
     <div id="content">
       <div class="blog-index">
   
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2007/08/30/pork-the-brave-new-world/">Pork: The Brave New World</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2007-08-30T08:31:43-07:00" pubdate data-updated="true">Aug 30<span>th</span>, 2007</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>It doesn&#8217;t look like my oink patches are going to reach upstream anytime soon. In fact, in the past year no patches have landed in the oink tree. I think this is unfortunate, but I have my own repository at <a href="http://hg.mozilla.org">http://hg.mozilla.org</a> and will continue working on my fork. So allow me to introduce Pork, the Oink fork. So if anyone has any exciting source location, pretty printing or other elsa improvements, I hope to eventually see those land in pork.</p>
-
-<p>Note, pork is just an informal name for the fork, I am not currently planning to do any source renaming or repository renaming.</p>
-
-<p><strong>Pork: Now in a VMware flavour</strong></p>
-
-<p>bsmedberg pointed out that oink seems a bit intimidating to setup and it would be nice if it came in virtual machine. So I have oink/mcpp/etc packaged up in a virtual machine that can build Mozilla with gcc3.4, run dehydra analyses and produce automated patches. If you want to play with that, post a comment and I&#8217;ll reply with a download link.</p>
-
-<p>A couple of people asked me about some simple code-scans to see for problems and optimization opportunities. Next week I am going to post few simple dehydra recipes on how to look for patterns in the code. It&#8217;s dead simple with JavaScript and some minimal shell knowledge to aggregate the results. The VM should provide a good way to get started.</p>
-
-<p><strong>Outparams: QueryInterface Rewrite Milestone Reached </strong> I finally got Mozilla to compile with the outparam-less qi call. The outparamdel part of that was surprisingly easy and straightforward. I   also learned all kinds of fun details about multiple inheritance and fun ways to construct functions out of macro segments. The next step is to get the code to run. I&#8217;ll also have to look into a few minor MCPP issues that the rewrite uncovered. See QI <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=391275">bug</a> for the gory details.</p>
-</div>
-  
-  
-
-
-    </article>
   
   
     <article>
@@ -862,6 +816,90 @@ The MCPP maintainer is almost done with 1. I have a prototype implementation of 
 
     </article>
   
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2007/05/17/undoing-cpp-deep-in-enemy-territory/">Undoing CPP - Deep in Enemy Territory</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-05-17T08:30:43-07:00" pubdate data-updated="true">May 17<span>th</span>, 2007</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><strong>Positive</strong></p>
+
+<p>Since the last blog post, I have been investigating on how to teach elsa about the C preprocessor. Overall, I am really happy that <a href="http://mcpp.sourceforge.net/">MCPP</a> exists and is actively maintained. Preprocessed source code may not be invertible into the original form, but at least it can be undone enough for refactoring purposes.</p>
+
+<p>Looks like I should be able to preprocess the source code, and while at it record macro expansion information and then have elsa fed with a somewhat xml-escue data structure.</p>
+
+<p>The way I see it, a line of code like</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>foo = PR_MAX(boo(), nsnull)</span></code></pre></td></tr></table></div></figure>
+
+
+<p>which expands into</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>foo =  boo() &gt; 0 ? boo() : 0;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>will get fed to elsa as something like</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;fragment&gt;foo = &lt;macro id=somemacro_instance&gt;PR_MAX(boo(), nsnull)&lt;/macro&gt;;&lt;/fragment&gt;
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>where somemacro_instance is defined as</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;fragment&gt;&lt;fragment ref=some_fragment/&gt; &gt; 0 ? &lt;fragment ref=some_fragment/&gt; : &lt;macro id=some_staticmacro&gt;0&lt;/macro&gt;&lt;/fragment&gt;
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>where some_staticmacro is defined as</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;fragment&gt;0&lt;/fragment&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I think this is a cute scheme because fragments are basically regions of source-code. This is exciting because once a macro is used in the code, the text fragment that defines the macro can be parsed as C++ and rewritten accordingly. Obviously, this wouldn&#8217;t be the default behavior.</p>
+
+<p>If you see a fatal flow in the above model, let me know.</p>
+
+<p><strong>Negative</strong></p>
+
+<p>My main reason for adding preprocessor support to elsa is to obtain precise source locations from elsa. Ironically, MCPP &#8220;compresses&#8221; whitespace, so column information is basically thrown out of the window. Means I&#8217;ll have to do some extensive culling of the compression code (which is everywhere).</p>
+
+<p>Another fun issue is that the general structure of MCPP encourages the &#8220;lots of global variables and defines&#8221; mode of programming. It also uses strings-as-a-data-structure pattern which may make me give up on the fancy onion-peel model I described above and instead have mcpp generate preprocessed code along with an &#8220;undo&#8221; type log.</p>
+
+<p>MCPP is also a bit on the slow side compared to GCC, but I&#8217;ll trade a second or two slowdown per file for never having to cry due to CPP again.</p>
+</div>
+  
+  
+
+
+    </article>
+  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/24/">&larr; Older</a>
@@ -879,10 +917,6 @@ The MCPP maintainer is almost done with 1. I have a prototype implementation of 
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2012/12/26/test-rss/">test rss</a>
-      </li>
-    
-      <li class="post">
         <a href="/blog/2012/12/24/making-pages-load-faster/">Making pages load faster</a>
       </li>
     
@@ -896,6 +930,10 @@ The MCPP maintainer is almost done with 1. I have a prototype implementation of 
     
       <li class="post">
         <a href="/blog/2012/11/26/coping-with-flash-hangs/">Coping with Flash hangs</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/11/16/snappy-44-fixing-tab-switching-in-vancouver/">Snappy #44: Fixing tab switching in Vancouver</a>
       </li>
     
   </ul>

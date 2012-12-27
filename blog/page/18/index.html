@@ -9,8 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="I got tagged by Benjamin, so I better comply and get my blog memed. Rules Link back to your original tagger and list the rules in your post.
-Share &hellip;">
+  <meta name="description" content="Static Analysis vs Performance Two months ago I got the feeling that I gotta take a break from static analysis and do something that obviously &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -36,9 +35,9 @@ Share &hellip;">
 
 <body   >
   <nav role="navigation"><ul class="subscription" data-subscription="rss">
-  <li><a href="https://raw.github.com/tarasglek/tarasglek.github.com/master/atom.xml" rel="subscribe-rss" title="subscribe via RSS">All RSS</a></li>
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">All RSS</a></li>
   
-  <li><a href="https://raw.github.com/tarasglek/tarasglek.github.com/master/mozilla.xml"  title="subscribe via RSS">Mozilla RSS</a></li>
+  <li><a href="/blog/categories/mozilla/atom.xml" rel="subscribe-rss" title="subscribe via RSS">Mozilla RSS</a></li>
 </ul>
   
 <ul class="main-navigation">
@@ -59,71 +58,6 @@ Share &hellip;">
     <div id="content">
       <div class="blog-index">
   
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/01/13/seven-things-you-may-not-know-about-me/">Seven Things You May Not Know About Me</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-01-13T11:17:49-08:00" pubdate data-updated="true">Jan 13<span>th</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I got tagged by <a href="http://benjamin.smedbergs.us/blog/2009-01-12/seven-things-you-may-not-know-about-me/">Benjamin</a>, so I better comply and get my blog memed.</p>
-
-<h4>Rules</h4>
-
-<ol>
-<li>Link back to your original tagger and list the rules in your post.</li>
-<li>Share seven facts about yourself.</li>
-<li>Tag some (seven?) people by leaving names and links to their blogs.</li>
-<li><p>Let them know they’ve been tagged.
-<strong>Seven Things</strong></p></li>
-<li><p>In Soviet Ukraine, kindergarten failed me (luckily they don&#8217;t make you retake that). Apparently when I was six, my handwriting and reading skills were not up to the communist standards of time. I still fondly remember excepts of various communist hymns we got to sing along.</p></li>
-<li>Grade 1 coincided with the fall of communism and me getting the most kickass grades of my academic career.</li>
-<li>I have owned two cars, but I have since traded that lifestyle for a garage full of bikes. I never liked the effects that driving had on my health nor the effect that crappy German engineering had on my savings.</li>
-<li>I met my wife on my first <a href="http://www.momentumplanet.com/features/moonlight-midnight-mystery-ride">midnight mystery ride</a>. Riding at midnight is awesome because that&#8217;s the only time that traffic dies down enough that one sees nothing but fellow bikers and drunk pedestrians.</li>
-<li>To buy groceries I ride a comical contraption called an adult tricycle. We even worked the trike into our wedding.</li>
-<li><img src="http://photos-e.ak.fbcdn.net/photos-ak-snc1/v1925/118/14/122504458/n122504458_33849548_3260.jpg" alt="" /></li>
-</ol>
-
-
-<p>I never had a real job. For some reason all of the Burger Kings and Subways that I applied at never took an interest in me. Instead, in grade 8 my first source of income was teaching Java to someone 2.5x my age for $3 an hour. From then on I bounced around various part-time jobs and internships until I ended up at Mozilla, my first real job.
-  7. For a something like six years I wore long hair to go along with my taste for Metal. I&#8217;m always looking for more awesome metal music, currently in heavy rotation are Testament, Winds of Plague, Dying Fetus and Opeth. If you think there is an awesome metal band I might be missing out on, let me know.
-<strong>Tags</strong></p>
-
-<p><a href="http://mozilla.damon.sicore.org/">Damon Sicore</a> - There are seven random things I need to know about my boss.</p>
-
-<p><a href="http://quetzalcoatal.blogspot.com/">Joshua Cranmer</a> - lets hear seven things about you without mentioning dem0rkification.</p>
-
-<p><a href="http://www.bluishcoder.co.nz/">Chris Double</a> - I hope to hear seven reasons for one to program in Reverse Polish Notation</p>
-
-<p><a href="http://blog.mozilla.org/graydon/">Graydon Hoare</a> -  because his blog hasn&#8217;t been memed. It&#8217;s also getting a bit dated</p>
-</div>
-  
-  
-
-
-    </article>
   
   
     <article>
@@ -594,6 +528,46 @@ Both of these projects are interested in converging on a single codebase. It sou
 
     </article>
   
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2008/08/14/meanwhile-in-a-parallel-universe/">Meanwhile in a Parallel Universe</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-08-14T01:48:04-07:00" pubdate data-updated="true">Aug 14<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Someone else is developing their own app-specific rewrite tools. In this case app-specific refers to <a href="http://people.imendio.com/richard/gtk-rewriter/">automating porting code</a> from gtk2 to gtk3. The approach is similar in that patches are produced, but it doesn&#8217;t look like a patch aggregating tool is written yet. Instead of the elsa/mcpp magic sauce, <a href="http://clang.llvm.org/">clang</a> is being used, so this is limited to C at the moment.</p>
+
+<p>KDE folks are behind in automated code rewrites arms race, perhaps the trolls should try some <a href="http://developer.mozilla.org/en/docs/Pork">pork</a> to accelerate KDE3->4 transition :)</p>
+
+<p>All kidding aside, it is awesome to see that less-manual-labour-through-compiler-assisted-refactoring approach is gaining mindshare.</p>
+</div>
+  
+  
+
+
+    </article>
+  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/19/">&larr; Older</a>
@@ -611,10 +585,6 @@ Both of these projects are interested in converging on a single codebase. It sou
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2012/12/26/test-rss/">test rss</a>
-      </li>
-    
-      <li class="post">
         <a href="/blog/2012/12/24/making-pages-load-faster/">Making pages load faster</a>
       </li>
     
@@ -628,6 +598,10 @@ Both of these projects are interested in converging on a single codebase. It sou
     
       <li class="post">
         <a href="/blog/2012/11/26/coping-with-flash-hangs/">Coping with Flash hangs</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/11/16/snappy-44-fixing-tab-switching-in-vancouver/">Snappy #44: Fixing tab switching in Vancouver</a>
       </li>
     
   </ul>
