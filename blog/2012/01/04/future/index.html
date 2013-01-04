@@ -57,17 +57,13 @@ if (!window.requestAnimationFrame) {
 
 }
 
+window._refreshLog = []
 function refreshLogCounter() {
-  if(!window._refreshLog) {
-    window._refreshLog = [Date.now()]
-    return
-  }
-  window._refreshLog.push(Date.now()-window._refreshLog[window._refreshLog.length-1].now())
+  window._refreshLog.push(Date.now())
   window._refreshLogCounter = requestAnimationFrame(refreshLogCounter);
 }
 
 window._refreshLogCounter = requestAnimationFrame(refreshLogCounter);
-
 </script>
 
 </nav>
