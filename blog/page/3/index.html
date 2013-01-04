@@ -45,6 +45,31 @@
   <li><a href="/blog/archives">Archives</a></li>
 </ul>
 
+<script>
+if (!window.requestAnimationFrame) {
+  window.requestAnimationFrame = window.mozRequestAnimationFrame
+    || window.webkitRequestAnimationFrame
+    || window.msRequestAnimationFrame;
+
+  window.cancelAnimationFrame = window.mozCancelAnimationFrame
+    || window.webkitCancelAnimationFrame
+    || window.msCancelAnimationFrame;
+
+}
+
+function refreshLogCounter() {
+  if(!window._refreshLog) {
+    window._refreshLog = [Date.now()]
+    return
+  }
+  window._refreshLog.push(Date.now()-window._refreshLog[window._refreshLog.length-1].now())
+  window._refreshLogCounter = requestAnimationFrame(refreshLogCounter);
+}
+
+window._refreshLogCounter = requestAnimationFrame(refreshLogCounter);
+
+</script>
+
 </nav>
   <header role="banner"><hgroup>
   <h1><a href="/">All About Performance</a></h1>
@@ -671,6 +696,12 @@ Creative Commons Attribution Share-Alike License v3.0 or any later version.
 
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span></h6>
 </p>
+<script>
+//indicate that content has been loaded
+window._monitorContentLoaded = Date.now()
+</script>
+<script src="http://monitor-taras-glek-net.appspot.com/static/monitor.js">
+</script>
 
 </footer>
   
