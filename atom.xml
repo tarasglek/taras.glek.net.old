@@ -4,7 +4,7 @@
   <title><![CDATA[All About Performance]]></title>
   <link href="http://taras.glek.net/atom.xml" rel="self"/>
   <link href="http://taras.glek.net/"/>
-  <updated>2013-01-04T17:24:19-08:00</updated>
+  <updated>2013-01-04T22:36:02-08:00</updated>
   <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -31,7 +31,7 @@
 
 <p>Much of the year was spent on tooling for analyzing Firefox performance. <a href="https://addons.mozilla.org/en-us/thunderbird/addon/gecko-profiler/">Gecko profiler</a> is my favourite new tool. Telemetry chromehangs, evolution and slowsql are also great for settling arguments.</p>
 
-<p>Many of the bugs below would not have gotten fixed without above tools.</p>
+<p>Many of the bugs below would not have gotten fixed without these tools.</p>
 
 <h1>Cleaning up the Memory Collectors</h1>
 

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: snappy | All About Performance]]></title>
   <link href="http://taras.glek.net/blog/categories/snappy/atom.xml" rel="self"/>
   <link href="http://taras.glek.net/"/>
-  <updated>2013-01-04T17:24:19-08:00</updated>
+  <updated>2013-01-04T22:36:02-08:00</updated>
   <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -30,7 +30,7 @@ I'd like to summarize some of the most memorable Snappy accomplishments.
 
 Much of the year was spent on tooling for analyzing Firefox performance. [Gecko profiler](https://addons.mozilla.org/en-us/thunderbird/addon/gecko-profiler/) is my favourite new tool. Telemetry chromehangs, evolution and slowsql are also great for settling arguments. 
 
-Many of the bugs below would not have gotten fixed without above tools.
+Many of the bugs below would not have gotten fixed without these tools.
 
 #Cleaning up the Memory Collectors
 
