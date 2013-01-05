@@ -4,7 +4,7 @@
   <title><![CDATA[All About Performance]]></title>
   <link href="http://taras.glek.net/atom.xml" rel="self"/>
   <link href="http://taras.glek.net/"/>
-  <updated>2013-01-04T16:23:43-08:00</updated>
+  <updated>2013-01-04T16:25:13-08:00</updated>
   <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -12,6 +12,8 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  
   
   
   <entry>
@@ -453,39 +455,6 @@ We spent most of the meeting discussing bug <a href="https://bugzilla.mozilla.or
     <updated>2012-08-14T05:52:00-07:00</updated>
     <id>http://taras.glek.net/blog/2012/08/14/snappy-for-aug-9</id>
     <content type="html"><![CDATA[<p>Lawrence took excellent Snappy <a href="https://wiki.mozilla.org/Performance/Snappy/2012-08-09">meeting notes</a> last week.</p>
-]]></content>
-  </entry>
-  
-  
-  
-  <entry>
-    <title type="html"><![CDATA[Snappy, Aug 2]]></title>
-    <link href="http://taras.glek.net/blog/2012/08/06/snappy-aug-2/"/>
-    <updated>2012-08-06T09:27:10-07:00</updated>
-    <id>http://taras.glek.net/blog/2012/08/06/snappy-aug-2</id>
-    <content type="html"><![CDATA[<p><strong>Landed This Week</strong></p>
-
-<p>Neil Deakin joined the Snappy effort. He is working on eliminating pointless reflows in the tab strip. His fix for <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=752486">bug 752486</a> landed, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=752376">752376</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=752496">752496</a> are next.</p>
-
-<p>Brian Bondy landed removal of our prefetch-nuking code in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=770911">770911</a>. xul.dll preload is now always on based on our telemetry startup study in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=765850">765850</a>.</p>
-
-<p>Bill McCloskey landed the following improvements to reduce garbage collection pauses:</p>
-
-<ul>
-<li>bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=777919">777919 </a>- Free LifoAlloc chunks on background thread, instead of as part of the final IGC slice. This isn&#8217;t a problem for most people, but for some people on OSX it can take anywhere from 50ms to 250ms or more.</li>
-<li>bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=778993"> 778993 </a>- Separate runtime&#8217;s gcMallocBytes from compartment&#8217;s gcMallocBytes, so we trigger less non-incremental GCs with many tabs open</li>
-<li>bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=767209">767209 </a>- Make GC slices longer when not painting to avoid non-incremental GCs.
-See Bill&#8217;s comments in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=767209">767209</a> for some insight into the complex heuristics that go into minimizing GC interruptions: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=767209#c3">comment 1</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=767209#c8">comment 2</a>.</li>
-</ul>
-
-
-<p><strong>Coming Soon</strong></p>
-
-<p>In the coming week I expect to see some good optimizations land for page rendering, tab-switching behavior, more robust cache, etc.</p>
-
-<p>Some Snappy people will be attending <a href="https://wiki.mozilla.org/MozCampEU2012">MozCamp.eu 2012</a> in Warsaw, Poland on September 8, 9. Expect to see lots of talk on profiling and other performance tools.</p>
-
-<p>I hope to have above 15-20 Performance/Snappy people in Warsaw for the following week. This is not yet finalized. At the moment we are looking to see if there is a coworking space or a company in Warsaw who could host us.</p>
 ]]></content>
   </entry>
   

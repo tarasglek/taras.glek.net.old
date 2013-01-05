@@ -4,7 +4,7 @@
   <title><![CDATA[All About Performance]]></title>
   <link href="http://taras.glek.net/atom.xml" rel="self"/>
   <link href="http://taras.glek.net/"/>
-  <updated>2013-01-04T16:23:43-08:00</updated>
+  <updated>2013-01-04T16:25:13-08:00</updated>
   <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -12,6 +12,88 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Snappy: 2012 Summary]]></title>
+    <link href="http://taras.glek.net/blog/2013/01/04/snappy-2012-summary/"/>
+    <updated>2013-01-04T15:46:00-08:00</updated>
+    <id>http://taras.glek.net/blog/2013/01/04/snappy-2012-summary</id>
+    <content type="html"><![CDATA[<p>2012 was an exciting year for Snappy. Turning &#8216;make it go faster&#8217; into a set of a measurements and corresponding bugs to fix was hard. We learned a lot.</p>
+
+<p>I&#8217;d like to summarize some of the most memorable Snappy accomplishments.</p>
+
+<p><em>Short version: Firefox is much more reponsive now.</em></p>
+
+<h1>Snappy Tools</h1>
+
+<p>Better part of the year was spent developing tooling to understand Firefox performance. <a href="https://addons.mozilla.org/en-us/thunderbird/addon/gecko-profiler/">Gecko profiler</a> is my favourite new tool. Telemetry chromehangs, evolution and slowsql are also great for settling arguments.</p>
+
+<h1>Cleaning up the Memory Collectors</h1>
+
+<p>In the beginning of the year it was common to suffer long (200-700ms for me) garbage and cycle collection pauses. I now rarely see pauses over 20ms in these areas. I suspect these were the most laborious improvements of 2012. There are too many bugs to list for this.</p>
+
+<h1>SQLite Misuse</h1>
+
+<p>SQLite is a fine database, but it is much better at storing data robustly than accessing it efficiently. Firefox got nailed by the following footguns:</p>
+
+<ul>
+<li>overusing main-thread SQL queries</li>
+<li>performing expensive background queries</li>
+</ul>
+
+
+<p>As if main-thread IO wasn&#8217;t bad enough, turns out SQLite does not like running queries in parallel. Mixing sync/async queries invites race conditions where sync queries can end up waiting for many minutes at a time (hanging the UI) while &#8220;background&#8221; maintenance queries complete. There were too many of such fixes to list.</p>
+
+<h3>DOM Local Storage Caching</h3>
+
+<p>We ran into significant problems with Local Storage. In order conform to spec and not perform like shit, browsers are forced to maintain an in-memory cache (this is why Local Storage dominates in synthetic benchmarks: they are measuring memory bandwidth with no syscall, etc overhead).</p>
+
+<ul>
+<li>It became really popular in 2011-2012 despite a poor spec: main-thread reads and vagueness on when/whether data should hit disk.</li>
+<li>Local Storage cache was causing LS to be written out too often: <a title="Reduce writes in current DOM Storage implementation" href="https://bugzilla.mozilla.org/show_bug.cgi?id=714964">bug 714964</a></li>
+<li>Local Storage cache was written on main-thread. For paranoid amusement it was then read back in after every writeout: <a title="Move LocalStorage writes off the main thread" href="https://bugzilla.mozilla.org/show_bug.cgi?id=807021">bug 807021</a></li>
+<li>For some some reason to do with how our DOM works there is a second level of caching so local storage can actually use up 2x more memory in RAM than it does on disk. As a result the Local Storage cache is slated for a complete rewrite in <a title="Rewrite and cleanup DOMStorage code" href="https://bugzilla.mozilla.org/show_bug.cgi?id=600307">bug 600307</a>.</li>
+</ul>
+
+
+<p>I should note, I made a mistake and attributed <a href="http://taras.glek.net/blog/2012/02/22/psa-dom-local-storage-considered-harmful/">too much blame</a> to the Local Storage API. I will blog on the exact extent of Local Storage badness once I have a chance to access the relevant telemetry data.</p>
+
+<p>Surprisingly, the Local Storage caching layer was so bad that underlying SQLite footguns did not get to play a role in this tragedy.</p>
+
+<h1>Async IO</h1>
+
+<p>For years people would argue on how patches should strive to use async APIs during patch review. Unfortunately even a little bit of sync IO has potential to cancel out the most elaborate async efforts.</p>
+
+<p>We had no purely async storage APIs until recently. We now have one such API in <a href="http://dutherenverseauborddelatable.wordpress.com/2012/10/03/asynchronous-file-io-for-the-mozilla-platform/">OS.File</a>.</p>
+
+<h1>UI Slowness</h1>
+
+<p>The following sadness was fixed:</p>
+
+<h3>Startup</h3>
+
+<ul>
+<li>Renaming directories with lots of files can take minutes on Windows, that&#8217;s bad when it happens on startup: <a title="Disk cache seems to cause exceptionally slow startups(1min+)" href="https://bugzilla.mozilla.org/show_bug.cgi?id=701909">bug 701909</a>.</li>
+<li>Firefox had a minor tendency to start loading webpages before UI is shown: <a title="Don't load homepage URI before first paint" href="https://bugzilla.mozilla.org/show_bug.cgi?id=756313">bug 756313</a>, <a title="Wait until chrome is painted before executing code not critical to making the initial window visible" href="https://bugzilla.mozilla.org/show_bug.cgi?id=715402">bug 715402</a>.</li>
+<li>Q: What could be worse than loading pages before UI is shown? A: Executing synchronous proxy code: <a title="windows proxy discovery via WPAD needs caching" href="https://bugzilla.mozilla.org/show_bug.cgi?id=790370">bug 790370</a>, <a title="remove synchronous DNS resolution in nsSOCKSIOLayer.cpp" href="https://bugzilla.mozilla.org/show_bug.cgi?id=767159">bug 767159</a></li>
+<li>Firefox insisted on doing network activity to verify some extension jars on startup: <a title="Certificate of a signed extension is validated on each startup" href="https://bugzilla.mozilla.org/show_bug.cgi?id=726125">bug 726125</a></li>
+</ul>
+
+
+<h3>General</h3>
+
+<ul>
+<li>Tab switching to some popular websites is roughly 10x faster now(too many bugs to list).</li>
+<li>Firefox tended be unresponsive during large downloads: <a title="nsExternalAppHandler downloads files on the main thread" href="https://bugzilla.mozilla.org/show_bug.cgi?id=789932">bug 789932</a>.</li>
+<li>In some situations hardware acceleration would slow down Firefox UI to a crawl: too many bugs to list here.</li>
+</ul>
+
+
+<h1>2013</h1>
+
+<p>2012 was a good warm-up. We spent a substantial part of the year on tooling. If everything goes right, that should pay off in the coming year.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Making pages load faster]]></title>
@@ -440,37 +522,6 @@ We spent most of the meeting discussing bug <a href="https://bugzilla.mozilla.or
     <updated>2012-08-14T05:52:00-07:00</updated>
     <id>http://taras.glek.net/blog/2012/08/14/snappy-for-aug-9</id>
     <content type="html"><![CDATA[<p>Lawrence took excellent Snappy <a href="https://wiki.mozilla.org/Performance/Snappy/2012-08-09">meeting notes</a> last week.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Snappy, Aug 2]]></title>
-    <link href="http://taras.glek.net/blog/2012/08/06/snappy-aug-2/"/>
-    <updated>2012-08-06T09:27:10-07:00</updated>
-    <id>http://taras.glek.net/blog/2012/08/06/snappy-aug-2</id>
-    <content type="html"><![CDATA[<p><strong>Landed This Week</strong></p>
-
-<p>Neil Deakin joined the Snappy effort. He is working on eliminating pointless reflows in the tab strip. His fix for <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=752486">bug 752486</a> landed, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=752376">752376</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=752496">752496</a> are next.</p>
-
-<p>Brian Bondy landed removal of our prefetch-nuking code in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=770911">770911</a>. xul.dll preload is now always on based on our telemetry startup study in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=765850">765850</a>.</p>
-
-<p>Bill McCloskey landed the following improvements to reduce garbage collection pauses:</p>
-
-<ul>
-<li>bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=777919">777919 </a>- Free LifoAlloc chunks on background thread, instead of as part of the final IGC slice. This isn&#8217;t a problem for most people, but for some people on OSX it can take anywhere from 50ms to 250ms or more.</li>
-<li>bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=778993"> 778993 </a>- Separate runtime&#8217;s gcMallocBytes from compartment&#8217;s gcMallocBytes, so we trigger less non-incremental GCs with many tabs open</li>
-<li>bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=767209">767209 </a>- Make GC slices longer when not painting to avoid non-incremental GCs.
-See Bill&#8217;s comments in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=767209">767209</a> for some insight into the complex heuristics that go into minimizing GC interruptions: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=767209#c3">comment 1</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=767209#c8">comment 2</a>.</li>
-</ul>
-
-
-<p><strong>Coming Soon</strong></p>
-
-<p>In the coming week I expect to see some good optimizations land for page rendering, tab-switching behavior, more robust cache, etc.</p>
-
-<p>Some Snappy people will be attending <a href="https://wiki.mozilla.org/MozCampEU2012">MozCamp.eu 2012</a> in Warsaw, Poland on September 8, 9. Expect to see lots of talk on profiling and other performance tools.</p>
-
-<p>I hope to have above 15-20 Performance/Snappy people in Warsaw for the following week. This is not yet finalized. At the moment we are looking to see if there is a coworking space or a company in Warsaw who could host us.</p>
 ]]></content>
   </entry>
   

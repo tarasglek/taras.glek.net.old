@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: mozilla_draft | All About Performance]]></title>
+  <link href="http://taras.glek.net/blog/categories/mozilla-draft/atom.xml" rel="self"/>
+  <link href="http://taras.glek.net/"/>
+  <updated>2013-01-04T16:25:13-08:00</updated>
+  <id>http://taras.glek.net/</id>
+  <author>
+    <name><![CDATA[Taras Glek]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Snappy: 2012 Summary]]></title>
+    <link href="http://taras.glek.net/blog/2013/01/04/snappy-2012-summary/"/>
+    <updated>2013-01-04T15:46:00-08:00</updated>
+    <id>http://taras.glek.net/blog/2013/01/04/snappy-2012-summary</id>
+    <content type="html"><![CDATA[2012 was an exciting year for Snappy. Turning 'make it go faster' into a set of a measurements and corresponding bugs to fix was hard. We learned a lot.
+
+I'd like to summarize some of the most memorable Snappy accomplishments.
+
+*Short version: Firefox is much more reponsive now.*
+
+#Snappy Tools
+
+Better part of the year was spent developing tooling to understand Firefox performance. [Gecko profiler](https://addons.mozilla.org/en-us/thunderbird/addon/gecko-profiler/) is my favourite new tool. Telemetry chromehangs, evolution and slowsql are also great for settling arguments. 
+
+#Cleaning up the Memory Collectors
+
+In the beginning of the year it was common to suffer long (200-700ms for me) garbage and cycle collection pauses. I now rarely see pauses over 20ms in these areas. I suspect these were the most laborious improvements of 2012. There are too many bugs to list for this.
+
+#SQLite Misuse
+
+SQLite is a fine database, but it is much better at storing data robustly than accessing it efficiently. Firefox got nailed by the following footguns:
+
+- overusing main-thread SQL queries
+- performing expensive background queries
+ 
+As if main-thread IO wasn't bad enough, turns out SQLite does not like running queries in parallel. Mixing sync/async queries invites race conditions where sync queries can end up waiting for many minutes at a time (hanging the UI) while "background" maintenance queries complete. There were too many of such fixes to list.
+
+###DOM Local Storage Caching
+
+We ran into significant problems with Local Storage. In order conform to spec and not perform like shit, browsers are forced to maintain an in-memory cache (this is why Local Storage dominates in synthetic benchmarks: they are measuring memory bandwidth with no syscall, etc overhead).
+
+* It became really popular in 2011-2012 despite a poor spec: main-thread reads and vagueness on when/whether data should hit disk.
+* Local Storage cache was causing LS to be written out too often: <a title="Reduce writes in current DOM Storage implementation" href="https://bugzilla.mozilla.org/show_bug.cgi?id=714964">bug 714964</a>
+* Local Storage cache was written on main-thread. For paranoid amusement it was then read back in after every writeout: <a title="Move LocalStorage writes off the main thread" href="https://bugzilla.mozilla.org/show_bug.cgi?id=807021">bug 807021</a>
+* For some some reason to do with how our DOM works there is a second level of caching so local storage can actually use up 2x more memory in RAM than it does on disk. As a result the Local Storage cache is slated for a complete rewrite in <a title="Rewrite and cleanup DOMStorage code" href="https://bugzilla.mozilla.org/show_bug.cgi?id=600307">bug 600307</a>.
+
+I should note, I made a mistake and attributed [too much blame](/blog/2012/02/22/psa-dom-local-storage-considered-harmful/) to the Local Storage API. I will blog on the exact extent of Local Storage badness once I have a chance to access the relevant telemetry data.
+
+Surprisingly, the Local Storage caching layer was so bad that underlying SQLite footguns did not get to play a role in this tragedy.
+
+#Async IO
+
+For years people would argue on how patches should strive to use async APIs during patch review. Unfortunately even a little bit of sync IO has potential to cancel out the most elaborate async efforts.
+
+We had no purely async storage APIs until recently. We now have one such API in [OS.File](http://dutherenverseauborddelatable.wordpress.com/2012/10/03/asynchronous-file-io-for-the-mozilla-platform/).
+
+
+#UI Slowness
+
+The following sadness was fixed:
+
+###Startup
+
+* Renaming directories with lots of files can take minutes on Windows, that's bad when it happens on startup: <a title="Disk cache seems to cause exceptionally slow startups(1min+)" href="https://bugzilla.mozilla.org/show_bug.cgi?id=701909">bug 701909</a>.
+* Firefox had a minor tendency to start loading webpages before UI is shown: <a title="Don't load homepage URI before first paint" href="https://bugzilla.mozilla.org/show_bug.cgi?id=756313">bug 756313</a>, <a title="Wait until chrome is painted before executing code not critical to making the initial window visible" href="https://bugzilla.mozilla.org/show_bug.cgi?id=715402">bug 715402</a>.
+* Q: What could be worse than loading pages before UI is shown? A: Executing synchronous proxy code: <a title="windows proxy discovery via WPAD needs caching" href="https://bugzilla.mozilla.org/show_bug.cgi?id=790370">bug 790370</a>, <a title="remove synchronous DNS resolution in nsSOCKSIOLayer.cpp" href="https://bugzilla.mozilla.org/show_bug.cgi?id=767159">bug 767159</a>
+* Firefox insisted on doing network activity to verify some extension jars on startup: <a title="Certificate of a signed extension is validated on each startup" href="https://bugzilla.mozilla.org/show_bug.cgi?id=726125">bug 726125</a>
+
+###General
+
+* Tab switching to some popular websites is roughly 10x faster now(too many bugs to list).
+* Firefox tended be unresponsive during large downloads: <a title="nsExternalAppHandler downloads files on the main thread" href="https://bugzilla.mozilla.org/show_bug.cgi?id=789932">bug 789932</a>.
+* In some situations hardware acceleration would slow down Firefox UI to a crawl: too many bugs to list here.
+
+#2013
+
+2012 was a good warm-up. We spent a substantial part of the year on tooling. If everything goes right, that should pay off in the coming year.
+]]></content>
+  </entry>
+  
+</feed>

@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="I am not a web developer. I often learn about modern web dev tricks/trends by noticing how they impact overall Firefox performance. I prefer learning &hellip;">
+  <meta name="description" content="2012 was an exciting year for Snappy. Turning &#8216;make it go faster&#8217; into a set of a measurements and corresponding bugs to fix was hard. We &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +79,115 @@ window._refreshLogCounter = requestAnimationFrame(refreshLogCounter);
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/01/04/snappy-2012-summary/">Snappy: 2012 Summary</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-01-04T15:46:00-08:00" pubdate data-updated="true">Jan 4<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>2012 was an exciting year for Snappy. Turning &#8216;make it go faster&#8217; into a set of a measurements and corresponding bugs to fix was hard. We learned a lot.</p>
+
+<p>I&#8217;d like to summarize some of the most memorable Snappy accomplishments.</p>
+
+<p><em>Short version: Firefox is much more reponsive now.</em></p>
+
+<h1>Snappy Tools</h1>
+
+<p>Better part of the year was spent developing tooling to understand Firefox performance. <a href="https://addons.mozilla.org/en-us/thunderbird/addon/gecko-profiler/">Gecko profiler</a> is my favourite new tool. Telemetry chromehangs, evolution and slowsql are also great for settling arguments.</p>
+
+<h1>Cleaning up the Memory Collectors</h1>
+
+<p>In the beginning of the year it was common to suffer long (200-700ms for me) garbage and cycle collection pauses. I now rarely see pauses over 20ms in these areas. I suspect these were the most laborious improvements of 2012. There are too many bugs to list for this.</p>
+
+<h1>SQLite Misuse</h1>
+
+<p>SQLite is a fine database, but it is much better at storing data robustly than accessing it efficiently. Firefox got nailed by the following footguns:</p>
+
+<ul>
+<li>overusing main-thread SQL queries</li>
+<li>performing expensive background queries</li>
+</ul>
+
+
+<p>As if main-thread IO wasn&#8217;t bad enough, turns out SQLite does not like running queries in parallel. Mixing sync/async queries invites race conditions where sync queries can end up waiting for many minutes at a time (hanging the UI) while &#8220;background&#8221; maintenance queries complete. There were too many of such fixes to list.</p>
+
+<h3>DOM Local Storage Caching</h3>
+
+<p>We ran into significant problems with Local Storage. In order conform to spec and not perform like shit, browsers are forced to maintain an in-memory cache (this is why Local Storage dominates in synthetic benchmarks: they are measuring memory bandwidth with no syscall, etc overhead).</p>
+
+<ul>
+<li>It became really popular in 2011-2012 despite a poor spec: main-thread reads and vagueness on when/whether data should hit disk.</li>
+<li>Local Storage cache was causing LS to be written out too often: <a title="Reduce writes in current DOM Storage implementation" href="https://bugzilla.mozilla.org/show_bug.cgi?id=714964">bug 714964</a></li>
+<li>Local Storage cache was written on main-thread. For paranoid amusement it was then read back in after every writeout: <a title="Move LocalStorage writes off the main thread" href="https://bugzilla.mozilla.org/show_bug.cgi?id=807021">bug 807021</a></li>
+<li>For some some reason to do with how our DOM works there is a second level of caching so local storage can actually use up 2x more memory in RAM than it does on disk. As a result the Local Storage cache is slated for a complete rewrite in <a title="Rewrite and cleanup DOMStorage code" href="https://bugzilla.mozilla.org/show_bug.cgi?id=600307">bug 600307</a>.</li>
+</ul>
+
+
+<p>I should note, I made a mistake and attributed <a href="/blog/2012/02/22/psa-dom-local-storage-considered-harmful/">too much blame</a> to the Local Storage API. I will blog on the exact extent of Local Storage badness once I have a chance to access the relevant telemetry data.</p>
+
+<p>Surprisingly, the Local Storage caching layer was so bad that underlying SQLite footguns did not get to play a role in this tragedy.</p>
+
+<h1>Async IO</h1>
+
+<p>For years people would argue on how patches should strive to use async APIs during patch review. Unfortunately even a little bit of sync IO has potential to cancel out the most elaborate async efforts.</p>
+
+<p>We had no purely async storage APIs until recently. We now have one such API in <a href="http://dutherenverseauborddelatable.wordpress.com/2012/10/03/asynchronous-file-io-for-the-mozilla-platform/">OS.File</a>.</p>
+
+<h1>UI Slowness</h1>
+
+<p>The following sadness was fixed:</p>
+
+<h3>Startup</h3>
+
+<ul>
+<li>Renaming directories with lots of files can take minutes on Windows, that&#8217;s bad when it happens on startup: <a title="Disk cache seems to cause exceptionally slow startups(1min+)" href="https://bugzilla.mozilla.org/show_bug.cgi?id=701909">bug 701909</a>.</li>
+<li>Firefox had a minor tendency to start loading webpages before UI is shown: <a title="Don't load homepage URI before first paint" href="https://bugzilla.mozilla.org/show_bug.cgi?id=756313">bug 756313</a>, <a title="Wait until chrome is painted before executing code not critical to making the initial window visible" href="https://bugzilla.mozilla.org/show_bug.cgi?id=715402">bug 715402</a>.</li>
+<li>Q: What could be worse than loading pages before UI is shown? A: Executing synchronous proxy code: <a title="windows proxy discovery via WPAD needs caching" href="https://bugzilla.mozilla.org/show_bug.cgi?id=790370">bug 790370</a>, <a title="remove synchronous DNS resolution in nsSOCKSIOLayer.cpp" href="https://bugzilla.mozilla.org/show_bug.cgi?id=767159">bug 767159</a></li>
+<li>Firefox insisted on doing network activity to verify some extension jars on startup: <a title="Certificate of a signed extension is validated on each startup" href="https://bugzilla.mozilla.org/show_bug.cgi?id=726125">bug 726125</a></li>
+</ul>
+
+
+<h3>General</h3>
+
+<ul>
+<li>Tab switching to some popular websites is roughly 10x faster now(too many bugs to list).</li>
+<li>Firefox tended be unresponsive during large downloads: <a title="nsExternalAppHandler downloads files on the main thread" href="https://bugzilla.mozilla.org/show_bug.cgi?id=789932">bug 789932</a>.</li>
+<li>In some situations hardware acceleration would slow down Firefox UI to a crawl: too many bugs to list here.</li>
+</ul>
+
+
+<h1>2013</h1>
+
+<p>2012 was a good warm-up. We spent a substantial part of the year on tooling. If everything goes right, that should pay off in the coming year.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -521,54 +630,6 @@ window._refreshLogCounter = requestAnimationFrame(refreshLogCounter);
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/10/04/snappy-39/">Snappy #39</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-10-04T09:24:57-07:00" pubdate data-updated="true">Oct 4<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>We should no longer do proxy-related IO on the main thread now that Patrick McManus landed <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=769764">bug 769764</a>. Synchronous proxy code resulted in a miserable user experience for people using proxies, but it also affected normal users during proxy-detection. This was one of the top intermittent freezes that we&#8217;ve seen.</p>
-
-<p>Tab switching should be much faster in Firefox 18 than before. Jared Wein got rid of an expensive regexp that was applied during a tab switch in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=781588">bug 781588</a>.  Jeff Muizelaar landed <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=792199">bug 792199</a> which should make switching to a image-heavy sites much faster. Jared&#8217;s change is already on nightlies, Jeff&#8217;s change should show up tomorrow if everything goes well.</p>
-
-<p>Matt Woodrow landed the huge change that is DLBI in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=539356">bug 539356</a> (yet again). DLBI speeds up reflows, reduces repaints resulting in a more responsive browser. For more details see Robert O&#8217;Callahan&#8217;s <a href="https://groups.google.com/forum/#!topic/mozilla.dev.platform/UFndiSxW4rU">announcement</a>.</p>
-
-<p><strong>Startup Regression </strong></p>
-
-<p>After working on improving startup for the last couple of releases we seem to have regressed it during the 18 cycle. I filed <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=798130">bug 798130</a> on this. I just noticed the regression a few hours ago. If anyone has ideas on what might&#8217;ve caused it, please comment.</p>
-
-<p><strong>Profiler</strong></p>
-
-<p><a href="https://addons.mozilla.org/en-us/firefox/addon/gecko-profiler/">Gecko profiler</a> now lives on AMO.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -584,6 +645,10 @@ window._refreshLogCounter = requestAnimationFrame(refreshLogCounter);
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/01/04/snappy-2012-summary/">Snappy: 2012 Summary</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2012/12/24/making-pages-load-faster/">Making pages load faster</a>
       </li>
     
@@ -597,10 +662,6 @@ window._refreshLogCounter = requestAnimationFrame(refreshLogCounter);
     
       <li class="post">
         <a href="/blog/2012/11/26/coping-with-flash-hangs/">Coping with Flash hangs</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/11/16/snappy-44-fixing-tab-switching-in-vancouver/">Snappy #44: Fixing tab switching in Vancouver</a>
       </li>
     
   </ul>
