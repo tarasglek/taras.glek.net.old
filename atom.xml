@@ -4,7 +4,7 @@
   <title><![CDATA[All About Performance]]></title>
   <link href="http://taras.glek.net/atom.xml" rel="self"/>
   <link href="http://taras.glek.net/"/>
-  <updated>2013-01-04T16:29:37-08:00</updated>
+  <updated>2013-01-04T17:24:19-08:00</updated>
   <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -18,7 +18,7 @@
     <link href="http://taras.glek.net/blog/2013/01/04/snappy-2012-summary/"/>
     <updated>2013-01-04T15:46:00-08:00</updated>
     <id>http://taras.glek.net/blog/2013/01/04/snappy-2012-summary</id>
-    <content type="html"><![CDATA[<p>2012 was an exciting year for Snappy. Turning &#8216;make it go faster&#8217; into a set of a measurements and corresponding bugs to fix was hard. We learned a lot.</p>
+    <content type="html"><![CDATA[<p>2012 was an exciting year for Snappy. Turning &#8216;make it go faster&#8217; into a set of measurements and corresponding bugs to fix was hard. We learned a lot.</p>
 
 <p>I&#8217;d like to summarize some of the most memorable Snappy accomplishments.</p>
 
@@ -29,11 +29,13 @@
 
 <h1>Snappy Tools</h1>
 
-<p>Better part of the year was spent developing tooling to understand Firefox performance. <a href="https://addons.mozilla.org/en-us/thunderbird/addon/gecko-profiler/">Gecko profiler</a> is my favourite new tool. Telemetry chromehangs, evolution and slowsql are also great for settling arguments.</p>
+<p>Much of the year was spent on tooling for analyzing Firefox performance. <a href="https://addons.mozilla.org/en-us/thunderbird/addon/gecko-profiler/">Gecko profiler</a> is my favourite new tool. Telemetry chromehangs, evolution and slowsql are also great for settling arguments.</p>
+
+<p>Many of the bugs below would not have gotten fixed without above tools.</p>
 
 <h1>Cleaning up the Memory Collectors</h1>
 
-<p>In the beginning of the year it was common to suffer long (200-700ms for me) garbage and cycle collection pauses. I now rarely see pauses over 20ms in these areas. I suspect these were the most laborious improvements of 2012. There are too many bugs to list for this.</p>
+<p>In the beginning of the year it was common to suffer long (200-700ms for me) garbage and cycle collection pauses. I now rarely see pauses over 20ms in these areas. I suspect these were the most laborious improvements of 2012: see the huge number of blocking bugs in <a title="Incremental GC" href="https://bugzilla.mozilla.org/show_bug.cgi?id=641025">bug 641025</a>, <a title="[meta] Don't add obviously live objects to the cycle collector graph" href="https://bugzilla.mozilla.org/show_bug.cgi?id=716598">bug 716598</a>.</p>
 
 <h1>SQLite Misuse</h1>
 
@@ -45,11 +47,11 @@
 </ul>
 
 
-<p>As if main-thread IO wasn&#8217;t bad enough, turns out SQLite does not like running queries in parallel. Mixing sync/async queries invites race conditions where sync queries can end up waiting for many minutes at a time (hanging the UI) while &#8220;background&#8221; maintenance queries complete. There were too many of such fixes to list.</p>
+<p>As if main-thread IO wasn&#8217;t bad enough, turns out SQLite does not like running queries in parallel. Mixing sync/async queries invites race conditions where sync queries can end up waiting for many minutes at a time (hanging the UI) while &#8220;background&#8221; maintenance queries complete. There were too many such fixes to list.</p>
 
 <h3>DOM Local Storage Caching</h3>
 
-<p>We ran into significant problems with Local Storage. In order conform to spec and not perform like shit, browsers are forced to maintain an in-memory cache (this is why Local Storage dominates in synthetic benchmarks: they are measuring memory bandwidth with no syscall, etc overhead).</p>
+<p>We ran into significant problems with Local Storage. In order conform to spec and not perform poorly, browsers are forced to maintain an in-memory cache (this is why Local Storage dominates in synthetic benchmarks: they are measuring memory bandwidth with no syscall, etc overhead).</p>
 
 <ul>
 <li>It became really popular in 2011-2012 despite a poor spec: main-thread reads and vagueness on when/whether data should hit disk.</li>
@@ -61,7 +63,7 @@
 
 <p>I should note, I made a mistake and attributed <a href="http://taras.glek.net/blog/2012/02/22/psa-dom-local-storage-considered-harmful/">too much blame</a> to the Local Storage API. I will blog on the exact extent of Local Storage badness once I have a chance to access the relevant telemetry data.</p>
 
-<p>Surprisingly, the Local Storage caching layer was so bad that underlying SQLite footguns did not get to play a role in this tragedy.</p>
+<p>Surprisingly, the Local Storage caching layer was so bad that the underlying SQLite footguns did not get to play a role in this tragedy.</p>
 
 <h1>Async IO</h1>
 
@@ -76,7 +78,7 @@
 <h3>Startup</h3>
 
 <ul>
-<li>Renaming directories with lots of files can take minutes on Windows, that&#8217;s bad when it happens on startup: <a title="Disk cache seems to cause exceptionally slow startups(1min+)" href="https://bugzilla.mozilla.org/show_bug.cgi?id=701909">bug 701909</a>.</li>
+<li>Renaming directories with lots of files can take minutes on Windows: bad when it happens on startup: <a title="Disk cache seems to cause exceptionally slow startups(1min+)" href="https://bugzilla.mozilla.org/show_bug.cgi?id=701909">bug 701909</a>.</li>
 <li>Firefox had a minor tendency to start loading webpages before UI is shown: <a title="Don't load homepage URI before first paint" href="https://bugzilla.mozilla.org/show_bug.cgi?id=756313">bug 756313</a>, <a title="Wait until chrome is painted before executing code not critical to making the initial window visible" href="https://bugzilla.mozilla.org/show_bug.cgi?id=715402">bug 715402</a>.</li>
 <li>Q: What could be worse than loading pages before UI is shown? A: Executing synchronous proxy code: <a title="windows proxy discovery via WPAD needs caching" href="https://bugzilla.mozilla.org/show_bug.cgi?id=790370">bug 790370</a>, <a title="remove synchronous DNS resolution in nsSOCKSIOLayer.cpp" href="https://bugzilla.mozilla.org/show_bug.cgi?id=767159">bug 767159</a></li>
 <li>Firefox insisted on doing network activity to verify some extension jars on startup: <a title="Certificate of a signed extension is validated on each startup" href="https://bugzilla.mozilla.org/show_bug.cgi?id=726125">bug 726125</a></li>
@@ -86,7 +88,7 @@
 <h3>General</h3>
 
 <ul>
-<li>Tab switching to some popular websites is roughly 10x faster now(too many bugs to list).</li>
+<li>Tab switching to some popular websites is roughly 10x faster now (too many bugs to list).</li>
 <li>Firefox tended be unresponsive during large downloads: <a title="nsExternalAppHandler downloads files on the main thread" href="https://bugzilla.mozilla.org/show_bug.cgi?id=789932">bug 789932</a>.</li>
 <li>In some situations hardware acceleration would slow down Firefox UI to a crawl: too many bugs to list here.</li>
 </ul>
