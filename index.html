@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="2012 was an exciting year for Snappy. Turning &#8216;make it go faster&#8217; into a set of measurements and corresponding bugs to fix was hard. We &hellip;">
+  <meta name="description" content="Huge Shutdown Improvement After a couple weeks worth of telemetry data confirmed that Olli Pettay sped up shutdown by an epic >=30%: bug 818739, &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -74,6 +74,67 @@ window._refreshLogCounter = requestAnimationFrame(refreshLogCounter);
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/01/10/snappy-number-48-now-with-faster-shutdown/">Snappy #48: Now With Faster Shutdown</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-01-10T16:53:00-08:00" pubdate data-updated="true">Jan 10<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3>Huge Shutdown Improvement</h3>
+
+<p>After a couple weeks worth of telemetry data confirmed that Olli Pettay sped up shutdown by an epic >=30%: <a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=818739">bug 818739</a>, <a href="http://tinyurl.com/abo6uek">telemetry link</a>.</p>
+
+<h3>Memory Management</h3>
+
+<p>Olli and Andrew McCreight continued with reducing CC pauses:</p>
+
+<ul>
+<li><a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=820378">bug 820378</a>: Delay CC if we&#8217;re in the middle of a GC, to allow async CC prep</li>
+<li><a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=827471">bug 827471</a>: Remove more wrapped JS from the CC graph</li>
+<li><a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=705371">bug 705371</a>: Remove pointless JSContexts from the CC graph</li>
+<li><a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=785493">bug 785493</a>: Reduce size of steady state cycle collector graph by about 80%</li>
+<li><a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=821371">bug 821371</a>: Include prep work in cycle collector pause time telemetry</li>
+</ul>
+
+
+<h3>Misc</h3>
+
+<p>Vladan landed <a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=807021">bug 807021</a>. Firefox should now handle DOM Local Storage writes without janking.</p>
+
+<h3>Startup</h3>
+
+<p>David Teller made search service metadata loading/migration async: <a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=760036">bug 760036</a>. David also made session-store loading async: <a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=532150">bug 532150</a>.</p>
+
+<p>Aaron Klotz landed a telemetry probe to measure how often the &#8216;Firefox is running but not responding&#8217; dialog is encountered on attempted startup: <a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=815418">bug 815418</a>. This will help us decide on whether (or when) to add functionality to kill unresponsive Firefox instances.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -150,9 +211,9 @@ window._refreshLogCounter = requestAnimationFrame(refreshLogCounter);
 
   <div class="entry-content"><p>I am not a web developer. I often learn about modern web dev tricks/trends by noticing how they impact overall Firefox performance. I prefer learning about perf topics from well-written blog posts. Bryan of Google page speed team <a href="http://calendar.perfplanet.com/2012/make-your-mobile-pages-render-in-under-one-second/">blogged</a> on optimizing pageload speeds on mobile. The advice is good, but I have two minor warnings about it.</p>
 
-<p>Suggestion to use <code>requestAnimationFrame</code> to delay loading resources is a good one. There is a gotcha: if you do something expensive in the requestAnimationFrame handler, it&#8217;ll delay your first page draw (requestAnimationFrame fires as the browser prepares to paint. It&#8217;s an ok place to start network requests, etc). If you do something expensive, use a chained requestAnimationFrame. Firefox recently started using a similar trick to display the UI faster in <a title="Wait until chrome is painted before executing code not critical to making the initial window visible" href="https://bugzilla.mozilla.org/show_bug.cgi?id=715402">bug 715402</a>.</p>
+<p>Suggestion to use <code>requestAnimationFrame</code> to delay loading resources is a good one. There is a gotcha: if you do something expensive in the requestAnimationFrame handler, it&#8217;ll delay your first page draw (requestAnimationFrame fires as the browser prepares to paint. It&#8217;s an ok place to start network requests, etc). If you do something expensive, use a chained requestAnimationFrame. Firefox recently started using a similar trick to display the UI faster in <a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=715402">bug 715402</a>.</p>
 
-<p>The suggestion to split up stylesheets is also good, but risky. I&#8217;ve seen this before, but I did not understand why websites sprinkled <code>&lt;link rel="stylesheet"&gt;</code> throughout the page bodies. This can significantly degrade pageload times by causing redundant page restyles and reflows. Reflows can take hundreds of milliseconds on slow mobile devices, doing them multiple times is bad. Make sure to run your pages through a <a href="http://anton.kovalyov.net/2012/12/17/firefox-profiler/">profiler</a> (or time the difference between relevant requestAnimationFrame callbacks). I saw a bad case of this in <a title="huffingtonpost loads up to 50% slower in Firefox than in opera" href="https://bugzilla.mozilla.org/show_bug.cgi?id=718864">bug 718864</a>.</p>
+<p>The suggestion to split up stylesheets is also good, but risky. I&#8217;ve seen this before, but I did not understand why websites sprinkled <code>&lt;link rel="stylesheet"&gt;</code> throughout the page bodies. This can significantly degrade pageload times by causing redundant page restyles and reflows. Reflows can take hundreds of milliseconds on slow mobile devices, doing them multiple times is bad. Make sure to run your pages through a <a href="http://anton.kovalyov.net/2012/12/17/firefox-profiler/">profiler</a> (or time the difference between relevant requestAnimationFrame callbacks). I saw a bad case of this in <a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=718864">bug 718864</a>.</p>
 </div>
   
   
@@ -193,14 +254,14 @@ window._refreshLogCounter = requestAnimationFrame(refreshLogCounter);
 <p>Benoit Girard sped up shutdown with:</p>
 
 <ul>
-<li>not forcing startup cache flushes on shutdown: <a title="[Shutdown] Startup cache slows shutdown with < 10 sec uptime" href="https://bugzilla.mozilla.org/show_bug.cgi?id=816656">bug 816656</a>. This speeds up exiting browser soon after startup.</li>
-<li><a title="[Shutdown] js::NukeCrossCompartmentWrappers takes up to 300ms on shutdown. Avoid doing it for optimized shutdown" href="https://bugzilla.mozilla.org/show_bug.cgi?id=818296">bug 818296</a>: [Shutdown] js::NukeCrossCompartmentWrappers takes up to 300ms on shutdown. Avoid doing it for optimized shutdown. This may significantly reduce our shutdown times. We are waiting on more telemetry data to confirm.</li>
+<li>not forcing startup cache flushes on shutdown: <a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=816656">bug 816656</a>. This speeds up exiting browser soon after startup.</li>
+<li><a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=818296">bug 818296</a>: . This may significantly reduce our shutdown times. We are waiting on more telemetry data to confirm.</li>
 </ul>
 
 
-<p>Aaron Klotz made startup slightly faster by speeding up reading of some urlclassifier files in <a title="loading the two safebrowsing files is not as fast as it could be" href="https://bugzilla.mozilla.org/show_bug.cgi?id=810101">bug 810101</a>.</p>
+<p>Aaron Klotz made startup slightly faster by speeding up reading of some urlclassifier files in <a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=810101">bug 810101</a>.</p>
 
-<p>Vladimir Vukicevic landed <a title="requestAnimationFrame generates too short/long frames, especially at the beginning of animation" href="https://bugzilla.mozilla.org/show_bug.cgi?id=731974">bug 731974</a> which results in smoother browser animations and significantly improves the quality of tab-strip animations.</p>
+<p>Vladimir Vukicevic landed <a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=731974">bug 731974</a> which results in smoother browser animations and significantly improves the quality of tab-strip animations.</p>
 </div>
   
   
@@ -495,72 +556,6 @@ window._refreshLogCounter = requestAnimationFrame(refreshLogCounter);
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/10/15/snappy-40-faster-tabswitching-startup-analysis/">Snappy #40: Faster Tabswitching, Startup Analysis</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-10-15T03:25:14-07:00" pubdate data-updated="true">Oct 15<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>This was an interesting week. On one hand all performance aspects of tab strip work were suspended until end of year on the frontend team, on the other impressive gains were made on platform side of things.</p>
-
-<p><strong>Jeff Muizelaar cut tab switch times in half</strong></p>
-
-<p>Data came in on Jeff&#8217;s optimization I mentioned <a href="http://taras.glek.net/blog/2012/10/04/snappy-39/">last week</a>: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=792199">bug 792199</a>. This halved our median tab switch time. Since this also landed at the end of our 18 cycle, a comparison between 18/19 Nightlies gives us an idea of how this changed our tab switching times overall. Note the actual difference would be greater since both 18 &amp; 19 include data points with Jeff&#8217;s patch, but the majority of data in 18 is without Jeff&#8217;s patch.</p>
-
-<p><a href="/assets/images/2012-10-15-snappy-40-faster-tabswitching-startup-analysis/fx_tab_switch_update.png"><img src="/assets/images/2012-10-15-snappy-40-faster-tabswitching-startup-analysis/fx_tab_switch_update.png" alt="" /></a></p>
-
-<p><em>Black: v18, Blue V19. X-axis represents time in milliseconds to do a tab switch, excluding time to paint.</em></p>
-
-<p>Above graph shows a shift towards fast tab switch times across the board with particularly nice improvements in the tail. See the corresponding 50% fall in medians on our <a href="https://metrics.mozilla.com/data/content/pentaho-cdf-dd/Render?solution=metrics2&amp;path=%2Ftelemetry&amp;file=telemetryEvolution.wcdf&amp;bookmarkState={%22impl%22%3A%22client%22%2C%22params%22%3A{%22referenceDate%22%3A%222012-10-09%22%2C%22appNameParameter%22%3A%22[Application].[Firefox]%22%2C%22osParameter%22%3A%22[OS].[WINNT]%22%2C%22channelParameter%22%3A%22[Channel].[nightly]%22%2C%22reasonParameter%22%3A%22[Reason].[saved-session]%22%2C%22histogramParameter%22%3A%22[Histogram].[FX_TAB_SWITCH_UPDATE_MS]%22%2C%22histogramPopupTools%22%3A%22%22%2C%22duplicateHistogram%22%3A%22%23duplicateHistogram%22%2C%22medianButtonParam%22%3A0%2C%22scatterChart%22%3A%22%22}}">telemetry evolution dashboard</a>.</p>
-
-<p>Unfortunately, Jeff&#8217;s patch was too good. Instead of decoding less images, it ended up decoding no images at all causing unnecessary flicker when switching tabs. The patch got backed out, but this accident provided us with a good baseline of how fast tab switching can be without decoding images :) Jeff landed a correction in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=799335">bug 799335</a>.</p>
-
-<p>As I mentioned above graph does not include paint times. Jeff also landed bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=800031">800031</a> which measures the complete tab switch duration (including paint time).</p>
-
-<p><a href="/assets/images/2012-10-15-snappy-40-faster-tabswitching-startup-analysis/fx_tab_switch_total.png"><img src="/assets/images/2012-10-15-snappy-40-faster-tabswitching-startup-analysis/fx_tab_switch_total.png" alt="" /></a></p>
-
-<p><strong>Timothy Nikkel&#8217;s Visible Image Decoding</strong></p>
-
-<p>Currently Firefox tends to decode too many images while browsing image-heavy sites. This hurts our total memory consumption, increases tab switch times, etc. Timothy has been posting tests builds in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=689623">bug 689623</a> which try to only decode visible images. Please give those builds a spin if you suffer from poor Firefox performance while browsing image-heavy sites.</p>
-
-<p><strong>Startup Time Profiling</strong></p>
-
-<p>Benoit Girard taught the the Gecko profiler how to capture most of browser startup in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=799638">799638</a>. This might be the most important achievement so far in tackling startup problems caused by extensions. This means that every Nightly user (and in a few weeks every Firefox user) can install the <a href="https://developer.mozilla.org/en-US/docs/Performance/Profiling_with_the_Built-in_Profiler">Gecko profiler</a>, click &#8216;Profile Startup&#8217; and get a report on what makes Firefox startup slow. This can then be posted to bugzilla, <a href="http://support.mozilla.com/">SUMO</a>, <a href="https://addons.mozilla.org/">AMO </a>or this blog so we can easily identify problematic addons, problematic APIs used by addons and the extent of startup overhead contributed by them.</p>
-
-<p>Making extension-aware startup profiling easy has incredible potential for making Firefox startup faster for extension-addicted users. If you can&#8217;t wait to try this out, you can install a <a href="https://raw.github.com/bgirard/Gecko-Profiler-Addon/2d0c32507f21d4e64a5eb3bff091f23d21528ad5/geckoprofiler.xpi">development snapshot</a> of the profiler extension. Feel free to post your startup profile links in a comment.</p>
-
-<p><strong>Proxy-detection</strong></p>
-
-<p>As I mentioned last time, Patrick McManus fixed proxy-related jank in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=769764">bug 769764</a>. Last week Vladan Djeric analyzed our chromehang data and confirmed that proxy jank went from being one of our top offenders to not happening.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -576,6 +571,10 @@ window._refreshLogCounter = requestAnimationFrame(refreshLogCounter);
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/01/10/snappy-number-48-now-with-faster-shutdown/">Snappy #48: Now With Faster Shutdown</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/01/04/snappy-2012-summary/">Snappy: 2012 Summary</a>
       </li>
     
@@ -589,10 +588,6 @@ window._refreshLogCounter = requestAnimationFrame(refreshLogCounter);
     
       <li class="post">
         <a href="/blog/2012/12/17/hello-octopress/">Hello Octopress</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/11/26/coping-with-flash-hangs/">Coping with Flash hangs</a>
       </li>
     
   </ul>

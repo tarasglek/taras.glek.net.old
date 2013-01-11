@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Looking for developers to test the web frontend for squash I got the web frontend to squash working. Right now I&#8217;m looking for people to test &hellip;">
+  <meta name="description" content="A Creature so Fierce&#8230; I&#8217;ve been wrestling with control flow graphs like this. I eliminated those pesky &#8220;empty&#8221; nodes found in &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -74,6 +74,74 @@ window._refreshLogCounter = requestAnimationFrame(refreshLogCounter);
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2007/03/02/uno-dos-dehydra/">Uno, Dos&#8230; DeHydra!</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-03-02T02:52:59-08:00" pubdate data-updated="true">Mar 2<span>nd</span>, 2007</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><strong>A Creature so Fierce&#8230;</strong></p>
+
+<p>I&#8217;ve been wrestling with control flow graphs <a href="http://people.mozilla.org/~tglek/hydra.png">like this</a>. I eliminated those pesky &#8220;empty&#8221; nodes found in the previous incarnations, improved branching to track conditions and realized that what I&#8217;m really doing is developing a tool to bite off the excessive necks and heads (otherwise known as edges and basic blocks) of the Hydra monster that is represented by the bloody graph. Thus, say hello to DeHydra which was once known as <a href="http://taras.glek.net/blog/2007/02/01/lossy-ast-traversals-for-good-code-health">dos</a>.</p>
+
+<p><strong>DeHydra Plans</strong></p>
+
+<p>I am quite happy with how dehydra is turning out. JavaScript is a nice language to pattern match code in a flow sensitive fashion and the uno-style api seems appropriate for the task.</p>
+
+<p>In the near term I really need some value-awareness through abstract interpretation. For example, <a href="http://people.mozilla.org/~tglek/hydra-unfeasible.png">this graph</a> of a <a href="http://people.mozilla.org/~tglek/hydra-unfeasible.c">simple function</a> demonstrates several things that dehydra will need to notice:</p>
+
+<ol>
+<li>There is a path from hydra-unfeasable.c:6 to hydra-unfeasable.c:10 and that those blocks are part of only a single control flow, not 4.</li>
+<li>hydra-unfeasable.c:12 requires a contradiction in the condition in order to have flow through it and should be dropped or even reported as dead code.
+I pondered a number of approaches ranging from value analysis, using a theorem prover and reversing conditions via prolog code. A simple C++ symbolic expression interpreter in C++ seems like the most productive thing at this point. So I will focus on that in the next short while.</li>
+</ol>
+
+
+<p>While I was reviewing my options I found a paper on <a href="http://www.cs.umd.edu/~jspacco/marmoset/papers/hovemeyer-paste2005.pdf">null pointer analysis for Java</a> to be a useful stating point for references to other relevant literature.</p>
+
+<p><strong>Longer Term DeHydra Plans</strong></p>
+
+<p>There is literature on how source-to-source transformation (like squash but also like the future C++ to ES4 tool) is assisted by flow sensitive static analysis tools (like dehydra) which I will have to absorb. DeHydra will gain whole-program analysis capability by:</p>
+
+<ol>
+<li><em>Inlining control flow graphs</em> into the main() function</li>
+<li>Supporting user-defined function attributes and using some sort of <em>attribute inference </em>(like in ML) to propagate them. This method would have higher performance, but less precision.
+For the above to work will also need support for a user-correctable/suggestable callgraph to compensate for function pointers and dynamic module loading. This should also be enough to do dead code and module detection. Oh and I want dehydra to support JavaScript for doing cross-language analysis.</li>
+</ol>
+
+
+<p>There is also <a href="http://www.stanford.edu/~jwhaley/papers/pldi04.pdf">Whaley&#8217;s paper</a> which uses prolog as a concise and expressive query engine for the source code. I would really like to see dehydra evolve such capabilities.</p>
+
+<p>All this will take more than a little time on my own, but this stuff is too exciting for other impatient people to idly observe.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -716,6 +784,10 @@ At the source level squash renames the class part of function definitions along 
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/01/10/snappy-number-48-now-with-faster-shutdown/">Snappy #48: Now With Faster Shutdown</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/01/04/snappy-2012-summary/">Snappy: 2012 Summary</a>
       </li>
     
@@ -729,10 +801,6 @@ At the source level squash renames the class part of function definitions along 
     
       <li class="post">
         <a href="/blog/2012/12/17/hello-octopress/">Hello Octopress</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/11/26/coping-with-flash-hangs/">Coping with Flash hangs</a>
       </li>
     
   </ul>

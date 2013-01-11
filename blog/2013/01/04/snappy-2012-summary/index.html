@@ -117,7 +117,7 @@ window._refreshLogCounter = requestAnimationFrame(refreshLogCounter);
 
 <h1>Cleaning up the Memory Collectors</h1>
 
-<p>In the beginning of the year it was common to suffer long (200-700ms for me) garbage and cycle collection pauses. I now rarely see pauses over 20ms in these areas. I suspect these were the most laborious improvements of 2012: see the huge number of blocking bugs in <a title="Incremental GC" href="https://bugzilla.mozilla.org/show_bug.cgi?id=641025">bug 641025</a>, <a title="[meta] Don't add obviously live objects to the cycle collector graph" href="https://bugzilla.mozilla.org/show_bug.cgi?id=716598">bug 716598</a>.</p>
+<p>In the beginning of the year it was common to suffer long (200-700ms for me) garbage and cycle collection pauses. I now rarely see pauses over 20ms in these areas. I suspect these were the most laborious improvements of 2012: see the huge number of blocking bugs in <a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=641025">bug 641025</a>, <a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=716598">bug 716598</a>.</p>
 
 <h1>SQLite Misuse</h1>
 
@@ -137,9 +137,9 @@ window._refreshLogCounter = requestAnimationFrame(refreshLogCounter);
 
 <ul>
 <li>It became really popular in 2011-2012 despite a poor spec: main-thread reads and vagueness on when/whether data should hit disk.</li>
-<li>Local Storage cache was causing LS to be written out too often: <a title="Reduce writes in current DOM Storage implementation" href="https://bugzilla.mozilla.org/show_bug.cgi?id=714964">bug 714964</a></li>
-<li>Local Storage cache was written on main-thread. For paranoid amusement it was then read back in after every writeout: <a title="Move LocalStorage writes off the main thread" href="https://bugzilla.mozilla.org/show_bug.cgi?id=807021">bug 807021</a></li>
-<li>For some some reason to do with how our DOM works there is a second level of caching so local storage can actually use up 2x more memory in RAM than it does on disk. As a result the Local Storage cache is slated for a complete rewrite in <a title="Rewrite and cleanup DOMStorage code" href="https://bugzilla.mozilla.org/show_bug.cgi?id=600307">bug 600307</a>.</li>
+<li>Local Storage cache was causing LS to be written out too often: <a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=714964">bug 714964</a></li>
+<li>Local Storage cache was written on main-thread. For paranoid amusement it was then read back in after every writeout: <a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=807021">bug 807021</a></li>
+<li>For some some reason to do with how our DOM works there is a second level of caching so local storage can actually use up 2x more memory in RAM than it does on disk. As a result the Local Storage cache is slated for a complete rewrite in <a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=600307">bug 600307</a>.</li>
 </ul>
 
 
@@ -160,10 +160,10 @@ window._refreshLogCounter = requestAnimationFrame(refreshLogCounter);
 <h3>Startup</h3>
 
 <ul>
-<li>Renaming directories with lots of files can take minutes on Windows: bad when it happens on startup: <a title="Disk cache seems to cause exceptionally slow startups(1min+)" href="https://bugzilla.mozilla.org/show_bug.cgi?id=701909">bug 701909</a>.</li>
-<li>Firefox had a minor tendency to start loading webpages before UI is shown: <a title="Don't load homepage URI before first paint" href="https://bugzilla.mozilla.org/show_bug.cgi?id=756313">bug 756313</a>, <a title="Wait until chrome is painted before executing code not critical to making the initial window visible" href="https://bugzilla.mozilla.org/show_bug.cgi?id=715402">bug 715402</a>.</li>
-<li>Q: What could be worse than loading pages before UI is shown? A: Executing synchronous proxy code: <a title="windows proxy discovery via WPAD needs caching" href="https://bugzilla.mozilla.org/show_bug.cgi?id=790370">bug 790370</a>, <a title="remove synchronous DNS resolution in nsSOCKSIOLayer.cpp" href="https://bugzilla.mozilla.org/show_bug.cgi?id=767159">bug 767159</a></li>
-<li>Firefox insisted on doing network activity to verify some extension jars on startup: <a title="Certificate of a signed extension is validated on each startup" href="https://bugzilla.mozilla.org/show_bug.cgi?id=726125">bug 726125</a></li>
+<li>Renaming directories with lots of files can take minutes on Windows: bad when it happens on startup: <a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=701909">bug 701909</a>.</li>
+<li>Firefox had a minor tendency to start loading webpages before UI is shown: <a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=756313">bug 756313</a>, <a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=715402">bug 715402</a>.</li>
+<li>Q: What could be worse than loading pages before UI is shown? A: Executing synchronous proxy code: <a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=790370">bug 790370</a>, <a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=767159">bug 767159</a></li>
+<li>Firefox insisted on doing network activity to verify some extension jars on startup: <a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=726125">bug 726125</a></li>
 </ul>
 
 
@@ -171,7 +171,7 @@ window._refreshLogCounter = requestAnimationFrame(refreshLogCounter);
 
 <ul>
 <li>Tab switching to some popular websites is roughly 10x faster now (too many bugs to list).</li>
-<li>Firefox tended be unresponsive during large downloads: <a title="nsExternalAppHandler downloads files on the main thread" href="https://bugzilla.mozilla.org/show_bug.cgi?id=789932">bug 789932</a>.</li>
+<li>Firefox tended be unresponsive during large downloads: <a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=789932">bug 789932</a>.</li>
 <li>In some situations hardware acceleration would slow down Firefox UI to a crawl: too many bugs to list here.</li>
 </ul>
 
@@ -227,6 +227,8 @@ window._refreshLogCounter = requestAnimationFrame(refreshLogCounter);
         <a class="basic-alignment left" href="/blog/2012/12/24/making-pages-load-faster/" title="Previous Post: Making pages load faster">&laquo; Making pages load faster</a>
       
       
+        <a class="basic-alignment right" href="/blog/2013/01/10/snappy-number-48-now-with-faster-shutdown/" title="Next Post: Snappy #48: Now With Faster Shutdown">Snappy #48: Now With Faster Shutdown &raquo;</a>
+      
     </p>
   </footer>
 </article>
@@ -246,6 +248,10 @@ window._refreshLogCounter = requestAnimationFrame(refreshLogCounter);
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/01/10/snappy-number-48-now-with-faster-shutdown/">Snappy #48: Now With Faster Shutdown</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/01/04/snappy-2012-summary/">Snappy: 2012 Summary</a>
       </li>
     
@@ -259,10 +265,6 @@ window._refreshLogCounter = requestAnimationFrame(refreshLogCounter);
     
       <li class="post">
         <a href="/blog/2012/12/17/hello-octopress/">Hello Octopress</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/11/26/coping-with-flash-hangs/">Coping with Flash hangs</a>
       </li>
     
   </ul>

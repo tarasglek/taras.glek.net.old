@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Positive Since the last blog post, I have been investigating on how to teach elsa about the C preprocessor. Overall, I am really happy that MCPP &hellip;">
+  <meta name="description" content="Existing Work All of existing work is based on basic C parsers so it can&#8217;t be directly applied to C++. I found out that someone did a PhD on &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -74,6 +74,133 @@ window._refreshLogCounter = requestAnimationFrame(refreshLogCounter);
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2007/05/29/cpp-integration-progress/">CPP Integration Progress</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-05-29T03:36:26-07:00" pubdate data-updated="true">May 29<span>th</span>, 2007</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><strong>Existing Work</strong></p>
+
+<p>All of existing work is based on basic C parsers so it can&#8217;t be directly applied to C++.</p>
+
+<p>I found out that someone did a PhD on refactoring C code resulting in the <a href="https://netfiles.uiuc.edu/garrido/www/CRefactory.html">CRefactory</a>(down atm) project. Looks like reversing the C preprocessor was by far the hardest task to address. Languages consisting of stacked lexical syntaxes (like OCaml &amp; camlp4) or preprocessorless ones like Java don&#8217;t even have this problem.</p>
+
+<p>A way to tackle the problem is to violently shove the some of the preprocessor markup into the C AST. Unfortunately this is an incredibly hard task because CPP is purely lexical and works at the token level, whereas the C compilers works with higher level AST syntax trees. Combining the two can result in an ambiguous grammar which is useless for refactoring.</p>
+
+<p>CRefactory integrates CPP into the AST where possible, it even handles some CPP conditionals. The author&#8217;s argument is that every CPP conditional represents a separate configuration and processing one configuration at a time will result in a combinatorial explosion of configurations to process thus conditionals must be integrated into the AST.</p>
+
+<p>However, CPP-in-AST solution is error prone and has issues scaling to large projects. Besides I think processing every configuration within the AST is still potentially a combinatorial explosion, the major benefit being that one can eliminate unfeasible conditionals if they cause syntax errors. This conditional elimination would be incredibly slow for C++. I also don&#8217;t believe that this would be enough to solve Mozilla&#8217;s conditionals since most of the troublesome macros are platform specific and would have dependencies on the system headers. Having said that, I appreciate seeing people prove that with enough effort even seemingly impossible tasks can be accomplished.</p>
+
+<p>A <a href="http://www.cs.berkeley.edu/~billm/astec-fse.pdf">paper</a> on ASTEC presents another solution which involves translating [lexical] CPP constructs into a CPP-like AST-based language. This works great in theory, but the translation process is only semi-automatic and requires a lot of hand-holding. I have mixed feeling about this approach. A simpler intermediate language is an excellent thing but as soon as it becomes &#8220;CPP sux, so I invented this better language: use it&#8221; the world gains yet another troublesome programming language.</p>
+
+<p><strong>My Approach</strong></p>
+
+<p>It took me a few weeks to figure out how to tackle the CPP problem in squash. I think I have a solution that will work real soon(TM).</p>
+
+<p>I like to avoid solving unsolvable problems and stick with works-for-me approach. Thus I probably wont make squash aware of CPP conditionals. My existing approach of combining output of running squash on Mac/Linux(and Windows in the future) should take care of 99% of cases in Mozilla. The rest will be flagged by a compiler and will be trivial to fix by hand.</p>
+
+<p><strong>Macro Expansion</strong></p>
+
+<p>I also don&#8217;t see the benefit of a partially integrated CPP within the C++ AST. Instead I am modifying MCPP to log the macro expansions with special markup enclosed in comments. Afterwards I plan to modify elsa to parse the macro-expansion log and modify the position tags on AST nodes accordingly. Then I&#8217;ll be able to do cool things like &#8220;cut out the piece of code that was parsed as 0&#8221; which will reference the source locations, figure out that 0 was a result of macro expansion and return &#8220;NULL&#8221;. Or when I try to rewrite a member in PR_MAX(something->GetPresContext()->foo, 0), the code will know that the the two GetPresContext() calls in the AST correspond to the same code fragment.</p>
+
+<p>Besides, isn&#8217;t this marked-up code pretty?</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>
+</span><span class='line'>/*m__CONCAT,"testcase3.c",2,*/
+</span><span class='line'>/*m__MATHDECL_1,"testcase3.c",5,*/
+</span><span class='line'>/*m__MATH_PRECNAME,"testcase3.c",8,*/
+</span><span class='line'># 10 "testcase3.c"
+</span><span class='line'>/*!0x2adfbaa6e010 _*/
+</span><span class='line'>/*!0x2adfbaa6e015 b*/
+</span><span class='line'># 10 "testcase3.c"
+</span><span class='line'>/*&lt;__CONCAT*/__boo/*&gt;*/
+</span><span class='line'>/*!0x2adfbaa6e010 _*/
+</span><span class='line'>/*!0x2adfbaa6e029 _*/
+</span><span class='line'># 11 "testcase3.c"
+</span><span class='line'># 11 "testcase3.c"
+</span><span class='line'># 11 "testcase3.c"
+</span><span class='line'>testcase3.c:11: error: Not a valid preprocessing token "//"
+</span><span class='line'>macro "__CONCAT" defined as: #define __CONCAT(x,y) x ## y   /* testcase3.c:*
+</span><span class='line'>/
+</span><span class='line'>macro "__MATHDECL_1" defined as: #define __MATHDECL_1(function,suffix) __CON
+</span><span class='line'>CAT(function,suffix)    /* testcase3.c:5        */
+</span><span class='line'>from testcase3.c: 11:    int __MATHDECL_1( __CONCAT(__, lgamma),_r);
+</span><span class='line'>int  /*&lt;__MATHDECL_1*/ /*&lt;__CONCAT*//*&lt;0x2adfbaa6e010*/ /*&lt;__CONCAT*/__lgamma/*&gt;
+</span><span class='line'>*//*&gt;*// *&lt;0x2adfbaa6e029*/_r/*&gt;*//*&gt;*/ /*&gt;*/ ;
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This is the original testcase:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>
+</span><span class='line'>#define __CONCAT(x,y)   x ## y</span></code></pre></td></tr></table></div></figure>
+
+
+<h1>define <strong>MATHDECL_1(function,suffix) \ </strong>CONCAT(function,suffix)</h1>
+
+<h1>define <strong>MATH_PRECNAME(name,r) </strong>CONCAT(name,r)</h1>
+
+<p><strong>CONCAT(</strong>, boo) int <strong>MATHDECL_1( </strong>CONCAT(<em>_, lgamma),</em>r); <strong>Code</strong></p>
+
+<p>The MCPP maintainer is absolutely awesome work with. MCPP needs to be modified to preserve horizontal whitespace(which preprocessors don&#8217;t do) and to provide the above expansion info. He volunteered to do a lot of the MCPP modifications for me and has been a lot of help in guiding me through his code.</p>
+
+<p>At this point looks like we&#8217;ll be able to integrate this work into the MCPP trunk. This is great news because to the best of my knowledge all of the other C refactoring tools either use a bitrotting fork of some C preprocessor or reimplement a yet another buggy version of CPP resulting in a lot of collectively wasted effort.</p>
+
+<p>I hope to have this working in squash within two weeks so I can finish the outparam rewrite and hopefully rid squash of a large portion of code that details with the non-deterministic source positions due to macro expansion.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -584,74 +711,6 @@ window._refreshLogCounter = requestAnimationFrame(refreshLogCounter);
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2007/03/02/uno-dos-dehydra/">Uno, Dos&#8230; DeHydra!</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2007-03-02T02:52:59-08:00" pubdate data-updated="true">Mar 2<span>nd</span>, 2007</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><strong>A Creature so Fierce&#8230;</strong></p>
-
-<p>I&#8217;ve been wrestling with control flow graphs <a href="http://people.mozilla.org/~tglek/hydra.png">like this</a>. I eliminated those pesky &#8220;empty&#8221; nodes found in the previous incarnations, improved branching to track conditions and realized that what I&#8217;m really doing is developing a tool to bite off the excessive necks and heads (otherwise known as edges and basic blocks) of the Hydra monster that is represented by the bloody graph. Thus, say hello to DeHydra which was once known as <a href="http://taras.glek.net/blog/2007/02/01/lossy-ast-traversals-for-good-code-health">dos</a>.</p>
-
-<p><strong>DeHydra Plans</strong></p>
-
-<p>I am quite happy with how dehydra is turning out. JavaScript is a nice language to pattern match code in a flow sensitive fashion and the uno-style api seems appropriate for the task.</p>
-
-<p>In the near term I really need some value-awareness through abstract interpretation. For example, <a href="http://people.mozilla.org/~tglek/hydra-unfeasible.png">this graph</a> of a <a href="http://people.mozilla.org/~tglek/hydra-unfeasible.c">simple function</a> demonstrates several things that dehydra will need to notice:</p>
-
-<ol>
-<li>There is a path from hydra-unfeasable.c:6 to hydra-unfeasable.c:10 and that those blocks are part of only a single control flow, not 4.</li>
-<li>hydra-unfeasable.c:12 requires a contradiction in the condition in order to have flow through it and should be dropped or even reported as dead code.
-I pondered a number of approaches ranging from value analysis, using a theorem prover and reversing conditions via prolog code. A simple C++ symbolic expression interpreter in C++ seems like the most productive thing at this point. So I will focus on that in the next short while.</li>
-</ol>
-
-
-<p>While I was reviewing my options I found a paper on <a href="http://www.cs.umd.edu/~jspacco/marmoset/papers/hovemeyer-paste2005.pdf">null pointer analysis for Java</a> to be a useful stating point for references to other relevant literature.</p>
-
-<p><strong>Longer Term DeHydra Plans</strong></p>
-
-<p>There is literature on how source-to-source transformation (like squash but also like the future C++ to ES4 tool) is assisted by flow sensitive static analysis tools (like dehydra) which I will have to absorb. DeHydra will gain whole-program analysis capability by:</p>
-
-<ol>
-<li><em>Inlining control flow graphs</em> into the main() function</li>
-<li>Supporting user-defined function attributes and using some sort of <em>attribute inference </em>(like in ML) to propagate them. This method would have higher performance, but less precision.
-For the above to work will also need support for a user-correctable/suggestable callgraph to compensate for function pointers and dynamic module loading. This should also be enough to do dead code and module detection. Oh and I want dehydra to support JavaScript for doing cross-language analysis.</li>
-</ol>
-
-
-<p>There is also <a href="http://www.stanford.edu/~jwhaley/papers/pldi04.pdf">Whaley&#8217;s paper</a> which uses prolog as a concise and expressive query engine for the source code. I would really like to see dehydra evolve such capabilities.</p>
-
-<p>All this will take more than a little time on my own, but this stuff is too exciting for other impatient people to idly observe.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/25/">&larr; Older</a>
@@ -669,6 +728,10 @@ For the above to work will also need support for a user-correctable/suggestable 
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/01/10/snappy-number-48-now-with-faster-shutdown/">Snappy #48: Now With Faster Shutdown</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/01/04/snappy-2012-summary/">Snappy: 2012 Summary</a>
       </li>
     
@@ -682,10 +745,6 @@ For the above to work will also need support for a user-correctable/suggestable 
     
       <li class="post">
         <a href="/blog/2012/12/17/hello-octopress/">Hello Octopress</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/11/26/coping-with-flash-hangs/">Coping with Flash hangs</a>
       </li>
     
   </ul>

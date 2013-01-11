@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Pork I planned to release Pork 1.0 for a while now. The tools work great, even if all the love is going to the GCC-based toolchain. However, after &hellip;">
+  <meta name="description" content="Those who would like to play with Pork, but are allergic to pulling sources from version control can now download an actual pork release. Now someone &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -74,6 +74,42 @@ window._refreshLogCounter = requestAnimationFrame(refreshLogCounter);
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2008/06/30/pork-09-in-the-wild/">Pork 0.9 in the Wild</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-06-30T06:08:26-07:00" pubdate data-updated="true">Jun 30<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Those who would like to play with Pork, but are allergic to pulling sources from version control can now download an actual <a href="http://ftp.mozilla.org/pub/mozilla.org/static-analysis/pork/pork-0.9.tar.gz">pork release</a>. Now someone needs to hook this into a GUI to provide easy Eclipse-style refactoring for C++.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -498,116 +534,6 @@ I have elaborate plans on how to take over the world with static analysis, more 
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2008/03/12/recipe-how-many-classes-are-instantiated-in-mozilla/">Recipe: How Many Classes Are Instantiated in Mozilla?</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-03-12T03:59:27-07:00" pubdate data-updated="true">Mar 12<span>th</span>, 2008</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I got this question in the mail today.</p>
-
-<p>Seems like a simple enough question, but grep won&#8217;t provide that answer :) It also happens to be an excellent usecase for <a href="http://wiki.mozilla.org/Dehydra_GCC">Dehydra</a>.</p>
-
-<p>My script:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>
-</span><span class='line'>var classes = []
-</span><span class='line'>function process_type (c) {
-</span><span class='line'>if (!/class|struct/(c.kind)) return
-</span><span class='line'>classes.push (c.name)
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>
-</span><span class='line'>function input_end() {
-</span><span class='line'>var f = this.aux_base_name + ".counter"
-</span><span class='line'>print(f)
-</span><span class='line'>write_file (f, classes.join ("\n"))
-</span><span class='line'>}
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>process_type is called every time GCC hits a class declaration or a template is instantiated(also for enums and unions, but those get ignored with the .kind check). Then input_end is called when GCC is done processing the file. this.aux_base_name is the input filename.</p>
-
-<p>I hooked up this script to the mozilla build by adding the following to .mozconfig:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>
-</span><span class='line'>export CXX=$HOME/gcc/bin/g++
-</span><span class='line'>export CXXFLAGS="-fplugin=$HOME/work/gccplugin/gcc_dehydra.so -fplugin-arg=$HOME/work/gccplugin/test/count_classes.js"
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Then I built:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>
-</span><span class='line'>make -f client.mk build WARNINGS_AS_ERRORS=
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Count:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>
-</span><span class='line'>find -name \*.counter|xargs cat |sort |uniq &gt; /tmp/classes.txt
-</span><span class='line'>wc /tmp/classes.txt
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Answer: 15001</p>
-
-<p>There are a million other trivial queries that could be accomplished in a similar manner that weren&#8217;t easy or possible before.</p>
-
-<p><strong>Update</strong>: Fixed typo, had an extra zero in the answer</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/21/">&larr; Older</a>
@@ -625,6 +551,10 @@ I have elaborate plans on how to take over the world with static analysis, more 
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/01/10/snappy-number-48-now-with-faster-shutdown/">Snappy #48: Now With Faster Shutdown</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/01/04/snappy-2012-summary/">Snappy: 2012 Summary</a>
       </li>
     
@@ -638,10 +568,6 @@ I have elaborate plans on how to take over the world with static analysis, more 
     
       <li class="post">
         <a href="/blog/2012/12/17/hello-octopress/">Hello Octopress</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/11/26/coping-with-flash-hangs/">Coping with Flash hangs</a>
       </li>
     
   </ul>

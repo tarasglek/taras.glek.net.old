@@ -4,7 +4,7 @@
   <title><![CDATA[Category: snappy | All About Performance]]></title>
   <link href="http://taras.glek.net/blog/categories/snappy/atom.xml" rel="self"/>
   <link href="http://taras.glek.net/"/>
-  <updated>2013-01-09T20:13:22-08:00</updated>
+  <updated>2013-01-10T17:34:00-08:00</updated>
   <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -12,6 +12,34 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Snappy #48: Now With Faster Shutdown]]></title>
+    <link href="http://taras.glek.net/blog/2013/01/10/snappy-number-48-now-with-faster-shutdown/"/>
+    <updated>2013-01-10T16:53:00-08:00</updated>
+    <id>http://taras.glek.net/blog/2013/01/10/snappy-number-48-now-with-faster-shutdown</id>
+    <content type="html"><![CDATA[###Huge Shutdown Improvement
+After a couple weeks worth of telemetry data confirmed that Olli Pettay sped up shutdown by an epic >=30%: <a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=818739">bug 818739</a>, [telemetry link](http://tinyurl.com/abo6uek).
+
+
+###Memory Management
+Olli and Andrew McCreight continued with reducing CC pauses:
+
+* <a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=820378">bug 820378</a>: Delay CC if we're in the middle of a GC, to allow async CC prep
+* <a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=827471">bug 827471</a>: Remove more wrapped JS from the CC graph
+* <a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=705371">bug 705371</a>: Remove pointless JSContexts from the CC graph
+* <a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=785493">bug 785493</a>: Reduce size of steady state cycle collector graph by about 80%
+* <a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=821371">bug 821371</a>: Include prep work in cycle collector pause time telemetry
+
+###Misc
+Vladan landed <a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=807021">bug 807021</a>. Firefox should now handle DOM Local Storage writes without janking.
+
+###Startup
+David Teller made search service metadata loading/migration async: <a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=760036">bug 760036</a>. David also made session-store loading async: <a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=532150">bug 532150</a>.
+
+Aaron Klotz landed a telemetry probe to measure how often the 'Firefox is running but not responding' dialog is encountered on attempted startup: <a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=815418">bug 815418</a>. This will help us decide on whether (or when) to add functionality to kill unresponsive Firefox instances. 
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Snappy: 2012 Summary]]></title>
@@ -34,7 +62,7 @@ Many of the bugs below would not have gotten fixed without these tools.
 
 #Cleaning up the Memory Collectors
 
-In the beginning of the year it was common to suffer long (200-700ms for me) garbage and cycle collection pauses. I now rarely see pauses over 20ms in these areas. I suspect these were the most laborious improvements of 2012: see the huge number of blocking bugs in <a title="Incremental GC" href="https://bugzilla.mozilla.org/show_bug.cgi?id=641025">bug 641025</a>, <a title="[meta] Don't add obviously live objects to the cycle collector graph" href="https://bugzilla.mozilla.org/show_bug.cgi?id=716598">bug 716598</a>. 
+In the beginning of the year it was common to suffer long (200-700ms for me) garbage and cycle collection pauses. I now rarely see pauses over 20ms in these areas. I suspect these were the most laborious improvements of 2012: see the huge number of blocking bugs in <a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=641025">bug 641025</a>, <a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=716598">bug 716598</a>. 
 
 #SQLite Misuse
 
@@ -50,9 +78,9 @@ As if main-thread IO wasn't bad enough, turns out SQLite does not like running q
 We ran into significant problems with Local Storage. In order conform to spec and not perform poorly, browsers are forced to maintain an in-memory cache (this is why Local Storage dominates in synthetic benchmarks: they are measuring memory bandwidth with no syscall, etc overhead).
 
 * It became really popular in 2011-2012 despite a poor spec: main-thread reads and vagueness on when/whether data should hit disk.
-* Local Storage cache was causing LS to be written out too often: <a title="Reduce writes in current DOM Storage implementation" href="https://bugzilla.mozilla.org/show_bug.cgi?id=714964">bug 714964</a>
-* Local Storage cache was written on main-thread. For paranoid amusement it was then read back in after every writeout: <a title="Move LocalStorage writes off the main thread" href="https://bugzilla.mozilla.org/show_bug.cgi?id=807021">bug 807021</a>
-* For some some reason to do with how our DOM works there is a second level of caching so local storage can actually use up 2x more memory in RAM than it does on disk. As a result the Local Storage cache is slated for a complete rewrite in <a title="Rewrite and cleanup DOMStorage code" href="https://bugzilla.mozilla.org/show_bug.cgi?id=600307">bug 600307</a>.
+* Local Storage cache was causing LS to be written out too often: <a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=714964">bug 714964</a>
+* Local Storage cache was written on main-thread. For paranoid amusement it was then read back in after every writeout: <a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=807021">bug 807021</a>
+* For some some reason to do with how our DOM works there is a second level of caching so local storage can actually use up 2x more memory in RAM than it does on disk. As a result the Local Storage cache is slated for a complete rewrite in <a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=600307">bug 600307</a>.
 
 I should note, I made a mistake and attributed [too much blame](/blog/2012/02/22/psa-dom-local-storage-considered-harmful/) to the Local Storage API. I will blog on the exact extent of Local Storage badness once I have a chance to access the relevant telemetry data.
 
@@ -71,15 +99,15 @@ The following sadness was fixed:
 
 ###Startup
 
-* Renaming directories with lots of files can take minutes on Windows: bad when it happens on startup: <a title="Disk cache seems to cause exceptionally slow startups(1min+)" href="https://bugzilla.mozilla.org/show_bug.cgi?id=701909">bug 701909</a>.
-* Firefox had a minor tendency to start loading webpages before UI is shown: <a title="Don't load homepage URI before first paint" href="https://bugzilla.mozilla.org/show_bug.cgi?id=756313">bug 756313</a>, <a title="Wait until chrome is painted before executing code not critical to making the initial window visible" href="https://bugzilla.mozilla.org/show_bug.cgi?id=715402">bug 715402</a>.
-* Q: What could be worse than loading pages before UI is shown? A: Executing synchronous proxy code: <a title="windows proxy discovery via WPAD needs caching" href="https://bugzilla.mozilla.org/show_bug.cgi?id=790370">bug 790370</a>, <a title="remove synchronous DNS resolution in nsSOCKSIOLayer.cpp" href="https://bugzilla.mozilla.org/show_bug.cgi?id=767159">bug 767159</a>
-* Firefox insisted on doing network activity to verify some extension jars on startup: <a title="Certificate of a signed extension is validated on each startup" href="https://bugzilla.mozilla.org/show_bug.cgi?id=726125">bug 726125</a>
+* Renaming directories with lots of files can take minutes on Windows: bad when it happens on startup: <a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=701909">bug 701909</a>.
+* Firefox had a minor tendency to start loading webpages before UI is shown: <a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=756313">bug 756313</a>, <a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=715402">bug 715402</a>.
+* Q: What could be worse than loading pages before UI is shown? A: Executing synchronous proxy code: <a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=790370">bug 790370</a>, <a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=767159">bug 767159</a>
+* Firefox insisted on doing network activity to verify some extension jars on startup: <a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=726125">bug 726125</a>
 
 ###General
 
 * Tab switching to some popular websites is roughly 10x faster now (too many bugs to list).
-* Firefox tended be unresponsive during large downloads: <a title="nsExternalAppHandler downloads files on the main thread" href="https://bugzilla.mozilla.org/show_bug.cgi?id=789932">bug 789932</a>.
+* Firefox tended be unresponsive during large downloads: <a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=789932">bug 789932</a>.
 * In some situations hardware acceleration would slow down Firefox UI to a crawl: too many bugs to list here.
 
 #2013
@@ -97,12 +125,12 @@ The following sadness was fixed:
 
 Benoit Girard sped up shutdown with:
 
-* not forcing startup cache flushes on shutdown: <a title="[Shutdown] Startup cache slows shutdown with < 10 sec uptime" href="https://bugzilla.mozilla.org/show_bug.cgi?id=816656">bug 816656</a>. This speeds up exiting browser soon after startup.
-* <a title="[Shutdown] js::NukeCrossCompartmentWrappers takes up to 300ms on shutdown. Avoid doing it for optimized shutdown" href="https://bugzilla.mozilla.org/show_bug.cgi?id=818296">bug 818296</a>: [Shutdown] js::NukeCrossCompartmentWrappers takes up to 300ms on shutdown. Avoid doing it for optimized shutdown. This may significantly reduce our shutdown times. We are waiting on more telemetry data to confirm.
+* not forcing startup cache flushes on shutdown: <a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=816656">bug 816656</a>. This speeds up exiting browser soon after startup.
+* <a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=818296">bug 818296</a>: . This may significantly reduce our shutdown times. We are waiting on more telemetry data to confirm.
 
-Aaron Klotz made startup slightly faster by speeding up reading of some urlclassifier files in <a title="loading the two safebrowsing files is not as fast as it could be" href="https://bugzilla.mozilla.org/show_bug.cgi?id=810101">bug 810101</a>.
+Aaron Klotz made startup slightly faster by speeding up reading of some urlclassifier files in <a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=810101">bug 810101</a>.
 
-Vladimir Vukicevic landed <a title="requestAnimationFrame generates too short/long frames, especially at the beginning of animation" href="https://bugzilla.mozilla.org/show_bug.cgi?id=731974">bug 731974</a> which results in smoother browser animations and significantly improves the quality of tab-strip animations.
+Vladimir Vukicevic landed <a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=731974">bug 731974</a> which results in smoother browser animations and significantly improves the quality of tab-strip animations.
 ]]></content>
   </entry>
   
@@ -131,41 +159,6 @@ Matt made sure that we no longer draw layers with opacity of 0 in bug [811831]
 Workweeks are a more about communication than getting code landed, so it is impressive that Jeff, Matt and their reviewers managed to diagnose, fix, review, land such significant optimizations in a couple of days. My laptop of pain feels much faster already.  
   
 In the coming weeks expect to see smoother tab switching, smoother animations, lower profiling overhead as we work through issues discussed during the workweek.
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Snappy #43: Big improvements: faster startup? Smoother tabstrip!]]></title>
-    <link href="http://taras.glek.net/blog/2012/11/05/snappy-43-big-improvements-faster-startup-smoother-tabstrip/"/>
-    <updated>2012-11-05T09:22:03-08:00</updated>
-    <id>http://taras.glek.net/blog/2012/11/05/snappy-43-big-improvements-faster-startup-smoother-tabstrip</id>
-    <content type="html"><![CDATA[Our median startup performance (as measured by [SIMPLE_MEASURES_FIRST_PAINT](https://metrics.mozilla.com/data/content/pentaho-cdf-dd/Render?solution=metrics2&path=%2Ftelemetry&file=telemetryEvolution.wcdf&bookmarkState={\%22impl%22%3A%22client%22%2C%22params%22%3A{\%22referenceDate%22%3A%222012-11-05%22%2C%22appNameParameter%22%3A%22[Application].[Firefox]%22%2C%22osParameter%22%3A%22[OS].[WINNT]%22%2C%22channelParameter%22%3A%22[Channel].[nightly]%22%2C%22reasonParameter%22%3A%22[Reason].[idle-daily]%22%2C%22histogramParameter%22%3A%22[Histogram].[SIMPLE_MEASURES_FIRSTPAINT]%22%2C%22histogramPopupTools%22%3A%22%22%2C%22duplicateHistogram%22%3A%22%23duplicateHistogram%22%2C%22medianButtonParam%22%3A1%2C%22scatterChart%22%3A%22%22}})) improved between 20%-25% at the end of Firefox 18 cycle (~Oct 26). Strangely most of the speedup seems to have come from a 50% speedup in library loading (measured by [SIMPLE_MEASURES_MAIN](https://metrics.mozilla.com/data/content/pentaho-cdf-dd/Render?solution=metrics2&path=%2Ftelemetry&file=telemetryEvolution.wcdf&bookmarkState={\%22impl%22%3A%22client%22%2C%22params%22%3A{\%22referenceDate%22%3A%222012-11-05%22%2C%22appNameParameter%22%3A%22[Application].[Firefox]%22%2C%22osParameter%22%3A%22[OS].[WINNT]%22%2C%22channelParameter%22%3A%22[Channel].[nightly]%22%2C%22reasonParameter%22%3A%22[Reason].[saved-session]%22%2C%22histogramParameter%22%3A%22[Histogram].[SIMPLE_MEASURES_MAIN]%22%2C%22histogramPopupTools%22%3A%22%22%2C%22duplicateHistogram%22%3A%22%23duplicateHistogram%22%2C%22medianButtonParam%22%3A1%2C%22scatterChart%22%3A%22%22}})).  
-  
-[![](/assets/images/2012-11-05-snappy-43-big-improvements-faster-startup-smoother-tabstrip/startup2025.png)](/assets/images/2012-11-05-snappy-43-big-improvements-faster-startup-smoother-tabstrip/startup2025.png)  
-  
-**Tab-strip**  
-  
-Bas Schouten landed [bug 805831](https://bugzilla.mozilla.org/show_bug.cgi?id=805831) which should further speed up tab-strip drawing when 2d-acceleration is used. Neil Deakin fixed [bug 792296](https://bugzilla.mozilla.org/show_bug.cgi?id=792296) and [bug 752376](https://bugzilla.mozilla.org/show_bug.cgi?id=752376).  
-  
-We spent a lot of time focusing on tab smoothness recently. We still have a long way to go, but I checked telemetry data and the improvements are staggering. In the picture below I'm comparing tab closing animation([FX_TAB_ANIM_CLOSE](https://metrics.mozilla.com/data/content/pentaho-cdf-dd/Render?solution=metrics2&path=%2Ftelemetry&file=telemetryHistogram.wcdf&bookmarkState={\%22impl%22%3A%22client%22%2C%22params%22%3A{\%22startDate%22%3A%222012-10-06%22%2C%22endDate%22%3A%222012-11-04%22%2C%22appVersion%22%3A%22%22%2C%22appName%22%3A%22Firefox%22%2C%22arch%22%3A%22%22%2C%22OS%22%3A%22WINNT%22%2C%22version%22%3A%226.1%22%2C%22channel%22%3A%22nightly%22%2C%22reason%22%3A%22idle-daily%22%2C%22appBuildID%22%3A%22%22%2C%22fromPlatformBuildID%22%3A%22%22%2C%22toPlatformBuildID%22%3A%22%22%2C%22excludeParam%22%3A%22%22%2C%22measure%22%3A%22FX_TAB_ANIM_CLOSE_MS%22%2C%22histogramCompareParam%22%3A%22appVersion%22%2C%22histogramVariablesParam%22%3A%2217.0a1%2C18.0a1%2C19.0a1%22%2C%22platformBuildIDMode%22%3A%22LATEST%22%2C%22platformBuildIDTopCount%22%3A%2230%22%2C%22conditionsStatistic%22%3A%22%23conditionsStatistic%22%2C%22submissionsParameter%22%3A[[134541]]}})) between 17, 18, 19. In the picture below there should be 0 entries to the right of 154(that's our problematic performance tail). In 2.5 months, we went from having almost 20% of our tab animations taking > 400ms to complete to ~3%.  
-  
-  
-  
-[![](/assets/images/2012-11-05-snappy-43-big-improvements-faster-startup-smoother-tabstrip/fx_anim_tab_close1.png)](/assets/images/2012-11-05-snappy-43-big-improvements-faster-startup-smoother-tabstrip/fx_anim_tab_close1.png)  
-  
-In addition to median perf improving, tab animations are now much less likely to vary in duration, etc. This required fixes in layout, gfx, frontend code. It's really great to see a cross-team effort producing tangible results. It's too bad that our analysis infrastructure makes it so hard to pinpoint specific changes that contributed most to an improvement like this.  
-  
-**Misc**  
-  
-Matt Woodrow improve performance of a periodic table demo in bug [806256](https://bugzilla.mozilla.org/show_bug.cgi?id=806256). However, performance is still poor on some types of machines, so I filed bug [808838](https://bugzilla.mozilla.org/show_bug.cgi?id=808838).  
-  
-Dão Gottwald landed bug [756313](https://bugzilla.mozilla.org/show_bug.cgi?id=756313) which is similarly to his work in last Snappy update postphones doing content work until Firefox chrome is painted.  
-  
-Benoit Girard changed the [profiler ](https://addons.mozilla.org/en-us/firefox/addon/gecko-profiler/)so it now updates the url as the treeview is being navigated. This makes it much easier to discuss what we are seeing in the profile.  
-  
-**Blog**  
-  
-Thanks for the feedback on blogging platform alternatives. I turned on a better captcha plugin to deflect spam. A lot less spam gets through now (but I think it's also preventing legitimate users from getting through). If you are having trouble commenting, use twitter for now.
 ]]></content>
   </entry>
   

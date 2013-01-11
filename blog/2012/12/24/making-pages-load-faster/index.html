@@ -102,9 +102,9 @@ window._refreshLogCounter = requestAnimationFrame(refreshLogCounter);
 
 <div class="entry-content"><p>I am not a web developer. I often learn about modern web dev tricks/trends by noticing how they impact overall Firefox performance. I prefer learning about perf topics from well-written blog posts. Bryan of Google page speed team <a href="http://calendar.perfplanet.com/2012/make-your-mobile-pages-render-in-under-one-second/">blogged</a> on optimizing pageload speeds on mobile. The advice is good, but I have two minor warnings about it.</p>
 
-<p>Suggestion to use <code>requestAnimationFrame</code> to delay loading resources is a good one. There is a gotcha: if you do something expensive in the requestAnimationFrame handler, it&#8217;ll delay your first page draw (requestAnimationFrame fires as the browser prepares to paint. It&#8217;s an ok place to start network requests, etc). If you do something expensive, use a chained requestAnimationFrame. Firefox recently started using a similar trick to display the UI faster in <a title="Wait until chrome is painted before executing code not critical to making the initial window visible" href="https://bugzilla.mozilla.org/show_bug.cgi?id=715402">bug 715402</a>.</p>
+<p>Suggestion to use <code>requestAnimationFrame</code> to delay loading resources is a good one. There is a gotcha: if you do something expensive in the requestAnimationFrame handler, it&#8217;ll delay your first page draw (requestAnimationFrame fires as the browser prepares to paint. It&#8217;s an ok place to start network requests, etc). If you do something expensive, use a chained requestAnimationFrame. Firefox recently started using a similar trick to display the UI faster in <a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=715402">bug 715402</a>.</p>
 
-<p>The suggestion to split up stylesheets is also good, but risky. I&#8217;ve seen this before, but I did not understand why websites sprinkled <code>&lt;link rel="stylesheet"&gt;</code> throughout the page bodies. This can significantly degrade pageload times by causing redundant page restyles and reflows. Reflows can take hundreds of milliseconds on slow mobile devices, doing them multiple times is bad. Make sure to run your pages through a <a href="http://anton.kovalyov.net/2012/12/17/firefox-profiler/">profiler</a> (or time the difference between relevant requestAnimationFrame callbacks). I saw a bad case of this in <a title="huffingtonpost loads up to 50% slower in Firefox than in opera" href="https://bugzilla.mozilla.org/show_bug.cgi?id=718864">bug 718864</a>.</p>
+<p>The suggestion to split up stylesheets is also good, but risky. I&#8217;ve seen this before, but I did not understand why websites sprinkled <code>&lt;link rel="stylesheet"&gt;</code> throughout the page bodies. This can significantly degrade pageload times by causing redundant page restyles and reflows. Reflows can take hundreds of milliseconds on slow mobile devices, doing them multiple times is bad. Make sure to run your pages through a <a href="http://anton.kovalyov.net/2012/12/17/firefox-profiler/">profiler</a> (or time the difference between relevant requestAnimationFrame callbacks). I saw a bad case of this in <a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=718864">bug 718864</a>.</p>
 </div>
 
 
@@ -174,6 +174,10 @@ window._refreshLogCounter = requestAnimationFrame(refreshLogCounter);
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/01/10/snappy-number-48-now-with-faster-shutdown/">Snappy #48: Now With Faster Shutdown</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/01/04/snappy-2012-summary/">Snappy: 2012 Summary</a>
       </li>
     
@@ -187,10 +191,6 @@ window._refreshLogCounter = requestAnimationFrame(refreshLogCounter);
     
       <li class="post">
         <a href="/blog/2012/12/17/hello-octopress/">Hello Octopress</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/11/26/coping-with-flash-hangs/">Coping with Flash hangs</a>
       </li>
     
   </ul>
