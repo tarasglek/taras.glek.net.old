@@ -58,7 +58,8 @@ function refreshLogCounter() {
   window._refreshLogCounter = requestAnimationFrame(refreshLogCounter);
 }
 
-window._refreshLogCounter = requestAnimationFrame(refreshLogCounter);
+if (requestAnimationFrame)
+  window._refreshLogCounter = requestAnimationFrame(refreshLogCounter);
 </script>
 
 </nav>
