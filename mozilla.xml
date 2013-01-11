@@ -4,7 +4,7 @@
   <title><![CDATA[All About Performance]]></title>
   <link href="http://taras.glek.net/atom.xml" rel="self"/>
   <link href="http://taras.glek.net/"/>
-  <updated>2013-01-10T17:34:00-08:00</updated>
+  <updated>2013-01-11T09:25:12-08:00</updated>
   <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -13,6 +13,40 @@
   <generator uri="http://octopress.org/">Octopress</generator>
 
   
+  
+  <entry>
+    <title type="html"><![CDATA[Snappy #48: Now With Faster Shutdown]]></title>
+    <link href="http://taras.glek.net/blog/2013/01/10/snappy-number-48-now-with-faster-shutdown/"/>
+    <updated>2013-01-10T16:53:00-08:00</updated>
+    <id>http://taras.glek.net/blog/2013/01/10/snappy-number-48-now-with-faster-shutdown</id>
+    <content type="html"><![CDATA[<h3>Huge Shutdown Improvement</h3>
+
+<p>After a couple weeks worth of telemetry data confirmed that Olli Pettay sped up shutdown by an epic >=30%: <a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=818739">bug 818739</a>, <a href="http://tinyurl.com/abo6uek">telemetry link</a>.</p>
+
+<h3>Memory Management</h3>
+
+<p>Olli and Andrew McCreight continued with reducing CC pauses:</p>
+
+<ul>
+<li><a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=820378">bug 820378</a>: Delay CC if we&#8217;re in the middle of a GC, to allow async CC prep</li>
+<li><a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=827471">bug 827471</a>: Remove more wrapped JS from the CC graph</li>
+<li><a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=705371">bug 705371</a>: Remove pointless JSContexts from the CC graph</li>
+<li><a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=785493">bug 785493</a>: Reduce size of steady state cycle collector graph by about 80%</li>
+<li><a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=821371">bug 821371</a>: Include prep work in cycle collector pause time telemetry</li>
+</ul>
+
+
+<h3>Misc</h3>
+
+<p>Vladan landed <a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=807021">bug 807021</a>. Firefox should now handle DOM Local Storage writes without janking.</p>
+
+<h3>Startup</h3>
+
+<p>David Teller made search service metadata loading/migration async: <a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=760036">bug 760036</a>. David also made session-store loading async: <a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=532150">bug 532150</a>.</p>
+
+<p>Aaron Klotz landed a telemetry probe to measure how often the &#8216;Firefox is running but not responding&#8217; dialog is encountered on attempted startup: <a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=815418">bug 815418</a>. This will help us decide on whether (or when) to add functionality to kill unresponsive Firefox instances.</p>
+]]></content>
+  </entry>
   
   
   
