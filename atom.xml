@@ -4,7 +4,7 @@
   <title><![CDATA[All About Performance]]></title>
   <link href="http://taras.glek.net/atom.xml" rel="self"/>
   <link href="http://taras.glek.net/"/>
-  <updated>2013-01-11T15:49:11-08:00</updated>
+  <updated>2013-01-17T20:53:13-08:00</updated>
   <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -20,30 +20,30 @@
     <id>http://taras.glek.net/blog/2013/01/10/snappy-number-48-now-with-faster-shutdown</id>
     <content type="html"><![CDATA[<h3>Huge Shutdown Improvement</h3>
 
-<p>After a couple weeks worth of telemetry data confirmed that Olli Pettay sped up shutdown by an epic >=30%: <a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=818739">bug 818739</a>, <a href="http://tinyurl.com/abo6uek">telemetry link</a>.</p>
+<p>After a couple weeks worth of telemetry data confirmed that Olli Pettay sped up shutdown by an epic >=30%: <a title="Don't run CC during shutdown" href="https://bugzilla.mozilla.org/show_bug.cgi?id=818739">bug 818739</a>, <a href="http://tinyurl.com/abo6uek">telemetry link</a>.</p>
 
 <h3>Memory Management</h3>
 
 <p>Olli and Andrew McCreight continued with reducing CC pauses:</p>
 
 <ul>
-<li><a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=820378">bug 820378</a>: Delay CC if we&#8217;re in the middle of a GC, to allow async CC prep</li>
-<li><a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=827471">bug 827471</a>: Remove more wrapped JS from the CC graph</li>
-<li><a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=705371">bug 705371</a>: Remove pointless JSContexts from the CC graph</li>
-<li><a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=785493">bug 785493</a>: Reduce size of steady state cycle collector graph by about 80%</li>
-<li><a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=821371">bug 821371</a>: Include prep work in cycle collector pause time telemetry</li>
+<li><a title="Try to postpone triggering CC if we're in middle of GC handling" href="https://bugzilla.mozilla.org/show_bug.cgi?id=820378">bug 820378</a>: Delay CC if we&#8217;re in the middle of a GC, to allow async CC prep</li>
+<li><a title="Improve CanSkipWrappedJS" href="https://bugzilla.mozilla.org/show_bug.cgi?id=827471">bug 827471</a>: Remove more wrapped JS from the CC graph</li>
+<li><a title="[CC] don't add JSContexts that have no children to the cycle collector graph" href="https://bugzilla.mozilla.org/show_bug.cgi?id=705371">bug 705371</a>: Remove pointless JSContexts from the CC graph</li>
+<li><a title="Mark the script of live nsXULPrototypeScript black during GC" href="https://bugzilla.mozilla.org/show_bug.cgi?id=785493">bug 785493</a>: Reduce size of steady state cycle collector graph by about 80%</li>
+<li><a title="Add telemetry for prep work done for cycle collection" href="https://bugzilla.mozilla.org/show_bug.cgi?id=821371">bug 821371</a>: Include prep work in cycle collector pause time telemetry</li>
 </ul>
 
 
 <h3>Misc</h3>
 
-<p>Vladan landed <a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=807021">bug 807021</a>. Firefox should now handle DOM Local Storage writes without janking.</p>
+<p>Vladan landed <a title="Move LocalStorage writes off the main thread" href="https://bugzilla.mozilla.org/show_bug.cgi?id=807021">bug 807021</a>. Firefox should now handle DOM Local Storage writes without janking.</p>
 
 <h3>Startup</h3>
 
-<p>David Teller made search service metadata loading/migration async: <a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=760036">bug 760036</a>. David also made session-store loading async: <a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=532150">bug 532150</a>.</p>
+<p>David Teller made search service metadata loading/migration async: <a title="nsIBrowserSearchService should load metadata asynchronously" href="https://bugzilla.mozilla.org/show_bug.cgi?id=760036">bug 760036</a>. David also made session-store loading async: <a title="session file should be read on a background thread" href="https://bugzilla.mozilla.org/show_bug.cgi?id=532150">bug 532150</a>.</p>
 
-<p>Aaron Klotz landed a telemetry probe to measure how often the &#8216;Firefox is running but not responding&#8217; dialog is encountered on attempted startup: <a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=815418">bug 815418</a>. This will help us decide on whether (or when) to add functionality to kill unresponsive Firefox instances.</p>
+<p>Aaron Klotz landed a telemetry probe to measure how often the &#8216;Firefox is running but not responding&#8217; dialog is encountered on attempted startup: <a title="telemetry on what proportion of attempted firefox startups result in 'firefox is running and not responding'" href="https://bugzilla.mozilla.org/show_bug.cgi?id=815418">bug 815418</a>. This will help us decide on whether (or when) to add functionality to kill unresponsive Firefox instances.</p>
 ]]></content>
   </entry>
   
@@ -69,7 +69,7 @@
 
 <h1>Cleaning up the Memory Collectors</h1>
 
-<p>In the beginning of the year it was common to suffer long (200-700ms for me) garbage and cycle collection pauses. I now rarely see pauses over 20ms in these areas. I suspect these were the most laborious improvements of 2012: see the huge number of blocking bugs in <a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=641025">bug 641025</a>, <a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=716598">bug 716598</a>.</p>
+<p>In the beginning of the year it was common to suffer long (200-700ms for me) garbage and cycle collection pauses. I now rarely see pauses over 20ms in these areas. I suspect these were the most laborious improvements of 2012: see the huge number of blocking bugs in <a title="Incremental GC" href="https://bugzilla.mozilla.org/show_bug.cgi?id=641025">bug 641025</a>, <a title="[meta] Don't add obviously live objects to the cycle collector graph" href="https://bugzilla.mozilla.org/show_bug.cgi?id=716598">bug 716598</a>.</p>
 
 <h1>SQLite Misuse</h1>
 
@@ -89,9 +89,9 @@
 
 <ul>
 <li>It became really popular in 2011-2012 despite a poor spec: main-thread reads and vagueness on when/whether data should hit disk.</li>
-<li>Local Storage cache was causing LS to be written out too often: <a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=714964">bug 714964</a></li>
-<li>Local Storage cache was written on main-thread. For paranoid amusement it was then read back in after every writeout: <a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=807021">bug 807021</a></li>
-<li>For some some reason to do with how our DOM works there is a second level of caching so local storage can actually use up 2x more memory in RAM than it does on disk. As a result the Local Storage cache is slated for a complete rewrite in <a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=600307">bug 600307</a>.</li>
+<li>Local Storage cache was causing LS to be written out too often: <a title="Reduce writes in current DOM Storage implementation" href="https://bugzilla.mozilla.org/show_bug.cgi?id=714964">bug 714964</a></li>
+<li>Local Storage cache was written on main-thread. For paranoid amusement it was then read back in after every writeout: <a title="Move LocalStorage writes off the main thread" href="https://bugzilla.mozilla.org/show_bug.cgi?id=807021">bug 807021</a></li>
+<li>For some some reason to do with how our DOM works there is a second level of caching so local storage can actually use up 2x more memory in RAM than it does on disk. As a result the Local Storage cache is slated for a complete rewrite in <a title="Rewrite and cleanup DOMStorage code" href="https://bugzilla.mozilla.org/show_bug.cgi?id=600307">bug 600307</a>.</li>
 </ul>
 
 
@@ -112,10 +112,10 @@
 <h3>Startup</h3>
 
 <ul>
-<li>Renaming directories with lots of files can take minutes on Windows: bad when it happens on startup: <a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=701909">bug 701909</a>.</li>
-<li>Firefox had a minor tendency to start loading webpages before UI is shown: <a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=756313">bug 756313</a>, <a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=715402">bug 715402</a>.</li>
-<li>Q: What could be worse than loading pages before UI is shown? A: Executing synchronous proxy code: <a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=790370">bug 790370</a>, <a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=767159">bug 767159</a></li>
-<li>Firefox insisted on doing network activity to verify some extension jars on startup: <a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=726125">bug 726125</a></li>
+<li>Renaming directories with lots of files can take minutes on Windows: bad when it happens on startup: <a title="Disk cache seems to cause exceptionally slow startups(1min+)" href="https://bugzilla.mozilla.org/show_bug.cgi?id=701909">bug 701909</a>.</li>
+<li>Firefox had a minor tendency to start loading webpages before UI is shown: <a title="Don't load homepage URI before first paint" href="https://bugzilla.mozilla.org/show_bug.cgi?id=756313">bug 756313</a>, <a title="Wait until chrome is painted before executing code not critical to making the initial window visible" href="https://bugzilla.mozilla.org/show_bug.cgi?id=715402">bug 715402</a>.</li>
+<li>Q: What could be worse than loading pages before UI is shown? A: Executing synchronous proxy code: <a title="windows proxy discovery via WPAD needs caching" href="https://bugzilla.mozilla.org/show_bug.cgi?id=790370">bug 790370</a>, <a title="remove synchronous DNS resolution in nsSOCKSIOLayer.cpp" href="https://bugzilla.mozilla.org/show_bug.cgi?id=767159">bug 767159</a></li>
+<li>Firefox insisted on doing network activity to verify some extension jars on startup: <a title="Certificate of a signed extension is validated on each startup" href="https://bugzilla.mozilla.org/show_bug.cgi?id=726125">bug 726125</a></li>
 </ul>
 
 
@@ -123,7 +123,7 @@
 
 <ul>
 <li>Tab switching to some popular websites is roughly 10x faster now (too many bugs to list).</li>
-<li>Firefox tended be unresponsive during large downloads: <a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=789932">bug 789932</a>.</li>
+<li>Firefox tended be unresponsive during large downloads: <a title="nsExternalAppHandler downloads files on the main thread" href="https://bugzilla.mozilla.org/show_bug.cgi?id=789932">bug 789932</a>.</li>
 <li>In some situations hardware acceleration would slow down Firefox UI to a crawl: too many bugs to list here.</li>
 </ul>
 
@@ -141,9 +141,9 @@
     <id>http://taras.glek.net/blog/2012/12/24/making-pages-load-faster</id>
     <content type="html"><![CDATA[<p>I am not a web developer. I often learn about modern web dev tricks/trends by noticing how they impact overall Firefox performance. I prefer learning about perf topics from well-written blog posts. Bryan of Google page speed team <a href="http://calendar.perfplanet.com/2012/make-your-mobile-pages-render-in-under-one-second/">blogged</a> on optimizing pageload speeds on mobile. The advice is good, but I have two minor warnings about it.</p>
 
-<p>Suggestion to use <code>requestAnimationFrame</code> to delay loading resources is a good one. There is a gotcha: if you do something expensive in the requestAnimationFrame handler, it&#8217;ll delay your first page draw (requestAnimationFrame fires as the browser prepares to paint. It&#8217;s an ok place to start network requests, etc). If you do something expensive, use a chained requestAnimationFrame. Firefox recently started using a similar trick to display the UI faster in <a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=715402">bug 715402</a>.</p>
+<p>Suggestion to use <code>requestAnimationFrame</code> to delay loading resources is a good one. There is a gotcha: if you do something expensive in the requestAnimationFrame handler, it&#8217;ll delay your first page draw (requestAnimationFrame fires as the browser prepares to paint. It&#8217;s an ok place to start network requests, etc). If you do something expensive, use a chained requestAnimationFrame. Firefox recently started using a similar trick to display the UI faster in <a title="Wait until chrome is painted before executing code not critical to making the initial window visible" href="https://bugzilla.mozilla.org/show_bug.cgi?id=715402">bug 715402</a>.</p>
 
-<p>The suggestion to split up stylesheets is also good, but risky. I&#8217;ve seen this before, but I did not understand why websites sprinkled <code>&lt;link rel="stylesheet"&gt;</code> throughout the page bodies. This can significantly degrade pageload times by causing redundant page restyles and reflows. Reflows can take hundreds of milliseconds on slow mobile devices, doing them multiple times is bad. Make sure to run your pages through a <a href="http://anton.kovalyov.net/2012/12/17/firefox-profiler/">profiler</a> (or time the difference between relevant requestAnimationFrame callbacks). I saw a bad case of this in <a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=718864">bug 718864</a>.</p>
+<p>The suggestion to split up stylesheets is also good, but risky. I&#8217;ve seen this before, but I did not understand why websites sprinkled <code>&lt;link rel="stylesheet"&gt;</code> throughout the page bodies. This can significantly degrade pageload times by causing redundant page restyles and reflows. Reflows can take hundreds of milliseconds on slow mobile devices, doing them multiple times is bad. Make sure to run your pages through a <a href="http://anton.kovalyov.net/2012/12/17/firefox-profiler/">profiler</a> (or time the difference between relevant requestAnimationFrame callbacks). I saw a bad case of this in <a title="huffingtonpost loads up to 50% slower in Firefox than in opera" href="https://bugzilla.mozilla.org/show_bug.cgi?id=718864">bug 718864</a>.</p>
 ]]></content>
   </entry>
   
@@ -157,14 +157,14 @@
 <p>Benoit Girard sped up shutdown with:</p>
 
 <ul>
-<li>not forcing startup cache flushes on shutdown: <a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=816656">bug 816656</a>. This speeds up exiting browser soon after startup.</li>
-<li><a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=818296">bug 818296</a>: . This may significantly reduce our shutdown times. We are waiting on more telemetry data to confirm.</li>
+<li>not forcing startup cache flushes on shutdown: <a title="[Shutdown] Startup cache slows shutdown with < 10 sec uptime" href="https://bugzilla.mozilla.org/show_bug.cgi?id=816656">bug 816656</a>. This speeds up exiting browser soon after startup.</li>
+<li><a title="[Shutdown] js::NukeCrossCompartmentWrappers takes up to 300ms on shutdown. Avoid doing it for optimized shutdown" href="https://bugzilla.mozilla.org/show_bug.cgi?id=818296">bug 818296</a>: [Shutdown] js::NukeCrossCompartmentWrappers takes up to 300ms on shutdown. Avoid doing it for optimized shutdown. This may significantly reduce our shutdown times. We are waiting on more telemetry data to confirm.</li>
 </ul>
 
 
-<p>Aaron Klotz made startup slightly faster by speeding up reading of some urlclassifier files in <a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=810101">bug 810101</a>.</p>
+<p>Aaron Klotz made startup slightly faster by speeding up reading of some urlclassifier files in <a title="loading the two safebrowsing files is not as fast as it could be" href="https://bugzilla.mozilla.org/show_bug.cgi?id=810101">bug 810101</a>.</p>
 
-<p>Vladimir Vukicevic landed <a title="" href="https://bugzilla.mozilla.org/show_bug.cgi?id=731974">bug 731974</a> which results in smoother browser animations and significantly improves the quality of tab-strip animations.</p>
+<p>Vladimir Vukicevic landed <a title="requestAnimationFrame generates too short/long frames, especially at the beginning of animation" href="https://bugzilla.mozilla.org/show_bug.cgi?id=731974">bug 731974</a> which results in smoother browser animations and significantly improves the quality of tab-strip animations.</p>
 ]]></content>
   </entry>
   
