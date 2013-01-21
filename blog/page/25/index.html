@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="A Creature so Fierce&#8230; I&#8217;ve been wrestling with control flow graphs like this. I eliminated those pesky &#8220;empty&#8221; nodes found in &hellip;">
+  <meta name="description" content="Dehydra does a form of basic symbolic execution now. It&#8217;s enough to avoid the unfeasable branches. It enabled me to add known_zero() and &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -77,6 +77,46 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2007/03/07/dehydra-01/">Dehydra 0.1</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-03-07T07:38:08-08:00" pubdate data-updated="true">Mar 7<span>th</span>, 2007</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Dehydra does a form of basic symbolic execution now. It&#8217;s enough to avoid the <em><a href="http://taras.glek.net/blog/2007/03/02/uno-dos...-dehydra">unfeasable</a> </em>branches. It enabled me to add known_zero() and known_notzero() so dehydra supports all of the functions documented in the <a href="http://www.spinroot.com/uno/uno_long.pdf">UNO paper</a>.</p>
+
+<p>I believe dehydra can now match all of the features of uno&#8217;s DSL. Download it <a href="http://spinroot.com/uno/">here</a>. See malloc.js for an example of how to port UNO scripts. There is no documentation, except for this blog, but the docs on the <a href="http://spinroot.com/uno/">UNO website</a> should work too.</p>
+
+<p>This is the first release so there are bugs, but the tool should be able to find some API-misuse issues, etc. I need some early adopters to help direct the evolution of this tool.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -787,6 +827,10 @@ At the source level squash renames the class part of function definitions along 
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/01/21/snappy-number-49-help-firefox-shutdown-faster/">Snappy #49: Help Firefox Shutdown Faster</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/01/10/snappy-number-48-now-with-faster-shutdown/">Snappy #48: Now With Faster Shutdown</a>
       </li>
     
@@ -800,10 +844,6 @@ At the source level squash renames the class part of function definitions along 
     
       <li class="post">
         <a href="/blog/2012/12/21/interesting-bugzilla-activity/">Snappy #45: The view from home</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/12/17/hello-octopress/">Hello Octopress</a>
       </li>
     
   </ul>

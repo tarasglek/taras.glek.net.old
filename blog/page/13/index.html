@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Last week I learned about how Windows handles page faults backed by files (specifically xul.dll). I already knew that Linux was suboptimal in this &hellip;">
+  <meta name="description" content="I landed the mozilla::services bug around the same time as Gavin announced the Services.jsm equivalent. Services.jsm came a pleasant surprise to me, &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -77,6 +77,46 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/04/20/mozillaservices/">Mozilla::services</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-04-20T04:20:10-07:00" pubdate data-updated="true">Apr 20<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I landed the mozilla::services <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=516085">bug</a> around the same time as Gavin <a href="http://www.gavinsharp.com/blog/2010/02/25/services-jsm/">announced</a> the Services.jsm equivalent. Services.jsm came a pleasant surprise to me, it&#8217;s nice to have API symmetry.</p>
+
+<p><a href="https://developer.mozilla.org/en/XPCOM/mozilla::services_namespace">mozilla::services</a> namespace provides a fast C++ way to refer to common services. This replaces a myriad layers of indirection that happened in the XPCOM <a href="https://developer.mozilla.org/en/XPCOM_Interface_Reference/nsIServiceManager/getService">GetService()</a> call. Too much generality hurts.</p>
+
+<p>So far I only replaced the common IOService getters. URL objects are 30% less slow to create now. A contributor, Mitchell Field, has volunteered to switch over a huge amount of other common services in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=560095">bug 560095</a>. That rocks.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -678,85 +718,6 @@ In the longer term some fixes for madvise() should land in both runtime and comp
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2010/03/11/extensions-startup/">Extensions & Startup</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-03-11T03:20:35-08:00" pubdate data-updated="true">Mar 11<span>th</span>, 2010</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Dietrich <a href="http://autonome.wordpress.com/2010/03/10/firefox-extensions-and-performance/">blogged</a> a &#8220;wake up and smell the startup&#8221; executive overview of startup issues caused by our extension practices. This post is a &#8220;numbers&#8221; followup. For this experiment I installed a brand-spankin-new copy of Linux Firefox 3.6. Firefox is installed on a 7200 hard drive, the rest of my system lives on an SSD. The CPU is core2duo, keep in mind these numbers will be significantly worse for people running on netbooks and other common hardware. The numbers vary +/- 150ms, but the general picture is pretty clear.</p>
-
-<p><strong>Results</strong></p>
-
-<p><strong>Startup Time</strong></p>
-
-<p>Firefox 3.6 with no extensions:
-2240ms</p>
-
-<p>+<a href="https://addons.mozilla.org/en-US/firefox/addon/1865">Adblock Plus</a> (no subscriptions)
-2538ms</p>
-
-<p>+<a href="https://addons.mozilla.org/en-US/firefox/addon/3006">Video Download Helper</a>
-2727ms</p>
-
-<p>+<a href="https://addons.mozilla.org/en-US/firefox/addon/10900">Personas</a>
-3220ms</p>
-
-<p>+<a href="https://addons.mozilla.org/en-US/firefox/addon/748">Greasemonkey</a>
-3300ms</p>
-
-<p>+EasyList subscription for adblock
-4044ms
-I just doubled cold startup time for Firefox by merely adding 4 extensions. It takes weeks or even months of developer time to shave off every 100ms off Firefox startup, but mere seconds to undo any of those gains by installing extensions. These are just the top-4 extensions in the list (presumably they are higher quality too), I&#8217;m sure there are lots of other extensions with more drastic performance hits.</p>
-
-<p>Dietrich&#8217;s <a href="http://autonome.wordpress.com/2010/03/10/firefox-extensions-and-performance/">post</a> details some of the remedies that should reduce the startup cost of extensions. For the inquisitive minds: I used <a href="http://taras.glek.net/blog/2009/10/23/studying-library-io-systemtap-style/">SystemTap</a> to produce a <a href="http://people.mozilla.com/~tglek/startup/extensions_report.txt">report</a> of files read by Firefox on startup ordered by their startup cost.</p>
-
-<p><strong>Update:</strong> Dietrich asked me to summarize warm startup too:</p>
-
-<ul>
-<li>Without extensions: 550ms</li>
-<li>With above Extensions: 1800ms
-Note that this is a developer blog, so by &#8220;remedies&#8221; I meant &#8220;things developers can do to&#8221;. There is little normal users can do short of complaining to the extension authors.</li>
-</ul>
-
-
-<p>This post isn&#8217;t meant to shame specific extension authors into speeding up their extensions. The aim is to show that a measurable percentage of startup is due to extensions and that we need to:</p>
-
-<ol>
-<li>Educate extension developers about it</li>
-<li>Provide better tools to measure slowdowns caused by extensions</li>
-<li>Make sure that the Firefox side of extension handling is sufficiently efficient</li>
-</ol>
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/14/">&larr; Older</a>
@@ -774,6 +735,10 @@ Note that this is a developer blog, so by &#8220;remedies&#8221; I meant &#8220;
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/01/21/snappy-number-49-help-firefox-shutdown-faster/">Snappy #49: Help Firefox Shutdown Faster</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/01/10/snappy-number-48-now-with-faster-shutdown/">Snappy #48: Now With Faster Shutdown</a>
       </li>
     
@@ -787,10 +752,6 @@ Note that this is a developer blog, so by &#8220;remedies&#8221; I meant &#8220;
     
       <li class="post">
         <a href="/blog/2012/12/21/interesting-bugzilla-activity/">Snappy #45: The view from home</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/12/17/hello-octopress/">Hello Octopress</a>
       </li>
     
   </ul>

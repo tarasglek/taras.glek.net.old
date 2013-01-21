@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="One of the purposes of this blog is to inform people that while the original Elsa author is no longer actively developing it, Elsa is being used in &hellip;">
+  <meta name="description" content="Certain other cool open source projects are doing cool static analysis work. In this case, here is an analysis of one of my favourite operating &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -77,6 +77,46 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2008/09/03/error-presentation/">Error Presentation</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-09-03T07:09:53-07:00" pubdate data-updated="true">Sep 3<span>rd</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Certain other cool open source projects are doing cool static analysis work. In this case, <a href="http://yoyodyne.ath.cx/ccc-analyze/buildkernel/2008-08-16-1/">here</a> is an analysis of one of my favourite operating systems projects, <a href="http://www.dragonflybsd.org/">DragonFly BSD</a>.</p>
+
+<p>I&#8217;m blown away by the clean UI. The error filter and the interleaving of static analysis results in the source code are drool-inducing. This is powered by the <a href="http://clang.llvm.org/StaticAnalysis.html">clang checker</a>. Clang&#8217;s checker doesn&#8217;t yet do C++, doesn&#8217;t do application-specific checks and has a lot of false positives, but it&#8217;s an exciting preview of things to come.</p>
+
+<p>Oh and I hope that DXR will have similar analysis awesomeness. In the future, I hope to see static analysis become almost as common as unit-testing.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -555,66 +595,6 @@ Some of you might ask &#8220;But Taras, why now, why not just keep doing what yo
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2008/07/08/where-is-the-sanity-in-the-c-std-library/">Where Is the Sanity in the C++ Std Library?</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-07-08T03:52:42-07:00" pubdate data-updated="true">Jul 8<span>th</span>, 2008</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Dear lazyweb,</p>
-
-<p>Please explain to me why the following code works the way it does. From looking at the following code and stringstream::str(), stringstream::str(string) docs the behavior of the following code does not make sense to me.</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>
-</span><span class='line'>#include &lt;sstream&gt;
-</span><span class='line'>#include &lt;iostream&gt;</span></code></pre></td></tr></table></div></figure>
-
-
-<p>using namespace std;</p>
-
-<p>int main(int argc, char**) { stringstream ss(&#8220;foo&#8221;); cout &lt;&lt; ss.str() &lt;&lt; endl; ss &lt;&lt; &#8220;bar&#8221;; cout &lt;&lt; ss.str() &lt;&lt; endl; ss &lt;&lt; &#8220;more&#8221;; cout &lt;&lt; ss.str() &lt;&lt; endl; }</p>
-
-<p>Why is doing &lt;&lt; after str(string) causing this stringstream to loose the initialization string? What possible API usecase would justify such behavior?</p>
-
-<p>For the curious, output is:</p>
-
-<p>foo bar barmore</p>
-
-<p>It seems that the only sensible way to use stringstream is to do ss.str(&#8220;&#8221;) unless you want to have your initial data reset for no reason. In that case why add a weird method overload instead of a .reset() method.</p>
-
-<p><strong>Update:</strong> Note that stringstream ss(&#8220;foo&#8221;) is equivalent to stringstream ss; ss.str(&#8220;foo&#8221;);</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/20/">&larr; Older</a>
@@ -632,6 +612,10 @@ Some of you might ask &#8220;But Taras, why now, why not just keep doing what yo
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/01/21/snappy-number-49-help-firefox-shutdown-faster/">Snappy #49: Help Firefox Shutdown Faster</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/01/10/snappy-number-48-now-with-faster-shutdown/">Snappy #48: Now With Faster Shutdown</a>
       </li>
     
@@ -645,10 +629,6 @@ Some of you might ask &#8220;But Taras, why now, why not just keep doing what yo
     
       <li class="post">
         <a href="/blog/2012/12/21/interesting-bugzilla-activity/">Snappy #45: The view from home</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/12/17/hello-octopress/">Hello Octopress</a>
       </li>
     
   </ul>

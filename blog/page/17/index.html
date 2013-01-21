@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="I finally landed the remaining GCC patches needed to get a useful Dehydra without any of that gcc-patching pain! This week I also got some nice &hellip;">
+  <meta name="description" content="Every once in a while people want to be analyze C code. If you are one of those people, checkout bug 494960. For GCC 4.3, you&#8217;ll need to update &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -77,6 +77,59 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/06/17/dehydratreehydra-c-support/">Dehydra/Treehydra C Support</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-06-17T04:22:53-07:00" pubdate data-updated="true">Jun 17<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Every once in a while people want to be analyze C code. If you are one of those people, checkout <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=494960">bug 494960</a>. For GCC 4.3, you&#8217;ll need to update your patch queue. If you you followed the <a href="https://developer.mozilla.org/En/Dehydra/Installing_Dehydra">Dehydra install instructions</a> do something like:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>
+</span><span class='line'>cd gcc-4.3.0/.hg/patches
+</span><span class='line'>hg pull -u
+</span><span class='line'>cd ../..
+</span><span class='line'>hg qpush -a
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>and rebuild gcc to get C support in the plugin framework for GCC 4.5 (patch for trunk is in the bug).</p>
+
+<p>Everything other than process_function should work in both treehydra and dehydra. Note that the objects provided by GCC will be slightly different in structure due to the underlying difference between gcc/g++, so scripts that were written for C++ may need to be updated.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -504,62 +557,6 @@ Now I&#8217;m sure that most of us would still run Emacs and other desktop edito
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/01/28/semantic-rewriting-of-code-with-pork-a-bitter-recap/">Semantic Rewriting of Code With Pork - a Bitter Recap</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-01-28T16:17:47-08:00" pubdate data-updated="true">Jan 28<span>th</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>LWN <a href="http://lwn.net/Articles/315686/">published</a> an article about a tool that does refactoring of C code. Guess what, it&#8217;s yet another tool on top of a crappy C-parser that will never grok C well or even hope to support C++. To my great disappointment the author was not aware of my work on Pork. Clearly I have failed in letting people know that complex C and C++ can be refactored with (somewhat raw, but powerful) open source tools.</p>
-
-<p>In addition to <a href="https://developer.mozilla.org/En/Dehydra">Dehydra</a> (which is even mentioned in the first comment, yay!), I also maintain <a href="https://developer.mozilla.org/En/Pork">Pork</a> - a fork of oink that is well suited to large-scale refactoring of real-world C/C++ code.</p>
-
-<p>So far pork has been used for &#8220;minor&#8221; things like renaming classes&amp;functions, rotating <a href="http://taras.glek.net/blog/2007/08/06/outparams-take-2/">outparameters</a> and correcting <a href="http://taras.glek.net/blog/2007/06/26/status-report-recent-work/">prbool</a> bugs. Additionally, Pork proved itself in an <a href="http://taras.glek.net/blog/2007/11/02/garburator-works/#comments">experiment</a> which involved rewriting almost every function(ie generating a 3+MB patch) in Mozilla to use garbage collection instead of reference-counting.</p>
-
-<p>So to summarize:</p>
-
-<ul>
-<li>Refactoring C is hard, but C++ is much harder</li>
-<li>For refactoring C++ there is no better toolchain to start with than Pork</li>
-<li>Pork shares no code with Dehydra.</li>
-<li>Pork is built on the Elsa parser which makes it well-suited for rewriting large amounts of code. Dehydra&#8217;s isn&#8217;t suitable for rewriting code due to GCC providing a very lossy AST and incomplete location information.</li>
-<li>Pork is not as convenient for analysis needs as Dehydra
-For any questions regarding Pork feel free to post on the <a href="https://lists.mozilla.org/listinfo/dev-static-analysis">mailing list</a> or ping me on IRC.</li>
-</ul>
-
-
-<p><strong>Language Wars</strong></p>
-
-<p>I find it depressing that the comments to the LWN article ended up being about language wars rather than the refactoring topic. Pork is written in C++ which is much more widely known than OCaml. However, I seriously doubt it&#8217;s easier for anyone to hack on advanced compiler frontend pieces in a language as ill-suited for the task as C++.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/18/">&larr; Older</a>
@@ -577,6 +574,10 @@ For any questions regarding Pork feel free to post on the <a href="https://lists
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/01/21/snappy-number-49-help-firefox-shutdown-faster/">Snappy #49: Help Firefox Shutdown Faster</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/01/10/snappy-number-48-now-with-faster-shutdown/">Snappy #48: Now With Faster Shutdown</a>
       </li>
     
@@ -590,10 +591,6 @@ For any questions regarding Pork feel free to post on the <a href="https://lists
     
       <li class="post">
         <a href="/blog/2012/12/21/interesting-bugzilla-activity/">Snappy #45: The view from home</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/12/17/hello-octopress/">Hello Octopress</a>
       </li>
     
   </ul>

@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="As I mentioned before, we are back to investigating some gfx deceleration issues. Preliminary investigation shows that our border+gradient code is &hellip;">
+  <meta name="description" content="Meeting notes. Memshink had a good idea to switch to bi-weekly meetings. We are going to try the same for Snappy. My plan is to still solicit status &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -77,6 +77,62 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/05/03/snappy-may-3rd-faint-hope-of-handling-mousedown-events-without-a-settimeout/">Snappy, May 3rd: Faint Hope of Handling Mousedown Events Without a setTimeout</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-05-03T07:23:13-07:00" pubdate data-updated="true">May 3<span>rd</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Meeting <a href="https://wiki.mozilla.org/Performance/Snappy/2012-05-03">notes</a>.</p>
+
+<p>Memshink had a good idea to switch to bi-weekly meetings. We are going to try the same for Snappy. My plan is to still solicit status updates and blog weekly, but only meet in person every two weeks. The next meeting will be on May 17.</p>
+
+<p><strong>Borders/Gradients</strong></p>
+
+<p>Turns out that most of the painting overhead in accelerated versions of Firefox is spent rendering borders and gradients. I <a href="http://taras.glek.net/blog/2012/05/01/pushing-the-borders-out-of-firefox-performance/">blogged </a>a little about this earlier. It&#8217;s a combination us not caching gradients and being overly picky about rendering border corners perfectly (ie to spec). Our chrome renders particularly slowly because as our chrome CSS changed (after implementing d2d accel and optimizing for exists codepaths), we started hitting more slow paths in the border code. We need telemetry to notice when things are rendering slower than expected.</p>
+
+<p>According to Bas we need to enable Azure for content and then start implementing respective caches. We should get significant speedups within 3-4 weeks, but to get close to the baseline performance of the no-borders/gradients build will take 3-4months. In the meantime we should look into simplifying our chrome to not feature as much expensive CSS.</p>
+
+<p>Longer term, Frank will look into reimplementing the tab bar in pure HTML  instead of XUL to maximize responsiveness.</p>
+
+<p><strong>CC/GC Pauses</strong></p>
+
+<p>Incremental GC should turned back on soon (bugs <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=750424">750424</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=750416">750416</a>). Olli relanded bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=747675">747675</a> which should reduce CC times somewhat.</p>
+
+<p>Kyle&#8217;s big memory leak <a href="http://blog.kylehuey.com/post/21892343371/fixing-the-memory-leak">fix</a> from last week turned out to occasionally cause leaks where there were none before: see bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=751466">751466</a>.</p>
+
+<p><strong>Frontend</strong></p>
+
+<p>Tim spent the week in a seemingly infinite r?/r- cycle attempting to prove that one handle clicks on tabs without setTimeout, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=743877">743877</a>. Tim also moved thumbnail storage away from network cache. This reduced cache contention (and browser freezes), bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=744388">744388</a>. Paulo continued nuking sync favicon api usage, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=728168">728168</a>.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -673,56 +729,6 @@ I recently got rid of an old Pioneer receiver in favour of a tiny Class D amplif
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/03/29/home-automation-via-mi-casa-verde-vera/">Home Automation via Mi Casa Verde Vera 3 + Z-Wave</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-03-29T18:06:00-07:00" pubdate data-updated="true">Mar 29<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><div class='post'>
-Our baby girl was born recently. We had the house heat off while we stayed at the birth center.<br /><br />Because we live in the future, we were able to to turn on the house heat(&amp; unlock front door) from the car while driving home. The house got down to 10C (50F) while we were away. Thanks to technology, we did not have to endure that temperature upon return :)<br /><br /><b>Vera/Z-Wave</b><br /><br />So far I have my thermostat, door lock, audio amp and some lights hooked up via Z-Wave. Mi Casa Verde <a href="http://www.amazon.com/gp/product/B0074WIVJ4/ref=as_li_qf_sp_asin_tl?ie=UTF8&amp;tag=stuff05e-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=B0074WIVJ4">Vera 3</a> controller is the brains of the operation. It took a couple years before I got everything hooked up because the Vera 3 controller is the only viable option, yet is so damn expensive (fair cost should be ~$100). <br />I waited on opensource stuff to get good (ie <a href="http://linuxmce.com/">LinuxMCE</a> + o<a href="http://code.google.com/p/open-zwave/">penzwave</a>), but it seems like Z-Wave will be obsolete before there is any useful open source support for it.<br /><br /><b>Impressions</b><br />So far controlling the <a href="http://www.amazon.com/dp/B0052MHPP4/ref=as_li_ss_til?tag=stuff05e-20&amp;camp=0&amp;creative=0&amp;linkCode=as4&amp;creativeASIN=B0052MHPP4&amp;adid=06SXD7JN1SWXKBYY9W71">thermostat</a> from my phone/laptop is the killer feature of the system. We like to keep our house barely warm enough. Unfortunately we have an idiotic gas-powered hot air heating system which guarantees that some rooms are too hot while others are freezing. We can finally adjust house temperate depending on what room in the house we are using without running back/forth to the thermostat.<br />This became even more valuable once the baby arrived. Ellen can control temperature/light with one hand without yelling at me to help :)<br /><br />Controlling lights is cool, but it wasn&#8217;t a life-changer.&nbsp; Time taken for unlocking phone, connecting to the controller + execution lag are fairly similar to walking over to the damn light switch. I suspect Ellen will appreciate this more while she has her hands full with baby and can&#8217;t move easily.<br /><br />Same goes for the door lock. We have a code lock on one side of the house and a<a href="http://www.amazon.com/gp/product/B001NEK6JM/ref=as_li_ss_tl?ie=UTF8&amp;tag=stuff05e-20&amp;linkCode=as2&amp;camp=1789&amp;creative=390957&amp;creativeASIN=B001NEK6JM"> z-wave/code lock</a> on the other. Frankly it takes longer to open the door via phone than to punch in the code. We haven&#8217;t used house-keys since we moved into the house&#8230;cos keys are a pain. Z-Wave makes it easy to change lock combination, check that the door is locked, etc, so it&#8217;s somewhat valuable.<br /><br />The coolest part of the system is ability to group individual device actions. We have a &#8220;house off&#8221; command that locks the door, turns off thermostat, turns of various lights/etc. It&#8217;s great to crawl into bed, poke at the phone and hear various things around the house shutting off.<br /><br /><b>Future</b><br />The Vera controller supports a lot more than just Z-Wave. It can do X10, custom scripts, respond to UPnP commands, schedule commands based on sun-set/rise times, etc. Various Z-Wave doodads also act as status indicators. In the future I plan to setup the thermostat to turn off while the door is open, open/close windows + turn on fans based of indoor/outdoor temp + time of night, etc. It is also possible to have the DHCP server on my lan report for when my phone appears/disappears so vera can turn off thermostat/lights automagically when we leave the house.<br /><br /><b>Alternatives</b><br />I probably spent $300 of real money on various Z-Wave gear + $300 of money suckered out of credit cards on this setup. There are alternatives.<br /><i> </i><br /><i>Lots of time approach</i>: I think one can do a lot of this on the cheap with xbee + atmega + relays. The thermostat is a little trickier, door lock is harder yet. This will involve reinventing the state machine behind Vera and interfacing with android, web, etc clients. I think it would be cool if open source people moved in this direction&#8230;google even made some noise about android-controlled light bulbs(and went quiet), but at the moment one would&nbsp; have to start from scratch.<br /><br /><i>I do what TV tells me:</i> People with more money than sense can pay Verizon/etc a <a href="https://shop.verizon.com/buy/Monitoring-Energy-Saving/Home-Control/Verizon-Home-Monitoring-and-Control/cat30006#order_tab">monthly fee</a> to do a lot of this. Verizon supports a strict subset of what the Vera controller does..but hey, they have TV ads.<br /><br /><i>Less-weird-stuff approach:</i> There are a couple different wifi thermostats on the market atm. <a href="http://www.amazon.com/dp/B004YZFU1Q/ref=as_li_ss_til?tag=stuff05e-20&amp;camp=0&amp;creative=0&amp;linkCode=as4&amp;creativeASIN=B004YZFU1Q&amp;adid=0T7A7B6RT7YD3PY5NJE1">This one</a> seems like a cheap way to go. Wifi is a lot less weird and proprietary than Z-Wave, but this gets you no closer to controlling lights, doors :)<br /><b><br /></b><br /><b>Conclusion</b><br />Now that the initial time/$$$ investment is made,<b> </b>I look forward to tightly coupling my security video, door bell, phone, sound, cooling systems. Motorized blind/window control is stupidly-expensive, so I&#8217;ll probably be rolling my own. There is lots of room left for energy savings + coolness factor improvements.<br /><br /></div>
-<h2>Comments</h2>
-<div class='comments'>
-<div class='comment'>
-<div class='author'>Taras</div>
-<div class='content'>
-Apparently blogger doesn&#39;t send comment notifications by default. micasaverde forums are probably your best bet. </div>
-</div>
-<div class='comment'>
-<div class='author'>Pedle Zelnip</div>
-<div class='content'>
-Awesome stuff, very cool.  Any tips for those of us who just bought a house and are thinking of looking into all this stuff (ie good resources on getting up to speed on it all)?</div>
-</div>
-</div>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/6/">&larr; Older</a>
@@ -740,6 +746,10 @@ Awesome stuff, very cool.  Any tips for those of us who just bought a house and 
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/01/21/snappy-number-49-help-firefox-shutdown-faster/">Snappy #49: Help Firefox Shutdown Faster</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/01/10/snappy-number-48-now-with-faster-shutdown/">Snappy #48: Now With Faster Shutdown</a>
       </li>
     
@@ -753,10 +763,6 @@ Awesome stuff, very cool.  Any tips for those of us who just bought a house and 
     
       <li class="post">
         <a href="/blog/2012/12/21/interesting-bugzilla-activity/">Snappy #45: The view from home</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/12/17/hello-octopress/">Hello Octopress</a>
       </li>
     
   </ul>

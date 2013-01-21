@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Thanks for all of those who commented on previous post on fragmentation. My first fragmentation fix has landed. In current nightlies and future &hellip;">
+  <meta name="description" content="To fight fragmentation it is best to tell the OS to allocate a continuous chunk of space for your file. With specialized APIs, the OS can do this &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -77,6 +77,46 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/09/09/help-wanted-does-fcntlf_preallocate-work-as-advertised-on-osx/">Help Wanted: Does fcntl(F_PREALLOCATE) Work as Advertised on OSX?</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-09-09T07:06:11-07:00" pubdate data-updated="true">Sep 9<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>To fight fragmentation it is best to tell the OS to allocate a continuous chunk of space for your file. With specialized APIs, the OS can do this without performing any IO (not counting metadata). I am adding support for this as part of <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=592520">bug 592520</a>.  Linux features <a href="http://linux.die.net/man/3/posix_fallocate">posix_fadvise</a> for preallocating files. Windows&#8217;s <a href="http://msdn.microsoft.com/en-us/library/aa365531%28VS.85%29.aspx">SetEndOfFile</a> achieves the same result. <a href="http://lists.apple.com/archives/darwin-dev/2007/Dec/msg00040.html">Supposedly</a> OSX can do this via <a href="http://www.manpages.info/macosx/fcntl.2.html">fcntl</a>(F_PREALLOCATE), but does it?</p>
+
+<p>I&#8217;ve experimented with posix_fadvise/SetEndOfFile and determined that they both change the file size and do their best to avoid fragmentation. Unfortunately I do not see any effect of fcntl(F_PREALLOCATE) on OS X 10.6 (the return code is successful). The file size does not change and if I then write to the file, it seems to fragment just as much as before. Can a Mac expert demonstrate that fcntl(F_PREALLOCATE) makes any difference at all?</p>
+
+<p><strong>Update:</strong> Thanks a lot for the useful feedback, it was extremely helpful in producing this <a href="https://bug592520.bugzilla.mozilla.org/attachment.cgi?id=474233">patch</a>. It appears that the posix_fallocate equivalent is to the fnctl followed by a truncate() call (which actually forces data to be written to the file).</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -619,46 +659,6 @@ I blogged about 1, 2, 4, this post is about #3.</li>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2010/04/20/mozillaservices/">Mozilla::services</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-04-20T04:20:10-07:00" pubdate data-updated="true">Apr 20<span>th</span>, 2010</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I landed the mozilla::services <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=516085">bug</a> around the same time as Gavin <a href="http://www.gavinsharp.com/blog/2010/02/25/services-jsm/">announced</a> the Services.jsm equivalent. Services.jsm came a pleasant surprise to me, it&#8217;s nice to have API symmetry.</p>
-
-<p><a href="https://developer.mozilla.org/en/XPCOM/mozilla::services_namespace">mozilla::services</a> namespace provides a fast C++ way to refer to common services. This replaces a myriad layers of indirection that happened in the XPCOM <a href="https://developer.mozilla.org/en/XPCOM_Interface_Reference/nsIServiceManager/getService">GetService()</a> call. Too much generality hurts.</p>
-
-<p>So far I only replaced the common IOService getters. URL objects are 30% less slow to create now. A contributor, Mitchell Field, has volunteered to switch over a huge amount of other common services in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=560095">bug 560095</a>. That rocks.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/13/">&larr; Older</a>
@@ -676,6 +676,10 @@ I blogged about 1, 2, 4, this post is about #3.</li>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/01/21/snappy-number-49-help-firefox-shutdown-faster/">Snappy #49: Help Firefox Shutdown Faster</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/01/10/snappy-number-48-now-with-faster-shutdown/">Snappy #48: Now With Faster Shutdown</a>
       </li>
     
@@ -689,10 +693,6 @@ I blogged about 1, 2, 4, this post is about #3.</li>
     
       <li class="post">
         <a href="/blog/2012/12/21/interesting-bugzilla-activity/">Snappy #45: The view from home</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/12/17/hello-octopress/">Hello Octopress</a>
       </li>
     
   </ul>

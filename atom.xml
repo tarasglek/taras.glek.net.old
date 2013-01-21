@@ -4,7 +4,7 @@
   <title><![CDATA[All About Performance]]></title>
   <link href="http://taras.glek.net/atom.xml" rel="self"/>
   <link href="http://taras.glek.net/"/>
-  <updated>2013-01-17T20:53:13-08:00</updated>
+  <updated>2013-01-21T13:19:42-08:00</updated>
   <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -12,6 +12,20 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Snappy #49: Help Firefox Shutdown Faster]]></title>
+    <link href="http://taras.glek.net/blog/2013/01/21/snappy-number-49-help-firefox-shutdown-faster/"/>
+    <updated>2013-01-21T13:04:00-08:00</updated>
+    <id>http://taras.glek.net/blog/2013/01/21/snappy-number-49-help-firefox-shutdown-faster</id>
+    <content type="html"><![CDATA[<hr />
+
+<p>Introducing a new <em>privacy-invasive</em> method to help make Firefox shutdown faster.</p>
+
+<blockquote><p>&#8230; the profiler will watch your browser for any performance hiccups and will automatically send a detailed bug report for the Performance team to fix!</p><footer><strong>Benoit Girard</strong> <cite><a href='http://benoitgirard.wordpress.com/2013/01/18/is-your-shutdown-slow-turn-on-the-performance-reporter/'>benoitgirard.wordpress.com/2013/&hellip;</a></cite></footer></blockquote>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Snappy #48: Now With Faster Shutdown]]></title>
@@ -541,17 +555,6 @@ We spent most of the meeting discussing bug <a href="https://bugzilla.mozilla.or
 <p><strong>Profiler</strong></p>
 
 <p>Benoit Girard posted a <a href="http://dl.dropbox.com/u/10523664/Screenshots/5p.png">preview </a>of view-source in the profiler. This will be handy for figuring out where performance problems lay, especially in JS files that have been preprocessed (our JS preprocessor does not try to keep the line numbers sane).</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[DXR is back at dxr.mozilla.org]]></title>
-    <link href="http://taras.glek.net/blog/2012/08/15/dxr-is-back-at-dxr-mozilla-org/"/>
-    <updated>2012-08-15T03:59:04-07:00</updated>
-    <id>http://taras.glek.net/blog/2012/08/15/dxr-is-back-at-dxr-mozilla-org</id>
-    <content type="html"><![CDATA[<p>For a while DXR lived on a <a href="http://dxr.lanedo.com/">lanedo.com</a> server. Lanedo folks are now done with DXR development. DXR is once again deployed at dxr.mozilla.org. Our Perf intern, Jonas, is driving DXR development this summer. See his <a href="http://jonasfj.dk/blog/2012/08/deploying-dxr-on-dxr-mozilla-org/">progress report</a>. Be sure to subscribe to his blog. He may change how you use DXR as a result of his current work.</p>
-
-<p><em>PS. Mozilla interns rule</em></p>
 ]]></content>
   </entry>
   

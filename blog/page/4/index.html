@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="_Note: click on the images if they get clipped by other content. Cold startups are those where data has to be read in from disk, warm ones are &hellip;">
+  <meta name="description" content="We have an intern working on an analysis tool to analyze how other Windows applications/services affect Firefox startup. If you run Windows and you &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -77,6 +77,48 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/06/25/slow-startup-logging-help-wanted/">Slow Startup Logging: Help Wanted</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-06-25T03:07:06-07:00" pubdate data-updated="true">Jun 25<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>We have an intern working on an analysis tool to analyze how other Windows applications/services affect Firefox startup.</p>
+
+<p><a href="http://nchaim-moz2012.tumblr.com/post/25647745019/slow-startup-logging-add-on"><img src="http://media.tumblr.com/tumblr_m616xmP5m81qz73vw.png" alt="" /></a></p>
+
+<p>If you run Windows and you experience slow startups, please see Nicolas&#8217; <a href="http://nchaim-moz2012.tumblr.com/post/25647745019/slow-startup-logging-add-on">blog post</a> and submit data his addon gathers.</p>
+
+<p>ps. I will not have time to post a Snappy update for last week. The next update will cover 2 weeks.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -518,62 +560,6 @@ if (requestAnimationFrame)
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/05/03/snappy-may-3rd-faint-hope-of-handling-mousedown-events-without-a-settimeout/">Snappy, May 3rd: Faint Hope of Handling Mousedown Events Without a setTimeout</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-05-03T07:23:13-07:00" pubdate data-updated="true">May 3<span>rd</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Meeting <a href="https://wiki.mozilla.org/Performance/Snappy/2012-05-03">notes</a>.</p>
-
-<p>Memshink had a good idea to switch to bi-weekly meetings. We are going to try the same for Snappy. My plan is to still solicit status updates and blog weekly, but only meet in person every two weeks. The next meeting will be on May 17.</p>
-
-<p><strong>Borders/Gradients</strong></p>
-
-<p>Turns out that most of the painting overhead in accelerated versions of Firefox is spent rendering borders and gradients. I <a href="http://taras.glek.net/blog/2012/05/01/pushing-the-borders-out-of-firefox-performance/">blogged </a>a little about this earlier. It&#8217;s a combination us not caching gradients and being overly picky about rendering border corners perfectly (ie to spec). Our chrome renders particularly slowly because as our chrome CSS changed (after implementing d2d accel and optimizing for exists codepaths), we started hitting more slow paths in the border code. We need telemetry to notice when things are rendering slower than expected.</p>
-
-<p>According to Bas we need to enable Azure for content and then start implementing respective caches. We should get significant speedups within 3-4 weeks, but to get close to the baseline performance of the no-borders/gradients build will take 3-4months. In the meantime we should look into simplifying our chrome to not feature as much expensive CSS.</p>
-
-<p>Longer term, Frank will look into reimplementing the tab bar in pure HTML  instead of XUL to maximize responsiveness.</p>
-
-<p><strong>CC/GC Pauses</strong></p>
-
-<p>Incremental GC should turned back on soon (bugs <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=750424">750424</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=750416">750416</a>). Olli relanded bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=747675">747675</a> which should reduce CC times somewhat.</p>
-
-<p>Kyle&#8217;s big memory leak <a href="http://blog.kylehuey.com/post/21892343371/fixing-the-memory-leak">fix</a> from last week turned out to occasionally cause leaks where there were none before: see bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=751466">751466</a>.</p>
-
-<p><strong>Frontend</strong></p>
-
-<p>Tim spent the week in a seemingly infinite r?/r- cycle attempting to prove that one handle clicks on tabs without setTimeout, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=743877">743877</a>. Tim also moved thumbnail storage away from network cache. This reduced cache contention (and browser freezes), bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=744388">744388</a>. Paulo continued nuking sync favicon api usage, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=728168">728168</a>.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/5/">&larr; Older</a>
@@ -591,6 +577,10 @@ if (requestAnimationFrame)
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/01/21/snappy-number-49-help-firefox-shutdown-faster/">Snappy #49: Help Firefox Shutdown Faster</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/01/10/snappy-number-48-now-with-faster-shutdown/">Snappy #48: Now With Faster Shutdown</a>
       </li>
     
@@ -604,10 +594,6 @@ if (requestAnimationFrame)
     
       <li class="post">
         <a href="/blog/2012/12/21/interesting-bugzilla-activity/">Snappy #45: The view from home</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/12/17/hello-octopress/">Hello Octopress</a>
       </li>
     
   </ul>

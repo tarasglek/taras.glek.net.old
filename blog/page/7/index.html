@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="The meeting was short this time because all of the participating people in the Toronto office conspired be busy or on vacation today. Our UX team &hellip;">
+  <meta name="description" content="Canadians and their Profilers Much like eating bacon, writing profiling tools is a favourite Canadian pastime. Unfortunately, while today&#8217;s &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -77,6 +77,62 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/02/16/snappy-feb-16/">Snappy, Feb 16</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-02-16T08:20:17-08:00" pubdate data-updated="true">Feb 16<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><strong>Canadians and their Profilers</strong></p>
+
+<p>Much like eating bacon, writing profiling tools is a favourite Canadian pastime. Unfortunately, while <a href="https://wiki.mozilla.org/Performance/Snappy/2012-02-16">today&#8217;s meeting</a> had more Canadians than last time, a few the usual suspects are still busy with Android bugs this week and weren&#8217;t able to attend.  There are no updates on about:jank or our <a href="https://developer.mozilla.org/en/Performance/Profiling_with_the_Built-in_Profiler">profiler</a> this week. Next week, Vlad plans to hook up Windows symbolification to the profiler bringing it up to par with Mac64.</p>
+
+<p><strong>UX Tweaks</strong></p>
+
+<p>Jared is almost done with preparation for snappy scrolling. He is wrapping up making scrollbar + arrow keys behave in a consistent manner, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=710373">710373</a>. The next step is to tweak our scrolling physics, which may lead us to integrate addon scrolling code in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=206438">bug 206438</a>. Jared also got rid of pointless &#8220;connecting&#8230;&#8221; tab title on refresh, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=709182">bug 709182</a>.****</p>
+
+<p><strong>IO Optimizations</strong></p>
+
+<p>Brian recently worked out a way to neuter prefetch in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=692255">692255</a>, this week he added Firefox hooks to take advantage of that in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=727864">727864</a>. Once that is done our startup speed will be up to us - no longer at the mercy of a misbehaving Microsoft heuristic. Brian also discovered a single-character typo (bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=726503">726503</a>) in my code,which apparently resulted in a 15% speed up in our page-loading benchmark, tp5. I&#8217;m disturbed that we didn&#8217;t notice respective slowdown when we landed this.</p>
+
+<p>Brian is also bravely battling download-manager lag in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=632556">632556</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=727275">727275</a>.</p>
+
+<p>Marco is working on reducing thread contention due to vacuum/pragmas, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=723611">723611</a>. Marco is also almost done with rewriting our ill-conceived, jank-happy livemarks code in bug  <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=613588">613588</a>.</p>
+
+<p><strong>Content</strong></p>
+
+<p>Vladan landed a DOM storage fix that should significantly reduce the amount of main thread SQL done by content <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=714964">bug 714964</a>. We plan to make dom storage not cause main thread io lag in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=712009">712009</a>.</p>
+
+<p>More of the content team is jumping into Snappy work next week, expect to see more in this section.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -496,74 +552,6 @@ We spent the weekend at FOSDEM. I re-presented my Plumbers talk on why Linux <a 
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/01/05/snappy-jan-5/">Snappy, Jan 5</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-01-05T06:07:36-08:00" pubdate data-updated="true">Jan 5<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I expected to a slow week, but there was a surprising amount of progress. I  take this as further evidence that having managers  go on vacation does wonders to engineer productivity :)</p>
-
-<p><strong>Interactivity with lots of tabs</strong></p>
-
-<p>We spent a lot of time pondering how to approach browser sluggishness in light of having tons of tabs open. On one hand people should understand, that one can&#8217;t expect the browser perform the same whether 1 tab is active or infinity. On the other hand we should do more to a) make the browser punish background tab hogs and b) communicate hogs to the user.</p>
-
-<p>For now we will look at throttling background setTimeouts better (bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=715376">715376</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=715378">715378</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=715380">715380</a>), XMLHttpRequest loops, etc more aggressively. We also plan to make more use of interactive state so Firefox can suspend non-critical tasks (bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=712478">712478</a>).</p>
-
-<p>Occasionally the cycle collector misbehaves, Andrew will look into not running cycle collection frequently when it is slow: bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=710496">710496</a>. Olli has been fixing many of the cycle-collection extremes, I don&#8217;t have bug #s for that, but apparently the improvements are dramatic.</p>
-
-<p><strong>Super-Slow Startups</strong></p>
-
-<p>Thanks to telemetry we now know that some users experience tragic startup speeds ranging from 30seconds to 34hours (bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=701872">701872</a>). Our network cache is to blame for some of these (bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=707436">707436</a>). Another theory is that an unfortunate turn of events causes us to start loading webpages before the UI is shown (bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=715402">715402</a>).</p>
-
-<p>Vlad will post some of his analysis and interested people can help us with telemetry forensics.</p>
-
-<p><strong>Profiling</strong></p>
-
-<p>Being able to profile interactivity bugs is an important key to making the browser snappier. Large parts of Benoit&#8217;s <a href="https://developer.mozilla.org/en/Performance/Profiling_with_the_Built-in_Profiler">interactivity profiler</a> have landed (bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=713227">713227</a>). Using this <a href="https://builder.addons.mozilla.org/addon/1023834/latest/">extension</a> on nightly win/mac should give you an idea of what it will look like when completed.</p>
-
-<p>We make heavy use of compiler optimizations. Unfortunately one of them is to omit the stack pointer. Ehsan has setup a developer-friendly <a href="http://groups.google.com/group/mozilla.dev.platform/browse_thread/thread/3389798e5ef9744b#">profiling branch</a>.</p>
-
-<p>Vlad is making progress on non-destructive chromehang(bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=712109">712109</a>). Traditionally we could not do this, but with a combination of telemetry + cycling Ehsan&#8217;s shiny new profiling branch on nightly channel&#8230; we&#8217;ll be in developer heaven.</p>
-
-<p><strong>Responsiveness testing</strong></p>
-
-<p><a href="https://wiki.mozilla.org/Auto-tools/Projects/peptest">Peptest</a> should be landing on try soon, Aki is wrapping stuff up. This should enable us to catch responsiveness regressions on our infrastructure.</p>
-
-<p><strong>Smooth Scrolling</strong></p>
-
-<p>Jared is almost done fixing tests to land smooth scrolling to gather feedback and move on to fancy physics (bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=710372">710372</a>).</p>
-
-<p>Other ongoing projects with nothing specific to link to: Vlad&#8217;s slow-sql telemetry, Rafael&#8217;s quest to close sql connections so we can exit(0), QA browser-cache-effectiveness comparisons.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/8/">&larr; Older</a>
@@ -581,6 +569,10 @@ We spent the weekend at FOSDEM. I re-presented my Plumbers talk on why Linux <a 
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/01/21/snappy-number-49-help-firefox-shutdown-faster/">Snappy #49: Help Firefox Shutdown Faster</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/01/10/snappy-number-48-now-with-faster-shutdown/">Snappy #48: Now With Faster Shutdown</a>
       </li>
     
@@ -594,10 +586,6 @@ We spent the weekend at FOSDEM. I re-presented my Plumbers talk on why Linux <a 
     
       <li class="post">
         <a href="/blog/2012/12/21/interesting-bugzilla-activity/">Snappy #45: The view from home</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/12/17/hello-octopress/">Hello Octopress</a>
       </li>
     
   </ul>
