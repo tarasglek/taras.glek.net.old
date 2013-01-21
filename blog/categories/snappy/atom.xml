@@ -4,7 +4,7 @@
   <title><![CDATA[Category: snappy | All About Performance]]></title>
   <link href="http://taras.glek.net/blog/categories/snappy/atom.xml" rel="self"/>
   <link href="http://taras.glek.net/"/>
-  <updated>2013-01-21T13:19:42-08:00</updated>
+  <updated>2013-01-21T13:20:44-08:00</updated>
   <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -19,7 +19,7 @@
     <updated>2013-01-21T13:04:00-08:00</updated>
     <id>http://taras.glek.net/blog/2013/01/21/snappy-number-49-help-firefox-shutdown-faster</id>
     <content type="html"><![CDATA[---
-Introducing a new *privacy-invasive* method to help make Firefox shutdown faster.
+Introducing a new *privacy-invasive* method to help improve Firefox shutdown time.
 
 <blockquote><p>... the profiler will watch your browser for any performance hiccups and will automatically send a detailed bug report for the Performance team to fix!</p><footer><strong>Benoit Girard</strong> <cite><a href='http://benoitgirard.wordpress.com/2013/01/18/is-your-shutdown-slow-turn-on-the-performance-reporter/'>benoitgirard.wordpress.com/2013/&hellip;</a></cite></footer></blockquote>
 ]]></content>
