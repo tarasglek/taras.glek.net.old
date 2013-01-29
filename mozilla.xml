@@ -4,7 +4,7 @@
   <title><![CDATA[All About Performance]]></title>
   <link href="http://taras.glek.net/atom.xml" rel="self"/>
   <link href="http://taras.glek.net/"/>
-  <updated>2013-01-28T16:25:08-08:00</updated>
+  <updated>2013-01-29T11:20:14-08:00</updated>
   <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -13,6 +13,31 @@
   <generator uri="http://octopress.org/">Octopress</generator>
 
   
+  
+  <entry>
+    <title type="html"><![CDATA[Snappy #50]]></title>
+    <link href="http://taras.glek.net/blog/2013/01/28/snappy-number-50-misc-speedups/"/>
+    <updated>2013-01-28T16:00:00-08:00</updated>
+    <id>http://taras.glek.net/blog/2013/01/28/snappy-number-50-misc-speedups</id>
+    <content type="html"><![CDATA[<h3>Graphics</h3>
+
+<p>In some cases Direct2D-accelerated drawing is slower than the non-accelerated path. Jeff Muizelaar fixed a severe gradient &#8216;hang&#8217; in <a title="Avoid hitting D2D slow path when drawing radial gradients from css" href="https://bugzilla.mozilla.org/show_bug.cgi?id=823147">bug 823147</a>.</p>
+
+<p>Avi Halachmi diagnosed a significant menu performance issue in <a title="Menu items slow to paint/respond after peeking their sub-menu popups" href="https://bugzilla.mozilla.org/show_bug.cgi?id=832641">bug 832641</a>, this was promptly fixed by Matt Woodrow.</p>
+
+<h3>Misc Pauses</h3>
+
+<p>Vladan Djeric <a href="https://blog.mozilla.org/vdjeric/2013/01/24/add-on-performance-problems/">blogged</a> about top main-thread SQL issues contributed by addons. Vladan also produced a <a href="http://people.mozilla.com/~vdjeric/DecJanHangs.txt">chromehang</a> report for last 2 months.</p>
+
+<p>Ehsan Akhgari fixed a <em>chromehang</em> caused by leftover debug code: <a title="Multi-second hang during CollectNewLoadedModules" href="https://bugzilla.mozilla.org/show_bug.cgi?id=830765">bug 830765</a>.</p>
+
+<p>Justin Lebar fixed an issue where telemetry memory reporting code was accidentally triggering expensive &#8216;release memory to OS&#8217; operations: <a title="Extremely long pause while collecting telemetry information on the main thread" href="https://bugzilla.mozilla.org/show_bug.cgi?id=789975">bug 789975</a>.</p>
+
+<h3>Shutdown</h3>
+
+<p>Sometimes Firefox takes a long time to shutdown. We also have a timer that regularly triggers cycle collection. Olli Pettay disabled this timer during shutdown in <a title="Timer based CC occurring on shutdown" href="https://bugzilla.mozilla.org/show_bug.cgi?id=822849">bug 822849</a>.</p>
+]]></content>
+  </entry>
   
   
   
