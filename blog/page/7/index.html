@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Canadians and their Profilers Much like eating bacon, writing profiling tools is a favourite Canadian pastime. Unfortunately, while today&#8217;s &hellip;">
+  <meta name="description" content="Recently there have been a number of blog posts on optimizations possible via Local StorageAPI. When Microsoft, Google, Amazon and a number of others &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -55,8 +55,20 @@ if (!window.requestAnimationFrame) {
 }
 
 window._refreshLog = []
+window.oldPaintCount = 0
+window._paintlessRefresh = 0
 function refreshLogCounter() {
-  window._refreshLog.push(Date.now())
+  var record = true
+  if ('mozPaintCount' in window) {
+    if (window.oldPaintCount == window.mozPaintCount) {
+      window._paintlessRefresh++
+      record = false
+    } else {
+      window.oldPaintCount == window.mozPaintCount
+    }
+  }
+  if (record)
+    window._refreshLog.push(Date.now())
   window._refreshLogCounter = requestAnimationFrame(refreshLogCounter);
 }
 
@@ -77,6 +89,83 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/02/22/psa-dom-local-storage-considered-harmful/">PSA: DOM Local Storage Considered Harmful</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-02-22T09:39:39-08:00" pubdate data-updated="true">Feb 22<span>nd</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Recently there have been a number of blog posts on optimizations possible via <a href="https://developer.mozilla.org/en/DOM/Storage#Storage_location_and_clearing_the_data">Local StorageAPI</a>. When Microsoft, Google, Amazon and a number of others aggressively adopt a new feature, people notice.</p>
+
+<p>The optimization is to use Local Storage to reduce network requests and/or payload size. This should result in a more responsive experience for the user&#8230; except when it doesn&#8217;t.</p>
+
+<p>This strategy can backfire because:</p>
+
+<ul>
+<li>Local Storage is a synchronous API</li>
+<li>Local Storage does IO
+Disk IO is particularly problematic because it&#8217;s non-deterministic for a multitude of reasons. A simple disk operation can take anywhere from zero milliseconds to a few seconds. Browsers cope with this by preloading the entire Local Storage key/value store into memory on first request. While testing a website the developer is likely to <em>frequently</em> reload the same page multiple times. This means that the relevant disk IO is very likely to be cached in the os file cache.</li>
+</ul>
+
+
+<p>Now consider the case of a user turning on their computer, firing up the browser and going to an optimized site:</p>
+
+<ol>
+<li>The webpage starts to load</li>
+<li>Data is read in from Local Storage</li>
+<li><em>Webpage completely freezes for a few seconds while the browser populates Local Storage key/value store</em>.
+This freeze can last anywhere from a few milliseconds on an unburdened computer to dozens of seconds on a computer with stock Windows settings (AntiVirus, Windows Indexing Service, etc). Firefox, Chrome, Safari suffer this fate to various degrees.</li>
+</ol>
+
+
+<p>Local Storage has the following costs:</p>
+
+<ol>
+<li>It can take a long unresponsive while to read in maximum allowable 5megs of data</li>
+<li>This data is then in memory for the lifetime of the webpage session wasting memory. Imagine if every one of your tabs decided to do this.</li>
+<li>LS is persistent. My profile has 0.5MB of meebo.com data that will haunt me forever even though meebo is long gone from my history.
+<strong>What should webdevs do instead?</strong></li>
+</ol>
+
+
+<p>Cry, rely on browser cache. There are no viable alternative at the moment. <a href="https://developer.mozilla.org/en/IndexedDB">IndexedDB </a>is complex, requires user to approve it and isn&#8217;t widely implemented. WebSQL is all about bringing SQLite problems we&#8217;ve been studying and fixing within Firefox to every single webpage.</p>
+
+<p>My best guess is that we&#8217;ll end up with webdevs using convenience libraries built on top of IndexedDB. We will likely add promptless operation to IndexedDB.</p>
+
+<p>We have already made Local Storage hurt less, we have a plan to make it relatively painless, but it will always degrade user experience when compared to something like IndexedDB.</p>
+
+<p><strong>Are there any other convenient APIs with terrible complications?</strong></p>
+
+<p>Of course, see <a href="http://blogs.msdn.com/b/wer/archive/2011/08/03/why-you-should-use-xmlhttprequest-asynchronously.aspx">sync XHR</a>.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -514,44 +603,6 @@ We spent the weekend at FOSDEM. I re-presented my Plumbers talk on why Linux <a 
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/01/11/call-for-snappy-help-looking-for-a-lots-of-tabs-sessions-with-lag/">Call for Snappy Help: Looking for a Lots-of-tabs Sessions With Lag</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-01-11T02:59:02-08:00" pubdate data-updated="true">Jan 11<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I have been working under assumption that the browser gets less snappy as more tabs are opened. This increases the chances of having an ill-behaved website in the background. An ill-behaved tab (or a couple of them) can in theory ruin scrolling, typing, clicking, etc in active tabs. However I do not have anything behind anecdotal evidence on this. There are bugs on specific websites in bugzilla, but it would be nice to get them mixed into a realistic set of tabs.</p>
-
-<p>Would someone be willing to contribute a list of webpages they use often that cause Firefox to lag (maybe a session restore file?)? I am a low-tab person myself, so I can&#8217;t easily reproduce this. Please make sure that Firefox is slow with your list of tabs even when all addons are disabled, include a description of slowness encountered.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/8/">&larr; Older</a>
@@ -569,6 +620,10 @@ We spent the weekend at FOSDEM. I re-presented my Plumbers talk on why Linux <a 
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/01/28/snappy-number-50-misc-speedups/">Snappy #50</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/01/21/snappy-number-49-help-firefox-shutdown-faster/">Snappy #49: Help Firefox Shutdown Faster</a>
       </li>
     
@@ -582,10 +637,6 @@ We spent the weekend at FOSDEM. I re-presented my Plumbers talk on why Linux <a 
     
       <li class="post">
         <a href="/blog/2012/12/24/making-pages-load-faster/">Making pages load faster</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/12/21/interesting-bugzilla-activity/">Snappy #45: The view from home</a>
       </li>
     
   </ul>
@@ -631,7 +682,7 @@ Creative Commons Attribution Share-Alike License v3.0 or any later version.
 //indicate that content has been loaded
 window._monitorContentLoaded = Date.now()
 </script>
-<script src="http://monitor-taras-glek-net.appspot.com/static/monitor.js">
+<script src="http://monitor-taras-glek-net.appspot.com/static/monitor.js" async>
 </script>
 
 </footer>

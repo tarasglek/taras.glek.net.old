@@ -4,7 +4,7 @@
   <title><![CDATA[All About Performance]]></title>
   <link href="http://taras.glek.net/atom.xml" rel="self"/>
   <link href="http://taras.glek.net/"/>
-  <updated>2013-01-21T13:20:44-08:00</updated>
+  <updated>2013-01-28T16:25:08-08:00</updated>
   <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -12,6 +12,31 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Snappy #50]]></title>
+    <link href="http://taras.glek.net/blog/2013/01/28/snappy-number-50-misc-speedups/"/>
+    <updated>2013-01-28T16:00:00-08:00</updated>
+    <id>http://taras.glek.net/blog/2013/01/28/snappy-number-50-misc-speedups</id>
+    <content type="html"><![CDATA[<h3>Graphics</h3>
+
+<p>In some cases Direct2D-accelerated drawing is slower than the non-accelerated path. Jeff Muizelaar fixed a severe gradient &#8216;hang&#8217; in <a title="Avoid hitting D2D slow path when drawing radial gradients from css" href="https://bugzilla.mozilla.org/show_bug.cgi?id=823147">bug 823147</a>.</p>
+
+<p>Avi Halachmi diagnosed a significant menu performance issue in <a title="Menu items slow to paint/respond after peeking their sub-menu popups" href="https://bugzilla.mozilla.org/show_bug.cgi?id=832641">bug 832641</a>, this was promptly fixed by Matt Woodrow.</p>
+
+<h3>Misc Pauses</h3>
+
+<p>Vladan Djeric <a href="https://blog.mozilla.org/vdjeric/2013/01/24/add-on-performance-problems/">blogged</a> about top main-thread SQL issues contributed by addons. Vladan also produced a <a href="http://people.mozilla.com/~vdjeric/DecJanHangs.txt">chromehang</a> report for last 2 months.</p>
+
+<p>Ehsan Akhgari fixed a <em>chromehang</em> caused by leftover debug code: <a title="Multi-second hang during CollectNewLoadedModules" href="https://bugzilla.mozilla.org/show_bug.cgi?id=830765">bug 830765</a>.</p>
+
+<p>Justin Lebar fixed an issue where telemetry memory reporting code was accidentally triggering expensive &#8216;release memory to OS&#8217; operations: <a title="Extremely long pause while collecting telemetry information on the main thread" href="https://bugzilla.mozilla.org/show_bug.cgi?id=789975">bug 789975</a>.</p>
+
+<h3>Shutdown</h3>
+
+<p>Sometimes Firefox takes a long time to shutdown. We also have a timer that regularly triggers cycle collection. Olli Pettay disabled this timer during shutdown in <a title="Timer based CC occurring on shutdown" href="https://bugzilla.mozilla.org/show_bug.cgi?id=822849">bug 822849</a>.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Snappy #49: Help Firefox Shutdown Faster]]></title>
@@ -524,37 +549,6 @@ We spent most of the meeting discussing bug <a href="https://bugzilla.mozilla.or
     <content type="html"><![CDATA[<p>One of the limitations of the SQLite FTS is that it can&#8217;t do regular expression or substring searches. Jonas is addressing this with <a href="http://jonasfj.dk/blog/2012/08/trilite-fast-string-matching-in-sqlite/">TriLite</a>. Be sure to subscribe to Jonas&#8217; blog for exciting DXR developments coming up within the final two weeks of his internship.</p>
 
 <p>Coming to our test <a href="http://dxr.allizom.org/">DXR instance</a> soon&#8230;</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Snappy #36]]></title>
-    <link href="http://taras.glek.net/blog/2012/08/16/snappy-36/"/>
-    <updated>2012-08-16T07:24:19-07:00</updated>
-    <id>http://taras.glek.net/blog/2012/08/16/snappy-36</id>
-    <content type="html"><![CDATA[<p><strong>Misc</strong></p>
-
-<p>I have been using dates to mark passage of time in the Snappy project. I think I&#8217;ll switch to a simple counter instead. We are ~36 updates into this project.</p>
-
-<p><strong>Blogging</strong></p>
-
-<p>Ludovic Hirlimann <a href="http://sietch-tabr.tumblr.com/post/29404692899/firefox-cache-and-spotlight">blogged</a> about how spotlight spends a lot of time indexing the Firefox network &#8216;Cache&#8217; directory (known problem, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=718910">718910</a>). If you experience this problem and would like to see it fixed, please comment in the bug if the <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=718910#c13">suggested remedy</a> helps.</p>
-
-<p>Tim Taubert <a href="http://timtaubert.de/blog/2012/08/snappy-fixing-new-tab-page-performance-regressions/">wrote</a> about reducing new-tab jank. I mention Tim a lot in these updates. He takes on a lot of interesting bugs in Firefox frontend. Hopefully he&#8217;ll make a habit out of blogging about his work.</p>
-
-<p><strong>Networking</strong></p>
-
-<p>Nick Hurley landed a change to reduce our maximum cache size to 350 megabytes. In order to avoid excessive disk IO traffic old cache size of 1 gigabyte remains in effect until the cache is reset. See bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=709297">709297</a> and Nick&#8217;s <a href="http://todesschaf.org/posts/2012/07/25/cache-usage-results.html">blog post</a> for more details. Progress is also being made on <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=777328">bug 777328</a> so we can move towards not blowing away our cache 10-20% of the time.</p>
-
-<p>Michal Novotny is proceeding with incrementally reducing cache-caused jank that&#8217;s due to holding a lock on the main thread while doing IO on a background thread. He also removing a multitude of synchronous necko APIs, see <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=695399">bug 695399</a>.</p>
-
-<p>Patrick McManus is removing synchronous proxy-related code, see <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=766973">bug 766973</a> for the DNS-related bit. Turns out our proxy code also does all kinds of synchronous operations when detecting proxy configuration, etc. This is being worked on, but hasn&#8217;t been filed yet.</p>
-
-<p>I usually try to highlight work that has already landed, but in this case it is important to point out that the Necko team is working hard on addressing significant problems in the networking code. These problems are tricky and will take a while to fix. The team is relatively new and is still discovering hidden surprises in their codebase.</p>
-
-<p><strong>Profiler</strong></p>
-
-<p>Benoit Girard posted a <a href="http://dl.dropbox.com/u/10523664/Screenshots/5p.png">preview </a>of view-source in the profiler. This will be handy for figuring out where performance problems lay, especially in JS files that have been preprocessed (our JS preprocessor does not try to keep the line numbers sane).</p>
 ]]></content>
   </entry>
   

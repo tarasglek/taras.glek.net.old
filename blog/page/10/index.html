@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="I was pleased to see Mozilla static analysis mentioned on lwn. Yes indeed, the mailing list has been pretty dead (most of our communication happens &hellip;">
+  <meta name="description" content="Telemetry Present Telemetry infrastructure has only been deployed for week, but we are already gathering interesting data: Memory usage from about: &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -55,8 +55,20 @@ if (!window.requestAnimationFrame) {
 }
 
 window._refreshLog = []
+window.oldPaintCount = 0
+window._paintlessRefresh = 0
 function refreshLogCounter() {
-  window._refreshLog.push(Date.now())
+  var record = true
+  if ('mozPaintCount' in window) {
+    if (window.oldPaintCount == window.mozPaintCount) {
+      window._paintlessRefresh++
+      record = false
+    } else {
+      window.oldPaintCount == window.mozPaintCount
+    }
+  }
+  if (record)
+    window._refreshLog.push(Date.now())
   window._refreshLogCounter = requestAnimationFrame(refreshLogCounter);
 }
 
@@ -77,6 +89,59 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/07/01/telemetry-status/">Telemetry Status</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-07-01T04:48:33-07:00" pubdate data-updated="true">Jul 1<span>st</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><strong>Telemetry Present</strong></p>
+
+<p>Telemetry infrastructure has only been deployed for week, but we are already gathering interesting data<em>:</em></p>
+
+<ul>
+<li><em>Memory usage </em>from about:memory gives us an idea of what constitutes typical memory usage for Firefox</li>
+<li><em>Cycle-collection overhead, stats</em> tell us about browser pauses due to memory cleanup</li>
+<li><em>Detailed startup profiling</em> tells us whether our new <a href="http://glandium.org/blog/?p=2105">library preloading logic</a> is effective</li>
+<li>Info on whether the browser was <em>shutdown</em> correctly will help us diagnose shutdown problems</li>
+<li><em>Plugin enumeration timing</em> to make sure my <a href="http://taras.glek.net/blog/2010/12/29/faster-plugin-enumeration-help-wanted/">faster plugin enumeration</a> stays fast</li>
+<li><em>HTTP connection profiling</em> to help optimize page loads
+Since the branch point for Aurora is approaching in less than a week, I don&#8217;t expect many more probes for Firefox 7.</li>
+</ul>
+
+
+<p><strong>Telemetry Future</strong></p>
+
+<p>One problem with doing awesome optimizations that as code changes, they frequently get accidentally undone. I plan to add telemetry to keep tabs on every significant optimization that I do in the future, in addition to retroactively adding it to the past ones. I expect other Mozilla developers to do the same. In addition to keeping tabs on Firefox performance, we can also learn about JavaScript feature adoption, the kind of hardware (and OS) that users run Firefox on, etc to better match users&#8217; needs.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -543,56 +608,6 @@ Our oldest startup benchmark, ts,Â  has been gathering wrong numbers all along.Â
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011/03/05/i-have-road-disc-and-you-do-notneener/">I Have Road Disc and You Do not&#8230;neener!</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-03-05T11:24:00-08:00" pubdate data-updated="true">Mar 5<span>th</span>, 2011</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><div class='post'>
-I always found sidepull brakes to be pathetic. The current generation of road brakes are much better than the old style mount-bike I&#8217;ve used before, but they still suck. Unfortunately most roadies are imitation whores and will never ever sport components that a pro rider wouldn&#8217;t ride(which they can&#8217;t cos of stupidly conservative racing rules). As a result no road carbon forks on the market feature disc brakes. So I suffered and suffered. I refused to buy stupidly expensive brake pads to make up for sidepull suck.<br /><br />After years of suffering the indignity of under-performing brakes, I met my friend Adam. Adam got mad carbon skills. He turned my oldish carbon fork into a sexy postmount disc fork. <br /><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-XMIu2jDNjf8/TXKMKF7PVlI/AAAAAAAABGo/ENcJlXL8kkU/s1600/disc2.JPG" imageanchor="1" style=""><img border="0" height="334" width="400" src="http://4.bp.blogspot.com/-XMIu2jDNjf8/TXKMKF7PVlI/AAAAAAAABGo/ENcJlXL8kkU/s400/disc2.JPG" /></a></div><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://2.bp.blogspot.com/-6SGGpgtc1qM/TXKMRi4XNSI/AAAAAAAABGw/1sWWVWJa2Oc/s1600/disc1.JPG" imageanchor="1" style=""><img border="0" height="400" width="266" src="http://2.bp.blogspot.com/-6SGGpgtc1qM/TXKMRi4XNSI/AAAAAAAABGw/1sWWVWJa2Oc/s400/disc1.JPG" /></a></div></div>
-<h2>Comments</h2>
-<div class='comments'>
-<div class='comment'>
-<div class='author'>Taras</div>
-<div class='content'>
-disc cx forks are not compatible with road bikes. It&#39;s a different fork rake, would make the bike handle like crap. </div>
-</div>
-<div class='comment'>
-<div class='author'>reverend dick</div>
-<div class='content'>
-Dude. You suffered and you suffered? No you didn&#39;t. Side pulls work pretty dang well. No, they aren&#39;t discs- but they work pretty dang well. And if you wanted discs, there have been cross forks available with disc mounts for years.<br /><br />Neener neener.</div>
-</div>
-</div>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/11/">&larr; Older</a>
@@ -610,6 +625,10 @@ Dude. You suffered and you suffered? No you didn&#39;t. Side pulls work pretty d
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/01/28/snappy-number-50-misc-speedups/">Snappy #50</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/01/21/snappy-number-49-help-firefox-shutdown-faster/">Snappy #49: Help Firefox Shutdown Faster</a>
       </li>
     
@@ -623,10 +642,6 @@ Dude. You suffered and you suffered? No you didn&#39;t. Side pulls work pretty d
     
       <li class="post">
         <a href="/blog/2012/12/24/making-pages-load-faster/">Making pages load faster</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/12/21/interesting-bugzilla-activity/">Snappy #45: The view from home</a>
       </li>
     
   </ul>
@@ -672,7 +687,7 @@ Creative Commons Attribution Share-Alike License v3.0 or any later version.
 //indicate that content has been loaded
 window._monitorContentLoaded = Date.now()
 </script>
-<script src="http://monitor-taras-glek-net.appspot.com/static/monitor.js">
+<script src="http://monitor-taras-glek-net.appspot.com/static/monitor.js" async>
 </script>
 
 </footer>

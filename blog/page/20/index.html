@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Dear lazyweb, Please explain to me why the following code works the way it does. From looking at the following code and stringstream::str(), &hellip;">
+  <meta name="description" content="Hydras I am close to landing a flow check. Turns out, it is super-easy to introduce new analyses into Mozilla due to a very nice build system hooks &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -55,8 +55,20 @@ if (!window.requestAnimationFrame) {
 }
 
 window._refreshLog = []
+window.oldPaintCount = 0
+window._paintlessRefresh = 0
 function refreshLogCounter() {
-  window._refreshLog.push(Date.now())
+  var record = true
+  if ('mozPaintCount' in window) {
+    if (window.oldPaintCount == window.mozPaintCount) {
+      window._paintlessRefresh++
+      record = false
+    } else {
+      window.oldPaintCount == window.mozPaintCount
+    }
+  }
+  if (record)
+    window._refreshLog.push(Date.now())
   window._refreshLogCounter = requestAnimationFrame(refreshLogCounter);
 }
 
@@ -77,6 +89,64 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2008/07/09/static-analysis-and-refactoring-tooling-updates/">Static Analysis and Refactoring Tooling Updates</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-07-09T07:59:00-07:00" pubdate data-updated="true">Jul 9<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><strong>Hydras</strong></p>
+
+<p>I am close to landing a <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=432917">flow</a> check. Turns out, it is super-easy to introduce new analyses into Mozilla due to a very nice build system hooks setup by bsmedberg.</p>
+
+<p>Since coming back from the GCC summit I have forward-ported our GCC patches to GCC trunk. The FSF legal paperwork came through today so I posted the first and biggest patch to the GCC for <a href="http://gcc.gnu.org/ml/gcc-patches/2008-07/msg00741.html">review</a>.</p>
+
+<p>I am not sure if I mentioned this before, but the C port of <a href="http://developer.mozilla.org/en/docs/Dehydra">Dehydra</a> is somewhat operational. It doesn&#8217;t yet have access to function bodies, but type traversal should work. Unfortunately, the C frontend has less features(pretty printing sucks, locations are even less reliable, etc) and thus is less awesome to work with than the C++ frontend.</p>
+
+<p><a href="http://wiki.mozilla.org/Pork"><strong>Pork</strong></a></p>
+
+<p>jst was awesome enough to list some interfaces that need some outparamdelling. The list is <a href="http://wiki.mozilla.org/Gecko:DeCOMtamination">here</a> (in the content/ section). This lead me to spent some time making outparamdel&#8217;s output prettier. There are still some improvements to be made, and I will be making them in the near future. However if someone is interested in refactoring of this kind land in the near future, they could easily complete outparamdel&#8217;s work with some clever scripting and a bit of manual labour. Sure beats doing the entire thing manually. From outparamdel&#8217;s perspective last 10% appear to be slightly painful and might take some time.</p>
+
+<p>Here is a <a href="http://people.mozilla.org/~tglek/nsinodeinfomanager_getnodeinfo.diff">patch</a> that takes about 30seconds to produce.</p>
+
+<p>Another exciting aspect of this is that a certain emacs wizard has confirmed that it would be possible to feed emacs such a patch file and have it correct indentation for the affected areas only.</p>
+
+<p>I am also very excited that a certain volunteer came forward and decided to start improving some of the stomach-turning areas of Pork. Hopefully in the near future we&#8217;ll modernize the C++ a little bit and a user&#8217;s first reaction wont be: &#8220;What the hell, why can&#8217;t I do &#8216;using namespace std;&#8217;&#8221;.</p>
+
+<p>To this end I have filed a bug to write a <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=441870">renamer tool</a> so we can dogfood renaming of unfortunately named pieces of code.</p>
+
+<p><strong>OSCON</strong></p>
+
+<p>The plan is to have some sort of a minisession on our static analysis efforts at Mozilla. So if you are attending OSCON and are interested in doing exciting things to depressingly large amounts of code, drop me a line.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -503,46 +573,6 @@ I have elaborate plans on how to take over the world with static analysis, more 
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2008/04/14/mozillafisl08/">Mozilla@FISL08</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-04-14T02:43:34-07:00" pubdate data-updated="true">Apr 14<span>th</span>, 2008</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I will be presenting on the work we are doing on Mozilla 2 at <a href="http://fisl.softwarelivre.org/9.0/www/">FISL08</a>. Chris posted an excellent <a href="http://www.0xdeadbeef.com/weblog/?p=344">breakdown</a> of Mozilla plans for the conference.</p>
-
-<p>If you are at all interested in ground-breaking development happening in Mozilla 2, the challenges of static analysis then look me up!</p>
-
-<p>This is all very exciting as it&#8217;ll be a trip of many personal firsts: Brazil, the southern hemisphere and a conference of this scale.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/21/">&larr; Older</a>
@@ -560,6 +590,10 @@ I have elaborate plans on how to take over the world with static analysis, more 
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/01/28/snappy-number-50-misc-speedups/">Snappy #50</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/01/21/snappy-number-49-help-firefox-shutdown-faster/">Snappy #49: Help Firefox Shutdown Faster</a>
       </li>
     
@@ -573,10 +607,6 @@ I have elaborate plans on how to take over the world with static analysis, more 
     
       <li class="post">
         <a href="/blog/2012/12/24/making-pages-load-faster/">Making pages load faster</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/12/21/interesting-bugzilla-activity/">Snappy #45: The view from home</a>
       </li>
     
   </ul>
@@ -622,7 +652,7 @@ Creative Commons Attribution Share-Alike License v3.0 or any later version.
 //indicate that content has been loaded
 window._monitorContentLoaded = Date.now()
 </script>
-<script src="http://monitor-taras-glek-net.appspot.com/static/monitor.js">
+<script src="http://monitor-taras-glek-net.appspot.com/static/monitor.js" async>
 </script>
 
 </footer>

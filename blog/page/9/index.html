@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Arduino Ecosystem rocksArduino is a great way to minimize the amount of variables when getting into microcontrollers. Flashing, cross-compilation, &hellip;">
+  <meta name="description" content="Two weeks ago I started project Snappy. The purpose of the meeting is to help us focus on eradicating jarring pauses in Firefox. Today we had our &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -55,8 +55,20 @@ if (!window.requestAnimationFrame) {
 }
 
 window._refreshLog = []
+window.oldPaintCount = 0
+window._paintlessRefresh = 0
 function refreshLogCounter() {
-  window._refreshLog.push(Date.now())
+  var record = true
+  if ('mozPaintCount' in window) {
+    if (window.oldPaintCount == window.mozPaintCount) {
+      window._paintlessRefresh++
+      record = false
+    } else {
+      window.oldPaintCount == window.mozPaintCount
+    }
+  }
+  if (record)
+    window._refreshLog.push(Date.now())
   window._refreshLogCounter = requestAnimationFrame(refreshLogCounter);
 }
 
@@ -77,6 +89,58 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/12/01/introducing-project-snappy/">Introducing Project Snappy</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-12-01T08:15:39-08:00" pubdate data-updated="true">Dec 1<span>st</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Two weeks ago I started project <a href="https://wiki.mozilla.org/Performance/Snappy">Snappy</a>. The purpose of the meeting is to help us focus on eradicating jarring pauses in Firefox.</p>
+
+<p>Today we had our second meeting (<a href="https://wiki.mozilla.org/Performance/Snappy/2011-12-01">notes</a>).  A surprising amount of work has happened between the first and second meeting:</p>
+
+<ul>
+<li><a href="https://bugzilla.mozilla.org/buglist.cgi?quicksearch=chromehang&amp;list_id=1813678">Chromehang </a>was briefly turned on. This converted browser stalls of >30seconds into crashes. This showed that a number of issues are worse than previously assumed</li>
+<li>We are about to start <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=699051">tracking</a> slow SQL queries via telemetry</li>
+<li>Even though <a href="http://www.w3.org/TR/IndexedDB">IndexedDB</a> is the new hotness, existing websites use the evil old DOM Storage API. This API is not asynchronous and degrades browser performance. The workaround is to <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=704933">tell</a> the backend to use async IO.
+Just like MemShrink, Snappy bugs fall into three categories:</li>
+<li>P1: Should be fixed ASAP</li>
+<li>P2: Should be fixed as soon as developers have cycles for it</li>
+<li>P3: Everything else
+Multiple people have asked whether Snappy is appropriate for bugs caught by Chromehang: ie should we focus on one-off long delays (ie font enumeration) or small delays that happen frequently (ie tab animations). After reflecting on this I decided that UI jank can be thought of as a risk of frustrating the user. Risk has a scientific definition: severity of event multiplied by probability.  Thus a long occasional pause during browsing is equivalent to a frequent short pause.</li>
+</ul>
+
+
+<p>For next week we plan to wrap up a <a href="http://benoitgirard.wordpress.com/2011/11/08/firefox-built-in-profiler/">profiler</a>, come up with a fix for cache io on startup/shutdown, look into submitting hang stacks in a less <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=706916">brutal way</a>.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -549,59 +613,6 @@ Above helps populate the Windows Prefetch in a less counter-productive way. Expl
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011/07/01/telemetry-status/">Telemetry Status</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-07-01T04:48:33-07:00" pubdate data-updated="true">Jul 1<span>st</span>, 2011</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><strong>Telemetry Present</strong></p>
-
-<p>Telemetry infrastructure has only been deployed for week, but we are already gathering interesting data<em>:</em></p>
-
-<ul>
-<li><em>Memory usage </em>from about:memory gives us an idea of what constitutes typical memory usage for Firefox</li>
-<li><em>Cycle-collection overhead, stats</em> tell us about browser pauses due to memory cleanup</li>
-<li><em>Detailed startup profiling</em> tells us whether our new <a href="http://glandium.org/blog/?p=2105">library preloading logic</a> is effective</li>
-<li>Info on whether the browser was <em>shutdown</em> correctly will help us diagnose shutdown problems</li>
-<li><em>Plugin enumeration timing</em> to make sure my <a href="http://taras.glek.net/blog/2010/12/29/faster-plugin-enumeration-help-wanted/">faster plugin enumeration</a> stays fast</li>
-<li><em>HTTP connection profiling</em> to help optimize page loads
-Since the branch point for Aurora is approaching in less than a week, I don&#8217;t expect many more probes for Firefox 7.</li>
-</ul>
-
-
-<p><strong>Telemetry Future</strong></p>
-
-<p>One problem with doing awesome optimizations that as code changes, they frequently get accidentally undone. I plan to add telemetry to keep tabs on every significant optimization that I do in the future, in addition to retroactively adding it to the past ones. I expect other Mozilla developers to do the same. In addition to keeping tabs on Firefox performance, we can also learn about JavaScript feature adoption, the kind of hardware (and OS) that users run Firefox on, etc to better match users&#8217; needs.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/10/">&larr; Older</a>
@@ -619,6 +630,10 @@ Since the branch point for Aurora is approaching in less than a week, I don&#821
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/01/28/snappy-number-50-misc-speedups/">Snappy #50</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/01/21/snappy-number-49-help-firefox-shutdown-faster/">Snappy #49: Help Firefox Shutdown Faster</a>
       </li>
     
@@ -632,10 +647,6 @@ Since the branch point for Aurora is approaching in less than a week, I don&#821
     
       <li class="post">
         <a href="/blog/2012/12/24/making-pages-load-faster/">Making pages load faster</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/12/21/interesting-bugzilla-activity/">Snappy #45: The view from home</a>
       </li>
     
   </ul>
@@ -681,7 +692,7 @@ Creative Commons Attribution Share-Alike License v3.0 or any later version.
 //indicate that content has been loaded
 window._monitorContentLoaded = Date.now()
 </script>
-<script src="http://monitor-taras-glek-net.appspot.com/static/monitor.js">
+<script src="http://monitor-taras-glek-net.appspot.com/static/monitor.js" async>
 </script>
 
 </footer>

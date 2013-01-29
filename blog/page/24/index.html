@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="This is incredibly exciting: I believe that I finally solved the messy and mind-numbingly boring CPP/C++ integration problem! Having code displaced &hellip;">
+  <meta name="description" content="Back to Real Life Just over a month ago I ran into this problem. Before last month I hoped to never have to work on the C preprocessor or a parser &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -55,8 +55,20 @@ if (!window.requestAnimationFrame) {
 }
 
 window._refreshLog = []
+window.oldPaintCount = 0
+window._paintlessRefresh = 0
 function refreshLogCounter() {
-  window._refreshLog.push(Date.now())
+  var record = true
+  if ('mozPaintCount' in window) {
+    if (window.oldPaintCount == window.mozPaintCount) {
+      window._paintlessRefresh++
+      record = false
+    } else {
+      window.oldPaintCount == window.mozPaintCount
+    }
+  }
+  if (record)
+    window._refreshLog.push(Date.now())
   window._refreshLogCounter = requestAnimationFrame(refreshLogCounter);
 }
 
@@ -77,6 +89,63 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2007/06/19/it-works/">It Works!</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-06-19T05:51:23-07:00" pubdate data-updated="true">Jun 19<span>th</span>, 2007</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><strong>Back to Real Life</strong></p>
+
+<p>Just over a month ago I ran into <a href="http://taras.glek.net/blog/2007/05/11/cpp-strikes-back/">this problem</a>. Before last month I hoped to never have to work on the C preprocessor or a parser generator. So much for that plan. Now my head is full of CPP-expansion-related trivia.</p>
+
+<p>After a month of design and implementing changes to mcpp, elsa, elkhound and oink I can finally move on. During the last week all of the pieces of the puzzle finally came together ( without any nasty surprises other than bugs). Now I can go back to solving real problems.</p>
+
+<p><strong>Upcoming Features</strong></p>
+
+<p>Benefits of having CPP support don&#8217;t stop at actually being able to rewrite code. Now that the Oink C++ parser is aware of the C preprocessor, it should be possible to refactor C++ almost as easily as Java. Here are some cool things that are possible now:</p>
+
+<ul>
+<li>Nicer UI. Exact source position info allows for eclipse-style context menus for renaming &amp; other refactorings in lxr (or other online code browsers).</li>
+<li>Richer type system. It should be possible to detect macro constants. Tools will be able to tell the difference between a prnull and 0. Should also be able to detect and maintain NSRESULT and other macros used for declarations.</li>
+<li>Macro refactoring. Now it&#8217;s possible to write a tool to automate the process of converting function-like macro calls to actual function calls. For example, PR_MAX could be converted into std::max calls with all of the accompanying casts to ensure that the resulting C++ is correct.</li>
+<li>Other nasty tricks like rewriting code within macro declarations.
+I&#8217;m not sure how much of these features I will work on, but they are relatively easy to implement now.</li>
+</ul>
+
+
+<p>I plan to write a minimalistic successor to squash and develop more aggressive refactorings than renames.</p>
+
+<p>Additionally, I will continue pushing above changes upstream and trying to facilitate a more open oink development community.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -716,57 +785,6 @@ The MCPP maintainer is almost done with 1. I have a prototype implementation of 
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2007/04/02/automated-code-refactoring/">Automated Code Refactoring</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2007-04-02T04:29:12-07:00" pubdate data-updated="true">Apr 2<span>nd</span>, 2007</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><strong>Squash </strong></p>
-
-<p>If you are working on any C++ refactoring, especially if it involves function calls, spans multiple files or feels like you need a compiler in your head to help you, drop me a note to see if <a href="http://wiki.mozilla.org/Squash">squash</a> can help. Squash provides a great deal of control over the refactoring process because it is not tied to a particular IDE and can be customized to accommodate for special cases.</p>
-
-<p>On Friday, two squash-produced patches landed:</p>
-
-<ol>
-<li>A <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=376042">212K patch</a> to rename nsIFrame::GetPresContext to PresContext. It took a couple of minutes to produce a patch for mac &amp; linux, and then some manual labour to complete it so it builds on Windows too. Unfortunately, Microsoft C++ is not yet supported by Oink. Windows-specific code will require magnitudes more of human labour until such support is contributed.</li>
-<li>A much simpler patch to calls to <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=375878">remove uses of the deprecated ::Recycle()</a>. This took a few minutes once I added support for renaming global functions to squash.
-<strong>Dehydra</strong></li>
-</ol>
-
-
-<p>C++ support in dehydra is coming along splendidly. I started working on cross-function analysis support. Currently my goal is to allow the user to build callgraphs of Mozilla. The first application of that is going to be dead code detection.</p>
-
-<p>In the meantime, contact me if you are looking for patterns in the code that grep wont help with : control flow-sensitive code, type &amp; syntax-aware matching, API misuse, etc. Dehydra can probably help.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/25/">&larr; Older</a>
@@ -784,6 +802,10 @@ The MCPP maintainer is almost done with 1. I have a prototype implementation of 
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/01/28/snappy-number-50-misc-speedups/">Snappy #50</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/01/21/snappy-number-49-help-firefox-shutdown-faster/">Snappy #49: Help Firefox Shutdown Faster</a>
       </li>
     
@@ -797,10 +819,6 @@ The MCPP maintainer is almost done with 1. I have a prototype implementation of 
     
       <li class="post">
         <a href="/blog/2012/12/24/making-pages-load-faster/">Making pages load faster</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/12/21/interesting-bugzilla-activity/">Snappy #45: The view from home</a>
       </li>
     
   </ul>
@@ -846,7 +864,7 @@ Creative Commons Attribution Share-Alike License v3.0 or any later version.
 //indicate that content has been loaded
 window._monitorContentLoaded = Date.now()
 </script>
-<script src="http://monitor-taras-glek-net.appspot.com/static/monitor.js">
+<script src="http://monitor-taras-glek-net.appspot.com/static/monitor.js" async>
 </script>
 
 </footer>

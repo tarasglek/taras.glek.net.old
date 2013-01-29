@@ -4,7 +4,7 @@
   <title><![CDATA[Category: snappy | All About Performance]]></title>
   <link href="http://taras.glek.net/blog/categories/snappy/atom.xml" rel="self"/>
   <link href="http://taras.glek.net/"/>
-  <updated>2013-01-21T13:20:44-08:00</updated>
+  <updated>2013-01-28T16:25:08-08:00</updated>
   <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -12,6 +12,28 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Snappy #50]]></title>
+    <link href="http://taras.glek.net/blog/2013/01/28/snappy-number-50-misc-speedups/"/>
+    <updated>2013-01-28T16:00:00-08:00</updated>
+    <id>http://taras.glek.net/blog/2013/01/28/snappy-number-50-misc-speedups</id>
+    <content type="html"><![CDATA[###Graphics
+In some cases Direct2D-accelerated drawing is slower than the non-accelerated path. Jeff Muizelaar fixed a severe gradient 'hang' in <a title="Avoid hitting D2D slow path when drawing radial gradients from css" href="https://bugzilla.mozilla.org/show_bug.cgi?id=823147">bug 823147</a>.
+
+Avi Halachmi diagnosed a significant menu performance issue in <a title="Menu items slow to paint/respond after peeking their sub-menu popups" href="https://bugzilla.mozilla.org/show_bug.cgi?id=832641">bug 832641</a>, this was promptly fixed by Matt Woodrow.
+
+###Misc Pauses
+Vladan Djeric [blogged](https://blog.mozilla.org/vdjeric/2013/01/24/add-on-performance-problems/) about top main-thread SQL issues contributed by addons. Vladan also produced a [chromehang](http://people.mozilla.com/~vdjeric/DecJanHangs.txt) report for last 2 months.
+
+Ehsan Akhgari fixed a *chromehang* caused by leftover debug code: <a title="Multi-second hang during CollectNewLoadedModules" href="https://bugzilla.mozilla.org/show_bug.cgi?id=830765">bug 830765</a>.
+
+Justin Lebar fixed an issue where telemetry memory reporting code was accidentally triggering expensive 'release memory to OS' operations: <a title="Extremely long pause while collecting telemetry information on the main thread" href="https://bugzilla.mozilla.org/show_bug.cgi?id=789975">bug 789975</a>.
+
+###Shutdown
+Sometimes Firefox takes a long time to shutdown. We also have a timer that regularly triggers cycle collection. Olli Pettay disabled this timer during shutdown in <a title="Timer based CC occurring on shutdown" href="https://bugzilla.mozilla.org/show_bug.cgi?id=822849">bug 822849</a>.
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Snappy #49: Help Firefox Shutdown Faster]]></title>
@@ -143,15 +165,6 @@ Benoit Girard sped up shutdown with:
 Aaron Klotz made startup slightly faster by speeding up reading of some urlclassifier files in <a title="loading the two safebrowsing files is not as fast as it could be" href="https://bugzilla.mozilla.org/show_bug.cgi?id=810101">bug 810101</a>.
 
 Vladimir Vukicevic landed <a title="requestAnimationFrame generates too short/long frames, especially at the beginning of animation" href="https://bugzilla.mozilla.org/show_bug.cgi?id=731974">bug 731974</a> which results in smoother browser animations and significantly improves the quality of tab-strip animations.
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Coping with Flash hangs]]></title>
-    <link href="http://taras.glek.net/blog/2012/11/26/coping-with-flash-hangs/"/>
-    <updated>2012-11-26T01:45:11-08:00</updated>
-    <id>http://taras.glek.net/blog/2012/11/26/coping-with-flash-hangs</id>
-    <content type="html"><![CDATA[Blocking calls into the Flash plugin can temporarily hang Firefox. This is a problem because sometimes the user would be happy to kill the plugin to access their webpage and at other times it's the only way to get certain flash apps/games to load. If you suffer from flash-related hangs see Aaron's [blog post](http://dblohm7.ca/blog/2012/11/22/plugin-hang-user-interface-for-firefox/) for some builds to try. He is working a new [feature ](https://wiki.mozilla.org/Features/Firefox/Windows_Plugin_Hang_UI)to provide an option to kill hanging flash instances.
 ]]></content>
   </entry>
   

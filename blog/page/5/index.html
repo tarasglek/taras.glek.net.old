@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Meeting notes. Memshink had a good idea to switch to bi-weekly meetings. We are going to try the same for Snappy. My plan is to still solicit status &hellip;">
+  <meta name="description" content="Tim landed a fix to avoid setTimeout()s when handling tab clicks: bug 743877. This should significantly improve our tab strip responsiveness. &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -55,8 +55,20 @@ if (!window.requestAnimationFrame) {
 }
 
 window._refreshLog = []
+window.oldPaintCount = 0
+window._paintlessRefresh = 0
 function refreshLogCounter() {
-  window._refreshLog.push(Date.now())
+  var record = true
+  if ('mozPaintCount' in window) {
+    if (window.oldPaintCount == window.mozPaintCount) {
+      window._paintlessRefresh++
+      record = false
+    } else {
+      window.oldPaintCount == window.mozPaintCount
+    }
+  }
+  if (record)
+    window._refreshLog.push(Date.now())
   window._refreshLogCounter = requestAnimationFrame(refreshLogCounter);
 }
 
@@ -77,6 +89,56 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/05/14/snappy-may-10-suspending-activity-in-background-tabs/">Snappy, May 10: Suspending Activity in Background Tabs</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-05-14T03:06:52-07:00" pubdate data-updated="true">May 14<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Tim landed a fix to avoid setTimeout()s when handling tab clicks: bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=743877">743877</a>. This should significantly improve our tab strip responsiveness.</p>
+
+<p>Incremental GC is making progress towards being turned on by default again: bugs <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=750959">750959</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=752098">752098</a>.</p>
+
+<p>There was also progress on cancellable SQL (bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=722243">722243</a>). This should result in faster shutdown.</p>
+
+<p>Progress was made towards fixing cache locking, bug <a href="http://bugzilla.mozilla.org/show_bug.cgi?id=722034">722034</a>.</p>
+
+<p>Lawrence posted a <a href="http://hacks.mozilla.org/2012/05/getting-snappy-performance-optimisations-in-firefox-13/">summary</a> of snappy work that went into Firefox 13.</p>
+
+<p><strong>LagBlock Plus</strong></p>
+
+<p>Some of the lag in Firefox is caused by background tabs processing timeouts <a href="http://taras.glek.net/blog/2012/04/18/web-2-0-a-collection-of-settimeouts/">willy-nilly</a>. We are working on teaching Firefox to cope with overactive background tabs in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=715376">715376</a>. The plan is to allow Firefox to throttle/group background events, especially in tabs that are CPU hogs.</p>
+
+<p>To help us along, the author of Adblock Plus <a href="http://adblockplus.org/blog/preventing-background-tabs-from-wasting-your-computer-s-resources">released</a> an experimental addon that freezes activity in background tabs. Since this addon halts all background tab activity, it is a useful gauge of baseline performance that we&#8217;ll try to get asymptotically close to. It is also helpful for isolating responsiveness issues that are not caused by background tabs.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -692,43 +754,6 @@ We do a lot of work outside of our goal process, so above goals represent only t
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/04/04/powering-speakers-etc-with-bike-dynamo/">Powering Speakers, Etc With a Bike Dynamo</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-04-04T22:15:00-07:00" pubdate data-updated="true">Apr 4<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><div class='post'>
-I recently got rid of an old Pioneer receiver in favour of a tiny Class D amplifier. The class D amp is more efficient, sounds better and is approximately 10x cheaper. Did I mention, it&#8217;s tiny?<br /><br />While shopping for a variable voltage regulator for a power supply I discovered that EBay sells fun-looking <a href="http://www.ebay.com/itm/3-5-28V-to-1-25-26V-DC-DC-Converter-Boost-Buck-Step-Up-Step-Down-Voltage-Module-/260978204562?pt=LH_DefaultDomain_0&amp;hash=item3cc3835f92">1.5V-26V regulators.</a>..for $10. I&#8217;ve been eyeing the Busch + Müller E-WERK universal power supply(up to 13.5V) for a while now, but those sell for $110. It&#8217;s no fun spending a hundred bucks on a bike accessory that may not prove useful. I had no choice but to buy the EBay regulator.<br /><br />As my first experiment I tried powering a 12V MR16 light&#8230; it worked, but flickered like mad. A fat capacitor on the regulated side calmed the flicker. Great, now I can use indoor lights to illuminate my outdoor bike rides.<br /><br />Next I tried a 1-meter 12V LED strip, the strip uses a lot less current than the light bulb so it was quite happy.<br /><br />Then I wondered&#8230;could I power decent speakers using dynamo power? $8 <a href="http://www.ebay.com/itm/ws/eBayISAPI.dll?ViewItem&amp;item=220950831774&amp;ssPageName=ADME:L:OU:US:1123">ebay amp</a> later&#8230;yes I can! <br /><div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/-Li9MPsIIXjI/T30nOwQeECI/AAAAAAAADCg/Ftik9IGKLlQ/s1600/IMGP4964.JPG" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="212" src="http://1.bp.blogspot.com/-Li9MPsIIXjI/T30nOwQeECI/AAAAAAAADCg/Ftik9IGKLlQ/s320/IMGP4964.JPG" width="320" /></a></div>Recipe: dynamo -&gt; rectifier bridge -&gt; high voltage smoothing capacitors -&gt; regulator -&gt; 16V 0.1F cap -&gt; (optional voltmeter) -&gt; ta2024 amp -&gt; speaker[s]<br /><br />By the way, do not buy this ta2024 amp, spend a few dollars extra and get a board with proper audio in. I had to desolder the weirdo 3pin connector and solder on a home-made audio cable. It also comes with extremely crappy capacitors and crappy terminals for remaining connections (vs decent stuff on the $14 ta204 amp).<br /><br />I think this voltage regulator will prove very handy for bike touring + camping. Should be especially fun once I combine the dynamo with a 3.5W solar panel. Buck/boost will prove very handy indeed.</div>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/6/">&larr; Older</a>
@@ -746,6 +771,10 @@ I recently got rid of an old Pioneer receiver in favour of a tiny Class D amplif
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/01/28/snappy-number-50-misc-speedups/">Snappy #50</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/01/21/snappy-number-49-help-firefox-shutdown-faster/">Snappy #49: Help Firefox Shutdown Faster</a>
       </li>
     
@@ -759,10 +788,6 @@ I recently got rid of an old Pioneer receiver in favour of a tiny Class D amplif
     
       <li class="post">
         <a href="/blog/2012/12/24/making-pages-load-faster/">Making pages load faster</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/12/21/interesting-bugzilla-activity/">Snappy #45: The view from home</a>
       </li>
     
   </ul>
@@ -808,7 +833,7 @@ Creative Commons Attribution Share-Alike License v3.0 or any later version.
 //indicate that content has been loaded
 window._monitorContentLoaded = Date.now()
 </script>
-<script src="http://monitor-taras-glek-net.appspot.com/static/monitor.js">
+<script src="http://monitor-taras-glek-net.appspot.com/static/monitor.js" async>
 </script>
 
 </footer>

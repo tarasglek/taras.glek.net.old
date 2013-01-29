@@ -9,9 +9,9 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Blog Archive 2013 Snappy #49: Help Firefox Shutdown Faster
-Jan 21 2013 posted in snappy Snappy #48: Now With Faster Shutdown
-Jan 10 2013 posted in &hellip;">
+  <meta name="description" content="Blog Archive 2013 Snappy #50
+Jan 28 2013 posted in snappy Snappy #49: Help Firefox Shutdown Faster
+Jan 21 2013 posted in snappy Snappy #48: Now With &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -57,8 +57,20 @@ if (!window.requestAnimationFrame) {
 }
 
 window._refreshLog = []
+window.oldPaintCount = 0
+window._paintlessRefresh = 0
 function refreshLogCounter() {
-  window._refreshLog.push(Date.now())
+  var record = true
+  if ('mozPaintCount' in window) {
+    if (window.oldPaintCount == window.mozPaintCount) {
+      window._paintlessRefresh++
+      record = false
+    } else {
+      window.oldPaintCount == window.mozPaintCount
+    }
+  }
+  if (record)
+    window._refreshLog.push(Date.now())
   window._refreshLogCounter = requestAnimationFrame(refreshLogCounter);
 }
 
@@ -91,6 +103,20 @@ if (requestAnimationFrame)
 
   
   <h2>2013</h2>
+
+<article>
+  
+<h1><a href="/blog/2013/01/28/snappy-number-50-misc-speedups/">Snappy #50</a></h1>
+<time datetime="2013-01-28T16:00:00-08:00" pubdate><span class='month'>Jan</span> <span class='day'>28</span> <span class='year'>2013</span></time>
+
+<footer>
+  <span class="categories">posted in <a class='category' href='/blog/categories/snappy/'>snappy</a></span>
+</footer>
+
+
+</article>
+
+
 
 <article>
   
@@ -3626,6 +3652,10 @@ if (requestAnimationFrame)
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/01/28/snappy-number-50-misc-speedups/">Snappy #50</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/01/21/snappy-number-49-help-firefox-shutdown-faster/">Snappy #49: Help Firefox Shutdown Faster</a>
       </li>
     
@@ -3639,10 +3669,6 @@ if (requestAnimationFrame)
     
       <li class="post">
         <a href="/blog/2012/12/24/making-pages-load-faster/">Making pages load faster</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/12/21/interesting-bugzilla-activity/">Snappy #45: The view from home</a>
       </li>
     
   </ul>
@@ -3689,7 +3715,7 @@ Creative Commons Attribution Share-Alike License v3.0 or any later version.
 //indicate that content has been loaded
 window._monitorContentLoaded = Date.now()
 </script>
-<script src="http://monitor-taras-glek-net.appspot.com/static/monitor.js">
+<script src="http://monitor-taras-glek-net.appspot.com/static/monitor.js" async>
 </script>
 
 </footer>

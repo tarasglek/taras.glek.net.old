@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="For a while DXR lived on a lanedo.com server. Lanedo folks are now done with DXR development. DXR is once again deployed at dxr.mozilla.org. Our Perf &hellip;">
+  <meta name="description" content="Misc I have been using dates to mark passage of time in the Snappy project. I think I&#8217;ll switch to a simple counter instead. We are ~36 updates &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -55,8 +55,20 @@ if (!window.requestAnimationFrame) {
 }
 
 window._refreshLog = []
+window.oldPaintCount = 0
+window._paintlessRefresh = 0
 function refreshLogCounter() {
-  window._refreshLog.push(Date.now())
+  var record = true
+  if ('mozPaintCount' in window) {
+    if (window.oldPaintCount == window.mozPaintCount) {
+      window._paintlessRefresh++
+      record = false
+    } else {
+      window.oldPaintCount == window.mozPaintCount
+    }
+  }
+  if (record)
+    window._refreshLog.push(Date.now())
   window._refreshLogCounter = requestAnimationFrame(refreshLogCounter);
 }
 
@@ -77,6 +89,64 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/08/16/snappy-36/">Snappy #36</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-08-16T07:24:19-07:00" pubdate data-updated="true">Aug 16<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><strong>Misc</strong></p>
+
+<p>I have been using dates to mark passage of time in the Snappy project. I think I&#8217;ll switch to a simple counter instead. We are ~36 updates into this project.</p>
+
+<p><strong>Blogging</strong></p>
+
+<p>Ludovic Hirlimann <a href="http://sietch-tabr.tumblr.com/post/29404692899/firefox-cache-and-spotlight">blogged</a> about how spotlight spends a lot of time indexing the Firefox network &#8216;Cache&#8217; directory (known problem, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=718910">718910</a>). If you experience this problem and would like to see it fixed, please comment in the bug if the <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=718910#c13">suggested remedy</a> helps.</p>
+
+<p>Tim Taubert <a href="http://timtaubert.de/blog/2012/08/snappy-fixing-new-tab-page-performance-regressions/">wrote</a> about reducing new-tab jank. I mention Tim a lot in these updates. He takes on a lot of interesting bugs in Firefox frontend. Hopefully he&#8217;ll make a habit out of blogging about his work.</p>
+
+<p><strong>Networking</strong></p>
+
+<p>Nick Hurley landed a change to reduce our maximum cache size to 350 megabytes. In order to avoid excessive disk IO traffic old cache size of 1 gigabyte remains in effect until the cache is reset. See bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=709297">709297</a> and Nick&#8217;s <a href="http://todesschaf.org/posts/2012/07/25/cache-usage-results.html">blog post</a> for more details. Progress is also being made on <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=777328">bug 777328</a> so we can move towards not blowing away our cache 10-20% of the time.</p>
+
+<p>Michal Novotny is proceeding with incrementally reducing cache-caused jank that&#8217;s due to holding a lock on the main thread while doing IO on a background thread. He also removing a multitude of synchronous necko APIs, see <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=695399">bug 695399</a>.</p>
+
+<p>Patrick McManus is removing synchronous proxy-related code, see <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=766973">bug 766973</a> for the DNS-related bit. Turns out our proxy code also does all kinds of synchronous operations when detecting proxy configuration, etc. This is being worked on, but hasn&#8217;t been filed yet.</p>
+
+<p>I usually try to highlight work that has already landed, but in this case it is important to point out that the Necko team is working hard on addressing significant problems in the networking code. These problems are tricky and will take a while to fix. The team is relatively new and is still discovering hidden surprises in their codebase.</p>
+
+<p><strong>Profiler</strong></p>
+
+<p>Benoit Girard posted a <a href="http://dl.dropbox.com/u/10523664/Screenshots/5p.png">preview </a>of view-source in the profiler. This will be handy for figuring out where performance problems lay, especially in JS files that have been preprocessed (our JS preprocessor does not try to keep the line numbers sane).</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -551,62 +621,6 @@ In part 2 I&#8217;ll discuss how various people at Mozilla use Telemetry.</li>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/07/02/snappy-june-21-28/">Snappy June 21, 28</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-07-02T07:06:24-07:00" pubdate data-updated="true">Jul 2<span>nd</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Necko team is busy squashing main-thread waits, see <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=765665">bug 765665</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=766973">bug 766973</a>.</p>
-
-<p>Ehsan Akhgari turned on frame pointers on nightly channel: bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=764216">764216</a>. This means that one can now use the <a href="https://developer.mozilla.org/en/Performance/Profiling_with_the_Built-in_Profiler#Running%20the%20profiler">built-in profiler</a> on nightly builds. The main purpose behind the change was to collect more chromehang data(long Firefox UI stalls). Vlad Djeric lowered the chromehang reporting threshold to 5 seconds: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=763124">bug 763124</a>. We are waiting on metrics to separate out chromehang reporting from telemetry pings: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=763116">bug 763116</a>.</p>
-
-<p>Nathan Froyd is making heroic progress on teaching our events to queue so they can be prioritized: bug <a href="http://bugzilla.mozilla.org/show_bug.cgi?id=715376">715376</a>.</p>
-
-<p>Tim Taubert is working to reproduce a tab animation regression in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=752837">bug 752837</a>. He also taking over making Firefox themes less of a performance pig in<strong> </strong><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=650968">bug 650968</a> .</p>
-
-<p>We had great success with eliciting data on slow startups in Nicholas Chaim&#8217;s <a href="http://nchaim-moz2012.tumblr.com/post/25647745019/slow-startup-logging-add-on">blog post</a>.  We confirmed that external processes can affect Firefox startup (we had evidence for this) and that we can detect those situations (great work Nicholas!). It will be a hard slog before we can bolt a pretty UI to the extension + integrate system diagnostics into Firefox. In the meantime I recommend that <a href="http://support.mozilla.org/en-US/home">SUMO</a> people start suggesting this extension to diagnose slow Firefox installs. Nicholas is working on a revision of the extension that records slow-IO-caused-startup situations on a server so we prioritize + turn these into detectable fingerprints.</p>
-
-<p>William McCloskey fixed a nasty GC regression which caused GCs to run too often: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=768282">bug 768282</a>. Andrew McCreight sped up cycle collection when closing tabs: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=754495">bug 754495</a>. Olli Pettay enabled freeing DOM nodes directly (bypassing cycle-collection) when setting .innerHtml of non-empty DOM elements see <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=730639">bug 730639</a>.</p>
-
-<p><strong>PS</strong></p>
-
-<p>&#8220;The Performance of Open Source Applications&#8221; book is looking for <a href="http://www.aosabook.org/blog/2012/06/the-performance-of-open-source-applications/">contributors</a>. Would be cool if someone snuck some Mozilla wisdom in there.</p>
-
-<p>Sorry for skipping the snappy update last week. These posts take a lot more effort than is reasonable and I needed to direct it at my talk last week. You can see my <a href="http://velocityconf.com/velocity2012">Velocity</a> slides <a href="http://people.mozilla.com/~tglek/velocity2012/">here</a>.</p>
-
-<p>At least one person objected to the strong language used in the presentation (ie &#8220;dom local storage sucks&#8221;). I chose this language to emphasize the fact this isn&#8217;t a feature where one gets to weigh upsides vs downsides because the downsides are so severe. Most of the positive data on this is coming from what I believe to be unrepresentative benchmarks. I have not seen any other data points similar in quality to those reported by our <a href="https://metrics.mozilla.com/data/">telemetry</a>.</p>
-
-<p>Btw, Jan Varga is close to removing our IndexedDB prompt(bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=758357">758357</a>), opening up IndexedDB as an alternative to DOM Local Storage(<a href="http://taras.glek.net/blog/2012/03/16/localstorage-pageload-perf/">which sucks</a>).</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/4/">&larr; Older</a>
@@ -624,6 +638,10 @@ In part 2 I&#8217;ll discuss how various people at Mozilla use Telemetry.</li>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/01/28/snappy-number-50-misc-speedups/">Snappy #50</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/01/21/snappy-number-49-help-firefox-shutdown-faster/">Snappy #49: Help Firefox Shutdown Faster</a>
       </li>
     
@@ -637,10 +655,6 @@ In part 2 I&#8217;ll discuss how various people at Mozilla use Telemetry.</li>
     
       <li class="post">
         <a href="/blog/2012/12/24/making-pages-load-faster/">Making pages load faster</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/12/21/interesting-bugzilla-activity/">Snappy #45: The view from home</a>
       </li>
     
   </ul>
@@ -686,7 +700,7 @@ Creative Commons Attribution Share-Alike License v3.0 or any later version.
 //indicate that content has been loaded
 window._monitorContentLoaded = Date.now()
 </script>
-<script src="http://monitor-taras-glek-net.appspot.com/static/monitor.js">
+<script src="http://monitor-taras-glek-net.appspot.com/static/monitor.js" async>
 </script>
 
 </footer>

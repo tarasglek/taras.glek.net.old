@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Every once in a while people want to be analyze C code. If you are one of those people, checkout bug 494960. For GCC 4.3, you&#8217;ll need to update &hellip;">
+  <meta name="description" content="I moved dehydra to a more official location, please update your scripts and hg settings. New dehydra url: http://hg.mozilla.org/rewriting-and- &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -55,8 +55,20 @@ if (!window.requestAnimationFrame) {
 }
 
 window._refreshLog = []
+window.oldPaintCount = 0
+window._paintlessRefresh = 0
 function refreshLogCounter() {
-  window._refreshLog.push(Date.now())
+  var record = true
+  if ('mozPaintCount' in window) {
+    if (window.oldPaintCount == window.mozPaintCount) {
+      window._paintlessRefresh++
+      record = false
+    } else {
+      window.oldPaintCount == window.mozPaintCount
+    }
+  }
+  if (record)
+    window._refreshLog.push(Date.now())
   window._refreshLogCounter = requestAnimationFrame(refreshLogCounter);
 }
 
@@ -77,6 +89,57 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/06/25/dehydra-pork-sources-moved/">Dehydra & Pork Sources Moved</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-06-25T08:32:57-07:00" pubdate data-updated="true">Jun 25<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I moved dehydra to a more official location, please update your scripts and hg settings. New dehydra url: http://hg.mozilla.org/rewriting-and-analysis/dehydra/</p>
+
+<p>Pork got reshuffled during the move, it&#8217;s now 2 repositories. oink is dead. It now depends on current versions of flex (as opposed to flex-old) and features a cleaned up buildsystem.</p>
+
+<p>New way to checkout pork:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>
+</span><span class='line'>hg clone http://hg.mozilla.org/rewriting-and-analysis/pork
+</span><span class='line'>hg clone http://hg.mozilla.org/rewriting-and-analysis/elsa pork/elsa
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -519,44 +582,6 @@ Now I&#8217;m sure that most of us would still run Emacs and other desktop edito
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/02/16/security-with-dehydra/">Security With Dehydra</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-02-16T08:36:38-08:00" pubdate data-updated="true">Feb 16<span>th</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>When I wrote the initial prototype of Dehydra I pondered how long it would take before it&#8217;s adopted by security guys. Unfortunately, until now take-up has been non-existent. Grep and Perl still seem to rule in that community even though the plain text approach restricts the range of possible security scans.</p>
-
-<p>Normally I would be tempted to rant on how grep is convenient yet limiting. However Ben Kurtz <a href="http://www.awgh.org/?p=73">discovered Dehydra for security scans</a> and did a great job explaining the issues involved. Thanks to Georgi for linking me to Ben&#8217;s post.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/18/">&larr; Older</a>
@@ -574,6 +599,10 @@ Now I&#8217;m sure that most of us would still run Emacs and other desktop edito
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/01/28/snappy-number-50-misc-speedups/">Snappy #50</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/01/21/snappy-number-49-help-firefox-shutdown-faster/">Snappy #49: Help Firefox Shutdown Faster</a>
       </li>
     
@@ -587,10 +616,6 @@ Now I&#8217;m sure that most of us would still run Emacs and other desktop edito
     
       <li class="post">
         <a href="/blog/2012/12/24/making-pages-load-faster/">Making pages load faster</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/12/21/interesting-bugzilla-activity/">Snappy #45: The view from home</a>
       </li>
     
   </ul>
@@ -636,7 +661,7 @@ Creative Commons Attribution Share-Alike License v3.0 or any later version.
 //indicate that content has been loaded
 window._monitorContentLoaded = Date.now()
 </script>
-<script src="http://monitor-taras-glek-net.appspot.com/static/monitor.js">
+<script src="http://monitor-taras-glek-net.appspot.com/static/monitor.js" async>
 </script>
 
 </footer>

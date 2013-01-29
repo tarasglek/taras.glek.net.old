@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Maintaining a module, killing off another one I was granted ownership of the jar module. Today, I resumed my quest to kill off the barely limping &hellip;">
+  <meta name="description" content="Moving files into jars reduces amount of seeks on startup, and has miscellaneous other performance/organization benefits. I added resource://gre- &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -55,8 +55,20 @@ if (!window.requestAnimationFrame) {
 }
 
 window._refreshLog = []
+window.oldPaintCount = 0
+window._paintlessRefresh = 0
 function refreshLogCounter() {
-  window._refreshLog.push(Date.now())
+  var record = true
+  if ('mozPaintCount' in window) {
+    if (window.oldPaintCount == window.mozPaintCount) {
+      window._paintlessRefresh++
+      record = false
+    } else {
+      window.oldPaintCount == window.mozPaintCount
+    }
+  }
+  if (record)
+    window._refreshLog.push(Date.now())
   window._refreshLogCounter = requestAnimationFrame(refreshLogCounter);
 }
 
@@ -77,6 +89,54 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/08/27/moving-files-into-jars/">Moving Files Into JARs</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-08-27T03:40:09-07:00" pubdate data-updated="true">Aug 27<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Moving files into jars reduces amount of seeks on startup, and has miscellaneous other performance/organization benefits. I added resource://gre-resources/ which maps to jar:toolkit.jar!/res/.</p>
+
+<p>To move a file into a jar:</p>
+
+<ol>
+<li>Add a jar.mn entry.</li>
+<li>Remove existing references to the file in Makefile.in, packages-static files</li>
+<li>Add file to the removed-files.in list of dead files</li>
+<li>Update urls refering to the file in the source. Sometimes one has to switch from using file streams and filenames to using channels and URIs. This is the hard part.</li>
+<li>Set your bug as blocking bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=513027">513027</a>.
+For an example see <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=508421">bug 508421</a>.</li>
+</ol>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -563,57 +623,6 @@ if (requestAnimationFrame)
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/06/25/dehydra-pork-sources-moved/">Dehydra & Pork Sources Moved</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-06-25T08:32:57-07:00" pubdate data-updated="true">Jun 25<span>th</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I moved dehydra to a more official location, please update your scripts and hg settings. New dehydra url: http://hg.mozilla.org/rewriting-and-analysis/dehydra/</p>
-
-<p>Pork got reshuffled during the move, it&#8217;s now 2 repositories. oink is dead. It now depends on current versions of flex (as opposed to flex-old) and features a cleaned up buildsystem.</p>
-
-<p>New way to checkout pork:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>
-</span><span class='line'>hg clone http://hg.mozilla.org/rewriting-and-analysis/pork
-</span><span class='line'>hg clone http://hg.mozilla.org/rewriting-and-analysis/elsa pork/elsa
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/17/">&larr; Older</a>
@@ -631,6 +640,10 @@ if (requestAnimationFrame)
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/01/28/snappy-number-50-misc-speedups/">Snappy #50</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/01/21/snappy-number-49-help-firefox-shutdown-faster/">Snappy #49: Help Firefox Shutdown Faster</a>
       </li>
     
@@ -644,10 +657,6 @@ if (requestAnimationFrame)
     
       <li class="post">
         <a href="/blog/2012/12/24/making-pages-load-faster/">Making pages load faster</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/12/21/interesting-bugzilla-activity/">Snappy #45: The view from home</a>
       </li>
     
   </ul>
@@ -693,7 +702,7 @@ Creative Commons Attribution Share-Alike License v3.0 or any later version.
 //indicate that content has been loaded
 window._monitorContentLoaded = Date.now()
 </script>
-<script src="http://monitor-taras-glek-net.appspot.com/static/monitor.js">
+<script src="http://monitor-taras-glek-net.appspot.com/static/monitor.js" async>
 </script>
 
 </footer>

@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="After a few weeks of mindnumbing work on treehydra gutts, I finally have something exciting to talk about! We will be presenting  Dehydra at the GCC &hellip;">
+  <meta name="description" content="I will be presenting on the work we are doing on Mozilla 2 at FISL08. Chris posted an excellent breakdown of Mozilla plans for the conference. If you &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -55,8 +55,20 @@ if (!window.requestAnimationFrame) {
 }
 
 window._refreshLog = []
+window.oldPaintCount = 0
+window._paintlessRefresh = 0
 function refreshLogCounter() {
-  window._refreshLog.push(Date.now())
+  var record = true
+  if ('mozPaintCount' in window) {
+    if (window.oldPaintCount == window.mozPaintCount) {
+      window._paintlessRefresh++
+      record = false
+    } else {
+      window.oldPaintCount == window.mozPaintCount
+    }
+  }
+  if (record)
+    window._refreshLog.push(Date.now())
   window._refreshLogCounter = requestAnimationFrame(refreshLogCounter);
 }
 
@@ -77,6 +89,46 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2008/04/14/mozillafisl08/">Mozilla@FISL08</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-04-14T02:43:34-07:00" pubdate data-updated="true">Apr 14<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I will be presenting on the work we are doing on Mozilla 2 at <a href="http://fisl.softwarelivre.org/9.0/www/">FISL08</a>. Chris posted an excellent <a href="http://www.0xdeadbeef.com/weblog/?p=344">breakdown</a> of Mozilla plans for the conference.</p>
+
+<p>If you are at all interested in ground-breaking development happening in Mozilla 2, the challenges of static analysis then look me up!</p>
+
+<p>This is all very exciting as it&#8217;ll be a trip of many personal firsts: Brazil, the southern hemisphere and a conference of this scale.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -594,72 +646,6 @@ Most of these wouldn&#8217;t have been an issue if GCC was written in <a href="h
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2007/12/19/exceptions/">Exceptions</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2007-12-19T07:26:30-08:00" pubdate data-updated="true">Dec 19<span>th</span>, 2007</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Often there are two ways to write code. One way is to design an API and have code patterns adhere to how the API is supposed to be used. Another way is to rely on language features to accomplish the same thing. Typically API-pattern approaches are chosen because compilers are too immature or just don&#8217;t provide the necessary features. Sometimes compilers do catch up and the possibility of utilizing newer language features appears.</p>
-
-<p>In the case of the exception rewrite the task is to rewrite code from a pattern-based (compiler in your head) approach to a more strict C++ construct-based exception paradigm. Unfortunately APIs don&#8217;t enforce their usage as much as a compiler (in part because we don&#8217;t have <a href="http://taras.glek.net/blog/2007/11/29/gcc-plugins-under-my-xmas-tree/">app-spefic compiler plugins</a>) so transforming that into a strict compiler-friendly form automatically isn&#8217;t always realistic (<a href="http://lxr.mozilla.org/seamonkey/source/xpcom/glue/nsIInterfaceRequestorUtils.cpp#43">example</a>). See my previous post for more examples.</p>
-
-<p>Having done more work on the exception conversion I believe that it is possible to switch Mozilla to exceptions to the point of getting it to compile. Unfortunately, I don&#8217;t think that it&#8217;s possible to do this in the Mozilla2 timeframe due to the large amount of manual labour required.</p>
-
-<p>Due to various use cases that don&#8217;t fit the exception model there is a need for an nsresult-lint tool to detect funny (see above) nsresult patterns so code can be manually fixed to enable thrower to transform code correctly.</p>
-
-<p>I expect conversion to exceptions to consist of the following large steps:</p>
-
-<p>XPCOMGC -> nsresult-lint -> thrower automatic conversion -> nsexception-lint -> outparamdel</p>
-
-<ol>
-<li>XPCOMGC needs to land first to simplify memory management. Otherwise there will be a lot more nsCOMPtr&lt;>s already_AddRefed&lt;>s and friends.</li>
-<li>nsresult-lint would flag code for clean up to assist with the multitude of special cases in the code preventing it from transformation</li>
-<li>thrower needs to do some reasonably sophisticated static analysis (sensitive to control flow) to ensure that code is rewritten correctly. The analysis step isn&#8217;t ridiculously hard, but it is considerably more complex than what is done in existing tools.</li>
-<li>nsexception-lint tool will flag exception-unsafe code. I expect this to highlight a fair amount of code that needs to be converted to RAII. It will take more manual labour to fix flagged code here than in than step2.</li>
-<li>Once exceptions are used the return value is freed up for outparamdel to utilize. This will be a nice optimization and code clean up.
-I think the best bet with exceptions would be to start working on them during the moz2 development cycle to have them land early in post-moz2.</li>
-</ol>
-
-
-<p>Or as an alternative we could try to do just the OOM exceptions which are less frequent which would look like:</p>
-
-<p>XPCOMGC -> thrower automatic conversion(OOM cases are easier) -> nsexception-lint</p>
-
-<p>In this case the only significant piece of work is nsexception-lint which would be needed later for a full-blown exception rewrite. It wouldn&#8217;t be so bad to convert code to RAII even before that is required for the full exception rewrite.</p>
-
-<p>For now I&#8217;m going let thrower rest in the pork hg repository while I try to make a <a href="http://wiki.mozilla.org/XPCOMGC/Static_Checker">static checker plugin</a> for gcc. Feel free to ask for clarification. I&#8217;m dealing with after-effects of insomnia so this may not be completely clear.</p>
-
-<p><strong>Update</strong>: Reasonable <a href="http://www.hackcraft.net/raii/">description of RAII</a>.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/22/">&larr; Older</a>
@@ -677,6 +663,10 @@ I think the best bet with exceptions would be to start working on them during th
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/01/28/snappy-number-50-misc-speedups/">Snappy #50</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/01/21/snappy-number-49-help-firefox-shutdown-faster/">Snappy #49: Help Firefox Shutdown Faster</a>
       </li>
     
@@ -690,10 +680,6 @@ I think the best bet with exceptions would be to start working on them during th
     
       <li class="post">
         <a href="/blog/2012/12/24/making-pages-load-faster/">Making pages load faster</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/12/21/interesting-bugzilla-activity/">Snappy #45: The view from home</a>
       </li>
     
   </ul>
@@ -739,7 +725,7 @@ Creative Commons Attribution Share-Alike License v3.0 or any later version.
 //indicate that content has been loaded
 window._monitorContentLoaded = Date.now()
 </script>
-<script src="http://monitor-taras-glek-net.appspot.com/static/monitor.js">
+<script src="http://monitor-taras-glek-net.appspot.com/static/monitor.js" async>
 </script>
 
 </footer>
