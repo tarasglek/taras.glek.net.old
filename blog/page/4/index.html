@@ -64,7 +64,7 @@ function refreshLogCounter() {
       window._paintlessRefresh++
       record = false
     } else {
-      window.oldPaintCount == window.mozPaintCount
+      window.oldPaintCount = window.mozPaintCount
     }
   }
   if (record)
