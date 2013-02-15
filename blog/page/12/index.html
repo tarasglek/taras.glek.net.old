@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Opening files is relatively expensive. There is a small syscall overhead and a higher overhead of fetching data from disk. Depending on physical data &hellip;">
+  <meta name="description" content="I spent last week trying to reproduce slow startup on Windows. Some users were reporting >30 second startup, supernova_00 has been feeding me xperf &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,73 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/10/04/diagnosing-slow-startup/">Diagnosing Slow Startup</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-10-04T10:30:56-07:00" pubdate data-updated="true">Oct 4<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I spent last week trying to reproduce slow startup on Windows. Some users were reporting >30 second startup, supernova_00 has been feeding me <a href="https://developer.mozilla.org/En/Profiling_with_Xperf">xperf</a> traces on IRC reproducing slow startups.</p>
+
+<p><strong>Startup Bugs</strong></p>
+
+<p>Turns out that if a website uses non-standard font names this can trigger Firefox to start parsing every single font on the system, freezing the browser in the meantime. Turns out facebook does this :(. This is now a blocker <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=600713">bug 600713</a>. This bug has the unfortunate effect of overshadowing any startup improvements in Firefox 4.</p>
+
+<p>We have some code to keep our databases in good shape by VACUUMing them. This is getting revamped in Firefox in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=541373">bug 541373</a>. In the meantime, for many current users performance suffers due to missing vacuums. If you are suffering from slow Firefox startup, and/or slow Awesomebar try this <a href="http://mozillalinks.org/wp/2009/08/vacuum-firefox-databases-for-better-performance-now-with-no-restart/">manual vacuum</a>. This helps in older Firefox releases, but in Firefox 4 this has the effect of supercharging the SQLite database performance by switching to <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=416330">32K pages</a>.</p>
+
+<p><strong>Scareware</strong></p>
+
+<p>Another fun discovery was the effect of anti-virus software(AVG in this case). Like an annoying pet, AVG has to have a sniff and fondle every file that Firefox opens on startup. Apparently this is a feature called on-demand scanning, yuck.</p>
+
+<p>But the fun doesn&#8217;t stop there, Windows has a wonderful <a href="http://en.wikipedia.org/wiki/Prefetcher">prefetch</a> mechanism that speeds up app startup. Unfortunately for supernova_00, \Windows\Prefetch just wouldn&#8217;t get populated with Firefox info, meaning that Windows wasn&#8217;t optimizing Firefox startup. Once I installed AVG, I ran into the same problem. Uninstalling AVG didn&#8217;t help. For whatever reason deleting every file in \Windows\Prefetch fixes that problem. For both of us prefetch got repopulated after being cleaned.</p>
+
+<p><strong>XPerf</strong></p>
+
+<p>Microsoft XPerf makes trivial to optimize cold startup. None of the other OSes have precanned analyses showing how much each individual file access is contributing to slow startup.</p>
+
+<p>If you have a startup problem, I&#8217;m much more likely to be able to reproduce it if the report comes with an xperf trace. To get xperf run the Microsoft Platform SDK <a href="http://www.microsoft.com/downloads/en/details.aspx?FamilyID=6b6c21d2-2006-4afa-9702-529fa782d63b&amp;displaylang=en">installer</a>, select &#8220;Windows Performance Toolkit&#8221;.</p>
+
+<p>To record an IO trace:</p>
+
+<ol>
+<li>Reboot</li>
+<li>run cmd.exe as Administrator</li>
+<li>xperf -on latency+FILE_IO+FILE_IO_INIT+DISK_IO</li>
+<li>run Firefox, reproduce the bug</li>
+<li>xperf -d report.etl</li>
+<li>Run xperf report.etl to view the report.
+Click on &#8220;IO Counts&#8221; or &#8220;Hard faults&#8221; graph, select &#8220;Summary Table&#8221;. &#8220;IO Time (ms)&#8221; is the interesting column there. To get an idea of the sequence of IO operations, export the summary table to .csv and load it in a spreadsheet/grep/whatever. Every Firefox developer should give xperf a try, addon authors are encouraged too.</li>
+</ol>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -594,87 +661,6 @@ I plan to blog more on each of these subjects as they get closer to realization.
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2010/05/27/startup-backward-constructors/">Startup: Backward Constructors</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-05-27T09:35:20-07:00" pubdate data-updated="true">May 27<span>th</span>, 2010</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><em>This post is a result of debugging <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=561842">bug 561842</a>. Turns out one needs to go far beyond lumping libraries together to reap startup benefits.</em></p>
-
-<p>I made a <a href="http://hg.mozilla.org/users/tglek_mozilla.com/startup/raw-file/ca994a12e2a8/xulanatomy.pdf">pdf</a> to illustrate the cost centers of loading libxul.so (the essence of Firefox).</p>
-
-<p>With <a href="http://taras.glek.net/blog/2010/04/07/icegrind-valgrind-plugin-for-optimizing-cold-startup/">Icegrind</a> I demonstrated that better binary layout can significantly improve application startup. However I still didn&#8217;t have a breakdown of reasons of why loading binaries is so damn inefficient. That&#8217;s what the above pdf is about.</p>
-
-<p>Loading libxul consists of 4 major phases:</p>
-
-<ol>
-<li>Runtime linker setup: mapping segments in, zeroing .bss, loading dependent libraries, etc</li>
-<li>Runtime linker relocations.</li>
-<li>Library intializers.</li>
-<li>main() and the rest of application code runs
-I blogged about 1, 2, 4, this post is about #3.</li>
-</ol>
-
-
-<p><strong>Library Initializers?</strong></p>
-
-<p><a href="http://people.gnome.org/~michael/">Michael Meeks</a> pointed me at the funny backwards IO pattern in his IO logs. I even <a href="http://taras.glek.net/blog/2010/03/24/linux-why-loading-binaries-from-disk-sucks/">made fun</a> of how by default libxul.so is read mostly via backwards IO. Once I <a href="http://taras.glek.net/blog/2010/05/24/teethig-troubles-assigning-blame-for-pagefaults/">assigned</a> userspace symbols to my pagefault log, it became clear that the backwards IO pattern was entirely due to library initializers. C++ compiler generates code that runs on library initialization to initialize globals and run relevant C++ constructors. In C one can assign a &#8220;constructor&#8221; GNU attribute to a function to participate in this mayhem.</p>
-
-<p><strong>Running Backwards?</strong></p>
-
-<p>Ian Lance Taylor clued me in on why these things run backwards.When one links the program, the object files are laid out sequentially. Static libraries are specified after the code that depends on them. Once an object is linked, the easiest way to make sure that libraries are initialized before their users is to invoke initializers backwards. The list of initializers is stored in the .ctors section and they loaded by libgcc.</p>
-
-<p>In Mozilla (and likely other C++ codebases) these global initializers are more or less evenly scattered throughout the codebase. By the time main() is run, most of the program has been paged in an unfortunately inefficient manner.</p>
-
-<p><strong>Run Faster Please?</strong></p>
-
-<p>The most interesting part about all this that the compiling toolchain can make a rather precise guess at how a large part of the initial program execution is going to go. To test this theory I wrote my best Mozilla <a href="https://bugzilla.mozilla.org/attachment.cgi?id=447253&amp;action=edit">patch</a> ever.</p>
-
-<p>One can place a function near the beginning of the library file and another one at the end (with a &#8220;constructor&#8221; attribute). The function at the end runs first and it can figure out the approximate range of memory that will need to be paged in and madvise() it. This results in a 5x reduction in libxul pagefaults. Unfortunately since constructors execute backwards and readahead forwards, the constructor execution stalls to wait for readahead, so the speedup is rather hard to detect.</p>
-
-<p><strong>Run Forward Faster!</strong></p>
-
-<p>Depressed about my hack failing to make a dent in startup time I patched gcc to run initializers in a forward order (and reversed the function-placement logic in above patch). Now readahead happened in the same direction as library initialization and my Firefox started 30% faster! I wrapped this up into a standalone <a href="http://people.mozilla.com/~tglek/startup/ctors.diff">gcc patch</a> (speed up any bloated C++ startup with a simple change to the compiler!). Note this hack reverses the library initialization order discussed above, this happens to not be a problem for Mozilla.</p>
-
-<p><strong>Conclusion: Order Matters! </strong></p>
-
-<p>The linker can reverse the per-library initializers such that initializers run forward, but cross-library dependencies are honoured. That in itself isn&#8217;t enough to boost startup without cleverer readahead on the kernel side (or application-side hacks).</p>
-
-<p>It&#8217;s weird to have initializers page in most of the binary. An interesting optimization would to have the compiler transitively mark functions reached by library initialization and place those in a .text.initializers section. Then one could have the linker group the initializers together.</p>
-
-<p><strong>Plans</strong></p>
-
-<p>I haven&#8217;t made up my mind on how to proceed. This madvise() hack + a simple linker patch could be deployed more easily than icegrind. This hack also appears to be as performant as a static firefox build + icegrind (due to inadequate kernel readahead without madvise()). Icegrid + libxul.so isn&#8217;t quite as efficient. I have a feeling that we&#8217;ll end up with a combination of icegrind + some form the initializer madvise() hack.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/13/">&larr; Older</a>
@@ -692,6 +678,10 @@ I blogged about 1, 2, 4, this post is about #3.</li>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/02/15/is-planet-mozilla-obsolete/">Is Planet Mozilla Obsolete for Technical Content?</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/01/28/snappy-number-50-misc-speedups/">Snappy #50</a>
       </li>
     
@@ -705,10 +695,6 @@ I blogged about 1, 2, 4, this post is about #3.</li>
     
       <li class="post">
         <a href="/blog/2013/01/04/snappy-2012-summary/">Snappy: 2012 Summary</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/12/24/making-pages-load-faster/">Making pages load faster</a>
       </li>
     
   </ul>

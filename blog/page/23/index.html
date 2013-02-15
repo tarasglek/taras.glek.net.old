@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Prcheck The trouble with prcheck and the automated prbool validation is that one can&#8217;t attach the giant patch it produces to bugzilla and &hellip;">
+  <meta name="description" content="In the Beginning There Was a Void Approximately a year ago, Brendan discussed with me the crazy possibility of rewriting most of the Mozilla code &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,58 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2007/10/12/rewriting-tools-for-mozilla-2-moving-forward-as-planned/">Rewriting Tools for Mozilla 2: Moving Forward as Planned</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-10-12T08:31:35-07:00" pubdate data-updated="true">Oct 12<span>th</span>, 2007</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><strong>In the Beginning There Was a Void</strong></p>
+
+<p>Approximately a year ago, Brendan discussed with me the crazy possibility of rewriting most of the Mozilla code automatically to modernize the codebase. The benefits were huge. Gecko would use the C++ standard library to improve code readability and reducing size, XPCOM would be ripped out of the core to improve performance and decrease footprint, etc.</p>
+
+<p>It seemed like a good idea, but in reality no other giant C++ project has attempted this before so we were not sure of how realistic it was. I spent a year in a <a href="http://benjamin.smedbergs.us/blog/2007-10-11/dehydra-ftw/">lonely corner</a> of Mozilla trying to materialize the idea.</p>
+
+<p>Brendan &amp; Graydon pointed me to <a href="http://www.cs.berkeley.edu/~smcpeak/elkhound/sources/elsa/">elsa</a>, the C++ parser that supposedly could parse Mozilla. However, it turned out that it was only able to parse an old version of Mozilla and rejected the new source. One of the elsa maintainers even tried to convince us to it was not designed for source-to-source transformations and wouldn&#8217;t work that way.</p>
+
+<p>After I patched up elsa and started devising ways to use it for source rewriting I ran into more pain. After a few false starts, I realized that C++ in Mozilla is actually a mix of CPP and C++ and one can not rewrite C++ without dealing with the <a href="http://taras.glek.net/blog/2007/05/11/cpp-strikes-back/">mess that is macro expansion</a>. <a href="http://mcpp.sourceforge.net/">MCPP</a> was pointed out to me as a good starting point for hacking on a preprocessor. So I <a href="http://taras.glek.net/blog/2007/06/12/undoing-cpp-expansion-in-3-simple-steps.-say-hello-to-easier-c-rewriting./">designed</a> an inline log for macro expansion. To my surprise the maintainer of MCPP, Kiyoshi MATSUI, volunteered to implement the spec and thus saved me from a world of pain. (For which I am eternally grateful as I can&#8217;t imagine a more depressing pastime than working on the root of all evil: the C preprocessor).</p>
+
+<p>In parallel with Kiyoshi&#8217;s work I modified <a href="http://www.cs.berkeley.edu/~smcpeak/elkhound/">elkhound</a> &amp; elsa to make the C++ parser a lot more suitable for source transformations. I learned about LR &amp; GLR parsing and confirmed my suspicion that I don&#8217;t want to write parser generators for a living.</p>
+
+<p><strong>Happy Conclusion </strong></p>
+
+<p>All this work finally got us what we discussed last September: a framework for doing lots of <a href="http://wiki.mozilla.org/XPCOMGC/Stack_Pointers">boring code rewrites</a>.</p>
+
+<p>The first big Moz2 task is <a href="http://wiki.mozilla.org/XPCOMGC">switching</a> from reference counting to garbage collection. Today, <a href="http://taras.glek.net/blog/2007/09/12/garburator-another-day-another-rewrite-tool/">garburator</a> produced a <a href="http://people.mozilla.org/~tglek/garburator/nsgenerichtmlelement.diff">gigantic patch</a> for subset of the content/ module and all of the affected files compiled. Hopefully next week I&#8217;ll have a multi-megabyte patch for the whole of Mozilla that compiles and possibly runs.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -714,86 +766,6 @@ Resulting code runs fast has a lot fewer bugs than code without all this fancy m
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2007/06/26/status-report-recent-work/">Status Report: Recent Work</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2007-06-26T04:08:52-07:00" pubdate data-updated="true">Jun 26<span>th</span>, 2007</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><strong>New Tool: Prcheck - PRBool&#8217;s best friend </strong></p>
-
-<p>Mozilla has a number boolean types and most of them are a form of an int. People expect them to behave like a bool, but since they can be assigned more than 1 value for true, this assumption can lead to bugs. Prcheck will mandate that prbools can only be assigned 1 or 0. Typically static checkers output errors, but prcheck outputs errors &amp; fixes for them in diff format so they can be fixed automatically. See <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=266048">this bug</a> for more info. I think the tool is almost complete. Hopefully, once the MCPP issues described below are addressed, I&#8217;ll have one giant patch to eliminate this problem.</p>
-
-<p><strong>MCPP Teething Troubles</strong></p>
-
-<p>Even in the open-source world there are some problems with vendor monoculture. For example we a single vendor providing the C++ compiler and one C preprocessor that is widely used. Even though MCPP is a portable preprocessor that can plug into multiple compilers, it still chokes on some GCCisms. Things are slowly changing and new open source compilers are on the horizon: I can&#8217;t wait.</p>
-
-<p>Additionally, since Mozilla is one of the largest projects to be preprocessed with MCPP, we found some scalability bugs in MCPP. The MCPP maintainer addressed those.</p>
-
-<p><strong>Elsa Backend Source Location Work - Works Well?</strong></p>
-
-<p>I am amazed, but hack &amp; slash approach to adding end-of-ast-node info to elkhound still seems to work correctly! It mostly required consulting wikipedia on LR &amp; GLR parsing algorithms to understand how to modify the data structures used in elkhound. I love the combination of Wikipedia and pretty &amp; easy to modify source code.</p>
-
-<p>The preprocessor undo-log appears to function exactly as intended too. That combined with the end-of-ast-node info means that I finally have the ability to easily cut&#8217;n&#8217;paste code to move it around programmatically. It basically makes the C/C++ pretty printer in oink obsolete for my purposes. This is cool because now I can output prettier source code AND rely on less oink C++ code to do so (ie no need to call the pretty printer[s]), so more refactoring tools could be written in higher level languages such as OCaml or JavaScript in the future.</p>
-
-<p><strong>Publishing My Oink Mods</strong></p>
-
-<p>I have been sending people tarballs on request, due to not being able to integrate my changes into the upstream svn repository. I tried a few svn2hg tools, but they didn&#8217;t work very well. <a href="http://cheeseshop.python.org/pypi/hgsvn/">hgsvn</a> is good enough to work for OpenJDK, so it might work for me. I&#8217;ll try to publish an hg repository of my work within the next week or two.</p>
-
-<p>I&#8217;m sorry for not doing this earlier, but it&#8217;s extremely time consuming to switch gears from coding oink stuff to trying to package it, especially due to all of the politics involved. Hopefully once the repository is easier to work with I&#8217;ll have more people sharing the oink worldload with me. Now that dust settled and the major missing pieces are either implemented or decided upon, a lot of exciting possibilities opened up.</p>
-
-<p><strong>libgcc</strong></p>
-
-<p>Another day, another piece of preprocessor trivia. Turned out there was an alternative to MCPP that I could have used: gcc&#8217;s libcpp. It is common knowledge that gcc uses an integrated preprocessor. It is not so well known that the preprocessor is factored out into what appears to be a mostly standalone library inside of gcc called libgcc. Google barely knows about it and there are no docs or other webpages pointing to it, so i missed it in my search.</p>
-
-<p>This could be a useful project, take libcpp turn it back into a standalone preprocessor and add the cpp undo log comments to it. The only downside of libgcc is that it is GPL which would normally be a pain for BSD-licensed projects, but by turning it back into a standalone tool there is no linking to to worry about.</p>
-
-<p>So if anyone finds implementing the macro-undo log with libgcc interesting, please feel free to do so :)</p>
-
-<p><strong>Random Rant on Parallels vs VMWare Fusion vs BootCamp vs 64bit Linux</strong></p>
-
-<p>I installed 64bit ubuntu on my MBP. Compilers &amp; other tools are ridiculously fast when running linux natively on core2duo. Due to some performance bugs that I can&#8217;t track down (shark isn&#8217;t working for and recently OSX&#8217;s gdb stopped working too) oink runs much faster on the linux side of the MBP. If any mac people want to profile oink on OSX, that&#8217;d be awesome. However OSX has some nice things (such as a display driver that works well and good battery life). I wish ati wasn&#8217;t such a pain with releasing specs for their cards so linux could support them properly. I hope the recent reverse engineered driver work stabilizes soon. So I figured it would be nice to access &amp; work on the linux partition from within OSX.</p>
-
-<p>I was pretty excited when I heard that Parallels 3 supports BootCamp. Problem was that nothing could see the bootcamp linux install. Turned the problem was caused because I used fdisk + refit to do the partitioning and turned on the bootable flag. To fix this I turned off the bootable flag on the linux partition using parted(which can sync the gpt partition table!) .</p>
-
-<p>Then I realized that Parallels has very slow disk access AND doesn&#8217;t do 64bit and doesn&#8217;t appear to support SMP.</p>
-
-<p>VMWare Fusion on the other hand supports bootcamp &amp; 64bit &amp; smp and appears to have much faster IO. However it lacks UI for accessing a linux bootcamp install or documentation. So here is the secret recipe to save time for others in my situation:</p>
-
-<p>1) Create a vmware disk for the bootcamp partition using vmware-rawdiskCreator in /Library/Application Support/VMware Fusion.</p>
-
-<p>2) Create a new machine, point at the file created in 1.</p>
-
-<p>Fusion&#8217;s performance is remarkable. Oink runs almost as fast as it does natively. Plus VMWare support the VMI interface in Linux which combined with a tickless kernel should make the virtualizing overhead minimal. Too bad Linux doesn&#8217;t have these features yet for amd64.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/24/">&larr; Older</a>
@@ -811,6 +783,10 @@ Resulting code runs fast has a lot fewer bugs than code without all this fancy m
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/02/15/is-planet-mozilla-obsolete/">Is Planet Mozilla Obsolete for Technical Content?</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/01/28/snappy-number-50-misc-speedups/">Snappy #50</a>
       </li>
     
@@ -824,10 +800,6 @@ Resulting code runs fast has a lot fewer bugs than code without all this fancy m
     
       <li class="post">
         <a href="/blog/2013/01/04/snappy-2012-summary/">Snappy: 2012 Summary</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/12/24/making-pages-load-faster/">Making pages load faster</a>
       </li>
     
   </ul>

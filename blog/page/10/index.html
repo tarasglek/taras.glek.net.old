@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Telemetry Present Telemetry infrastructure has only been deployed for week, but we are already gathering interesting data: Memory usage from about: &hellip;">
+  <meta name="description" content="&nbsp;I once blogged that ARM devices are useless and how one shouldn&#8217;t buy them cos they run weird forked kernels on weird bootloaders. I &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,43 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/07/16/my-nas-is-smaller-than-yours/">My NAS Is Smaller Than Yours</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-07-16T19:29:00-07:00" pubdate data-updated="true">Jul 16<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><div class='post'>
+<div class="separator" style="clear: both; text-align: center;"><a href="http://2.bp.blogspot.com/-NyjNccrtMm4/ThfcarpyIvI/AAAAAAAABT4/gYYcP66XgE8/s1600/IMGP4287.JPG" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="640" src="http://2.bp.blogspot.com/-NyjNccrtMm4/ThfcarpyIvI/AAAAAAAABT4/gYYcP66XgE8/s640/IMGP4287.JPG" width="424" /></a></div>&nbsp;I once <a href="/blog/2009/11/from-arms-and-mips.html">blogged</a> that ARM devices are useless and how one shouldn&#8217;t buy them cos they run weird forked kernels on weird bootloaders. I also blogged on how awesome and low power my <a href="/blog/2009/12/rooter-hardware.html">Atom box</a> was.<br /><br />Since then my Atom box died (probably the power supply), so faced with the option of rebuying various components until I find one that broke I decided that I&#8217;d rather forgo that. Instead I got an $40 Seagate Goflex.<br /><br />The atom box idled at 13W and maxed out around 20W, which was pretty impressive. Goflex can idle at 4W and maxes out at 7W. The 1ghz CPU is no x86 in speed, but it can keep up.<br /><br />Clever people developed a fully-featured Uboot bootloader for it so it takes care of that typical non-x86 suck. I opted to run  <a href="http://archlinuxarm.org/platforms/armv5/seagate-goflex-net">arch linux for arm</a> since Debian support isn&#8217;t particularly mature. In some ways Arch is better, it doesn&#8217;t play games with proprietary firmware and stays up to date better.<br /><br />So yeah with a $40 pricepoint, dual native sata, 4W idle even I will run ARM :)<br /><br /><i>Bonus:</i> In theory I should be able to run the static binaries I compile on the goflex on my android phones.</div>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -568,46 +605,6 @@ Our oldest startup benchmark, ts,Â  has been gathering wrong numbers all along.Â
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011/03/10/start-faster-addon/">&#8220;Start Faster&#8221; Addon</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-03-10T08:24:13-08:00" pubdate data-updated="true">Mar 10<span>th</span>, 2011</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>A large proportion of our startup time is spent on loading the Firefox library(.dll, etc) files. This is true on all of our platforms. In my <a href="http://taras.glek.net/blog/2011/02/09/magic-patch-that-doubles-windows-startup/">previous pos</a>t I thought I discovered a way to load the Firefox binaries more efficiently on Windows(bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=627591">627591</a>). Further testing revealed that to not be true in all cases and that the Windows Prefetch service was still killing our startup speed. Microsoft does not seem to provide a way to opt out of the Windows Prefetch &#8216;service&#8217;.</p>
-
-<p>There is a DIY way to opt out of prefetch by gaining Administrator privileges and deleting files out of the prefetch directory. Our is plan is to provide a Windows service to handle Firefox updates (bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=481815">481815</a>). Additionally the service would be able to do useful things like delete prefetch files, defragment Firefox databases(or at least help report on fragmentation levels). This is all tricky stuff.</p>
-
-<p>In the meantime, to test my theory I wrote a <a href="https://addons.mozilla.org/en-US/firefox/addon/startupservice/">test extension</a>. This is a restartless extension that adds a Windows service and a wrapper executable to significantly speed up Firefox startup after rebooting (oh the irony!). After installing the extension, &#8220;Faster Firefox&#8221; shortcut on the Desktop should result in up to 2x speed up in Firefox startup. This addon is a rough proof of concept to play with while I bake this functionality into Firefox. Comments, improvements are welcome. Note that launching Firefox by shortcuts other &#8220;Faster Firefox&#8221; is slower while this extension is installed (this will be fixed once preloading functionality is integrated into Firefox properly). This addon does not yet work on XP because I do not yet have an XP enviroment to test/develop in (patches are welcome).</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/11/">&larr; Older</a>
@@ -625,6 +622,10 @@ Our oldest startup benchmark, ts,Â  has been gathering wrong numbers all along.Â
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/02/15/is-planet-mozilla-obsolete/">Is Planet Mozilla Obsolete for Technical Content?</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/01/28/snappy-number-50-misc-speedups/">Snappy #50</a>
       </li>
     
@@ -638,10 +639,6 @@ Our oldest startup benchmark, ts,Â  has been gathering wrong numbers all along.Â
     
       <li class="post">
         <a href="/blog/2013/01/04/snappy-2012-summary/">Snappy: 2012 Summary</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/12/24/making-pages-load-faster/">Making pages load faster</a>
       </li>
     
   </ul>

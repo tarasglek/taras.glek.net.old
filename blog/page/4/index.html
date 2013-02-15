@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Necko team is busy squashing main-thread waits, see bug 765665, bug 766973. Ehsan Akhgari turned on frame pointers on nightly channel: bug 764216. &hellip;">
+  <meta name="description" content="Frontend Jared Wein discovered that our about:home was surprisingly expensive to load. He sped up the page by an estimated 30% in bug 765411. &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,56 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/07/09/snappy-update-for-week-of-july-5th/">Snappy Update for Week of July 5th</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-07-09T07:49:31-07:00" pubdate data-updated="true">Jul 9<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><strong>Frontend</strong></p>
+
+<p>Jared Wein discovered that our about:home was surprisingly expensive to load. He sped up the page by an estimated 30% in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=765411#c11">765411</a>. Similarly, Tim Taubert is fixing our new tab page performance in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=753448">753448</a>.</p>
+
+<p>Tim is also bravely attacking (via bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=769634">769634</a>) horrid performance issues with Firefox themes tracked by bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=650968">650968</a>.</p>
+
+<p><strong>Profiling</strong></p>
+
+<p>Alex Crichton added ability to profile JS in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=761261">761261</a>. Benoit Girard is adding labels to the profiler to expose JS profiling info in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=707308">bug 707308</a>.  Same functionality will also allow us to add URLs to the stacks. This means that in addition to seeing what Firefox is busy with, the profiler will now provide context on what caused the processing (<a href="http://people.mozilla.com/~tglek/velocity2012/css/profiler.png">screenshot</a>). This is huge. Benoit also improved profiler timing data in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=769989">769989</a>.</p>
+
+<p><strong>Slow Startup Research</strong></p>
+
+<p>As I mentioned <a href="http://taras.glek.net/blog/2012/06/25/slow-startup-logging-help-wanted/">before</a>, Nicholas Chaim wrote an addon to track system IO usage while starting Firefox. He has since <a href="http://nchaim-moz2012.tumblr.com/post/26653615162/slow-startup-logging-add-on-0-12">updated </a>his addon to be hosted on <a href="https://addons.mozilla.org/en-US/firefox/addon/slow-startup-logging/">AMO</a> and to submit that data for analysis. If you suffer from slow Firefox startups, please help us identify common IO hogs by installing his addon. Please encourage friends with slow startups to do the same.</p>
+
+<p>This addon lists names of processes and amount of IO they did. This is somewhat private information, we can&#8217;t gather this data via telemetry.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -534,50 +584,6 @@ if (requestAnimationFrame)
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/05/21/snappy-workweek/">Snappy Workweek</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-05-21T02:53:14-07:00" pubdate data-updated="true">May 21<span>st</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><strong>Workweek</strong></p>
-
-<p>The perf team + Lawrence held a snappy workweek at the Mozilla HQ last week. We spent most of the week meeting with various people involved with the Snappy project. I expect lots of good things to happen in the near future.</p>
-
-<p>The most immediate outcome of all of these meetings was the public unveiling of our telemetry dashboards. See Lawrence&#8217;s <a href="http://lawrencemandel.com/2012/05/16/sign-in-to-telemetry-with-persona/">post</a> on how to log in with your persona account. We started work on telemetry about a year ago, felt great to finally reach this milestone. Lots of work remains on UI polish, data validation, etc. Telemetry is our primary mechanism for gathering snappy performance data. Every telemetry infrastructure improvement leads to better snappy decisions.</p>
-
-<p>Additionally we discussed Australis theme work (how it should be faster than existing theme), dom event scheduling, main thread io work, feasibility of switching to an FTS backend for places, etc.</p>
-
-<p>Vlad wrote some good posts on analyzing <a href="http://blog.mozilla.org/vdjeric/2012/05/14/more-telemetry-from-super-slow-startups/">startup</a> and <a href="http://blog.mozilla.org/vdjeric/2012/05/17/looking-at-my-own-abouttelemetry-data/">other data</a> exposed by about:telemetry. <a href="http://planet.mozilla.org/">Planet Mozilla</a> could use more technical posts like that.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/5/">&larr; Older</a>
@@ -595,6 +601,10 @@ if (requestAnimationFrame)
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/02/15/is-planet-mozilla-obsolete/">Is Planet Mozilla Obsolete for Technical Content?</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/01/28/snappy-number-50-misc-speedups/">Snappy #50</a>
       </li>
     
@@ -608,10 +618,6 @@ if (requestAnimationFrame)
     
       <li class="post">
         <a href="/blog/2013/01/04/snappy-2012-summary/">Snappy: 2012 Summary</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/12/24/making-pages-load-faster/">Making pages load faster</a>
       </li>
     
   </ul>

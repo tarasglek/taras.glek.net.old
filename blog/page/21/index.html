@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="I will be presenting on the work we are doing on Mozilla 2 at FISL08. Chris posted an excellent breakdown of Mozilla plans for the conference. If you &hellip;">
+  <meta name="description" content="When started on my static analysis quest just over a year ago. I imagined a perfect world in which I make tools and people use them to do awesome &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,54 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2008/04/22/static-analyses-gadgets-of-mozilla-2-james-bonds/">Static Analyses: Gadgets of Mozilla 2 James Bonds</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-04-22T05:49:42-07:00" pubdate data-updated="true">Apr 22<span>nd</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>When started on my static analysis quest just over a year ago. I imagined a perfect world in which I make tools and people use them to do awesome analyses. Since I did not want to be disappointed, I imagined this, but did not think it would come true.</p>
+
+<p>Now we are at a point where static analysis use is growing rapidly, most analyses are done by people other than me as lately I barely have time to work on actual analyses. Treehydra and dehydra now have users and are well on their way to being released, which is taking up most of my time. Some of the most notable happenings:</p>
+
+<ul>
+<li>Vlad Sukhoy appeared out of nowhere and <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=415289">ported Dehydra</a> to GCC 4.2 on OSX. This is exciting because it showed that the plugin system is portable between GCC release, and it&#8217;s the biggest patch from a non-core dev.</li>
+<li>We finished the paper on our static analysis work to be presented at the <a href="https://www.gccsummit.org/2008/summary.php">GCC summit</a>. I am looking forward to meeting developers that built the GCC features that made the *hydras practical.</li>
+<li>There is a lot finishing touches being done such that we can release Dehydra 0.9 and eventually 1.0. <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=423898">Bug</a>.</li>
+<li>Dave Mandelin implemented a proper testsuite for the *hydras. This is a massive step up from what we had before.</li>
+<li>There is a massive amount of Treehydra work going on. Looks like it is boldly going where no static analysis has gone before, even faster than Dehydra did. So far it looks like Treehydra is going to be a bigger deal than Dehydra could ever be. It is turning out to be a very potent combination of GCC for features and JavaScript for ease of use.
+I have elaborate plans on how to take over the world with static analysis, more on that later. In the meantime I&#8217;ve started compiling a <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=430328">tracking bug</a> of ongoing analyses for Moz 2.</li>
+</ul>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -604,48 +652,6 @@ Most of these wouldn&#8217;t have been an issue if GCC was written in <a href="h
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2007/12/28/recent-progress/">Recent Progress</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2007-12-28T05:39:45-08:00" pubdate data-updated="true">Dec 28<span>th</span>, 2007</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Looks like <a href="http://wiki.mozilla.org/Pork">pork</a> is slowly going to get merged back into oink. This makes me happy as it will result in decreased merging headaches and gives more visibility to my work outside of Mozilla. My elkhound changes are already in!</p>
-
-<p>Recently I added support for retaining gnu attributes to elsa and corresponding features dehydra and garburator. Now dehydra can verify things based on attributes and  garburator gained a way to rewrite special cases like classes that are always <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=409088">allocated on the stack</a>. Elsa still drops most attributes, but at least classes, methods and variable declarations are covered.</p>
-
-<p>I also spent a couple of days investigating gcc plugins. Turns out modifying gcc to support plugins is dead easy, but getting anything useful done in GCC requires a steep learning curve. I tried to find how to enumerate all of the toplevel declarations in the source, but I couldn&#8217;t find the correct global variable that corresponds to the toplevel scope(aka the Translation Unit?). I have a few more ideas of what to try next. Once I do that, it shouldn&#8217;t take much work to make a basic gcc-hosted version of dehydra. There is also a gcc plugin branch hosted in the gcc svn, but I can&#8217;t find any example code for it. It isn&#8217;t a big deal since none of the plugins I&#8217;ve seen mentioned venture outside of intra-function analyses.</p>
-
-<p>I am still pondering on how to tackle rewriting Mozilla to use exceptions. It is the key to improving overall readability/perf of Moz C++, but the logistics of writing the corresponding analyses+rewrites followed by a parallel manual correction step are still making my head spin. All I&#8217;m sure about is that the first step to exceptions would be to enable the OOM exceptions and do the corresponding exception safe analysis+rewrite.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/22/">&larr; Older</a>
@@ -663,6 +669,10 @@ Most of these wouldn&#8217;t have been an issue if GCC was written in <a href="h
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/02/15/is-planet-mozilla-obsolete/">Is Planet Mozilla Obsolete for Technical Content?</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/01/28/snappy-number-50-misc-speedups/">Snappy #50</a>
       </li>
     
@@ -676,10 +686,6 @@ Most of these wouldn&#8217;t have been an issue if GCC was written in <a href="h
     
       <li class="post">
         <a href="/blog/2013/01/04/snappy-2012-summary/">Snappy: 2012 Summary</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/12/24/making-pages-load-faster/">Making pages load faster</a>
       </li>
     
   </ul>

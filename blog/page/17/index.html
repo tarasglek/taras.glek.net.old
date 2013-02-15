@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="I moved dehydra to a more official location, please update your scripts and hg settings. New dehydra url: http://hg.mozilla.org/rewriting-and- &hellip;">
+  <meta name="description" content="Working on Fennec performance N810 has been very educational. I have been learning more and more about performance profiling on crappy platforms. I &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,64 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/06/26/studying-fennec-performance/">Studying Fennec Performance</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-06-26T07:31:36-07:00" pubdate data-updated="true">Jun 26<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Working on Fennec performance N810 has been very educational. I have been learning more and more about performance profiling on crappy platforms. I define a platform as crap if it has poor development tools, limited OS or other significant limitations. Linux is a crappy platform in this case because it&#8217;s running on ARM where oprofile barely does anything and there are no other performance tools for N810 (more modern ARM cpus should user-space perf counters and be more useful for instrumentation).</p>
+
+<p><strong>JSD Secret Sauce for JS Optimization</strong></p>
+
+<p>In general there is a misconception that implementing stuff in JavaScript will result in slower code than doing the same in C++. That may be true if the code is implemented in the exact same manner. But in real life the expressiveness and safety of a high-level language like JavaScript permits algorithmic optimizations that would often not be realistic to do in C++ because of time/safety constraints.</p>
+
+<p>So how does one figure out what&#8217;s slow in JS? timeless suggested that I checkout the JavaScript Debugging API. Using the API and a small hack in spidermonkey(JSD doesn&#8217;t expose fast dom calls) I was able to hook into chrome code to get a timed trace of JavaScript functions being run.</p>
+
+<p>Once I had a trace it was relatively easy to figure out to &#8220;do not call this slow thing all the time&#8221; dance (aka optimize code). I collected that work in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=470116">bug 470116</a>. Last I checked there was relatively little room for optimization left on the JS side of Fennec, so then I went to look at what&#8217;s lurking in C++.</p>
+
+<p>PS. Firebug is a popular consumer of the JSD API for those times when one isn&#8217;t willing to write JS components to figure out why something is slow.</p>
+
+<p><strong>C++ Is Harder</strong></p>
+
+<p>I&#8217;ve some success with inserting probes into C++ code. I would find interesting code by running oprofile on the desktop (while doing things that I felt were slow on N810). Oprofile would then provide me a callgraph which I would visualize with <a href="http://code.google.com/p/jrfonseca/wiki/Gprof2Dot">this awesome little script</a>. Then I would stick <a href="http://people.mozilla.com/~tglek/fennec/patches/measurer.diff">MeasurerOfTime</a> timing blocks into interesting &#8220;hot&#8221; code and hope that I would learn something useful.</p>
+
+<p>This got me thinking. Wouldn&#8217;t it be nice if there existed a JSD for C++? It&#8217;d be cool to inspect the C++ callgraph just like one does for JS. It seems like it would help on platforms that aren&#8217;t gcc and can&#8217;t inject tracing code via -finstrument-functions. Even -finstrument-functions is of limited use due to the pain of looking up symbols in shared libraries. Stay tuned.</p>
+
+<p><strong>Measuring Progress</strong></p>
+
+<p>The worst part of doing optimizations is knowing that some time in a future an innocent programmer will slightly change some seemingly innocent code and things will no longer happen quickly. Short of policing every single patch by people who previously optimized code in question there is only one thing one can do: performance tests.</p>
+
+<p><a href="http://hg.mozilla.org/users/tglek_mozilla.com/fennecmark">Fennecmark</a> is a benchmark for measuring responsiveness of the Fennec features that I worked on most: panning, zooming and lag during pageload. I <a href="http://taras.glek.net/blog/2009/04/23/benchmarks-and-instrumentation-for-fennecetc/">blogged</a> about it before. Since then Joel Maher has <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=493057">gotten Fennecmark</a> to run automatically and produce results on the graph server. I think we should be logging more numbers (Tpan, Tzoom), but it&#8217;s an excellent first step in monitoring performance regressions.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -536,52 +594,6 @@ if (requestAnimationFrame)
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/02/19/quickfix-model-of-develoment/">Quickfix Model of Develoment</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-02-19T03:20:51-08:00" pubdate data-updated="true">Feb 19<span>th</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I love new programming toys and this week is a good one for those. Ever since I laid the foundations for Dehydra I&#8217;ve been dreaming of a world where I can quickly lookup a piece of code(say something that someone complains about on IRC), fix it, get it reviewed and pushed in the most efficient manner possible. Seems that the pieces are finally falling into place.</p>
-
-<ol>
-<li>I want quick semantically aware code lookup via <a href="http://zenit.senecac.on.ca/wiki/dxr/">DXR</a>. And guess what, there is <a href="http://www.visophyte.org/blog/2009/02/19/dxrpy-with-references-against-mailnews-plus-bespin-wishes/">progress</a> in that direction.</li>
-<li>I want to DXR to provide a link to edit the code. <a href="http://bespin.mozilla.com/">Bespin</a> looks like the most promising candidate for editing. As an aside, using canvas to do text editing is badass. I salute devs who are crazy enough to prove their point by reimplementing something (hopefully better) from scratch using an approach that hasn&#8217;t been tried before.</li>
-<li>I want my changes to be saved as a diff into bugzilla. I want that to be two way so I can edit existing patches and save them as new bugzilla attachments.</li>
-<li>From there I&#8217;d like a commit feature in bugzilla so the patch would go through try-then-push cycle that Jesse <a href="http://www.squarefree.com/">described</a>.</li>
-<li>Having all this inplace would make it trivial to integrate random features such as crash stack trace navigation or <a href="https://developer.mozilla.org/En/Pork">Pork</a> automagic refactoring.
-Now I&#8217;m sure that most of us would still run Emacs and other desktop editors for longer development tasks. But just imagine being bored with a computer at a webcafe, boring friend, etc and having the ability to quickly jump into in the development process as easily as logging into webmail.</li>
-</ol>
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/18/">&larr; Older</a>
@@ -599,6 +611,10 @@ Now I&#8217;m sure that most of us would still run Emacs and other desktop edito
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/02/15/is-planet-mozilla-obsolete/">Is Planet Mozilla Obsolete for Technical Content?</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/01/28/snappy-number-50-misc-speedups/">Snappy #50</a>
       </li>
     
@@ -612,10 +628,6 @@ Now I&#8217;m sure that most of us would still run Emacs and other desktop edito
     
       <li class="post">
         <a href="/blog/2013/01/04/snappy-2012-summary/">Snappy: 2012 Summary</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/12/24/making-pages-load-faster/">Making pages load faster</a>
       </li>
     
   </ul>

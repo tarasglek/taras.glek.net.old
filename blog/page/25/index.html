@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Squash If you are working on any C++ refactoring, especially if it involves function calls, spans multiple files or feels like you need a compiler in &hellip;">
+  <meta name="description" content="Most static analysis tools don&#8217;t let you script them. Oink is an example of that. Adding a new analysis requires extending an existing tool &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,48 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2007/04/04/what-about-javascript-in-dehydra/">What About JavaScript in Dehydra?</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-04-04T09:44:04-07:00" pubdate data-updated="true">Apr 4<span>th</span>, 2007</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Most static analysis tools don&#8217;t let you script them. Oink is an example of that. Adding a new analysis requires extending an existing tool with a feature which may not fit in smoothly or writing a new tool in C++ with the corresponding boilerplate to handle command-line arguments, etc.</p>
+
+<p>At the other extreme lives UNO which has a DSL that is designed strictly for solving control-flow programs.</p>
+
+<p>I chose JavaScript for Dehydra to get the power of a full-blown (and memory safe) programming language while keeping JS&#8217;s view of the code under analysis as simple as possible. I think I got the C++/JS mix just right, the C++ codebase is growing slowly, yet I add JS scripts for any little task.</p>
+
+<p>Additionally JS came in handy for publishing the data on the web. I wrote a <a href="http://people.mozilla.org/~tglek/inheritance.js">script</a> to determine the class inheritance graph. Then I added a little prefix to the <a href="http://people.mozilla.org/~tglek/graph/examples/inheritance.js">file produced</a>, combined it with <a href="http://www.kylescholz.com/blog/projects/jsviz/">jsviz</a> and ended up with a really slow and unusable, but somewhat pretty <a href="http://people.mozilla.org/~tglek/graph/examples/classes.html">class browser</a>. This could evolve to be a rather neat way to supplement LXR.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -712,121 +754,6 @@ In the longer term, I would also like to see some Elsa changes:</li>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2006/12/21/oink-meet-squash/">Oink, Meet Squash</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2006-12-21T07:55:25-08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2006</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Progress</p>
-
-<p>I spent some time proving to myself that it is possible to automate DeCOMtamination. The result is squash - a tool that aims to accomplish the first step of DeCOMtamination. My near term goals are to be able to squash together a real life XPCOM interface and implementation such that:</p>
-
-<ol>
-<li>The resulting code compiles</li>
-<li>Firefox runs correctly</li>
-<li>Simple functions using out parameters are converted to use return values instead
-Currently I am approximately halfway through with first requirement. In its current form squash lives as a patch to the <a href="http://www.cubewano.org/oink">oink suite</a> of tools.</li>
-</ol>
-
-
-<p>Usage</p>
-
-<ul>
-<li>Pick a simple XPCOM implementation class to squash. I like</li>
-</ul>
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>CSSLoaderImpl</span></code></pre></td></tr></table></div></figure>
-
-
-<p>.
-  * Produce a .i file because Oink/Elsa do not have an integrated preprocessor yet.</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'> make CXX="gcc -E" nsCSSLoader.o; mv nsCSSLoader.o nsCSSLoader.i</span></code></pre></td></tr></table></div></figure>
-
-
-<ul>
-<li>Squash it:</li>
-</ul>
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>./squash -o-lang GNU_Cplusplus -sq-implementation CSSLoaderImpl  nsCSSLoader.i  -sq-exclude-include string/nsTString.h -sq-include "nsString.h" &gt; /tmp/cssloader.patch &gt; cssloader.patch</span></code></pre></td></tr></table></div></figure>
-
-
-<ul>
-<li>Apply the patch:</li>
-</ul>
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>patch -p0 &lt; cssloader.patch</span></code></pre></td></tr></table></div></figure>
-
-
-<ul>
-<li>Run make, deduce the problem with the patch and start over
-Current functionality at the header level:</li>
-<li>Class member merging
-
-<ul>
-<li>virtual interface members are replaced with non-virtual ones from implementation</li>
-<li>Class members and their parameters are renamed: eg s/CSSLoaderImpl/nsICSSLoader/</li>
-</ul>
-</li>
-<li>Additional members from the implementation are added to the interface</li>
-<li>Extra class/struct definitions used by the implementation members are moved up into the header as needed</li>
-<li>Header and forward declaration inference
-
-<ul>
-<li>The resulting class will usually not compile because more headers are needed. Squash computes the set difference of class definitions as used by the implementation and the interface. Part of the list ends up as forwad declarations, the other part is translated futher into #include statements.</li>
-<li>The above is trickly algorithm to fully implement fully, so in the meantime there are also manual overrides with -sq-include and -sq-exclude-include
-At the source level squash renames the class part of function definitions along with their arguments.</li>
-</ul>
-</li>
-</ul>
-
-
-<p><strong>Results</strong></p>
-
-<p><a href="http://glek.net:8080/~taras/cssloader.patch.gz">Sample patch output</a>.</p>
-
-<p><a href="http://glek.net:8080/~taras/oink.patch.gz">Oink patch</a>.</p>
-
-<p><strong>Challenges and Limitations</strong></p>
-
-<p>I am really grateful for Elsa&#8217;s ability to parse C++ as used in Mozilla. I think this opens a lot of doors to automation, optimizations and new features that would be too laborious to even consider implementing otherwise. However Elsa still has some maturing to do. We loose typedef information, pretty-printing is still spotty and looks too different from parsed C++, but the biggest challenge is the lack of an &#8220;end-of-ASTNode&#8221; position information. All these will be addressed in the future, but in the meantime I have to make unfortunate choices of either getting distracted and working on Elsa/Oink internals or do work-around and continue with writing tools. My short term goal is to finish step 1 and to get squash into the oink SVN.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/26/">&larr; Older</a>
@@ -844,6 +771,10 @@ At the source level squash renames the class part of function definitions along 
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/02/15/is-planet-mozilla-obsolete/">Is Planet Mozilla Obsolete for Technical Content?</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/01/28/snappy-number-50-misc-speedups/">Snappy #50</a>
       </li>
     
@@ -857,10 +788,6 @@ At the source level squash renames the class part of function definitions along 
     
       <li class="post">
         <a href="/blog/2013/01/04/snappy-2012-summary/">Snappy: 2012 Summary</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/12/24/making-pages-load-faster/">Making pages load faster</a>
       </li>
     
   </ul>

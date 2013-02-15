@@ -4,7 +4,7 @@
   <title><![CDATA[Category: mozilla | All About Performance]]></title>
   <link href="http://taras.glek.net/blog/categories/mozilla/atom.xml" rel="self"/>
   <link href="http://taras.glek.net/"/>
-  <updated>2013-01-29T15:17:52-08:00</updated>
+  <updated>2013-02-15T12:37:42-08:00</updated>
   <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -12,6 +12,37 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Is Planet Mozilla Obsolete for Technical Content?]]></title>
+    <link href="http://taras.glek.net/blog/2013/02/15/is-planet-mozilla-obsolete/"/>
+    <updated>2013-02-15T11:21:00-08:00</updated>
+    <id>http://taras.glek.net/blog/2013/02/15/is-planet-mozilla-obsolete</id>
+    <content type="html"><![CDATA[##Good Old Days
+I have been remotely working at Mozilla for over 6 years. I like working remotely, but it poses some challenges. Early on I discovered that if I only show up at the HQ a couple times a year, most will people treat me as a stranger. That got old fast.
+
+The problem is that it takes a lot of time time to get everybody up to speed on who you are (defined by what you work on). This means one's work social circle is limited to people who you have frequent bugzilla/irc interactions with + random people who took the time to get to know a random coworker. One can imagine that introverts are not inclined to waste too much energy meeting new people.
+
+The solution was simple: blog a lot. After a couple years of blogging I just had to say "I'm Taras" and a good proportion of the people would connect my face to (obscure static analysis at first) work they read about on [planet](http://planet.mozilla.org). This cut down my introduction overhead significantly. Planet Mozilla had a lot of blogs syndicated to it when I joined. I had a huge audience to introduce my work to.
+
+In addition to creating awareness of my work, blogging about tough problems would occasionally result in helpful comments. People provided tips on static analysis, Windows APIs and even ran scary privileged software I wrote to help me gather data. Due to disproportionate (eg saving days to weeks of work) value of helpful comments I concluded that it's worth spending a couple hours per blog post. Most blog comments might be [garbage](http://davidwalsh.name/blog-comments), but they are easy to ignore. Before I implemented [telemetry](https://wiki.mozilla.org/Telemetry), I was able to find performance extremes solely on blog feedback. Unlike privacy-sensitive telemetry data, blog comments came with email addresses and eager volunteers on the other end. I value comments a lot, it makes me sad when good bloggers disable comments.
+
+To me Planet Mozilla was a great way to keep up with Mozilla technical affairs. We have a lot of smart people working on interesting problems at Mozilla. As a result of past planet experience, I ask every new person who joins the Performance team to get their blog syndicated to planet ASAP. Increasingly that feels like an unproductive suggestion.
+
+##Present
+
+I do not have any data on this. However my feeling is that the volume of blog traffic on planet grew from barely-manageable in the early days to too much. Good technical content never constituted more than 10% of the planet posts. However as absolute blog traffic grew, it became harder to spot the good stuff. In addition to a lot of content being non-technical, in the last few years people started discussing their feelings about others and things got ugly.
+
+I'm pretty sure the result is that there are less technical people reading planet than before(due to poor signal/noise ratio). Lack of audience means less incentive to blog (that and the fact that some bloggers are part of the audience that gave up on planet).
+
+So what are we to do? Is planet obsolete for good technical content? Is there a new reddit/hackernews/twitter self-moderating solution for dealing with single/noise problems? Surely setting up a new planet is no longer considered state of the art for this. 
+
+I am sad to see a public resource like the planet get too big to remain useful with no clear successor.
+
+
+ps. Sorry for adding to the non-technical noise.
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Snappy #50]]></title>
@@ -148,24 +179,6 @@ The following sadness was fixed:
 Suggestion to use `requestAnimationFrame` to delay loading resources is a good one. There is a gotcha: if you do something expensive in the requestAnimationFrame handler, it'll delay your first page draw (requestAnimationFrame fires as the browser prepares to paint. It's an ok place to start network requests, etc). If you do something expensive, use a chained requestAnimationFrame. Firefox recently started using a similar trick to display the UI faster in <a title="Wait until chrome is painted before executing code not critical to making the initial window visible" href="https://bugzilla.mozilla.org/show_bug.cgi?id=715402">bug 715402</a>.
 
 The suggestion to split up stylesheets is also good, but risky. I've seen this before, but I did not understand why websites sprinkled `<link rel="stylesheet">` throughout the page bodies. This can significantly degrade pageload times by causing redundant page restyles and reflows. Reflows can take hundreds of milliseconds on slow mobile devices, doing them multiple times is bad. Make sure to run your pages through a [profiler](http://anton.kovalyov.net/2012/12/17/firefox-profiler/) (or time the difference between relevant requestAnimationFrame callbacks). I saw a bad case of this in <a title="huffingtonpost loads up to 50% slower in Firefox than in opera" href="https://bugzilla.mozilla.org/show_bug.cgi?id=718864">bug 718864</a>.
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Snappy #45: The view from home]]></title>
-    <link href="http://taras.glek.net/blog/2012/12/21/interesting-bugzilla-activity/"/>
-    <updated>2012-12-21T12:09:00-08:00</updated>
-    <id>http://taras.glek.net/blog/2012/12/21/interesting-bugzilla-activity</id>
-    <content type="html"><![CDATA[I'm out until January. However, I setup a [new blog](/blog/2012/12/17/hello-octopress/), so why not test it with a snappy update. 
-
-Benoit Girard sped up shutdown with:
-
-* not forcing startup cache flushes on shutdown: <a title="[Shutdown] Startup cache slows shutdown with < 10 sec uptime" href="https://bugzilla.mozilla.org/show_bug.cgi?id=816656">bug 816656</a>. This speeds up exiting browser soon after startup.
-* <a title="[Shutdown] js::NukeCrossCompartmentWrappers takes up to 300ms on shutdown. Avoid doing it for optimized shutdown" href="https://bugzilla.mozilla.org/show_bug.cgi?id=818296">bug 818296</a>: [Shutdown] js::NukeCrossCompartmentWrappers takes up to 300ms on shutdown. Avoid doing it for optimized shutdown. This may significantly reduce our shutdown times. We are waiting on more telemetry data to confirm.
-
-Aaron Klotz made startup slightly faster by speeding up reading of some urlclassifier files in <a title="loading the two safebrowsing files is not as fast as it could be" href="https://bugzilla.mozilla.org/show_bug.cgi?id=810101">bug 810101</a>.
-
-Vladimir Vukicevic landed <a title="requestAnimationFrame generates too short/long frames, especially at the beginning of animation" href="https://bugzilla.mozilla.org/show_bug.cgi?id=731974">bug 731974</a> which results in smoother browser animations and significantly improves the quality of tab-strip animations.
 ]]></content>
   </entry>
   
