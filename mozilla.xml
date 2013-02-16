@@ -4,7 +4,7 @@
   <title><![CDATA[All About Performance]]></title>
   <link href="http://taras.glek.net/atom.xml" rel="self"/>
   <link href="http://taras.glek.net/"/>
-  <updated>2013-02-15T14:36:47-08:00</updated>
+  <updated>2013-02-15T17:00:23-08:00</updated>
   <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -12,6 +12,21 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  
+  <entry>
+    <title type="html"><![CDATA[Plugin Hang UI On Aurora]]></title>
+    <link href="http://taras.glek.net/blog/2013/02/15/plugin-hang-ui-on-aurora/"/>
+    <updated>2013-02-15T16:51:00-08:00</updated>
+    <id>http://taras.glek.net/blog/2013/02/15/plugin-hang-ui-on-aurora</id>
+    <content type="html"><![CDATA[<p>Aaron wrote a <a href="http://dblohm7.ca/blog/2013/02/15/plugin-hang-ui-on-aurora/">great post</a> on of the new plugin killer UI and Windows magic involved in debugging it.</p>
+
+<p>We need help testing the new functionality, please see the link above for details.</p>
+
+<p>Unfortunately, we are still waiting on <a title="Add Aaron Klotz's blog to Planet Mozilla" href="https://bugzilla.mozilla.org/show_bug.cgi?id=814095">bug 814095</a> to get his blog syndicated to planet.</p>
+]]></content>
+  </entry>
+  
   
   
   <entry>
@@ -536,40 +551,6 @@
 <li>we also need to stabilize the development version and move it to <a href="http://dxr.mozilla.org/">dxr.mozilla.org</a>.</li>
 </ul>
 
-]]></content>
-  </entry>
-  
-  
-  
-  <entry>
-    <title type="html"><![CDATA[Snappy #37]]></title>
-    <link href="http://taras.glek.net/blog/2012/08/23/snappy-37/"/>
-    <updated>2012-08-23T09:10:49-07:00</updated>
-    <id>http://taras.glek.net/blog/2012/08/23/snappy-37</id>
-    <content type="html"><![CDATA[<p>Highlights from <a href="https://wiki.mozilla.org/Performance/Snappy/2012-08-23#Incoming">meeting note</a>s for today:</p>
-
-<ul>
-<li>Tim Taubert worked on Firefox UI speedups</li>
-<li>Lots of improvements to the profiler from Benoit Girard</li>
-<li>More incremental GC work from Jon Coppeard</li>
-<li>Vladan Djeric got all of the security reviews and should be able to land Nicholas Chaim&#8217;s fix for networked certificate validation:<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=726125"> bug 726125</a>
-We spent most of the meeting discussing bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=784512">bug 784512</a>. According several data sources Firefox 15 Beta loads pages slower than 14. Occasionally problems squeeze past our performance testing + telemetry infrastructure, this looks like one of these times. Unfortunately, it&#8217;s quite hard to reduce a few noisy signals to a concrete performance problem. If you can reproduce a performance regression to do with loading webpages/games/etc in FF15 vs FF14, please leave a comment.</li>
-</ul>
-
-
-<p><strong>Thanks!</strong></p>
-
-<p>Thanks for the great comments on my <a href="http://taras.glek.net/blog/2012/08/16/snappy-36/">previous </a>snappy updates. <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=783755">Bug 783755</a> should take care of the new cache size pref not sticking. <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=718910">Bug 718910</a> on hiding Cache directory from Spotlight is making progress too.</p>
-
-<p>Commenter, kumalos, reported a tab switching regression and posted a profile recorded with our <a href="https://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;ved=0CCIQFjAA&amp;url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FPerformance%2FProfiling_with_the_Built-in_Profiler&amp;ei=FLw2UKzMO4WXiQLSgoHwAQ&amp;usg=AFQjCNEGPmI44wGwpjRbtR-WT36EdVv-ew">profiler </a>as evidence. This proved to be an example of bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=783748">783748</a>, and lead us to identify a previously unknown issue in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=784756">784756</a>. Constructive feedback like this is one of the main reasons I blog.</p>
-
-<p>I highly encourage users interested in improving Firefox performance to use Nightly builds and report bugs with profiler traces attached.</p>
-
-<p><strong>Shutdown Times</strong></p>
-
-<p>I&#8217;ll end with our latest Telemetry data point. This one took a while to get right, but we finally track our shutdown speed.</p>
-
-<p><a href="http://taras.glek.net/blog/files/2012/08/shutdown.png"><img src="http://taras.glek.net/assets/images/2012-08-23-snappy-37/shutdown-300x157.png" alt="" /></a></p>
 ]]></content>
   </entry>
   

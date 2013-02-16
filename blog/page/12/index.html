@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="I spent last week trying to reproduce slow startup on Windows. Some users were reporting >30 second startup, supernova_00 has been feeding me xperf &hellip;">
+  <meta name="description" content="Fragmentation: SQLite &amp; Friends I am happy to report that the SQLite fragmentation problem is now solved. I copied my profile a month ago, and my &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,56 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/11/16/performance-progress/">Performance Update. Fragmentation: Mostly Fixed. GCC: Work-in-progress.</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-11-16T07:14:02-08:00" pubdate data-updated="true">Nov 16<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><strong>Fragmentation: SQLite &amp; Friends </strong></p>
+
+<p>I am happy to report that the SQLite fragmentation <a href="http://taras.glek.net/blog/2010/09/07/fighting-fragmentation-sqlite/">problem</a> is now <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=581606">solved</a>. I copied my profile a month ago, and my places.sqlite is still in a single fragment! There was a similar <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=592520">fix</a> done to Firefox disk cache. Thanks to helpful comments on my OSX preallocation <a href="http://taras.glek.net/blog/2010/09/09/help-wanted-does-fcntlf_preallocate-work-as-advertised-on-osx/">cry for help</a>, we now preallocate efficiently on OSX too.</p>
+
+<p>Startup cache is the last <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=593349">remaining</a> bastion of fragmentation, but that&#8217;s already 10x better than it was a month ago. I have two complimentary solutions for that: either <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=562406">omnijar startup cache generation</a> for core code and/or write the cache more <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=586859">efficiently</a>.</p>
+
+<p>Firefox 4 will be a lot more gentle on those spinning platters.</p>
+
+<p><strong>GCC</strong></p>
+
+<p>I helped Jan Hubicka on a GCC <a href="http://gcc.gnu.org/wiki/summit2010">summit paper</a>. Those nasty static initializers will not be a hassle in GCC 4.6!</p>
+
+<p>I keep wanting to blog about how we switched to <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=559964">GCC 4.5</a> and how life is wonderful, but life didn&#8217;t work out this way. So far we tried switching away from 4.3 compiler three times. The first time GCC completely failed in terms of -Os performance. C++ -Os is more bloated in 4.5 (because that option is benchmarked on C apps). Then it turned out that libffi was being <a href="http://gcc.gnu.org/bugzilla/show_bug.cgi?id=45623">miscompiled</a> (we also found a related bug in libffi). Last time, we tried switching to GCC 4.5 + -O3 since that performs much better than -Os, but that <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=609543#c45">broke</a> sunspider. Hopefully we can fix the sunspider issue and try again next week. I would really like to utilize GCC <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=418866">PGO</a> to produce fastest possible Linux Firefox builds.</p>
+
+<p>Nonetheless I happy with recent GCC progress. With Jan&#8217;s help, GCC will eventually be very good at compiling Mozilla. In my spare cycles I&#8217;ve been working on setting up GCC benchmarks using Mozilla to help avoid future surprises like we discovered in GCC 4.5. More on this later.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -615,52 +665,6 @@ I plan to blog more on each of these subjects as they get closer to realization.
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2010/06/09/galois-talk/">Galois Talk</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-06-09T03:08:44-07:00" pubdate data-updated="true">Jun 9<span>th</span>, 2010</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I was invited to present a <a href="http://www.galois.com/blog/2010/06/03/tech-talk-large-scale-static-analysis-at-mozilla/">Galois tech talk</a> on Mozilla static analysis. It was really cool to give a talk locally to such an expert audience. I was surprised to discover a vibrant Programming Languages + Analysis community in Portland.</p>
-
-<p>Edward Z. Yang did an <a href="http://blog.ezyang.com/2010/06/static-analysis-mozilla/">excellent write-up</a> on the talk.</p>
-
-<p><strong>PLDi</strong></p>
-
-<p>Robert O&#8217;Callahan mentioned Dehydra in his <a href="http://weblogs.mozillazine.org/roc/archives/2010/06/sleepless_in_to.html">PLDI talk</a>.</p>
-
-<p><strong>Dehydra/Treehydra in GCC 4.5</strong></p>
-
-<p>There a few fixes that are about to land. I&#8217;m hoping that by the end of the week GCC 4.5 support will be production-quality. Sorry that it&#8217;s taken so long, but I&#8217;ve been busy focusing on startup. <a href="http://ehren.wordpress.com/">Ehren</a> has picked up the slack, we should be able to produce a fairly polished Dehydra 1.0 by the end of the summer.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/13/">&larr; Older</a>
@@ -678,6 +682,10 @@ I plan to blog more on each of these subjects as they get closer to realization.
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/02/15/plugin-hang-ui-on-aurora/">Plugin Hang UI On Aurora</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/02/15/is-planet-mozilla-obsolete/">Is Planet Mozilla Obsolete for Technical Content?</a>
       </li>
     
@@ -691,10 +699,6 @@ I plan to blog more on each of these subjects as they get closer to realization.
     
       <li class="post">
         <a href="/blog/2013/01/10/snappy-number-48-now-with-faster-shutdown/">Snappy #48: Now With Faster Shutdown</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/01/04/snappy-2012-summary/">Snappy: 2012 Summary</a>
       </li>
     
   </ul>

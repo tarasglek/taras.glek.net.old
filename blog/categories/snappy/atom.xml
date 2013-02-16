@@ -4,7 +4,7 @@
   <title><![CDATA[Category: snappy | All About Performance]]></title>
   <link href="http://taras.glek.net/blog/categories/snappy/atom.xml" rel="self"/>
   <link href="http://taras.glek.net/"/>
-  <updated>2013-02-15T14:36:47-08:00</updated>
+  <updated>2013-02-15T17:00:23-08:00</updated>
   <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -12,6 +12,20 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Plugin Hang UI On Aurora]]></title>
+    <link href="http://taras.glek.net/blog/2013/02/15/plugin-hang-ui-on-aurora/"/>
+    <updated>2013-02-15T16:51:00-08:00</updated>
+    <id>http://taras.glek.net/blog/2013/02/15/plugin-hang-ui-on-aurora</id>
+    <content type="html"><![CDATA[Aaron wrote a [great post](http://dblohm7.ca/blog/2013/02/15/plugin-hang-ui-on-aurora/) on of the new plugin killer UI and Windows magic involved in debugging it. 
+
+We need help testing the new functionality, please see the link above for details.
+
+Unfortunately, we are still waiting on <a title="Add Aaron Klotz's blog to Planet Mozilla" href="https://bugzilla.mozilla.org/show_bug.cgi?id=814095">bug 814095</a> to get his blog syndicated to planet.
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Snappy #50]]></title>
@@ -147,24 +161,6 @@ The following sadness was fixed:
 #2013
 
 2012 was a good warm-up. We spent a substantial part of the year on tooling. If everything goes right, that should pay off in the coming year.
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Snappy #45: The view from home]]></title>
-    <link href="http://taras.glek.net/blog/2012/12/21/interesting-bugzilla-activity/"/>
-    <updated>2012-12-21T12:09:00-08:00</updated>
-    <id>http://taras.glek.net/blog/2012/12/21/interesting-bugzilla-activity</id>
-    <content type="html"><![CDATA[I'm out until January. However, I setup a [new blog](/blog/2012/12/17/hello-octopress/), so why not test it with a snappy update. 
-
-Benoit Girard sped up shutdown with:
-
-* not forcing startup cache flushes on shutdown: <a title="[Shutdown] Startup cache slows shutdown with < 10 sec uptime" href="https://bugzilla.mozilla.org/show_bug.cgi?id=816656">bug 816656</a>. This speeds up exiting browser soon after startup.
-* <a title="[Shutdown] js::NukeCrossCompartmentWrappers takes up to 300ms on shutdown. Avoid doing it for optimized shutdown" href="https://bugzilla.mozilla.org/show_bug.cgi?id=818296">bug 818296</a>: [Shutdown] js::NukeCrossCompartmentWrappers takes up to 300ms on shutdown. Avoid doing it for optimized shutdown. This may significantly reduce our shutdown times. We are waiting on more telemetry data to confirm.
-
-Aaron Klotz made startup slightly faster by speeding up reading of some urlclassifier files in <a title="loading the two safebrowsing files is not as fast as it could be" href="https://bugzilla.mozilla.org/show_bug.cgi?id=810101">bug 810101</a>.
-
-Vladimir Vukicevic landed <a title="requestAnimationFrame generates too short/long frames, especially at the beginning of animation" href="https://bugzilla.mozilla.org/show_bug.cgi?id=731974">bug 731974</a> which results in smoother browser animations and significantly improves the quality of tab-strip animations.
 ]]></content>
   </entry>
   

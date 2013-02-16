@@ -9,7 +9,9 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="One of the limitations of the SQLite FTS is that it can&#8217;t do regular expression or substring searches. Jonas is addressing this with TriLite. &hellip;">
+  <meta name="description" content="Highlights from meeting notes for today: Tim Taubert worked on Firefox UI speedups
+Lots of improvements to the profiler from Benoit Girard
+More &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +91,65 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/08/23/snappy-37/">Snappy #37</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-08-23T09:10:49-07:00" pubdate data-updated="true">Aug 23<span>rd</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Highlights from <a href="https://wiki.mozilla.org/Performance/Snappy/2012-08-23#Incoming">meeting note</a>s for today:</p>
+
+<ul>
+<li>Tim Taubert worked on Firefox UI speedups</li>
+<li>Lots of improvements to the profiler from Benoit Girard</li>
+<li>More incremental GC work from Jon Coppeard</li>
+<li>Vladan Djeric got all of the security reviews and should be able to land Nicholas Chaim&#8217;s fix for networked certificate validation:<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=726125"> bug 726125</a>
+We spent most of the meeting discussing bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=784512">bug 784512</a>. According several data sources Firefox 15 Beta loads pages slower than 14. Occasionally problems squeeze past our performance testing + telemetry infrastructure, this looks like one of these times. Unfortunately, it&#8217;s quite hard to reduce a few noisy signals to a concrete performance problem. If you can reproduce a performance regression to do with loading webpages/games/etc in FF15 vs FF14, please leave a comment.</li>
+</ul>
+
+
+<p><strong>Thanks!</strong></p>
+
+<p>Thanks for the great comments on my <a href="http://taras.glek.net/blog/2012/08/16/snappy-36/">previous </a>snappy updates. <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=783755">Bug 783755</a> should take care of the new cache size pref not sticking. <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=718910">Bug 718910</a> on hiding Cache directory from Spotlight is making progress too.</p>
+
+<p>Commenter, kumalos, reported a tab switching regression and posted a profile recorded with our <a href="https://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;ved=0CCIQFjAA&amp;url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FPerformance%2FProfiling_with_the_Built-in_Profiler&amp;ei=FLw2UKzMO4WXiQLSgoHwAQ&amp;usg=AFQjCNEGPmI44wGwpjRbtR-WT36EdVv-ew">profiler </a>as evidence. This proved to be an example of bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=783748">783748</a>, and lead us to identify a previously unknown issue in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=784756">784756</a>. Constructive feedback like this is one of the main reasons I blog.</p>
+
+<p>I highly encourage users interested in improving Firefox performance to use Nightly builds and report bugs with profiler traces attached.</p>
+
+<p><strong>Shutdown Times</strong></p>
+
+<p>I&#8217;ll end with our latest Telemetry data point. This one took a while to get right, but we finally track our shutdown speed.</p>
+
+<p><a href="http://taras.glek.net/blog/files/2012/08/shutdown.png"><img src="/assets/images/2012-08-23-snappy-37/shutdown-300x157.png" alt="" /></a></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -547,68 +608,6 @@ In part 2 I&#8217;ll discuss how various people at Mozilla use Telemetry.</li>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/07/12/snappy-july-12-2012/">Snappy. July 12, 2012</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-07-12T08:30:52-07:00" pubdate data-updated="true">Jul 12<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><strong>Testing</strong></p>
-
-<p>We discussed setting up <a href="http://wrla.ch/blog/2012/06/mobile-firefox-measuring-how-a-browser-feels">Eideticker</a>, for desktop Firefox responsiveness testing.</p>
-
-<p>Andrew Halberstadt is making progress on a revised version of peptest. We are looking at loading talos pageset into individual tabs and tracking tab-switching</p>
-
-<p>We also discussed how QA can help in helping us confirm + narrow down regressions found by telemetry.</p>
-
-<p><strong>Necko</strong></p>
-
-<p>Necko guys are continuing to remove main thread DNS resolution, are integrating a custom DNS resolver. Last week they landed a bunch of <a href="https://metrics.mozilla.com/data/">telemetry</a> to help them play cache-lock-whack-a-mole: bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=763342">763342</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=767275">767275</a>.</p>
-
-<p><strong>Profiler</strong></p>
-
-<p>Our <a href="https://developer.mozilla.org/en/Performance/Profiling_with_the_Built-in_Profiler">profiler </a>should grok JavaScript now. See tomorrow&#8217;s nightly.</p>
-
-<p><strong>GC</strong></p>
-
-<p>Jon Coppeard put up a patch to do incremental sweeping. The cleanup phase of the GC is a major remaining continuous GC operation. This should help reduce remaining significant GC pauses.</p>
-
-<p><strong>Perf Team</strong></p>
-
-<p>Nicholas Chaim is almost done with setting a way to track main thread IO with XPerf in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=770317">770317</a>. We would like to track main thread network IO via xperf, but it&#8217;s not clear if xperf can report what thread IO operations happen on.</p>
-
-<p><strong>Slow Startup</strong></p>
-
-<p>Turns out Firefox validates some signed extensions on startup: bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=726125">726125</a>. I think we finally have a good explanation for some of the ridiculously slow startups we&#8217;ve been looking at. Yuck.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/4/">&larr; Older</a>
@@ -626,6 +625,10 @@ In part 2 I&#8217;ll discuss how various people at Mozilla use Telemetry.</li>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/02/15/plugin-hang-ui-on-aurora/">Plugin Hang UI On Aurora</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/02/15/is-planet-mozilla-obsolete/">Is Planet Mozilla Obsolete for Technical Content?</a>
       </li>
     
@@ -639,10 +642,6 @@ In part 2 I&#8217;ll discuss how various people at Mozilla use Telemetry.</li>
     
       <li class="post">
         <a href="/blog/2013/01/10/snappy-number-48-now-with-faster-shutdown/">Snappy #48: Now With Faster Shutdown</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/01/04/snappy-2012-summary/">Snappy: 2012 Summary</a>
       </li>
     
   </ul>

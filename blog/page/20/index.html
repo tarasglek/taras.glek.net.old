@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="It seems that there is some confusion as to what pork is and how it&#8217;s related to oink and elsa. So here is my view of it. Pork is my set of &hellip;">
+  <meta name="description" content="I wrote a class renamer and used it to fix my pork pet-pieve #1: a class named string that isn&#8217;t std::string. This has been a low priority goal &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,48 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2008/07/22/dogfooding-pork-oscon/">Dogfooding Pork & OSCON</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-07-22T03:26:19-07:00" pubdate data-updated="true">Jul 22<span>nd</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I wrote a class renamer and used it to <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=445897">fix</a> my pork pet-pieve #1: a class named string that isn&#8217;t std::string. This has been a low priority goal for as long as I&#8217;ve been using Elsa. It&#8217;s pretty cool to apply a tool to fix itself.</p>
+
+<p>The renamer is a 3x simpler than the next simplest tool. I plan to extend it to also rename class members. Renaming is the most trivial use-case for rewriting code, I plan to post a tutorial on using  the renamer in the near future.</p>
+
+<p><strong>OSCON</strong></p>
+
+<p>If you are at OSCON, you do not want to miss our <a href="http://en.oreilly.com/oscon2008/public/schedule/detail/4383">static analysis session</a> on Wednesday.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -568,57 +610,6 @@ Some of you might ask &#8220;But Taras, why now, why not just keep doing what yo
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2008/04/29/counting-down-to-a-dehydra-release/">Counting Down to a Dehydra Release</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-04-29T08:34:43-07:00" pubdate data-updated="true">Apr 29<span>th</span>, 2008</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I hope to release Dehydra 0.9  within a couple of weeks. There is already a community of users, but there are still too many barriers to entry keeping potential bug hunters away.</p>
-
-<p>In recent weeks there has been a lot of work on polishing rough areas. Now we have better error reporting, improved APIs for using libraries, etc. The remaining tasks are tracked in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=423898">this bug</a>.</p>
-
-<p>There few big remaining TODOs are low-tech:</p>
-
-<ul>
-<li>Need a better homepage than the <a href="http://wiki.mozilla.org/Dehydra_GCC">current one</a>.</li>
-<li>Docs, tutorials and more docs. Currently, the plan is to puts more documentation on MDC and  have it also serve as a webpage. Any dehydra/treehydra guides or API doc contributions are welcome. For now if you need help, feel free to ask on the <a href="https://lists.mozilla.org/listinfo/dev-static-analysis">mailing list</a> or #mmgc on irc.mozilla.org</li>
-<li>Verify, document and maintain the <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=415289">OSX port</a>. Vlad Sukhoy did a lot of heavy lifting to make this happen, now we need to cement his achievement by setting up a <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=430321">buildbot</a></li>
-<li>Spread the word! I would like to see other large projects such as KDE, OpenOffice, etc adopt application-specific static analysis in the form of <em>hydra. I am interested in seeing people use </em>hydra to scan code for security vunerabilities. Ok, so this isn&#8217;t really needed to release Dehydra 0.9, but I am impatient!
-<strong>RIP: Oink Dehydra</strong></li>
-</ul>
-
-
-<p>Between GCC Dehydra and Treehydra, there is nothing that pork Dehydra could do better, so I finally removed Dehydra from <a href="http://wiki.mozilla.org/Pork">Pork</a>. From now on Pork&#8217;s purpose is large-scale C/C++ refactoring. For everything else one should use <a href="http://wiki.mozilla.org/Dehydra_GCC">Dehydra</a>.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/21/">&larr; Older</a>
@@ -636,6 +627,10 @@ Some of you might ask &#8220;But Taras, why now, why not just keep doing what yo
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/02/15/plugin-hang-ui-on-aurora/">Plugin Hang UI On Aurora</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/02/15/is-planet-mozilla-obsolete/">Is Planet Mozilla Obsolete for Technical Content?</a>
       </li>
     
@@ -649,10 +644,6 @@ Some of you might ask &#8220;But Taras, why now, why not just keep doing what yo
     
       <li class="post">
         <a href="/blog/2013/01/10/snappy-number-48-now-with-faster-shutdown/">Snappy #48: Now With Faster Shutdown</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/01/04/snappy-2012-summary/">Snappy: 2012 Summary</a>
       </li>
     
   </ul>

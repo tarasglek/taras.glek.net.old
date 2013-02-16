@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Good Old Days I have been remotely working at Mozilla for over 6 years. I like working remotely, but it poses some challenges. Early on I discovered &hellip;">
+  <meta name="description" content="Aaron wrote a great post on of the new plugin killer UI and Windows magic involved in debugging it. We need help testing the new functionality, &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,46 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/02/15/plugin-hang-ui-on-aurora/">Plugin Hang UI on Aurora</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-02-15T16:51:00-08:00" pubdate data-updated="true">Feb 15<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Aaron wrote a <a href="http://dblohm7.ca/blog/2013/02/15/plugin-hang-ui-on-aurora/">great post</a> on of the new plugin killer UI and Windows magic involved in debugging it.</p>
+
+<p>We need help testing the new functionality, please see the link above for details.</p>
+
+<p>Unfortunately, we are still waiting on <a title="Add Aaron Klotz's blog to Planet Mozilla" href="https://bugzilla.mozilla.org/show_bug.cgi?id=814095">bug 814095</a> to get his blog syndicated to planet.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -522,52 +562,6 @@ if (requestAnimationFrame)
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/11/16/snappy-44-fixing-tab-switching-in-vancouver/">Snappy #44: Fixing Tab Switching in Vancouver</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-11-16T10:06:41-08:00" pubdate data-updated="true">Nov 16<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I joined our GFX+Layout teams for a workweek in Vancouver. Since profiling is most effective on slow machines, I brought along my trusty Acer  Aspire 722(slow 1.3ghz  CPU+ fast GPU) as my primary laptop. This hardware is great because the combination of a weak CPU + decent GPU means that if we accelerate things right the browser can perform quite well and if we don&#8217;t, things get really slow. (analogous situation exists when fast CPUs are matched with slow GPUs).</p>
-
-<p>In the beginning of the week I quickly demoed menu lag, slow gmail tab switching(<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=811472">811472</a>). Later in the week we looked at problematic Facebook tab switch times (<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=811474">811474</a>), Australis(see Matt&#8217;s <a href="http://matthew.noorenberghe.com/blog/2012/11/australis-tabs-where-are-you">post</a>) performance. By the end of the week tab switching improved by over 2x for both facebook and gmail. I don&#8217;t have exact figures because while we can measure general tab switch trends via telemetry, there isn&#8217;t a convenient way to do it on individual browsers yet. <em>Help wanted:</em> would be great if someone could do up a barebone addon to monitor tab switching in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=812381">812381</a>, we&#8217;ll fill in the rest.</p>
-
-<p>Jeff Muizelaar started out by speeding up checkbox drawing in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=809603">809603</a><strong>.</strong> Matt Woodrow sped up gmail by tweaking how we use layers in bugs <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=811927">811927</a>,  <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=811570">811570</a>.</p>
-
-<p>Matt made sure that we no longer draw layers with opacity of 0 in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=811831">811831</a>. Turns rendering lots of invisible text can be expensive.</p>
-
-<p>Workweeks are a more about communication than getting code landed, so it is impressive that Jeff, Matt and their reviewers managed to diagnose, fix, review, land such significant optimizations in a couple of days. My laptop of pain feels much faster already.</p>
-
-<p>In the coming weeks expect to see smoother tab switching, smoother animations, lower profiling overhead as we work through issues discussed during the workweek.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -583,6 +577,10 @@ if (requestAnimationFrame)
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/02/15/plugin-hang-ui-on-aurora/">Plugin Hang UI On Aurora</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/02/15/is-planet-mozilla-obsolete/">Is Planet Mozilla Obsolete for Technical Content?</a>
       </li>
     
@@ -596,10 +594,6 @@ if (requestAnimationFrame)
     
       <li class="post">
         <a href="/blog/2013/01/10/snappy-number-48-now-with-faster-shutdown/">Snappy #48: Now With Faster Shutdown</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/01/04/snappy-2012-summary/">Snappy: 2012 Summary</a>
       </li>
     
   </ul>

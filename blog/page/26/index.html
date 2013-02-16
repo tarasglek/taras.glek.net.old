@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Progress I spent some time proving to myself that it is possible to automate DeCOMtamination. The result is squash - a tool that aims to accomplish &hellip;">
+  <meta name="description" content="Squash Milestone Reached Squash can now produce a patch that squashes my testcase class nsCSSLoaderImpl into the nsICSSLoader interface such that the &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,80 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2007/01/03/squashed-and-compiled/">Squashed and Compiled</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-01-03T03:22:25-08:00" pubdate data-updated="true">Jan 3<span>rd</span>, 2007</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><strong>Squash Milestone Reached</strong> Squash can now produce a patch that squashes my testcase class nsCSSLoaderImpl into the nsICSSLoader interface such that the resulting code compiles, links and runs!</p>
+
+<p><strong>Gory Details</strong> Patching function bodies turned out easier than expected. Since the last post, I&#8217;ve added the ability to rewrite variable declarations, casts and static method calls. This was enough to get nsCSSLoader.cpp compiling.</p>
+
+<p>I also ran into an issue where some methods need to remain virtual such that they can be referenced from other modules. I added a -sq-virtual flag to specify method names which need to stay virtual.</p>
+
+<p>I discovered that the implementation class can be used from other source files so now squash can work on multiple files. Unfortunately, this made me run into another Elsa misfeature: memory allocation. Elsa data structures do not attempt to clean up in their destructors. Once an AST is produced, it will remain in memory for the duration of execution. This is an issue, because merely parsing all of the .i files in layout/style/ takes over 600M of memory even though squash is strictly sequential and processes a single file at a time. Hopefully, converting Elsa to use auto_ptr is feasible and I wont have to resort to funny fork() tricks to reclaim memory.</p>
+
+<p><strong>ML vs C++ for Compilers: Rant</strong> I wonder why people insist on using C++ for symbolic manipulations instead of an *ml like O&#8217;Caml and either give up or, more frequently, reinvent features such as the ml type system, list processing, garbage collection or pattern matching. Isn&#8217;t it more productive to not have to deal with segfaults, slow compilation times and have a tenfold reduction in code size?</p>
+
+<p><strong>Squash Usage</strong> First I grep the build directory for usage of CSSLoaderImpl. This imprecise and will eventually be handled by squash itself, but first the memory deallocation issue has to be addressed or an index of the whole sourcetree needs to be built.</p>
+
+<p>find -name *.o | xargs grep CSSLoaderImpl</p>
+
+<p>This returned nsCSSLoader.o and nsLayoutStatics.o . Now .i files are produced by running make in their respective directories</p>
+
+<p>make nsCSSLoader.i make nsLayoutStatics.i</p>
+
+<p>For convenience I gather the .i files in a moz directory and run squash.</p>
+
+<p>./squash -o-lang GNU_Cplusplus -sq-exclude-include string/nsTString.h -sq-include nsString.h -sq-include nsCOMArray.h -sq-virtual LoadSheetSync -sq-virtual LoadSheet -sq-implementation CSSLoaderImpl moz/nsCSSLoader.i moz/nsLayoutStatics.i > cssloader.patch</p>
+
+<p>Turns out pretty printing C++ is hard and Oink/Elsa&#8217;s pretty printer still needs a lot of work. By producing patches and only rewriting part of the code squash rewrites only the code that needs changing. This avoids pretty printer bugs, and maximally preserves comments and the original code structure. The wackyness of the pretty printed code is apparent in the <a href="http://glek.net:8080/~taras/cssloader.patch">cssloader.patch</a>, especially in the function bodies.</p>
+
+<p><strong>Future Work</strong> I am happy to see that patching is viable even without precise source coordinates or preprocessor support in Elsa. My near term goals for squash are:</p>
+
+<ul>
+<li>Push squash upstream</li>
+<li>Add the ability to translate out-parameters to return values where possible</li>
+<li>Get a list of candidates for DeCOMtamination and improve squash enough to process all of them</li>
+<li>Work on a source code indexer. This would be useful to both squash as a semantic grep database and could be used to improve lxr.
+In the longer term, I would also like to see some Elsa changes:</li>
+<li>Figure out a memory de-allocation strategy</li>
+<li>Resolve the pain that is caused by Elsa having own &#8220;string&#8221; class which makes using STL an exercise in namespace verbosity. If Elsa were to switch to C++ strings, the above de-allocation job would be simplified too.</li>
+<li>Elsa is lossy when it comes to C++ extensions: may need to extend the Elsa AST a little</li>
+<li>It would be nice to improve Elsa memory consumption further. This would be hard.</li>
+<li>It would be great to make Elsa&#8217;s C++ <a href="http://www.parashift.com/c++-faq-lite/const-correctness.html">const-correct</a></li>
+</ul>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -268,6 +342,10 @@ At the source level squash renames the class part of function definitions along 
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/02/15/plugin-hang-ui-on-aurora/">Plugin Hang UI On Aurora</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/02/15/is-planet-mozilla-obsolete/">Is Planet Mozilla Obsolete for Technical Content?</a>
       </li>
     
@@ -281,10 +359,6 @@ At the source level squash renames the class part of function definitions along 
     
       <li class="post">
         <a href="/blog/2013/01/10/snappy-number-48-now-with-faster-shutdown/">Snappy #48: Now With Faster Shutdown</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/01/04/snappy-2012-summary/">Snappy: 2012 Summary</a>
       </li>
     
   </ul>

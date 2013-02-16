@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="A large proportion of our startup time is spent on loading the Firefox library(.dll, etc) files. This is true on all of our platforms. In my previous &hellip;">
+  <meta name="description" content="Recently the addon team started working towards penalizing addons that penalize our startup. We have solid data shows that startup gets worse as more &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,56 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/04/14/arguing-about-startup-communicating-performance/">Arguing About Startup: Communicating Performance</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-04-14T04:15:46-07:00" pubdate data-updated="true">Apr 14<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Recently the addon team started working towards penalizing addons that penalize our startup. We have solid data shows that startup gets worse as more addons installed so the effort is justified. Justin published this picture to illustrate the problem: <img src="http://people.mozilla.com/~fligtar/performance/num-addons-med.png" alt="" /></p>
+
+<p>However some technical mistakes were made. Wladimir (AdBlock+ guy!) has been busy exposing them on his <a href="http://adblockplus.org/blog/the-wrong-way-of-allowing-users-to-make-informed-decisions">blog</a>. Thanks Wladimir! I spent a couple of years understanding Firefox startup, so I really appreciate Wladimir&#8217;s remarkable speed/quality in poking holes in AMO approach.</p>
+
+<p><strong>Rating Addon Performance</strong>****</p>
+
+<p>Wlad&#8217;s latest <a href="http://adblockplus.org/blog/the-wrong-way-of-allowing-users-to-make-informed-decisions">point</a> is regarding how addon impact is measured on warm startup with an empty profile. I agree that addon impact on warm startup with clean profile is going to be different from that of cold startup with a dirty real-world profile. I also agree that it is weird to primarily measure warm startup given that our data clearly indicates that most users are experiencing cold startup.</p>
+
+<p>However startup is an irritating multidimensional problem influenced by a large number of factors. Should we suck it up and let addons kill warm startup (and risk ruining firefox upgrade times, pissing off web developers)? How does one choose a typical dirty profile? Creating a &#8220;typical&#8221; dirty profile is a tough problem (ie due to privacy, disk fragmentation) and there is no reason to let clean profile performance be degraded.</p>
+
+<p>So an addon performance rating will not be perfect. Time added by addon during warm startup is the easiest starting point and is one of the more deterministic measures (Wlad&#8217;s blog says otherwise, but measuring other startup kinds have even more noise). This is no worse than choosing browsers based on their JavaScript benchmark performance.</p>
+
+<p>I think a much awesomer addon performance rating may be obtainable by clever statistics boffins by analyzing our aggregated startup data. Perhaps the Mozilla Metrics will make it a reality, but in the meantime we&#8217;ll have to make do with an imperfect approach.</p>
+
+<p><em><strong>Coming soon:</strong> Why is the measurement approach in Jorge&#8217;s <a href="http://xulforge.com/blog/2011/04/testing-add-on-startup-performance/">post</a> is overly complicated and somewhat incorrect.</em></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -531,56 +581,6 @@ This was a rare fix that resulted in seconds saved on crapware-loaded computers.
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2010/11/16/performance-progress/">Performance Update. Fragmentation: Mostly Fixed. GCC: Work-in-progress.</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-11-16T07:14:02-08:00" pubdate data-updated="true">Nov 16<span>th</span>, 2010</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><strong>Fragmentation: SQLite &amp; Friends </strong></p>
-
-<p>I am happy to report that the SQLite fragmentation <a href="http://taras.glek.net/blog/2010/09/07/fighting-fragmentation-sqlite/">problem</a> is now <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=581606">solved</a>. I copied my profile a month ago, and my places.sqlite is still in a single fragment! There was a similar <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=592520">fix</a> done to Firefox disk cache. Thanks to helpful comments on my OSX preallocation <a href="http://taras.glek.net/blog/2010/09/09/help-wanted-does-fcntlf_preallocate-work-as-advertised-on-osx/">cry for help</a>, we now preallocate efficiently on OSX too.</p>
-
-<p>Startup cache is the last <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=593349">remaining</a> bastion of fragmentation, but that&#8217;s already 10x better than it was a month ago. I have two complimentary solutions for that: either <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=562406">omnijar startup cache generation</a> for core code and/or write the cache more <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=586859">efficiently</a>.</p>
-
-<p>Firefox 4 will be a lot more gentle on those spinning platters.</p>
-
-<p><strong>GCC</strong></p>
-
-<p>I helped Jan Hubicka on a GCC <a href="http://gcc.gnu.org/wiki/summit2010">summit paper</a>. Those nasty static initializers will not be a hassle in GCC 4.6!</p>
-
-<p>I keep wanting to blog about how we switched to <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=559964">GCC 4.5</a> and how life is wonderful, but life didn&#8217;t work out this way. So far we tried switching away from 4.3 compiler three times. The first time GCC completely failed in terms of -Os performance. C++ -Os is more bloated in 4.5 (because that option is benchmarked on C apps). Then it turned out that libffi was being <a href="http://gcc.gnu.org/bugzilla/show_bug.cgi?id=45623">miscompiled</a> (we also found a related bug in libffi). Last time, we tried switching to GCC 4.5 + -O3 since that performs much better than -Os, but that <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=609543#c45">broke</a> sunspider. Hopefully we can fix the sunspider issue and try again next week. I would really like to utilize GCC <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=418866">PGO</a> to produce fastest possible Linux Firefox builds.</p>
-
-<p>Nonetheless I happy with recent GCC progress. With Jan&#8217;s help, GCC will eventually be very good at compiling Mozilla. In my spare cycles I&#8217;ve been working on setting up GCC benchmarks using Mozilla to help avoid future surprises like we discovered in GCC 4.5. More on this later.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/12/">&larr; Older</a>
@@ -598,6 +598,10 @@ This was a rare fix that resulted in seconds saved on crapware-loaded computers.
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/02/15/plugin-hang-ui-on-aurora/">Plugin Hang UI On Aurora</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/02/15/is-planet-mozilla-obsolete/">Is Planet Mozilla Obsolete for Technical Content?</a>
       </li>
     
@@ -611,10 +615,6 @@ This was a rare fix that resulted in seconds saved on crapware-loaded computers.
     
       <li class="post">
         <a href="/blog/2013/01/10/snappy-number-48-now-with-faster-shutdown/">Snappy #48: Now With Faster Shutdown</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/01/04/snappy-2012-summary/">Snappy: 2012 Summary</a>
       </li>
     
   </ul>

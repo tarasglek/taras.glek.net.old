@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Note: I am doing my measurements and experiments on Fedora 12, once I feel that I understand and can solve the problems on Linux, other operating &hellip;">
+  <meta name="description" content="Got some helpful comments on my previous post. madvise(WILLNEED) in ld.so Frank Ch. Eigler pointed out that other people have noticed the madvise/ &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,58 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/03/25/madvise-prelink-update/">Madvise, Prelink Update</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-03-25T04:09:25-07:00" pubdate data-updated="true">Mar 25<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Got some helpful comments on my <a href="http://taras.glek.net/blog/2010/03/24/linux-why-loading-binaries-from-disk-sucks/">previous post</a>.</p>
+
+<p><strong>madvise(WILLNEED) in ld.so</strong></p>
+
+<p>Frank Ch. Eigler pointed out that other people have <a href="http://www.google.com/search?q=ld.so%20madvise">noticed</a> the madvise/mmap deficiency in the dynamic linker. Unfortunately those unfortunate people did not have the ability to flush caches or to measure page faults exactly. Linux has gotten a lot nicer for diagnosing this. Frank also filed a <a href="http://sourceware.org/bugzilla/show_bug.cgi?id=11431">glibc bug</a>. SuSE already ships with a madvise()ed dynamic linker.</p>
+
+<p><strong>Prelink saga</strong></p>
+
+<p>Both Bradley Baetz and Frank pointed me at the FIPS-caused <a href="https://bugzilla.redhat.com/show_bug.cgi?id=504949">bug</a> which causes prelink to get angry at Firefox. This isn&#8217;t the first time that practically-useless FIPS has gotten in the way of a higher performing Firefox.</p>
+
+<p>The most common response to people who complain about run-time linker issue is &#8220;are you using prelink?&#8221;. So I did my best to assume that prelink would erase a bunch of the overhead I saw in the previous bug.</p>
+
+<p>I got rid of the offending nss rule in the prelink configuration as the bug instructed; prelink started working on Firefox (according to LD_DEBUG=statistics). Unfortunately the IO pattern was identical to what I was seeing before.</p>
+
+<p>Frank suggested that I try prelink -u to undo any prelinking. This caused a bunch more runtime-linker IO from which one can conclude that the overhead I am seeing is not solved by prelink. The is still a lot of IO that happens before any application code is executed, so the runtime linker is still my primary suspect.</p>
+
+<p>Going to spend some quality time with SystemTap to try to figure out what the linker is doing.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -647,48 +699,6 @@ What am I testing? I am measuring the time between invoking the browser until a 
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2010/01/04/some-developers-manually-grope-around-in-the-dark/">Some Developers Manually Grope Around in the Dark</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-01-04T12:27:03-08:00" pubdate data-updated="true">Jan 4<span>th</span>, 2010</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Cool thing about static analysis is that you can ask painful-for-humans questions about your codebase AND have them answered. Here are two that got answered by Ehren:</p>
-
-<p>Where do function bodies continue after return statements (ie obviously dead/broken code)? <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=535646">Bug 535646</a>.</p>
-
-<p>How many functions in Mozilla could/should be marked static? <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=536427">Bug 536427</a>.</p>
-
-<p>Awesome!</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/15/">&larr; Older</a>
@@ -706,6 +716,10 @@ What am I testing? I am measuring the time between invoking the browser until a 
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/02/15/plugin-hang-ui-on-aurora/">Plugin Hang UI On Aurora</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/02/15/is-planet-mozilla-obsolete/">Is Planet Mozilla Obsolete for Technical Content?</a>
       </li>
     
@@ -719,10 +733,6 @@ What am I testing? I am measuring the time between invoking the browser until a 
     
       <li class="post">
         <a href="/blog/2013/01/10/snappy-number-48-now-with-faster-shutdown/">Snappy #48: Now With Faster Shutdown</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/01/04/snappy-2012-summary/">Snappy: 2012 Summary</a>
       </li>
     
   </ul>

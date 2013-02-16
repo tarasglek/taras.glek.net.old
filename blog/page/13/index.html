@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="This post is a result of debugging bug 561842. Turns out one needs to go far beyond lumping libraries together to reap startup benefits. I made a pdf &hellip;">
+  <meta name="description" content="I was invited to present a Galois tech talk on Mozilla static analysis. It was really cool to give a talk locally to such an expert audience. I was &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,52 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/06/09/galois-talk/">Galois Talk</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-06-09T03:08:44-07:00" pubdate data-updated="true">Jun 9<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I was invited to present a <a href="http://www.galois.com/blog/2010/06/03/tech-talk-large-scale-static-analysis-at-mozilla/">Galois tech talk</a> on Mozilla static analysis. It was really cool to give a talk locally to such an expert audience. I was surprised to discover a vibrant Programming Languages + Analysis community in Portland.</p>
+
+<p>Edward Z. Yang did an <a href="http://blog.ezyang.com/2010/06/static-analysis-mozilla/">excellent write-up</a> on the talk.</p>
+
+<p><strong>PLDi</strong></p>
+
+<p>Robert O&#8217;Callahan mentioned Dehydra in his <a href="http://weblogs.mozillazine.org/roc/archives/2010/06/sleepless_in_to.html">PLDI talk</a>.</p>
+
+<p><strong>Dehydra/Treehydra in GCC 4.5</strong></p>
+
+<p>There a few fixes that are about to land. I&#8217;m hoping that by the end of the week GCC 4.5 support will be production-quality. Sorry that it&#8217;s taken so long, but I&#8217;ve been busy focusing on startup. <a href="http://ehren.wordpress.com/">Ehren</a> has picked up the slack, we should be able to produce a fairly polished Dehydra 1.0 by the end of the summer.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -694,58 +740,6 @@ Additionally, proper binary reordering results in >2mb reduction in memory usage
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2010/03/25/madvise-prelink-update/">Madvise, Prelink Update</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-03-25T04:09:25-07:00" pubdate data-updated="true">Mar 25<span>th</span>, 2010</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Got some helpful comments on my <a href="http://taras.glek.net/blog/2010/03/24/linux-why-loading-binaries-from-disk-sucks/">previous post</a>.</p>
-
-<p><strong>madvise(WILLNEED) in ld.so</strong></p>
-
-<p>Frank Ch. Eigler pointed out that other people have <a href="http://www.google.com/search?q=ld.so%20madvise">noticed</a> the madvise/mmap deficiency in the dynamic linker. Unfortunately those unfortunate people did not have the ability to flush caches or to measure page faults exactly. Linux has gotten a lot nicer for diagnosing this. Frank also filed a <a href="http://sourceware.org/bugzilla/show_bug.cgi?id=11431">glibc bug</a>. SuSE already ships with a madvise()ed dynamic linker.</p>
-
-<p><strong>Prelink saga</strong></p>
-
-<p>Both Bradley Baetz and Frank pointed me at the FIPS-caused <a href="https://bugzilla.redhat.com/show_bug.cgi?id=504949">bug</a> which causes prelink to get angry at Firefox. This isn&#8217;t the first time that practically-useless FIPS has gotten in the way of a higher performing Firefox.</p>
-
-<p>The most common response to people who complain about run-time linker issue is &#8220;are you using prelink?&#8221;. So I did my best to assume that prelink would erase a bunch of the overhead I saw in the previous bug.</p>
-
-<p>I got rid of the offending nss rule in the prelink configuration as the bug instructed; prelink started working on Firefox (according to LD_DEBUG=statistics). Unfortunately the IO pattern was identical to what I was seeing before.</p>
-
-<p>Frank suggested that I try prelink -u to undo any prelinking. This caused a bunch more runtime-linker IO from which one can conclude that the overhead I am seeing is not solved by prelink. The is still a lot of IO that happens before any application code is executed, so the runtime linker is still my primary suspect.</p>
-
-<p>Going to spend some quality time with SystemTap to try to figure out what the linker is doing.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/14/">&larr; Older</a>
@@ -763,6 +757,10 @@ Additionally, proper binary reordering results in >2mb reduction in memory usage
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/02/15/plugin-hang-ui-on-aurora/">Plugin Hang UI On Aurora</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/02/15/is-planet-mozilla-obsolete/">Is Planet Mozilla Obsolete for Technical Content?</a>
       </li>
     
@@ -776,10 +774,6 @@ Additionally, proper binary reordering results in >2mb reduction in memory usage
     
       <li class="post">
         <a href="/blog/2013/01/10/snappy-number-48-now-with-faster-shutdown/">Snappy #48: Now With Faster Shutdown</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/01/04/snappy-2012-summary/">Snappy: 2012 Summary</a>
       </li>
     
   </ul>

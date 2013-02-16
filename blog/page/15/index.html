@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="I did some digging to figure out if one can setup cold-startup testing in Windows 7 without nasty hacks. My conclusion is: sorta-kinda. The Good - &hellip;">
+  <meta name="description" content="Cool thing about static analysis is that you can ask painful-for-humans questions about your codebase AND have them answered. Here are two that got &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,48 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/01/04/some-developers-manually-grope-around-in-the-dark/">Some Developers Manually Grope Around in the Dark</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-01-04T12:27:03-08:00" pubdate data-updated="true">Jan 4<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Cool thing about static analysis is that you can ask painful-for-humans questions about your codebase AND have them answered. Here are two that got answered by Ehren:</p>
+
+<p>Where do function bodies continue after return statements (ie obviously dead/broken code)? <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=535646">Bug 535646</a>.</p>
+
+<p>How many functions in Mozilla could/should be marked static? <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=536427">Bug 536427</a>.</p>
+
+<p>Awesome!</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -826,44 +868,6 @@ Bring on Atom! :D</div>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/09/30/corrupting-innocent-minds-with-gcc/">Corrupting Innocent Minds With GCC</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-09-30T10:32:38-07:00" pubdate data-updated="true">Sep 30<span>th</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Ever since the plugin branch landed in GCC, I have been itching to explore the application-specific optimization space that it opens up. It&#8217;s really hard to optimize code in the general case, but it&#8217;s relatively easy to optimize for something for specific use-cases. We can rely on API-specific static analysis in order to get rid of the API-imposed overheads at compile time. Let me repeat, we can get rid of some API-induced suck (OO frameworks  usually have a lot of it) without sacrificing any of the benefits.</p>
-
-<p>Unfortunally, I got busy working on, supposedly, more important stuff such as making Firefox startup quicker, so my<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=517370"> de-error-handling</a> and de-virtualizer (basically possible with LTO, but we can prove that certain classes will never be overloaded via dynamic linking) ideas had to be put on indefinite hold. Luckily, one of David Humphrey&#8217;s students decided to take on the first task, see his <a href="http://ehren.wordpress.com/2009/09/30/popping-my-gimples-a-plan/">blog post</a> here. I&#8217;m really psyched about this, few things that are cooler than cross-project open source work involving the most important open source projects of our time :)</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/16/">&larr; Older</a>
@@ -881,6 +885,10 @@ Bring on Atom! :D</div>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/02/15/plugin-hang-ui-on-aurora/">Plugin Hang UI On Aurora</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/02/15/is-planet-mozilla-obsolete/">Is Planet Mozilla Obsolete for Technical Content?</a>
       </li>
     
@@ -894,10 +902,6 @@ Bring on Atom! :D</div>
     
       <li class="post">
         <a href="/blog/2013/01/10/snappy-number-48-now-with-faster-shutdown/">Snappy #48: Now With Faster Shutdown</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/01/04/snappy-2012-summary/">Snappy: 2012 Summary</a>
       </li>
     
   </ul>
