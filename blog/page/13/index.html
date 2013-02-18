@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="I try to blog about interesting things I encounter while solving various issues in Mozilla. Some things are less bloggable than others. If this blog &hellip;">
+  <meta name="description" content="Files are considered fragmented when they aren&#8217;t laid out in a continuous chunk on disk. This causes extra seeks even if the file is being read &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,115 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/07/22/file-fragmentation/">File Fragmentation</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-07-22T07:55:44-07:00" pubdate data-updated="true">Jul 22<span>nd</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Files are considered fragmented when they aren&#8217;t laid out in a continuous chunk on disk. This causes extra seeks even if the file is being read sequentially.</p>
+
+<p>I was discussing startup over dinner, someone asked about how much of an issue fragmentation is in Firefox.</p>
+
+<p>Early on I decided to pretend that fragmentation does not exist as we had bigger fish to fry. We were opening too many files on startup, effectively causing our own high-level fragmentation. Luckily, that problem should be mostly solved in Firefox 4 once <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=556644">omnijar</a> and <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=561842">fat xul</a> bugs land (unfortunately, extensions can cause similar issues until we stick em into a <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=533038">single file</a>).</p>
+
+<p>To measure fragmentation I used my SystemTap <a href="http://hg.mozilla.org/users/tglek_mozilla.com/startup/file/782c42e1d6a4/kernelio.stp">script</a> to get a list of files opened (one could also use strace or any similar tool) and piped the results to filefrag. Filefrag is a Linux fragmentation-measuring utility. On Windows one can use <a href="http://technet.microsoft.com/en-us/sysinternals/bb897428.aspx">contig</a> and Mac OS X features <a href="http://www.osxbook.com/software/hfsdebug/">hfsdebug</a>. I&#8217;m using ext4 on Linux.</p>
+
+<p>My top offenders were:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>
+</span><span class='line'>places.sqlite: 34 extents
+</span><span class='line'>cookies.sqlite: 18 extents
+</span><span class='line'>XPC.mfasl: 11 extents
+</span><span class='line'>Cache/_CACHE_003_: 11 extents
+</span><span class='line'>urlclassifier3.sqlite: 6 extents
+</span><span class='line'>Cache/_CACHE_002_: 6 extents
+</span><span class='line'>Cache/_CACHE_001_: 6 extents
+</span><span class='line'>XUL.mfasl: 5 extents
+</span><span class='line'>formhistory.sqlite: 5 extents
+</span><span class='line'>content-prefs.sqlite: 4 extents
+</span><span class='line'>libxul.so: 4 extents
+</span><span class='line'>signons.sqlite: 3 extents
+</span><span class='line'>icon-theme.cache: 2 extents
+</span><span class='line'>libatk-1.0.so.0.2809.1: 2 extents
+</span><span class='line'>libflashplayer.so: 2 extents
+</span><span class='line'>Cache/_CACHE_MAP_: 2 extents
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I did an informal poll of my friends and it seems that the order of fragmentation is similar among them, only the magnitude differs. For example, XFS tends to be 10-20 times more fragmented than ext4 :). I don&#8217;t have any numbers for HFS+, but I suspect XFS takes the crown as most fragmentation-prone filesystem to run Firefox.</p>
+
+<p>Interestingly, my friend running NTFS reported similar fragmentation to ext4. That was disappointing as Windows Prefetch supposedly defragments files used with the first 10 seconds of startup. Clearly, isn&#8217;t keeping up in this case.</p>
+
+<p><strong>Preliminary Conclusions</strong></p>
+
+<p>places.sqlite is the largest and most performance-critical file in Firefox. It contains browser history and bookmarks. It is the brains behind the AwesomeBar.The fact that it is severely affected by fragmentation significantly impacts Firefox responsiveness. There are no easy fixes for fragmentation there. mak suggested moving history to a separate file to mitigate this, but that isn&#8217;t an easy change.</p>
+
+<p>In contrast, cookies.sqlite is tiny(&lt;1mb for me) and probably so fragmented due to cookie expiration. I am guessing that easiest workaround here is to write a new sqlite file every time there is a mass update to the file.</p>
+
+<p>urlclassifier.sqlite is a large file that may be mitigated similarly to cookies.</p>
+
+<p><a href="http://www.sqlite.org/releaselog/3_7_0.html">SQLite 3.7.0</a> came out today which features WAL logging, which may reduce fragmentation (or make battling it easier). In general, sqlite&#8217;s VACUUM (used to clean and compact the database) command does not help with fragmentation, we really need to be doing something like hot backup which would create a new database file every VACUUM.</p>
+
+<p>Our cache code is ancient and sucks. The cache files get fragmented immediately and severely. They are accessed in insane patterns and they get laid out insanely on disk. There are some efforts to improve the code, but I suspect that&#8217;s equivalent to putting <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=513008">lipstick</a> on a pig.</p>
+
+<p>*.mfasl files are due to be obsoleted by a <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=520309">startup cache</a> jar. It may get less fragmented. Should be a straight-forward fix it if it does get fragmented.</p>
+
+<p>I&#8217;m disappointed to see the .so files get fragmented. This might be an ext4 bug or has something to do with how the updater works (both ours and yum on Fedora).</p>
+
+<p><strong>Further Work</strong></p>
+
+<p>I would like to see more data on fragmentation on Windows/OSX. Feel free to leave a comment with fragmentation numbers for cache, mfasl, sqlite and .dll files in your Firefox. We should look into online <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=556326">defragmentation API</a>s in modern OSes.</p>
+
+<p><strong>Workarounds?</strong></p>
+
+<p>Easiest way to fix fragmented files is to make a copy of the original file, delete the original and then rename the copy. This works on sane filesystems, apparently it doesn&#8217;t work too well on OS X.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -706,46 +815,6 @@ Additionally, proper binary reordering results in >2mb reduction in memory usage
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2010/03/31/how-to-get-reviews-fast-delete-code/">How to Get Reviews Fast: Delete Code!</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-03-31T13:17:48-07:00" pubdate data-updated="true">Mar 31<span>st</span>, 2010</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>The fastest review I ever got was when I deleted a bunch of code from libjar. It was so riddled crud it was next to impossible to modify the code. That was a mere <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=505784">24KB patch</a> produced manually.</p>
-
-<p><a href="http://ehren.wordpress.com/">Ehren</a> just put my personal records to shame with a <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=556446">94KB patch</a> that got r+ed at breakneck speed. Best part is that he generates these by plucking off dead parts of the Mozilla callgraph via static analysis. I bet if he tried he could land 90KB patches every day. Way to go Ehren!</p>
-
-<p>I expect more good code deletions to make themselves known via this <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=457262">meta bug</a>.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/14/">&larr; Older</a>
@@ -763,6 +832,10 @@ Additionally, proper binary reordering results in >2mb reduction in memory usage
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/02/17/router-assisted-automatic-wake-on-lan-plus-suspend/">Router-Assisted Automatic Wake-on-LAN + Suspend</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/02/17/10w-intel-i5-desktop/">10W Intel i5 Desktop</a>
       </li>
     
@@ -776,10 +849,6 @@ Additionally, proper binary reordering results in >2mb reduction in memory usage
     
       <li class="post">
         <a href="/blog/2013/01/28/snappy-number-50-misc-speedups/">Snappy #50</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/01/21/snappy-number-49-help-firefox-shutdown-faster/">Snappy #49: Help Firefox Shutdown Faster</a>
       </li>
     
   </ul>

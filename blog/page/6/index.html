@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="As I mentioned before, I&#8217;ve been a manager for a year. I&#8217;ve focused solely on paper pushing for the past 6 months. Even though I love &hellip;">
+  <meta name="description" content="Notes are here. Time was spent on administrative issues like overlap/conflict between Snappy and Kilimanjaro, plans for security review for Vladan&# &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,52 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/04/16/snappy-april-12/">Snappy, April 12</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-04-16T06:45:17-07:00" pubdate data-updated="true">Apr 16<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Notes are<a href="https://wiki.mozilla.org/Performance/Snappy/2012-04-12"> here</a>. Time was spent on administrative issues like overlap/conflict between Snappy and Kilimanjaro, plans for security review for Vladan&#8217;s symbol server and bug triage.</p>
+
+<p>I&#8217;m usually really bad at noticing UI lag, but now my mind is focused on tab switching and I notice the lag every time click on tabs (keyboard switching is unaffected). We discussed how to fix tab lag I blogged about <a href="http://blog.mozilla.com/tglek/2012/04/10/argh-at-our-unresponsive-tab-strip-settimeoutfoo-0-can-be-very-harmful/">earlier</a>. It&#8217;s hard because there is some funny interaction between focus and drag &amp; drop and us switching tabs on mousedown. Neil will look into addressing focus issues this week.</p>
+
+<p>Tim is addressing thumbnail capture slowness in bugs: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=744388">744388</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=742594">742594</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=726347">726347</a>.</p>
+
+<p>Paolo is busy switching code away from synchronous places APIs: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=728168">728168</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=728174">728174</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=728142">728142 </a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=739213">739213</a>.</p>
+
+<p>The networking team is expected to make a decision this week on how to fix the big networking cache lock. See Nick&#8217;s <a href="https://wiki.mozilla.org/Performance/Snappy/2012-04-12#Fix_cache_-_hurley">notes</a> on options presented.</p>
+
+<p>Thanks for feedback on preferred snappy update format: we&#8217;ll stick with cherries.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -745,46 +791,6 @@ INSERT INTO webappsstore2_temp (scope, key, value, secure, owner) SELECT scope, 
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/03/07/planet-should-be-technical/">Planet Should Be Technical</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-03-07T06:12:18-08:00" pubdate data-updated="true">Mar 7<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I ask every new Mozilla person to follow planet Mozilla. It&#8217;s the only easiest way to keep an eye on what is going on in Mozilla. Because it is the single most useful source of mozilla news, it irritates me to no end to see funny pictures of cats mixed in with useful posts at a 9:1 ratio. It&#8217;s like the funny pictures, personal agenda people are taking the rest of us hostage. I understand that the official planet policy encourages personal noise, but policies can evolve.</p>
-
-<p>There are multiple proposals on how to fix this situation. IMHO the most correct one is to have planet refocus on relevant content and add noise.mozilla.org for everything else. People who like noise can subscribe to that. Polite people with personal blogs already syndicate moz-tech-only parts of the blogs to planet, others have personal blogs. Arguments on marriage, definition of hate speech, far leftyness, funny cats, other memes really drain the will to live when I want to get work done.</p>
-
-<p>I do think we could use a better code of conduct for people deeply involved in the community. Open source is a bit too good with letting assholes get away with being assholes.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/7/">&larr; Older</a>
@@ -802,6 +808,10 @@ INSERT INTO webappsstore2_temp (scope, key, value, secure, owner) SELECT scope, 
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/02/17/router-assisted-automatic-wake-on-lan-plus-suspend/">Router-Assisted Automatic Wake-on-LAN + Suspend</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/02/17/10w-intel-i5-desktop/">10W Intel i5 Desktop</a>
       </li>
     
@@ -815,10 +825,6 @@ INSERT INTO webappsstore2_temp (scope, key, value, secure, owner) SELECT scope, 
     
       <li class="post">
         <a href="/blog/2013/01/28/snappy-number-50-misc-speedups/">Snappy #50</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/01/21/snappy-number-49-help-firefox-shutdown-faster/">Snappy #49: Help Firefox Shutdown Faster</a>
       </li>
     
   </ul>

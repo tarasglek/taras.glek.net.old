@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="At Mozilla we have a long history of using MXR for looking up and discussing source code. Unfortunately MXR is an unlovable mess of Perl and a crappy &hellip;">
+  <meta name="description" content="Frank and Jared are aiming to have the Australis theme up for review next week in bug 732583. There are no computed borders or gradients in the &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,52 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/05/29/snappy-may-24-meetingless/">Snappy, May 24 - Meetingless</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-05-29T03:31:59-07:00" pubdate data-updated="true">May 29<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Frank and Jared are aiming to have the Australis theme up for review next week in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=732583">bug 732583</a>. There are no <em>computed</em> borders or gradients in the redesign, so it will be faster.  The current theme generates new borders/gradients on every tab interaction, which is very inefficient. Bas is working on fixing our graphics backend to render borders/gradients more efficiently in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=750871">750871</a>.</p>
+
+<p>Wlad spotted some unintended bloat in the addon database in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=752868">bug 752868</a>. Blair fixed it, this should speed up startup and other addon manager interactions.</p>
+
+<p>Bill did some further IGC fixes: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=757483">bug 757483</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=754588">bug 754588</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=756732">bug 756732</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=731423">bug 731423</a>.</p>
+
+<p>We started a new project to let Firefox diagnose common Windows/etc misconfiguration issues that severely impact Firefox performance. Our new intern, Nicholas, is working on this in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=684646">684646</a>. The immediate plan is to release an addon that detects when Firefox startup is unusually slow, checks for known Windows issues and pops up a link to a Mozilla <a href="http://support.mozilla.com/">support</a> article on how to fix the problem. If this turns out to be successful, we&#8217;ll integrate this functionality into Firefox.</p>
+
+<p>The gecko profiler is now ready for general consumption. See Benoit&#8217;s <a href="https://groups.google.com/forum/#!topic/mozilla.dev.platform/jOklwc7AdC8">announcement</a>. This will allow users running  the <a href="http://groups.google.com/group/mozilla.dev.platform/browse_thread/thread/3389798e5ef9744b#">profiling </a>variant of Firefox nightly builds to capture/report performance problems in a way that developers can act on. I suspect that <a href="http://benoitgirard.wordpress.com">Benoit </a>will blog about this.</p>
+
+<p><strong>Update</strong>: I originally linked the wrong bug for windows misconfiguration detection.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -532,52 +578,6 @@ if (requestAnimationFrame)
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/04/16/snappy-april-12/">Snappy, April 12</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-04-16T06:45:17-07:00" pubdate data-updated="true">Apr 16<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Notes are<a href="https://wiki.mozilla.org/Performance/Snappy/2012-04-12"> here</a>. Time was spent on administrative issues like overlap/conflict between Snappy and Kilimanjaro, plans for security review for Vladan&#8217;s symbol server and bug triage.</p>
-
-<p>I&#8217;m usually really bad at noticing UI lag, but now my mind is focused on tab switching and I notice the lag every time click on tabs (keyboard switching is unaffected). We discussed how to fix tab lag I blogged about <a href="http://blog.mozilla.com/tglek/2012/04/10/argh-at-our-unresponsive-tab-strip-settimeoutfoo-0-can-be-very-harmful/">earlier</a>. It&#8217;s hard because there is some funny interaction between focus and drag &amp; drop and us switching tabs on mousedown. Neil will look into addressing focus issues this week.</p>
-
-<p>Tim is addressing thumbnail capture slowness in bugs: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=744388">744388</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=742594">742594</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=726347">726347</a>.</p>
-
-<p>Paolo is busy switching code away from synchronous places APIs: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=728168">728168</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=728174">728174</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=728142">728142 </a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=739213">739213</a>.</p>
-
-<p>The networking team is expected to make a decision this week on how to fix the big networking cache lock. See Nick&#8217;s <a href="https://wiki.mozilla.org/Performance/Snappy/2012-04-12#Fix_cache_-_hurley">notes</a> on options presented.</p>
-
-<p>Thanks for feedback on preferred snappy update format: we&#8217;ll stick with cherries.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/6/">&larr; Older</a>
@@ -595,6 +595,10 @@ if (requestAnimationFrame)
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/02/17/router-assisted-automatic-wake-on-lan-plus-suspend/">Router-Assisted Automatic Wake-on-LAN + Suspend</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/02/17/10w-intel-i5-desktop/">10W Intel i5 Desktop</a>
       </li>
     
@@ -608,10 +612,6 @@ if (requestAnimationFrame)
     
       <li class="post">
         <a href="/blog/2013/01/28/snappy-number-50-misc-speedups/">Snappy #50</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/01/21/snappy-number-49-help-firefox-shutdown-faster/">Snappy #49: Help Firefox Shutdown Faster</a>
       </li>
     
   </ul>

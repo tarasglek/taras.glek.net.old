@@ -4,7 +4,7 @@
   <title><![CDATA[All About Performance]]></title>
   <link href="http://taras.glek.net/atom.xml" rel="self"/>
   <link href="http://taras.glek.net/"/>
-  <updated>2013-02-17T20:52:51-08:00</updated>
+  <updated>2013-02-17T21:58:06-08:00</updated>
   <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -12,6 +12,83 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Router-Assisted Automatic Wake-on-LAN + Suspend]]></title>
+    <link href="http://taras.glek.net/blog/2013/02/17/router-assisted-automatic-wake-on-lan-plus-suspend/"/>
+    <updated>2013-02-17T20:56:00-08:00</updated>
+    <id>http://taras.glek.net/blog/2013/02/17/router-assisted-automatic-wake-on-lan-plus-suspend</id>
+    <content type="html"><![CDATA[<h2>The problem</h2>
+
+<p>My <a href="http://taras.glek.net/blog/2013/02/17/10w-intel-i5-desktop/">new computer</a> uses 10-46W of power while on, 1W while suspended. It replaced my softbricked (ArchLinux can burn in hell) <a href="http://taras.glek.net/blog/2011/07/16/my-nas-is-smaller-than-yours/">arm computer</a> where power consumption ranged from 4-7W.</p>
+
+<p>The new computer is a backup target for my eyefi (via <a href="https://github.com/hacker/iii">iiid</a>), Android phone (via <a href="https://play.google.com/store/apps/details?id=eu.kowalczuk.rsync4android&amp;hl=en">rsync/ssh</a>), laptop (via rsync).</p>
+
+<p>For fun I decided to try to use suspend-to-RAM + Wake-on-LAN to minimize power usage to get this beefy x86 to use less power than the old ARM NAS (which could not unsuspend successfully).</p>
+
+<p>By default WOL is a pain. The eye-fi card uploads photos when the SLR camera is on. Android phone is configured to rsync stuff when it is plugged while connected to home wifi. It&#8217;s not convenient to navigate some UI to send a WOL packet (or push a power button) every time I need to perform a backup. Manually deciding when to suspend the machine is also no fun.</p>
+
+<h2>Automatic WOL Theory</h2>
+
+<p>In an ideal world WOL would support waking up on IP traffic directed at the machine in question. Typically WOL either wakes up in response to WOL magic packets or ANY ethernet traffic(ugh!).</p>
+
+<p>Luckily, ARP <code>who has x.x.x.x</code> queries are broadcast to whole network segment. So my <a href="http://en.wikipedia.org/wiki/Tomato_%28firmware%29">Tomato</a> router can help.</p>
+
+<p>Ideally this would work like:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Android-phone: ARP: Who has 192.168.1.149
+</span><span class='line'>router: *sends WOL packet to NAS*
+</span><span class='line'>Server Unsuspend Script: 192.168.1.149 is at A:B:C:D:E:F</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Unfortunately, ARP is tightly coupled with Linux TCP stack. One can&#8217;t listen for incoming ARP traffic without examining ALL traffic (via libpcap or something). This not practical on a crappy fanless MIPS cpu in my router (cheap wifi-router CPUs do not need extra excuses to cook themselves). Linksys E2000 also doesn&#8217;t have much flash space for installing software even if I did want to go through the pain of writing and cross-compiling a custom C program.</p>
+
+<h2>WOL Solution: AWK + iptables</h2>
+
+<p>AWK is the only scripting language provided by busybox (not a  good fit for packet injection/inspection). Since Linux wont let me do anything fun at ARP level, I had to move up to IP protocols. This is messy.</p>
+
+<p>Steps on Suspend:</p>
+
+<ol>
+<li>NAS sends a packet to inform router it is suspending</li>
+<li>iptables logs packet</li>
+<li>AWK on router sets up a virtual interface with same IP as the NAS</li>
+</ol>
+
+
+<p>Steps on NAS-access:</p>
+
+<ol>
+<li>LAN machine <code>ARP: Who has 192.168.1.149</code></li>
+<li>Router <code>I got it</code></li>
+<li>LAN machine <code>TCP SYN to start an ssh connection</code></li>
+<li>Router iptables DROPs the SYN (a NACK would be bad), logs it</li>
+<li>AWK on router unregisters virtual interface so it does not conflict with NAS, sends a WOL packet</li>
+<li>NAS sends &#8216;ARP: 192.168.1.149 at MACADDY&#8217;</li>
+<li>LAN machine resends SYN packets until NAS responds</li>
+</ol>
+
+
+<p>This has a few obvious downsides, but it does work. When NAS is suspended, ssh round-trip latency is just under 10 seconds. That&#8217;s still less time that it would take me to manually send the WOL packet even if I wanted to.</p>
+
+<p>Proper solution is for someone to write a WOL target for arptables. This may be easy. Any kernel hackers reading this? I think OpenWRT, DD-WRT, etc would benefit from having an easy to setup wake-on-access scenario.</p>
+
+<h2>Auto-suspend</h2>
+
+<p>Once the server is awake, it is annoying to have to put it to sleep manually. I wrote a script to monitor <code>/var/log/auth.log</code> and auto-suspend when active ssh-session count reaches 0.</p>
+
+<h2>Conclusion</h2>
+
+<p>This was fun. The hardest part of this was figuring out how to do this without a useful ARP &#8216;API&#8217; from Linux without resorting to C programming. Abusing multiple layers of the Linux networking stack felt great.</p>
+
+<p>It great to have an x86 box idle at 1W while unused. Suspend to disk introduces extra latency without saving much more power (due to keeping WOL on).</p>
+
+<p>Please checkout the code on <a href="https://github.com/tarasglek/sleepyscripts">github</a>. If you think my solution is too complicated, let me know of a simpler way. WOL magic happens in <code>logmon.awk</code> and auto-suspend in <code>autosleep.py</code>.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[10W Intel i5 Desktop]]></title>
@@ -514,37 +591,6 @@
 <p>My favourite part of MozCamp was finally meeting some a couple of the impressive community contributors in person. I finally had the pleasure of literally buying beer to thank someone for cleaning up some nasty code. I hope some day we can do a developer-oriented MozCamp-like conference.</p>
 
 <p>My favourite talk was Anant &amp; Tim&#8217;s presentation on WebRTC. There is something incredibly attractive about having an encrypted, cross-browser, firewall-punching p2p implementation (realtime open video conferencing is a nice bonus). See Anant&#8217;s <a href="http://kix.in/2012/09/16/mozcamp-eu-2012-mobilize-mozilla/">blog post</a> for more details.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Snappy #38: Responsiveness Fixes Galore]]></title>
-    <link href="http://taras.glek.net/blog/2012/09/04/snappy-38/"/>
-    <updated>2012-09-04T02:17:48-07:00</updated>
-    <id>http://taras.glek.net/blog/2012/09/04/snappy-38</id>
-    <content type="html"><![CDATA[<p>End of summer is a tough time to make progress because a lot of people are on vacation. Surprisingly, Firefox got some good fixes in since the last update.</p>
-
-<p><strong>Less Slow Startups</strong></p>
-
-<p><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=726125">Bug 726125</a>: should get rid of a lot of super-slow startups. Due to an abstraction accident we ended up validating jars more eagerly than expected. Firefox would go on the net (on the main thread) to check the certificate every time a signed jar was opened. There are over 500 signed extensions on AMO with over 14million active users. See the following for background on the (now dead) feature that caused our jar code to go nuts: <a href="http://www.mozilla.org/projects/security/components/signed-scripts.html">signed scripts</a> and <a href="https://developer.mozilla.org/en-US/docs/Bypassing_Security_Restrictions_and_Signing_Code">note on removal of signed script</a> support. Thanks for Nicholas Chaim and Vladan Djeric for fixing this.</p>
-
-<p><strong>Less Proxy Lag (WIP)</strong></p>
-
-<p><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=769764#c5">Bug 769764</a>. We have received a lot of strange complaints about Firefox network performance that we could never reproduce. Turned out this was because none of us used proxies. Patrick McManus discovered a lot of synchronous proxy and DNS code in our network stack.</p>
-
-<p>Fix for this should also improve performance for people without proxies since proxy-autodetection code was also doing main thread IO. As a result all of us replacing sync APIs with async ones all of the existing proxy-related addons will have to be updated. Patrick is reaching out to addon authors to make sure addons are updated in time for the next release.</p>
-
-<p><strong>Less UI Repaint Lag</strong></p>
-
-<p><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=786421">Bug 786421</a>: Nightlies got unbearably slow for me recently. Turned out we ended continuously resizing + applying theme + redrawing invisible tooltips on every paint. Thanks for Timothy Nikkel for fixing this. This bug never affected anyone outside of the Nightly/Aurora testers, but it serves as yet another example of how the <a href="https://developer.mozilla.org/en-US/docs/Performance/Profiling_with_the_Built-in_Profiler">Gecko Profiler</a> makes it easier than ever to diagnose weird performance problems. The single biggest contribution anyone can do at the moment is to provide instructions of how to reproduce lag with accompanying profiler traces.</p>
-
-<p><strong>Less Gradient Lag</strong></p>
-
-<p><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=761393">Bug 761393</a>: Paul Adenot implemented a gradient cache. This was landed as a Telemetry experiment so we can determine what the optimal cache retention strategy is. We&#8217;ll be watching the relationship between GRADIENT_DURATION and GRADIENT_RETENTION_TIME in the coming weeks. Currently rendering gradients cause stalls in the GPU pipeline. In previous experiments we found out that most of the tab-switch rendering time in hardware-accelerated Firefox is spent rendering gradients :(. Gradients are hard to notice for casual users, but they are heavily used in our tab strip and on Google web properties.</p>
-
-<p><strong>MozCamp</strong></p>
-
-<p>I may not have a chance to post the next snappy update as I&#8217;ll be hopping on the plane to Warsaw right after our meeting. If you are attending MozCamp come to our <a href="https://wiki.mozilla.org/index.php?title=MozCampEU2012/Schedule/Desktopandmobile/All-About-Performance">&#8216;All About Performance&#8217; session</a>. Our goal for the talk is to significantly expand the pool of people who can diagnose Firefox (and web) performance problems.</p>
 ]]></content>
   </entry>
   

@@ -9,7 +9,8 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Automated Analyses and Rewrites Dehydra and Squash are now mature enough to assist with mundane tasks like renames and various kinds of tedious code &hellip;">
+  <meta name="description" content="Squash Outparams The following took me a few days to achieve. 1
+./squash -sq-rewrite-outparams out2.txt -sq-implementation nsBidiPresUtils -sq-no- &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +90,85 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2007/05/07/status-update-outparam-work/">Status Update: Outparam Work</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-05-07T02:58:43-07:00" pubdate data-updated="true">May 7<span>th</span>, 2007</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><strong>Squash Outparams</strong></p>
+
+<p>The following took me a few days to achieve.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>./squash -sq-rewrite-outparams out2.txt -sq-implementation nsBidiPresUtils  -sq-no-squash -o-lang GNU_Cplusplus ~/work/ff-build/dom/src/base/nsFocusController.i</span></code></pre></td></tr></table></div></figure>
+
+
+<p>where out2.txt contains instructions on which functions to modify</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>nsFocusController::GetFocusedElement,0=mCurrentElement,</span></code></pre></td></tr></table></div></figure>
+
+
+<p>produces</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>--- /Users/tarasglek/work/mozilla/dom/src/base/nsFocusController.h
+</span><span class='line'>+++ /Users/tarasglek/work/mozilla/dom/src/base/nsFocusController.h
+</span><span class='line'>@@ -72,1 +72,1 @@
+</span><span class='line'>-  NS_IMETHOD GetFocusedElement(nsIDOMElement** aResult);
+</span><span class='line'>+  nsIDOMElement* GetFocusedElement();
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This still doesn&#8217;t add the already_AddRefed or other important attributes, but that should be easy. The result looks simple, but getting squash from working with a testcase to an actual source file was a little on the painful side.</p>
+
+<p>After my experience with renaming I have realized that squash should avoid the C++ pretty printer for now. Thus the result is produced in a verbose AST-sensitive regexp-like way. However figuring out where things start and end is incredibly painful due to the presence of the preprocessor.</p>
+
+<p>My plan is to get squash rewriting some basic Mozilla code the painful way and then I use what I learned to integrate <a href="http://mcpp.sourceforge.net/">mcpp</a> along with the much coveted end-of-ast-node info into elsa.</p>
+
+<p><strong>JavaScript is an AST&#8217;s Best Friend </strong></p>
+
+<p>Until recently I have been doing a lot of work with dehydra. Now that it is feature-complete I am back to working on squash fulltime and I miss JavaScript already. JS is much better suited for messing about with Abstract Syntax Trees. It is so nice to be able to print out any data structure, create new ones without modifying a billion files and the lack of C++ compile/linking delay is nice too. It&#8217;s amazing how much simpler it is to analyze functions for out-param rewriting in JS compared to checking for simpler patterns in C++. I am seriously excited about Tamarin/ES4 and the productivity boost that it will provide.</p>
+
+<p>I wonder whether a complete JS binding for Elsa would be a good idea.</p>
+
+<p><strong>Emacs</strong></p>
+
+<p>Switching to a Mac finally made me switch to Emacs. I could not find any other editors that would be support the workflow I was used to with SciTE or Kate. Other than absolutely hating the majoring of Emacs shortcuts (who&#8217;s idea was Ctrl-^ and the crazy undo/redo) I love the editor for the amazing term mode. It&#8217;s a little buggy in the current version, but the CVS version is good enough to comfortably run vim in it for quick edits :). It&#8217;s so nice to keep all of my terminals and code in the same window. I am dreaming of the day when Emacs will undergo the Mozilla->Firefox-like modernization.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -609,83 +689,6 @@ For the above to work will also need support for a user-correctable/suggestable 
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2007/01/24/will-rename-class-members-for-food/">Will Rename Class Members for Food</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2007-01-24T10:04:39-08:00" pubdate data-updated="true">Jan 24<span>th</span>, 2007</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Squash may now be ready as a class member renaming tool for early adopters. I would like people to use me as a frontend to squash. Email me your requests for renames and I will reply with giant patches. This way squash can be immediately useful. Plus I can fix bugs in squash and figure out actual usecase while I get the frontend set up.Progress</p>
-
-<p>Squash can now produce a good looking <a href="http://glek.net:8080/~taras/nsiframe.diff">92K patch</a> for renaming nsIFrame::GetPresContext. This means that squash can now correctly traverse 167 files and produce a patch that affects 103 of them. I am going to work on the web frontend next.</p>
-
-<p>Some issues below.</p>
-
-<p><strong>Tool Explosion</strong></p>
-
-<p>I wrote a creatively named frontend: run_squash. It prevents squash from running out of address space by running squash unit-at-a-time and combining patch output from multiple runs. It runs squash in parallel similar to make -j. This decreases runtime proportionally with the number of cores. I would be curious to see how Sun&#8217;s Rock-based systems fare for this. For example on the 4way Opteron a 20 minute squash run takes around 5 minutes. Having lots of CPU cores will become important down the road once multiple users are running multiple analysis tasks on a single machine through a web frontend.</p>
-
-<p>There is another temporarly named tool, prepare.py, which greps .cpp files looking for candidates for renaming, produces matching .i files, figures out number of cpus and then invokes run_squash.</p>
-
-<p>More special purpose tools will need to be written. For example roc mentioned that it would be nice to check when generated interface files are being modified and to have the corresponding IDL updated instead while refusing to modify frozen IDL interfaces. Classes with IIDs would need to have them changed too.</p>
-
-<p><em>Tool Rant</em> I am trying to decide how to manage the tool growth such that things evolve sanely. Should squash be a giant swiss-army-knife binary capable of doing everything but incredibly hard to modify? Or should it be broken up into a dozen of separate programs &amp; scripts that work together in an ad-hoc way? The latter would be what some people describe as UNIX way, whatever that means. In the 90s, the former would&#8217;ve been done by making everything a COM component and still just as hard to modify. Alternatively, I could use some strong ROPE and SOAP to tie everything together with SOA. Kidding aside, it would be nice to have a strategy to deal with this so people could run squash on their own machines too without spending a week setting up dependencies.</p>
-
-<p><strong>CPP – To Invert or Not to Invert</strong></p>
-
-<p>A large part of squash is hacks and workarounds for preprocessor-induced pain. Recently, I ran into two interesting cases where blind string substitution fails.</p>
-
-<p><em>Multiline macro parameters</em></p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>if (NS_SUCCEEDED(
-</span><span class='line'>nsSVGUtils::GetReferencedFrame(&nextPattern, targetURI,
-</span><span class='line'>mContent,
-</span><span class='line'>GetPresContext()-&gt;PresShell()))) {
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Squash works on an AST produced from .i files. When cpp expands this macro, everything ends up on the same line as the if keyword. That&#8217;s a problem because when squash wants to replace GetPresContext() the parser gives it the wrong line. Initially I was tempted to remove the newline in a few cases from the original source, but then I realized that this analogous to looking for the closing } in class declarations when end-of-AST-node info isn&#8217;t available. Now if a string substitution fails squash will go to the next line until a match is found or one of ;{} characters is encountered. Yes, that&#8217;s also an emoticon of me looking at yet another CPP-induced problem.</p>
-
-<p><em>Replacing Code Within a Macro Definition. </em>Mozilla has whole functions defined within macros. Squash can not deal with that. Is it worth it to do a limited preprocessor inversion to fix these or to fail and let a developer do it by hand? For example one could mark up the .i file with metadata on which sections came from a macro expansion and which sections were passed into macros as parameters. Then an intelligent rewrite decision could be made. This would solve most of the CPP-induced problems I can think of, but would require hacking a good C preprocessor. This is probably not worth the pain, but apparently someone bolted on a bsd-licensed preprocessor onto Elsa. If that&#8217;s true, the patch may get me most of the way to a macro-aware squash.</p>
-
-<p><strong>Quick Analyses</strong></p>
-
-<p>There are hundreds of useful analyses that can be done on Elsa&#8217;s AST of Mozilla. However using C++ is too verbose and error prone do many of the simpler tasks. It would be nice to make a first-class binding to Oink/Elsa that easily extract all interesting info from the AST. Olmar is one way of doing that, but converting Elsa-style OO into ML datatypes produces incredibly verbose data structures and requires careful conversion of code such that information isn&#8217;t lost.</p>
-
-<p>A language that can query the C++ AST in the way that the author&#8217;s intended it, may be an easier way to go. ES4 JavaScript would be interesting for that because the script could traverse the cast-happy Elsa-AST, extract information of interested and present that as a structured type which could then be manipulated using type-safe pattern matching.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/26/">&larr; Older</a>
@@ -703,6 +706,10 @@ For the above to work will also need support for a user-correctable/suggestable 
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/02/17/router-assisted-automatic-wake-on-lan-plus-suspend/">Router-Assisted Automatic Wake-on-LAN + Suspend</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/02/17/10w-intel-i5-desktop/">10W Intel i5 Desktop</a>
       </li>
     
@@ -716,10 +723,6 @@ For the above to work will also need support for a user-correctable/suggestable 
     
       <li class="post">
         <a href="/blog/2013/01/28/snappy-number-50-misc-speedups/">Snappy #50</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/01/21/snappy-number-49-help-firefox-shutdown-faster/">Snappy #49: Help Firefox Shutdown Faster</a>
       </li>
     
   </ul>

@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="I just committed the large giant change to bring down elsa&#8217;s namespace pollution to reasonable levels. Elsa code now is now using std::foo &hellip;">
+  <meta name="description" content="The past week rocked. I was especially impressed with the localizers. The guys who bear through translating an entire browser with associated &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,46 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2008/08/04/summit/">Summit</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-08-04T11:40:28-07:00" pubdate data-updated="true">Aug 4<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>The past week rocked. I was especially impressed with the localizers. The guys who bear through translating an entire browser with associated websites to expose their country to an awesome browsing experience are simply electrifying.</p>
+
+<p>It was great to see the South American guys again and to meet hordes of Europeans.</p>
+
+<p>The most exciting outcome of the summit in my neck of the static analysis woods is that DXR (a semantically aware successor to MXR) will be rewritten from scratch in Python. Another reason to rejoice is that a tracing spidermonkey should make Treehydra ridiculously fast without much (or any) effort on my part.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -568,54 +608,6 @@ Some of you might ask &#8220;But Taras, why now, why not just keep doing what yo
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2008/05/27/treehydra-goes-push-and-pop/">Treehydra Goes Push and Pop</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-05-27T06:48:03-07:00" pubdate data-updated="true">May 27<span>th</span>, 2008</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>After writing a ton of <a href="http://developer.mozilla.org/en/docs/Dehydra_Manual">docs</a> and working through other <a href="http://developer.mozilla.org/en/docs/Dehydra">Dehydra</a> <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=423898">0.9 blockers</a>, I decided to cool off by doing some actual analyses. Before I get to that, I&#8217;d like to say that the last big task is to setup a buildbot for Dehydra on Linux/OSX. Thanks to yet another awesome contribution from Vlad, that&#8217;s <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=430321">mostly done</a>.</p>
-
-<p>So I got working on <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=421934">GC-safety static analysis</a>. Originally we tried to define a complete spec before writing a single line of code. That turned to be a bad idea and resulted in a spec full of bugs. <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=432915">This time</a> we are defining the analysis incrementally and as a surprise reward, it already caught <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=435546">a bug</a>.</p>
-
-<p><strong>Pushing and Popping Our Way</strong></p>
-
-<p>SpiderMonkey has a lot of complex code doing applying Push/Pop-like operations on variables in a function-local manner. Examples of functions that this analysis would look at are: JS_PUSH_TEMP_ROOT/JS_POP_TEMP_ROOT and JS_LOCK/JS_UNLOCK. See <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=432915">bug</a> for more. Essentially, this will help with &#8220;code must flow through here&#8221; comments on &#8220;out:&#8221; goto labels that inhabit the SpiderMonkey source.</p>
-
-<p>This is an example of control-flow-sensitive analysis. It impossible without a compiler-like view of the code that <a href="http://developer.mozilla.org/en/docs/Treehydra">Treehydra</a> provides. It also helps to have a scalable algorithm to iterate the CFG. Luckily, David Mandelin wrote such a beast by implementing <a href="http://www.cs.cornell.edu/courses/cs711/2005fa/papers/dls-pldi02.pdf">ESP</a> for his <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=420933">outparam analysis</a>. David factored-out the ESP analysis and made it available for reuse. See esp_lock.js in the <a href="http://hg.mozilla.org/users/tglek_mozilla.com/dehydra-gcc/index.cgi/file/8f6914b2aaf9/test/">test suite</a> for an example of how to write control-flow sensitive analyses. locks_valid<em>.cc and locks_bad</em>.cc illustrate the code patterns that can be scanned for.</p>
-
-<p>So if you know of any further push/pop patterns in the rest of Moz that can be checked in this manner, leave a comment.</p>
-
-<p>PS. This is yet another account of Treehydra rocking the static analysis world. Exposing the slightly scary, but awesome GCC gutts via JavaScript allows one to perform precise static analyses in a civilized manner. What could be more fun?</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/21/">&larr; Older</a>
@@ -633,6 +625,10 @@ Some of you might ask &#8220;But Taras, why now, why not just keep doing what yo
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/02/17/router-assisted-automatic-wake-on-lan-plus-suspend/">Router-Assisted Automatic Wake-on-LAN + Suspend</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/02/17/10w-intel-i5-desktop/">10W Intel i5 Desktop</a>
       </li>
     
@@ -646,10 +642,6 @@ Some of you might ask &#8220;But Taras, why now, why not just keep doing what yo
     
       <li class="post">
         <a href="/blog/2013/01/28/snappy-number-50-misc-speedups/">Snappy #50</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/01/21/snappy-number-49-help-firefox-shutdown-faster/">Snappy #49: Help Firefox Shutdown Faster</a>
       </li>
     
   </ul>

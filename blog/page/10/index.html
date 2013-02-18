@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="I like having guests who bike. So when Brian came over I decided this would be a great opportunity to explore going to the coast and back by bike ( &hellip;">
+  <meta name="description" content="****Firefox 7 features improved startup speed. Our research has shown that most OSes are not capable of starting large programs efficiently (see my &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,60 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/09/20/firefox-7-cheating-the-operating-system-to-start-faster/">Firefox 7: Cheating the Operating System to Start Faster</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-09-20T07:54:07-07:00" pubdate data-updated="true">Sep 20<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>****Firefox 7 features improved startup speed. Our research has shown that most OSes are not capable of starting large programs efficiently (see my older blog entries). As a result, Firefox 7 will explicitly tell the OS to aggressively preload our xul.dll/libxul.so/XUL library before passing it on to the runtime linker. This marks the productization of the approach explored in &#8220;20-line patch that doubles Firefox startup&#8221; that got people so excited. See <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=552864">bug 552864</a> and dependent bugs for exciting technical details.</p>
+
+<p><strong>Do Not Try this at Home: Ugly Windows</strong></p>
+
+<p><em>Note: Windows Prefetch does everything possible to thwart exciting startup optimizations.</em> Above optimization only works when prefetch is disabled/broken (ie Firefox should be faster with Windows Prefetch off). See <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=627591#c158">this comment</a> on disabling prefetch for Firefox. Alternatively one may get Windows Prefetch to not slow down Firefox startup by the following magic incantation:</p>
+
+<ol>
+<li>Install Firefox (or delete the windows prefetch entry for existing Firefox 7)</li>
+<li>Reboot (Do not start Firefox after installation!)</li>
+<li>Start Firefox.
+Above helps populate the Windows Prefetch in a less counter-productive way. Explanation: on warm startup Windows Prefetch records irrelevant IO operations and blocks Firefox startup to preload files that Firefox accesses <em>after</em> startup.</li>
+</ol>
+
+
+<p>Note: the <a href="http://mxr.mozilla.org/mozilla-central/source/browser/app/nsBrowserApp.cpp#224">heuristic</a> that we use to detect Windows Prefetch will also prevent this optimization from kicking in on some exceptionally slow hard drives when prefetch is off. This is unfortunate as this optimization is most dramatic on exceptionally slow machines.</p>
+
+<p>According to our preliminary telemetry data, less than 25% of our Windows users have Windows Prefetch off and can benefit from vastly improved startup. We expect to improve this in future Firefox releases by scheduling a prefetch cleanup operation similar to the script in above bugzilla comment.</p>
+
+<p>Operating systems without counter-productive startup heuristics (ie Mac/Linux) will simply allow Firefox 7 to start faster.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -576,62 +630,6 @@ My phone is useful for doing GPSey things and staying connected. Unfortunately e
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011/05/13/firefox-telemetry/">Firefox Telemetry</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-05-13T09:35:45-07:00" pubdate data-updated="true">May 13<span>th</span>, 2011</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><strong>Benchmarks Suck</strong></p>
-
-<p>Mozilla has traditionally relied on [Talos, Sunspider, Kraken, etc] benchmarks to optimize Firefox. Unfortunately there are two problems with benchmarks: a) it is hard to write good benchmarks (see all of the complaints about Sunspider) b) the most perfect synthetic benchmarks do not completely correspond to actual user usage. Firefox with a well-used profile, anti-viral software, well-aged Windows and 30 addons will not perform the same as it does in our clean benchmarking environment.</p>
-
-<p>For my team this became obvious in Firefox 4 once we started recording Firefox startup times. Turned out that it is easier to work on fixing startup performance than make our synthetic test closely reflect real world startup speed.</p>
-
-<p><strong>Telemetry</strong></p>
-
-<p>There is only one solution to this problem: develop telemetry infrastructure to measure Firefox performance in the wild. Beginning with version 6, Firefox will ask users to opt-in to sending anonymous usage statistics about performance, user interface feature usage, memory usage, and responsiveness to Mozilla. This information will help us improve future versions of Firefox to better fit actual usage patterns.</p>
-
-<p>This functionality is already present in our major competitors. Unlike our competition we do not plan to tag reported data with unique identifiers. This will make it harder for us see how Firefox performance changes over time for particular users (or easily tell whether some users are disproportionately represented due to sending more reports). We take our users&#8217; privacy seriously, so this seems like a reasonable trade off.</p>
-
-<p>Yesterday I landed the reporting part of telemetry (bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=585196">585196</a>). We are still working on UI, official server-side and on updating the privacy policy.</p>
-
-<p><img src="http://people.mozilla.com/~tglek/telemetry/telemetry.jpg" alt="" /></p>
-
-<p>Above screenshot shows some of the data that will be gathered for users that opt-in to telemetry.</p>
-
-<p>Please help us get a headstart on telemetry. In the recent nightlies, go to about:config and set toolkit.telemetry.enabled to true. Once the pref is set, Firefox will send interesting performance data to the telemetry test server. The metrics are very compact and are sent out no more than once a day.</p>
-
-<p>Since there is no UI yet, install my <a href="https://addons.mozilla.org/en-US/firefox/addon/abouttelemetry/">about:telemetry</a> extension and navigate to &#8220;about:telemetry&#8221; to see the metrics collected.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/11/">&larr; Older</a>
@@ -649,6 +647,10 @@ My phone is useful for doing GPSey things and staying connected. Unfortunately e
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/02/17/router-assisted-automatic-wake-on-lan-plus-suspend/">Router-Assisted Automatic Wake-on-LAN + Suspend</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/02/17/10w-intel-i5-desktop/">10W Intel i5 Desktop</a>
       </li>
     
@@ -662,10 +664,6 @@ My phone is useful for doing GPSey things and staying connected. Unfortunately e
     
       <li class="post">
         <a href="/blog/2013/01/28/snappy-number-50-misc-speedups/">Snappy #50</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/01/21/snappy-number-49-help-firefox-shutdown-faster/">Snappy #49: Help Firefox Shutdown Faster</a>
       </li>
     
   </ul>

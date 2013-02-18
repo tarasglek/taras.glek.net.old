@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="After I wrote prcheck, I was surprised by the errors it found. I expected to find lots of cases of prbool variables having integers assigned into &hellip;">
+  <meta name="description" content="static on irc.mozilla.org is now the correct irc channel for anything to do with static analysis. Codecon On Sunday, I will be presenting on Pork at &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,52 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/04/15/misc-static-analysis-news-smmgcstatic-codecon-piglet/">Misc Static Analysis News: S/#mmgc/#static/, Codecon, Piglet, &#8230;</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-04-15T06:37:23-07:00" pubdate data-updated="true">Apr 15<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h1>static on irc.mozilla.org is now the correct irc channel for anything to do with static analysis.</h1>
+
+<p><strong>Codecon</strong> On Sunday, I will be presenting on <a href="https://developer.mozilla.org/En/Pork">Pork</a> at codecon. I have been meaning to attend <a href="http://www.codecon.org/">codecon</a> since the days when P2P was considered cool, was not able to make it until this year. It is a historical milestone for me. Codecon was how people at Mozilla first heard of Elsa, which is now the foundation of all our refactoring tools (it is also inherited baggage I get to maintain).</p>
+
+<p><strong>Piglet</strong></p>
+
+<p>I adopted <a href="http://hg.mozilla.org/users/tglek_mozilla.com/piglet">Piglet</a>, <a href="http://blog.mozilla.org/dmandelin/">Dave Mandelin</a>&#8217;s de-oinkification project, and imported it into hg. It feels really good to finally be able to do a make -j without disturbing people nearby with surprise explosions of foul language. I plan to move all relevant static analysis tools into piglet. After that I shall finally merge a dozen or so elsa repositories and end up with Pork consisting of elsa/ + piglet/.</p>
+
+<p><strong>Pork</strong>*</p>
+
+<p>Chris Jones is quietly working on making Pork magnitudes more useful to average developers. It&#8217;s exciting stuff and I&#8217;ll let him announce it when he&#8217;s ready. Between his work and <a href="http://vocamus.net/dave/">David Humphrey</a>&#8217;s DXR. I think we are finally going to make it easier to hack on Mozilla for a much wider audience than before.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -545,57 +591,6 @@ For any questions regarding Pork feel free to post on the <a href="https://lists
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2008/10/09/cool-stuff-in-foreign-realms/">Cool Stuff in Foreign Realms</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-10-09T02:18:29-07:00" pubdate data-updated="true">Oct 9<span>th</span>, 2008</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Open Source projects are often like parallel worlds. People reach the same conclusions, attempt similar solutions and are typically blissfully unaware of each other&#8217;s existance.</p>
-
-<p>Here are two projects that came to my attention this week:</p>
-
-<ul>
-<li>Via Planet KDE I stumbled on <a href="http://www.englishbreakfastnetwork.org/krazy/">Krazy</a>. It&#8217;s neat if not somewhat depressing that even if C++ parsers are finally becoming accessible all this is still Perl.</li>
-<li>Helpful comment on my previous entry pointed me to <a href="http://blogs.linux.ie/caolan/">dead method hunting</a> in OpenOffice.
-<strong>Uncool Open Source Rant</strong></li>
-</ul>
-
-
-<p>Reason I switched to linux was because it seemed like a developer&#8217;s dream come true. Compilers are a package manager operation away (and generally aren&#8217;t tied to OS versions, I&#8217;m looking at you Apple), everything can be recompiled to address any particular concerns and there are crapload of weird languages to write your software in. This is especially awesome when compared to a typical proprietory software stack where one can&#8217;t easily fix problems that involve multiple components due to licensing issues or due to not having the code available(or due to not having the development environment available). So one would think that Linux distributions hold the ultimate software power: unlimited pass to modify their offering to their target audience&#8217;s content.</p>
-
-<p>Unfortunately my view of Linux ways is unrealistic. For example when people do <a href="http://lwn.net/Articles/299483/">friggin&#8217; awesome work</a> knocking down boot time to 5 seconds by hacking and slashing their way through the entire software stack involved in boottime delays, distributions claim that it&#8217;s not somethin they can seriously consider because they are too set in their ways of general purpose(and generally bloated) init systems and stock kernels(worst case: why can&#8217;t we recompile the kernel on the user&#8217;s machine or ship a couple of custom variations for common hardware out there). What&#8217;s the point of open source if we continue pretending that everything is a general purpose black box that doesn&#8217;t like to play together? It&#8217;s been two weeks and I haven&#8217;t seen a single distro bite the bullet and attempt to list 5 second boot in their goals. Come on guys, don&#8217;t you like to be challenged?</p>
-
-<p>Hope someone proves me wrong.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/19/">&larr; Older</a>
@@ -613,6 +608,10 @@ For any questions regarding Pork feel free to post on the <a href="https://lists
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/02/17/router-assisted-automatic-wake-on-lan-plus-suspend/">Router-Assisted Automatic Wake-on-LAN + Suspend</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/02/17/10w-intel-i5-desktop/">10W Intel i5 Desktop</a>
       </li>
     
@@ -626,10 +625,6 @@ For any questions regarding Pork feel free to post on the <a href="https://lists
     
       <li class="post">
         <a href="/blog/2013/01/28/snappy-number-50-misc-speedups/">Snappy #50</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/01/21/snappy-number-49-help-firefox-shutdown-faster/">Snappy #49: Help Firefox Shutdown Faster</a>
       </li>
     
   </ul>

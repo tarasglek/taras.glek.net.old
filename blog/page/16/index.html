@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="I spent the past couple weeks analyzing and improving fastload performance. I&#8217;ve long been suspicious of fastload, but only finally got around &hellip;">
+  <meta name="description" content="So I&#8217;ve been trying to figure out how optimize disk IO startup. I looked into IO caused by libraries and turns out that apps with big libraries &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,56 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/10/20/large-apps-just-have-to-start-slow/">Rant on Library IO</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-10-20T14:24:36-07:00" pubdate data-updated="true">Oct 20<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>So I&#8217;ve been trying to figure out how optimize disk IO startup. I looked into IO caused by libraries and turns out that apps with big libraries are screwed. Here is how I came to this conclusion:</p>
+
+<p>Gnomer&#8217;s <a href="http://www.gnome.org/~lcolitti/gnome-startup/analysis/">research</a> on startup pointed out that dumb readahead leads to wins in terms file io. So I wrote some code and sure enough, reading in libxul on top of our main() function does indeed result in a significant measurable speed-up on both Linux and OSX.</p>
+
+<p>From the gnome page I found a link to some <a href="http://ds9a.nl/diskstat/">diskstat</a> stuff. There lay a presentation with graphs that appear to show that OpenOffice has a much better cold IO pattern than Firefox. Given that there are some strong similarities between our application layouts I went digging to see if OpenOffice does something funny. And oh boy, it does do <a href="http://wiki.services.openoffice.org/wiki/Performance/Reorder_Symbols_For_Libraries">funny</a> page reordering on Windows and &#8220;slightly-smarter-than-dumb-readahead-style library prefetch&#8221; on Linux&#8230;</p>
+
+<p>So here is an innocent question: Why is page-reordering not done as a PGO step? I mean shouldn&#8217;t you fire up your app, feed some info back to the linker and be done with it? Another question: Why can&#8217;t we mark certain files as &#8220;keep this whole file in ram if someone asks for part of it to be paged in&#8221;?</p>
+
+<p>So is the only way to fast application startup via static linking? It sure is easy to</p>
+
+<p>posix_fadvise(open(argv[0],O_RDONLY),  POSIX_FADV_WILLNEED);</p>
+
+<p>Are these hacks still the state of the art in making apps with large libraries startup fast?</p>
+
+<p><strong>Update:</strong> Found some mentions of GNU Rope unfinishedware and a relatively recent blog <a href="http://blogs.linux.ie/caolan/2007/04/24/controlling-symbol-ordering/">post</a></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -515,46 +565,6 @@ For an example see <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=508421"
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/07/14/virtualbox-rocks/">VirtualBox 3.0 Rocks</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-07-14T06:15:52-07:00" pubdate data-updated="true">Jul 14<span>th</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>With much pain I managed to convince a Vmware WinXP virtual machine to run in <a href="http://www.virtualbox.org/">VirtualBox</a>. At first it ran very sluggishly(>3 hours to do a build?), but after I turned off IO Apic stuff in Windows, it&#8217;s become disturbingly fast. It now takes 40minutes to build a wince fennec vs almost 80minutes it took on VMware server.</p>
-
-<p>VirtualBox&#8217;s disk throughput is phenomenal, in fact, this is the first time I&#8217;ve seen almost-native speed disk io in virtual machine. A benchmark I tried reported 45mb/s 4K read/writes (these were cached on the linux side).</p>
-
-<p>Unlike Vmware server, VirtualBox&#8217;s usb works without troubles, shared folders were easy to setup etc. It&#8217;s an awesome app, hope Sun/Oracle keeps it up.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/17/">&larr; Older</a>
@@ -572,6 +582,10 @@ For an example see <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=508421"
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/02/17/router-assisted-automatic-wake-on-lan-plus-suspend/">Router-Assisted Automatic Wake-on-LAN + Suspend</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/02/17/10w-intel-i5-desktop/">10W Intel i5 Desktop</a>
       </li>
     
@@ -585,10 +599,6 @@ For an example see <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=508421"
     
       <li class="post">
         <a href="/blog/2013/01/28/snappy-number-50-misc-speedups/">Snappy #50</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/01/21/snappy-number-49-help-firefox-shutdown-faster/">Snappy #49: Help Firefox Shutdown Faster</a>
       </li>
     
   </ul>

@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Hunting Down Mythical &#8220;Slowness&#8221; I recently met a developer who used Chromium instead of Firefox. Chromium&#8217;s superior startup speed &hellip;">
+  <meta name="description" content="Mozilla has static analyses built into the buildsystem that can be turned on with &#8211;with-static-checking= flag. The analyses live in xpcom/ &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,75 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/01/21/state-of-static-analysis-at-mozilla/">State of Static Analysis at Mozilla</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-01-21T09:24:03-08:00" pubdate data-updated="true">Jan 21<span>st</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Mozilla has static analyses built into the buildsystem that can be turned on with &#8211;with-static-checking= flag. The analyses live in <a href="http://mxr.mozilla.org/mozilla-central/source/xpcom/analyses">xpcom/analyses</a> directory. The testcases (aka documentation) are in <a href="http://mxr.mozilla.org/mozilla-central/source/xpcom/tests/static-checker/">xpcom/tests/static-checker</a>. Analyses are implemented in either <a href="https://developer.mozilla.org/En/Dehydra">Dehydra</a> or <a href="https://developer.mozilla.org/en/Treehydra">Treehydra</a> and run within a patched GCC 4.3.</p>
+
+<p>The currently landed checks are:</p>
+
+<ul>
+<li>final.js: Java-like &#8220;final&#8221; keyword for C++</li>
+<li>flow.js: Ensure code in a function flows through a particular label</li>
+<li>must-override.js: Force derived classes to override certain methods</li>
+<li>override.js: Ensure methods exist in base class</li>
+<li>outparams.js: Ensure outparameters and return error codes are in sync</li>
+<li>stack.js: Mark classes as stack-only
+A whole lot more analyses in various states of completion can be tracked in the static analysis <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=430328">bug</a>.</li>
+</ul>
+
+
+<p>Asynchronous discussion happens in the mailing list. #static irc channel is the place for interactive discussion.</p>
+
+<p><strong>Nearterm Plans For Plugins </strong></p>
+
+<p>GCC 4.5 has an official plugin framework enabled by default. I will try to switch to GCC 4.5 as soon as it is out. Currently 4.5 is still changing too often for me to bother fixing Treehydra (Dehydra usually works). As soon as 4.5 is out I will revise the installation instructions to use distribution GCC and JavaScript packages to avoid the current mess (draft can be found <a href="http://groups.google.com/group/mozilla.dev.static-analysis/browse_thread/thread/a773ebdbc5479f9a#">here</a>). Sometime after that I&#8217;ll switch Mozilla static analysis to GCC 4.5 and drop 4.3 support.</p>
+
+<p>Hopefully, this will make it easier for other open source projects to adapt the hydras.</p>
+
+<p><strong>Plans for Analyses</strong></p>
+
+<p>I&#8217;m a big believer into application-specific static analyses, but I would like to see some heavy duty open source analyzers built on top of GCC.</p>
+
+<p>Some of the not-so-Mozilla-specific analyses should be bundled together to make them easy to try out on other projects.</p>
+
+<p>Hopefully 2010 will be the year that open source static analysis catches on.</p>
+
+<p><strong>LCA2010</strong></p>
+
+<p>I posted my <a href="http://people.mozilla.com/~tglek/lca2010/">slides</a> from yesterday.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -852,56 +921,6 @@ Bring on Atom! :D</div>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/10/20/large-apps-just-have-to-start-slow/">Rant on Library IO</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-10-20T14:24:36-07:00" pubdate data-updated="true">Oct 20<span>th</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>So I&#8217;ve been trying to figure out how optimize disk IO startup. I looked into IO caused by libraries and turns out that apps with big libraries are screwed. Here is how I came to this conclusion:</p>
-
-<p>Gnomer&#8217;s <a href="http://www.gnome.org/~lcolitti/gnome-startup/analysis/">research</a> on startup pointed out that dumb readahead leads to wins in terms file io. So I wrote some code and sure enough, reading in libxul on top of our main() function does indeed result in a significant measurable speed-up on both Linux and OSX.</p>
-
-<p>From the gnome page I found a link to some <a href="http://ds9a.nl/diskstat/">diskstat</a> stuff. There lay a presentation with graphs that appear to show that OpenOffice has a much better cold IO pattern than Firefox. Given that there are some strong similarities between our application layouts I went digging to see if OpenOffice does something funny. And oh boy, it does do <a href="http://wiki.services.openoffice.org/wiki/Performance/Reorder_Symbols_For_Libraries">funny</a> page reordering on Windows and &#8220;slightly-smarter-than-dumb-readahead-style library prefetch&#8221; on Linux&#8230;</p>
-
-<p>So here is an innocent question: Why is page-reordering not done as a PGO step? I mean shouldn&#8217;t you fire up your app, feed some info back to the linker and be done with it? Another question: Why can&#8217;t we mark certain files as &#8220;keep this whole file in ram if someone asks for part of it to be paged in&#8221;?</p>
-
-<p>So is the only way to fast application startup via static linking? It sure is easy to</p>
-
-<p>posix_fadvise(open(argv[0],O_RDONLY),  POSIX_FADV_WILLNEED);</p>
-
-<p>Are these hacks still the state of the art in making apps with large libraries startup fast?</p>
-
-<p><strong>Update:</strong> Found some mentions of GNU Rope unfinishedware and a relatively recent blog <a href="http://blogs.linux.ie/caolan/2007/04/24/controlling-symbol-ordering/">post</a></p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/16/">&larr; Older</a>
@@ -919,6 +938,10 @@ Bring on Atom! :D</div>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/02/17/router-assisted-automatic-wake-on-lan-plus-suspend/">Router-Assisted Automatic Wake-on-LAN + Suspend</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/02/17/10w-intel-i5-desktop/">10W Intel i5 Desktop</a>
       </li>
     
@@ -932,10 +955,6 @@ Bring on Atom! :D</div>
     
       <li class="post">
         <a href="/blog/2013/01/28/snappy-number-50-misc-speedups/">Snappy #50</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/01/21/snappy-number-49-help-firefox-shutdown-faster/">Snappy #49: Help Firefox Shutdown Faster</a>
       </li>
     
   </ul>
