@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Misc This was an unusual meeting for the Snappy project: everybody was in the same physical room (though someone dialed in 5min before the end). I &hellip;">
+  <meta name="description" content="At Mozilla we have a long history of using MXR for looking up and discussing source code. Unfortunately MXR is an unlovable mess of Perl and a crappy &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,50 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/05/22/give-dxr-a-try/">Give DXR a Try</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-05-22T02:34:51-07:00" pubdate data-updated="true">May 22<span>nd</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>At Mozilla we have a long history of using <a href="http://mxr.mozilla.org/">MXR</a> for looking up and discussing source code. Unfortunately MXR is an unlovable mess of Perl and a crappy (in terms of performance and license) text indexing engine that is glimpse. It is dead because nobody wants to work on it.</p>
+
+<p><a href="https://wiki.mozilla.org/DXR">DXR</a> is a semantically-aware successor to MXR. Semantic information is extracted from LLVM during compilation. This makes it possible to do searches like <a href="http://dxr.lanedo.com/search.cgi?tree=mozilla-central&amp;derived=nsIFile">derived:nsIFile</a>. DXR uses a modern Full Text Search engine for text searches, so it should be much faster than MXR. There is a test instance at <a href="http://dxr.lanedo.com/">dxr.mozilla.org</a>, please give it a try. The homepage lists sample searches you can do.</p>
+
+<p>DXR is written in Python. It uses an SQLite database + FTS index as a backend. Useful semantic information is extracted from the source via a Clang LLVM plugin. Checkout the <a href="https://github.com/mozilla/dxr/">source code</a> at github.</p>
+
+<p>DXR should be getting close to feature parity with MXR. Give it a try and let me know of any bugs/missing features you encounter (or submit a patch!). I realize that people have gotten used to various MXR quirks and that it can be stressful to switch to a new code indexer while trying to get stuff done, but MXR IS DEAD. We need to move on. Mozilla is complex, finding relevant code can take quite a while, especially for new contributors. Using a smarter indexer should save time, reduce frustration and free up a few developer-years to make Firefox better.</p>
+
+<p>We have lots of ideas for DXR, but first we need to ensure it is a suitable replacement for MXR. Take DXR for a spin!</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -534,60 +578,6 @@ if (requestAnimationFrame)
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/04/10/argh-at-our-unresponsive-tab-strip-settimeoutfoo-0-can-be-very-harmful/">ARGH at Our Unresponsive Tab Strip: setTimeout(foo, 0) Can Be Very Harmful</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-04-10T02:51:01-07:00" pubdate data-updated="true">Apr 10<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>As I mentioned before, I&#8217;ve been a manager for a year. I&#8217;ve focused solely on paper pushing for the past 6 months. Even though I love programming, it&#8217;s surprisingly enjoyable to merely tell others what to do :) However, as all technical managers find out, eventually one gets very bored without doing something technical. So here it goes&#8230;</p>
-
-<p><strong>Why The Frick Are My Tabs So Damn Laggy?</strong></p>
-
-<p>****I noticed that tab switching has become unbearable lately. I finally filed a bug and with Gavin&#8217;s help investigated the brokenness. Turned out that we <a href="http://mxr.mozilla.org/mozilla-central/source/toolkit/content/widgets/tabbox.xml#800">awesomely</a></p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>setTimeout(do_stuff, 0)</span></code></pre></td></tr></table></div></figure>
-
-
-<p>in the mousedown handler (bug 743877). This means that I click on my tab, only to suggest to the browser to schedule an event to be handled some time in the future. The browser will also go ahead and flush the existing event queue before getting to handling my event. I measured lag anywhere from 30 to 160+milliseconds before the browser even started handling my click.</p>
-
-<p><em>This code is pretty ancient, why has tab switching gotten slow within the last few months?</em> Turns out we now take a tab thumbnail on every tabselect, which takes >100ms on my machine&#8230; We then carefully use async IO to store that image in our network disk cache. Unfortunately our cache uses locks in creative ways effectively making that code path synchronous (<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=723577">723577</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=723582">723582</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=722033">722033</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=722034">722034</a>). See <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=742594">742594</a> for thumbnail jank. Naturally, all of the above + cycle collection + garbage collection + etc gets scheduled right in the middle of handling tab switching :)</p>
-
-<p>Thanks to a strategically misplaced setTimeout, the browser currently can spend a very long time not responding to user input (seconds sometimes). I bet we have a quite a few places that &#8220;solve&#8221; problems with setTimeouts like above.</p>
-
-<p><strong>There is hope</strong></p>
-
-<p>See <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=743069">bug 743069</a> for some proof of concept patches on making tab switching more responsive. As far as I can see, there is no technical reason for us to not to have a buttery-smooth tab strip. Next steps are figuring out why XUL draws slowly, throttling other browser activity while interacting with tab strips, etc.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/6/">&larr; Older</a>
@@ -605,6 +595,10 @@ if (requestAnimationFrame)
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/02/17/10w-intel-i5-desktop/">10W Intel i5 Desktop</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/02/15/plugin-hang-ui-on-aurora/">Plugin Hang UI On Aurora</a>
       </li>
     
@@ -618,10 +612,6 @@ if (requestAnimationFrame)
     
       <li class="post">
         <a href="/blog/2013/01/21/snappy-number-49-help-firefox-shutdown-faster/">Snappy #49: Help Firefox Shutdown Faster</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/01/10/snappy-number-48-now-with-faster-shutdown/">Snappy #48: Now With Faster Shutdown</a>
       </li>
     
   </ul>

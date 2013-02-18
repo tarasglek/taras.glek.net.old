@@ -9,9 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Highlights from meeting notes for today: Tim Taubert worked on Firefox UI speedups
-Lots of improvements to the profiler from Benoit Girard
-More &hellip;">
+  <meta name="description" content="Google code was once the best code-search tool in the business. Then it got shut down, except for a few special instances like chromium. Our intern, &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -91,6 +89,53 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/08/29/dxr-now-does-live-regexp-search-thanks-google-code/">DXR Now Does Live Regexp Search, Thanks Google Code</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-08-29T06:56:03-07:00" pubdate data-updated="true">Aug 29<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Google code was once the best code-search tool in the business. Then it got shut down, except for a few special instances like <a href="http://code.google.com/p/chromium/source/search?q=Startup.BrowserMessageLoopStartTime&amp;origq=Startup.BrowserMessageLoopStartTime&amp;btnG=Search+Trunk">chromium</a>.</p>
+
+<p>Our intern, Jonas Finnemann Jensen, took the re2 code that used to power google code search and integrated it into DXR (among other cleanups). See his blog <a href="http://jonasfj.dk/blog/2012/08/regular-expressions-on-dxr-allizom-org/">post </a>for more details.</p>
+
+<p>Regexps combined with the new instant search feature changed how I search Mozilla code. Instant search means that I&#8217;m constantly refining my search terms to narrow down my results to a minimum before I leave the search page. Digging through Mozilla code is pretty fun now. I believe our development instance* of <a href="http://dxr.allizom.org/search?q=&amp;tree=mozilla-central&amp;redirect=true">DXR</a> is the most pleasant./efficient (even if a bit rough) code indexing solution atm. I no longer miss google code for searching Mozilla.</p>
+
+<p>Now that Mozilla can be searched in a pleasant way, something needs to fill the searching of masses of open source code usecase. Perhaps <a href="https://github.com/">github</a> could plug the &#8220;google code&#8221;-sized gap in developer hearts?</p>
+
+<ul>
+<li>we also need to stabilize the development version and move it to <a href="http://dxr.mozilla.org/">dxr.mozilla.org</a>.</li>
+</ul>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -560,54 +605,6 @@ In part 2 I&#8217;ll discuss how various people at Mozilla use Telemetry.</li>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/07/23/snappy-july-19-telemetry-experiments/">Snappy, July 19: Telemetry Experiments</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-07-23T10:56:56-07:00" pubdate data-updated="true">Jul 23<span>rd</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>For the in-progress work and minor changes that landed see <a href="https://wiki.mozilla.org/Performance/Snappy/2012-07-19">non-meeting notes</a> for this week.</p>
-
-<p>Jeff Muizelaar wrote an interesting <a href="http://muizelaar.blogspot.ca/2012/07/what-happens-when-you-switch-to-gmail.html">blog post</a> work involved in a tab switch on Mac.</p>
-
-<p><strong>Windows Prefetch</strong>:<strong> Experimental Data vs Reality</strong></p>
-
-<p>I once discovered that <a href="http://en.wikipedia.org/wiki/Prefetcher">Windows Prefetch</a> can adversely affect application startup times, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=627591">627591</a>. Certain machines were showing performance to be much better with Windows prefetch disabled and using my &#8220;manual&#8221; dll preload code to warm up the cache. Manual dll preload is a win for loading large applications because it causes xul.dll to be read in sequentially rather than randomly via page-in (see my <a href="http://taras.glek.net/blog/2010/">blog posts</a> from 2010 for details of startup IO uglyness). Unfortunately Windows Prefetch + my preload code measured as a net regression. I found a weird API that seemed to return 0 when prefetch was broken and <a href="https://hg.mozilla.org/mozilla-central/rev/cc18551d5cc3#l1.19">guarded </a>preload on that.</p>
-
-<p>We have recently backed out above heuristic based on a telemetry study in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=757215">757215</a>. Perhaps this is why our startup numbers have started <a href="https://metrics.mozilla.com/data/content/pentaho-cdf-dd/Render?solution=metrics2&amp;path=%2Ftelemetry&amp;file=telemetryEvolution.wcdf&amp;bookmarkState={%22impl%22%3A%22client%22%2C%22params%22%3A{%22referenceDate%22%3A%222012-07-23%22%2C%22appNameParameter%22%3A%22[Application].[Firefox]%22%2C%22osParameter%22%3A%22[OS].[WINNT]%22%2C%22channelParameter%22%3A%22[Channel].[nightly]%22%2C%22reasonParameter%22%3A%22[Reason].[idle-daily]%22%2C%22histogramParameter%22%3A%22[Histogram].[SIMPLE_MEASURES_FIRSTPAINT]%22%2C%22histogramPopupTools%22%3A%22%22%2C%22duplicateHistogram%22%3A%22%23duplicateHistogram%22%2C%22medianButtonParam%22%3A0%2C%22scatterChart%22%3A%22%22}}">getting better</a> in Firefox 16?</p>
-
-<p>Brian Bondy setup a <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=764905">telemetry startup trial</a> to randomly delete prefetch, turn on dll preload. Last week Saptarshi Guha crunched some <a href="https://wiki.mozilla.org/Platform/Features/Telemetry">telemetry</a> numbers, see this <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=771745#c9">bugzilla comment</a>. Turned out Windows Prefetch is a huge win and dll preload is a tiny incremental improvement on top of that (rather than being a regression).</p>
-
-<p>Moral of the story is: <em>do not rely on manual performance testing for workloads involving large amounts of IO</em>. Simulating a &#8220;typical&#8221; Windows machine is extremely hard without getting noisy numbers. Effort is better spent on analyzing noisy real-world numbers and running experiments in the wild.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/4/">&larr; Older</a>
@@ -625,6 +622,10 @@ In part 2 I&#8217;ll discuss how various people at Mozilla use Telemetry.</li>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/02/17/10w-intel-i5-desktop/">10W Intel i5 Desktop</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/02/15/plugin-hang-ui-on-aurora/">Plugin Hang UI On Aurora</a>
       </li>
     
@@ -638,10 +639,6 @@ In part 2 I&#8217;ll discuss how various people at Mozilla use Telemetry.</li>
     
       <li class="post">
         <a href="/blog/2013/01/21/snappy-number-49-help-firefox-shutdown-faster/">Snappy #49: Help Firefox Shutdown Faster</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/01/10/snappy-number-48-now-with-faster-shutdown/">Snappy #48: Now With Faster Shutdown</a>
       </li>
     
   </ul>

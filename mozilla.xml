@@ -4,7 +4,7 @@
   <title><![CDATA[All About Performance]]></title>
   <link href="http://taras.glek.net/atom.xml" rel="self"/>
   <link href="http://taras.glek.net/"/>
-  <updated>2013-02-15T17:00:23-08:00</updated>
+  <updated>2013-02-17T20:46:54-08:00</updated>
   <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -12,6 +12,8 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  
   
   
   <entry>
@@ -529,28 +531,6 @@
 <p><strong>MozCamp</strong></p>
 
 <p>I may not have a chance to post the next snappy update as I&#8217;ll be hopping on the plane to Warsaw right after our meeting. If you are attending MozCamp come to our <a href="https://wiki.mozilla.org/index.php?title=MozCampEU2012/Schedule/Desktopandmobile/All-About-Performance">&#8216;All About Performance&#8217; session</a>. Our goal for the talk is to significantly expand the pool of people who can diagnose Firefox (and web) performance problems.</p>
-]]></content>
-  </entry>
-  
-  
-  
-  <entry>
-    <title type="html"><![CDATA[DXR now does live regexp search, thanks Google Code]]></title>
-    <link href="http://taras.glek.net/blog/2012/08/29/dxr-now-does-live-regexp-search-thanks-google-code/"/>
-    <updated>2012-08-29T06:56:03-07:00</updated>
-    <id>http://taras.glek.net/blog/2012/08/29/dxr-now-does-live-regexp-search-thanks-google-code</id>
-    <content type="html"><![CDATA[<p>Google code was once the best code-search tool in the business. Then it got shut down, except for a few special instances like <a href="http://code.google.com/p/chromium/source/search?q=Startup.BrowserMessageLoopStartTime&amp;origq=Startup.BrowserMessageLoopStartTime&amp;btnG=Search+Trunk">chromium</a>.</p>
-
-<p>Our intern, Jonas Finnemann Jensen, took the re2 code that used to power google code search and integrated it into DXR (among other cleanups). See his blog <a href="http://jonasfj.dk/blog/2012/08/regular-expressions-on-dxr-allizom-org/">post </a>for more details.</p>
-
-<p>Regexps combined with the new instant search feature changed how I search Mozilla code. Instant search means that I&#8217;m constantly refining my search terms to narrow down my results to a minimum before I leave the search page. Digging through Mozilla code is pretty fun now. I believe our development instance* of <a href="http://dxr.allizom.org/search?q=&amp;tree=mozilla-central&amp;redirect=true">DXR</a> is the most pleasant./efficient (even if a bit rough) code indexing solution atm. I no longer miss google code for searching Mozilla.</p>
-
-<p>Now that Mozilla can be searched in a pleasant way, something needs to fill the searching of masses of open source code usecase. Perhaps <a href="https://github.com/">github</a> could plug the &#8220;google code&#8221;-sized gap in developer hearts?</p>
-
-<ul>
-<li>we also need to stabilize the development version and move it to <a href="http://dxr.mozilla.org/">dxr.mozilla.org</a>.</li>
-</ul>
-
 ]]></content>
   </entry>
   

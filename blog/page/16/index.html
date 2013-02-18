@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Ever since the plugin branch landed in GCC, I have been itching to explore the application-specific optimization space that it opens up. It&#8217;s &hellip;">
+  <meta name="description" content="I spent the past couple weeks analyzing and improving fastload performance. I&#8217;ve long been suspicious of fastload, but only finally got around &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,50 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/10/08/restless-bug-fixing/">Restless Bug Fixing</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-10-08T03:13:01-07:00" pubdate data-updated="true">Oct 8<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I spent the past couple weeks analyzing and improving fastload performance. I&#8217;ve long been suspicious of fastload, but only finally got around to investigating it in detail. I think there is some fundamentally ironic rule in software that if you put the word “fast” in the name of a component, it is bound to eventually become a performance bottleneck.</p>
+
+<p>Almost a decade has passed since the conception of this code, so it was time to update code&#8217;s assumptions to reflect the capabilities of modern OSes. I landed the <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=412796">fix</a> today. It results in startup performance gains of 1-20% on various platforms I tested, making this the most exiting perf bug I&#8217;ve worked on.</p>
+
+<p><strong>Plans</strong></p>
+
+<p>Now that I&#8217;ve had my fill of almost a year&#8217;s worth of startup performance analysis, for the remainder of the year I plan to refocus on static analysis. My main goal is decent  C support on Dehydra(not to mention the ever elusive GCC 4.5 compatibility) and to facilitate a production-quality DXR.</p>
+
+<p>I&#8217;m hoping that we&#8217;ll end up with cool ways of dealing with the painful/slow boilerplate (bugs <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=520626">520626</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=516085">516085</a> and <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=517370">517370</a>)</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -511,87 +555,6 @@ For an example see <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=508421"
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/07/01/python-gdb-logging-file-io/">Python GDB - Logging File IO</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-07-01T08:05:42-07:00" pubdate data-updated="true">Jul 1<span>st</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><strong>Python GDB Rocks!</strong></p>
-
-<p>I wanted a non-painful way to figure out what&#8217;s causing bonus file IO. I&#8217;ve noticed that gtk likes to open files, but I didn&#8217;t have the exact details. So I grabbed <a href="http://sourceware.org/gdb/wiki/PythonGdb">python gdb</a>, and with some tips on syscalls from gdb old-timers managed to produce a <a href="http://people.mozilla.com/~tglek/fennec/files.txt">report</a> to assign blame for open()ing files to relevant Mozilla functions.</p>
-
-<p>Other than the gdb-hating syscalls issue, achieving this was simple</p>
-
-<ol>
-<li>Compile python-enabled gdb(Next set of distribution releases should have it..I hope)</li>
-<li>Define a new gdb command in a python file. I called mine &#8220;taras&#8221; for lack of a better name.</li>
-<li>Set a breakpoint, attach your command to it. :</li>
-</ol>
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>break open  
-</span><span class='line'>
-</span><span class='line'>source -p /path/to/your/script.py  
-</span><span class='line'>
-</span><span class='line'>command 1  
-</span><span class='line'>
-</span><span class='line'>taras  
-</span><span class='line'>
-</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
-
-
-<ol>
-<li>Have the script walk the backtrace to figure out the filename and the last Mozilla function. Log the info, issue gdb continue command.</li>
-<li>Print out a report and profit:</li>
-</ol>
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>python report()</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Here is my <a href="http://people.mozilla.com/~tglek/gdblog.py">script</a>. The only nasty part here is that I had to read the filename out of a register (i&#8217;m on amd64, on 32 it&#8217;d be $esi instead of $rdi) because gdb doesn&#8217;t deal well with system calls.</p>
-
-<p>I&#8217;ve never throught it would be this fun to use gdb. I always thought debuggers should be scriptable, thanks to <a href="http://tromey.com/blog/">Tom Tromey</a> (lots of gdb tutorials on Tom&#8217;s blog) and any others who finally made this a reality.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/17/">&larr; Older</a>
@@ -609,6 +572,10 @@ For an example see <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=508421"
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/02/17/10w-intel-i5-desktop/">10W Intel i5 Desktop</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/02/15/plugin-hang-ui-on-aurora/">Plugin Hang UI On Aurora</a>
       </li>
     
@@ -622,10 +589,6 @@ For an example see <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=508421"
     
       <li class="post">
         <a href="/blog/2013/01/21/snappy-number-49-help-firefox-shutdown-faster/">Snappy #49: Help Firefox Shutdown Faster</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/01/10/snappy-number-48-now-with-faster-shutdown/">Snappy #48: Now With Faster Shutdown</a>
       </li>
     
   </ul>

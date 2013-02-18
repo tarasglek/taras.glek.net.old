@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="I mainly review code written by team perf. You&#8217;d think a 6 person team would imply a fairly chill review queue. The team must&#8217;ve &hellip;">
+  <meta name="description" content="SUMO Problem Investigation Looks like increase in negative SUMO reports that I mentioned last time was due to over-counting. There might be some &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,76 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/03/05/snappy-march-1st/">Snappy: March 1st</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-03-05T08:09:45-08:00" pubdate data-updated="true">Mar 5<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><strong>SUMO Problem Investigation</strong></p>
+
+<p>Looks like increase in negative SUMO reports that I mentioned <a href="http://taras.glek.net/blog/2012/02/27/snappy-feb-23rd/">last time</a> was due to over-counting. There might be some networking regressions, but no general slowdown. Without solid data it&#8217;s hard to tell.</p>
+
+<p>In order to provide more context to make SUMO reports more useful to developers we are looking into allowing users to attach their telemetry data: bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=732522">732522</a>.</p>
+
+<p><strong>Work in Progress</strong></p>
+
+<p>There are few exciting landings to report this week, but there is a lot of exciting work going on.</p>
+
+<p>Nick is getting rid of main thread cache locks, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=723577">723577</a>. Limited initial testing indicates this can significantly improve Firefox responsiveness.</p>
+
+<p>Brian&#8217;s prefetch nuking bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=692255">692255 </a>is moving along. Interactivity profiling is also close to landing, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=710935">710935</a>.</p>
+
+<p>Dietrich is pushing automation changes to how we monitor startup so we can alter our startup sequence to show the main window sooner, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=715402">715402</a>.</p>
+
+<p>Vlad tweaked chromehang to work on all windows versions and is working on the serverside component with Benjamin, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=712109">712109</a>.</p>
+
+<p>I posted <a href="https://groups.google.com/forum/#!topic/mozilla.dev.platform/1fn0Vz20wu8">our plan</a> on shutting down Firefox efficiently, speak up if I missed an important detail. Rafael is working on this in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=662444">662444</a>.</p>
+
+<p>Jared has landed more of Avi&#8217;s smooth scrolling tweaks on the ux-branch, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=198964">198964</a>. Take the <a href="http://ftp.mozilla.org/pub/mozilla.org/firefox/nightly/latest-ux">ux nightlies</a> for a spin to try improved scrolling.</p>
+
+<p>Dietrich and Andrew are looking into massive CC pauses after resume, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=639262">639262</a>.</p>
+
+<p><strong>Landed</strong></p>
+
+<p>Async livemarks changes landed, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=613588">613588</a>. Macro is following up to fix any slowdown for livemark users.</p>
+
+<p>Nathan landed persistent telemetry, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=707320">707320</a>. It&#8217;s not quite working yet, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=732970">732970</a>.</p>
+
+<p><strong>Local Storage Discussion</strong></p>
+
+<p>Chris wrote a great <a href="http://hacks.mozilla.org/2012/03/there-is-no-simple-solution-for-local-storage/">post</a> on DOM Local Storage, the discussion is great. I did a <a href="http://taras.glek.net/blog/2012/02/22/psa-dom-local-storage-considered-harmful/">post</a> on this a few weeks ago.</p>
+
+<p>I have some raw data on exactly how slow DOM Local Storage is, I will post it once Xavier has time to yank data properly out of the cluster.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -553,64 +623,6 @@ We spent the weekend at FOSDEM. I re-presented my Plumbers talk on why Linux <a 
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/01/26/snappy-january-26/">Snappy, January 26</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-01-26T07:22:09-08:00" pubdate data-updated="true">Jan 26<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><strong>Slow Sessions - Tabs-on-Demand</strong></p>
-
-<p>Armed to the teeth with <a href="https://addons.mozilla.org/en-US/firefox/addon/aboutjank/">about:jank</a>, I was testing session restore scenarios that people <a href="http://taras.glek.net/blog/2012/01/11/call-for-snappy-help-looking-for-a-lots-of-tabs-sessions-with-lag/">reported</a>. While at it I came up with a <a href="https://plus.google.com/108936502671219351445/posts/UMzBAQr3xDS">testcase</a> for bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=711193">711193</a>. At first we were going to use telemetry to debate the merits of tabs on demand by default, but I feel my example illustrates responsiveness problems with session-restore well enough. Gavin is looking into this so we can make a decision this week.</p>
-
-<p><strong>Laggy </strong><strong>Sessions </strong></p>
-
-<p>On my machine about:jank indicated that most lag was caused by our direct2d accelerated drawing code, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=721273">bug 721273</a>. Turning off graphics acceleration made things a lot less slow (Options/Advanced/use hardware acceleration) . It would be nice if people experiencing lots of lag in their sessions (on youtube, blogs with high quality backgrounds, etc) could try <a href="https://addons.mozilla.org/en-US/firefox/addon/aboutjank/">about:jank</a>. This requires running a very recent nightly.</p>
-
-<p>Install the extension, go to about:jank, browse around, then refresh about:jank. In the case of gfx lag, DrawThebesLayers shows up on top.</p>
-
-<p><strong>Imminent Cycle Collector + GC Improvements </strong></p>
-
-<p>Olli is landing huge cycle collector improvements (half of the patches landed so far), <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=705582">bug 705582</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=717500">bug 717500</a>. If that doesn&#8217;t solve all CC problems by Tuesday, Andrew is standing by with bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=710496">710496</a> to limit how often CC can run. If we are lucky, incremental JS GC will land before Tuesday too (bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=641025">641025</a>). Landing by Tuesday means that these improvements have a good chance of showing up in Firefox 12. CC + GC are the most well-known causes of pauses in Firefox, so this is very exciting.</p>
-
-<p><strong>Other stuff</strong> ****</p>
-
-<p>Profiling tools are moving along at a good clip. Benoit&#8217;s <a href="https://developer.mozilla.org/en/Performance/Profiling_with_the_Built-in_Profiler">profiler</a> works well on Mac now, hopefully Windows support will happen next week. Non-destructive chromehang is <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=712109">almost</a> landed.</p>
-
-<p>Telemetry histograms should now survive restarts (so we can do shutdown telemetry, etc), <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=707320">bug 707320</a>.</p>
-
-<p>Peptest didn&#8217;t manage to survive deployment on try due to <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=719618">bug 719618</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=719511">719511</a>.</p>
-
-<p>We are now transitioning from identifying issues to fixing identified issues. It&#8217;s exciting to move from speculation as to what sucks to actual results. For more details see <a href="https://wiki.mozilla.org/Performance/Snappy/2012-01-26">meeting notes</a>.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/8/">&larr; Older</a>
@@ -628,6 +640,10 @@ We spent the weekend at FOSDEM. I re-presented my Plumbers talk on why Linux <a 
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/02/17/10w-intel-i5-desktop/">10W Intel i5 Desktop</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/02/15/plugin-hang-ui-on-aurora/">Plugin Hang UI On Aurora</a>
       </li>
     
@@ -641,10 +657,6 @@ We spent the weekend at FOSDEM. I re-presented my Plumbers talk on why Linux <a 
     
       <li class="post">
         <a href="/blog/2013/01/21/snappy-number-49-help-firefox-shutdown-faster/">Snappy #49: Help Firefox Shutdown Faster</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/01/10/snappy-number-48-now-with-faster-shutdown/">Snappy #48: Now With Faster Shutdown</a>
       </li>
     
   </ul>
