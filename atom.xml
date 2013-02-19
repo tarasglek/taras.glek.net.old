@@ -4,7 +4,7 @@
   <title><![CDATA[All About Performance]]></title>
   <link href="http://taras.glek.net/atom.xml" rel="self"/>
   <link href="http://taras.glek.net/"/>
-  <updated>2013-02-17T21:58:06-08:00</updated>
+  <updated>2013-02-18T23:44:53-08:00</updated>
   <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -28,13 +28,13 @@
 
 <p>By default WOL is a pain. The eye-fi card uploads photos when the SLR camera is on. Android phone is configured to rsync stuff when it is plugged while connected to home wifi. It&#8217;s not convenient to navigate some UI to send a WOL packet (or push a power button) every time I need to perform a backup. Manually deciding when to suspend the machine is also no fun.</p>
 
-<h2>Automatic WOL Theory</h2>
+<h2>Automatic WOL</h2>
 
-<p>In an ideal world WOL would support waking up on IP traffic directed at the machine in question. Typically WOL either wakes up in response to WOL magic packets or ANY ethernet traffic(ugh!).</p>
+<p>In an ideal world WOL would support waking up on IP traffic directed at the machine in question. Typically WOL either wakes up in response to WOL magic packets or ANY ethernet traffic(ugh!). <strong>Update</strong>: Turns out my nic supports directed wakeups, but the e1000e driver on Linux does not implement them.</p>
 
 <p>Luckily, ARP <code>who has x.x.x.x</code> queries are broadcast to whole network segment. So my <a href="http://en.wikipedia.org/wiki/Tomato_%28firmware%29">Tomato</a> router can help.</p>
 
-<p>Ideally this would work like:</p>
+<p>This works as follows:</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -44,37 +44,15 @@
 </span><span class='line'>Server Unsuspend Script: 192.168.1.149 is at A:B:C:D:E:F</span></code></pre></td></tr></table></div></figure>
 
 
-<p>Unfortunately, ARP is tightly coupled with Linux TCP stack. One can&#8217;t listen for incoming ARP traffic without examining ALL traffic (via libpcap or something). This not practical on a crappy fanless MIPS cpu in my router (cheap wifi-router CPUs do not need extra excuses to cook themselves). Linksys E2000 also doesn&#8217;t have much flash space for installing software even if I did want to go through the pain of writing and cross-compiling a custom C program.</p>
+<p>I wrote an arpwol program for this, I run it via</p>
 
-<h2>WOL Solution: AWK + iptables</h2>
-
-<p>AWK is the only scripting language provided by busybox (not a  good fit for packet injection/inspection). Since Linux wont let me do anything fun at ARP level, I had to move up to IP protocols. This is messy.</p>
-
-<p>Steps on Suspend:</p>
-
-<ol>
-<li>NAS sends a packet to inform router it is suspending</li>
-<li>iptables logs packet</li>
-<li>AWK on router sets up a virtual interface with same IP as the NAS</li>
-</ol>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>arpwake.mips br0 192.168.1.149 4C:72:B9:42:EA:97</span></code></pre></td></tr></table></div></figure>
 
 
-<p>Steps on NAS-access:</p>
+<p>It listens for arp looking for 192.168.1.149 and fires of a WOL.</p>
 
-<ol>
-<li>LAN machine <code>ARP: Who has 192.168.1.149</code></li>
-<li>Router <code>I got it</code></li>
-<li>LAN machine <code>TCP SYN to start an ssh connection</code></li>
-<li>Router iptables DROPs the SYN (a NACK would be bad), logs it</li>
-<li>AWK on router unregisters virtual interface so it does not conflict with NAS, sends a WOL packet</li>
-<li>NAS sends &#8216;ARP: 192.168.1.149 at MACADDY&#8217;</li>
-<li>LAN machine resends SYN packets until NAS responds</li>
-</ol>
-
-
-<p>This has a few obvious downsides, but it does work. When NAS is suspended, ssh round-trip latency is just under 10 seconds. That&#8217;s still less time that it would take me to manually send the WOL packet even if I wanted to.</p>
-
-<p>Proper solution is for someone to write a WOL target for arptables. This may be easy. Any kernel hackers reading this? I think OpenWRT, DD-WRT, etc would benefit from having an easy to setup wake-on-access scenario.</p>
+<p>It takes 5 seconds for an ssh roundtrip to a sleeping server.</p>
 
 <h2>Auto-suspend</h2>
 
@@ -82,11 +60,9 @@
 
 <h2>Conclusion</h2>
 
-<p>This was fun. The hardest part of this was figuring out how to do this without a useful ARP &#8216;API&#8217; from Linux without resorting to C programming. Abusing multiple layers of the Linux networking stack felt great.</p>
-
 <p>It great to have an x86 box idle at 1W while unused. Suspend to disk introduces extra latency without saving much more power (due to keeping WOL on).</p>
 
-<p>Please checkout the code on <a href="https://github.com/tarasglek/sleepyscripts">github</a>. If you think my solution is too complicated, let me know of a simpler way. WOL magic happens in <code>logmon.awk</code> and auto-suspend in <code>autosleep.py</code>.</p>
+<p>Please checkout the code on <a href="https://github.com/tarasglek/sleepyscripts">github</a>. WOL magic happens in <code>arpwake.c</code> and auto-suspend in <code>autosleep.py</code>.</p>
 ]]></content>
   </entry>
   
