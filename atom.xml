@@ -4,7 +4,7 @@
   <title><![CDATA[All About Performance]]></title>
   <link href="http://taras.glek.net/atom.xml" rel="self"/>
   <link href="http://taras.glek.net/"/>
-  <updated>2013-02-18T23:44:53-08:00</updated>
+  <updated>2013-02-22T16:28:10-08:00</updated>
   <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -12,6 +12,37 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Snappy #51: Smoothing Tab Animations]]></title>
+    <link href="http://taras.glek.net/blog/2013/02/22/snappy-number-51-smoothing-tab-animations/"/>
+    <updated>2013-02-22T16:14:00-08:00</updated>
+    <id>http://taras.glek.net/blog/2013/02/22/snappy-number-51-smoothing-tab-animations</id>
+    <content type="html"><![CDATA[<h3>Lack of Updates</h3>
+
+<p>I skipped a Snappy update two-weeks ago (did anyone notice?) due to not having any completed work to report. Snappy has not stagnated, we have big projects inflight see this week&#8217;s <a href="https://wiki.mozilla.org/Performance/Snappy/2013-02-21">notes</a> for some details.</p>
+
+<h3>Tab Smoothness</h3>
+
+<p>I usually do not cover in-flight work in Snappy updates and expect individual developers to blog about stuff they are working on. However, Avi Halachmi has delayed blogging to focus on quickly advancing Firefox performance, an exception had to me made.</p>
+
+<p>Avi has been investigating tab smoothness since December. His approach relies on detailed instrumentation + sending captured data via Telemetry. This culminated in some exciting bug activity this week:</p>
+
+<ul>
+<li><a title="Add telemetry probes for tab animation smoothness" href="https://bugzilla.mozilla.org/show_bug.cgi?id=828097">bug 828097</a> According to Telemetry, Firefox tab animations are quite smooth (due to recent improvements like <a title="requestAnimationFrame generates too short/long frames, especially at the beginning of animation" href="https://bugzilla.mozilla.org/show_bug.cgi?id=731974">bug 731974</a>) iff one has the newtab thumbnail feature disabled (via button in top right of the page).</li>
+<li><a title="Newtab page slows down tab-open animation" href="https://bugzilla.mozilla.org/show_bug.cgi?id=843853">bug 843853</a> was filed to fix above performance hit ASAP.</li>
+<li><a title="Cache GradientStops instead of gfxPatterns" href="https://bugzilla.mozilla.org/show_bug.cgi?id=838758">bug 838758</a> 20-25% tab animation speedup on Direct2D-accelerated systems.</li>
+<li><a title="Refresh driver may re-target the same timestamp" href="https://bugzilla.mozilla.org/show_bug.cgi?id=842967">bug 842967</a>, <a title="Consider getting rid of the delay line filter stuff in timer thread" href="https://bugzilla.mozilla.org/show_bug.cgi?id=590422">bug 590422</a> improve animation scheduling.</li>
+</ul>
+
+
+<p>Due to web-like Firefox UI architecture most of these improvements will enable smoother website perf.</p>
+
+<p>Avi, Matthew Noorenberghe, Mike Conley are working on optimizing our next UI refresh: Australis. Australis is shaping up to be the most perf-tuned theme update we&#8217;ve done. See <a title="Australis tabs performance tracking" href="https://bugzilla.mozilla.org/show_bug.cgi?id=837885">bug 837885</a> for how performance is being tracked.</p>
+
+<p>As Avi&#8217;s manager I found it trying to see weeks of perf-reporting work with no fixes to accompany it. I&#8217;m happy to see this investigation investment pay off and serve an example of importance of methodically studying performance before proceeding to optimization.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Router-Assisted Automatic Wake-on-LAN + Suspend]]></title>
@@ -554,19 +585,6 @@
 <p>Josh Aas, Lawrence &amp; me coordinated on Snappy priorities on necko team.</p>
 
 <p>I&#8217;m sure I missed a few projects, I hope other attendees blog about their work last week.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[MozCamp.EU in Warsaw]]></title>
-    <link href="http://taras.glek.net/blog/2012/09/17/moacamp-eu-in-warsaw/"/>
-    <updated>2012-09-17T18:09:30-07:00</updated>
-    <id>http://taras.glek.net/blog/2012/09/17/moacamp-eu-in-warsaw</id>
-    <content type="html"><![CDATA[<p>Last week a few of us attended MozCamp.EU in Warsaw. Me, Benoit &amp; Vlad presented a <a href="https://wiki.mozilla.org/MozCampEU2012/Schedule/Desktopandmobile/All-About-Performance">talk </a>on performance work. Primary aim of our talk was to inform our community about various performance tools that came to fruition of the past year and how to use them to investigate Firefox performance problems. Hopefully we&#8217;ll see a spike in bug reports with detailed performance information (profiler traces, telemetry histogram+chromehang excepts, etc).</p>
-
-<p>My favourite part of MozCamp was finally meeting some a couple of the impressive community contributors in person. I finally had the pleasure of literally buying beer to thank someone for cleaning up some nasty code. I hope some day we can do a developer-oriented MozCamp-like conference.</p>
-
-<p>My favourite talk was Anant &amp; Tim&#8217;s presentation on WebRTC. There is something incredibly attractive about having an encrypted, cross-browser, firewall-punching p2p implementation (realtime open video conferencing is a nice bonus). See Anant&#8217;s <a href="http://kix.in/2012/09/16/mozcamp-eu-2012-mobilize-mozilla/">blog post</a> for more details.</p>
 ]]></content>
   </entry>
   

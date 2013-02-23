@@ -4,7 +4,7 @@
   <title><![CDATA[Category: mozilla | All About Performance]]></title>
   <link href="http://taras.glek.net/blog/categories/mozilla/atom.xml" rel="self"/>
   <link href="http://taras.glek.net/"/>
-  <updated>2013-02-18T23:44:53-08:00</updated>
+  <updated>2013-02-22T16:28:10-08:00</updated>
   <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -12,6 +12,34 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Snappy #51: Smoothing Tab Animations]]></title>
+    <link href="http://taras.glek.net/blog/2013/02/22/snappy-number-51-smoothing-tab-animations/"/>
+    <updated>2013-02-22T16:14:00-08:00</updated>
+    <id>http://taras.glek.net/blog/2013/02/22/snappy-number-51-smoothing-tab-animations</id>
+    <content type="html"><![CDATA[###Lack of Updates
+
+I skipped a Snappy update two-weeks ago (did anyone notice?) due to not having any completed work to report. Snappy has not stagnated, we have big projects inflight see this week's [notes](https://wiki.mozilla.org/Performance/Snappy/2013-02-21) for some details.
+
+###Tab Smoothness
+
+I usually do not cover in-flight work in Snappy updates and expect individual developers to blog about stuff they are working on. However, Avi Halachmi has delayed blogging to focus on quickly advancing Firefox performance, an exception had to me made.
+
+Avi has been investigating tab smoothness since December. His approach relies on detailed instrumentation + sending captured data via Telemetry. This culminated in some exciting bug activity this week:
+
+* <a title="Add telemetry probes for tab animation smoothness" href="https://bugzilla.mozilla.org/show_bug.cgi?id=828097">bug 828097</a> According to Telemetry, Firefox tab animations are quite smooth (due to recent improvements like <a title="requestAnimationFrame generates too short/long frames, especially at the beginning of animation" href="https://bugzilla.mozilla.org/show_bug.cgi?id=731974">bug 731974</a>) iff one has the newtab thumbnail feature disabled (via button in top right of the page).
+* <a title="Newtab page slows down tab-open animation" href="https://bugzilla.mozilla.org/show_bug.cgi?id=843853">bug 843853</a> was filed to fix above performance hit ASAP.
+* <a title="Cache GradientStops instead of gfxPatterns" href="https://bugzilla.mozilla.org/show_bug.cgi?id=838758">bug 838758</a> 20-25% tab animation speedup on Direct2D-accelerated systems.
+* <a title="Refresh driver may re-target the same timestamp" href="https://bugzilla.mozilla.org/show_bug.cgi?id=842967">bug 842967</a>, <a title="Consider getting rid of the delay line filter stuff in timer thread" href="https://bugzilla.mozilla.org/show_bug.cgi?id=590422">bug 590422</a> improve animation scheduling.
+
+Due to web-like Firefox UI architecture most of these improvements will enable smoother website perf.
+
+Avi, Matthew Noorenberghe, Mike Conley are working on optimizing our next UI refresh: Australis. Australis is shaping up to be the most perf-tuned theme update we've done. See <a title="Australis tabs performance tracking" href="https://bugzilla.mozilla.org/show_bug.cgi?id=837885">bug 837885</a> for how performance is being tracked.
+
+As Avi's manager I found it trying to see weeks of perf-reporting work with no fixes to accompany it. I'm happy to see this investigation investment pay off and serve an example of importance of methodically studying performance before proceeding to optimization.
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Plugin Hang UI On Aurora]]></title>
@@ -105,81 +133,6 @@ Vladan landed <a title="Move LocalStorage writes off the main thread" href="http
 David Teller made search service metadata loading/migration async: <a title="nsIBrowserSearchService should load metadata asynchronously" href="https://bugzilla.mozilla.org/show_bug.cgi?id=760036">bug 760036</a>. David also made session-store loading async: <a title="session file should be read on a background thread" href="https://bugzilla.mozilla.org/show_bug.cgi?id=532150">bug 532150</a>.
 
 Aaron Klotz landed a telemetry probe to measure how often the 'Firefox is running but not responding' dialog is encountered on attempted startup: <a title="telemetry on what proportion of attempted firefox startups result in 'firefox is running and not responding'" href="https://bugzilla.mozilla.org/show_bug.cgi?id=815418">bug 815418</a>. This will help us decide on whether (or when) to add functionality to kill unresponsive Firefox instances. 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Snappy: 2012 Summary]]></title>
-    <link href="http://taras.glek.net/blog/2013/01/04/snappy-2012-summary/"/>
-    <updated>2013-01-04T15:46:00-08:00</updated>
-    <id>http://taras.glek.net/blog/2013/01/04/snappy-2012-summary</id>
-    <content type="html"><![CDATA[2012 was an exciting year for Snappy. Turning 'make it go faster' into a set of measurements and corresponding bugs to fix was hard. We learned a lot.
-
-I'd like to summarize some of the most memorable Snappy accomplishments.
-
-*Short version: Firefox is much more reponsive now.*
-
-<!-- more -->
-
-#Snappy Tools
-
-Much of the year was spent on tooling for analyzing Firefox performance. [Gecko profiler](https://addons.mozilla.org/en-us/thunderbird/addon/gecko-profiler/) is my favourite new tool. Telemetry chromehangs, evolution and slowsql are also great for settling arguments. 
-
-Many of the bugs below would not have gotten fixed without these tools.
-
-#Cleaning up the Memory Collectors
-
-In the beginning of the year it was common to suffer long (200-700ms for me) garbage and cycle collection pauses. I now rarely see pauses over 20ms in these areas. I suspect these were the most laborious improvements of 2012: see the huge number of blocking bugs in <a title="Incremental GC" href="https://bugzilla.mozilla.org/show_bug.cgi?id=641025">bug 641025</a>, <a title="[meta] Don't add obviously live objects to the cycle collector graph" href="https://bugzilla.mozilla.org/show_bug.cgi?id=716598">bug 716598</a>. 
-
-#SQLite Misuse
-
-SQLite is a fine database, but it is much better at storing data robustly than accessing it efficiently. Firefox got nailed by the following footguns:
-
-- overusing main-thread SQL queries
-- performing expensive background queries
- 
-As if main-thread IO wasn't bad enough, turns out SQLite does not like running queries in parallel. Mixing sync/async queries invites race conditions where sync queries can end up waiting for many minutes at a time (hanging the UI) while "background" maintenance queries complete. There were too many such fixes to list.
-
-###DOM Local Storage Caching
-
-We ran into significant problems with Local Storage. In order conform to spec and not perform poorly, browsers are forced to maintain an in-memory cache (this is why Local Storage dominates in synthetic benchmarks: they are measuring memory bandwidth with no syscall, etc overhead).
-
-* It became really popular in 2011-2012 despite a poor spec: main-thread reads and vagueness on when/whether data should hit disk.
-* Local Storage cache was causing LS to be written out too often: <a title="Reduce writes in current DOM Storage implementation" href="https://bugzilla.mozilla.org/show_bug.cgi?id=714964">bug 714964</a>
-* Local Storage cache was written on main-thread. For paranoid amusement it was then read back in after every writeout: <a title="Move LocalStorage writes off the main thread" href="https://bugzilla.mozilla.org/show_bug.cgi?id=807021">bug 807021</a>
-* For some some reason to do with how our DOM works there is a second level of caching so local storage can actually use up 2x more memory in RAM than it does on disk. As a result the Local Storage cache is slated for a complete rewrite in <a title="Rewrite and cleanup DOMStorage code" href="https://bugzilla.mozilla.org/show_bug.cgi?id=600307">bug 600307</a>.
-
-I should note, I made a mistake and attributed [too much blame](/blog/2012/02/22/psa-dom-local-storage-considered-harmful/) to the Local Storage API. I will blog on the exact extent of Local Storage badness once I have a chance to access the relevant telemetry data.
-
-Surprisingly, the Local Storage caching layer was so bad that the underlying SQLite footguns did not get to play a role in this tragedy.
-
-#Async IO
-
-For years people would argue on how patches should strive to use async APIs during patch review. Unfortunately even a little bit of sync IO has potential to cancel out the most elaborate async efforts.
-
-We had no purely async storage APIs until recently. We now have one such API in [OS.File](http://dutherenverseauborddelatable.wordpress.com/2012/10/03/asynchronous-file-io-for-the-mozilla-platform/).
-
-
-#UI Slowness
-
-The following sadness was fixed:
-
-###Startup
-
-* Renaming directories with lots of files can take minutes on Windows: bad when it happens on startup: <a title="Disk cache seems to cause exceptionally slow startups(1min+)" href="https://bugzilla.mozilla.org/show_bug.cgi?id=701909">bug 701909</a>.
-* Firefox had a minor tendency to start loading webpages before UI is shown: <a title="Don't load homepage URI before first paint" href="https://bugzilla.mozilla.org/show_bug.cgi?id=756313">bug 756313</a>, <a title="Wait until chrome is painted before executing code not critical to making the initial window visible" href="https://bugzilla.mozilla.org/show_bug.cgi?id=715402">bug 715402</a>.
-* Q: What could be worse than loading pages before UI is shown? A: Executing synchronous proxy code: <a title="windows proxy discovery via WPAD needs caching" href="https://bugzilla.mozilla.org/show_bug.cgi?id=790370">bug 790370</a>, <a title="remove synchronous DNS resolution in nsSOCKSIOLayer.cpp" href="https://bugzilla.mozilla.org/show_bug.cgi?id=767159">bug 767159</a>
-* Firefox insisted on doing network activity to verify some extension jars on startup: <a title="Certificate of a signed extension is validated on each startup" href="https://bugzilla.mozilla.org/show_bug.cgi?id=726125">bug 726125</a>
-
-###General
-
-* Tab switching to some popular websites is roughly 10x faster now (too many bugs to list).
-* Firefox tended be unresponsive during large downloads: <a title="nsExternalAppHandler downloads files on the main thread" href="https://bugzilla.mozilla.org/show_bug.cgi?id=789932">bug 789932</a>.
-* In some situations hardware acceleration would slow down Firefox UI to a crawl: too many bugs to list here.
-
-#2013
-
-2012 was a good warm-up. We spent a substantial part of the year on tooling. If everything goes right, that should pay off in the coming year.
 ]]></content>
   </entry>
   

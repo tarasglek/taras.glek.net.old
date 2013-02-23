@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="After writing a ton of docs and working through other Dehydra 0.9 blockers, I decided to cool off by doing some actual analyses. Before I get to that &hellip;">
+  <meta name="description" content="I am finally happy enough with Dehydra API and functionality to release 0.9. Dehydra is basically feature complete, the main reason I&#8217;m not &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,48 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2008/06/09/dehydra-09-its-alive/">Dehydra 0.9: It&#8217;s Alive!</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-06-09T04:14:05-07:00" pubdate data-updated="true">Jun 9<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I am finally happy enough with Dehydra API and functionality to release 0.9. <a href="http://developer.mozilla.org/en/docs/Dehydra">Dehydra</a> is basically feature complete, the main reason I&#8217;m not calling it 1.0 is in case there are outstanding API bugs.</p>
+
+<p>I believe Dehydra is the first useful open source static analysis tool. I hope to see projects outside of Mozilla benefitting from it too.</p>
+
+<p>I would love to see someone package this up for various Linux distributions. You can grab there release <a href="http://ftp.mozilla.org/pub/mozilla.org/dehydra/dehydra-0.9.tar.gz">here</a>.</p>
+
+<p>Note, this release also features as a preview release of <a href="http://developer.mozilla.org/en/docs/Treehydra">Treehydra</a>. Most of the development lately has been focused on improving Treehydra and building analyses on top of it.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -574,46 +616,6 @@ I have elaborate plans on how to take over the world with static analysis, more 
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2008/02/06/gcc4-elsa-together-at-last/">GCC4 + Elsa, Together at Last?</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-02-06T05:26:44-08:00" pubdate data-updated="true">Feb 6<span>th</span>, 2008</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>David Mandelin has been going through <a href="http://wiki.mozilla.org/Pork">Pork</a> fixing bugs and now it is almost working with GCC4. Prior to Dave&#8217;s involvement people would run into Elsa&#8217;s scary template bugs and switch back to GCC3.4 while trembling with fear. I asked Dave to fix a few easily work-aroundable (in Moz, not in Elsa) crashes in Elsa caused by Mozilla source and he did. Recently, I accidentally ran Elsa on a Mozilla .ii file produced by GCC4 and magically it processed! Turns out that the 3-4 bugs that Dave fixed also fixed 90% of the failures caused by GCC4 headers. The good news is that soon people won&#8217;t have to worry about that pesky GCC3.4 dependancy and run rewriting tools easier.</p>
-
-<p><a href="http://wiki.mozilla.org/Dehydra_GCC"><strong>GCC Dehydra</strong></a></p>
-
-<p>I feel like I&#8217;m nearing the feature-complete milestone. I plan to have Dehydra generate conversion code from GCC tree structures to JavaScript objects so we&#8217;ll be able to easily hook into any GCC middle-end pass in pure JS.  Dynamic, GCed, introspective nature of JavaScript should allow for very rapid development of code police/extraction/grep tools. This should result in a consistent codebase for Mozilla 2.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/22/">&larr; Older</a>
@@ -631,6 +633,10 @@ I have elaborate plans on how to take over the world with static analysis, more 
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/02/22/snappy-number-51-smoothing-tab-animations/">Snappy #51: Smoothing Tab Animations</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/02/17/router-assisted-automatic-wake-on-lan-plus-suspend/">Router-Assisted Automatic Wake-on-LAN + Suspend</a>
       </li>
     
@@ -644,10 +650,6 @@ I have elaborate plans on how to take over the world with static analysis, more 
     
       <li class="post">
         <a href="/blog/2013/02/15/is-planet-mozilla-obsolete/">Is Planet Mozilla Obsolete for Technical Content?</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/01/28/snappy-number-50-misc-speedups/">Snappy #50</a>
       </li>
     
   </ul>

@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="static on irc.mozilla.org is now the correct irc channel for anything to do with static analysis. Codecon On Sunday, I will be presenting on Pork at &hellip;">
+  <meta name="description" content="I wrote Fennecmark to automate some of the tasks that I did manually while doing performance debugging. I tried to capture some of the &#8220; &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,58 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/04/23/benchmarks-and-instrumentation-for-fennecetc/">Benchmarks and Instrumentation for Fennec/etc</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-04-23T03:19:14-07:00" pubdate data-updated="true">Apr 23<span>rd</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I wrote Fennecmark to automate some of the tasks that I did manually while doing performance debugging.</p>
+
+<p>I tried to capture some of the &#8220;perceived performance&#8221; in numbers. My goal is to focus on user-visible areas of performance. Ideally it will enable us to track performance better to ensure that key features do not regress in performance and enable us to compare Fennec speed on various platforms. I need to spend some quality time with QA people to figure out how to achieve that.</p>
+
+<p>Currently Fennecmark loads a slow-to-load webpage, zooms around it and then pans from the top to the bottom. This measures: responsiveness during pageload, zoom speed and panning lag.</p>
+
+<p>See code at <a href="http://hg.mozilla.org/users/tglek_mozilla.com/fennecmark">http://hg.mozilla.org/users/tglek_mozilla.com/fennecmark</a>.</p>
+
+<p><strong>JSD Instrumentation</strong></p>
+
+<p>Spidermonkey provides an API that allows one to get a notification on every method entry/exit. I was able to do most of my Fennec performance analysis via a component in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=470116">bug 470116</a>. My stopwatch component times the execution of every js function call and spits out a log that has been very useful in figuring out what is taking up time in Fennec chrome.</p>
+
+<p><strong>Porkstain</strong></p>
+
+<p>I am itching to write a tool that can instrument large portions of Mozilla code such that it can be profiled across C++/JS boundaries and without any external tool support. I am guessing this would be most useful on platforms with crappy sampling tools, but it would be cool if it made finding slow codepaths easier in general. If you know any lightweight instrumentation techniques, please share.</p>
+
+<p>I wrote a little prototype to insert stopwatch stuff into code deemed interesting by oprofile (stuff in the bug above). The code patching part works well, but it&#8217;s a big runtime hit and outputs too much data.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -553,44 +605,6 @@ For any questions regarding Pork feel free to post on the <a href="https://lists
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2008/11/07/enabling-prcheck-email-notifications/">Enabling Prcheck Email Notifications</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-11-07T07:58:08-08:00" pubdate data-updated="true">Nov 7<span>th</span>, 2008</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I&#8217;ve been running my prbool checker with nightly notifications for about a year now. There are some false positivies, but mostly it picks up real bugs. The checker pulls the blame source to try to guess who is responsible for the error, but so far it has only been emailing me.</p>
-
-<p>I&#8217;m going to make it emailed the hg blamed person starting this weekend, so if you commit something and get an email from me complaining about it don&#8217;t take it too personally. Hopefully this will keep the amount of new detectable prbool bugs at 0. If you do get an email and decide you don&#8217;t want to get these in the future, please complain and we&#8217;ll try to come up with a better notification solution.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/19/">&larr; Older</a>
@@ -608,6 +622,10 @@ For any questions regarding Pork feel free to post on the <a href="https://lists
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/02/22/snappy-number-51-smoothing-tab-animations/">Snappy #51: Smoothing Tab Animations</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/02/17/router-assisted-automatic-wake-on-lan-plus-suspend/">Router-Assisted Automatic Wake-on-LAN + Suspend</a>
       </li>
     
@@ -621,10 +639,6 @@ For any questions regarding Pork feel free to post on the <a href="https://lists
     
       <li class="post">
         <a href="/blog/2013/02/15/is-planet-mozilla-obsolete/">Is Planet Mozilla Obsolete for Technical Content?</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/01/28/snappy-number-50-misc-speedups/">Snappy #50</a>
       </li>
     
   </ul>

@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Telemetry has been in production for about year. However, it turns out that many Mozillians do not know what it is good for. I presented about &hellip;">
+  <meta name="description" content="An inquisitive mind sent me an email with a pointed question: &#8220;Is there an example of someone who&#8217;s not you that had a burning question &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,54 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/07/25/telemetry-and-what-it-is-good-for-part-2-telemetry-achievements/">Telemetry and What It Is Good for: Part 2: Telemetry Achievements</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-07-25T08:55:21-07:00" pubdate data-updated="true">Jul 25<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>An inquisitive mind sent me an email with a pointed question:</p>
+
+<p>&#8220;Is there an example of someone who&#8217;s not you that had a burning question that would drive some sort of research or development activity and got it answered by telemetry?&#8221;</p>
+
+<p>I forwarded his email and got a pretty fun survey. See below for a slightly edited version of emails I got. In addition to positive experiences below, people had a lot of complains about the telemetry experience.</p>
+
+<p><em>Justin Lebar</em> Justin is probably the most vocal telemetry user who isn&#8217;t me. He <a href="http://jlebar.com/2012/5/30/A_ghost_story.html">blogged</a> about one of his more successful telemetry experiences. <em>Andrew McCreight</em> One telemetry stat I added is <a href="https://metrics.mozilla.com/data/content/pentaho-cdf-dd/Render?solution=metrics2&amp;path=%2Ftelemetry&amp;file=telemetryHistogram.wcdf&amp;bookmarkState={%22impl%22%3A%22client%22%2C%22params%22%3A{%22startDate%22%3A%222012-06-25%22%2C%22endDate%22%3A%222012-07-24%22%2C%22appVersion%22%3A%22%22%2C%22appName%22%3A%22Firefox%22%2C%22arch%22%3A%22%22%2C%22OS%22%3A%22%22%2C%22version%22%3A%22%22%2C%22channel%22%3A%22nightly%22%2C%22reason%22%3A%22idle-daily%22%2C%22appBuildID%22%3A%22%22%2C%22fromPlatformBuildID%22%3A%22%22%2C%22toPlatformBuildID%22%3A%22%22%2C%22excludeParam%22%3A%22%22%2C%22measure%22%3A%22CYCLE_COLLECTOR_NEED_GC%22%2C%22histogramCompareParam%22%3A%22appVersion%22%2C%22histogramVariablesParam%22%3A%22%22%2C%22platformBuildIDMode%22%3A%22LATEST%22%2C%22platformBuildIDTopCount%22%3A%2230%22%2C%22conditionsStatistic%22%3A%22%23conditionsStatistic%22%2C%22submissionsParameter%22%3A[[172394]]}}">CYCLE_COLLECTOR_NEED_GC</a>.  Sometimes a read barrier fails and we need to do a GC synchronously at the start of a CC, which is terrible for pause times.  Using telemetry, I confirmed my suspicion that this is very rare, and thus not worth trying to improve. Another state Olli added is <a href="https://metrics.mozilla.com/data/content/pentaho-cdf-dd/Render?solution=metrics2&amp;path=%2Ftelemetry&amp;file=telemetryEvolution.wcdf&amp;bookmarkState=%7B%22impl%22%3A%22client%22%2C%22params%22%3A%7B%22referenceDate%22%3A%222012-07-25%22%2C%22appNameParameter%22%3A%22%5BApplication%5D.%5BFirefox%5D%22%2C%22osParameter%22%3A%22%5BOS%5D.%5BWINNT%5D%22%2C%22channelParameter%22%3A%22%5BChannel%5D.%5Bnightly%5D%22%2C%22reasonParameter%22%3A%22%5BReason%5D.%5Bidle-daily%5D%22%2C%22histogramParameter%22%3A%22%5BHistogram%5D.%5BFORGET_SKIPPABLE_MAX%5D%22%2C%22histogramPopupTools%22%3A%22%22%2C%22duplicateHistogram%22%3A%22%23duplicateHistogram%22%2C%22medianButtonParam%22%3A0%2C%22scatterChart%22%3A%22%22%7D%7D">FORGET_SKIPPABLE_MAX</a>, which tracks the length of the CC cleanup phases we run.  As we made the cleanup more and more thorough, the times of these got longer and longer.  I think eventually this led Olli to try to fix the worst case cleanup phases, in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=747675">747675</a>.  He had this comment in there: &#8220;Based on the initial telemetry data, the patch doesn&#8217;t affect too much to the already low median times, but helps significantly with the worst 5%, so mean time decreases quite nicely.&#8221; Also, back around Firefox 13, Olli was using telemetry to observe the results of various CC optimizations, to assess their effectiveness, which he then used to decide whether or not to nominate various patches for landing on Aurora 12.  Telemetry let us see the reward part of the risk vs. reward tradeoff, and get some pretty big improvements into 12. Locally, I use <a href="https://addons.mozilla.org/en-US/firefox/addon/abouttelemetry/">about:telemetry</a> to get a sense of what the behavior on my local machine has been, but I suppose that doesn&#8217;t really fall under &#8220;telemetry&#8221; per se.  But it was quite useful during the Cycle Collector Crisis to see what CC behavior people had been seeing on their machines.</p>
+
+<p><em>Olli Pettay</em> Thanks Andrew, very accurate summary of what I&#8217;ve been doing I tend to look at CC telemetry data daily. I very rarely use the histogram, since evolution is more interesting to me. Especially median time and also how P75 and P95 evolve. (The focus in this Q is to get lower bad times, so we should manage to drop P75 and P95) I use also <a href="about:telemetry">about:telemetry</a> locally since I tend to run builds with some patch, and I want to see if they affect badly to CC or GC times.</p>
+
+<p><em>Taras</em> My blog is basically a collection of telemetry trivia :) I do not have testimonials from other people. However I heard that the silent-update team proved something about silent updates with telemetry, Necko team discovered that some optimizations were not, etc. I encourage other people who solved a problem with telemetry to either wrote a blog post or leave a comment.</p>
+
+<p>In part 3 I will cover flaws in the current Telemetry experience.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -569,54 +617,6 @@ In part 2 I&#8217;ll discuss how various people at Mozilla use Telemetry.</li>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/06/04/snappy-may-31st-less-lag/">Snappy, May 31st - Less Lag</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-06-04T02:38:08-07:00" pubdate data-updated="true">Jun 4<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>On Friday, the necko team finally landed a fix that makes cache less likely to freeze the UI thread during reads: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=722034">bug 722034</a>. Cache writes, other less common cache use-cases remain problematic (tracked by bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=717761">717761</a>). Poor cache/main-thread interactions are one of the main causes of UI lag tracked by the Snappy project, so this is very exciting. Barring the need to backout, this fix will appear in Firefox 15.</p>
-
-<p><strong>Help Wanted:</strong> The necko team is looking for some help to determine the optimal disk cache size, please see <a href="http://todesschaf.org/posts/2012/06/04/cache-usage-and-you.html">Nick&#8217;s post</a>. We need users to install an extension and submit detailed stats on our cache lifecycle.</p>
-
-<p>There are various Firefox frontend fixes in progress: improving session restore (working towards <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=669603">669603</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=669034">669034</a>), FUEL (bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=750454">750454</a>),  search service (bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=722332">722332</a>) and the new theme (bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=732583">732583</a>). I will blog about these in more detail as they land.</p>
-
-<p>Bill landed turned on incremental GC again. Hopefully it will stay on in Firefox 15.</p>
-
-<p>Andrew is making progress on reducing CC pauses while closing tabs: bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=754495">754495</a>.</p>
-
-<p>Brian has instrumented our event loop to measure the extent of Firefox lag when responding to user events, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=759449">759449</a>. This is different than measuring general event-loop lag in that it focuses on lag that the user would actually notice. Look for  the EVENTLOOP_UI_LAG_EXP_MS histogram in our <a href="https://metrics.mozilla.com/data/">telemetry dashboard </a>(yes, we are the only browser vendor to make this sort of data public). This should help us track progress as we tweak heuristics to delay background processing during user interaction (eg bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=712478">712478</a>).</p>
-
-<p>Brian also landed a way to bypass the windows prefetch service via our privileged silent update service, see <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=692255">bug 692255</a>. In my testing prefetch is likely to prefetch too many files, slowing down startup for complex apps like Firefox. Hopefully we can do better with our own prefetch.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/5/">&larr; Older</a>
@@ -634,6 +634,10 @@ In part 2 I&#8217;ll discuss how various people at Mozilla use Telemetry.</li>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/02/22/snappy-number-51-smoothing-tab-animations/">Snappy #51: Smoothing Tab Animations</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/02/17/router-assisted-automatic-wake-on-lan-plus-suspend/">Router-Assisted Automatic Wake-on-LAN + Suspend</a>
       </li>
     
@@ -647,10 +651,6 @@ In part 2 I&#8217;ll discuss how various people at Mozilla use Telemetry.</li>
     
       <li class="post">
         <a href="/blog/2013/02/15/is-planet-mozilla-obsolete/">Is Planet Mozilla Obsolete for Technical Content?</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/01/28/snappy-number-50-misc-speedups/">Snappy #50</a>
       </li>
     
   </ul>

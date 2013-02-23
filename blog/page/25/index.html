@@ -9,8 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Squash Outparams The following took me a few days to achieve. 1
-./squash -sq-rewrite-outparams out2.txt -sq-implementation nsBidiPresUtils -sq-no- &hellip;">
+  <meta name="description" content="Automatic code rewriting business can be a little depressing sometimes. I tend to run into funny issues caused by CPP, oink limitations or just &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -90,6 +89,50 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2007/05/10/nicely-rewriting-outparams/">Nicely Rewriting Outparams</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-05-10T07:52:07-07:00" pubdate data-updated="true">May 10<span>th</span>, 2007</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Automatic code rewriting business can be a little depressing sometimes. I tend to run into funny issues caused by CPP, oink limitations or just unpleasant-to-rewrite parts of C++. After banging my head against the wall due to all these issues I finally arrived at a workable approach for the easy part of the outparam rewrite.</p>
+
+<p>Currently I have a dehydra script that finds all non-virtual getters that return either NS_OK or <em>NS_SOMETHING_IS_WRONG</em>. The script then outputs data for squash to base the rewrites on. Then squash takes over.</p>
+
+<p>In order to preserve sanity, pretty-printing is not used at all for rewriting the getter functions. This way one doesn&#8217;t have to worry about oink generating invalid C++ and the output is much more aesthetically pleasing. Instead, squash finds interesting expressions in the .i file. Then it extracts the corresponding strings from .h/.cpp files. The strings are used to fudge the position information obtained from the .i file to vaguely correspond to the original source files. After various C++ string-foo, squash produces a promising looking patch like <a href="http://people.mozilla.org/~tglek/outparams.May10.diff">this</a>.</p>
+
+<p>This also relies on a fair amount of semantic information provided by elsa/oink. For example when removing a parameter, squash inserts a local variable with the same name and then removes all of the derefences of the old parameter. Since there could be multiple variables with the same name, squash relies on elsa&#8217;s variable resolution.</p>
+
+<p>I think squash is now 50% feature complete with respect to outparam stuff. The other 50% is the hard part of rewriting all of the call-sites. I&#8217;m not counting easy parts like wrapping the return type in already_AddRefed&lt;>, eliminating redundant assignments in the getter or removing the error variable once it is no longer needed.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -613,82 +656,6 @@ For the above to work will also need support for a user-correctable/suggestable 
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2007/02/01/lossy-ast-traversals-for-good-code-health/">Lossy AST Traversals for Good Code Health</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2007-02-01T10:34:28-08:00" pubdate data-updated="true">Feb 1<span>st</span>, 2007</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Two weeks ago I finally listened to <a href="http://blog.mozilla.org/graydon">Graydon</a> and spent some quality time playing with <a href="http://spinroot.com/uno/">UNO</a> and reading the <a href="http://spinroot.com/uno/uno_long.pdf">paper</a> on it. UNO provides a simple DSL language to traverse interesting parts of the C abstract syntax tree. It simplifies the AST down to the bare minimum of variable and function call info and iterates user-defined scripts over that.</p>
-
-<p>Since I was looking for a way to get away from C++ for code analysis I was very excited and decided to implement the ideas in UNO in my own tool which goes by a temporarily name of &#8220;dos&#8221;. There limitations in UNO: it has no hope of parsing C++ without switching parsers and the DSL is rather limited. Thus, dos is built on the incredible <a href="http://www.cubewano.org/oink/">Elsa/Oink</a> C/C++ parser and uses SpiderMonkey to provide JavaScript as a scripting language.</p>
-
-<p><strong>Status</strong></p>
-
-<ul>
-<li>dos builds a Control Flow Graph from the Elsa AST. It isn&#8217;t finished and while for/while loops, break/continue/return and if statements are supported (as opposed to the trinary operator or goto), but the CFG isn&#8217;t quite right yet. However, it&#8217;s good enough for proof of concept purposes.</li>
-<li>Dos does not do DFS traversal when iterating the script like UNO, but instead iterates through statements sequentially because I did not feel like writing my own traversal of the massive Elsa AST.</li>
-<li><p>I mostly implemented an UNO-compatibility JS lib in <a href="http://people.mozilla.com/~tglek/system.js">system.js</a> which should allow for easy ports of UNO analyses like <a href="http://people.mozilla.com/~tglek/malloc.js">malloc.js</a>. It&#8217;s missing the negation conditions from UNO, but those should be quick to implement.
-<strong>Instructions</strong></p></li>
-<li><p>Download my oink <a href="http://people.mozilla.com/~tglek/dos_and_squash-0.0.tar.gz">tarball</a> with the squash &amp; dos additions.</p></li>
-<li>Install ossp spidermonkey distribution: cd dos_and_squash-0.0/js-1.6.20060820 ; configure &#8211;prefix=/usr (or use /usr/include) &amp;&amp; make install</li>
-<li>Build the oink suite: cd ../oink ; ./configure &amp;&amp; make</li>
-<li>I ported a simple UNO analysis which checks that malloc() is always paired with a corresponding free() statement. To run it: ./dos -dos-javascript malloc.js simple.cpp Now modify line 12 of simple.cpp by putting ; after the while statement. The error will be detected: func:test Error at simple.cpp:13: malloc without free
-<strong>Writing Scripts</strong></li>
-</ul>
-
-
-<p>Take a look at <a href="http://people.mozilla.com/~tglek/simple.js">simple.js</a> for a barebone analysis. There should be at least 2 functions in every script <em>uno_check(vars, state)</em> and <em>path_end(state)</em>. <em>uno_check()</em> is called for every statement in a control flow path. <em>vars</em> is an array of interesting variables and function calls in the current AST statement and <em>state</em> is where the script should store all state info. <em>state</em> gets copied on CFG block transitions with an optionally user-provided <em>clone()</em> function (see system.js for an example). <em>path_end()</em> is called when the end of the CFG path is reached.</p>
-
-<p>./dos -dos-javascript simple.js simple.cpp # this runs the user script</p>
-
-<p><strong>UNO-compatibility</strong></p>
-
-<p>UNO and the corresponding paper on it is currently the best documentation for dos. Thus I also assign <em>vars</em> and <em>state</em> to the global object to achieve UNO-like scripting feel. See malloc.js and system.js for details.</p>
-
-<p><strong>Goals</strong></p>
-
-<ul>
-<li>My foremost goal is to find a better name for dos. I&#8217;m open to suggestions that are both humorous and somehow related to source analysis.</li>
-<li>Easy: finish UNO compatibility functions. I&#8217;ll do that as I port more scripts, but I wont mind if anyone does it for me.</li>
-<li>Improve the CFG, do some value analysis to reduce the graph and provide more info to the scripts</li>
-<li>Easy: Add types to the variable info, should get dos closer to doing the <a href="http://wiki.mozilla.org/GC_SafetySpec">GC safety-analysis</a>.</li>
-<li>Reuse the JS parser to build a JS CFG to allow the same kind of analyses for JavaScript. This would be great for verifying API usage in extensions. For bonus points one can allow the user to tie the JS and C/C++ analysis together for cross-language analyses.</li>
-<li>UNO has a fairly complicated global variable analyses that is not very scriptable and thus boring. I would be interested in scripting intra-procedural analyses to figure out call-graphs, do some sort of behavior inference (ie figure out indirect malloc calls, certain other heap modifying behaviors and propagate them as attributes to function calls), etc.
-<strong>Update: New name for dos -> DeHydra</strong></li>
-</ul>
-
-
-<p>The tool is now named DeHydra since it is supposed identify bugs in the multi-headed Control Flow Graph monster.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/26/">&larr; Older</a>
@@ -706,6 +673,10 @@ For the above to work will also need support for a user-correctable/suggestable 
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/02/22/snappy-number-51-smoothing-tab-animations/">Snappy #51: Smoothing Tab Animations</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/02/17/router-assisted-automatic-wake-on-lan-plus-suspend/">Router-Assisted Automatic Wake-on-LAN + Suspend</a>
       </li>
     
@@ -719,10 +690,6 @@ For the above to work will also need support for a user-correctable/suggestable 
     
       <li class="post">
         <a href="/blog/2013/02/15/is-planet-mozilla-obsolete/">Is Planet Mozilla Obsolete for Technical Content?</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/01/28/snappy-number-50-misc-speedups/">Snappy #50</a>
       </li>
     
   </ul>

@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="I completely agree with Asa that having unwanted crap forced upon the user is morally wrong. We should do a better job of undoing this kind of &hellip;">
+  <meta name="description" content="Imagine a typical Firefox user who starts their Windows computer in order to surf the web. First app they launch is Firefox 4. Turned out that on &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,50 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/12/21/rude-surprise-startup-overhead-of-windows-font-apis/">Rude Surprise: Startup Overhead of Windows Font APIs</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-12-21T05:33:14-08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Imagine a typical Firefox user who starts their Windows computer in order to surf the web. First app they launch is Firefox 4. Turned out that on systems that support hardware-acceleration for 2D graphics, Firefox 4 takes minutes to startup. WTF? XPerf-aided investigation showed that, the Windows font enumeration code causes us to do 30x more disk IO (~300MB) than the rest of Firefox code.</p>
+
+<p>In order to hardware accelerate Firefox, we switched from GDI to using DirectWrite for font stuffs. Apparently, DirectWrite is a wonderful api, but the implementation has some teething issues. DirectWrite opens a connection to the Font Service (and starts it if it isn&#8217;t already running), however if service fails to respond DirectWrite proceeds to enumerate all of the system fonts on the client-side. This isn&#8217;t cool for multiple reasons: a) it is <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=602792">slow as hell</a> b) it causes Firefox to <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=617266">run out of memory</a>(installing IE9 helps!) sooner.  This means that currently Firefox 4 starts up a lot slower than 3.6. <a href="http://blog.mozilla.org/nattokirai/">John Daggett</a> is busy working on a workaround by using older GDI APIs to enumerate fonts. Firefox is one of the first popular Windows applications to switch to DirectWrite, so we get to suffer the consequences.</p>
+
+<p>Unfortunately it turns out that using Microsoft GDI APIs to <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=600713">enumerate fonts</a> still causes a significant amount of disk IO (~30-60MB), John plans to fix that next.</p>
+
+<p><strong>How Did We Miss This?</strong></p>
+
+<p>This bug came from a fundamental difference of how developers and users start Firefox. A developer will restart Firefox a dozen times an hour. This means we rarely get to observe true cold startup. Our tests only measure warm startup (because most operating systems make it difficult to test cold startup). Windows is also incredibly slow to develop on, so a lot of us test in a virtual machine to speed things up and avoid rebooting the computer all the time. This also makes observing cold startup hard. Fortunately xperf makes IO much easier to observe. We should deploy xperf on our <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=609111">test infrastructure</a> as soon as possible.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -539,61 +583,6 @@ Turned on USB debugging, plugged phone into laptop, told NetworkManager to conne
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2010/07/30/msvc-static-initializers-decent-stuff/">MSVC Static Initializers - Decent Stuff</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-07-30T05:56:17-07:00" pubdate data-updated="true">Jul 30<span>th</span>, 2010</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I was digging through a MSVC++ <a href="http://msdn.microsoft.com/en-us/library/k7xkk3e2%28v=VS.80%29.aspx">map file</a> for xul.dll. Turns out MSVC++ isn&#8217;t as <a href="http://taras.glek.net/blog/2010/05/27/startup-backward-constructors/">naive</a> about virtual initializers as the GNU toolchain. Initializers are all laid out next to each other. Same goes for what looks like finalizers and exception unwinding stuff. Initializers have an __E prefix and look like this:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>
-</span><span class='line'>0001:0089b470       ??__E?config@AvmCore@avmplus@@2UConfig@nanojit@@A@@YAXXZ 1089c470 f    CIL library: CIL module
-</span><span class='line'>0001:0089b475       ??__EkStaticModules@@YAXXZ 1089c475 f   nsStaticXULComponents.obj
-</span><span class='line'>0001:0089b638       ??__E?sSnifferEntries@nsUnknownDecoder@@1PAUnsSnifferEntry@1@A@@YAXXZ 1089c638 f   necko:nsUnknownDecoder.obj
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now if only Microsoft fixed their kernel to do [</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>memory-mapped IO</span></code></pre></td></tr></table></div></figure>
-
-
-<p>](http://taras.glek.net/blog/2010/04/19/windows-sucks-at-memory-mapped-io-during-startup/) efficiently, it&#8217;d be a superior OS for starting Firefox.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/13/">&larr; Older</a>
@@ -611,6 +600,10 @@ Turned on USB debugging, plugged phone into laptop, told NetworkManager to conne
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/02/22/snappy-number-51-smoothing-tab-animations/">Snappy #51: Smoothing Tab Animations</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/02/17/router-assisted-automatic-wake-on-lan-plus-suspend/">Router-Assisted Automatic Wake-on-LAN + Suspend</a>
       </li>
     
@@ -624,10 +617,6 @@ Turned on USB debugging, plugged phone into laptop, told NetworkManager to conne
     
       <li class="post">
         <a href="/blog/2013/02/15/is-planet-mozilla-obsolete/">Is Planet Mozilla Obsolete for Technical Content?</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/01/28/snappy-number-50-misc-speedups/">Snappy #50</a>
       </li>
     
   </ul>

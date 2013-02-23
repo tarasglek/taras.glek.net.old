@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="GCC Dehydra is evolving much faster than the Elsa version did and it is easier to use. Once I implemented virtual methods correctly, Joshua was able &hellip;">
+  <meta name="description" content="David Mandelin has been going through Pork fixing bugs and now it is almost working with GCC4. Prior to Dave&#8217;s involvement people would run &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,46 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2008/02/06/gcc4-elsa-together-at-last/">GCC4 + Elsa, Together at Last?</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-02-06T05:26:44-08:00" pubdate data-updated="true">Feb 6<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>David Mandelin has been going through <a href="http://wiki.mozilla.org/Pork">Pork</a> fixing bugs and now it is almost working with GCC4. Prior to Dave&#8217;s involvement people would run into Elsa&#8217;s scary template bugs and switch back to GCC3.4 while trembling with fear. I asked Dave to fix a few easily work-aroundable (in Moz, not in Elsa) crashes in Elsa caused by Mozilla source and he did. Recently, I accidentally ran Elsa on a Mozilla .ii file produced by GCC4 and magically it processed! Turns out that the 3-4 bugs that Dave fixed also fixed 90% of the failures caused by GCC4 headers. The good news is that soon people won&#8217;t have to worry about that pesky GCC3.4 dependancy and run rewriting tools easier.</p>
+
+<p><a href="http://wiki.mozilla.org/Dehydra_GCC"><strong>GCC Dehydra</strong></a></p>
+
+<p>I feel like I&#8217;m nearing the feature-complete milestone. I plan to have Dehydra generate conversion code from GCC tree structures to JavaScript objects so we&#8217;ll be able to easily hook into any GCC middle-end pass in pure JS.  Dynamic, GCed, introspective nature of JavaScript should allow for very rapid development of code police/extraction/grep tools. This should result in a consistent codebase for Mozilla 2.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -591,160 +631,6 @@ Usually stage 3 is a few times harder than 2. For garburator rewriting got reall
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2007/11/26/mozilla-2-outparamdel/">Mozilla 2: Outparamdel</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2007-11-26T07:26:17-08:00" pubdate data-updated="true">Nov 26<span>th</span>, 2007</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>There will be a lot of under-the-hood code changes in Mozilla 2. Our goal is to end up with a simpler, safer and faster codebase.</p>
-
-<p>This is my perspective on the work ahead with respect to outparamdel.</p>
-
-<p><strong>Outparamdel</strong></p>
-
-<p>In the presence of a garbage collector we will be getting rid of stack nsCOMPtr&lt;> usage (using raw pointers instead), but the getter_Addrefs() will still be needed to pass references to heap-allocated nsCOMPtr so they can be assigned to. Eliminating as many outparams as possible will eliminate much getter_Addrefs() footprint/perf/code bloat.</p>
-
-<p>Within the next week I hope to attempt to rewrite all of the auto-detectable outparamdel candidates.</p>
-
-<p><strong>Determining What To Rewrite</strong></p>
-
-<p>outparams.js is a dehydra script for flagging code that can be rewritten to use outparameters. It turned out a bit trickier than I initially expected. Here are the checks required</p>
-
-<ol>
-<li>Check that a function only ever returns 1 failure error code (NS_OK and something else). This enough if a function is not virtual.</li>
-<li>Ensure that either a) This is the only implementation of a particular virtual function or b) All other implementations of this function satisfy 1 Currently I only do a).</li>
-<li>Also check that all overloads of this function have the same outparameter type. This is required since C++ (thankfully) doesn&#8217;t not allow function overloading by varying the return type.</li>
-<li>Checks 1-3 ensure that the function can be rewritten, however one also needs to determine if the return type should be wrapped in getter_Addrefs&lt;>. This can not be deterministically done from looking at the getter. So one has to scan the code for usage of the function to see if the outparam is ever passed getter_Addrefs.</li>
-<li>Check that none of the callers are within macros to minimize non-automatic rewriting.
-Checks 2 and 3 require the complete class hierachy of Mozilla so I finally made a few more dehydra scripts to produce that. This was on my TODO list for a while and should make a few other interesting analyses possible (my favourite one is finding interfaces which only have 1 implementation to get rid of excessive virtual functions).</li>
-</ol>
-
-
-<p>Checks 4 and 5 were easiest to implement as warnings in outparamdel.</p>
-
-<p>One should keep in mind transitivity. Once the first outparamdel candidates are rewritten, some of their callers should become flagged for rewriting in the same manner.</p>
-
-<p><strong>Rewriting Code </strong></p>
-
-<p>Here is an example of how code will be simplified.</p>
-
-<p>given a function:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>
-</span><span class='line'>nsresult getFoo(nsIFoo **out);
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>And usage like:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>
-</span><span class='line'>nsCOMPtr&lt;nsIFoo&gt; bla;
-</span><span class='line'>nsresult rv = getFoo(getter_Addrefs(bla));</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>if ((NS_SUCCEEDED(rv) && bla) {
-</span><span class='line'>...
-</span><span class='line'>} else {
-</span><span class='line'>return rv;
-</span><span class='line'>}
-</span><span class='line'>nsCOMPtr&lt;nsIFoo&gt; bla2;
-</span><span class='line'>return getFoo(getter_Addrefs(bla2));
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The function definition will become:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>nsIFoo* getFoo();
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Before this can be done, several issues come up</p>
-
-<ol>
-<li>It is not clear if the original getFoo() is allowed to always override the value passed to it. This is hard to determine automatically, so we make the assumption that in the general case it is ok.</li>
-<li>It isn&#8217;t obvious if getFoo() is returns null in the outparam to indicate some non-error condition. This is rare so the parameter shall be annotated. Currently, the plan is to annotate with a NULLABLE_OUTPARAM() macro which would be detectable by dehydra and serve as documentation for the function behavior.</li>
-</ol>
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>nsCOMPtr&lt;nsIFoo&gt; bla = getFoo(); //after XPCOMGC rewrite the left side will become nsIFoo* bla
-</span><span class='line'>if (bla) { // could even merge the above declaration into the if condition
-</span><span class='line'>...
-</span><span class='line'>} else {
-</span><span class='line'>return NS_ERROR;// or NULL if this is another outparamdel candidate
-</span><span class='line'>}
-</span><span class='line'>nsCOMPtr&lt;nsIFoo&gt; bla2 = getFoo();
-</span><span class='line'>return bla2 ? NS_OK : NS_ERROR_SOMETHING; // I'm not sure if outparamdel should use an explicit ternary operator or an inline function to convert new style errors into nsresult
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Currently the code is being rewritten in a much uglier way. So this cleaner version will likely be implemented as an optimization pass (probably with a new tool outparamdel-opt?). There several tricks here:</p>
-
-<ol>
-<li>Connect the declaration with initialization of bla and bla2</li>
-<li>Detect the error check and replace it with &#8220;bla&#8221;(or !bla for NS_FAILED).Then realize that bla &amp;&amp; bla contains a redundant statement and take it out.</li>
-<li>Do something similar to return statements.
-<strong>Result</strong></li>
-</ol>
-
-
-<p>This should result in prettier code that compiles quicker and to a smaller, more efficient binary. It will also be more GC-friendly.</p>
-
-<p><strong>C++ Exceptions</strong></p>
-
-<p>Right now outparamdel does rewrites that are useful even if C++ exceptions will not be introduced. There are further code reduction gains possible if above error checks were converted into C++ exceptions, but I am not clear on performance characteristics of exceptions. We would also need to change tamarin exceptions to match C++ ones before any experimentation can be done.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/23/">&larr; Older</a>
@@ -762,6 +648,10 @@ Checks 2 and 3 require the complete class hierachy of Mozilla so I finally made 
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/02/22/snappy-number-51-smoothing-tab-animations/">Snappy #51: Smoothing Tab Animations</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/02/17/router-assisted-automatic-wake-on-lan-plus-suspend/">Router-Assisted Automatic Wake-on-LAN + Suspend</a>
       </li>
     
@@ -775,10 +665,6 @@ Checks 2 and 3 require the complete class hierachy of Mozilla so I finally made 
     
       <li class="post">
         <a href="/blog/2013/02/15/is-planet-mozilla-obsolete/">Is Planet Mozilla Obsolete for Technical Content?</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/01/28/snappy-number-50-misc-speedups/">Snappy #50</a>
       </li>
     
   </ul>

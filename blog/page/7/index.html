@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="I ask every new Mozilla person to follow planet Mozilla. It&#8217;s the only easiest way to keep an eye on what is going on in Mozilla. Because it is &hellip;">
+  <meta name="description" content="I was away on Thursday, so the following is based on Lawrence&#8217;s notes. Work in Progress The content team is working on reducing lag caused by &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,62 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/03/09/snappy-march-8/">Snappy, March 8</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-03-09T07:53:00-08:00" pubdate data-updated="true">Mar 9<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I was away on Thursday, so the following is based on Lawrence&#8217;s <a href="https://wiki.mozilla.org/Performance/Snappy/2012-03-08">notes</a>.</p>
+
+<p><strong>Work in Progress</strong></p>
+
+<p>The content team is working on reducing lag caused by background tabs (no specific bug numbers in notes, but I suspect <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=734015">734015</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=715376">715376</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=674779">674779</a>).</p>
+
+<p>Vlad is almost done with bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=722368">722368</a>. This will give us coverage of all SQL activity within Firefox. For queries with private data we will only report duration + database name. Locally, within about:telemetry, we&#8217;ll be able to report full sql strings if the pref for it is turned on.</p>
+
+<p>Vlad is aiming to wrap up cancelable SQL queries next week, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=722243">722243</a>. Apparently he&#8217;s also almost done with the python symbol server for bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=712109">712109</a>.</p>
+
+<p>Pointless-stat()-reducing bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=521264">521264 </a>is asymptotically reaching landing. Paolo is asyncing favicon consumers in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=728143">728143 </a>(on the way toward async places). Drew is asyncing content prefs in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=699859">699859</a>.</p>
+
+<p>Nick is still working on making cache async in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=723577">723577</a>.</p>
+
+<p>Mark decided to change <a href="https://wiki.mozilla.org/Auto-tools/Projects/peptest">peptest </a>to be more like talos and to integrate <a href="https://developer.mozilla.org/en/Performance/Profiling_with_the_Built-in_Profiler">SPS</a>. I am guessing he&#8217;ll blog about this.</p>
+
+<p><strong>Landed This Week</strong></p>
+
+<p>Andrews work in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=728460">728460 </a>should result in the cycle collector running less often.</p>
+
+<p>Most depressing bugfix of the week award goes to Rafael. Firefox no longer considers it appropriate to tickle idle-daily observers tasks late during shutdown, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=732368">732368</a>.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -587,42 +643,6 @@ We spent the weekend at FOSDEM. I re-presented my Plumbers talk on why Linux <a 
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/01/31/fast-dxr/">Fast DXR</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-01-31T01:29:05-08:00" pubdate data-updated="true">Jan 31<span>st</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><a href="http://dxr.lanedo.com/index.html">DXR </a>is now <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=722743">uber-fast</a>. See bottom of search pages for timing info. Give it a try. We have a few more bugs to fix before we jump into fixing the UI.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/8/">&larr; Older</a>
@@ -640,6 +660,10 @@ We spent the weekend at FOSDEM. I re-presented my Plumbers talk on why Linux <a 
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/02/22/snappy-number-51-smoothing-tab-animations/">Snappy #51: Smoothing Tab Animations</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/02/17/router-assisted-automatic-wake-on-lan-plus-suspend/">Router-Assisted Automatic Wake-on-LAN + Suspend</a>
       </li>
     
@@ -653,10 +677,6 @@ We spent the weekend at FOSDEM. I re-presented my Plumbers talk on why Linux <a 
     
       <li class="post">
         <a href="/blog/2013/02/15/is-planet-mozilla-obsolete/">Is Planet Mozilla Obsolete for Technical Content?</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/01/28/snappy-number-50-misc-speedups/">Snappy #50</a>
       </li>
     
   </ul>

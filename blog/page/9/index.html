@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Meeting notes. Not much exciting new stuff happened this week. There was some progress on responsiveness profiler, snappy scrolling, dom storage. We &hellip;">
+  <meta name="description" content="Team Perf and a significant number of other Mozillians will be attending FOSDEM this year. My team will be giving talks on android linkers, IO, &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,46 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/12/20/fosdem-anyone/">FOSDEM Anyone?</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-12-20T06:57:10-08:00" pubdate data-updated="true">Dec 20<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Team Perf and a significant number of other Mozillians will be attending <a href="http://fosdem.org/2012/">FOSDEM</a> this year. My team will be giving talks on android linkers, IO, toolchain stuff, other TBD stuff. This will be my first FOSDEM, I&#8217;m really excited about it. There are a lot of European open sourcers to meet that don&#8217;t make it to this side of the pond much.</p>
+
+<p>Team perf &amp; other snappy people (10+ people) plan to spend the week before FOSDEM hacking on <a href="http://taras.glek.net/blog/category/snappy/">Snappy</a> and other perf projects. Does anyone have suggestions on a cool hackerspace (I sent an email to hackerspaces.be folks) or a coworking facility that could host us in Brussels?</p>
+
+<p><strong>Update:</strong> Looks like hackerspaces.be will be hosting us. Looking forward to checking out HSBXL-NG :)</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -515,61 +555,6 @@ Turns out that one can load a url with chrome privs (about:memory works too) and
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011/09/20/firefox-7-telemetry-faster-startup/">Firefox 7: Telemetry</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-09-20T07:59:43-07:00" pubdate data-updated="true">Sep 20<span>th</span>, 2011</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>****Firefox 7 marks a turning point in how we measure Firefox performance. Traditionally we measured Firefox performance on individual developer machines and our build &amp; release infrastructure. However it turns out synthetic benchmarks do not correspond to real-world Firefox usage: it is difficult to model a &#8220;typical&#8221; computer in a lab environment. Surprisingly slow consumer hardware, changes in usage patterns, preinstalled bloatware all affect Firefox performance in surprising ways.</p>
-
-<p>Firefox 7 telemetry will prompt users to opt-in to reporting performance data to Mozilla. This data will supplement our existing benchmarking infrastructure to help us optimize future Firefox releases. Telemetry performance metrics are very lightweight and will not negatively impact Firefox performance.</p>
-
-<p>In addition to transmitting data via SSL, Mozilla privacy team worked tirelessly to ensure that no personally-identifiable information is sent via telemetry. Whereas many other software projects stamp this kind of data with a unique per-user id, we opted for a per-session id which is reset every time the browser restarts. Telemetry is also disabled while in private-browsing mode.</p>
-
-<p>The following telemetry data will be gathered in Firefox 7:</p>
-
-<ul>
-<li>Memory usage</li>
-<li>CPU core count</li>
-<li>Cycle collection times</li>
-<li>Startup speed
-Use the <a href="https://addons.mozilla.org/en-US/firefox/addon/abouttelemetry/">about:telemetry</a> extension to check on your browser performance. The following screenshot shows how to enable telemetry:</li>
-</ul>
-
-
-<p><img src="http://people.mozilla.com/~tglek/telemetry/telemetry-ff7.jpg" alt="" /></p>
-
-<p>I&#8217;m very excited that Firefox finally joins the ranks of cars, airplanes and other software projects in making performance decisions based on real evidence gathered in the wild.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/10/">&larr; Older</a>
@@ -587,6 +572,10 @@ Use the <a href="https://addons.mozilla.org/en-US/firefox/addon/abouttelemetry/"
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/02/22/snappy-number-51-smoothing-tab-animations/">Snappy #51: Smoothing Tab Animations</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/02/17/router-assisted-automatic-wake-on-lan-plus-suspend/">Router-Assisted Automatic Wake-on-LAN + Suspend</a>
       </li>
     
@@ -600,10 +589,6 @@ Use the <a href="https://addons.mozilla.org/en-US/firefox/addon/abouttelemetry/"
     
       <li class="post">
         <a href="/blog/2013/02/15/is-planet-mozilla-obsolete/">Is Planet Mozilla Obsolete for Technical Content?</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/01/28/snappy-number-50-misc-speedups/">Snappy #50</a>
       </li>
     
   </ul>

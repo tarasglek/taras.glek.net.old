@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="****Firefox 7 features improved startup speed. Our research has shown that most OSes are not capable of starting large programs efficiently (see my &hellip;">
+  <meta name="description" content="****Firefox 7 marks a turning point in how we measure Firefox performance. Traditionally we measured Firefox performance on individual developer &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,61 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/09/20/firefox-7-telemetry-faster-startup/">Firefox 7: Telemetry</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-09-20T07:59:43-07:00" pubdate data-updated="true">Sep 20<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>****Firefox 7 marks a turning point in how we measure Firefox performance. Traditionally we measured Firefox performance on individual developer machines and our build &amp; release infrastructure. However it turns out synthetic benchmarks do not correspond to real-world Firefox usage: it is difficult to model a &#8220;typical&#8221; computer in a lab environment. Surprisingly slow consumer hardware, changes in usage patterns, preinstalled bloatware all affect Firefox performance in surprising ways.</p>
+
+<p>Firefox 7 telemetry will prompt users to opt-in to reporting performance data to Mozilla. This data will supplement our existing benchmarking infrastructure to help us optimize future Firefox releases. Telemetry performance metrics are very lightweight and will not negatively impact Firefox performance.</p>
+
+<p>In addition to transmitting data via SSL, Mozilla privacy team worked tirelessly to ensure that no personally-identifiable information is sent via telemetry. Whereas many other software projects stamp this kind of data with a unique per-user id, we opted for a per-session id which is reset every time the browser restarts. Telemetry is also disabled while in private-browsing mode.</p>
+
+<p>The following telemetry data will be gathered in Firefox 7:</p>
+
+<ul>
+<li>Memory usage</li>
+<li>CPU core count</li>
+<li>Cycle collection times</li>
+<li>Startup speed
+Use the <a href="https://addons.mozilla.org/en-US/firefox/addon/abouttelemetry/">about:telemetry</a> extension to check on your browser performance. The following screenshot shows how to enable telemetry:</li>
+</ul>
+
+
+<p><img src="http://people.mozilla.com/~tglek/telemetry/telemetry-ff7.jpg" alt="" /></p>
+
+<p>I&#8217;m very excited that Firefox finally joins the ranks of cars, airplanes and other software projects in making performance decisions based on real evidence gathered in the wild.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -593,43 +648,6 @@ Since the branch point for Aurora is approaching in less than a week, I don&#821
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011/05/14/cheap-solar-power-for-my-phone/">Cheap Solar Power for My Phone</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-05-14T11:55:00-07:00" pubdate data-updated="true">May 14<span>th</span>, 2011</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><div class='post'>
-My phone is useful for doing GPSey things and staying connected. Unfortunately expecting more than a day of use is unrealistic. So I set out on a quest for portable power. <br /><br />I spent way too much time choosing a dynamo hub, building a wheel, having a friend build a circuit so I could charge my phone while away from home. <br /><br />One day I was randomly surfing dealextreme/ebay and stumbled on something that was unbelievably awesome: cheapass solar power. Turns out a $25 solar panel and a spliced usb cable is enough.<br /><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://a7.sphotos.ak.fbcdn.net/hphotos-ak-snc6/229316_681609118926_122504458_36920657_6584253_n.jpg" imageanchor="1"><img border="0" height="540" src="http://a7.sphotos.ak.fbcdn.net/hphotos-ak-snc6/229316_681609118926_122504458_36920657_6584253_n.jpg" width="720" /></a></div><br />At this point the main benefit of a dynamo hub is that it works all year long(24x7 as long as I&#8217;m biking). Dynamo also has a benefit of being a bunch of metal that&#8217;s part of the bike. Attaching a solar panel will require some cleverness to avoid smashing it the first time the bike falls over. <br /><br />On the other hand the solar panel is light and will work great for camping while off the bike. It&#8217;s good to have options.<br /><b><br /></b><br /><b>Update:</b><br /><ul><li>I&#8217;ve had this for a while now. This solar panel is amazing. It is exactly as the seller claims: 5V and provides up to 700mA of current. There is a problem where if the panel gets in the shade, the current level drops off and stupid charging circutry on my Vibrant continues to try to charge. I documented it in this <a href="http://forum.xda-developers.com/showthread.php?p=15413618#post15413618">forum post</a>.</li><li><a href="http://cgi.ebay.com/ws/eBayISAPI.dll?ViewItem&amp;item=220768018461&amp;ssPageName=ADME:L:OU:US:1123">ebay listing</a> I bought this from.</li></ul></div>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/11/">&larr; Older</a>
@@ -647,6 +665,10 @@ My phone is useful for doing GPSey things and staying connected. Unfortunately e
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/02/22/snappy-number-51-smoothing-tab-animations/">Snappy #51: Smoothing Tab Animations</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/02/17/router-assisted-automatic-wake-on-lan-plus-suspend/">Router-Assisted Automatic Wake-on-LAN + Suspend</a>
       </li>
     
@@ -660,10 +682,6 @@ My phone is useful for doing GPSey things and staying connected. Unfortunately e
     
       <li class="post">
         <a href="/blog/2013/02/15/is-planet-mozilla-obsolete/">Is Planet Mozilla Obsolete for Technical Content?</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/01/28/snappy-number-50-misc-speedups/">Snappy #50</a>
       </li>
     
   </ul>

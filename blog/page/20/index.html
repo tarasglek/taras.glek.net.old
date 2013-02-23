@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="The past week rocked. I was especially impressed with the localizers. The guys who bear through translating an entire browser with associated &hellip;">
+  <meta name="description" content="I have never enjoyed the theory behind software engineering. It seems particularly depressing as it can be summarized as: &#8220;What can we learn &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,50 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2008/08/11/oink-testsuite-within-pork-passes/">Oink Testsuite Within Pork Passes</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-08-11T07:49:28-07:00" pubdate data-updated="true">Aug 11<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I have never enjoyed the theory behind software engineering. It seems particularly depressing as it can be summarized as: &#8220;What can we learn from past software development experience in order to not repeat old mistakes such that we can come up with newer and shinier mistakes?&#8221;.</p>
+
+<p>For that reason I haven&#8217;t been able to stick to any particular software development doctrine (paired, test-driven, OO, SOA, etc) and instead taken shortcuts to whatever is practical at the time.</p>
+
+<p>One unfortunate result of such neglect is that the oink test suite ended up not being utilized. I tried it a couple of times while starting out with oink and it failed in many cumbersome ways. However, as pork evolved out of oink, I learned more about the &#8220;architecture&#8221; behind it, I fixed a couple of the issues that were causing funny make errors.</p>
+
+<p>However one giant bug remained. Turned out other people were able to run the original oink testsuite, but not the equivalent one in pork. Fearing that I somehow screwed up Elsa, I spent way too long investigating the failure only to learn it wasn&#8217;t my <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=444805">fault</a>. Pork users: rejoice, the testsuite should run as expected now.</p>
+
+<p>PS. I may not be a SENG believer, but I do think that open source + good version control + testsuites result in better software.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -566,48 +610,6 @@ Some of you might ask &#8220;But Taras, why now, why not just keep doing what yo
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2008/06/09/dehydra-09-its-alive/">Dehydra 0.9: It&#8217;s Alive!</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-06-09T04:14:05-07:00" pubdate data-updated="true">Jun 9<span>th</span>, 2008</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I am finally happy enough with Dehydra API and functionality to release 0.9. <a href="http://developer.mozilla.org/en/docs/Dehydra">Dehydra</a> is basically feature complete, the main reason I&#8217;m not calling it 1.0 is in case there are outstanding API bugs.</p>
-
-<p>I believe Dehydra is the first useful open source static analysis tool. I hope to see projects outside of Mozilla benefitting from it too.</p>
-
-<p>I would love to see someone package this up for various Linux distributions. You can grab there release <a href="http://ftp.mozilla.org/pub/mozilla.org/dehydra/dehydra-0.9.tar.gz">here</a>.</p>
-
-<p>Note, this release also features as a preview release of <a href="http://developer.mozilla.org/en/docs/Treehydra">Treehydra</a>. Most of the development lately has been focused on improving Treehydra and building analyses on top of it.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/21/">&larr; Older</a>
@@ -625,6 +627,10 @@ Some of you might ask &#8220;But Taras, why now, why not just keep doing what yo
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/02/22/snappy-number-51-smoothing-tab-animations/">Snappy #51: Smoothing Tab Animations</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/02/17/router-assisted-automatic-wake-on-lan-plus-suspend/">Router-Assisted Automatic Wake-on-LAN + Suspend</a>
       </li>
     
@@ -638,10 +644,6 @@ Some of you might ask &#8220;But Taras, why now, why not just keep doing what yo
     
       <li class="post">
         <a href="/blog/2013/02/15/is-planet-mozilla-obsolete/">Is Planet Mozilla Obsolete for Technical Content?</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/01/28/snappy-number-50-misc-speedups/">Snappy #50</a>
       </li>
     
   </ul>

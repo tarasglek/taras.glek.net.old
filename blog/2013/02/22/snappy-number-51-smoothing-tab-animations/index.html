@@ -5,13 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Alternative to the Indignity of Dealing with the Error Console - All About Performance</title>
+  <title>Snappy #51: Smoothing Tab Animations - All About Performance</title>
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="The JavaScript error console is a relic from the Mozilla stone age. There are two problems with it: It lives in a separate window
-It is not helpful
-I &hellip;">
+  <meta name="description" content="Lack of Updates I skipped a Snappy update two-weeks ago (did anyone notice?) due to not having any completed work to report. Snappy has not stagnated &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -20,7 +18,7 @@ I &hellip;">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://taras.glek.net/blog/2011/10/18/alternative-to-the-indignity-of-dealing-with-the-error-console/">
+  <link rel="canonical" href="http://taras.glek.net/blog/2013/02/22/snappy-number-51-smoothing-tab-animations/">
   <link href="/favicon.png" rel="icon">
   <style>
 <!-- <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">-->
@@ -94,7 +92,7 @@ if (requestAnimationFrame)
   
   <header>
     
-      <h1 class="entry-title">Alternative to the Indignity of Dealing With the Error Console</h1>
+      <h1 class="entry-title">Snappy #51: Smoothing Tab Animations</h1>
     
     
       <p class="meta">
@@ -110,28 +108,36 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2011-10-18T23:56:09-07:00" pubdate data-updated="true">Oct 18<span>th</span>, 2011</time>
+<time datetime="2013-02-22T16:14:00-08:00" pubdate data-updated="true">Feb 22<span>nd</span>, 2013</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>The JavaScript error console is a relic from the Mozilla stone age. There are two problems with it:</p>
+<div class="entry-content"><h3>Lack of Updates</h3>
 
-<ol>
-<li>It lives in a separate window</li>
-<li>It is not helpful
-I&#8217;ve been drooling over the new Firefox Web Console, but unfortunately it doesn&#8217;t have chrome privs [yet?] so it isn&#8217;t a replacement for the error console since it operates with privileges of the webpage displayed. Turns out I was 2 steps away from nirvana:</li>
-<li>Navigate to <a href="chrome://global/content/console.xul">chrome://global/content/console.xul</a>.</li>
-<li>Menu -> &#8220;Web Developer&#8221; -> &#8220;Web Console&#8221;
-Turns out that one can load a url with chrome privs (about:memory works too) and the web console becomes a very helpful [with autocompletion, less noise, etc) tool for typing Components.interfaces&#8230;</li>
-</ol>
+<p>I skipped a Snappy update two-weeks ago (did anyone notice?) due to not having any completed work to report. Snappy has not stagnated, we have big projects inflight see this week&#8217;s <a href="https://wiki.mozilla.org/Performance/Snappy/2013-02-21">notes</a> for some details.</p>
+
+<h3>Tab Smoothness</h3>
+
+<p>I usually do not cover in-flight work in Snappy updates and expect individual developers to blog about stuff they are working on. However, Avi Halachmi has delayed blogging to focus on quickly advancing Firefox performance, an exception had to me made.</p>
+
+<p>Avi has been investigating tab smoothness since December. His approach relies on detailed instrumentation + sending captured data via Telemetry. This culminated in some exciting bug activity this week:</p>
+
+<ul>
+<li><a title="Add telemetry probes for tab animation smoothness" href="https://bugzilla.mozilla.org/show_bug.cgi?id=828097">bug 828097</a> According to Telemetry, Firefox tab animations are quite smooth (due to recent improvements like <a title="requestAnimationFrame generates too short/long frames, especially at the beginning of animation" href="https://bugzilla.mozilla.org/show_bug.cgi?id=731974">bug 731974</a>) iff one has the newtab thumbnail feature disabled (via button in top right of the page).</li>
+<li><a title="Newtab page slows down tab-open animation" href="https://bugzilla.mozilla.org/show_bug.cgi?id=843853">bug 843853</a> was filed to fix above performance hit ASAP.</li>
+<li><a title="Cache GradientStops instead of gfxPatterns" href="https://bugzilla.mozilla.org/show_bug.cgi?id=838758">bug 838758</a> 20-25% tab animation speedup on Direct2D-accelerated systems.</li>
+<li><a title="Refresh driver may re-target the same timestamp" href="https://bugzilla.mozilla.org/show_bug.cgi?id=842967">bug 842967</a>, <a title="Consider getting rid of the delay line filter stuff in timer thread" href="https://bugzilla.mozilla.org/show_bug.cgi?id=590422">bug 590422</a> improve animation scheduling.</li>
+</ul>
 
 
-<p><strong>Update:</strong></p>
+<p>Due to web-like Firefox UI architecture most of these improvements will enable smoother website perf.</p>
 
-<p>Scratchpad can also do this sans autocompletion, see Rob&#8217;s comment below.</p>
+<p>Avi, Matthew Noorenberghe, Mike Conley are working on optimizing our next UI refresh: Australis. Australis is shaping up to be the most perf-tuned theme update we&#8217;ve done. See <a title="Australis tabs performance tracking" href="https://bugzilla.mozilla.org/show_bug.cgi?id=837885">bug 837885</a> for how performance is being tracked.</p>
+
+<p>As Avi&#8217;s manager I found it trying to see weeks of perf-reporting work with no fixes to accompany it. I&#8217;m happy to see this investigation investment pay off and serve an example of importance of methodically studying performance before proceeding to optimization.</p>
 </div>
 
 
@@ -154,12 +160,12 @@ Turns out that one can load a url with chrome privs (about:memory works too) and
   
 
 
-<time datetime="2011-10-18T23:56:09-07:00" pubdate data-updated="true">Oct 18<span>th</span>, 2011</time>
+<time datetime="2013-02-22T16:14:00-08:00" pubdate data-updated="true">Feb 22<span>nd</span>, 2013</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/mozilla/'>mozilla</a>
+    <a class='category' href='/blog/categories/mozilla/'>mozilla</a>, <a class='category' href='/blog/categories/snappy/'>snappy</a>
   
 </span>
 
@@ -168,7 +174,7 @@ Turns out that one can load a url with chrome privs (about:memory works too) and
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://taras.glek.net/blog/2011/10/18/alternative-to-the-indignity-of-dealing-with-the-error-console/" data-via="tarasglek" data-counturl="http://taras.glek.net/blog/2011/10/18/alternative-to-the-indignity-of-dealing-with-the-error-console/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://taras.glek.net/blog/2013/02/22/snappy-number-51-smoothing-tab-animations/" data-via="tarasglek" data-counturl="http://taras.glek.net/blog/2013/02/22/snappy-number-51-smoothing-tab-animations/" >Tweet</a>
   
   
   
@@ -177,10 +183,8 @@ Turns out that one can load a url with chrome privs (about:memory works too) and
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2011/10/10/misc/" title="Previous Post: Misc">&laquo; Misc</a>
+        <a class="basic-alignment left" href="/blog/2013/02/17/router-assisted-automatic-wake-on-lan-plus-suspend/" title="Previous Post: Router-Assisted Automatic Wake-on-LAN + Suspend">&laquo; Router-Assisted Automatic Wake-on-LAN + Suspend</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2011/10/20/emacs-cmd-exe/" title="Next Post: Emacs > CMD.EXE">Emacs > CMD.EXE &raquo;</a>
       
     </p>
   </footer>
@@ -275,8 +279,8 @@ window._monitorContentLoaded = Date.now()
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://taras.glek.net/blog/2011/10/18/alternative-to-the-indignity-of-dealing-with-the-error-console/';
-        var disqus_url = 'http://taras.glek.net/blog/2011/10/18/alternative-to-the-indignity-of-dealing-with-the-error-console/';
+        var disqus_identifier = 'http://taras.glek.net/blog/2013/02/22/snappy-number-51-smoothing-tab-animations/';
+        var disqus_url = 'http://taras.glek.net/blog/2013/02/22/snappy-number-51-smoothing-tab-animations/';
         var disqus_script = 'embed.js';
       
     (function () {

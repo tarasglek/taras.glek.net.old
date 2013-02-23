@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Notes are here. Time was spent on administrative issues like overlap/conflict between Snappy and Kilimanjaro, plans for security review for Vladan&# &hellip;">
+  <meta name="description" content="Earlier I blogged about terrible UI responsiveness resulting from a poorly placed setTimeout. I&#8217;ve long suspected that SetTimeouts are to blame &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,62 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/04/18/web-2-0-a-collection-of-settimeouts/">Web 2.0: A Collection of SetTimeouts</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-04-18T09:13:19-07:00" pubdate data-updated="true">Apr 18<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Earlier I <a href="http://taras.glek.net/blog/2012/04/10/argh-at-our-unresponsive-tab-strip-settimeoutfoo-0-can-be-very-harmful/">blogged </a>about terrible UI responsiveness resulting from a poorly placed setTimeout. I&#8217;ve long suspected that SetTimeouts are to blame for everything. Now with help of bz and sfink I have proof.</p>
+
+<p>Turns out webpages like to keep users entertained and spin setTimeout loops to poll the servers to synchronize news tickers, social networking shoe-ins, collaborative editing, etc. Most pages do this regardless of whether they are a background or a foreground tab. Firefox tries to mitigate this by not allowing background tabs to schedule setTimeouts &lt; 2seconds. Turns out this is a pretty weak defense.</p>
+
+<p>In my personal browsing: etherpad, twitter, zimbra burn through cpu cycles. See this bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=744470#c12">comment </a>for an example of setTimeout terrorism with less than 10 tabs. In Firefox these setTimeouts cause significant UI lag, but they will also eat your battery life, overheat your laptop, etc. I filed bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=715376">715376</a> to add functionality to cope with this.  The plan is to prioritize foreground tab activity and do exponential setTimeout decay on abusive background tabs. We basically have to write something similar to an OS scheduler. Ideally we&#8217;d also follow that up with unloading idle tabs, ie bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=675539">675539</a>.</p>
+
+<p>If you are curious about what tabs are abusing your browser my <a href="http://ftp.mozilla.org/pub/mozilla.org/firefox/try-builds/tglek@mozilla.com-520630fd738e">diagnostic builds</a> will be available on try in a few hours. Install a <a href="http://people.mozilla.com/~tglek/telemetry/ping.telemetry.xpi">modified </a>version of about:telemetry to see the report.</p>
+
+<p><strong>What should well-behaved web apps do?</strong></p>
+
+<p>You can detect when your tab becomes inactive via <a href="https://developer.mozilla.org/en/DOM/window.onblur">window.onblur</a>, then throttle or disable your page activity. I know using focus is suboptional for this. There is also a vendor-prefixed <a href="https://developer.mozilla.org/en/API/PageVisibility/Page_Visibility_API">visibility api</a> (thanks!).</p>
+
+<p>Now you know why your browser keeps your CPU wide awake :)</p>
+
+<p><em>Update:</em></p>
+
+<p>Wrote this post in a rush on the way out, thanks for the visibility links. I am aware that some webpages need to do work in the background. However that work should be as minimal as possible, this is often not the case.</p>
+
+<p><em>Project Idea:</em></p>
+
+<p>Would be nice if someone wrote an extension that goes through tabs and nukes any outstanding setTimeouts/XHRs/etc.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -735,62 +791,6 @@ INSERT INTO webappsstore2_temp (scope, key, value, secure, owner) SELECT scope, 
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/03/09/snappy-march-8/">Snappy, March 8</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-03-09T07:53:00-08:00" pubdate data-updated="true">Mar 9<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I was away on Thursday, so the following is based on Lawrence&#8217;s <a href="https://wiki.mozilla.org/Performance/Snappy/2012-03-08">notes</a>.</p>
-
-<p><strong>Work in Progress</strong></p>
-
-<p>The content team is working on reducing lag caused by background tabs (no specific bug numbers in notes, but I suspect <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=734015">734015</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=715376">715376</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=674779">674779</a>).</p>
-
-<p>Vlad is almost done with bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=722368">722368</a>. This will give us coverage of all SQL activity within Firefox. For queries with private data we will only report duration + database name. Locally, within about:telemetry, we&#8217;ll be able to report full sql strings if the pref for it is turned on.</p>
-
-<p>Vlad is aiming to wrap up cancelable SQL queries next week, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=722243">722243</a>. Apparently he&#8217;s also almost done with the python symbol server for bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=712109">712109</a>.</p>
-
-<p>Pointless-stat()-reducing bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=521264">521264 </a>is asymptotically reaching landing. Paolo is asyncing favicon consumers in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=728143">728143 </a>(on the way toward async places). Drew is asyncing content prefs in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=699859">699859</a>.</p>
-
-<p>Nick is still working on making cache async in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=723577">723577</a>.</p>
-
-<p>Mark decided to change <a href="https://wiki.mozilla.org/Auto-tools/Projects/peptest">peptest </a>to be more like talos and to integrate <a href="https://developer.mozilla.org/en/Performance/Profiling_with_the_Built-in_Profiler">SPS</a>. I am guessing he&#8217;ll blog about this.</p>
-
-<p><strong>Landed This Week</strong></p>
-
-<p>Andrews work in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=728460">728460 </a>should result in the cycle collector running less often.</p>
-
-<p>Most depressing bugfix of the week award goes to Rafael. Firefox no longer considers it appropriate to tickle idle-daily observers tasks late during shutdown, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=732368">732368</a>.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/7/">&larr; Older</a>
@@ -808,6 +808,10 @@ INSERT INTO webappsstore2_temp (scope, key, value, secure, owner) SELECT scope, 
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/02/22/snappy-number-51-smoothing-tab-animations/">Snappy #51: Smoothing Tab Animations</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/02/17/router-assisted-automatic-wake-on-lan-plus-suspend/">Router-Assisted Automatic Wake-on-LAN + Suspend</a>
       </li>
     
@@ -821,10 +825,6 @@ INSERT INTO webappsstore2_temp (scope, key, value, secure, owner) SELECT scope, 
     
       <li class="post">
         <a href="/blog/2013/02/15/is-planet-mozilla-obsolete/">Is Planet Mozilla Obsolete for Technical Content?</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/01/28/snappy-number-50-misc-speedups/">Snappy #50</a>
       </li>
     
   </ul>
