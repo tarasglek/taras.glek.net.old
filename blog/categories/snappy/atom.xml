@@ -4,7 +4,7 @@
   <title><![CDATA[Category: snappy | All About Performance]]></title>
   <link href="http://taras.glek.net/blog/categories/snappy/atom.xml" rel="self"/>
   <link href="http://taras.glek.net/"/>
-  <updated>2013-02-22T16:28:10-08:00</updated>
+  <updated>2013-03-08T17:15:00-08:00</updated>
   <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -12,6 +12,31 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Snappy #52]]></title>
+    <link href="http://taras.glek.net/blog/2013/03/08/snappy-number-52/"/>
+    <updated>2013-03-08T16:58:00-08:00</updated>
+    <id>http://taras.glek.net/blog/2013/03/08/snappy-number-52</id>
+    <content type="html"><![CDATA[###Frontend
+
+####Help-Wanted:
+
+Avi Halachmi [needs your help](http://avih.github.com/blog/2013/02/28/slow-touchpad-scroll-in-firefox/) comparing scrolling behavior between browsers.
+
+####Australis
+
+Mike Conley [blogged](http://mikeconley.ca/blog/2013/03/01/australis-curvy-tabs-more-progress/) that Australis performance is now on-par with current theme on low-end hardware.
+
+
+###Startup
+
+Aaron Klotz landed <a title="Generic readahead functions" href="https://bugzilla.mozilla.org/show_bug.cgi?id=845907">bug 845907</a>. This gives us a consistent way to warm IO caches. This functionality can easily backfire if we end preloading data that does not get used. Uses of readahead should always be accompanied with telemetry to verify it performs as expected. <a title="Use fadvise() to speed up cookie db load" href="https://bugzilla.mozilla.org/show_bug.cgi?id=810454">Bug 810454</a> is the first user of readahead API, it landed with A/B testing telemetry.
+Omnijar readhead is next, in <a title="Use readahead for ordered jar files such as omni.ja. Should be ~10% startup speedup" href="https://bugzilla.mozilla.org/show_bug.cgi?id=810151">bug 810151</a>. It results in ~60% drop in omni.ja startup read time on Windows on Aaron's machine.
+
+ 
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Snappy #51: Smoothing Tab Animations]]></title>
@@ -86,34 +111,6 @@ Sometimes Firefox takes a long time to shutdown. We also have a timer that regul
 Introducing a new *privacy-invasive* method to help improve Firefox shutdown time.
 
 <blockquote><p>... the profiler will watch your browser for any performance hiccups and will automatically send a detailed bug report for the Performance team to fix!</p><footer><strong>Benoit Girard</strong> <cite><a href='http://benoitgirard.wordpress.com/2013/01/18/is-your-shutdown-slow-turn-on-the-performance-reporter/'>benoitgirard.wordpress.com/2013/&hellip;</a></cite></footer></blockquote>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Snappy #48: Now With Faster Shutdown]]></title>
-    <link href="http://taras.glek.net/blog/2013/01/10/snappy-number-48-now-with-faster-shutdown/"/>
-    <updated>2013-01-10T16:53:00-08:00</updated>
-    <id>http://taras.glek.net/blog/2013/01/10/snappy-number-48-now-with-faster-shutdown</id>
-    <content type="html"><![CDATA[###Huge Shutdown Improvement
-After a couple weeks worth of telemetry data confirmed that Olli Pettay sped up shutdown by an epic >=30%: <a title="Don't run CC during shutdown" href="https://bugzilla.mozilla.org/show_bug.cgi?id=818739">bug 818739</a>, [telemetry link](http://tinyurl.com/abo6uek).
-
-
-###Memory Management
-Olli and Andrew McCreight continued with reducing CC pauses:
-
-* <a title="Try to postpone triggering CC if we're in middle of GC handling" href="https://bugzilla.mozilla.org/show_bug.cgi?id=820378">bug 820378</a>: Delay CC if we're in the middle of a GC, to allow async CC prep
-* <a title="Improve CanSkipWrappedJS" href="https://bugzilla.mozilla.org/show_bug.cgi?id=827471">bug 827471</a>: Remove more wrapped JS from the CC graph
-* <a title="[CC] don't add JSContexts that have no children to the cycle collector graph" href="https://bugzilla.mozilla.org/show_bug.cgi?id=705371">bug 705371</a>: Remove pointless JSContexts from the CC graph
-* <a title="Mark the script of live nsXULPrototypeScript black during GC" href="https://bugzilla.mozilla.org/show_bug.cgi?id=785493">bug 785493</a>: Reduce size of steady state cycle collector graph by about 80%
-* <a title="Add telemetry for prep work done for cycle collection" href="https://bugzilla.mozilla.org/show_bug.cgi?id=821371">bug 821371</a>: Include prep work in cycle collector pause time telemetry
-
-###Misc
-Vladan landed <a title="Move LocalStorage writes off the main thread" href="https://bugzilla.mozilla.org/show_bug.cgi?id=807021">bug 807021</a>. Firefox should now handle DOM Local Storage writes without janking.
-
-###Startup
-David Teller made search service metadata loading/migration async: <a title="nsIBrowserSearchService should load metadata asynchronously" href="https://bugzilla.mozilla.org/show_bug.cgi?id=760036">bug 760036</a>. David also made session-store loading async: <a title="session file should be read on a background thread" href="https://bugzilla.mozilla.org/show_bug.cgi?id=532150">bug 532150</a>.
-
-Aaron Klotz landed a telemetry probe to measure how often the 'Firefox is running but not responding' dialog is encountered on attempted startup: <a title="telemetry on what proportion of attempted firefox startups result in 'firefox is running and not responding'" href="https://bugzilla.mozilla.org/show_bug.cgi?id=815418">bug 815418</a>. This will help us decide on whether (or when) to add functionality to kill unresponsive Firefox instances. 
 ]]></content>
   </entry>
   

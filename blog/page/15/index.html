@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="A really good ACM article about static analysis from Coverity&#8217;s perspective has been making rounds in Mozilla. What struck me most was the &hellip;">
+  <meta name="description" content="I have been told that it should be possible to control the way the GNU linker lays out binaries. Unfortunately until recently I couldn&#8217;t figure &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,67 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/02/19/teaching-ld-to-optimize-binaries-for-startup/">Teaching Ld to Optimize Binaries for Startup</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-02-19T03:28:51-08:00" pubdate data-updated="true">Feb 19<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I have been told that it should be possible to control the way the GNU linker lays out binaries. Unfortunately until recently I couldn&#8217;t figure out the right incantations to convince ld to do my bidding. Turns out what I needed was to be stranded on a beach in Fiji with nothing better to do than to reread the ld info page a few times.</p>
+
+<p>Recipe:</p>
+
+<ol>
+<li>Produce 2 mozilla builds: A tracing build with -finstrument-functions in CXXFLAGS/CFLAGS A release build with -ffunction-sections and -fdata-sections CXXFLAGS/CFLAGS to allow the linker to move stuff at function or static data(mostly variables) granularity</li>
+<li>Link my <a href="http://people.mozilla.com/~tglek/startup/ld/profile.cpp">profile.cpp</a> into libxul in the tracing build (without -finstrument-functions flag)</li>
+<li>Run the tracing build, capturing the spew from profile.cpp into a log file</li>
+<li>Feed the log file to <a href="http://people.mozilla.com/~tglek/startup/ld/generate_sections_ff.py">my script</a> to produce a linker script. This will produce library.so.script files for all of Mozilla libraries.</li>
+<li>Rebuild relevant libraries in the release build with -T library.so.script linker flag</li>
+<li>Enjoy faster startup
+This results in 200ms faster startup my 7200rpm laptop harddrive which is about a 10% of my startup. I think that&#8217;s pretty good for a proof of concept. Unfortunately there isn&#8217;t a measurable win on the SSD (not surprising) nor a reduction in memory usage (I expected one due to not having to page in code that isn&#8217;t needed for firefox startup).</li>
+</ol>
+
+
+<p>I suspect the problem is that data sections need to be laid out adjacent to functions that refer to them. I started sketching out a treehydra <a href="http://people.mozilla.com/~tglek/startup/ld/map_functions_and_symbols.js">script</a> to extract that info.</p>
+
+<p>I posted the relevant testcase and scripts. Do hg clone <a href="http://people.mozilla.com/~tglek/startup/ld/">http://people.mozilla.com/~tglek/startup/ld</a> to see the simple testcase and various WIP firefox scripts.</p>
+
+<p><strong>Long-term Expectations</strong></p>
+
+<p>The majority of Firefox startup overhead (prior to rendering of web pages) comes from frustrating areas such inefficient libraries (eg fontconfig, gtk) and the mess caused by crappy layout of binaries and overuse of dynamic libraries. This post describes one small step towards fixing the crappy layout of our binaries.</p>
+
+<p>I would like to end up in a world where our binaries are static and laid out such that they are read sequentially on startup (such that we can use the massive sequential read speeds provided by modern storage media). Laying out code/data properly should result in memory usage reductions which should be especially welcome on Fennec (especially on Windows Mobile).</p>
+
+<p>I am hoping to see 30-50% startup time improvements from this work if everything goes according to plan.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -595,60 +656,6 @@ Bring on Atom! :D</div>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/11/06/fsoss-dehydra-update/">FSOSS & Dehydra Update</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-11-06T09:27:53-08:00" pubdate data-updated="true">Nov 6<span>th</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Last week I was in Canada to present at <a href="http://fsoss.senecac.on.ca/2009/">FSOSS</a> with <a href="http://vocamus.net/dave/">David Humphrey</a> on awesome Mozilla Tools: Dehydra, DXR, Pork, etc. I think we managed to convey the message regarding what a sad affair that current developer development tools are.</p>
-
-<p><strong>General-Purpose Dehydra Scripts</strong></p>
-
-<p>Dehydra grew out of Mozilla&#8217;s constant need to figure out what is going on in the source code. As a result most of our scripts are very Mozilla API-specific. This makes harder for people outside of Mozilla to learn Dehydra. There is no library of Dehydra code that one can just plugin to start analyzing their codebase. Instead one has to sit down, figure out what Dehydra is capable of and then see if any of the problems facing the developer can be solved this way. If anyone wants to contribute such a library, let me know.</p>
-
-<p>In the meantime, more general-purpose analyses are surfacing.</p>
-
-<p><strong>Shadowed Members</strong></p>
-
-<p>My favourite script so far is the member-shadowing checker. I ran into a member-shadowing warning that is unique to Sun&#8217;s C++ compiler. It was triggered by some code that I just landed on the tree. I fixed the warning, but within a few days a coworker ran into a bug caused by that member shadowing(due to having an unlucky revision of the code). The following example shows how simple it was to implement the warning in GCC/Dehydra.</p>
-
-<p>See <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=522776">bug 522776</a> for the complete story on adding the member shadowing check to Mozilla.</p>
-
-<p><strong>Printf</strong> Another general purpose analysis was done outside of Mozilla by Philip Taylor for <a href="http://os.wildfiregames.com/">his game</a>. His <a href="http://svn.wildfiregames.com/public/ps/trunk/build/dehydra/printf-type-check.js">script</a> checks wide printf format strings (which are overlooked by gcc). Independently, Benjamin wrote a printf checker for Mozilla printf-like code, see <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=493996">bug 493996</a>.</p>
-
-<p><strong>Custom Sections in Object Files</strong> We have long speculated about how nice it would be if Dehydra could emit info into object files that could then be yanked out of the resulting binary (by say, valgrind). <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=523435">bug 523435</a> will soon make that a reality.</p>
-
-<p><strong>Update:</strong> <a href="http://www.flickr.com/photos/mhoye/4058902208/in/photostream/">Two</a> <a href="http://www.flickr.com/photos/mhoye/4058902456/sizes/l/in/photostream/">photos</a> from FSOSS.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/16/">&larr; Older</a>
@@ -666,6 +673,10 @@ Bring on Atom! :D</div>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/03/08/snappy-number-52/">Snappy #52</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/02/22/snappy-number-51-smoothing-tab-animations/">Snappy #51: Smoothing Tab Animations</a>
       </li>
     
@@ -679,10 +690,6 @@ Bring on Atom! :D</div>
     
       <li class="post">
         <a href="/blog/2013/02/15/plugin-hang-ui-on-aurora/">Plugin Hang UI On Aurora</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/02/15/is-planet-mozilla-obsolete/">Is Planet Mozilla Obsolete for Technical Content?</a>
       </li>
     
   </ul>

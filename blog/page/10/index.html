@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="****Firefox 7 marks a turning point in how we measure Firefox performance. Traditionally we measured Firefox performance on individual developer &hellip;">
+  <meta name="description" content="Linux Plumbers A few of us attend LinuxPlumbers last month, I gave talk. Basic summary: kernel + toolchain could add a few straight-forward features &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,60 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/10/10/misc/">Misc</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-10-10T08:28:14-07:00" pubdate data-updated="true">Oct 10<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><strong>Linux Plumbers</strong></p>
+
+<p>A few of us attend LinuxPlumbers last month, I gave <a href="http://people.mozilla.com/~tglek/lpc2011/">talk</a>. Basic summary: kernel + toolchain could add a few straight-forward features to make Firefox and other apps start faster and use less memory.</p>
+
+<p><strong>Performance Team</strong></p>
+
+<p>I am no longer alone on my quest of performance whack-a-mole. Since spring I&#8217;ve been growing a team of extremely talented people to help make Firefox faster and slimmer. As a manager I do more people tasks now, so I have less &#8221; ____ sucks&#8221; blog posts to write. We are currently working on massively speeding up Fennec startup via <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=686805">incremental decompression</a> (sort of like an efficient UPX for android), fixing SQLite + other IO <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=611837">usage</a> in Firefox, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=662397">reordering binaries</a> for faster startup, faster <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=662444">shutdown</a>. The idea is to focus on all areas of browser performance other than rendering the web (for now).</p>
+
+<p><strong>Performance Help</strong></p>
+
+<p>&#8220;Perf work is cool, but I wouldn&#8217;t know where to start with finding a good first perf-bug&#8221; &lt;&#8211; is this you? Would any of my readers be interested in a roundup of next set of &#8220;low hanging fruit&#8221; perf-improvements to be had?</p>
+
+<p>Example bugs:</p>
+
+<ul>
+<li><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=693485">Implement </a>readahead support on Android</li>
+<li>Use <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=613124#c1">readahead</a> for omnijars</li>
+</ul>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -606,48 +660,6 @@ Since the branch point for Aurora is approaching in less than a week, I don&#821
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011/06/01/telemetry-updates/">Telemetry Updates</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-06-01T05:03:47-07:00" pubdate data-updated="true">Jun 1<span>st</span>, 2011</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>My <a href="http://taras.glek.net/blog/2011/05/13/firefox-telemetry/">previous post</a> was too optimistic. There will be no telemetry in Firefox 6. Due to the multitude of reviews involved we slipped and are now aiming for Firefox 7. <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=659396">Bug 659396</a> tracks various ongoing telemetry tasks.</p>
-
-<p>I updated my <a href="http://people.mozilla.com/~tglek/telemetry/ping.telemetry.xpi">about:telemetry</a> extension to work with Firefox 7 nightlies. Additionally, my friend, David, helped me apply some nasty CSS tricks to make the histograms look like histograms. I&#8217;m open to further CSS contributions. I haven&#8217;t listed the extension on AMO because we plan to have this functionality integrated into Firefox soon (hopefully 7).</p>
-
-<p>To turn on telemetry,we have to: a) finish up the telemetry <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=652657">opt-in UI</a> and b) <a href="http://www.archivum.info/mozilla.governance/2011-05/00009/Update-to-Firefox-Privacy-Policy.html">update</a> our privacy policy.</p>
-
-<p>Thanks to everybody who manually flipped the pref to turn on telemetry. Having early feedback on this feature is awesome.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/11/">&larr; Older</a>
@@ -665,6 +677,10 @@ Since the branch point for Aurora is approaching in less than a week, I don&#821
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/03/08/snappy-number-52/">Snappy #52</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/02/22/snappy-number-51-smoothing-tab-animations/">Snappy #51: Smoothing Tab Animations</a>
       </li>
     
@@ -678,10 +694,6 @@ Since the branch point for Aurora is approaching in less than a week, I don&#821
     
       <li class="post">
         <a href="/blog/2013/02/15/plugin-hang-ui-on-aurora/">Plugin Hang UI On Aurora</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/02/15/is-planet-mozilla-obsolete/">Is Planet Mozilla Obsolete for Technical Content?</a>
       </li>
     
   </ul>

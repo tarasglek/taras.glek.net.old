@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="My phone is useful for doing GPSey things and staying connected. Unfortunately expecting more than a day of use is unrealistic. So I set out on a &hellip;">
+  <meta name="description" content="My previous post was too optimistic. There will be no telemetry in Firefox 6. Due to the multitude of reviews involved we slipped and are now aiming &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,48 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/06/01/telemetry-updates/">Telemetry Updates</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-06-01T05:03:47-07:00" pubdate data-updated="true">Jun 1<span>st</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>My <a href="http://taras.glek.net/blog/2011/05/13/firefox-telemetry/">previous post</a> was too optimistic. There will be no telemetry in Firefox 6. Due to the multitude of reviews involved we slipped and are now aiming for Firefox 7. <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=659396">Bug 659396</a> tracks various ongoing telemetry tasks.</p>
+
+<p>I updated my <a href="http://people.mozilla.com/~tglek/telemetry/ping.telemetry.xpi">about:telemetry</a> extension to work with Firefox 7 nightlies. Additionally, my friend, David, helped me apply some nasty CSS tricks to make the histograms look like histograms. I&#8217;m open to further CSS contributions. I haven&#8217;t listed the extension on AMO because we plan to have this functionality integrated into Firefox soon (hopefully 7).</p>
+
+<p>To turn on telemetry,we have to: a) finish up the telemetry <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=652657">opt-in UI</a> and b) <a href="http://www.archivum.info/mozilla.governance/2011-05/00009/Update-to-Firefox-Privacy-Policy.html">update</a> our privacy policy.</p>
+
+<p>Thanks to everybody who manually flipped the pref to turn on telemetry. Having early feedback on this feature is awesome.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -545,66 +587,6 @@ Lots of people helped in getting this feature landed, but two people stand out. 
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2010/12/29/faster-plugin-enumeration-help-wanted/">Faster Plugin Enumeration + Help Wanted</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-12-29T09:08:47-08:00" pubdate data-updated="true">Dec 29<span>th</span>, 2010</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>In addition to slow <a href="http://taras.glek.net/blog/">font enumeration</a>, we were suffering from a similar problem: slow plugin enumeration. Just as with fonts, the plugin enumeration code is different on every platform. Unlike the font situation, plugin enumeration is done completely within our code(ie easy to fix).</p>
-
-<p>Plugin enumeration is often triggered by JavaScript code (for example by checking if a Java handler is present). This means that enumeration is a blocking operation that must happen quickly. XPerf made me wonder why so many plugin-like .dll files were being read. This lead me to a fun set of perf fixes.</p>
-
-<p><strong>The Algorithm</strong></p>
-
-<ol>
-<li>Files in plugin directories are listed</li>
-<li>Platform-specific IsPluginFile function to determines what files look like plugins(ie np*.dll on Windows).</li>
-<li>Code then checks if the files + their timestamps are known by pluginreg.dat. If so, cached info is used and the following steps are skipped</li>
-<li>For each library-file that isn&#8217;t found in pluginreg.dat, we use platform-specific GetPluginInfo to load the library-file to see if it is indeed a valid plugin (and to see what mimetypes it handles/etc).</li>
-<li>Valid plugins are recorded in pluginreg.dat.
-This process took up to 3 seconds on a user&#8217;s computer. WTF? There were gotchas in almost every step of the way.</li>
-<li>Windows directory listing code would request metadata for <em>every bloody file in the directory</em>. Which resulted in an easiest optimization ever: <a href="https://bug616256.bugzilla.mozilla.org/attachment.cgi?id=494795">pure code deletion</a>.</li>
-<li>IsPluginFile on Windows/Mac sneakily did more than just check the filename. It also <a href="https://bugzilla.mozilla.org/attachment.cgi?id=494840&amp;action=edit">checked</a> if the file was loadable, which on Windows loaded the dll and all of the dependencies. Mac code was <a href="https://bugzilla.mozilla.org/attachment.cgi?id=499855&amp;action=edit">satisfied</a> with merely doing a little extra IO.</li>
-<li>This part was right</li>
-<li><h1>2 was easily fixed by moving file IO here.</h1></li>
-<li>Files that failed the check in #4 were doomed to cause extra IO for all of eternity. Scott Greenlay fixed that by <a href="https://bugzilla.mozilla.org/attachment.cgi?id=496518&amp;action=edit">recording</a> invalid plugin-like files too.
-This was a rare fix that resulted in seconds saved on crapware-loaded computers. Usually I have to count my progress in milliseconds :(</li>
-</ol>
-
-
-<p><strong>Help Wanted </strong></p>
-
-<p>I have plans for vastly improving Firefox startup, but I need help to get there. If you enjoy beating under-performing code into submission and want to work for Mozilla, please send me your resume(taras at mozilla dot com). Example projects: a better performance testsuite (ie tracking IO, cpu instructions, etc), better infrastructure for profiling addons, optimizing away various CSS/XUL markup, etc. A low-level approach to solving problems is helpful, compiler/linker/kernel hackers are well-suited (but not required) for this.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/12/">&larr; Older</a>
@@ -622,6 +604,10 @@ This was a rare fix that resulted in seconds saved on crapware-loaded computers.
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/03/08/snappy-number-52/">Snappy #52</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/02/22/snappy-number-51-smoothing-tab-animations/">Snappy #51: Smoothing Tab Animations</a>
       </li>
     
@@ -635,10 +621,6 @@ This was a rare fix that resulted in seconds saved on crapware-loaded computers.
     
       <li class="post">
         <a href="/blog/2013/02/15/plugin-hang-ui-on-aurora/">Plugin Hang UI On Aurora</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/02/15/is-planet-mozilla-obsolete/">Is Planet Mozilla Obsolete for Technical Content?</a>
       </li>
     
   </ul>

@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Team Perf and a significant number of other Mozillians will be attending FOSDEM this year. My team will be giving talks on android linkers, IO, &hellip;">
+  <meta name="description" content="Work is continuing from last week: jank profiler, DOM storage fixes, font enumeration and SQL telemetry analysis. This was the last Snappy meeting of &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,46 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/12/22/snappy-dec-22/">Snappy Dec 22</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-12-22T06:42:22-08:00" pubdate data-updated="true">Dec 22<span>nd</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Work is continuing from last week: jank profiler, DOM storage fixes, font enumeration and SQL telemetry analysis. This was the last Snappy meeting of the year.</p>
+
+<p>We plan to hold a perf + snappy hack week at <a href="https://hackerspace.be/">hackerspace.be</a> Jan 31 - Feb 3, followed by attending FOSDEM.</p>
+
+<p>I&#8217;m off until January 3rd,  see #perf for taras-substitutes in meantime.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -501,60 +541,6 @@ Turns out that one can load a url with chrome privs (about:memory works too) and
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011/10/10/misc/">Misc</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-10-10T08:28:14-07:00" pubdate data-updated="true">Oct 10<span>th</span>, 2011</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><strong>Linux Plumbers</strong></p>
-
-<p>A few of us attend LinuxPlumbers last month, I gave <a href="http://people.mozilla.com/~tglek/lpc2011/">talk</a>. Basic summary: kernel + toolchain could add a few straight-forward features to make Firefox and other apps start faster and use less memory.</p>
-
-<p><strong>Performance Team</strong></p>
-
-<p>I am no longer alone on my quest of performance whack-a-mole. Since spring I&#8217;ve been growing a team of extremely talented people to help make Firefox faster and slimmer. As a manager I do more people tasks now, so I have less &#8221; ____ sucks&#8221; blog posts to write. We are currently working on massively speeding up Fennec startup via <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=686805">incremental decompression</a> (sort of like an efficient UPX for android), fixing SQLite + other IO <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=611837">usage</a> in Firefox, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=662397">reordering binaries</a> for faster startup, faster <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=662444">shutdown</a>. The idea is to focus on all areas of browser performance other than rendering the web (for now).</p>
-
-<p><strong>Performance Help</strong></p>
-
-<p>&#8220;Perf work is cool, but I wouldn&#8217;t know where to start with finding a good first perf-bug&#8221; &lt;&#8211; is this you? Would any of my readers be interested in a roundup of next set of &#8220;low hanging fruit&#8221; perf-improvements to be had?</p>
-
-<p>Example bugs:</p>
-
-<ul>
-<li><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=693485">Implement </a>readahead support on Android</li>
-<li>Use <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=613124#c1">readahead</a> for omnijars</li>
-</ul>
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/10/">&larr; Older</a>
@@ -572,6 +558,10 @@ Turns out that one can load a url with chrome privs (about:memory works too) and
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/03/08/snappy-number-52/">Snappy #52</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/02/22/snappy-number-51-smoothing-tab-animations/">Snappy #51: Smoothing Tab Animations</a>
       </li>
     
@@ -585,10 +575,6 @@ Turns out that one can load a url with chrome privs (about:memory works too) and
     
       <li class="post">
         <a href="/blog/2013/02/15/plugin-hang-ui-on-aurora/">Plugin Hang UI On Aurora</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/02/15/is-planet-mozilla-obsolete/">Is Planet Mozilla Obsolete for Technical Content?</a>
       </li>
     
   </ul>

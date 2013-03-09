@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Lack of Updates I skipped a Snappy update two-weeks ago (did anyone notice?) due to not having any completed work to report. Snappy has not stagnated &hellip;">
+  <meta name="description" content="Frontend Help-Wanted: Avi Halachmi needs your help comparing scrolling behavior between browsers. Australis Mike Conley blogged that Australis &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,55 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/03/08/snappy-number-52/">Snappy #52</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-03-08T16:58:00-08:00" pubdate data-updated="true">Mar 8<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3>Frontend</h3>
+
+<h4>Help-Wanted:</h4>
+
+<p>Avi Halachmi <a href="http://avih.github.com/blog/2013/02/28/slow-touchpad-scroll-in-firefox/">needs your help</a> comparing scrolling behavior between browsers.</p>
+
+<h4>Australis</h4>
+
+<p>Mike Conley <a href="http://mikeconley.ca/blog/2013/03/01/australis-curvy-tabs-more-progress/">blogged</a> that Australis performance is now on-par with current theme on low-end hardware.</p>
+
+<h3>Startup</h3>
+
+<p>Aaron Klotz landed <a title="Generic readahead functions" href="https://bugzilla.mozilla.org/show_bug.cgi?id=845907">bug 845907</a>. This gives us a consistent way to warm IO caches. This functionality can easily backfire if we end preloading data that does not get used. Uses of readahead should always be accompanied with telemetry to verify it performs as expected. <a title="Use fadvise() to speed up cookie db load" href="https://bugzilla.mozilla.org/show_bug.cgi?id=810454">Bug 810454</a> is the first user of readahead API, it landed with A/B testing telemetry.
+Omnijar readhead is next, in <a title="Use readahead for ordered jar files such as omni.ja. Should be ~10% startup speedup" href="https://bugzilla.mozilla.org/show_bug.cgi?id=810151">bug 810151</a>. It results in ~60% drop in omni.ja startup read time on Windows on Aaron&#8217;s machine.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -567,46 +616,6 @@ if (requestAnimationFrame)
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/12/24/making-pages-load-faster/">Making Pages Load Faster</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-12-24T21:44:00-08:00" pubdate data-updated="true">Dec 24<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I am not a web developer. I often learn about modern web dev tricks/trends by noticing how they impact overall Firefox performance. I prefer learning about perf topics from well-written blog posts. Bryan of Google page speed team <a href="http://calendar.perfplanet.com/2012/make-your-mobile-pages-render-in-under-one-second/">blogged</a> on optimizing pageload speeds on mobile. The advice is good, but I have two minor warnings about it.</p>
-
-<p>Suggestion to use <code>requestAnimationFrame</code> to delay loading resources is a good one. There is a gotcha: if you do something expensive in the requestAnimationFrame handler, it&#8217;ll delay your first page draw (requestAnimationFrame fires as the browser prepares to paint. It&#8217;s an ok place to start network requests, etc). If you do something expensive, use a chained requestAnimationFrame. Firefox recently started using a similar trick to display the UI faster in <a title="Wait until chrome is painted before executing code not critical to making the initial window visible" href="https://bugzilla.mozilla.org/show_bug.cgi?id=715402">bug 715402</a>.</p>
-
-<p>The suggestion to split up stylesheets is also good, but risky. I&#8217;ve seen this before, but I did not understand why websites sprinkled <code>&lt;link rel="stylesheet"&gt;</code> throughout the page bodies. This can significantly degrade pageload times by causing redundant page restyles and reflows. Reflows can take hundreds of milliseconds on slow mobile devices, doing them multiple times is bad. Make sure to run your pages through a <a href="http://anton.kovalyov.net/2012/12/17/firefox-profiler/">profiler</a> (or time the difference between relevant requestAnimationFrame callbacks). I saw a bad case of this in <a title="huffingtonpost loads up to 50% slower in Firefox than in opera" href="https://bugzilla.mozilla.org/show_bug.cgi?id=718864">bug 718864</a>.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -622,6 +631,10 @@ if (requestAnimationFrame)
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/03/08/snappy-number-52/">Snappy #52</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/02/22/snappy-number-51-smoothing-tab-animations/">Snappy #51: Smoothing Tab Animations</a>
       </li>
     
@@ -635,10 +648,6 @@ if (requestAnimationFrame)
     
       <li class="post">
         <a href="/blog/2013/02/15/plugin-hang-ui-on-aurora/">Plugin Hang UI On Aurora</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/02/15/is-planet-mozilla-obsolete/">Is Planet Mozilla Obsolete for Technical Content?</a>
       </li>
     
   </ul>

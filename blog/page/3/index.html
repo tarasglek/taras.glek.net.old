@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Last week a few of us attended MozCamp.EU in Warsaw. Me, Benoit &amp; Vlad presented a talk on performance work. Primary aim of our talk was to &hellip;">
+  <meta name="description" content="After MozCamp, we held a snappy meet-up at NoaCowork in Warsaw. I believe this was one of the most productive weeks I had the pleasure of &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,86 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/09/17/snappy-in-warsaw-pierogy-fueled-hackfest/">Snappy in Warsaw: Pierogy-fueled Hackfest</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-09-17T20:06:15-07:00" pubdate data-updated="true">Sep 17<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>After MozCamp, we held a snappy meet-up at <a href="http://www.noacowork.pl/">NoaCowork</a> in Warsaw. I believe this was one of the most productive weeks I had the pleasure of participating in since I started at Mozilla. My only regret I was not motivated to organize any memorable after-work activities while suffering the MozCamp.EU plague (Mozilla gatherings are great for exchanging global influenza strains).</p>
+
+<p><strong>Profiler</strong></p>
+
+<p>Benoit Girard went through existing and upcoming profiler features. We made sure that everyone in attendance knew how to use the profiler. We also discussed potential UX improvements. Markus Stange is a community contributor who originally designed and implemented the current profiler UI. He attended MozCamp and spent most of Monday with us planning future profiler improvements with Benoit.</p>
+
+<p><strong>Bas-tool: Azure Drawing Tracer</strong></p>
+
+<p>Bas Schouten presented his work-in-progress graphics tracing tool. Our graphics people have been using the Microsoft <a href="http://www.google.com.ua/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;ved=0CCEQFjAA&amp;url=http%3A%2F%2Fen.wikipedia.org%2Fwiki%2FPIX_(Microsoft">PIX tool</a>&amp;ei=D0FYUM2yK4zasgat6IHoCQ&amp;usg=AFQjCNFaEbWMtMB_UAvO0oOb0drynfX-qw) to debug accelerated drawing issues with Direct2D. I believe Bas got fed up with the buggyness and limitations of an otherwise excellent tool and wrote a similar Azure-specific tool with some special Bas-sauce.</p>
+
+<p>Bas-tool presents a graphics trace so one can see how Firefox draws on the screen. Seeing how something is drawn step-by-step helps us see when we not using efficient graphics primitives, are doing redundant invalidations, etc. The tool can also do tricks like bruteforce graphics operations to find redundant ones, etc.</p>
+
+<p>I expect Bas will present this tool + accompanying patches soon.</p>
+
+<p><strong>OMTC &amp; Tab Strip</strong></p>
+
+<p>Current Firefox tab-strip implementation is crufty. It uses expensive graphics primitives, inefficient CSS transitions, implements scrolling/overflow animations in JS and does other non-performant things (tracked by <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=593680">bug 593680</a>). These things happen when one keeps adding features without having good profiling/tracing tools.</p>
+
+<p>Tim Taubert lead the effort to prototype a new tab strip that is implemented without JS animations and uses OMTC-friendly, efficient graphics primitives. Bas-tool was used heavily to see whether CSS transitions were animating efficiently. We sorely missed having a layout person around help diagnose layerizing issues, etc. Turns out CSS transition scheduling is very <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=753139#c10">jank-sensitive</a>. We may also need come up + implement some new CSS transition to make an attractive tab strip. Good news is that any backend improvements we make in this area should make it easier to implement fluid, responsive web apps.</p>
+
+<p>Tim Taubert, Benoit Girard &amp; Jared Wein cobbled together a desktop OMTC throbber demo where the tab throbber was implemented using CSS rotations which made it animate smoothly through content jank.</p>
+
+<p><strong>Chromehangs</strong></p>
+
+<p>Me, Josh Aas, Vladan Djeric, Lawrence Mandel went through our new non-destructive chromehang report. Chromehangs are multi-second browser stalls that we report via telemetry. See the complete list that we went through <a href="https://etherpad.mozilla.org/chromehangs">here</a>.</p>
+
+<p>Looks our recently-discovered synchronous proxy code and flash are to blame for most of our temporary hangs. Proxy stuff should disappear once bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=769764">769764</a> is fixed. <a href="http://www.google.com.ua/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;ved=0CCQQFjAA&amp;url=http%3A%2F%2Fmsujaws.wordpress.com%2F2012%2F04%2F11%2Fopting-in-to-plugins-in-firefox%2F&amp;ei=DUhYUKGvA4eTswbZ94DYCw&amp;usg=AFQjCNGkVdVAsE90oEm9Ycou1OrBheMdIg">Click-to-play</a> will help with some of the plugin-caused hangs. We will be discussing how to deal with the rest of the plugin-jank in the coming weeks.</p>
+
+<p>My favourite chromehang was the one that pinpointed why downloads jank Firefox so much: bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=789932">789932</a>. We tried to pin this on anti-virus scans, download manager sqlite activity, but the main reason turned out to be very simple. Turns out we do network traffic on a networking thread only to write out file contents to disk on main thread.</p>
+
+<p><strong>Other </strong></p>
+
+<p>Paulo Amadini, Lawrence Mandel, Gavin Sharp and me made plans to get rid of main thread SQL usage in download, addon manager.</p>
+
+<p>Vladan Djeric explained his plans to speed up &amp; reduce jank caused by DOM Local Storage.</p>
+
+<p>Margaret Leibovic worked on removing synchronous cache API usage, added pageload telemetry. She also filed a bug that resulted in 20% faster link navigation in Fennec (bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=789889">789889</a>). Perhaps we should do the same on our Metro build?</p>
+
+<p>Olli Pettay &amp; Felipe Gomes worked on making our social api features not leak memory.</p>
+
+<p>Julian Seward, Mike Hommey, Benoit Girard worked on improving our profiling infrastructure and making it work on Android, B2G, Linux.</p>
+
+<p>Josh Aas, Lawrence &amp; me coordinated on Snappy priorities on necko team.</p>
+
+<p>I&#8217;m sure I missed a few projects, I hope other attendees blog about their work last week.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -522,64 +602,6 @@ See Bill&#8217;s comments in bug <a href="https://bugzilla.mozilla.org/show_bug.
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/07/26/snappy-july-26-go-try-the-gecko-profiler/">Snappy, July 26: Go Try the Gecko Profiler!</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-07-26T08:43:17-07:00" pubdate data-updated="true">Jul 26<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>See raw <a href="https://wiki.mozilla.org/Performance/Snappy/2012-07-26">notes</a> for details on mid-flight snappy work.</p>
-
-<p><strong>Checkout the SPS Profiler</strong>!</p>
-
-<p><a href="https://developer.mozilla.org/en/Performance/Profiling_with_the_Built-in_Profiler">SPS Gecko Profiler</a> has gotten a lot of praise this week on #perf. If you ever wonder the hell Firefox is doing with your CPU, give the profiler a try. For the past couple of weeks it has been able to label stacks with JS, URLs and even favicons. It&#8217;s likely that Mozilla may have shipped the world&#8217;s first profiler to feature favicons.</p>
-
-<p>Having JS support is nice, it lead to the first 2 snappy addon bugs: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=777266">777266</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=777397">777397</a>. I documented how to act on addon responsiveness issues in the <a href="https://wiki.mozilla.org/Performance/Snappy#Snappy_Addons">snappy wiki</a>.</p>
-
-<p>Whether you develop web pages, addons or are a core gecko hacker, the profiler may make the performance-analysis part of your life much more pleasant. Update: Benoit Girard <a href="http://benoitgirard.wordpress.com/2012/07/27/javascript-profiling-with-the-gecko-profiler-and-js-anti-pattern/">wrote</a> about the new profiler features.</p>
-
-<p><strong>Things To Not Do On Startup </strong></p>
-
-<p>Blair McBride did some <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=726125#c16">digging</a>, there may be 15million users with signed extensions which can cause Firefox to do network IO (ie stall for a long time) on startup.</p>
-
-<p>Brian Bondy landed a fix to lower IO priority of nuking our cache: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=773518">773518</a>. According to telemetry, 10-20% of startups feature cache nuking. It take a while to blow away 1GB of files on startup. Brian used telemetry to investigate causes for cache purges in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=774146">774146</a>. Based on this data, Brian will begin tackling what may be the oldest snappy bug so far: bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=105843">105843</a>. For more details on our cache see Nick Hurley&#8217;s <a href="http://todesschaf.org/posts/2012/07/25/cache-usage-results.html">blog post</a> (also see his link to a similar blog post from a Chrome person).</p>
-
-<p><strong>More Responsive Tabs</strong></p>
-
-<p>Tim Taubert made our new tab animation more pleasant in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=716108">716108</a>. Tim also landed a fix to halve jank caused by thumbnail capture in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=774811">774811</a>, this should result in better tab-switching experience. Stay tuned for more developer attention in this area.</p>
-
-<p><strong>GC</strong></p>
-
-<p>Jon Coppeard enabled incremental sweeping: bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=729760">729760</a>. This should result in slightly smaller GC pauses.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/4/">&larr; Older</a>
@@ -597,6 +619,10 @@ See Bill&#8217;s comments in bug <a href="https://bugzilla.mozilla.org/show_bug.
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/03/08/snappy-number-52/">Snappy #52</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/02/22/snappy-number-51-smoothing-tab-animations/">Snappy #51: Smoothing Tab Animations</a>
       </li>
     
@@ -610,10 +636,6 @@ See Bill&#8217;s comments in bug <a href="https://bugzilla.mozilla.org/show_bug.
     
       <li class="post">
         <a href="/blog/2013/02/15/plugin-hang-ui-on-aurora/">Plugin Hang UI On Aurora</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/02/15/is-planet-mozilla-obsolete/">Is Planet Mozilla Obsolete for Technical Content?</a>
       </li>
     
   </ul>

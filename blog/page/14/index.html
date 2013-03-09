@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="As I explained before, loading binaries from disk sucks. Aside from switching glibc to use madvise/fadvise, what can application developers do to &hellip;">
+  <meta name="description" content="Most program binaries are laid out with little to no regard to how programs get loaded from disk. This disconnect between compile-time and runtime &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,70 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/04/07/icegrind-valgrind-plugin-for-optimizing-cold-startup/">Icegrind - Valgrind Plugin for Optimizing Cold Startup</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-04-07T08:03:24-07:00" pubdate data-updated="true">Apr 7<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Most program binaries are laid out with little to no regard to how programs get loaded from disk. This disconnect between compile-time and runtime behaviour of binaries imposes a significant performance penalty to on large applications such as browsers, office suites, etc.</p>
+
+<p>It is incredibly difficult to observe both the cause (ie calling a random function) of binary-induced IO and the effect (the program gets suspended during startup while parts being loaded from disk), so this area doesn&#8217;t get as much optimization love as it deserves.</p>
+
+<p>My estimate is that around 50% of Firefox startup time is wasted on subobtimal binary layout. My previous <a href="http://taras.glek.net/blog/2010/04/05/linux-how-to-make-startup-suck-less-and-reduce-memory-usage/">post</a> demonstrated the kind of difference a better binary layout can make. Note that reordering executables isn&#8217;t the only solution, eliminating dead code should also speed things up (deleting <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=457262">dead code</a> is a <a href="http://ehren.wordpress.com/">hard</a>).</p>
+
+<p><strong>Optimizing Binary Layout</strong><em> Disclaimer:I just finished my 3rd rewrite of icegrind a few hours ago, be gentle.</em></p>
+
+<p>Ingredients: <a href="http://valgrind.org/">Valgrind</a> SVN trunk + <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=549749">icegrind patch</a>, GNU Gold + <a href="http://sourceware.org/ml/binutils/2010-03/msg00050.html">section-ordering-file patch</a>, a way to describe contents of binaries.</p>
+
+<p><em>Step 1a: Produce a build </em>Since I am interested in reorganizing program binaries, I build mozilla with &#8220;-ffunction-sections -fdata-sections&#8221; in CFLAGS/CXXFLAGS</p>
+
+<p>I also prelink the binaries in dist/bin such that my binaries better correspond to how they will be used: prelink $LD_LIBRARY_PATH/firefox-bin $LD_LIBRARY_PATH/*.so</p>
+
+<p><em>Step 1b: Produce a description of interesting files </em>I use my <a href="http://hg.mozilla.org/users/tglek_mozilla.com/startup/file/6453ad2a7906/elflog.cpp">elflog</a> utility to produce a .sections description of files I&#8217;m interested in. Elflog looks at the symbol table and tries to infer section names (produced by -ffunction-sections -fdata-sections) from symbol names/locations(see also &#8211;print-map option for ld).</p>
+
+<p>elflog  &#8211;contents  libxul.so >  libxul.so.sections elflog currently emits non-existent .comment.* sections because it gets confused by 0-length sections such as .bss. Note, one can also build tools to describe other kinds of files, such as jar or sqlite files. The only limitation is that Icegrind currently only tracks mmap()-caused disk IO, it would be trivial to extend it to deal with open/seek/read kind of disk IO.</p>
+
+<p><em>Step 2: Produce a log with icegrind! </em>Apply my icegrind <a href="https://bugzilla.mozilla.org/attachment.cgi?id=437664&amp;action=edit">patch</a>, build+install valgrind. Run Firefox valgrind &#8211;tool=icegrind firefox-bin -profile /tmp/ff -no-remote This will produce a .log file for every mmap()ed file with a .sections description. This log chronologically lists sections in the order of access.</p>
+
+<p><em>Step 3: Tell gold to link using the above log</em> Build/install binutils (I use a CVS checkout from a month ago) with the <a href="http://sourceware.org/ml/binutils/2010-03/msg00050.html">section ordering patch</a>, specify &#8211;enable-gold. To reorder the binary, I just add -Wl,&#8211;section-ordering-file,libxul.so.log to my linker commandline. Note there are still some teething issues with using this patch, it exhibits N<sup>2</sup> behavior (ie takes 10min to link libxul.so with it) and occasionally swaps order for .rela.plt and .rela.dyn, which makes prelink upset. But unlike my <a href="http://taras.glek.net/blog/2010/02/19/teaching-ld-to-optimize-binaries-for-startup/">earlier attempt</a> with linker scripts, it does not affect the binary size.</p>
+
+<p>Step 4: Enjoy! Now strip, install, prelink your binaries and enjoy faster startup.</p>
+
+<p><strong>Plans</strong></p>
+
+<p>I would like to see the gold patch fixed up and landed. Once that is done I&#8217;d like to turn this on for our Linux and mobile linux builds.</p>
+
+<p>I am hoping that some sort of sensible ordering of binaries will become commonplace in the future.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -654,67 +718,6 @@ Additionally, it may be possible to benefit from linking with large page support
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2010/02/19/teaching-ld-to-optimize-binaries-for-startup/">Teaching Ld to Optimize Binaries for Startup</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-02-19T03:28:51-08:00" pubdate data-updated="true">Feb 19<span>th</span>, 2010</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I have been told that it should be possible to control the way the GNU linker lays out binaries. Unfortunately until recently I couldn&#8217;t figure out the right incantations to convince ld to do my bidding. Turns out what I needed was to be stranded on a beach in Fiji with nothing better to do than to reread the ld info page a few times.</p>
-
-<p>Recipe:</p>
-
-<ol>
-<li>Produce 2 mozilla builds: A tracing build with -finstrument-functions in CXXFLAGS/CFLAGS A release build with -ffunction-sections and -fdata-sections CXXFLAGS/CFLAGS to allow the linker to move stuff at function or static data(mostly variables) granularity</li>
-<li>Link my <a href="http://people.mozilla.com/~tglek/startup/ld/profile.cpp">profile.cpp</a> into libxul in the tracing build (without -finstrument-functions flag)</li>
-<li>Run the tracing build, capturing the spew from profile.cpp into a log file</li>
-<li>Feed the log file to <a href="http://people.mozilla.com/~tglek/startup/ld/generate_sections_ff.py">my script</a> to produce a linker script. This will produce library.so.script files for all of Mozilla libraries.</li>
-<li>Rebuild relevant libraries in the release build with -T library.so.script linker flag</li>
-<li>Enjoy faster startup
-This results in 200ms faster startup my 7200rpm laptop harddrive which is about a 10% of my startup. I think that&#8217;s pretty good for a proof of concept. Unfortunately there isn&#8217;t a measurable win on the SSD (not surprising) nor a reduction in memory usage (I expected one due to not having to page in code that isn&#8217;t needed for firefox startup).</li>
-</ol>
-
-
-<p>I suspect the problem is that data sections need to be laid out adjacent to functions that refer to them. I started sketching out a treehydra <a href="http://people.mozilla.com/~tglek/startup/ld/map_functions_and_symbols.js">script</a> to extract that info.</p>
-
-<p>I posted the relevant testcase and scripts. Do hg clone <a href="http://people.mozilla.com/~tglek/startup/ld/">http://people.mozilla.com/~tglek/startup/ld</a> to see the simple testcase and various WIP firefox scripts.</p>
-
-<p><strong>Long-term Expectations</strong></p>
-
-<p>The majority of Firefox startup overhead (prior to rendering of web pages) comes from frustrating areas such inefficient libraries (eg fontconfig, gtk) and the mess caused by crappy layout of binaries and overuse of dynamic libraries. This post describes one small step towards fixing the crappy layout of our binaries.</p>
-
-<p>I would like to end up in a world where our binaries are static and laid out such that they are read sequentially on startup (such that we can use the massive sequential read speeds provided by modern storage media). Laying out code/data properly should result in memory usage reductions which should be especially welcome on Fennec (especially on Windows Mobile).</p>
-
-<p>I am hoping to see 30-50% startup time improvements from this work if everything goes according to plan.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/15/">&larr; Older</a>
@@ -732,6 +735,10 @@ This results in 200ms faster startup my 7200rpm laptop harddrive which is about 
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/03/08/snappy-number-52/">Snappy #52</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/02/22/snappy-number-51-smoothing-tab-animations/">Snappy #51: Smoothing Tab Animations</a>
       </li>
     
@@ -745,10 +752,6 @@ This results in 200ms faster startup my 7200rpm laptop harddrive which is about 
     
       <li class="post">
         <a href="/blog/2013/02/15/plugin-hang-ui-on-aurora/">Plugin Hang UI On Aurora</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/02/15/is-planet-mozilla-obsolete/">Is Planet Mozilla Obsolete for Technical Content?</a>
       </li>
     
   </ul>
