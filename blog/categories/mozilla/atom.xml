@@ -4,7 +4,7 @@
   <title><![CDATA[Category: mozilla | All About Performance]]></title>
   <link href="http://taras.glek.net/blog/categories/mozilla/atom.xml" rel="self"/>
   <link href="http://taras.glek.net/"/>
-  <updated>2013-03-08T17:15:00-08:00</updated>
+  <updated>2013-03-11T17:44:09-07:00</updated>
   <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -12,6 +12,34 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Blogging with Octopress]]></title>
+    <link href="http://taras.glek.net/blog/2013/03/11/living-with-octopress/"/>
+    <updated>2013-03-11T16:58:00-07:00</updated>
+    <id>http://taras.glek.net/blog/2013/03/11/living-with-octopress</id>
+    <content type="html"><![CDATA[A couple months ago I [switched](/blog/2012/12/17/hello-octopress/) to [Octopress](http://octopress.org). I now have some experience to share.
+
+Overall, my Octopress + Github + Disqus experience has been much better blogger, wordpress and livejournal past before it. I only wish I kept my old posts in HTML instead of converting them to markdown. When I was setting up my blog, I did not know that Octopress could render HTML.
+
+####RSS Bugs
+I learned not expect much from RSS. In addition to being hard to discover, the default category RSS is buggy. It interprets markdown twice [choking](https://github.com/imathis/octopress/issues/884#issuecomment-12178049) on some exciting Telemetry links in my archives. I had to restort to writing a custom mozilla category feed.
+
+The excerpt feature (`<!-- more -->`) does not work in RSS. To me that defeats the whole point of excerpts, who even reads blog homepages? I do not have time to fix this.
+
+####It's easy to make a mess
+I wanted to get rid of some octopress defaults like external CSS, external fonts, modify some layout. I found I could not restrict myself to only editing files in `_directories`. I think this means that switching to a new theme will be hard. I was lazy and ended up with my content in the same repo as the octopress source. I'll have to clean up my act before I can share my customizations.
+
+####Saving Time
+One of the worst parts about my old wordpress blog was the amount of UI one had to go through to create HTML links. My snappy updates have a lot of bugzilla links. I wrote an octopress extension to do most of the link work for me. Syntax looks like:
+```
+{%Bug ####%}, {%bug ####%}
+```
+If anyone is interested, you can download it [here](http://people.mozilla.org/~tglek/bugzilla.rb) until I clean up my octopress git repository.
+
+Overall I like Octopress and I recommend the octopress/github combo to every developer who is looking to setup a blog. It saves a lot of time and as long as one can deal with lack of unit testing and Ruby, it's great.
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Snappy #52]]></title>
@@ -31,8 +59,8 @@ Mike Conley [blogged](http://mikeconley.ca/blog/2013/03/01/australis-curvy-tabs-
 
 ###Startup
 
-Aaron Klotz landed <a title="Generic readahead functions" href="https://bugzilla.mozilla.org/show_bug.cgi?id=845907">bug 845907</a>. This gives us a consistent way to warm IO caches. This functionality can easily backfire if we end preloading data that does not get used. Uses of readahead should always be accompanied with telemetry to verify it performs as expected. <a title="Use fadvise() to speed up cookie db load" href="https://bugzilla.mozilla.org/show_bug.cgi?id=810454">Bug 810454</a> is the first user of readahead API, it landed with A/B testing telemetry.
-Omnijar readhead is next, in <a title="Use readahead for ordered jar files such as omni.ja. Should be ~10% startup speedup" href="https://bugzilla.mozilla.org/show_bug.cgi?id=810151">bug 810151</a>. It results in ~60% drop in omni.ja startup read time on Windows on Aaron's machine.
+Aaron Klotz landed {%bug 845907%}. This gives us a consistent way to warm IO caches. This functionality can easily backfire if we end preloading data that does not get used. Uses of readahead should always be accompanied with telemetry to verify it performs as expected. {%Bug 810454%} is the first user of readahead API, it landed with A/B testing telemetry.
+Omnijar readhead is next, in {%bug 810151%}. It results in ~60% drop in omni.ja startup read time on Windows on Aaron's machine.
 
  
 ]]></content>
@@ -53,14 +81,14 @@ I usually do not cover in-flight work in Snappy updates and expect individual de
 
 Avi has been investigating tab smoothness since December. His approach relies on detailed instrumentation + sending captured data via Telemetry. This culminated in some exciting bug activity this week:
 
-* <a title="Add telemetry probes for tab animation smoothness" href="https://bugzilla.mozilla.org/show_bug.cgi?id=828097">bug 828097</a> According to Telemetry, Firefox tab animations are quite smooth (due to recent improvements like <a title="requestAnimationFrame generates too short/long frames, especially at the beginning of animation" href="https://bugzilla.mozilla.org/show_bug.cgi?id=731974">bug 731974</a>) iff one has the newtab thumbnail feature disabled (via button in top right of the page).
-* <a title="Newtab page slows down tab-open animation" href="https://bugzilla.mozilla.org/show_bug.cgi?id=843853">bug 843853</a> was filed to fix above performance hit ASAP.
-* <a title="Cache GradientStops instead of gfxPatterns" href="https://bugzilla.mozilla.org/show_bug.cgi?id=838758">bug 838758</a> 20-25% tab animation speedup on Direct2D-accelerated systems.
-* <a title="Refresh driver may re-target the same timestamp" href="https://bugzilla.mozilla.org/show_bug.cgi?id=842967">bug 842967</a>, <a title="Consider getting rid of the delay line filter stuff in timer thread" href="https://bugzilla.mozilla.org/show_bug.cgi?id=590422">bug 590422</a> improve animation scheduling.
+* {%bug 828097%} According to Telemetry, Firefox tab animations are quite smooth (due to recent improvements like {%bug 731974%}) iff one has the newtab thumbnail feature disabled (via button in top right of the page).
+* {%bug 843853%} was filed to fix above performance hit ASAP.
+* {%bug 838758%} 20-25% tab animation speedup on Direct2D-accelerated systems.
+* {%bug 842967%}, {%bug 590422%} improve animation scheduling.
 
 Due to web-like Firefox UI architecture most of these improvements will enable smoother website perf.
 
-Avi, Matthew Noorenberghe, Mike Conley are working on optimizing our next UI refresh: Australis. Australis is shaping up to be the most perf-tuned theme update we've done. See <a title="Australis tabs performance tracking" href="https://bugzilla.mozilla.org/show_bug.cgi?id=837885">bug 837885</a> for how performance is being tracked.
+Avi, Matthew Noorenberghe, Mike Conley are working on optimizing our next UI refresh: Australis. Australis is shaping up to be the most perf-tuned theme update we've done. See {%bug 837885%} for how performance is being tracked.
 
 As Avi's manager I found it trying to see weeks of perf-reporting work with no fixes to accompany it. I'm happy to see this investigation investment pay off and serve an example of importance of methodically studying performance before proceeding to optimization.
 ]]></content>
@@ -75,7 +103,7 @@ As Avi's manager I found it trying to see weeks of perf-reporting work with no f
 
 We need help testing the new functionality, please see the link above for details.
 
-Unfortunately, we are still waiting on <a title="Add Aaron Klotz's blog to Planet Mozilla" href="https://bugzilla.mozilla.org/show_bug.cgi?id=814095">bug 814095</a> to get his blog syndicated to planet.
+Unfortunately, we are still waiting on {%bug 814095%} to get his blog syndicated to planet.
 
 ]]></content>
   </entry>
@@ -108,28 +136,6 @@ I am sad to see a public resource like the planet get too big to remain useful w
 
 
 ps. Sorry for adding to the non-technical noise.
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Snappy #50]]></title>
-    <link href="http://taras.glek.net/blog/2013/01/28/snappy-number-50-misc-speedups/"/>
-    <updated>2013-01-28T16:00:00-08:00</updated>
-    <id>http://taras.glek.net/blog/2013/01/28/snappy-number-50-misc-speedups</id>
-    <content type="html"><![CDATA[###Graphics
-In some cases Direct2D-accelerated drawing is slower than the non-accelerated path. Jeff Muizelaar fixed a severe gradient 'hang' in <a title="Avoid hitting D2D slow path when drawing radial gradients from css" href="https://bugzilla.mozilla.org/show_bug.cgi?id=823147">bug 823147</a>.
-
-Avi Halachmi diagnosed a significant menu performance issue in <a title="Menu items slow to paint/respond after peeking their sub-menu popups" href="https://bugzilla.mozilla.org/show_bug.cgi?id=832641">bug 832641</a>, this was promptly fixed by Matt Woodrow.
-
-###Misc Pauses
-Vladan Djeric [blogged](https://blog.mozilla.org/vdjeric/2013/01/24/add-on-performance-problems/) about top main-thread SQL issues contributed by addons. Vladan also produced a [chromehang](http://people.mozilla.com/~vdjeric/DecJanHangs.txt) report for last 2 months.
-
-Ehsan Akhgari fixed a *chromehang* caused by leftover debug code: <a title="Multi-second hang during CollectNewLoadedModules" href="https://bugzilla.mozilla.org/show_bug.cgi?id=830765">bug 830765</a>.
-
-Justin Lebar fixed an issue where telemetry memory reporting code was accidentally triggering expensive 'release memory to OS' operations: <a title="Extremely long pause while collecting telemetry information on the main thread" href="https://bugzilla.mozilla.org/show_bug.cgi?id=789975">bug 789975</a>.
-
-###Shutdown
-Sometimes Firefox takes a long time to shutdown. We also have a timer that regularly triggers cycle collection. Olli Pettay disabled this timer during shutdown in <a title="Timer based CC occurring on shutdown" href="https://bugzilla.mozilla.org/show_bug.cgi?id=822849">bug 822849</a>.
 ]]></content>
   </entry>
   

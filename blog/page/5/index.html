@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Notes. Justin&#8217;s FUEL fix will help add-ons avoid leaks and shutdown hangs: bug 750454. Jared plans to start landing Australis tab strip (738491 &hellip;">
+  <meta name="description" content="There are no news from the Firefox frontend team this week. Adventures in Measuring Changes Necko team spent this week investigating why the recent &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,58 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/06/14/snappy-june-14th-telemetry-investigations/">Snappy, June 14th: Telemetry Investigations</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-06-14T07:51:24-07:00" pubdate data-updated="true">Jun 14<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>There are no news from the Firefox frontend team this week.</p>
+
+<p><strong>Adventures in Measuring Changes</strong></p>
+
+<p>Necko team spent this week investigating why the recent big <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=722034#c75">cache fix</a> was not showing as a win in telemetry.</p>
+
+<p><a href="https://metrics.mozilla.com/data/content/pentaho-cdf-dd/Render?solution=metrics2&amp;path=%2Ftelemetry&amp;file=telemetryEvolution.wcdf&amp;bookmarkState={%22impl%22%3A%22client%22%2C%22params%22%3A{%22appNameParameter%22%3A%22[Application].[Firefox]%22%2C%22channelParameter%22%3A%22[Channel].[nightly]%22%2C%22osParameter%22%3A%22[OS].[WINNT]%22%2C%22histogramParameter%22%3A%22[Histogram].[CACHE_SERVICE_LOCK_WAIT_MAINTHREAD]%22%2C%22referenceDate%22%3A%222012-06-14%22%2C%22histogramPopupTools%22%3A%22%22%2C%22duplicateHistogram%22%3A%22%23duplicateHistogram%22%2C%22medianButtonParam%22%3A0%2C%22scatterChart%22%3A%22%22}}"><img src="/assets/images/2012-06-14-snappy-june-14th-telemetry-investigations/cache_lock_mainthread_crap.jpg.png" alt="" /></a></p>
+
+<p>We were on a verge of a big backout when Saptashi Guha&#8217;s analysis in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=762576">762576</a> suggested that we might actually be winning. It&#8217;s frustrating to have data point us in different directions. However, it is better to try to make sense of data than have no data at all as was the case only a year ago. I&#8217;ll have more on this next week.</p>
+
+<p>William McCloskey landed fix to turn on incremental GC for real (bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=761739">761739</a>). This might fix the mysterious recent user-responsiveness regression spotted by telemetry (bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=761722">761722</a>). He  also landed another GC speed up in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=743396">743396</a>.</p>
+
+<p>Mark Cote met with metrics analysts to discuss reporting peptest results robustly. The goal is avoid noise in reporting, so responsiveness regressions are acted upon</p>
+
+<p><strong>Interactivity Profiler</strong></p>
+
+<p>Benoit Girrard added added badges to mark known stacks in the profiler, see his <a href="http://benoitgirard.wordpress.com/2012/06/08/making-profiling-easier-automated-profiler-diagnostics/">blog post</a>. A few weeks ago Vladan <a href="http://blog.mozilla.org/vdjeric/2012/05/30/profiling-with-the-built-in-gecko-profiler-and-local-symbols-on-windows/">taught </a>the symbolication server to serve data from local .pdb files, allowing developers to use Benoit&#8217;s profiler in own builds. Mike Conley added incomplete Thunderbird support to the profiler.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -522,54 +574,6 @@ if (requestAnimationFrame)
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/04/26/snappy-april-26/">Snappy, April 26</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-04-26T08:43:50-07:00" pubdate data-updated="true">Apr 26<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Notes from today&#8217;s meeting are <a href="https://wiki.mozilla.org/Performance/Snappy/2012-04-26">here</a>.</p>
-
-<p>No major snappy fixes landed this week. However, if you look in the notes, there are quite a few projects going through the review cycle.</p>
-
-<p>Personally, I&#8217;m most excited by progress in getting rid of the setTimeout on tab click(bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=743877">743877</a>). Neil posted a diagnosis of why we need setTimeout while switching tabs. Tim followed up with a patch to avoid the setTimeout for non-focus bits. On the subject of SetTimeouts: we devised a plan for managing SetTimeout <a href="http://taras.glek.net/blog/2012/04/18/web-2-0-a-collection-of-settimeouts/">overhead </a>in background tabs. This will involve breaking up our global event queue into a global queue + smaller per-page queues, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=715376">715376</a>. This will not be a pleasant task, but Nathan aims to have a proof of concept ready next week. With this infrastructure we should be able start prioritizing which events we handle and punish misbehaving tabs.</p>
-
-<p>The graphics team is wrapping up the big Android push, freeing up cycles for elsewhere. Bas is back to looking at slowdowns due to hw acceleration (bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=721273">721273</a>). Bas is also looking into changing our chrome CSS to be less expensive to paint.</p>
-
-<p>Ehsan is working with Paul to change firefox themes to not be horrible <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=650968">performance hogs</a>.</p>
-
-<p><strong>Update:</strong> A very significant snappy fix <a href="http://blog.kylehuey.com/post/21892343371/fixing-the-memory-leak">landed </a>this week as part of memshrink. It should significantly reduce memory usage and thus cycle-collector pauses, etc.</p>
-
-<p><strong>Update #2</strong>: I missed another very cool Snappy fix: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=729133">bug 729133</a>. This is based on revising old assumptions about cache being faster than disk. We learned from telemetry data that a significant portion of disk cache requests are processed slower than they would if we just went straight to network. Firefox now hedges bets and warms up a TCP connection while checking cache. For details see Patricks&#8217;s <a href="http://bitsup.blogspot.com/2012/04/making-firefox-search-snappier.html">blog</a>.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/6/">&larr; Older</a>
@@ -587,6 +591,10 @@ if (requestAnimationFrame)
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/03/11/living-with-octopress/">Blogging with Octopress</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/03/08/snappy-number-52/">Snappy #52</a>
       </li>
     
@@ -600,10 +608,6 @@ if (requestAnimationFrame)
     
       <li class="post">
         <a href="/blog/2013/02/17/10w-intel-i5-desktop/">10W Intel i5 Desktop</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/02/15/plugin-hang-ui-on-aurora/">Plugin Hang UI On Aurora</a>
       </li>
     
   </ul>

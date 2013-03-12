@@ -4,7 +4,7 @@
   <title><![CDATA[All About Performance]]></title>
   <link href="http://taras.glek.net/atom.xml" rel="self"/>
   <link href="http://taras.glek.net/"/>
-  <updated>2013-03-08T17:15:00-08:00</updated>
+  <updated>2013-03-11T17:44:09-07:00</updated>
   <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -12,6 +12,41 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  
+  <entry>
+    <title type="html"><![CDATA[Blogging with Octopress]]></title>
+    <link href="http://taras.glek.net/blog/2013/03/11/living-with-octopress/"/>
+    <updated>2013-03-11T16:58:00-07:00</updated>
+    <id>http://taras.glek.net/blog/2013/03/11/living-with-octopress</id>
+    <content type="html"><![CDATA[<p>A couple months ago I <a href="http://taras.glek.net/blog/2012/12/17/hello-octopress/">switched</a> to <a href="http://octopress.org">Octopress</a>. I now have some experience to share.</p>
+
+<p>Overall, my Octopress + Github + Disqus experience has been much better blogger, wordpress and livejournal past before it. I only wish I kept my old posts in HTML instead of converting them to markdown. When I was setting up my blog, I did not know that Octopress could render HTML.</p>
+
+<h4>RSS Bugs</h4>
+
+<p>I learned not expect much from RSS. In addition to being hard to discover, the default category RSS is buggy. It interprets markdown twice <a href="https://github.com/imathis/octopress/issues/884#issuecomment-12178049">choking</a> on some exciting Telemetry links in my archives. I had to restort to writing a custom mozilla category feed.</p>
+
+<p>The excerpt feature (<code>&lt;!-- more --&gt;</code>) does not work in RSS. To me that defeats the whole point of excerpts, who even reads blog homepages? I do not have time to fix this.</p>
+
+<h4>It&#8217;s easy to make a mess</h4>
+
+<p>I wanted to get rid of some octopress defaults like external CSS, external fonts, modify some layout. I found I could not restrict myself to only editing files in <code>_directories</code>. I think this means that switching to a new theme will be hard. I was lazy and ended up with my content in the same repo as the octopress source. I&#8217;ll have to clean up my act before I can share my customizations.</p>
+
+<h4>Saving Time</h4>
+
+<p>One of the worst parts about my old wordpress blog was the amount of UI one had to go through to create HTML links. My snappy updates have a lot of bugzilla links. I wrote an octopress extension to do most of the link work for me. Syntax looks like:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>{%Bug ####%}, {%bug ####%}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If anyone is interested, you can download it <a href="http://people.mozilla.org/~tglek/bugzilla.rb">here</a> until I clean up my octopress git repository.</p>
+
+<p>Overall I like Octopress and I recommend the octopress/github combo to every developer who is looking to setup a blog. It saves a lot of time and as long as one can deal with lack of unit testing and Ruby, it&#8217;s great.</p>
+]]></content>
+  </entry>
+  
   
   
   <entry>
@@ -464,29 +499,6 @@ Omnijar readhead is next, in <a title="Use readahead for ordered jar files such 
 <p><strong>Proxy-detection</strong></p>
 
 <p>As I mentioned last time, Patrick McManus fixed proxy-related jank in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=769764">bug 769764</a>. Last week Vladan Djeric analyzed our chromehang data and confirmed that proxy jank went from being one of our top offenders to not happening.</p>
-]]></content>
-  </entry>
-  
-  
-  
-  <entry>
-    <title type="html"><![CDATA[Snappy #39 ]]></title>
-    <link href="http://taras.glek.net/blog/2012/10/04/snappy-39/"/>
-    <updated>2012-10-04T09:24:57-07:00</updated>
-    <id>http://taras.glek.net/blog/2012/10/04/snappy-39</id>
-    <content type="html"><![CDATA[<p>We should no longer do proxy-related IO on the main thread now that Patrick McManus landed <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=769764">bug 769764</a>. Synchronous proxy code resulted in a miserable user experience for people using proxies, but it also affected normal users during proxy-detection. This was one of the top intermittent freezes that we&#8217;ve seen.</p>
-
-<p>Tab switching should be much faster in Firefox 18 than before. Jared Wein got rid of an expensive regexp that was applied during a tab switch in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=781588">bug 781588</a>.  Jeff Muizelaar landed <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=792199">bug 792199</a> which should make switching to a image-heavy sites much faster. Jared&#8217;s change is already on nightlies, Jeff&#8217;s change should show up tomorrow if everything goes well.</p>
-
-<p>Matt Woodrow landed the huge change that is DLBI in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=539356">bug 539356</a> (yet again). DLBI speeds up reflows, reduces repaints resulting in a more responsive browser. For more details see Robert O&#8217;Callahan&#8217;s <a href="https://groups.google.com/forum/#!topic/mozilla.dev.platform/UFndiSxW4rU">announcement</a>.</p>
-
-<p><strong>Startup Regression </strong></p>
-
-<p>After working on improving startup for the last couple of releases we seem to have regressed it during the 18 cycle. I filed <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=798130">bug 798130</a> on this. I just noticed the regression a few hours ago. If anyone has ideas on what might&#8217;ve caused it, please comment.</p>
-
-<p><strong>Profiler</strong></p>
-
-<p><a href="https://addons.mozilla.org/en-us/firefox/addon/gecko-profiler/">Gecko profiler</a> now lives on AMO.</p>
 ]]></content>
   </entry>
   

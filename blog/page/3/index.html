@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="After MozCamp, we held a snappy meet-up at NoaCowork in Warsaw. I believe this was one of the most productive weeks I had the pleasure of &hellip;">
+  <meta name="description" content="We should no longer do proxy-related IO on the main thread now that Patrick McManus landed bug 769764. Synchronous proxy code resulted in a miserable &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,54 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/10/04/snappy-39/">Snappy #39</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-10-04T09:24:57-07:00" pubdate data-updated="true">Oct 4<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>We should no longer do proxy-related IO on the main thread now that Patrick McManus landed <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=769764">bug 769764</a>. Synchronous proxy code resulted in a miserable user experience for people using proxies, but it also affected normal users during proxy-detection. This was one of the top intermittent freezes that we&#8217;ve seen.</p>
+
+<p>Tab switching should be much faster in Firefox 18 than before. Jared Wein got rid of an expensive regexp that was applied during a tab switch in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=781588">bug 781588</a>.  Jeff Muizelaar landed <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=792199">bug 792199</a> which should make switching to a image-heavy sites much faster. Jared&#8217;s change is already on nightlies, Jeff&#8217;s change should show up tomorrow if everything goes well.</p>
+
+<p>Matt Woodrow landed the huge change that is DLBI in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=539356">bug 539356</a> (yet again). DLBI speeds up reflows, reduces repaints resulting in a more responsive browser. For more details see Robert O&#8217;Callahan&#8217;s <a href="https://groups.google.com/forum/#!topic/mozilla.dev.platform/UFndiSxW4rU">announcement</a>.</p>
+
+<p><strong>Startup Regression </strong></p>
+
+<p>After working on improving startup for the last couple of releases we seem to have regressed it during the 18 cycle. I filed <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=798130">bug 798130</a> on this. I just noticed the regression a few hours ago. If anyone has ideas on what might&#8217;ve caused it, please comment.</p>
+
+<p><strong>Profiler</strong></p>
+
+<p><a href="https://addons.mozilla.org/en-us/firefox/addon/gecko-profiler/">Gecko profiler</a> now lives on AMO.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -544,64 +592,6 @@ We spent most of the meeting discussing bug <a href="https://bugzilla.mozilla.or
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/08/06/snappy-aug-2/">Snappy, Aug 2</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-08-06T09:27:10-07:00" pubdate data-updated="true">Aug 6<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><strong>Landed This Week</strong></p>
-
-<p>Neil Deakin joined the Snappy effort. He is working on eliminating pointless reflows in the tab strip. His fix for <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=752486">bug 752486</a> landed, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=752376">752376</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=752496">752496</a> are next.</p>
-
-<p>Brian Bondy landed removal of our prefetch-nuking code in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=770911">770911</a>. xul.dll preload is now always on based on our telemetry startup study in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=765850">765850</a>.</p>
-
-<p>Bill McCloskey landed the following improvements to reduce garbage collection pauses:</p>
-
-<ul>
-<li>bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=777919">777919 </a>- Free LifoAlloc chunks on background thread, instead of as part of the final IGC slice. This isn&#8217;t a problem for most people, but for some people on OSX it can take anywhere from 50ms to 250ms or more.</li>
-<li>bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=778993"> 778993 </a>- Separate runtime&#8217;s gcMallocBytes from compartment&#8217;s gcMallocBytes, so we trigger less non-incremental GCs with many tabs open</li>
-<li>bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=767209">767209 </a>- Make GC slices longer when not painting to avoid non-incremental GCs.
-See Bill&#8217;s comments in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=767209">767209</a> for some insight into the complex heuristics that go into minimizing GC interruptions: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=767209#c3">comment 1</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=767209#c8">comment 2</a>.</li>
-</ul>
-
-
-<p><strong>Coming Soon</strong></p>
-
-<p>In the coming week I expect to see some good optimizations land for page rendering, tab-switching behavior, more robust cache, etc.</p>
-
-<p>Some Snappy people will be attending <a href="https://wiki.mozilla.org/MozCampEU2012">MozCamp.eu 2012</a> in Warsaw, Poland on September 8, 9. Expect to see lots of talk on profiling and other performance tools.</p>
-
-<p>I hope to have above 15-20 Performance/Snappy people in Warsaw for the following week. This is not yet finalized. At the moment we are looking to see if there is a coworking space or a company in Warsaw who could host us.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/4/">&larr; Older</a>
@@ -619,6 +609,10 @@ See Bill&#8217;s comments in bug <a href="https://bugzilla.mozilla.org/show_bug.
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/03/11/living-with-octopress/">Blogging with Octopress</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/03/08/snappy-number-52/">Snappy #52</a>
       </li>
     
@@ -632,10 +626,6 @@ See Bill&#8217;s comments in bug <a href="https://bugzilla.mozilla.org/show_bug.
     
       <li class="post">
         <a href="/blog/2013/02/17/10w-intel-i5-desktop/">10W Intel i5 Desktop</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/02/15/plugin-hang-ui-on-aurora/">Plugin Hang UI On Aurora</a>
       </li>
     
   </ul>

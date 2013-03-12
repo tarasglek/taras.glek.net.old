@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Turns out that if someone compromises a merchant that you shop with, such as bikenashbar.com, then they are entitled to your money as long as they &hellip;">
+  <meta name="description" content="Lately I have been focusing on optimizing Fennec startup on a delightfully inadequate platform: Windows Mobile. More on fascinating startup, &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,58 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/08/03/this-month-in-static-analysis/">This Month in Static Analysis</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-08-03T14:19:55-07:00" pubdate data-updated="true">Aug 3<span>rd</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Lately I have been focusing on optimizing Fennec startup on a delightfully inadequate platform: Windows Mobile. More on fascinating startup, performance problems and solutions later. As a result I have been doing relatively little static analysis stuff.</p>
+
+<p>The main reason for taking a break is that I feel that I went from having no way to do any analysis to having production-quality tools for <a href="https://developer.mozilla.org/En/Dehydra">analysis</a> and <a href="https://developer.mozilla.org/En/Pork">rewriting</a>.  I finally have a chance to move on from developing tools to using them in everyday development. The main puzzle piece that needs completion is GCC 4.5 support in Dehydra. We are feature-complete on 4.5, just need to stabilize once the trunk stabilizes.</p>
+
+<p><strong>Drowning In Pork </strong></p>
+
+<p>A number of other people did some cool stuff in the meantime. First and foremost: Joshua Cranmer has ventured into the land of <a href="https://developer.mozilla.org/En/Pork">Pork</a> and is publishing a guide to doing refactoring tools on this blog (<a href="http://quetzalcoatal.blogspot.com/2009/07/guide-to-pork-part-1.html">part 1</a>, <a href="http://quetzalcoatal.blogspot.com/2009/07/guide-to-pork-part-2.html">part 2</a>, <a href="http://quetzalcoatal.blogspot.com/2009/08/guide-to-pork-part-3.html">part 3</a>). This is cool, because until now, there were no Pork docs and nothing I write could ever match Joshua&#8217;s documenting talents.  Thanks a bunch, Joshua.</p>
+
+<p>I have also received my first-ever bugfix patches to Elsa. Previously, I&#8217;ve received miscellaneous build fixes, etc, but these are the first patches that involved somebody pounding their head against the wall until they figured out why things were crashing or not accepting valid C++ code.</p>
+
+<p><strong>Introducing Dan Witte</strong></p>
+
+<p>Dan is the new static analysis go-to person. So far he facilitated an explosion of static analysis ideas (they are tracked in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=430328">bug 430328</a>). A lot of these can be expressed as &lt;10line Dehydra analyses, so they are excellent introductory projects. If you are dying to start analyzing code, but don&#8217;t know where to begin, look in that bug. Dan has written an interesting analysis to do with finding accidental temporaries due to C++&#8217;s &#8220;wonderful&#8221; implicit conversions/etc (expect to see a blog post on that). He is also working on the holy grail of Mozilla static analysis: a full callgraph. It&#8217;s a little embarrassing that we don&#8217;t have that yet, but it&#8217;s hard and once we do have it, a whole new world of analyses will be possible.</p>
+
+<p><strong>Speaking of Callgraphs&#8230;</strong></p>
+
+<p>So while various Mozillians were pondering how awesome it would be to do inter-function analysis, an intern has beat us to writing the first useful inter-function analysis! Sully had a problem, after a tiny bit of  Dehydra coaching, he solved his problem in the amount of time it took me to eat my lunch. Brilliant! See his <a href="http://www.msully.net/blog/2009/08/03/doing-whole-tree-analysis-with-dehydra/">blog post</a> for details. My conclusion: either Dehydra is pretty easy to use and/or we get mad genius interns :).</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -548,46 +600,6 @@ if (requestAnimationFrame)
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/05/11/dehydra-updates/">Dehydra Updates</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-05-11T03:55:14-07:00" pubdate data-updated="true">May 11<span>th</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><strong>How well are you packing your structs?</strong> Arpad asked that question with an awesome <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=492185">Dehydra scrip</a>t and came up with an interesting list.</p>
-
-<p><strong>GCC 4.3.3 Is supported</strong> GCC 4.3.3(4.3.[210] worked) broke C++ compatibility in the headers used by <a href="https://developer.mozilla.org/En/Dehydra">Dehydra</a>. Zach pointed out that passing -fpermissive to g++ solves the problem. Sorry to all the people who had issues building the hydras with GCC 4.3.3, that&#8217;s fixed now.</p>
-
-<p>As I mentioned before, we are skipping GCC 4.4 support in Dehydra and aiming for supporting unpatched GCC 4.5. I wish that the small GCC patches were as quick to land as that big one I landed a couple of weeks ago :(.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/18/">&larr; Older</a>
@@ -605,6 +617,10 @@ if (requestAnimationFrame)
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/03/11/living-with-octopress/">Blogging with Octopress</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/03/08/snappy-number-52/">Snappy #52</a>
       </li>
     
@@ -618,10 +634,6 @@ if (requestAnimationFrame)
     
       <li class="post">
         <a href="/blog/2013/02/17/10w-intel-i5-desktop/">10W Intel i5 Desktop</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/02/15/plugin-hang-ui-on-aurora/">Plugin Hang UI On Aurora</a>
       </li>
     
   </ul>

@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="It is difficult to follow error messages from control-flow analyzing tools. After struggling to visualize what I was debugging, I added a a native &hellip;">
+  <meta name="description" content="Looking for developers to test the web frontend for squash I got the web frontend to squash working. Right now I&#8217;m looking for people to test &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,95 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2007/02/28/websquash/">WebSquash</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-02-28T05:20:15-08:00" pubdate data-updated="true">Feb 28<span>th</span>, 2007</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><strong>Looking for developers to test the web frontend for squash</strong> I got the web frontend to squash working. Right now I&#8217;m looking for people to test it on my test server before I open it to the wild web. It ended up in a further frontend script explosion, but all of the pieces seem to make sense. As it stands right now there are 5 pieces:</p>
+
+<ol>
+<li>JavaScript client-side provides progress notification</li>
+<li>A PHP frontend to communicate with the stateful server</li>
+<li>Python server that handles command queuing, progress reporting and error handling</li>
+<li>Python library to build a list of possible candidates for squashing, produce the necessary .i files and an invocation command from squash</li>
+<li>Squash: the friendly neighborhood class member renamer
+<strong>Passion of CPP: Macros are Considered Painful </strong></li>
+</ol>
+
+
+<p>In the process of testing the web frontend I updated the Mozilla sourcecode only to notice that Elsa can no longer parse files for tasks that worked before. At first I got a little discouraged thinking that I&#8217;ll have to teach Elkhound about yet another obscure C++ feature that wasn&#8217;t handled correctly before. However, turned out that in one case I was feeding squash a file that didn&#8217;t even compile and in the other 2 cases CPP was messing with my head.</p>
+
+<p>The first case was the magic of CPP leading to unintentional code duplication and squash confusion:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>PR_MAX(GetPresContext()-&gt;PointsToAppUnits(0.5f), onePixel)</span></code></pre></td></tr></table></div></figure>
+
+
+<p>gets expanded and parsed as</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>GetPresContext()-&gt;PointsToAppUnits(0.5f) ? GetPresContext()-&gt;PointsToAppUnits(0.5f) : onePixel</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I ended up putting in a special case teaching squash to not get upset if it can only find one of the two instances of class member to replace when PR_MAX is involved.</p>
+
+<p>The second case was exciting. In my innocent perception of CPP wonder I thought that running g++ on a .cpp or a .i file produced from the said .cpp would result in pretty similar behavior. Not so.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>PR_LOG(gLog, PR_LOG_DEBUG,
+</span><span class='line'>("xul: %.5d. %s    %s=%s",
+</span><span class='line'>-1, // XXX pass in line number
+</span><span class='line'>NS_ConvertUTF16toUTF8(extraWhiteSpace).get(),
+</span><span class='line'>NS_ConvertUTF16toUTF8(qnameC).get(),
+</span><span class='line'>NS_ConvertUTF16toUTF8(valueC).get()));
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>yields</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>do { if (((gLog)-&gt;level &gt;= (PR_LOG_DEBUG))) { PR_LogPrint ("xul: %.5d. %s    %s=%s", -1, // XXX pass in line number NS_ConvertUTF16toUTF8(extraWhiteSpace).get(), NS_ConvertUTF16toUTF8(qnameC).get(), NS_ConvertUTF16toUTF8(valueC).get()); } } while (0);</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Here the // comment ends up being promoted to being inside a line due to PR_LOG contracting and the resulting line won&#8217;t parse since half of it is commented out.</p>
+
+<p>This kind of CPP mischief leads me to believe that something has got to give. If we are to embrace automated tools to aid in verification and development either CPP use has to be reduced considerably or Elsa needs to get a builtin preprocessor. I suspect the solution to this will involve a mixture of the two approaches.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -642,6 +731,10 @@ At the source level squash renames the class part of function definitions along 
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/03/11/living-with-octopress/">Blogging with Octopress</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/03/08/snappy-number-52/">Snappy #52</a>
       </li>
     
@@ -655,10 +748,6 @@ At the source level squash renames the class part of function definitions along 
     
       <li class="post">
         <a href="/blog/2013/02/17/10w-intel-i5-desktop/">10W Intel i5 Desktop</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/02/15/plugin-hang-ui-on-aurora/">Plugin Hang UI On Aurora</a>
       </li>
     
   </ul>
