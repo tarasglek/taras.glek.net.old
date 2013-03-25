@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="We had a few slow snappy updates cycles recently. This week a bunch of longer-term stuff came together. Responsiveness Joe Drew taught Firefox to &hellip;">
+  <meta name="description" content="Responsiveness Joe Drew taught Firefox to decode images on multiple threads. It took a mere 29 patches in bug 716140. This should speed up page-load &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -118,9 +118,7 @@ if (requestAnimationFrame)
   </header>
 
 
-  <div class="entry-content"><p>We had a few slow snappy updates cycles recently. This week a bunch of longer-term stuff came together.</p>
-
-<h3>Responsiveness</h3>
+  <div class="entry-content"><h3>Responsiveness</h3>
 
 <p>Joe Drew taught Firefox to decode images on multiple threads. It took a mere 29 patches in <a title="Multithreaded image decoding" href="https://bugzilla.mozilla.org/show_bug.cgi?id=716140">bug 716140</a>. This should speed up page-load and improve tab-switch times. This task was considered too hard a year ago when Snappy people were discussing potential improvements.</p>
 
