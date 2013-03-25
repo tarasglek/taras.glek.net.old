@@ -127,11 +127,9 @@ if (requestAnimationFrame)
 
 <h3>Startup</h3>
 
-<ul>
-<li><a title="Use readahead for ordered jar files such as omni.ja. Should be ~10% startup speedup" href="https://bugzilla.mozilla.org/show_bug.cgi?id=810151">bug 810151</a> + <a title="Use fadvise() to speed up cookie db load" href="https://bugzilla.mozilla.org/show_bug.cgi?id=810454">bug 810454</a> - Aaron Klotz implemented omnijar + cookie readahead.</li>
-<li><a title="Fold NSPR and NSS into mozjs (for Windows) or libxul (for other platforms)" href="https://bugzilla.mozilla.org/show_bug.cgi?id=648407">bug 648407</a> - Mike Hommey folded libraries for faster startup. If I&#8217;m reading <a title="Update removed-files after bug 648407" href="https://bugzilla.mozilla.org/show_bug.cgi?id=852068">bug 852068</a> correctly, Firefox now loads 7 fewer libraries on startup. My rough rule of thumb is that each (small) file adds ~30ms to spinning-disk startup so this should net >200ms in startup savings.</li>
-</ul>
+<p><a title="Use readahead for ordered jar files such as omni.ja. Should be ~10% startup speedup" href="https://bugzilla.mozilla.org/show_bug.cgi?id=810151">bug 810151</a> + <a title="Use fadvise() to speed up cookie db load" href="https://bugzilla.mozilla.org/show_bug.cgi?id=810454">bug 810454</a> - Aaron Klotz implemented omnijar + cookie readahead.</p>
 
+<p><a title="Fold NSPR and NSS into mozjs (for Windows) or libxul (for other platforms)" href="https://bugzilla.mozilla.org/show_bug.cgi?id=648407">bug 648407</a> - Mike Hommey folded libraries for faster startup. If I&#8217;m reading <a title="Update removed-files after bug 648407" href="https://bugzilla.mozilla.org/show_bug.cgi?id=852068">bug 852068</a> correctly, Firefox now loads 7 fewer libraries on startup. My rough rule of thumb is that each (small) file adds ~30ms to spinning-disk startup so this should net >200ms in startup savings.</p>
 
 <p>Cumulative startup improvements are notoriously difficult to predict + measure, but I suspect that above changes should make for a >=10% speedup in Firefox 22 start over previous releases. We&#8217;ll be watching telemetry data in the coming weeks.</p>
 

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: snappy | All About Performance]]></title>
   <link href="http://taras.glek.net/blog/categories/snappy/atom.xml" rel="self"/>
   <link href="http://taras.glek.net/"/>
-  <updated>2013-03-25T06:42:43-07:00</updated>
+  <updated>2013-03-25T06:45:22-07:00</updated>
   <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -31,8 +31,9 @@ Marco Bonardo fixed a mysterious cause of main thread IO I ran into in <a title=
 
 ### Startup
 
-* <a title="Use readahead for ordered jar files such as omni.ja. Should be ~10% startup speedup" href="https://bugzilla.mozilla.org/show_bug.cgi?id=810151">bug 810151</a> + <a title="Use fadvise() to speed up cookie db load" href="https://bugzilla.mozilla.org/show_bug.cgi?id=810454">bug 810454</a> - Aaron Klotz implemented omnijar + cookie readahead.
-* <a title="Fold NSPR and NSS into mozjs (for Windows) or libxul (for other platforms)" href="https://bugzilla.mozilla.org/show_bug.cgi?id=648407">bug 648407</a> - Mike Hommey folded libraries for faster startup. If I'm reading <a title="Update removed-files after bug 648407" href="https://bugzilla.mozilla.org/show_bug.cgi?id=852068">bug 852068</a> correctly, Firefox now loads 7 fewer libraries on startup. My rough rule of thumb is that each (small) file adds ~30ms to spinning-disk startup so this should net >200ms in startup savings.
+<a title="Use readahead for ordered jar files such as omni.ja. Should be ~10% startup speedup" href="https://bugzilla.mozilla.org/show_bug.cgi?id=810151">bug 810151</a> + <a title="Use fadvise() to speed up cookie db load" href="https://bugzilla.mozilla.org/show_bug.cgi?id=810454">bug 810454</a> - Aaron Klotz implemented omnijar + cookie readahead.
+
+<a title="Fold NSPR and NSS into mozjs (for Windows) or libxul (for other platforms)" href="https://bugzilla.mozilla.org/show_bug.cgi?id=648407">bug 648407</a> - Mike Hommey folded libraries for faster startup. If I'm reading <a title="Update removed-files after bug 648407" href="https://bugzilla.mozilla.org/show_bug.cgi?id=852068">bug 852068</a> correctly, Firefox now loads 7 fewer libraries on startup. My rough rule of thumb is that each (small) file adds ~30ms to spinning-disk startup so this should net >200ms in startup savings.
 
 Cumulative startup improvements are notoriously difficult to predict + measure, but I suspect that above changes should make for a >=10% speedup in Firefox 22 start over previous releases. We'll be watching telemetry data in the coming weeks.
 
