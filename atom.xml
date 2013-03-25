@@ -4,7 +4,7 @@
   <title><![CDATA[All About Performance]]></title>
   <link href="http://taras.glek.net/atom.xml" rel="self"/>
   <link href="http://taras.glek.net/"/>
-  <updated>2013-03-25T06:52:22-07:00</updated>
+  <updated>2013-03-25T07:03:29-07:00</updated>
   <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -14,21 +14,11 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Snappy Number 53 Faster Startup]]></title>
+    <title type="html"><![CDATA[snappy #53: Faster: Startup, Image Decoding, Touchpad Input. Smoother Animations]]></title>
     <link href="http://taras.glek.net/blog/2013/03/25/snappy-number-53-faster-startup/"/>
-    <updated>2013-03-25T00:00:00-07:00</updated>
+    <updated>2013-03-25T06:25:00-07:00</updated>
     <id>http://taras.glek.net/blog/2013/03/25/snappy-number-53-faster-startup</id>
-    <content type="html"><![CDATA[<hr />
-
-<p>layout: post
-title: &#8220;snappy #53: Faster: Startup, Image Decoding, Touchpad Input. Smoother Animations&#8221;
-date: 2013-03-25 06:25
-comments: true
-categories:
-- snappy
-- mozilla</p>
-
-<h3>Responsiveness</h3>
+    <content type="html"><![CDATA[<h3>Responsiveness</h3>
 
 <p>Joe Drew taught Firefox to decode images on multiple threads. It took a mere 29 patches in <a title="Multithreaded image decoding" href="https://bugzilla.mozilla.org/show_bug.cgi?id=716140">bug 716140</a>. This should speed up page-load and improve tab-switch times. This task was considered too hard a year ago when Snappy people were discussing potential improvements.</p>
 
