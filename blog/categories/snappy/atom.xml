@@ -4,7 +4,7 @@
   <title><![CDATA[Category: snappy | All About Performance]]></title>
   <link href="http://taras.glek.net/blog/categories/snappy/atom.xml" rel="self"/>
   <link href="http://taras.glek.net/"/>
-  <updated>2013-03-25T06:48:03-07:00</updated>
+  <updated>2013-03-25T06:52:22-07:00</updated>
   <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -12,42 +12,6 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
-  
-  <entry>
-    <title type="html"><![CDATA[snappy #53: Faster: Startup, Image Decoding, Touchpad Input. Smoother Animations]]></title>
-    <link href="http://taras.glek.net/blog/2013/03/25/snappy-number-53-faster-startup/"/>
-    <updated>2013-03-25T06:25:00-07:00</updated>
-    <id>http://taras.glek.net/blog/2013/03/25/snappy-number-53-faster-startup</id>
-    <content type="html"><![CDATA[### Responsiveness
-
-Joe Drew taught Firefox to decode images on multiple threads. It took a mere 29 patches in <a title="Multithreaded image decoding" href="https://bugzilla.mozilla.org/show_bug.cgi?id=716140">bug 716140</a>. This should speed up page-load and improve tab-switch times. This task was considered too hard a year ago when Snappy people were discussing potential improvements.
-
-Masayuki Nakano improved Firefox scrolling responsiveness on modern touchpads in <a title="Scrolling using some high-resolution-scroll aware touchpads feels slow" href="https://bugzilla.mozilla.org/show_bug.cgi?id=829952">bug 829952</a>. Dealing with scroll-events on Windows is a mess. It's nice when we make forward progress in this area.
-
-
-Marco Bonardo fixed a mysterious cause of main thread IO I ran into in <a title="Avoid repeated execution of expensive daysOfHistory query" href="https://bugzilla.mozilla.org/show_bug.cgi?id=830423">bug 830423</a>. I ran into this issue because I compulsively navigate to `about:telemetry` in Firefox and look in 'Slow SQL Statements' and 'Browser Hang' sections. I encourage readers of this blog to check out that data whenever Firefox is under-performing.
-
-### Startup
-
-<a title="Use readahead for ordered jar files such as omni.ja. Should be ~10% startup speedup" href="https://bugzilla.mozilla.org/show_bug.cgi?id=810151">bug 810151</a> + <a title="Use fadvise() to speed up cookie db load" href="https://bugzilla.mozilla.org/show_bug.cgi?id=810454">bug 810454</a> - Aaron Klotz implemented omnijar + cookie readahead.
-
-<a title="Fold NSPR and NSS into mozjs (for Windows) or libxul (for other platforms)" href="https://bugzilla.mozilla.org/show_bug.cgi?id=648407">bug 648407</a> - Mike Hommey folded libraries for faster startup. If I'm reading <a title="Update removed-files after bug 648407" href="https://bugzilla.mozilla.org/show_bug.cgi?id=852068">bug 852068</a> correctly, Firefox now loads 7 fewer libraries on startup. My rough rule of thumb is that each (small) file adds ~30ms to spinning-disk startup so this should net >200ms in startup savings.
-
-Cumulative startup improvements are notoriously difficult to predict + measure, but I suspect that above changes should make for a >=10% speedup in Firefox 22 start over previous releases. We'll be watching telemetry data in the coming weeks.
-
-###Smoothness
-<a title="Consider getting rid of the delay line filter stuff in timer thread" href="https://bugzilla.mozilla.org/show_bug.cgi?id=590422">bug 590422</a> - Avi Halachmi is continuing on his quest to make Firefox animate smoothly. This is another tricky step towards smoother animations in Firefox. Since landing this, Avi already embarked on the next gecko-level animation smoothness improvement.
-
-Marco Bonardo spotted some potential for contention in recent DOM Local Storage optimizations. Vladan Djeric landed corrections in <a title="LocalStorage performance improvements" href="https://bugzilla.mozilla.org/show_bug.cgi?id=842852">bug 842852</a>.
-
-###Throughput improvements
-
-Ehsan Akhgari reduced allocator contention in <a title="Prevent firing timers from lock contention with the main thread" href="https://bugzilla.mozilla.org/show_bug.cgi?id=733277">bug 733277</a>.
-
-Tim Taubert taught Firefox to warm up newtab connections on hover <a title="[New Tab Page] Speculatively open connections for sites when hovering them" href="https://bugzilla.mozilla.org/show_bug.cgi?id=790882">bug 790882</a>
-
-]]></content>
-  </entry>
   
   <entry>
     <title type="html"><![CDATA[Snappy #52]]></title>
@@ -135,6 +99,18 @@ Justin Lebar fixed an issue where telemetry memory reporting code was accidental
 
 ###Shutdown
 Sometimes Firefox takes a long time to shutdown. We also have a timer that regularly triggers cycle collection. Olli Pettay disabled this timer during shutdown in <a title="Timer based CC occurring on shutdown" href="https://bugzilla.mozilla.org/show_bug.cgi?id=822849">bug 822849</a>.
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Snappy #49: Help Firefox Shutdown Faster]]></title>
+    <link href="http://taras.glek.net/blog/2013/01/21/snappy-number-49-help-firefox-shutdown-faster/"/>
+    <updated>2013-01-21T13:04:00-08:00</updated>
+    <id>http://taras.glek.net/blog/2013/01/21/snappy-number-49-help-firefox-shutdown-faster</id>
+    <content type="html"><![CDATA[---
+Introducing a new *privacy-invasive* method to help improve Firefox shutdown time.
+
+<blockquote><p>... the profiler will watch your browser for any performance hiccups and will automatically send a detailed bug report for the Performance team to fix!</p><footer><strong>Benoit Girard</strong> <cite><a href='http://benoitgirard.wordpress.com/2013/01/18/is-your-shutdown-slow-turn-on-the-performance-reporter/'>benoitgirard.wordpress.com/2013/&hellip;</a></cite></footer></blockquote>
 ]]></content>
   </entry>
   
