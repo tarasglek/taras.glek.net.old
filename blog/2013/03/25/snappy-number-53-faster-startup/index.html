@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Dehydra/Treehydra C support - All About Performance</title>
+  <title>snappy #53: Faster: Startup, Image Decoding, Touchpad Input. Smoother Animations - All About Performance</title>
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Every once in a while people want to be analyze C code. If you are one of those people, checkout bug 494960. For GCC 4.3, you&#8217;ll need to update &hellip;">
+  <meta name="description" content="We had a few slow snappy updates cycles recently. This week a bunch of longer-term stuff came together. Responsiveness Joe Drew taught Firefox to &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://taras.glek.net/blog/2009/06/17/dehydratreehydra-c-support/">
+  <link rel="canonical" href="http://taras.glek.net/blog/2013/03/25/snappy-number-53-faster-startup/">
   <link href="/favicon.png" rel="icon">
   <style>
 <!-- <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">-->
@@ -92,7 +92,7 @@ if (requestAnimationFrame)
   
   <header>
     
-      <h1 class="entry-title">Dehydra/Treehydra C Support</h1>
+      <h1 class="entry-title">Snappy #53: Faster: Startup, Image Decoding, Touchpad Input. Smoother Animations</h1>
     
     
       <p class="meta">
@@ -108,31 +108,44 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2009-06-17T04:22:53-07:00" pubdate data-updated="true">Jun 17<span>th</span>, 2009</time>
+<time datetime="2013-03-25T06:25:00-07:00" pubdate data-updated="true">Mar 25<span>th</span>, 2013</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>Every once in a while people want to be analyze C code. If you are one of those people, checkout <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=494960">bug 494960</a>. For GCC 4.3, you&#8217;ll need to update your patch queue. If you you followed the <a href="https://developer.mozilla.org/En/Dehydra/Installing_Dehydra">Dehydra install instructions</a> do something like:</p>
+<div class="entry-content"><p>We had a few slow snappy updates cycles recently. This week a bunch of longer-term stuff came together.</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>
-</span><span class='line'>cd gcc-4.3.0/.hg/patches
-</span><span class='line'>hg pull -u
-</span><span class='line'>cd ../..
-</span><span class='line'>hg qpush -a
-</span></code></pre></td></tr></table></div></figure>
+<h3>Responsiveness</h3>
+
+<p>Joe Drew taught Firefox to decode images on multiple threads. It took a mere 29 patches in <a title="Multithreaded image decoding" href="https://bugzilla.mozilla.org/show_bug.cgi?id=716140">bug 716140</a>. This should speed up page-load and improve tab-switch times. This task was considered too hard a year ago when Snappy people were discussing potential improvements.</p>
+
+<p>Masayuki Nakano improved Firefox scrolling responsiveness on modern touchpads in <a title="Scrolling using some high-resolution-scroll aware touchpads feels slow" href="https://bugzilla.mozilla.org/show_bug.cgi?id=829952">bug 829952</a>. Dealing with scroll-events on Windows is a mess. It&#8217;s nice when we make forward progress in this area.</p>
+
+<p>Marco Bonardo fixed a mysterious cause of main thread IO I ran into in <a title="Avoid repeated execution of expensive daysOfHistory query" href="https://bugzilla.mozilla.org/show_bug.cgi?id=830423">bug 830423</a>. I ran into this issue because I compulsively navigate to <code>about:telemetry</code> in Firefox and look in &#8216;Slow SQL Statements&#8217; and &#8216;Browser Hang&#8217; sections. I encourage readers of this blog to check out that data whenever Firefox is under-performing.</p>
+
+<h3>Startup</h3>
+
+<ul>
+<li><a title="Use readahead for ordered jar files such as omni.ja. Should be ~10% startup speedup" href="https://bugzilla.mozilla.org/show_bug.cgi?id=810151">bug 810151</a> + <a title="Use fadvise() to speed up cookie db load" href="https://bugzilla.mozilla.org/show_bug.cgi?id=810454">bug 810454</a> - Aaron Klotz implemented omnijar + cookie readahead.</li>
+<li><a title="Fold NSPR and NSS into mozjs (for Windows) or libxul (for other platforms)" href="https://bugzilla.mozilla.org/show_bug.cgi?id=648407">bug 648407</a> - Mike Hommey folded libraries for faster startup. If I&#8217;m reading <a title="Update removed-files after bug 648407" href="https://bugzilla.mozilla.org/show_bug.cgi?id=852068">bug 852068</a> correctly, Firefox now loads 7 fewer libraries on startup. My rough rule of thumb is that each (small) file adds ~30ms to spinning-disk startup so this should net >200ms in startup savings.</li>
+</ul>
 
 
-<p>and rebuild gcc to get C support in the plugin framework for GCC 4.5 (patch for trunk is in the bug).</p>
+<p>Cumulative startup improvements are notoriously difficult to predict + measure, but I suspect that above changes should make for a >=10% speedup in Firefox 22 start over previous releases. We&#8217;ll be watching telemetry data in the coming weeks.</p>
 
-<p>Everything other than process_function should work in both treehydra and dehydra. Note that the objects provided by GCC will be slightly different in structure due to the underlying difference between gcc/g++, so scripts that were written for C++ may need to be updated.</p>
+<h3>Smoothness</h3>
+
+<p><a title="Consider getting rid of the delay line filter stuff in timer thread" href="https://bugzilla.mozilla.org/show_bug.cgi?id=590422">bug 590422</a> - Avi Halachmi is continuing on his quest to make Firefox animate smoothly. This is another tricky step towards smoother animations in Firefox. Since landing this, Avi already embarked on the next gecko-level animation smoothness improvement.</p>
+
+<p>Marco Bonardo spotted some potential for contention in recent DOM Local Storage optimizations. Vladan Djeric landed corrections in <a title="LocalStorage performance improvements" href="https://bugzilla.mozilla.org/show_bug.cgi?id=842852">bug 842852</a>.</p>
+
+<h3>Throughput improvements</h3>
+
+<p>Ehsan Akhgari reduced allocator contention in <a title="Prevent firing timers from lock contention with the main thread" href="https://bugzilla.mozilla.org/show_bug.cgi?id=733277">bug 733277</a>.</p>
+
+<p>Tim Taubert taught Firefox to warm up newtab connections on hover <a title="[New Tab Page] Speculatively open connections for sites when hovering them" href="https://bugzilla.mozilla.org/show_bug.cgi?id=790882">bug 790882</a></p>
 </div>
 
 
@@ -155,12 +168,12 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2009-06-17T04:22:53-07:00" pubdate data-updated="true">Jun 17<span>th</span>, 2009</time>
+<time datetime="2013-03-25T06:25:00-07:00" pubdate data-updated="true">Mar 25<span>th</span>, 2013</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/mozilla/'>mozilla</a>
+    <a class='category' href='/blog/categories/snappy/'>snappy</a>
   
 </span>
 
@@ -169,7 +182,7 @@ if (requestAnimationFrame)
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://taras.glek.net/blog/2009/06/17/dehydratreehydra-c-support/" data-via="tarasglek" data-counturl="http://taras.glek.net/blog/2009/06/17/dehydratreehydra-c-support/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://taras.glek.net/blog/2013/03/25/snappy-number-53-faster-startup/" data-via="tarasglek" data-counturl="http://taras.glek.net/blog/2013/03/25/snappy-number-53-faster-startup/" >Tweet</a>
   
   
   
@@ -178,10 +191,8 @@ if (requestAnimationFrame)
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2009/05/14/gcc-45-dehydra-is-a-go-and-other-updates/" title="Previous Post: GCC 4.5 + Dehydra is a go and other updates">&laquo; GCC 4.5 + Dehydra is a go and other updates</a>
+        <a class="basic-alignment left" href="/blog/2013/03/11/living-with-octopress/" title="Previous Post: Blogging with Octopress">&laquo; Blogging with Octopress</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2009/06/25/dehydra-pork-sources-moved/" title="Next Post: Dehydra & Pork Sources Moved">Dehydra & Pork Sources Moved &raquo;</a>
       
     </p>
   </footer>
@@ -276,8 +287,8 @@ window._monitorContentLoaded = Date.now()
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://taras.glek.net/blog/2009/06/17/dehydratreehydra-c-support/';
-        var disqus_url = 'http://taras.glek.net/blog/2009/06/17/dehydratreehydra-c-support/';
+        var disqus_identifier = 'http://taras.glek.net/blog/2013/03/25/snappy-number-53-faster-startup/';
+        var disqus_url = 'http://taras.glek.net/blog/2013/03/25/snappy-number-53-faster-startup/';
         var disqus_script = 'embed.js';
       
     (function () {

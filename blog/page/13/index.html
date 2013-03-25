@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Turned on USB debugging, plugged phone into laptop, told NetworkManager to connect to T-Mobile&#8230;Done. It&#8217;s amazing when you plug in a &hellip;">
+  <meta name="description" content="Thanks for all of those who commented on previous post on fragmentation. My first fragmentation fix has landed. In current nightlies and future &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,68 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/09/07/fighting-fragmentation-sqlite/">Fighting Fragmentation: SQLite</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-09-07T02:57:56-07:00" pubdate data-updated="true">Sep 7<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Thanks for all of those who commented on <a href="http://taras.glek.net/blog/2010/07/22/file-fragmentation/">previous post</a> on fragmentation. My first fragmentation <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=581606">fix</a> has landed. In current nightlies and future releases the main Firefox databases will grow more aggressively to avoid fragmentation. This should translate into better history/awesomebar/cookie performance for our most dedicated users.</p>
+
+<p>Unfortunately fixing existing profiles is <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=592678">hard</a> from within Firefox. In the meantime advanced users on non-Windows platforms who are suffering from fragmentation can manually copy *.sqlite files to another directory and back.</p>
+
+<p><strong>Windows: Ahead of the pack</strong></p>
+
+<p>Evidence suggests that the Windows fragmentation situation is slightly better than on other platforms. Firefox fragmentation behavior on Windows is similar to other OSes but Windows periodically defragments Firefox files opened on startup. So one ends up with a cycle of deteriorating performance, followed by better performance(ie right after defrag), followed by deteriorating performance, etc.</p>
+
+<p>I haven&#8217;t observed Windows defragmenting files for me, but it seems to do this for most users. Would love to learn more on how/when it decides to defragment files.</p>
+
+<p><strong>Horror Stories </strong></p>
+
+<p>I found a few other places that are horridly affected by fragmentation, will be blogging about those as I fix them. Fragmentation is an interesting problem to optimize because it affects dedicated users most, yet it is very tricky to replicate in a developer environment. Furthermore, there are a lot of misconceptions floating around:</p>
+
+<ol>
+<li>Fragmentation is a Windows problem that Linux is immune to due to having awesomer filesystems.</li>
+<li>Mac OSX automatically defragments files, so fragmentation isn&#8217;t a problem there.</li>
+<li>Fragmentation isn&#8217;t a problem on SSDs
+To which I say:</li>
+<li>Linux might be good at avoiding fragmentation for server workloads. It sucks for desktop users.</li>
+<li>OSX will defragment small files, but big ones hurt most.</li>
+<li>Cheap SSDs suck at tiny reads caused by fragmentation resulting in spectacularly bad IO. More on this in a future post.
+To summarize: there are a lot of misleading stories floating around. I am always happy to hear more measurements/docs/bugs/etc on this subject, but I have zero patience for folk stories and speculation.</li>
+</ol>
+
+
+<p>I should also mention that the fragmentation problem isn&#8217;t limited to Firefox. Other browsers suffer from it too.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -609,71 +671,6 @@ I blogged about 1, 2, 4, this post is about #3.</li>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2010/04/19/windows-sucks-at-memory-mapped-io-during-startup/">Windows Sucks at Memory-Mapped IO During Startup</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-04-19T07:00:00-07:00" pubdate data-updated="true">Apr 19<span>th</span>, 2010</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Last week I learned about how Windows handles page faults backed by files (specifically xul.dll). I already knew that Linux was <a href="http://taras.glek.net/blog/2010/04/12/squeezing-every-last-bit-of-performance-out-of-the-linux-toolchain/">suboptimal</a> in this area, perhaps the clever people at Redmond did better.</p>
-
-<p>Shaver pointed me at <a href="https://developer.mozilla.org/En/Profiling_with_Xperf">xperf</a>, which is sort of like the new Linux perf tools. Xperf rocks in that it can capture the relevant data and it can export it as .csv.</p>
-
-<p>Even with profile-guided-optimization Windows causes 3x as much IO in xul.dll than linux does on libxul.so. That&#8217;s especially interesting given that xul.dll is one-third smaller on Windows. Here is the <a href="http://people.mozilla.com/~tglek/startup/systemtap_graphs/visualize.html?#../win7/noprefetch.csv.html">graph</a>. PGO isn&#8217;t helping on Windows as much as it can help on Linux because MSVC PGO doesn&#8217;t do the equivalent of GCC&#8217;s -freorder-blocks-and-partition (unless I missed something in the docs).</p>
-
-<p>With the Windows <a href="http://en.wikipedia.org/wiki/Prefetcher">prefetcher</a>, there were 4x less xul.dll IOs (graph <a href="http://people.mozilla.com/~tglek/startup/systemtap_graphs/visualize.html?#../win7/prefetch.csv.html">here</a>). Unfortunately, the prefetcher can&#8217;t figure out that the whole xul.dll should be paged in and we still end up with an excess of random IO.</p>
-
-<p><strong>Why?</strong></p>
-
-<p>When a page fault occurs, Windows goes to read the page from the file and reads a little extra (just like any other sane OS) assuming that there will be more IO nearby. Unfortunately the gods of virtual memory at Microsoft decided that for every page fault, only 7 extra pages should read. So reads occur in 32K chunks (vs 128K in Linux, which is still too small). To make matters worse, segments mapped in as data only read in 3 extra pages (ie 16K chunks).</p>
-
-<p>This is funny in a sad way. Reading in 32K chunks is supposed to minimize ram usage (which makes no bloody sense when Win7 officially requires 1GB of RAM). As a result of being so thrifty on easy-to-evict file cache, windows ends up doing 4x as much file IO as Linux. The 16K reads are particularly funny as one can see the result of that misoptimization in the string of puny reads on the top right of the graphs.</p>
-
-<p><strong>Surely There is an API like madvise()</strong> On Posix systems madvise() can be used to influence the caching behavior of the OS. fadvise() is another such call for IO based on filehandles. For example, Firefox fastload files are now madvise()ed such that they are read in a single 2mb chunk on startup. Unfortunately, it appears that Windows has no such APIs so one is stuck with pathetically small reads.</p>
-
-<p>At first, I thought that, passing FILE_FLAG_SEQUENTIAL_SCAN when opening the file handle will work like a crappy fadvise()-equivalent. Turns out that mmaping files completely bypasses the Windows Cache Manager, so that flag just gets ignored.</p>
-
-<p>So as far as I can tell the only way to convince Windows to not read stuff in stupidly small chunks is to mmap() everything we care about using large pages. Unfortunately that comes with some significant costs.</p>
-
-<p>We are going to try to <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=553721">order</a> the binaries better which should halve the amount of page faults.</p>
-
-<p><strong>Can Windows Do Anything Better?</strong></p>
-
-<p>Yes. The &#8220;Unix way&#8221; of breaking up everything into a billion libraries and configuration files results in 10x more files being read on startup on Linux vs Windows. Just because Linux can read individual libraries 4x faster, doesn&#8217;t mean that IO becomes free.</p>
-
-<p>Presently, in ideal conditions, Firefox starts up 30-50% faster on Windows. The Windows Prefetcher hack sweeps a lot of Windows suck under the carpet, but Microsoft has a lot of room for improvement.</p>
-
-<p><strong>Update:</strong><br/>
-People seem to prefer to comment on <a href="http://www.reddit.com/r/programming/comments/bu2do/windows_sucks_at_memorymapped_io_during_startup/">reddit</a>. If you want me to not miss your comment, make sure you comment here.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/14/">&larr; Older</a>
@@ -691,6 +688,10 @@ People seem to prefer to comment on <a href="http://www.reddit.com/r/programming
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/03/25/snappy-number-53-faster-startup/">snappy #53: Faster: Startup, Image Decoding, Touchpad Input. Smoother Animations</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/03/11/living-with-octopress/">Blogging with Octopress</a>
       </li>
     
@@ -704,10 +705,6 @@ People seem to prefer to comment on <a href="http://www.reddit.com/r/programming
     
       <li class="post">
         <a href="/blog/2013/02/17/router-assisted-automatic-wake-on-lan-plus-suspend/">Router-Assisted Automatic Wake-on-LAN + Suspend</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/02/17/10w-intel-i5-desktop/">10W Intel i5 Desktop</a>
       </li>
     
   </ul>

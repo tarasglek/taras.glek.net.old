@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="We cancelled last week&#8217;s snappy meeting due to Perf/Snappy workweek + FOSDEM. See Jared&#8217;s post for a summary of the workweek, I&#8217;ll &hellip;">
+  <meta name="description" content="The meeting was short this time because all of the participating people in the Toronto office conspired be busy or on vacation today. Our UX team &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,54 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/02/09/snappy-feb-9-blame-canada/">Snappy Feb 9: Blame Canada!</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-02-09T07:01:02-08:00" pubdate data-updated="true">Feb 9<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>The meeting was short this time because all of the participating people in the Toronto office conspired be busy or on vacation today.</p>
+
+<p>Our UX team helped us decide to turn on tabs-on-demand + do tab restore by default, Bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=711193">711193</a>. This change will make interacting with the browser more responsive after startup, help <a href="https://wiki.mozilla.org/Performance/MemShrink">MemShink</a> and not trigger as much captive wifi portal badness.</p>
+
+<p>Frontend people are busy adding telemetry to everything that matters, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=671038">bug 671038</a>. Some of this has already paid off in terms of us catching a tab animation regression in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=724349">bug 724349</a>. We plan to switch our awesomebar searching from SQL to an FTS. If you are a text-search/tokenizer expert, perhaps you help us with <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=725821">bug 725821</a>. There is also a lot of activity on making various sync IO things async, see the <a href="https://wiki.mozilla.org/Performance/Snappy/2012-02-09#Projects">meeting notes</a> for complete details.</p>
+
+<p>Brian Bondy posted an <a href="http://www.brianbondy.com/blog/id/127/">update</a> documenting his two-week rampage through Firefox startup inefficiencies on Windows. Brian&#8217;s blog post contains tips on xperf, Firefox profiler, about:startup - <a href="http://www.brianbondy.com/blog/id/127/">read it</a>.</p>
+
+<p>The networking team is busy nuking the big cache lock, see bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=717761">717761</a>.</p>
+
+<p>Olli has landed most of the cycle collector fixes. Telemetry shows a dramatic reduction in cycle collection times for Firefox 13. He and Andrew investigating the remaining causes of long CC times.</p>
+
+<p>I&#8217;ll end this post with a pretty picture demonstrating recent cycle collection improvements. <a href="/assets/images/2012-02-09-snappy-feb-9-blame-canada/cc13_12.png"> <img src="/assets/images/2012-02-09-snappy-feb-9-blame-canada/cc13_12.png" alt="" /></a> * y: frequency, x: milliseconds</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -528,43 +576,6 @@ We spent the weekend at FOSDEM. I re-presented my Plumbers talk on why Linux <a 
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/01/04/future/">Future</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-01-04T21:42:00-08:00" pubdate data-updated="true">Jan 4<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><div class='post'>
-As people get older they gain clout, respect and other sorts of  undeserved credibility. One way to get rid of such credibility is to try  to predict the future (and get it wrong). I feel like a new year is a  good opportunity to take a stab at this.<br /><br /><strong>Tablets are an evolutionary dead end</strong><br />Remember RAZR phones, palm pilots? Tablets will evoke the same sort of memories in a couple of years.<br /><br /><strong>LCD/OLED as a window into the internet will be laughed at</strong><br /><br />I read a great <a data-mce-href="http://www.amazon.com/Brief-History-Cocaine-Second-ebook/dp/B001AXNYRM/ref=sr_1_68?s=digital-text&amp;ie=UTF8&amp;qid=1325351647&amp;sr=1-68" href="http://www.amazon.com/Brief-History-Cocaine-Second-ebook/dp/B001AXNYRM/ref=sr_1_68?s=digital-text&amp;ie=UTF8&amp;qid=1325351647&amp;sr=1-68">book</a> about the history of cocaine. When cocaine was discovered, it was a  local anesthetic, virility potion, steroid, cure for nymphomania, cure  for addiction, etc. This all looks quite silly in retrospect, but it  really reminds me of the hype over internet connected screen touting  devices. &#8220;People used to think that the best way to stay connected is to  scorch eyeballs with awkward square flashlights with graphics on them&#8221;.<br />It  blows my mind that even though humans have a multitude of senses, we&#8217;ve  settled on something that destroys eyesight and ties one to a desk.  Even best of breed phones, tablets are still tied to an access point,  cell tower and are useless in sunlight. Instead of communicating  directly, devices prefer to channel themselves via amazon or apple  servers.<br /><br /><strong>Future</strong><br />I think the future is in  wrapping information flow around the many senses (seeing, hearing,  tactile feedback etc). I think the future will be shaped more by  odd-ball hackers and less by tech messiahs &amp; their knockoffs  repackaging the same thing every 18months. Hopefully B2G is the first  step in that direction. Perhaps it will result in extremely promis^H^H^H^H connected devices that will mate with every device around. I know we have the right people working on this :)<br /></div>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/9/">&larr; Older</a>
@@ -582,6 +593,10 @@ As people get older they gain clout, respect and other sorts of  undeserved cred
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/03/25/snappy-number-53-faster-startup/">snappy #53: Faster: Startup, Image Decoding, Touchpad Input. Smoother Animations</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/03/11/living-with-octopress/">Blogging with Octopress</a>
       </li>
     
@@ -595,10 +610,6 @@ As people get older they gain clout, respect and other sorts of  undeserved cred
     
       <li class="post">
         <a href="/blog/2013/02/17/router-assisted-automatic-wake-on-lan-plus-suspend/">Router-Assisted Automatic Wake-on-LAN + Suspend</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/02/17/10w-intel-i5-desktop/">10W Intel i5 Desktop</a>
       </li>
     
   </ul>

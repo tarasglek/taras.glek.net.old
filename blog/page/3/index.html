@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="We should no longer do proxy-related IO on the main thread now that Patrick McManus landed bug 769764. Synchronous proxy code resulted in a miserable &hellip;">
+  <meta name="description" content="This was an interesting week. On one hand all performance aspects of tab strip work were suspended until end of year on the frontend team, on the &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,72 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/10/15/snappy-40-faster-tabswitching-startup-analysis/">Snappy #40: Faster Tabswitching, Startup Analysis</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-10-15T03:25:14-07:00" pubdate data-updated="true">Oct 15<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>This was an interesting week. On one hand all performance aspects of tab strip work were suspended until end of year on the frontend team, on the other impressive gains were made on platform side of things.</p>
+
+<p><strong>Jeff Muizelaar cut tab switch times in half</strong></p>
+
+<p>Data came in on Jeff&#8217;s optimization I mentioned <a href="http://taras.glek.net/blog/2012/10/04/snappy-39/">last week</a>: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=792199">bug 792199</a>. This halved our median tab switch time. Since this also landed at the end of our 18 cycle, a comparison between 18/19 Nightlies gives us an idea of how this changed our tab switching times overall. Note the actual difference would be greater since both 18 &amp; 19 include data points with Jeff&#8217;s patch, but the majority of data in 18 is without Jeff&#8217;s patch.</p>
+
+<p><a href="/assets/images/2012-10-15-snappy-40-faster-tabswitching-startup-analysis/fx_tab_switch_update.png"><img src="/assets/images/2012-10-15-snappy-40-faster-tabswitching-startup-analysis/fx_tab_switch_update.png" alt="" /></a></p>
+
+<p><em>Black: v18, Blue V19. X-axis represents time in milliseconds to do a tab switch, excluding time to paint.</em></p>
+
+<p>Above graph shows a shift towards fast tab switch times across the board with particularly nice improvements in the tail. See the corresponding 50% fall in medians on our <a href="https://metrics.mozilla.com/data/content/pentaho-cdf-dd/Render?solution=metrics2&amp;path=%2Ftelemetry&amp;file=telemetryEvolution.wcdf&amp;bookmarkState={%22impl%22%3A%22client%22%2C%22params%22%3A{%22referenceDate%22%3A%222012-10-09%22%2C%22appNameParameter%22%3A%22[Application].[Firefox]%22%2C%22osParameter%22%3A%22[OS].[WINNT]%22%2C%22channelParameter%22%3A%22[Channel].[nightly]%22%2C%22reasonParameter%22%3A%22[Reason].[saved-session]%22%2C%22histogramParameter%22%3A%22[Histogram].[FX_TAB_SWITCH_UPDATE_MS]%22%2C%22histogramPopupTools%22%3A%22%22%2C%22duplicateHistogram%22%3A%22%23duplicateHistogram%22%2C%22medianButtonParam%22%3A0%2C%22scatterChart%22%3A%22%22}}">telemetry evolution dashboard</a>.</p>
+
+<p>Unfortunately, Jeff&#8217;s patch was too good. Instead of decoding less images, it ended up decoding no images at all causing unnecessary flicker when switching tabs. The patch got backed out, but this accident provided us with a good baseline of how fast tab switching can be without decoding images :) Jeff landed a correction in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=799335">bug 799335</a>.</p>
+
+<p>As I mentioned above graph does not include paint times. Jeff also landed bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=800031">800031</a> which measures the complete tab switch duration (including paint time).</p>
+
+<p><a href="/assets/images/2012-10-15-snappy-40-faster-tabswitching-startup-analysis/fx_tab_switch_total.png"><img src="/assets/images/2012-10-15-snappy-40-faster-tabswitching-startup-analysis/fx_tab_switch_total.png" alt="" /></a></p>
+
+<p><strong>Timothy Nikkel&#8217;s Visible Image Decoding</strong></p>
+
+<p>Currently Firefox tends to decode too many images while browsing image-heavy sites. This hurts our total memory consumption, increases tab switch times, etc. Timothy has been posting tests builds in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=689623">bug 689623</a> which try to only decode visible images. Please give those builds a spin if you suffer from poor Firefox performance while browsing image-heavy sites.</p>
+
+<p><strong>Startup Time Profiling</strong></p>
+
+<p>Benoit Girard taught the the Gecko profiler how to capture most of browser startup in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=799638">799638</a>. This might be the most important achievement so far in tackling startup problems caused by extensions. This means that every Nightly user (and in a few weeks every Firefox user) can install the <a href="https://developer.mozilla.org/en-US/docs/Performance/Profiling_with_the_Built-in_Profiler">Gecko profiler</a>, click &#8216;Profile Startup&#8217; and get a report on what makes Firefox startup slow. This can then be posted to bugzilla, <a href="http://support.mozilla.com/">SUMO</a>, <a href="https://addons.mozilla.org/">AMO </a>or this blog so we can easily identify problematic addons, problematic APIs used by addons and the extent of startup overhead contributed by them.</p>
+
+<p>Making extension-aware startup profiling easy has incredible potential for making Firefox startup faster for extension-addicted users. If you can&#8217;t wait to try this out, you can install a <a href="https://raw.github.com/bgirard/Gecko-Profiler-Addon/2d0c32507f21d4e64a5eb3bff091f23d21528ad5/geckoprofiler.xpi">development snapshot</a> of the profiler extension. Feel free to post your startup profile links in a comment.</p>
+
+<p><strong>Proxy-detection</strong></p>
+
+<p>As I mentioned last time, Patrick McManus fixed proxy-related jank in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=769764">bug 769764</a>. Last week Vladan Djeric analyzed our chromehang data and confirmed that proxy jank went from being one of our top offenders to not happening.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -556,42 +622,6 @@ We spent most of the meeting discussing bug <a href="https://bugzilla.mozilla.or
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/08/14/snappy-for-aug-9/">Snappy for Aug 9</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-08-14T05:52:00-07:00" pubdate data-updated="true">Aug 14<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Lawrence took excellent Snappy <a href="https://wiki.mozilla.org/Performance/Snappy/2012-08-09">meeting notes</a> last week.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/4/">&larr; Older</a>
@@ -609,6 +639,10 @@ We spent most of the meeting discussing bug <a href="https://bugzilla.mozilla.or
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/03/25/snappy-number-53-faster-startup/">snappy #53: Faster: Startup, Image Decoding, Touchpad Input. Smoother Animations</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/03/11/living-with-octopress/">Blogging with Octopress</a>
       </li>
     
@@ -622,10 +656,6 @@ We spent most of the meeting discussing bug <a href="https://bugzilla.mozilla.or
     
       <li class="post">
         <a href="/blog/2013/02/17/router-assisted-automatic-wake-on-lan-plus-suspend/">Router-Assisted Automatic Wake-on-LAN + Suspend</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/02/17/10w-intel-i5-desktop/">10W Intel i5 Desktop</a>
       </li>
     
   </ul>

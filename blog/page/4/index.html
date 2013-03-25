@@ -9,7 +9,8 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Landed This Week Neil Deakin joined the Snappy effort. He is working on eliminating pointless reflows in the tab strip. His fix for bug 752486 landed &hellip;">
+  <meta name="description" content="Lawrence took excellent Snappy meeting notes last week.
+">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +90,42 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/08/14/snappy-for-aug-9/">Snappy for Aug 9</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-08-14T05:52:00-07:00" pubdate data-updated="true">Aug 14<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Lawrence took excellent Snappy <a href="https://wiki.mozilla.org/Performance/Snappy/2012-08-09">meeting notes</a> last week.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -587,56 +624,6 @@ In part 2 I&#8217;ll discuss how various people at Mozilla use Telemetry.</li>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/06/18/40-60-of-startups-are-warm/">40-60% of Startups Are Warm?</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-06-18T07:00:34-07:00" pubdate data-updated="true">Jun 18<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>_Note: click on the images if they get clipped by other content. Cold startups are those where data has to be read in from disk, warm ones are subsequent startups where the OS already has Firefox files in memory. _ I&#8217;m really surprised by the amount of warm startups done by Firefox users. Somewhere between 40% to 60% of startups are warm. On Linux you can see that by watching whether pagefaults occur while loading the firefox binary via <a href="https://metrics.mozilla.com/data/content/pentaho-cdf-dd/Render?solution=metrics2&amp;path=%2Ftelemetry&amp;file=telemetryHistogram.wcdf&amp;bookmarkState={%22impl%22%3A%22client%22%2C%22params%22%3A{%22startDate%22%3A%222012-05-19%22%2C%22endDate%22%3A%222012-06-17%22%2C%22appVersion%22%3A%22%22%2C%22appName%22%3A%22firefox%22%2C%22arch%22%3A%22%22%2C%22OS%22%3A%22%22%2C%22version%22%3A%22%22%2C%22channel%22%3A%22%22%2C%22appBuildID%22%3A%22%22%2C%22fromPlatformBuildID%22%3A%22%22%2C%22toPlatformBuildID%22%3A%22%22%2C%22excludeParam%22%3A%22%22%2C%22measure%22%3A%22EARLY_GLUESTARTUP_HARD_FAULTS%22%2C%22histogramCompareParam%22%3A%22appVersion%22%2C%22histogramVariablesParam%22%3A%22%22%2C%22platformBuildIDMode%22%3A%22LATEST%22%2C%22platformBuildIDTopCount%22%3A%2230%22%2C%22conditionsStatistic%22%3A%22%23conditionsStatistic%22%2C%22submissionsParameter%22%3A[[5229518]]}}">EARLY_GLUE_STARTUP_HARD_FAULTS</a> histogram.</p>
-
-<p><a href="/assets/images/2012-06-18-40-60-of-startups-are-warm/glue.png"><img src="/assets/images/2012-06-18-40-60-of-startups-are-warm/glue.png" alt="" /></a></p>
-
-<p>On Windows we do not have a good metric  for distinguishing cold startups from warm ones. However can look at the distribution of <a href="https://metrics.mozilla.com/data/content/pentaho-cdf-dd/Render?solution=metrics2&amp;path=%2Ftelemetry&amp;file=telemetryHistogram.wcdf&amp;bookmarkState={%22impl%22%3A%22client%22%2C%22params%22%3A{%22startDate%22%3A%222012-05-19%22%2C%22endDate%22%3A%222012-06-17%22%2C%22appVersion%22%3A%22%22%2C%22appName%22%3A%22firefox%22%2C%22arch%22%3A%22%22%2C%22OS%22%3A%22%22%2C%22version%22%3A%22%22%2C%22channel%22%3A%22%22%2C%22appBuildID%22%3A%22%22%2C%22fromPlatformBuildID%22%3A%22%22%2C%22toPlatformBuildID%22%3A%22%22%2C%22excludeParam%22%3A%22%22%2C%22measure%22%3A%22SIMPLE_MEASURES_FIRSTPAINT%22%2C%22histogramCompareParam%22%3A%22OS%22%2C%22histogramVariablesParam%22%3A%22darwin%2Clinux%2Cwinnt%22%2C%22platformBuildIDMode%22%3A%22LATEST%22%2C%22platformBuildIDTopCount%22%3A%2230%22%2C%22conditionsStatistic%22%3A%22%23conditionsStatistic%22%2C%22submissionsParameter%22%3A[[91510595]]}}">firstpaint histogram</a> and see that faster startups are more common than slower ones. Only a small minority of machines should be able to cold start a browser in &lt;3 seconds.  We have a lot of startups of various degrees of warmness.</p>
-
-<p><a href="/assets/images/2012-06-18-40-60-of-startups-are-warm/firstpaint.png"><img src="/assets/images/2012-06-18-40-60-of-startups-are-warm/firstpaint.png" alt="" /></a></p>
-
-<p>I have no explanation on why people restart Firefox so much. We know &lt; 10% of our shutdowns are <a href="https://metrics.mozilla.com/data/content/pentaho-cdf-dd/Render?solution=metrics2&amp;path=%2Ftelemetry&amp;file=telemetryHistogram.wcdf&amp;bookmarkState={%22impl%22%3A%22client%22%2C%22params%22%3A{%22startDate%22%3A%222012-05-19%22%2C%22endDate%22%3A%222012-06-17%22%2C%22appVersion%22%3A%22%22%2C%22appName%22%3A%22firefox%22%2C%22arch%22%3A%22%22%2C%22OS%22%3A%22%22%2C%22version%22%3A%22%22%2C%22channel%22%3A%22%22%2C%22appBuildID%22%3A%22%22%2C%22fromPlatformBuildID%22%3A%22%22%2C%22toPlatformBuildID%22%3A%22%22%2C%22excludeParam%22%3A%22%22%2C%22measure%22%3A%22SHUTDOWN_OK%22%2C%22histogramCompareParam%22%3A%22OS%22%2C%22histogramVariablesParam%22%3A%22darwin%2Clinux%2Cwinnt%22%2C%22platformBuildIDMode%22%3A%22LATEST%22%2C%22platformBuildIDTopCount%22%3A%2230%22%2C%22conditionsStatistic%22%3A%22%23conditionsStatistic%22%2C%22submissionsParameter%22%3A[[91503292]]}}">unclean</a> (most of those appear to be due to OS shutdown not waiting on Firefox, ie us shutting down too <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=662444">slowly</a>) so users aren&#8217;t crashing their browser and starting again. They are voluntarily closing the browser and then starting it soon after (ie OS doesn&#8217;t get a chance to flush Firefox out of filesystem cache).</p>
-
-<p><a href="/assets/images/2012-06-18-40-60-of-startups-are-warm/shutdown_ok.png"><img src="/assets/images/2012-06-18-40-60-of-startups-are-warm/shutdown_ok.png" alt="" /></a></p>
-
-<p>These patterns are pretty consistent across all of the Firefox release channels I checked, so I can&#8217;t blame warm startups on nightly users getting barraged with upgrade prompts. Can someone come up with a good theory(preferably with some evidence) for this?</p>
-
-<p>Note telemetry only collects data once a day and requires the browser to be open for a few minutes before submitting data, data could be skewed here.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/5/">&larr; Older</a>
@@ -654,6 +641,10 @@ In part 2 I&#8217;ll discuss how various people at Mozilla use Telemetry.</li>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/03/25/snappy-number-53-faster-startup/">snappy #53: Faster: Startup, Image Decoding, Touchpad Input. Smoother Animations</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/03/11/living-with-octopress/">Blogging with Octopress</a>
       </li>
     
@@ -667,10 +658,6 @@ In part 2 I&#8217;ll discuss how various people at Mozilla use Telemetry.</li>
     
       <li class="post">
         <a href="/blog/2013/02/17/router-assisted-automatic-wake-on-lan-plus-suspend/">Router-Assisted Automatic Wake-on-LAN + Suspend</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/02/17/10w-intel-i5-desktop/">10W Intel i5 Desktop</a>
       </li>
     
   </ul>

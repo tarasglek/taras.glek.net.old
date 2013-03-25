@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Notes from today&#8217;s meeting are here. No major snappy fixes landed this week. However, if you look in the notes, there are quite a few projects &hellip;">
+  <meta name="description" content="As I mentioned before, we are back to investigating some gfx deceleration issues. Preliminary investigation shows that our border+gradient code is &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,44 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/05/01/pushing-the-borders-out-of-firefox-performance/">Pushing the Borders [Out] of Firefox Performance</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-05-01T09:57:33-07:00" pubdate data-updated="true">May 1<span>st</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>As I mentioned before, we are back to investigating some gfx deceleration issues. Preliminary investigation shows that our border+gradient code is inefficient and since Firefox uses these features heavily, we get some epic slowdowns when tab switching.</p>
+
+<p>To test out this theory Bas put up a test build that simply does not draw gradients or borders. See <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=750871">bug 75087</a>  for a screenshot demonstrating drastic reduction in browser attractiveness. There is also a test build for people suffering from slow drawing to try out.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -697,80 +735,6 @@ Awesome stuff, very cool.  Any tips for those of us who just bought a house and 
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/03/16/snappy-march-15th/">Snappy, March 15th</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-03-16T08:39:30-07:00" pubdate data-updated="true">Mar 16<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Firefox 13 became Aurora this week. Firefox 13 is the first release that contains a significant amount of Snappy improvements. Some work got backported to 11 &amp; 12, but 13 is where the bulk of work landed. I am very proud of how much we accomplished in 13.</p>
-
-<p>[caption id=&#8221;attachment_613&#8221; align=&#8221;alignnone&#8221; width=&#8221;600&#8221; caption=&#8221;Distribution of Snappy fixes&#8221;]<a href="/assets/images/2012-03-16-snappy-march-15th/ff13.png"><img src="/assets/images/2012-03-16-snappy-march-15th/ff13.png" alt="" /></a>[/caption]</p>
-
-<p>I suspect the unnamed bar mostly consists of bugs that did not get version-tagged, but those should also be FF13.</p>
-
-<p><strong>Smooth Scrolling</strong></p>
-
-<p>About 10 years ago Avi Halachmi embarked on perfecting scrolling via his <a href="http://smoothwheel.mozdev.org/">smoothwheel extention</a>. It may be that Firefox was the first browser to feature kinetic scrolling (with his extension). This Tuesday Avi landed some of those smarts in Firefox; see bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=206438">206438</a>. I&#8217;m sad that it took us 10 years to notice an awesome UX improvement like this. However, it is awesome to work with community developers who can focus on in on a particular feature and perfect it to their liking. To me this is what open source is about: enabling amazing people to perfect their software experience (and have everybody else benefit). Thanks, Avi!</p>
-
-<p>My secret plan is to clean up a few primary user experiences and freeze the rest of the browser while the user is interacting via bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=712478">712478</a>. Scrolling is one such activity, watching video is another, typing, etc.</p>
-
-<p><strong>Peptest</strong></p>
-
-<p>There is now a <a href="http://mrcote.info/peptest/">graph</a> for peptest results. Mark is figuring out how to deal with outlier, and considering integrating telemetry histograms.</p>
-
-<p><strong>Cycle Collector</strong></p>
-
-<p>Olli reduced CC lag observed after closing tabs like gmail, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=734057">734057</a>.</p>
-
-<p><strong>WIP</strong></p>
-
-<p>We have fixed a lot of the low-hanging fruit and are working on larger projects at the moment. Going forward I&#8217;ll stick to mentioning projects when they get started, finish, or post builds for people to test.</p>
-
-<p><strong>Plans for Firefox 14</strong></p>
-
-<p>I&#8217;m very proud of Snappy fixes in Firefox 13, as a result I have high expectations for Firefox 14. The following are within reach:</p>
-
-<ul>
-<li>Get rid of remaining main thread SQL (including Local Storage).</li>
-<li>Make background maintenance tasks interruptable</li>
-<li>Fix themes to not ruin our <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=650968">startup</a></li>
-<li>Teach Firefox to suspend background processing during<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=712478"> user interaction</a></li>
-<li>Ensure that graphics acceleration does not <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=692557">regress </a>browser responsiveness</li>
-<li><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=662444">Exit </a>quickly</li>
-<li>De-jank animations</li>
-<li>Make our network cache more responsive</li>
-</ul>
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/7/">&larr; Older</a>
@@ -788,6 +752,10 @@ Awesome stuff, very cool.  Any tips for those of us who just bought a house and 
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/03/25/snappy-number-53-faster-startup/">snappy #53: Faster: Startup, Image Decoding, Touchpad Input. Smoother Animations</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/03/11/living-with-octopress/">Blogging with Octopress</a>
       </li>
     
@@ -801,10 +769,6 @@ Awesome stuff, very cool.  Any tips for those of us who just bought a house and 
     
       <li class="post">
         <a href="/blog/2013/02/17/router-assisted-automatic-wake-on-lan-plus-suspend/">Router-Assisted Automatic Wake-on-LAN + Suspend</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/02/17/10w-intel-i5-desktop/">10W Intel i5 Desktop</a>
       </li>
     
   </ul>

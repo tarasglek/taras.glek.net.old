@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Sorry for the delay in posting this. We don&#8217;t yet have a frontend for tracking SQL performance in Firefox. Had to wait on Xavier to become &hellip;">
+  <meta name="description" content="Firefox 13 became Aurora this week. Firefox 13 is the first release that contains a significant amount of Snappy improvements. Some work got &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,80 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/03/16/snappy-march-15th/">Snappy, March 15th</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-03-16T08:39:30-07:00" pubdate data-updated="true">Mar 16<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Firefox 13 became Aurora this week. Firefox 13 is the first release that contains a significant amount of Snappy improvements. Some work got backported to 11 &amp; 12, but 13 is where the bulk of work landed. I am very proud of how much we accomplished in 13.</p>
+
+<p>[caption id=&#8221;attachment_613&#8221; align=&#8221;alignnone&#8221; width=&#8221;600&#8221; caption=&#8221;Distribution of Snappy fixes&#8221;]<a href="/assets/images/2012-03-16-snappy-march-15th/ff13.png"><img src="/assets/images/2012-03-16-snappy-march-15th/ff13.png" alt="" /></a>[/caption]</p>
+
+<p>I suspect the unnamed bar mostly consists of bugs that did not get version-tagged, but those should also be FF13.</p>
+
+<p><strong>Smooth Scrolling</strong></p>
+
+<p>About 10 years ago Avi Halachmi embarked on perfecting scrolling via his <a href="http://smoothwheel.mozdev.org/">smoothwheel extention</a>. It may be that Firefox was the first browser to feature kinetic scrolling (with his extension). This Tuesday Avi landed some of those smarts in Firefox; see bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=206438">206438</a>. I&#8217;m sad that it took us 10 years to notice an awesome UX improvement like this. However, it is awesome to work with community developers who can focus on in on a particular feature and perfect it to their liking. To me this is what open source is about: enabling amazing people to perfect their software experience (and have everybody else benefit). Thanks, Avi!</p>
+
+<p>My secret plan is to clean up a few primary user experiences and freeze the rest of the browser while the user is interacting via bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=712478">712478</a>. Scrolling is one such activity, watching video is another, typing, etc.</p>
+
+<p><strong>Peptest</strong></p>
+
+<p>There is now a <a href="http://mrcote.info/peptest/">graph</a> for peptest results. Mark is figuring out how to deal with outlier, and considering integrating telemetry histograms.</p>
+
+<p><strong>Cycle Collector</strong></p>
+
+<p>Olli reduced CC lag observed after closing tabs like gmail, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=734057">734057</a>.</p>
+
+<p><strong>WIP</strong></p>
+
+<p>We have fixed a lot of the low-hanging fruit and are working on larger projects at the moment. Going forward I&#8217;ll stick to mentioning projects when they get started, finish, or post builds for people to test.</p>
+
+<p><strong>Plans for Firefox 14</strong></p>
+
+<p>I&#8217;m very proud of Snappy fixes in Firefox 13, as a result I have high expectations for Firefox 14. The following are within reach:</p>
+
+<ul>
+<li>Get rid of remaining main thread SQL (including Local Storage).</li>
+<li>Make background maintenance tasks interruptable</li>
+<li>Fix themes to not ruin our <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=650968">startup</a></li>
+<li>Teach Firefox to suspend background processing during<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=712478"> user interaction</a></li>
+<li>Ensure that graphics acceleration does not <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=692557">regress </a>browser responsiveness</li>
+<li><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=662444">Exit </a>quickly</li>
+<li>De-jank animations</li>
+<li>Make our network cache more responsive</li>
+</ul>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -613,54 +687,6 @@ This freeze can last anywhere from a few milliseconds on an unburdened computer 
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/02/09/snappy-feb-9-blame-canada/">Snappy Feb 9: Blame Canada!</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-02-09T07:01:02-08:00" pubdate data-updated="true">Feb 9<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>The meeting was short this time because all of the participating people in the Toronto office conspired be busy or on vacation today.</p>
-
-<p>Our UX team helped us decide to turn on tabs-on-demand + do tab restore by default, Bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=711193">711193</a>. This change will make interacting with the browser more responsive after startup, help <a href="https://wiki.mozilla.org/Performance/MemShrink">MemShink</a> and not trigger as much captive wifi portal badness.</p>
-
-<p>Frontend people are busy adding telemetry to everything that matters, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=671038">bug 671038</a>. Some of this has already paid off in terms of us catching a tab animation regression in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=724349">bug 724349</a>. We plan to switch our awesomebar searching from SQL to an FTS. If you are a text-search/tokenizer expert, perhaps you help us with <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=725821">bug 725821</a>. There is also a lot of activity on making various sync IO things async, see the <a href="https://wiki.mozilla.org/Performance/Snappy/2012-02-09#Projects">meeting notes</a> for complete details.</p>
-
-<p>Brian Bondy posted an <a href="http://www.brianbondy.com/blog/id/127/">update</a> documenting his two-week rampage through Firefox startup inefficiencies on Windows. Brian&#8217;s blog post contains tips on xperf, Firefox profiler, about:startup - <a href="http://www.brianbondy.com/blog/id/127/">read it</a>.</p>
-
-<p>The networking team is busy nuking the big cache lock, see bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=717761">717761</a>.</p>
-
-<p>Olli has landed most of the cycle collector fixes. Telemetry shows a dramatic reduction in cycle collection times for Firefox 13. He and Andrew investigating the remaining causes of long CC times.</p>
-
-<p>I&#8217;ll end this post with a pretty picture demonstrating recent cycle collection improvements. <a href="/assets/images/2012-02-09-snappy-feb-9-blame-canada/cc13_12.png"> <img src="/assets/images/2012-02-09-snappy-feb-9-blame-canada/cc13_12.png" alt="" /></a> * y: frequency, x: milliseconds</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/8/">&larr; Older</a>
@@ -678,6 +704,10 @@ This freeze can last anywhere from a few milliseconds on an unburdened computer 
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/03/25/snappy-number-53-faster-startup/">snappy #53: Faster: Startup, Image Decoding, Touchpad Input. Smoother Animations</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/03/11/living-with-octopress/">Blogging with Octopress</a>
       </li>
     
@@ -691,10 +721,6 @@ This freeze can last anywhere from a few milliseconds on an unburdened computer 
     
       <li class="post">
         <a href="/blog/2013/02/17/router-assisted-automatic-wake-on-lan-plus-suspend/">Router-Assisted Automatic Wake-on-LAN + Suspend</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/02/17/10w-intel-i5-desktop/">10W Intel i5 Desktop</a>
       </li>
     
   </ul>

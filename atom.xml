@@ -4,7 +4,7 @@
   <title><![CDATA[All About Performance]]></title>
   <link href="http://taras.glek.net/atom.xml" rel="self"/>
   <link href="http://taras.glek.net/"/>
-  <updated>2013-03-11T17:44:09-07:00</updated>
+  <updated>2013-03-25T06:42:43-07:00</updated>
   <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -12,6 +12,45 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[snappy #53: Faster: Startup, Image Decoding, Touchpad Input. Smoother Animations]]></title>
+    <link href="http://taras.glek.net/blog/2013/03/25/snappy-number-53-faster-startup/"/>
+    <updated>2013-03-25T06:25:00-07:00</updated>
+    <id>http://taras.glek.net/blog/2013/03/25/snappy-number-53-faster-startup</id>
+    <content type="html"><![CDATA[<p>We had a few slow snappy updates cycles recently. This week a bunch of longer-term stuff came together.</p>
+
+<h3>Responsiveness</h3>
+
+<p>Joe Drew taught Firefox to decode images on multiple threads. It took a mere 29 patches in <a title="Multithreaded image decoding" href="https://bugzilla.mozilla.org/show_bug.cgi?id=716140">bug 716140</a>. This should speed up page-load and improve tab-switch times. This task was considered too hard a year ago when Snappy people were discussing potential improvements.</p>
+
+<p>Masayuki Nakano improved Firefox scrolling responsiveness on modern touchpads in <a title="Scrolling using some high-resolution-scroll aware touchpads feels slow" href="https://bugzilla.mozilla.org/show_bug.cgi?id=829952">bug 829952</a>. Dealing with scroll-events on Windows is a mess. It&#8217;s nice when we make forward progress in this area.</p>
+
+<p>Marco Bonardo fixed a mysterious cause of main thread IO I ran into in <a title="Avoid repeated execution of expensive daysOfHistory query" href="https://bugzilla.mozilla.org/show_bug.cgi?id=830423">bug 830423</a>. I ran into this issue because I compulsively navigate to <code>about:telemetry</code> in Firefox and look in &#8216;Slow SQL Statements&#8217; and &#8216;Browser Hang&#8217; sections. I encourage readers of this blog to check out that data whenever Firefox is under-performing.</p>
+
+<h3>Startup</h3>
+
+<ul>
+<li><a title="Use readahead for ordered jar files such as omni.ja. Should be ~10% startup speedup" href="https://bugzilla.mozilla.org/show_bug.cgi?id=810151">bug 810151</a> + <a title="Use fadvise() to speed up cookie db load" href="https://bugzilla.mozilla.org/show_bug.cgi?id=810454">bug 810454</a> - Aaron Klotz implemented omnijar + cookie readahead.</li>
+<li><a title="Fold NSPR and NSS into mozjs (for Windows) or libxul (for other platforms)" href="https://bugzilla.mozilla.org/show_bug.cgi?id=648407">bug 648407</a> - Mike Hommey folded libraries for faster startup. If I&#8217;m reading <a title="Update removed-files after bug 648407" href="https://bugzilla.mozilla.org/show_bug.cgi?id=852068">bug 852068</a> correctly, Firefox now loads 7 fewer libraries on startup. My rough rule of thumb is that each (small) file adds ~30ms to spinning-disk startup so this should net >200ms in startup savings.</li>
+</ul>
+
+
+<p>Cumulative startup improvements are notoriously difficult to predict + measure, but I suspect that above changes should make for a >=10% speedup in Firefox 22 start over previous releases. We&#8217;ll be watching telemetry data in the coming weeks.</p>
+
+<h3>Smoothness</h3>
+
+<p><a title="Consider getting rid of the delay line filter stuff in timer thread" href="https://bugzilla.mozilla.org/show_bug.cgi?id=590422">bug 590422</a> - Avi Halachmi is continuing on his quest to make Firefox animate smoothly. This is another tricky step towards smoother animations in Firefox. Since landing this, Avi already embarked on the next gecko-level animation smoothness improvement.</p>
+
+<p>Marco Bonardo spotted some potential for contention in recent DOM Local Storage optimizations. Vladan Djeric landed corrections in <a title="LocalStorage performance improvements" href="https://bugzilla.mozilla.org/show_bug.cgi?id=842852">bug 842852</a>.</p>
+
+<h3>Throughput improvements</h3>
+
+<p>Ehsan Akhgari reduced allocator contention in <a title="Prevent firing timers from lock contention with the main thread" href="https://bugzilla.mozilla.org/show_bug.cgi?id=733277">bug 733277</a>.</p>
+
+<p>Tim Taubert taught Firefox to warm up newtab connections on hover <a title="[New Tab Page] Speculatively open connections for sites when hovering them" href="https://bugzilla.mozilla.org/show_bug.cgi?id=790882">bug 790882</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Blogging with Octopress]]></title>
@@ -527,45 +566,6 @@ Omnijar readhead is next, in <a title="Use readahead for ordered jar files such 
     <content type="html"><![CDATA[<p>Jeff Muizelaar may not have cut tab switch times in half in my <a href="http://taras.glek.net/blog/2012/10/15/snappy-40-faster-tabswitching-startup-analysis/">last update</a>. The overhead moved to a later part of the process that we were not measuring before the change landed. We&#8217;ll be able to tell the magnitude of the tab-switch improvement was by landing bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=800031">800031</a> on Aurora.</p>
 
 <p>Matt Woodrow reduced tab-close animation jank in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=750417">bug 750417</a>.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Snappy #40: Faster tabswitching, startup analysis]]></title>
-    <link href="http://taras.glek.net/blog/2012/10/15/snappy-40-faster-tabswitching-startup-analysis/"/>
-    <updated>2012-10-15T03:25:14-07:00</updated>
-    <id>http://taras.glek.net/blog/2012/10/15/snappy-40-faster-tabswitching-startup-analysis</id>
-    <content type="html"><![CDATA[<p>This was an interesting week. On one hand all performance aspects of tab strip work were suspended until end of year on the frontend team, on the other impressive gains were made on platform side of things.</p>
-
-<p><strong>Jeff Muizelaar cut tab switch times in half</strong></p>
-
-<p>Data came in on Jeff&#8217;s optimization I mentioned <a href="http://taras.glek.net/blog/2012/10/04/snappy-39/">last week</a>: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=792199">bug 792199</a>. This halved our median tab switch time. Since this also landed at the end of our 18 cycle, a comparison between 18/19 Nightlies gives us an idea of how this changed our tab switching times overall. Note the actual difference would be greater since both 18 &amp; 19 include data points with Jeff&#8217;s patch, but the majority of data in 18 is without Jeff&#8217;s patch.</p>
-
-<p><a href="http://taras.glek.net/assets/images/2012-10-15-snappy-40-faster-tabswitching-startup-analysis/fx_tab_switch_update.png"><img src="http://taras.glek.net/assets/images/2012-10-15-snappy-40-faster-tabswitching-startup-analysis/fx_tab_switch_update.png" alt="" /></a></p>
-
-<p><em>Black: v18, Blue V19. X-axis represents time in milliseconds to do a tab switch, excluding time to paint.</em></p>
-
-<p>Above graph shows a shift towards fast tab switch times across the board with particularly nice improvements in the tail. See the corresponding 50% fall in medians on our <a href="https://metrics.mozilla.com/data/content/pentaho-cdf-dd/Render?solution=metrics2&amp;path=%2Ftelemetry&amp;file=telemetryEvolution.wcdf&amp;bookmarkState={%22impl%22%3A%22client%22%2C%22params%22%3A{%22referenceDate%22%3A%222012-10-09%22%2C%22appNameParameter%22%3A%22[Application].[Firefox]%22%2C%22osParameter%22%3A%22[OS].[WINNT]%22%2C%22channelParameter%22%3A%22[Channel].[nightly]%22%2C%22reasonParameter%22%3A%22[Reason].[saved-session]%22%2C%22histogramParameter%22%3A%22[Histogram].[FX_TAB_SWITCH_UPDATE_MS]%22%2C%22histogramPopupTools%22%3A%22%22%2C%22duplicateHistogram%22%3A%22%23duplicateHistogram%22%2C%22medianButtonParam%22%3A0%2C%22scatterChart%22%3A%22%22}}">telemetry evolution dashboard</a>.</p>
-
-<p>Unfortunately, Jeff&#8217;s patch was too good. Instead of decoding less images, it ended up decoding no images at all causing unnecessary flicker when switching tabs. The patch got backed out, but this accident provided us with a good baseline of how fast tab switching can be without decoding images :) Jeff landed a correction in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=799335">bug 799335</a>.</p>
-
-<p>As I mentioned above graph does not include paint times. Jeff also landed bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=800031">800031</a> which measures the complete tab switch duration (including paint time).</p>
-
-<p><a href="http://taras.glek.net/assets/images/2012-10-15-snappy-40-faster-tabswitching-startup-analysis/fx_tab_switch_total.png"><img src="http://taras.glek.net/assets/images/2012-10-15-snappy-40-faster-tabswitching-startup-analysis/fx_tab_switch_total.png" alt="" /></a></p>
-
-<p><strong>Timothy Nikkel&#8217;s Visible Image Decoding</strong></p>
-
-<p>Currently Firefox tends to decode too many images while browsing image-heavy sites. This hurts our total memory consumption, increases tab switch times, etc. Timothy has been posting tests builds in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=689623">bug 689623</a> which try to only decode visible images. Please give those builds a spin if you suffer from poor Firefox performance while browsing image-heavy sites.</p>
-
-<p><strong>Startup Time Profiling</strong></p>
-
-<p>Benoit Girard taught the the Gecko profiler how to capture most of browser startup in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=799638">799638</a>. This might be the most important achievement so far in tackling startup problems caused by extensions. This means that every Nightly user (and in a few weeks every Firefox user) can install the <a href="https://developer.mozilla.org/en-US/docs/Performance/Profiling_with_the_Built-in_Profiler">Gecko profiler</a>, click &#8216;Profile Startup&#8217; and get a report on what makes Firefox startup slow. This can then be posted to bugzilla, <a href="http://support.mozilla.com/">SUMO</a>, <a href="https://addons.mozilla.org/">AMO </a>or this blog so we can easily identify problematic addons, problematic APIs used by addons and the extent of startup overhead contributed by them.</p>
-
-<p>Making extension-aware startup profiling easy has incredible potential for making Firefox startup faster for extension-addicted users. If you can&#8217;t wait to try this out, you can install a <a href="https://raw.github.com/bgirard/Gecko-Profiler-Addon/2d0c32507f21d4e64a5eb3bff091f23d21528ad5/geckoprofiler.xpi">development snapshot</a> of the profiler extension. Feel free to post your startup profile links in a comment.</p>
-
-<p><strong>Proxy-detection</strong></p>
-
-<p>As I mentioned last time, Patrick McManus fixed proxy-related jank in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=769764">bug 769764</a>. Last week Vladan Djeric analyzed our chromehang data and confirmed that proxy jank went from being one of our top offenders to not happening.</p>
 ]]></content>
   </entry>
   
