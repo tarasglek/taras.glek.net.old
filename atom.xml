@@ -4,7 +4,7 @@
   <title><![CDATA[All About Performance]]></title>
   <link href="http://taras.glek.net/atom.xml" rel="self"/>
   <link href="http://taras.glek.net/"/>
-  <updated>2013-03-26T04:28:58-07:00</updated>
+  <updated>2013-03-26T04:33:41-07:00</updated>
   <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -20,7 +20,7 @@
     <id>http://taras.glek.net/blog/2013/03/26/snappy-number-54-snappy-discussion-in-paris</id>
     <content type="html"><![CDATA[<h3>Meeting In Paris</h3>
 
-<p>Last week Snappy people met in Paris at IRILL(http://www.irill.org/about). IRILL is one of the best small work venues I&#8217;ve attended. I like small venues because they encourage conversations.</p>
+<p>Last week Snappy people met in Paris at <a href="http://www.irill.org/about">IRILL</a>. IRILL is one of the best small work venues I&#8217;ve attended. I like small venues because they encourage conversations.</p>
 
 <p>Excellent Parisian food did not hurt :)</p>
 
@@ -42,7 +42,7 @@
 <li>Vladan Djeric: <a href="https://etherpad.mozilla.org/chromehangsMarch">Chromehang prioritization etherpad</a></li>
 <li>Vladan Djeric: <a href="http://people.mozilla.com/~vdjeric/flashDiscussionDiagram.JPG">Flash-caused hangs whiteboard</a></li>
 <li>Jet: Shumway Demo</li>
-<li>David Teller :Introduction to Promises, Task.jsm</li>
+<li>David Teller: Introduction to Promises, Task.jsm</li>
 <li>Lawrence Mandel: Discussion on how to accomplish reviews faster. Lawrence will <a href="http://lawrencemandel.com/">blog</a> notes on this soon.</li>
 <li>Taras Glek + Lawrence Mandel: <a href="http://lawrencemandel.com/2013/03/21/no-more-snappy-meetings-and-other-changes-from-the-snappy-team/">Improving coordination + focus</a></li>
 <li>Taras Glek: <a href="http://people.mozilla.org/~tglek/pydoop2013/">Telemetry reboot plan + doing hadoop map/reduce in python</a></li>
