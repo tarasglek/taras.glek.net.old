@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="I got this question in the mail today. Seems like a simple enough question, but grep won&#8217;t provide that answer :) It also happens to be an &hellip;">
+  <meta name="description" content="After a few weeks of mindnumbing work on treehydra gutts, I finally have something exciting to talk about! We will be presenting  Dehydra at the GCC &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,60 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2008/03/17/dehydra-world-tour/">Dehydra World Tour</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-03-17T06:57:35-07:00" pubdate data-updated="true">Mar 17<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>After a few weeks of mindnumbing work on treehydra gutts, I finally have something exciting to talk about!</p>
+
+<p>We will be presenting  <a href="http://wiki.mozilla.org/Dehydra_GCC">Dehydra</a> at the <a href="http://www.gccsummit.org/2008/">GCC Developer&#8217;s Summit</a> in lovely Ottawa. The GCC version of Dehydra exceeded all of my expectations, so it will be exciting to meet awesome GCC hackers who lay the groundwork to make this possible. Got suggestions for other venues to present Dehydra?</p>
+
+<p><strong>Packaging Help Needed</strong></p>
+
+<p>I feel that the Dehydra concept is getting mature enough for a 1.0 release. Recently baked GCC 4.3 means I&#8217;ll be able to distribute a 4.3-specific <a href="http://hg.mozilla.org/users/tglek_mozilla.com/gcc-moz-plugin-mq/">plugin patch</a>(currently it&#8217;s against trunk, aka 4.4to-be). Now I need README, LICENSE, configure files, etc.</p>
+
+<p>I will need help with packaging dehydra + patched gcc into .dpkg and .rpm files. Leave a comment, email me/<a href="https://lists.mozilla.org/listinfo/dev-static-analysis">static analysis list</a> or poke me in #mmgc on irc.mozilla.org if you can help with packaging.</p>
+
+<p><strong>Logo/Mascot Wanted</strong></p>
+
+<p>Since every serious project has a cool mascot, it would be cool to get one for Dehydra. I&#8217;d be curious to see what people think could symbolize a code scanning monster that makes grep feel inadequate. I have a feeling a cartoon version of a giant <a href="http://photos-b.ak.facebook.com/photos-ak-sf2p/v181/152/124/53600064/n53600064_30549377_7914.jpg">Heavy Metal Duck</a> might be it, but I haven&#8217;t made up my mind yet.</p>
+
+<p><strong>Treehydra What?</strong></p>
+
+<p>Treehydra is a work-in-progress name for the low-level equivalent of Dehydra. Currently it is built as separate GCC plugin. I haven&#8217;t yet made up mind on whether Treehydra will end up extending Dehydra or stay a separate tool. Since treehydra needs dehydra for bootstrap, they&#8217;ll stay separate for now.</p>
+
+<p>Last week I managed to run treehydra to completition on my mozilla checkout and walk the resulting AST in JS correctly. Now comes the fun part of making it do useful tricks.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -618,64 +672,6 @@ I think the best bet with exceptions would be to start working on them during th
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2007/12/11/switching-to-exceptions-makes-head-spin/">Switching to Exceptions: Makes Head Spin</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2007-12-11T04:10:19-08:00" pubdate data-updated="true">Dec 11<span>th</span>, 2007</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><strong>Typical</strong></p>
-
-<p>It seems that there are 3 stages to doing a rewrite in Moz:</p>
-
-<ol>
-<li>Start a new tool. Make sure that it can rewrite some trivial testcases. Add lots of asserts for cases you are unsure about.</li>
-<li>Run tool on Mozilla and fix crashes caused by above asserts. Get 80% of the code rewriting correctly.</li>
-<li>Get the other 20% rewriting. This often involves major overhauls to rewriting logic due to patterns that weren&#8217;t expected when the spec was written
-Usually stage 3 is a few times harder than 2. For garburator rewriting got really hard in stage 3. 90% of my time ended up being spent in stage 3 due to fun issues like figuring out what to do with <a href="http://benjamin.smedbergs.us/blog/2007-11-08/perils-in-rewriting/">unforeseen</a>(in spec) combination of references and nsCOMPtr&lt;>s.</li>
-</ol>
-
-
-<p><strong>Exceptions</strong></p>
-
-<p>With exceptions step 2 is already getting hard. So far I&#8217;ve had to extend elsa to support pattern matching,  and reworked the code patcher to support recursive rewriting.</p>
-
-<p>Now looks like I&#8217;ll need to do some flow-sensitive analysis to rewrite cases like <a href="http://lxr.mozilla.org/seamonkey/source/xpcom/base/nsMemoryImpl.cpp#217">nsMemoryImpl::FlushMemory</a>. I&#8217;m not sure if it is possible to automatically deal with functions like <a href="http://lxr.mozilla.org/seamonkey/source/xpcom/base/nsExceptionService.cpp#290">nsExceptionService::DoGetExceptionFromProvider</a>.</p>
-
-<p>Also, I&#8217;m not yet rewriting code to be bugfree, just trying to get it to compile. Once exceptioned code compiles, step two will be to statically check code to verify that it is exception-safe and convert it to RAII or something.</p>
-
-<p>Here is an <a href="http://people.mozilla.org/~tglek/xpcom.diff">current patch</a> for xpcom/ produced by thrower. At the moment there are still a lot of pattern matches to be added. It mostly handles rv = foo(); if (NS_FAILED(rv)) and a few other simple <a href="http://hg.mozilla.org/oink/?file/fbbcc3e9056b/thrower_tests/">cases</a>.</p>
-
-<p>This is exciting stuff, but really hard, so if anyone has exciting problem solving ideas feel free to ping me.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/23/">&larr; Older</a>
@@ -693,6 +689,10 @@ Usually stage 3 is a few times harder than 2. For garburator rewriting got reall
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/03/26/snappy-number-54-snappy-discussion-in-paris/">Snappy #54: Snappy Discussion in Paris</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/03/25/snappy-number-53-faster-startup/">snappy #53: Faster: Startup, Image Decoding, Touchpad Input. Smoother Animations</a>
       </li>
     
@@ -706,10 +706,6 @@ Usually stage 3 is a few times harder than 2. For garburator rewriting got reall
     
       <li class="post">
         <a href="/blog/2013/02/22/snappy-number-51-smoothing-tab-animations/">Snappy #51: Smoothing Tab Animations</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/02/17/router-assisted-automatic-wake-on-lan-plus-suspend/">Router-Assisted Automatic Wake-on-LAN + Suspend</a>
       </li>
     
   </ul>

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: snappy | All About Performance]]></title>
   <link href="http://taras.glek.net/blog/categories/snappy/atom.xml" rel="self"/>
   <link href="http://taras.glek.net/"/>
-  <updated>2013-03-25T07:03:29-07:00</updated>
+  <updated>2013-03-26T04:28:58-07:00</updated>
   <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -12,6 +12,49 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Snappy #54: Snappy Discussion in Paris]]></title>
+    <link href="http://taras.glek.net/blog/2013/03/26/snappy-number-54-snappy-discussion-in-paris/"/>
+    <updated>2013-03-26T04:16:00-07:00</updated>
+    <id>http://taras.glek.net/blog/2013/03/26/snappy-number-54-snappy-discussion-in-paris</id>
+    <content type="html"><![CDATA[###Meeting In Paris
+Last week Snappy people met in Paris at IRILL(http://www.irill.org/about). IRILL is one of the best small work venues I've attended. I like small venues because they encourage conversations.
+
+Excellent Parisian food did not hurt :)
+
+###Workweek Presentations
+
+I was impressed by the number and quality of presentations this time. I suspect having a presentation-friendly venue helped.
+
+Talks/discussions/notes (please leave a comment if I missed a talk):
+
+* Gabriele Svelto: [Firefox OS Performance](http://people.mozilla.org/~tglek/paris2013/b2g_slides.pdf)
+* Benoit Girard: [profiler improvements](http://benoitgirard.wordpress.com/2013/03/25/profiler-snappy-work-week/)
+* Nathan Froyd + Avi Halachmi: [Talos flaws + improvements to focus on](http://blog.mozilla.org/nfroyd/2013/03/25/perf-workweek-talos-discussion/)
+* Nathan Froyd: [How Firefox Makes Your JavaScript Run Fast](http://people.mozilla.com/~nfroyd/paris-workweek-2013/)
+* Julian Seward: [Stack unwinding for Gecko Profiler](http://people.mozilla.org/~tglek/paris2013/sps_breakpad.pdf)
+* Julian Seward: ['Harmless' data races in Gecko](http://people.mozilla.org/~tglek/paris2013/data_races.pdf)
+* Marco: [SQLite pitfalls](http://mozilla.bonardo.net/paris2013/)
+* Vladan Djeric: [Firefox startup analysis](http://people.mozilla.com/~vdjeric/perfweek_paris2013/)
+* Vladan Djeric: [Chromehang prioritization etherpad](https://etherpad.mozilla.org/chromehangsMarch)
+* Vladan Djeric: [Flash-caused hangs whiteboard](http://people.mozilla.com/~vdjeric/flashDiscussionDiagram.JPG)
+* Jet: Shumway Demo
+* David Teller :Introduction to Promises, Task.jsm
+* Lawrence Mandel: Discussion on how to accomplish reviews faster. Lawrence will [blog](http://lawrencemandel.com/) notes on this soon.
+* Taras Glek + Lawrence Mandel: [Improving coordination + focus](http://lawrencemandel.com/2013/03/21/no-more-snappy-meetings-and-other-changes-from-the-snappy-team/)
+* Taras Glek: [Telemetry reboot plan + doing hadoop map/reduce in python](http://people.mozilla.org/~tglek/pydoop2013/)
+
+
+###Team Activity
+
+For a team activity we walked to the [Paris Catacombes](http://en.wikipedia.org/wiki/Catacombs_of_Paris). 
+
+<img src="https://lh6.googleusercontent.com/-dUluprOFvY0/UUoRsBAC1oI/AAAAAAAAIj8/WjOYb7uHij4/s580/20130320_123837.jpg" title="Relevance to writing software? Multi-million line codebases are boneyards of some kind" >
+
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[snappy #53: Faster: Startup, Image Decoding, Touchpad Input. Smoother Animations]]></title>
@@ -113,28 +156,6 @@ We need help testing the new functionality, please see the link above for detail
 
 Unfortunately, we are still waiting on <a title="Add Aaron Klotz's blog to Planet Mozilla" href="https://bugzilla.mozilla.org/show_bug.cgi?id=814095">bug 814095</a> to get his blog syndicated to planet.
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Snappy #50]]></title>
-    <link href="http://taras.glek.net/blog/2013/01/28/snappy-number-50-misc-speedups/"/>
-    <updated>2013-01-28T16:00:00-08:00</updated>
-    <id>http://taras.glek.net/blog/2013/01/28/snappy-number-50-misc-speedups</id>
-    <content type="html"><![CDATA[###Graphics
-In some cases Direct2D-accelerated drawing is slower than the non-accelerated path. Jeff Muizelaar fixed a severe gradient 'hang' in <a title="Avoid hitting D2D slow path when drawing radial gradients from css" href="https://bugzilla.mozilla.org/show_bug.cgi?id=823147">bug 823147</a>.
-
-Avi Halachmi diagnosed a significant menu performance issue in <a title="Menu items slow to paint/respond after peeking their sub-menu popups" href="https://bugzilla.mozilla.org/show_bug.cgi?id=832641">bug 832641</a>, this was promptly fixed by Matt Woodrow.
-
-###Misc Pauses
-Vladan Djeric [blogged](https://blog.mozilla.org/vdjeric/2013/01/24/add-on-performance-problems/) about top main-thread SQL issues contributed by addons. Vladan also produced a [chromehang](http://people.mozilla.com/~vdjeric/DecJanHangs.txt) report for last 2 months.
-
-Ehsan Akhgari fixed a *chromehang* caused by leftover debug code: <a title="Multi-second hang during CollectNewLoadedModules" href="https://bugzilla.mozilla.org/show_bug.cgi?id=830765">bug 830765</a>.
-
-Justin Lebar fixed an issue where telemetry memory reporting code was accidentally triggering expensive 'release memory to OS' operations: <a title="Extremely long pause while collecting telemetry information on the main thread" href="https://bugzilla.mozilla.org/show_bug.cgi?id=789975">bug 789975</a>.
-
-###Shutdown
-Sometimes Firefox takes a long time to shutdown. We also have a timer that regularly triggers cycle collection. Olli Pettay disabled this timer during shutdown in <a title="Timer based CC occurring on shutdown" href="https://bugzilla.mozilla.org/show_bug.cgi?id=822849">bug 822849</a>.
 ]]></content>
   </entry>
   

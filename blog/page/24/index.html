@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="This is an update on the ongoing deCOMtamination work from the automated rewriting perspective. I think it&#8217;s pretty exciting that Mozilla is &hellip;">
+  <meta name="description" content="I&#8217;m going to be on vacation until September 25th. I started the day by planning out how to do the rewriting tool to implement Benjamin&#8217;s &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,44 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2007/09/12/garburator-another-day-another-rewrite-tool/">Garburator: Another Day, Another Rewrite Tool</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-09-12T05:54:45-07:00" pubdate data-updated="true">Sep 12<span>th</span>, 2007</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I&#8217;m going to be on vacation until September 25th. I started the day by planning out how to do the rewriting tool to implement Benjamin&#8217;s <a href="http://wiki.mozilla.org/XPCOMGC/Stack_Pointers">spec.</a> I&#8217;ll have to add more position information to elsa to do things properly and that might take a week or two. However, I&#8217;m into instant gratification so I wrote up a hacky prototype that results in a patch <a href="http://people.mozilla.org/~tglek/garburator.diff">like this.</a></p>
+
+<p>Say hi to garburator, a tool that will assist with the reference counting -> MMgc transition. The tool is less than 100 lines long, so someone could finish the hacky version while I am away. Either that or one could teach elsa to keep detailed position information in declarations and identifier names and clean up the postvisitS_decl() method in garburator.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -765,99 +803,6 @@ I&#8217;m not sure how much of these features I will work on, but they are relat
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2007/06/12/undoing-cpp-expansion-in-3-simple-steps-say-hello-to-easier-c-rewriting/">Undoing CPP Expansion in 3 Simple Steps. Say &#8220;Hello&#8221; to Easier C++ Rewriting.</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2007-06-12T03:26:01-07:00" pubdate data-updated="true">Jun 12<span>th</span>, 2007</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>This is incredibly exciting: I believe that I finally solved the messy and mind-numbingly boring CPP/C++ integration problem! Having code displaced or generated due to CPP-expansion should no longer be a fatal problem for <a href="http://wiki.mozilla.org/Squash">Squash</a>. I believe macro-expansion is (or was) the single biggest problem between me and large-scale automated refactoring of the Mozilla codebase.</p>
-
-<p>What&#8217;s even more exciting is that I think my solution is both incredibly simple to implement and more general than prior work. Most other tools combine the CPP expansion &amp; C parsing into a single step and then integrate (or should I say violently shove?) CPP constructs into the AST. This results in complete lack of separation between preprocessing and program analysis. For example, due to this tight coupling existing solutions were useless to me because the fancy CPP logic could not be separated from the C parser. I would also have a hard time submitting a more convoluted C++ parser upstream to the Elsa maintainer.</p>
-
-<p><strong>Design</strong></p>
-
-<p>There are three parts to my solution:</p>
-
-<ol>
-<li><em>Critical component</em>. A CPP expansion undo-log injected during CPP-expansion by a modified C preprocessor (upcoming version of MCPP). The statements are wrapped in C comments such that the preprocessed result can be parsed by any C/C++/etc parser or compiler. Implementation-wise this is the hardest part since MCPP(as most other C proprocessors) was never designed it keep track of macro expansion info.</li>
-<li>A small modification to the Elsa lexer to parse the undo-log and set it aside in a separate data structure.</li>
-<li><em>Tricky</em>. A function that utilizes the cpp undo-log to map the preprocessed source locations to the unpreprocessed ones. This is a a ridiculously simple solution to a tricky design problem of how to efficiently advertise the fact that every AST node has at least 2 different source positions (pre expansion, post expansion &amp; a stack of positions resulting from expanding nested macros).
-The MCPP maintainer is almost done with 1. I have a prototype implementation of 2 &amp; 3 weighing in at less than 500lines. Now that the design phase is complete, the amount of changes to Elsa is trivial, so I should be done with those real soon now.</li>
-</ol>
-
-
-<p><strong>Looking Ahead</strong></p>
-
-<p>Now I need to modify Elsa to retain more precise source locations. This includes adding end-of-ast-node-location and adding positions to nodes(such as expressions) that don&#8217;t even have a start position at the moment. This combined with cpp-undo-log enhanced precise positions should allow for code rewrites to retain as much original source code as possible. This reduces the amount of ugly machine-generated code and results in better correctness (existing code is likely to work).</p>
-
-<p><strong>CPP Undo-log Example</strong></p>
-
-<p>The undo-log took a couple of tries to get right. Now macro-parameters have a notion of scope and sensible names. The following example features macro-induced column displacement and macro-expansion causing line shrinkage.</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>
-</span><span class='line'>#define NULL 0L
-</span><span class='line'>#define FOO(a, b) a + b
-</span><span class='line'>int i = NULL; int j;
-</span><span class='line'>int k = FOO(
-</span><span class='line'>FOO(NULL , 1),
-</span><span class='line'>2);
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Preprocessed version</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>
-</span><span class='line'># 1 "testcase4.c"
-</span><span class='line'>/*mNULL 1:8-1:15*/
-</span><span class='line'>/*mFOO 2:8-2:23*/</span></code></pre></td></tr></table></div></figure>
-
-
-<p>int i = /<em><NULL 3:8-3:12*/0L/*></em>/; # 3 &#8220;testcase4.c&#8221; int j; int k = /<em><FOO 4:8-6:3*//*!FOO#0-0 5:0-5:13*//*!FOO#0-1 6:1-6:2*//*<FOO#0-0*//*<FOO*//*!FOO#1-0*//*!FOO#1-1*//*<FOO#1-0*//*<NULL*/0L/*></em>//<em>></em>/ + /<em>&lt;FOO#1-1</em>/1/<em>></em>//<em>></em>//<em>></em>/ + /<em>&lt;FOO#0-1</em>/2/<em>></em>//<em>></em>/;</p>
-
-<p><strong>Conclusion</strong></p>
-
-<p>It took a lot to arrive at such a simple solution. I expect that all of my work is likely to end up upstream in BSD-licensed projects: MCPP &amp; and Elsa/Oink. I sincerely hope that other people will be able to build on it for their CPP-infested analysis needs and avoid the unbearable mind-numbing discomfort associated with making CPP play along.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/25/">&larr; Older</a>
@@ -875,6 +820,10 @@ The MCPP maintainer is almost done with 1. I have a prototype implementation of 
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/03/26/snappy-number-54-snappy-discussion-in-paris/">Snappy #54: Snappy Discussion in Paris</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/03/25/snappy-number-53-faster-startup/">snappy #53: Faster: Startup, Image Decoding, Touchpad Input. Smoother Animations</a>
       </li>
     
@@ -888,10 +837,6 @@ The MCPP maintainer is almost done with 1. I have a prototype implementation of 
     
       <li class="post">
         <a href="/blog/2013/02/22/snappy-number-51-smoothing-tab-animations/">Snappy #51: Smoothing Tab Animations</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/02/17/router-assisted-automatic-wake-on-lan-plus-suspend/">Router-Assisted Automatic Wake-on-LAN + Suspend</a>
       </li>
     
   </ul>

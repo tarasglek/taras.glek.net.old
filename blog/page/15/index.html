@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="In an earlier post I described my Fiji hack: how to use some nasty instrumentation to spit out ld scripts to speed up cold startup. This week I tried &hellip;">
+  <meta name="description" content="Dietrich blogged a &#8220;wake up and smell the startup&#8221; executive overview of startup issues caused by our extension practices. This post is a &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,85 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/03/11/extensions-startup/">Extensions & Startup</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-03-11T03:20:35-08:00" pubdate data-updated="true">Mar 11<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Dietrich <a href="http://autonome.wordpress.com/2010/03/10/firefox-extensions-and-performance/">blogged</a> a &#8220;wake up and smell the startup&#8221; executive overview of startup issues caused by our extension practices. This post is a &#8220;numbers&#8221; followup. For this experiment I installed a brand-spankin-new copy of Linux Firefox 3.6. Firefox is installed on a 7200 hard drive, the rest of my system lives on an SSD. The CPU is core2duo, keep in mind these numbers will be significantly worse for people running on netbooks and other common hardware. The numbers vary +/- 150ms, but the general picture is pretty clear.</p>
+
+<p><strong>Results</strong></p>
+
+<p><strong>Startup Time</strong></p>
+
+<p>Firefox 3.6 with no extensions:
+2240ms</p>
+
+<p>+<a href="https://addons.mozilla.org/en-US/firefox/addon/1865">Adblock Plus</a> (no subscriptions)
+2538ms</p>
+
+<p>+<a href="https://addons.mozilla.org/en-US/firefox/addon/3006">Video Download Helper</a>
+2727ms</p>
+
+<p>+<a href="https://addons.mozilla.org/en-US/firefox/addon/10900">Personas</a>
+3220ms</p>
+
+<p>+<a href="https://addons.mozilla.org/en-US/firefox/addon/748">Greasemonkey</a>
+3300ms</p>
+
+<p>+EasyList subscription for adblock
+4044ms
+I just doubled cold startup time for Firefox by merely adding 4 extensions. It takes weeks or even months of developer time to shave off every 100ms off Firefox startup, but mere seconds to undo any of those gains by installing extensions. These are just the top-4 extensions in the list (presumably they are higher quality too), I&#8217;m sure there are lots of other extensions with more drastic performance hits.</p>
+
+<p>Dietrich&#8217;s <a href="http://autonome.wordpress.com/2010/03/10/firefox-extensions-and-performance/">post</a> details some of the remedies that should reduce the startup cost of extensions. For the inquisitive minds: I used <a href="http://taras.glek.net/blog/2009/10/23/studying-library-io-systemtap-style/">SystemTap</a> to produce a <a href="http://people.mozilla.com/~tglek/startup/extensions_report.txt">report</a> of files read by Firefox on startup ordered by their startup cost.</p>
+
+<p><strong>Update:</strong> Dietrich asked me to summarize warm startup too:</p>
+
+<ul>
+<li>Without extensions: 550ms</li>
+<li>With above Extensions: 1800ms
+Note that this is a developer blog, so by &#8220;remedies&#8221; I meant &#8220;things developers can do to&#8221;. There is little normal users can do short of complaining to the extension authors.</li>
+</ul>
+
+
+<p>This post isn&#8217;t meant to shame specific extension authors into speeding up their extensions. The aim is to show that a measurable percentage of startup is due to extensions and that we need to:</p>
+
+<ol>
+<li>Educate extension developers about it</li>
+<li>Provide better tools to measure slowdowns caused by extensions</li>
+<li>Make sure that the Firefox side of extension handling is sufficiently efficient</li>
+</ol>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -627,43 +706,6 @@ What am I testing? I am measuring the time between invoking the browser until a 
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/12/03/rooter-hardware/">Rooter Hardware</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-12-03T03:11:00-08:00" pubdate data-updated="true">Dec 3<span>rd</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><div class='post'>
-Rooter - British pronunciation of router. This is post describes the hardware in my Atom router.<br /><br />I wanted a low power x86 router. There a number of things that I want to be able to do with it on my lan: DNS for naming/tracking a few dozen devices, VOIP, media serving with MPD + PulseAudio.<br /><br />I choose Atom because it is cheap to buy and to run. CPU/Mobo combos start at $50. There are two flavours of Atom boards: cheap ones with desktop chipsets and more expensive ones with laptop chipsets (which consume 50% less power).  I also needed to have 2 nics and to have gigE on the LAN side. Most boards ship with RealTek NICs which have absolutely terrible drivers. Unfortunately there is only one (<a href="http://www.tweaktown.com/reviews/1675/msi_im_945gse_a_mini_itx_fanless_atom_motherboard/index2.html">MSI IM-955GSE-A</a>) massmarket dual Intel-gigE board that doesn&#8217;t suck and it costs $150. <br /><br />Due to a misleading ebay listing I ended up buying MSI IM-955GSE-B on Ebay. It is the former boards&#8217; wierdo industrial sibling(no VGA, 1 gigE, but 6 serial ports!). It features a builtin DC2DC power supply which connects via a floppy-power-connector to a 12V DC source.<br /><br />To make up for a missing Ethernet port I opted for a USB2.0 100Mbit nic (Trendnet TU2-ET100,which uses the &#8216;asix&#8217; driver). This NIC is a true full-speed device and easily sustains 11MB/s transfers, so it&#8217;s perfectly good enough for a WAN port.<br /><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://ep.yimg.com/ca/I/yhst-27518546784426_2079_116848138" imageanchor="1" style="clear: left; float: left; margin-bottom: 1em; margin-right: 1em;"><img border="0" src="http://ep.yimg.com/ca/I/yhst-27518546784426_2079_116848138" /></a><br /></div>I got the cheapest Mini-ITX case on ebay. It came with a great 65W Seasonic power supply.<br /><br />Cost:<br />Case - $30<br />Mobo/CPU - $82<br />2GB RAM - $30<br />USB NIC - $18<br />Total: $160 <br /><br />I installed Fedora onto a spare 4gb usb stick. I am really happy with the resulting computer. It is very quiet because it has no moving fans.<br /><br /><b>PSU Hack</b> <br />Current 13W idle power draw is reasonable given that the PSU is likely underloaded and thus less efficient .<br />Currently, the mobo is powered by shorting the ON pins on the PSU(+ducttape for robustness) and a custom Molex2Berg adapter cable(made for me by a very resourceful friend). Eventually I plan to switch over the EEE power supplies as they are better specced for such low power motherboards. This would also avoid redundant dc2dc conversion going on in the case.<br /><br /><b>Power-On AC</b><br />I considered using busted netbook for rooter duties but laptops do not usually have the Power-On-AC option (or power-on-lan-activity). With power-on-ac Rooter turns On/Off just like any other appliance when one messes with the power cord. That&#8217;s as wife-safe as a computer can get :)</div>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/16/">&larr; Older</a>
@@ -681,6 +723,10 @@ Rooter - British pronunciation of router. This is post describes the hardware in
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/03/26/snappy-number-54-snappy-discussion-in-paris/">Snappy #54: Snappy Discussion in Paris</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/03/25/snappy-number-53-faster-startup/">snappy #53: Faster: Startup, Image Decoding, Touchpad Input. Smoother Animations</a>
       </li>
     
@@ -694,10 +740,6 @@ Rooter - British pronunciation of router. This is post describes the hardware in
     
       <li class="post">
         <a href="/blog/2013/02/22/snappy-number-51-smoothing-tab-animations/">Snappy #51: Smoothing Tab Animations</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/02/17/router-assisted-automatic-wake-on-lan-plus-suspend/">Router-Assisted Automatic Wake-on-LAN + Suspend</a>
       </li>
     
   </ul>

@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="My previous post on outparam rewriting described the wealth of functions that can be rewritten. Unfortunately, most functions in Mozilla are declared &hellip;">
+  <meta name="description" content="Typical It seems that there are 3 stages to doing a rewrite in Moz: Start a new tool. Make sure that it can rewrite some trivial testcases. Add lots &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,64 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2007/12/11/switching-to-exceptions-makes-head-spin/">Switching to Exceptions: Makes Head Spin</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-12-11T04:10:19-08:00" pubdate data-updated="true">Dec 11<span>th</span>, 2007</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><strong>Typical</strong></p>
+
+<p>It seems that there are 3 stages to doing a rewrite in Moz:</p>
+
+<ol>
+<li>Start a new tool. Make sure that it can rewrite some trivial testcases. Add lots of asserts for cases you are unsure about.</li>
+<li>Run tool on Mozilla and fix crashes caused by above asserts. Get 80% of the code rewriting correctly.</li>
+<li>Get the other 20% rewriting. This often involves major overhauls to rewriting logic due to patterns that weren&#8217;t expected when the spec was written
+Usually stage 3 is a few times harder than 2. For garburator rewriting got really hard in stage 3. 90% of my time ended up being spent in stage 3 due to fun issues like figuring out what to do with <a href="http://benjamin.smedbergs.us/blog/2007-11-08/perils-in-rewriting/">unforeseen</a>(in spec) combination of references and nsCOMPtr&lt;>s.</li>
+</ol>
+
+
+<p><strong>Exceptions</strong></p>
+
+<p>With exceptions step 2 is already getting hard. So far I&#8217;ve had to extend elsa to support pattern matching,  and reworked the code patcher to support recursive rewriting.</p>
+
+<p>Now looks like I&#8217;ll need to do some flow-sensitive analysis to rewrite cases like <a href="http://lxr.mozilla.org/seamonkey/source/xpcom/base/nsMemoryImpl.cpp#217">nsMemoryImpl::FlushMemory</a>. I&#8217;m not sure if it is possible to automatically deal with functions like <a href="http://lxr.mozilla.org/seamonkey/source/xpcom/base/nsExceptionService.cpp#290">nsExceptionService::DoGetExceptionFromProvider</a>.</p>
+
+<p>Also, I&#8217;m not yet rewriting code to be bugfree, just trying to get it to compile. Once exceptioned code compiles, step two will be to statically check code to verify that it is exception-safe and convert it to RAII or something.</p>
+
+<p>Here is an <a href="http://people.mozilla.org/~tglek/xpcom.diff">current patch</a> for xpcom/ produced by thrower. At the moment there are still a lot of pattern matches to be added. It mostly handles rv = foo(); if (NS_FAILED(rv)) and a few other simple <a href="http://hg.mozilla.org/oink/?file/fbbcc3e9056b/thrower_tests/">cases</a>.</p>
+
+<p>This is exciting stuff, but really hard, so if anyone has exciting problem solving ideas feel free to ping me.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -628,44 +686,6 @@ Checks 2 and 3 require the complete class hierachy of Mozilla so I finally made 
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2007/09/12/garburator-another-day-another-rewrite-tool/">Garburator: Another Day, Another Rewrite Tool</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2007-09-12T05:54:45-07:00" pubdate data-updated="true">Sep 12<span>th</span>, 2007</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I&#8217;m going to be on vacation until September 25th. I started the day by planning out how to do the rewriting tool to implement Benjamin&#8217;s <a href="http://wiki.mozilla.org/XPCOMGC/Stack_Pointers">spec.</a> I&#8217;ll have to add more position information to elsa to do things properly and that might take a week or two. However, I&#8217;m into instant gratification so I wrote up a hacky prototype that results in a patch <a href="http://people.mozilla.org/~tglek/garburator.diff">like this.</a></p>
-
-<p>Say hi to garburator, a tool that will assist with the reference counting -> MMgc transition. The tool is less than 100 lines long, so someone could finish the hacky version while I am away. Either that or one could teach elsa to keep detailed position information in declarations and identifier names and clean up the postvisitS_decl() method in garburator.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/24/">&larr; Older</a>
@@ -683,6 +703,10 @@ Checks 2 and 3 require the complete class hierachy of Mozilla so I finally made 
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/03/26/snappy-number-54-snappy-discussion-in-paris/">Snappy #54: Snappy Discussion in Paris</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/03/25/snappy-number-53-faster-startup/">snappy #53: Faster: Startup, Image Decoding, Touchpad Input. Smoother Animations</a>
       </li>
     
@@ -696,10 +720,6 @@ Checks 2 and 3 require the complete class hierachy of Mozilla so I finally made 
     
       <li class="post">
         <a href="/blog/2013/02/22/snappy-number-51-smoothing-tab-animations/">Snappy #51: Smoothing Tab Animations</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/02/17/router-assisted-automatic-wake-on-lan-plus-suspend/">Router-Assisted Automatic Wake-on-LAN + Suspend</a>
       </li>
     
   </ul>

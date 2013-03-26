@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Telemetry went live in Firefox Nightly builds over the weekend. Everyone who wants to contribute to making Firefox better now has an easy new way: &hellip;">
+  <meta name="description" content="I was pleased to see Mozilla static analysis mentioned on lwn. Yes indeed, the mailing list has been pretty dead (most of our communication happens &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,76 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/06/30/dehyratreehydra-static-analysis-thoughts/">Dehyra/Treehydra Static Analysis Thoughts</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-06-30T05:07:20-07:00" pubdate data-updated="true">Jun 30<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I was pleased to see Mozilla static analysis <a href="http://lwn.net/Articles/447916/">mentioned</a> on lwn. Yes indeed, the <a href="https://lists.mozilla.org/listinfo/dev-static-analysis">mailing list</a> has been pretty dead (most of our communication happens on irc.mozilla.org #static). I completely failed to build a community around my static analysis tools. Perhaps more people will try <a href="https://developer.mozilla.org/en/Dehydra">Dehydra</a> now that it&#8217;s <a href="http://packages.debian.org/experimental/dehydra">getting</a> into Debian. The hydras are still alive, <a href="http://hg.mozilla.org/rewriting-and-analysis/dehydra/">evidence</a> can be seen in the mercurial commit log. Development has slowed because the hydras are now considered to be feature-complete and my primary focus is elsewhere in Mozilla now.</p>
+
+<p>As to why open source static analysis has failed to take off, I have a few theories. I think the main problem is that static analysis requires a compiler/correctness/type-system-nerd/large-scale-development-nerd type personality. That&#8217;s a pretty rare intersection of hobbies to begin with. One also has to hate the <a href="http://people.mozilla.com/~tglek/lca2010/">stone age</a> that C/C++ ecosystem we are in, but not move on to shiny new Haskell/Ocaml/whatever communities.</p>
+
+<p><strong>Have I failed at igniting the static analysis revolution?</strong></p>
+
+<ol>
+<li>My goal primary goal was: provide a way to analyze Mozilla source code to speed up our development + refactoring efforts.</li>
+<li>My secondary goal was to make sure that whatever work I do, nobody else has to suffer through the unbelievably sucky infrastructure cruft I had to work through.</li>
+<li>Lastly, I did put in some effort at promoting open source static analysis (by giving talks at conferences, etc) since working in an active community is more fun.
+<em>Mozilla side</em>:</li>
+</ol>
+
+
+<p>I&#8217;m happy to report that I achieved a culture shift at Mozilla. Instead of people saying &#8220;oh god, I can&#8217;t find all instances of ___ issue in 3million lines of C++ code&#8221;, it&#8217;s pretty common to hear &#8220;lets solve this through static analysis&#8221;. Dehydra was designed to take the bitchwork (boilerplate of compiler integration, etc) out of static analysis so one can focus on the analysis part. New Dehydra users within Mozilla seem to confirm that. Instead of pondering whether certain tool-assisted refactorings are feasible, we plan to embark on some now (turned out we were understaffed to keep up with tool output and overburdened by api compatibility before; more on this in a future blog post).</p>
+
+<p><em>No More Static Analysis Bitchwork:</em></p>
+
+<p>The worst aspect of dealing with C++ is parsing it. The second worst aspect is dealing with the preprocessor. With respect to parsing C++ we went from weirdo-custom-frontends(ie Elsa, EDG, etc) and &#8220;GCC will never allow plugins, don&#8217;t waste your time&#8221; to GCC adopting a plugin architecture that suited my static analysis needs. I also implemented source-location transformation tracking(-K) in <a href="http://mcpp.sourceforge.net/">mcpp</a>, so nobody has to suffer through undoing braindamage inflicted by the C proprocessor again. I hear at least a couple of people benefited from MCPP work and I take partial credit for every new analysis GCC plugin. I suspect I saved a few person-months for somebody :)</p>
+
+<p>Btw, I think Chris Lattner&#8217;s from-scratch effort on <a href="http://clang.llvm.org/">Clang</a> is way awesomer than anything I could ever accomplish.</p>
+
+<p><em>Conferences &amp; Stuff:</em></p>
+
+<p>I admit complete and utter failure in this regard. Most open source people have low regard for static analysis. Linus seems to take a million-monkeys-with-type-writers approach (ala the open source eyeballs approach to security) to ensuring kernel code quality (which is a reasonable approach when you have mobs of contributors). Most other projects do not have the resources to spare on unproven tech such as static analysis.</p>
+
+<p>To make matters worse, at first people thought JavaScript was a toy language worth only cut&#8217;n&#8217;pasting from recipes online. Then just as JavaScript was getting more popular, SpiderMonkey embedding got buggier and made for some unpleasant first experiences with the Hydras.</p>
+
+<p><strong>Conclusion</strong></p>
+
+<p>There isn&#8217;t much to show for my work outside of Mozilla; that&#8217;s fine since my primary goal was Mozilla :) The Hydras aren&#8217;t dead, they are in maintenance mode.</p>
+
+<p>I&#8217;m glad to see <a href="http://lwn.net/Articles/448698/">python-as-gcc-plugin </a>approach, it seems to fill the same niche as <a href="https://developer.mozilla.org/en/Treehydra">Treehydra</a>. I regret not starting out with Python (I think it&#8217;s slightly better than JavaScript for this task), I hope David Malcolm succeeds in attracting wider interest.</p>
+
+<p>PS. I&#8217;m super-excited about the new <a href="http://quetzalcoatal.blogspot.com/2011/06/alpha-release-of-dxr.html">DXR work</a>. <a href="http://dxr.mozilla.org/">DXR</a> is something that makes my daily life easier. DXR is by far the smartest code-indexing system out there, it&#8217;s bound to transform my life as a developer far more than any static analysis ever could :)</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -535,43 +605,6 @@ Dude. You suffered and you suffered? No you didn&#39;t. Side pulls work pretty d
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011/02/19/phone-mount-that-doesnt-suck/">Phone Mount That Doesn&#8217;t Suck</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-02-19T22:22:00-08:00" pubdate data-updated="true">Feb 19<span>th</span>, 2011</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><div class='post'>
-This has been on a long quest, but I finally have my phone mounted on my bike the way I want to.<br /><br />I always thought it was stupid to have the phone(or bike computer) mounted way below field of sight. Now I addressed this in my carbon fiber mount. I also dealt with flimsy construction aspects of bike mounts(had a couple of commercial mount eject my phone)<br /><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://hphotos-snc6.fbcdn.net/171675_631094775076_122504458_36643314_2302551_o.jpg" imageanchor="1" style="clear:left; float:left;margin-right:1em; margin-bottom:1em"><img border="0" height="597" width="900" src="http://hphotos-snc6.fbcdn.net/171675_631094775076_122504458_36643314_2302551_o.jpg" /></a></div><i>My prototype(hacksaw blade wrapped in carbon + conduit clamp)</i><br /><br /><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://hphotos-snc6.fbcdn.net/170589_631386729996_122504458_36650309_3355921_o.jpg" imageanchor="1" style="clear:left; float:left;margin-right:1em; margin-bottom:1em"><img border="0" height="597" width="900" src="http://hphotos-snc6.fbcdn.net/170589_631386729996_122504458_36650309_3355921_o.jpg" /></a></div><i><br />I made the case out of carbon tow held together with paper tape :). It came out a little flexible, so i could bend it to get phone in/out. I was going to devise an elaborate locking mechanism for it, but carbon ended with the right mix of flexibility/stiffness(yay luck)</i><br /><br /><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://hphotos-snc6.fbcdn.net/172383_632964717696_122504458_36690008_2894342_o.jpg" imageanchor="1" style="clear:left; float:left;margin-right:1em; margin-bottom:1em"><img border="0" height="597" width="900" src="http://hphotos-snc6.fbcdn.net/172383_632964717696_122504458_36690008_2894342_o.jpg" /></a></div><i>I added a carbon hoop to the case and used a rubber band keep it from sliding around</i><br /><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://hphotos-snc6.fbcdn.net/172145_632964742646_122504458_36690009_4350159_o.jpg" imageanchor="1" style="clear:left; float:left;margin-right:1em; margin-bottom:1em"><img border="0" height="597" width="900" src="http://hphotos-snc6.fbcdn.net/172145_632964742646_122504458_36690009_4350159_o.jpg" /></a></div><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://hphotos-snc6.fbcdn.net/171475_632964862406_122504458_36690014_6129155_o.jpg" imageanchor="1" style="clear:left; float:left;margin-right:1em; margin-bottom:1em"><img border="0" height="597" width="900" src="http://hphotos-snc6.fbcdn.net/171475_632964862406_122504458_36690014_6129155_o.jpg" /></a></div><i>Still using a carbon-wrapped blade + one more layer of carbon + a composite clamp(it&#8217;s 5x lighter and fits better than the steel one in the prototype)</i><br /><br /><br />Here is a video of me stress-testing it. E71 sucks at video :)<br /><br /><iframe title="YouTube video player" width="480" height="390" src="http://www.youtube.com/embed/FiApJwsMSUM" frameborder="0" allowfullscreen></iframe><br /><br /><br />And some video of the mounting mechanism. SLR video is sexy, even without AF.<br /><iframe title="YouTube video player" width="640" height="390" src="http://www.youtube.com/embed/Bwq-xy1lli0" frameborder="0" allowfullscreen></iframe><br /><br /><br />Anyway&#8230;hit a teeny teeny snag. Turned out adding the carbon attachment loop to the case had an unexpected effect. I wrapped it on with some more carbon tow and cut off the tow that covered the screen area(once it dried). This made the case not flex anymore. It became extremely stiff. So once I put the phone in for a testride, it didn&#8217;t want to come out anymore. Carbon is so unintuitively easy to stiffen up.<br /><div class="separator" style="clear: both; text-align: center;"><a href="http://hphotos-ash1.fbcdn.net/173006_632964772586_122504458_36690010_5630214_o.jpg" imageanchor="1" style="clear:left; float:left;margin-right:1em; margin-bottom:1em"><img border="0" height="597" width="900" src="http://hphotos-ash1.fbcdn.net/173006_632964772586_122504458_36690010_5630214_o.jpg" /></a></div><i>With the precision of a drunk dentist, I cut the bottom of the case off so I could pull the phone out.</i><br /><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://hphotos-snc6.fbcdn.net/172440_632964837456_122504458_36690013_6189893_o.jpg" imageanchor="1" style="clear:left; float:left;margin-right:1em; margin-bottom:1em"><img border="0" height="896" width="597" src="http://hphotos-snc6.fbcdn.net/172440_632964837456_122504458_36690013_6189893_o.jpg" /></a></div><i>cut a little too deep :(</i><br /><br />Now the case is a slider. It is still extremely stiff(but 1.3 grams lighter). Since I made the case by using my phone as a mold, it fits it extremely snugly. I might add a little bendy stopper bit, but so far it seems like overkill.</div>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/12/">&larr; Older</a>
@@ -589,6 +622,10 @@ This has been on a long quest, but I finally have my phone mounted on my bike th
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/03/26/snappy-number-54-snappy-discussion-in-paris/">Snappy #54: Snappy Discussion in Paris</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/03/25/snappy-number-53-faster-startup/">snappy #53: Faster: Startup, Image Decoding, Touchpad Input. Smoother Animations</a>
       </li>
     
@@ -602,10 +639,6 @@ This has been on a long quest, but I finally have my phone mounted on my bike th
     
       <li class="post">
         <a href="/blog/2013/02/22/snappy-number-51-smoothing-tab-animations/">Snappy #51: Smoothing Tab Animations</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/02/17/router-assisted-automatic-wake-on-lan-plus-suspend/">Router-Assisted Automatic Wake-on-LAN + Suspend</a>
       </li>
     
   </ul>

@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Firefox 13 became Aurora this week. Firefox 13 is the first release that contains a significant amount of Snappy improvements. Some work got &hellip;">
+  <meta name="description" content="Our baby girl was born recently. We had the house heat off while we stayed at the birth center.Because we live in the future, we were able to to &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,56 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/03/29/home-automation-via-mi-casa-verde-vera/">Home Automation via Mi Casa Verde Vera 3 + Z-Wave</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-03-29T18:06:00-07:00" pubdate data-updated="true">Mar 29<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><div class='post'>
+Our baby girl was born recently. We had the house heat off while we stayed at the birth center.<br /><br />Because we live in the future, we were able to to turn on the house heat(&amp; unlock front door) from the car while driving home. The house got down to 10C (50F) while we were away. Thanks to technology, we did not have to endure that temperature upon return :)<br /><br /><b>Vera/Z-Wave</b><br /><br />So far I have my thermostat, door lock, audio amp and some lights hooked up via Z-Wave. Mi Casa Verde <a href="http://www.amazon.com/gp/product/B0074WIVJ4/ref=as_li_qf_sp_asin_tl?ie=UTF8&amp;tag=stuff05e-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=B0074WIVJ4">Vera 3</a> controller is the brains of the operation. It took a couple years before I got everything hooked up because the Vera 3 controller is the only viable option, yet is so damn expensive (fair cost should be ~$100). <br />I waited on opensource stuff to get good (ie <a href="http://linuxmce.com/">LinuxMCE</a> + o<a href="http://code.google.com/p/open-zwave/">penzwave</a>), but it seems like Z-Wave will be obsolete before there is any useful open source support for it.<br /><br /><b>Impressions</b><br />So far controlling the <a href="http://www.amazon.com/dp/B0052MHPP4/ref=as_li_ss_til?tag=stuff05e-20&amp;camp=0&amp;creative=0&amp;linkCode=as4&amp;creativeASIN=B0052MHPP4&amp;adid=06SXD7JN1SWXKBYY9W71">thermostat</a> from my phone/laptop is the killer feature of the system. We like to keep our house barely warm enough. Unfortunately we have an idiotic gas-powered hot air heating system which guarantees that some rooms are too hot while others are freezing. We can finally adjust house temperate depending on what room in the house we are using without running back/forth to the thermostat.<br />This became even more valuable once the baby arrived. Ellen can control temperature/light with one hand without yelling at me to help :)<br /><br />Controlling lights is cool, but it wasn&#8217;t a life-changer.&nbsp; Time taken for unlocking phone, connecting to the controller + execution lag are fairly similar to walking over to the damn light switch. I suspect Ellen will appreciate this more while she has her hands full with baby and can&#8217;t move easily.<br /><br />Same goes for the door lock. We have a code lock on one side of the house and a<a href="http://www.amazon.com/gp/product/B001NEK6JM/ref=as_li_ss_tl?ie=UTF8&amp;tag=stuff05e-20&amp;linkCode=as2&amp;camp=1789&amp;creative=390957&amp;creativeASIN=B001NEK6JM"> z-wave/code lock</a> on the other. Frankly it takes longer to open the door via phone than to punch in the code. We haven&#8217;t used house-keys since we moved into the house&#8230;cos keys are a pain. Z-Wave makes it easy to change lock combination, check that the door is locked, etc, so it&#8217;s somewhat valuable.<br /><br />The coolest part of the system is ability to group individual device actions. We have a &#8220;house off&#8221; command that locks the door, turns off thermostat, turns of various lights/etc. It&#8217;s great to crawl into bed, poke at the phone and hear various things around the house shutting off.<br /><br /><b>Future</b><br />The Vera controller supports a lot more than just Z-Wave. It can do X10, custom scripts, respond to UPnP commands, schedule commands based on sun-set/rise times, etc. Various Z-Wave doodads also act as status indicators. In the future I plan to setup the thermostat to turn off while the door is open, open/close windows + turn on fans based of indoor/outdoor temp + time of night, etc. It is also possible to have the DHCP server on my lan report for when my phone appears/disappears so vera can turn off thermostat/lights automagically when we leave the house.<br /><br /><b>Alternatives</b><br />I probably spent $300 of real money on various Z-Wave gear + $300 of money suckered out of credit cards on this setup. There are alternatives.<br /><i> </i><br /><i>Lots of time approach</i>: I think one can do a lot of this on the cheap with xbee + atmega + relays. The thermostat is a little trickier, door lock is harder yet. This will involve reinventing the state machine behind Vera and interfacing with android, web, etc clients. I think it would be cool if open source people moved in this direction&#8230;google even made some noise about android-controlled light bulbs(and went quiet), but at the moment one would&nbsp; have to start from scratch.<br /><br /><i>I do what TV tells me:</i> People with more money than sense can pay Verizon/etc a <a href="https://shop.verizon.com/buy/Monitoring-Energy-Saving/Home-Control/Verizon-Home-Monitoring-and-Control/cat30006#order_tab">monthly fee</a> to do a lot of this. Verizon supports a strict subset of what the Vera controller does..but hey, they have TV ads.<br /><br /><i>Less-weird-stuff approach:</i> There are a couple different wifi thermostats on the market atm. <a href="http://www.amazon.com/dp/B004YZFU1Q/ref=as_li_ss_til?tag=stuff05e-20&amp;camp=0&amp;creative=0&amp;linkCode=as4&amp;creativeASIN=B004YZFU1Q&amp;adid=0T7A7B6RT7YD3PY5NJE1">This one</a> seems like a cheap way to go. Wifi is a lot less weird and proprietary than Z-Wave, but this gets you no closer to controlling lights, doors :)<br /><b><br /></b><br /><b>Conclusion</b><br />Now that the initial time/$$$ investment is made,<b> </b>I look forward to tightly coupling my security video, door bell, phone, sound, cooling systems. Motorized blind/window control is stupidly-expensive, so I&#8217;ll probably be rolling my own. There is lots of room left for energy savings + coolness factor improvements.<br /><br /></div>
+<h2>Comments</h2>
+<div class='comments'>
+<div class='comment'>
+<div class='author'>Taras</div>
+<div class='content'>
+Apparently blogger doesn&#39;t send comment notifications by default. micasaverde forums are probably your best bet. </div>
+</div>
+<div class='comment'>
+<div class='author'>Pedle Zelnip</div>
+<div class='content'>
+Awesome stuff, very cool.  Any tips for those of us who just bought a house and are thinking of looking into all this stuff (ie good resources on getting up to speed on it all)?</div>
+</div>
+</div>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -631,62 +681,6 @@ This freeze can last anywhere from a few milliseconds on an unburdened computer 
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/02/16/snappy-feb-16/">Snappy, Feb 16</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-02-16T08:20:17-08:00" pubdate data-updated="true">Feb 16<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><strong>Canadians and their Profilers</strong></p>
-
-<p>Much like eating bacon, writing profiling tools is a favourite Canadian pastime. Unfortunately, while <a href="https://wiki.mozilla.org/Performance/Snappy/2012-02-16">today&#8217;s meeting</a> had more Canadians than last time, a few the usual suspects are still busy with Android bugs this week and weren&#8217;t able to attend.  There are no updates on about:jank or our <a href="https://developer.mozilla.org/en/Performance/Profiling_with_the_Built-in_Profiler">profiler</a> this week. Next week, Vlad plans to hook up Windows symbolification to the profiler bringing it up to par with Mac64.</p>
-
-<p><strong>UX Tweaks</strong></p>
-
-<p>Jared is almost done with preparation for snappy scrolling. He is wrapping up making scrollbar + arrow keys behave in a consistent manner, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=710373">710373</a>. The next step is to tweak our scrolling physics, which may lead us to integrate addon scrolling code in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=206438">bug 206438</a>. Jared also got rid of pointless &#8220;connecting&#8230;&#8221; tab title on refresh, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=709182">bug 709182</a>.****</p>
-
-<p><strong>IO Optimizations</strong></p>
-
-<p>Brian recently worked out a way to neuter prefetch in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=692255">692255</a>, this week he added Firefox hooks to take advantage of that in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=727864">727864</a>. Once that is done our startup speed will be up to us - no longer at the mercy of a misbehaving Microsoft heuristic. Brian also discovered a single-character typo (bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=726503">726503</a>) in my code,which apparently resulted in a 15% speed up in our page-loading benchmark, tp5. I&#8217;m disturbed that we didn&#8217;t notice respective slowdown when we landed this.</p>
-
-<p>Brian is also bravely battling download-manager lag in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=632556">632556</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=727275">727275</a>.</p>
-
-<p>Marco is working on reducing thread contention due to vacuum/pragmas, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=723611">723611</a>. Marco is also almost done with rewriting our ill-conceived, jank-happy livemarks code in bug  <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=613588">613588</a>.</p>
-
-<p><strong>Content</strong></p>
-
-<p>Vladan landed a DOM storage fix that should significantly reduce the amount of main thread SQL done by content <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=714964">bug 714964</a>. We plan to make dom storage not cause main thread io lag in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=712009">712009</a>.</p>
-
-<p>More of the content team is jumping into Snappy work next week, expect to see more in this section.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/8/">&larr; Older</a>
@@ -704,6 +698,10 @@ This freeze can last anywhere from a few milliseconds on an unburdened computer 
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/03/26/snappy-number-54-snappy-discussion-in-paris/">Snappy #54: Snappy Discussion in Paris</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/03/25/snappy-number-53-faster-startup/">snappy #53: Faster: Startup, Image Decoding, Touchpad Input. Smoother Animations</a>
       </li>
     
@@ -717,10 +715,6 @@ This freeze can last anywhere from a few milliseconds on an unburdened computer 
     
       <li class="post">
         <a href="/blog/2013/02/22/snappy-number-51-smoothing-tab-animations/">Snappy #51: Smoothing Tab Animations</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/02/17/router-assisted-automatic-wake-on-lan-plus-suspend/">Router-Assisted Automatic Wake-on-LAN + Suspend</a>
       </li>
     
   </ul>

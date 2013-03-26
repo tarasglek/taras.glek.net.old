@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="When I originally started at Mozilla, I only knew the people who interviewed me. But I quickly discovered beltzner when he uttered a sacrilegious &hellip;">
+  <meta name="description" content="Maintaining a module, killing off another one I was granted ownership of the jar module. Today, I resumed my quest to kill off the barely limping &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,86 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/08/20/cleaning-up-startup-disk-io/">Cleaning Up Startup Disk IO</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-08-20T08:50:12-07:00" pubdate data-updated="true">Aug 20<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><strong>Maintaining a module, killing off another one </strong></p>
+
+<p>I was granted ownership of the <a href="http://benjamin.smedbergs.us/blog/2009-08-19/taras-owns-libjar/">jar module</a>. Today, I resumed my quest to <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=457949">kill off </a>the barely limping stopwatch module. Together with nuking <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=505784">STANDALONE</a> mode in jar stuff, I will have landed 75KB worth of -ve diffs this month. It feels so good to delete code.</p>
+
+<p><strong>IO Report</strong></p>
+
+<p>Currently I am focusing on application IO (excluding libraries and IO caused by libraries).</p>
+
+<p>From my empirical measurements, opening individual files on a 7200RPM hard drive costs around 0-40ms. This is on Linux. I presume files open quickly when they are located near previously opened files and slower if a full disk seek is required for them. Combining files is usually a significant win in terms of throughput. It turns out that even warm starts and reading from SSDs can benefit from combined IO. Currently small file throughput ranges from &lt;1KB/s to &lt;200KB/s for files &lt; 500K. Combining files into memory mapped jars bumps that up to 1-1.5MB/s (currently jar files are relatively small, making them responsible for a higher proportion of IO should boost that further).</p>
+
+<p>The biggest gains are to be had on Windows Mobile where almost every seemingly trivial filesystem operation takes 2-3ms.</p>
+
+<p>I would like to reduce the number of files read on startup to a dozen or so to be able to crank up disk throughput. Unfortunately, there is a lot to be done, I could use a great deal of help.</p>
+
+<p>Below is a long list of files gathered by stracing firefox-bin, and what I know about them:  /home/taras/builds/minefield/dist/bin/application.ini /home/taras/builds/minefield/dist/bin/browserconfig.properties /home/taras/builds/minefield/dist/bin/platform.ini Haven&#8217;t investigated these yet. Perhaps, instead of reading these files should be compiling this info into the xulrunner launcher app?</p>
+
+<p><strong>Update</strong>: ted says application.ini used to be compiled in: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=383167">bug 383167 </a> /home/taras/builds/minefield/dist/bin/plugins</p>
+
+<p>I&#8217;m ignoring plugins at the moment. /home/taras/builds/minefield/dist/bin/chrome /home/taras/builds/minefield/dist/bin/chrome/browser.jar /home/taras/builds/minefield/dist/bin/chrome/browser.manifest /home/taras/builds/minefield/dist/bin/chrome/comm.manifest /home/taras/builds/minefield/dist/bin/chrome/en-US.jar /home/taras/builds/minefield/dist/bin/chrome/en-US.manifest /home/taras/builds/minefield/dist/bin/chrome/pageloader.manifest /home/taras/builds/minefield/dist/bin/chrome/pippki.manifest /home/taras/builds/minefield/dist/bin/chrome/reftest.manifest /home/taras/builds/minefield/dist/bin/chrome/toolkit.jar /home/taras/builds/minefield/dist/bin/chrome/toolkit.manifest /home/taras/builds/minefield/dist/bin/chrome/xslt-qa.manifest</p>
+
+<p>The .manifest files describe how to find stuff in chrome jars. Parsing .manifest files is inefficient due to disk seeks. Additionally, current .manifest parsing code appears to be slow on mobile devices. <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=506392">bug 506392</a> I would like to move .manifest files within jars(and look for manifests within jars when a manifest isn&#8217;t found alongside the .jar in the filesystem)</p>
+
+<p>.jar files are a little bit of  a  cpu hog when it comes  to parse the zip file index. This can be done lazily: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=511754">bug 511754</a> /home/taras/builds/minefield/dist/bin/chrome/icons/default/default16.png /home/taras/builds/minefield/dist/bin/chrome/icons/default/default32.png /home/taras/builds/minefield/dist/bin/chrome/icons/default/default48.png These icons are parsed by gnome libs 3 times during startup. I wonder if we are initializing some gnome thing 3 times?</p>
+
+<p>/home/taras/builds/minefield/dist/bin/components /home/taras/builds/minefield/dist/bin/components/aboutCertError.js /home/taras/builds/minefield/dist/bin/components/aboutPrivateBrowsing.js /home/taras/builds/minefield/dist/bin/components/aboutRights.js /home/taras/builds/minefield/dist/bin/components/aboutRobots.js /home/taras/builds/minefield/dist/bin/components/aboutSessionRestore.js /home/taras/builds/minefield/dist/bin/components/FeedConverter.js /home/taras/builds/minefield/dist/bin/components/FeedWriter.js /home/taras/builds/minefield/dist/bin/components/fuelApplication.js /home/taras/builds/minefield/dist/bin/components/httpd.js /home/taras/builds/minefield/dist/bin/components/NetworkGeolocationProvider.js /home/taras/builds/minefield/dist/bin/components/nsAddonRepository.js /home/taras/builds/minefield/dist/bin/components/nsBadCertHandler.js /home/taras/builds/minefield/dist/bin/components/nsBlocklistService.js /home/taras/builds/minefield/dist/bin/components/nsBrowserContentHandler.js /home/taras/builds/minefield/dist/bin/components/nsBrowserGlue.js /home/taras/builds/minefield/dist/bin/components/nsContentDispatchChooser.js /home/taras/builds/minefield/dist/bin/components/nsContentPrefService.js /home/taras/builds/minefield/dist/bin/components/nsDefaultCLH.js /home/taras/builds/minefield/dist/bin/components/nsDownloadManagerUI.js /home/taras/builds/minefield/dist/bin/components/nsExtensionManager.js /home/taras/builds/minefield/dist/bin/components/nsFilePicker.js /home/taras/builds/minefield/dist/bin/components/nsFormAutoComplete.js /home/taras/builds/minefield/dist/bin/components/nsHandlerService.js /home/taras/builds/minefield/dist/bin/components/nsHelperAppDlg.js /home/taras/builds/minefield/dist/bin/components/nsLivemarkService.js /home/taras/builds/minefield/dist/bin/components/nsLoginInfo.js /home/taras/builds/minefield/dist/bin/components/nsLoginManager.js /home/taras/builds/minefield/dist/bin/components/nsLoginManagerPrompter.js /home/taras/builds/minefield/dist/bin/components/nsMicrosummaryService.js /home/taras/builds/minefield/dist/bin/components/nsPlacesAutoComplete.js /home/taras/builds/minefield/dist/bin/components/nsPlacesDBFlush.js /home/taras/builds/minefield/dist/bin/components/nsPlacesTransactionsService.js /home/taras/builds/minefield/dist/bin/components/nsPrivateBrowsingService.js /home/taras/builds/minefield/dist/bin/components/nsProgressDialog.js /home/taras/builds/minefield/dist/bin/components/nsProxyAutoConfig.js /home/taras/builds/minefield/dist/bin/components/nsSafebrowsingApplication.js /home/taras/builds/minefield/dist/bin/components/nsSample.js /home/taras/builds/minefield/dist/bin/components/nsSearchService.js /home/taras/builds/minefield/dist/bin/components/nsSearchSuggestions.js /home/taras/builds/minefield/dist/bin/components/nsSessionStartup.js /home/taras/builds/minefield/dist/bin/components/nsSessionStore.js /home/taras/builds/minefield/dist/bin/components/nsSetDefaultBrowser.js /home/taras/builds/minefield/dist/bin/components/nsSidebar.js /home/taras/builds/minefield/dist/bin/components/nsTaggingService.js /home/taras/builds/minefield/dist/bin/components/nsTryToClose.js /home/taras/builds/minefield/dist/bin/components/nsUpdateService.js /home/taras/builds/minefield/dist/bin/components/nsUrlClassifierLib.js /home/taras/builds/minefield/dist/bin/components/nsUrlClassifierListManager.js /home/taras/builds/minefield/dist/bin/components/nsURLFormatter.js /home/taras/builds/minefield/dist/bin/components/nsWebHandlerApp.js /home/taras/builds/minefield/dist/bin/components/pluginGlue.js /home/taras/builds/minefield/dist/bin/components/reftest-cmdline.js /home/taras/builds/minefield/dist/bin/components/storage-Legacy.js /home/taras/builds/minefield/dist/bin/components/storage-mozStorage.js /home/taras/builds/minefield/dist/bin/components/tp-cmdline.js /home/taras/builds/minefield/dist/bin/components/txEXSLTRegExFunctions.js /home/taras/builds/minefield/dist/bin/components/WebContentConverter.js Above files are only read in during the &#8220;slow&#8221; startup and are &#8220;fastloaded&#8221; afterward. However, they are stat()ed to make sure the fastload stuff isn&#8217;t stale. This is bad: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=511761">bug 511761</a>. Making these depend on .autoreg seems reasonable.</p>
+
+<p>/home/taras/builds/minefield/dist/bin/extensions This probably should depend on .autoreg too</p>
+
+<p>/home/taras/builds/minefield/dist/bin/updates /home/taras/builds/minefield/dist/bin/updates/0/update.test /home/taras/builds/minefield/dist/bin/update.test This too?</p>
+
+<p>/home/taras/builds/minefield/dist/bin/greprefs /home/taras/builds/minefield/dist/bin/greprefs/all.js /home/taras/builds/minefield/dist/bin/greprefs/security-prefs.js /home/taras/builds/minefield/dist/bin/greprefs/xpinstall.js Reading a directory full of pref files that never change is crazy. <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=507288">bug 507288</a> provides 10-100x throughput improvement in reading gre prefs.</p>
+
+<p>/home/taras/builds/minefield/dist/bin/defaults/pref /home/taras/builds/minefield/dist/bin/defaults/pref/channel-prefs.js /home/taras/builds/minefield/dist/bin/defaults/pref/firefox-branding.js /home/taras/builds/minefield/dist/bin/defaults/pref/firefox.js /home/taras/builds/minefield/dist/bin/defaults/pref/firefox-l10n.js /home/taras/builds/minefield/dist/bin/defaults/pref/reporter.js This is similar to gre pref situation, but worse because there are more pref files. This is also harder to refactor. I propose having 2 hardcoded pref names for xulrunner applications: app.js burried in a jar file speed and l10n.js for localization convenience.</p>
+
+<p>/home/taras/builds/minefield/dist/bin/dictionaries /home/taras/builds/minefield/dist/bin/dictionaries/en-US.aff /home/taras/builds/minefield/dist/bin/dictionaries/en-US.dic For some reason only one of my computers is reading the spellcheck dictionary at startup, but it is costing me 70ms. I wonder if these can be moved to a locale jar.</p>
+
+<p>/home/taras/builds/minefield/dist/bin/modules/distribution.js /home/taras/builds/minefield/dist/bin/modules/DownloadLastDir.jsm /home/taras/builds/minefield/dist/bin/modules/ISO8601DateUtils.jsm /home/taras/builds/minefield/dist/bin/modules/NetUtil.jsm /home/taras/builds/minefield/dist/bin/modules/utils.js /home/taras/builds/minefield/dist/bin/modules/XPCOMUtils.jsm These modules should be moved into toolkit.jar: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=509755">bug 509755</a></p>
+
+<p>/home/taras/builds/minefield/dist/bin/res/broken-image.png /home/taras/builds/minefield/dist/bin/res/charsetalias.properties /home/taras/builds/minefield/dist/bin/res/charsetData.properties /home/taras/builds/minefield/dist/bin/res/forms.css /home/taras/builds/minefield/dist/bin/res/hiddenWindow.html /home/taras/builds/minefield/dist/bin/res/html.css /home/taras/builds/minefield/dist/bin/res/loading-image.png /home/taras/builds/minefield/dist/bin/res/quirk.css /home/taras/builds/minefield/dist/bin/res/ua.css</p>
+
+<p>These need to be in a jar too: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=508421">bug 508421</a> /home/taras/builds/minefield/dist/bin/searchplugins /home/taras/builds/minefield/dist/bin/searchplugins/amazondotcom.xml /home/taras/builds/minefield/dist/bin/searchplugins/answers.xml /home/taras/builds/minefield/dist/bin/searchplugins/creativecommons.xml /home/taras/builds/minefield/dist/bin/searchplugins/eBay.xml /home/taras/builds/minefield/dist/bin/searchplugins/google.xml /home/taras/builds/minefield/dist/bin/searchplugins/wikipedia.xml /home/taras/builds/minefield/dist/bin/searchplugins/yahoo.xml I think these should be in a jar too.</p>
+
+<p>This concludes the list of Firefox application files read at startup. I haven&#8217;t touched the stuff in the profile directories or libraries. I think it is realistic to get a tenfold reduction in physical files read by Firefox 3.6.</p>
+
+<p>https://bugzilla.mozilla.org/show_bug.cgi?id=383167</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -546,59 +626,6 @@ if (requestAnimationFrame)
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/06/17/dehydratreehydra-c-support/">Dehydra/Treehydra C Support</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-06-17T04:22:53-07:00" pubdate data-updated="true">Jun 17<span>th</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Every once in a while people want to be analyze C code. If you are one of those people, checkout <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=494960">bug 494960</a>. For GCC 4.3, you&#8217;ll need to update your patch queue. If you you followed the <a href="https://developer.mozilla.org/En/Dehydra/Installing_Dehydra">Dehydra install instructions</a> do something like:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>
-</span><span class='line'>cd gcc-4.3.0/.hg/patches
-</span><span class='line'>hg pull -u
-</span><span class='line'>cd ../..
-</span><span class='line'>hg qpush -a
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>and rebuild gcc to get C support in the plugin framework for GCC 4.5 (patch for trunk is in the bug).</p>
-
-<p>Everything other than process_function should work in both treehydra and dehydra. Note that the objects provided by GCC will be slightly different in structure due to the underlying difference between gcc/g++, so scripts that were written for C++ may need to be updated.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/18/">&larr; Older</a>
@@ -616,6 +643,10 @@ if (requestAnimationFrame)
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/03/26/snappy-number-54-snappy-discussion-in-paris/">Snappy #54: Snappy Discussion in Paris</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/03/25/snappy-number-53-faster-startup/">snappy #53: Faster: Startup, Image Decoding, Touchpad Input. Smoother Animations</a>
       </li>
     
@@ -629,10 +660,6 @@ if (requestAnimationFrame)
     
       <li class="post">
         <a href="/blog/2013/02/22/snappy-number-51-smoothing-tab-animations/">Snappy #51: Smoothing Tab Animations</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/02/17/router-assisted-automatic-wake-on-lan-plus-suspend/">Router-Assisted Automatic Wake-on-LAN + Suspend</a>
       </li>
     
   </ul>
