@@ -4,7 +4,7 @@
   <title><![CDATA[Category: mozilla | All About Performance]]></title>
   <link href="http://taras.glek.net/blog/categories/mozilla/atom.xml" rel="self"/>
   <link href="http://taras.glek.net/"/>
-  <updated>2013-03-26T04:35:21-07:00</updated>
+  <updated>2013-03-26T06:26:15-07:00</updated>
   <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -12,6 +12,49 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Snappy #54: Snappy Discussion in Paris]]></title>
+    <link href="http://taras.glek.net/blog/2013/03/26/snappy-number-54-snappy-discussion-in-paris/"/>
+    <updated>2013-03-26T04:16:00-07:00</updated>
+    <id>http://taras.glek.net/blog/2013/03/26/snappy-number-54-snappy-discussion-in-paris</id>
+    <content type="html"><![CDATA[###Meeting In Paris
+Last week Snappy people met in Paris at [IRILL](http://www.irill.org/about). I like small venues because they encourage conversations. IRILL is one of the best small work venues I've attended.
+
+Excellent Parisian food did not hurt :)
+
+###Workweek Presentations
+
+I was impressed by the number and quality of presentations this time. I suspect having a presentation-friendly venue helped.
+
+Talks/discussions/notes (please leave a comment if I missed a talk):
+
+* Gabriele Svelto: [Firefox OS Performance](http://people.mozilla.org/~tglek/paris2013/b2g_slides.pdf)
+* Benoit Girard: [profiler improvements](http://benoitgirard.wordpress.com/2013/03/25/profiler-snappy-work-week/)
+* Nathan Froyd + Avi Halachmi: [Talos flaws + improvements to focus on](http://blog.mozilla.org/nfroyd/2013/03/25/perf-workweek-talos-discussion/)
+* Nathan Froyd: [How Firefox Makes Your JavaScript Run Fast](http://people.mozilla.com/~nfroyd/paris-workweek-2013/)
+* Julian Seward: [Stack unwinding for Gecko Profiler](http://people.mozilla.org/~tglek/paris2013/sps_breakpad.pdf)
+* Julian Seward: ['Harmless' data races in Gecko](http://people.mozilla.org/~tglek/paris2013/data_races.pdf)
+* Marco: [SQLite pitfalls](http://mozilla.bonardo.net/paris2013/)
+* Vladan Djeric: [Firefox startup analysis](http://people.mozilla.com/~vdjeric/perfweek_paris2013/)
+* Vladan Djeric: [Chromehang prioritization etherpad](https://etherpad.mozilla.org/chromehangsMarch)
+* Vladan Djeric: [Flash-caused hangs whiteboard](http://people.mozilla.com/~vdjeric/flashDiscussionDiagram.JPG)
+* Jet: Shumway Demo
+* David Teller: Introduction to Promises, Task.jsm
+* Lawrence Mandel: Discussion on how to accomplish reviews faster. Lawrence will [blog](http://lawrencemandel.com/) notes on this soon.
+* Taras Glek + Lawrence Mandel: [Improving coordination + focus](http://lawrencemandel.com/2013/03/21/no-more-snappy-meetings-and-other-changes-from-the-snappy-team/)
+* Taras Glek: [Telemetry reboot plan + doing hadoop map/reduce in python](http://people.mozilla.org/~tglek/pydoop2013/)
+
+
+###Team Activity
+
+For a team activity we walked to the [Paris Catacombes](http://en.wikipedia.org/wiki/Catacombs_of_Paris). 
+
+{%img https://lh6.googleusercontent.com/-dUluprOFvY0/UUoRsBAC1oI/AAAAAAAAIj8/WjOYb7uHij4/s580/20130320_123837.jpg Relevance to writing software? Multi-million line codebases are boneyards of some kind%}
+
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[snappy #53: Faster: Startup, Image Decoding, Touchpad Input. Smoother Animations]]></title>
@@ -127,20 +170,6 @@ Due to web-like Firefox UI architecture most of these improvements will enable s
 Avi, Matthew Noorenberghe, Mike Conley are working on optimizing our next UI refresh: Australis. Australis is shaping up to be the most perf-tuned theme update we've done. See {%bug 837885%} for how performance is being tracked.
 
 As Avi's manager I found it trying to see weeks of perf-reporting work with no fixes to accompany it. I'm happy to see this investigation investment pay off and serve an example of importance of methodically studying performance before proceeding to optimization.
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Plugin Hang UI On Aurora]]></title>
-    <link href="http://taras.glek.net/blog/2013/02/15/plugin-hang-ui-on-aurora/"/>
-    <updated>2013-02-15T16:51:00-08:00</updated>
-    <id>http://taras.glek.net/blog/2013/02/15/plugin-hang-ui-on-aurora</id>
-    <content type="html"><![CDATA[Aaron wrote a [great post](http://dblohm7.ca/blog/2013/02/15/plugin-hang-ui-on-aurora/) on of the new plugin killer UI and Windows magic involved in debugging it. 
-
-We need help testing the new functionality, please see the link above for details.
-
-Unfortunately, we are still waiting on {%bug 814095%} to get his blog syndicated to planet.
-
 ]]></content>
   </entry>
   

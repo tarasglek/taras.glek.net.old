@@ -4,7 +4,7 @@
   <title><![CDATA[All About Performance]]></title>
   <link href="http://taras.glek.net/atom.xml" rel="self"/>
   <link href="http://taras.glek.net/"/>
-  <updated>2013-03-26T04:35:21-07:00</updated>
+  <updated>2013-03-26T06:26:15-07:00</updated>
   <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -13,6 +13,50 @@
   <generator uri="http://octopress.org/">Octopress</generator>
 
   
+  
+  <entry>
+    <title type="html"><![CDATA[Snappy #54: Snappy Discussion in Paris]]></title>
+    <link href="http://taras.glek.net/blog/2013/03/26/snappy-number-54-snappy-discussion-in-paris/"/>
+    <updated>2013-03-26T04:16:00-07:00</updated>
+    <id>http://taras.glek.net/blog/2013/03/26/snappy-number-54-snappy-discussion-in-paris</id>
+    <content type="html"><![CDATA[<h3>Meeting In Paris</h3>
+
+<p>Last week Snappy people met in Paris at <a href="http://www.irill.org/about">IRILL</a>. I like small venues because they encourage conversations. IRILL is one of the best small work venues I&#8217;ve attended.</p>
+
+<p>Excellent Parisian food did not hurt :)</p>
+
+<h3>Workweek Presentations</h3>
+
+<p>I was impressed by the number and quality of presentations this time. I suspect having a presentation-friendly venue helped.</p>
+
+<p>Talks/discussions/notes (please leave a comment if I missed a talk):</p>
+
+<ul>
+<li>Gabriele Svelto: <a href="http://people.mozilla.org/~tglek/paris2013/b2g_slides.pdf">Firefox OS Performance</a></li>
+<li>Benoit Girard: <a href="http://benoitgirard.wordpress.com/2013/03/25/profiler-snappy-work-week/">profiler improvements</a></li>
+<li>Nathan Froyd + Avi Halachmi: <a href="http://blog.mozilla.org/nfroyd/2013/03/25/perf-workweek-talos-discussion/">Talos flaws + improvements to focus on</a></li>
+<li>Nathan Froyd: <a href="http://people.mozilla.com/~nfroyd/paris-workweek-2013/">How Firefox Makes Your JavaScript Run Fast</a></li>
+<li>Julian Seward: <a href="http://people.mozilla.org/~tglek/paris2013/sps_breakpad.pdf">Stack unwinding for Gecko Profiler</a></li>
+<li>Julian Seward: <a href="http://people.mozilla.org/~tglek/paris2013/data_races.pdf">&#8216;Harmless&#8217; data races in Gecko</a></li>
+<li>Marco: <a href="http://mozilla.bonardo.net/paris2013/">SQLite pitfalls</a></li>
+<li>Vladan Djeric: <a href="http://people.mozilla.com/~vdjeric/perfweek_paris2013/">Firefox startup analysis</a></li>
+<li>Vladan Djeric: <a href="https://etherpad.mozilla.org/chromehangsMarch">Chromehang prioritization etherpad</a></li>
+<li>Vladan Djeric: <a href="http://people.mozilla.com/~vdjeric/flashDiscussionDiagram.JPG">Flash-caused hangs whiteboard</a></li>
+<li>Jet: Shumway Demo</li>
+<li>David Teller: Introduction to Promises, Task.jsm</li>
+<li>Lawrence Mandel: Discussion on how to accomplish reviews faster. Lawrence will <a href="http://lawrencemandel.com/">blog</a> notes on this soon.</li>
+<li>Taras Glek + Lawrence Mandel: <a href="http://lawrencemandel.com/2013/03/21/no-more-snappy-meetings-and-other-changes-from-the-snappy-team/">Improving coordination + focus</a></li>
+<li>Taras Glek: <a href="http://people.mozilla.org/~tglek/pydoop2013/">Telemetry reboot plan + doing hadoop map/reduce in python</a></li>
+</ul>
+
+
+<h3>Team Activity</h3>
+
+<p>For a team activity we walked to the <a href="http://en.wikipedia.org/wiki/Catacombs_of_Paris">Paris Catacombes</a>.</p>
+
+<p><img src="https://lh6.googleusercontent.com/-dUluprOFvY0/UUoRsBAC1oI/AAAAAAAAIj8/WjOYb7uHij4/s580/20130320_123837.jpg" title="Relevance to writing software? Multi-million line codebases are boneyards of some kind" ></p>
+]]></content>
+  </entry>
   
   
   
