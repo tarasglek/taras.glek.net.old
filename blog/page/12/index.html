@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="This has been on a long quest, but I finally have my phone mounted on my bike the way I want to.I always thought it was stupid to have the phone(or &hellip;">
+  <meta name="description" content="I always found sidepull brakes to be pathetic. The current generation of road brakes are much better than the old style mount-bike I&#8217;ve used &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,56 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/03/05/i-have-road-disc-and-you-do-notneener/">I Have Road Disc and You Do not&#8230;neener!</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-03-05T11:24:00-08:00" pubdate data-updated="true">Mar 5<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><div class='post'>
+I always found sidepull brakes to be pathetic. The current generation of road brakes are much better than the old style mount-bike I&#8217;ve used before, but they still suck. Unfortunately most roadies are imitation whores and will never ever sport components that a pro rider wouldn&#8217;t ride(which they can&#8217;t cos of stupidly conservative racing rules). As a result no road carbon forks on the market feature disc brakes. So I suffered and suffered. I refused to buy stupidly expensive brake pads to make up for sidepull suck.<br /><br />After years of suffering the indignity of under-performing brakes, I met my friend Adam. Adam got mad carbon skills. He turned my oldish carbon fork into a sexy postmount disc fork. <br /><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-XMIu2jDNjf8/TXKMKF7PVlI/AAAAAAAABGo/ENcJlXL8kkU/s1600/disc2.JPG" imageanchor="1" style=""><img border="0" height="334" width="400" src="http://4.bp.blogspot.com/-XMIu2jDNjf8/TXKMKF7PVlI/AAAAAAAABGo/ENcJlXL8kkU/s400/disc2.JPG" /></a></div><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://2.bp.blogspot.com/-6SGGpgtc1qM/TXKMRi4XNSI/AAAAAAAABGw/1sWWVWJa2Oc/s1600/disc1.JPG" imageanchor="1" style=""><img border="0" height="400" width="266" src="http://2.bp.blogspot.com/-6SGGpgtc1qM/TXKMRi4XNSI/AAAAAAAABGw/1sWWVWJa2Oc/s400/disc1.JPG" /></a></div></div>
+<h2>Comments</h2>
+<div class='comments'>
+<div class='comment'>
+<div class='author'>Taras</div>
+<div class='content'>
+disc cx forks are not compatible with road bikes. It&#39;s a different fork rake, would make the bike handle like crap. </div>
+</div>
+<div class='comment'>
+<div class='author'>reverend dick</div>
+<div class='content'>
+Dude. You suffered and you suffered? No you didn&#39;t. Side pulls work pretty dang well. No, they aren&#39;t discs- but they work pretty dang well. And if you wanted discs, there have been cross forks available with disc mounts for years.<br /><br />Neener neener.</div>
+</div>
+</div>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -558,78 +608,6 @@ Click on &#8220;IO Counts&#8221; or &#8220;Hard faults&#8221; graph, select &#82
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2010/09/14/firefox-4-jar-jar-jar/">Firefox 4: Jar Jar Jar</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-09-14T03:32:35-07:00" pubdate data-updated="true">Sep 14<span>th</span>, 2010</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Opening files is relatively expensive. There is a small syscall overhead and a higher overhead of fetching data from disk. Depending on physical data layout and disk type, this can leave modern CPUs twiddling their thumbs for a long time while the disk skips around fetching all of the different file pieces.</p>
-
-<p><strong>Optimization #1: Fewer naked files</strong></p>
-
-<p>About two years ago I started gathering naked files on disk and shoving them into jars (eg <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=508421">bug 508421</a>). We made jar reading as efficient as possible by cleaning up code and switching to <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=504864">mmap</a>. Eventually all application data files read from disk during &#8220;normal&#8221; startup ended up in jars. Unfortunately we ended up with four jars (toolkit, chrome + 2 locale jars), which felt silly. Due to limitations in XPCOM, a lot of naked files were still read from disk on version upgrades and extension installation.</p>
-
-<p><strong>Optimization #2: One jar to rule them all</strong></p>
-
-<p>Recently Michael Wu unleashed a can of <a href="http://blog.mozilla.org/mwu/2010/08/13/omnijar-how-does-it-work/">omnijar</a> whoopass. This was a massive effort driven by Android packaging requirements. Now application startup data is always being read from one file. This implies better data locality, less seeking, less waiting. One benefit of packing files tightly is that the OS speculatively reads data from disk in chunks that are usually larger than what the application requests. This makes reading nearby files free. Unfortunately there was no good way to predict the order that files will be accessed in without actually running Firefox, so there was more room for improvement.</p>
-
-<p><strong>Optimization #3: Optimized jar layout </strong></p>
-
-<p>So now that all of our data was in one file, the next logical step was to pack it intelligently. The only way to do this is to profile Firefox startup and then order the jar according to that. Unfortunately even once one lays out all of the jar entries sequentially we were still doing our io suboptimally. This was due to the fact that the zip index (jars are zip files) is traditionally located on the end of the file. Wikipedia <a href="http://en.wikipedia.org/wiki/ZIP_(file_format">entry</a>) has pictures to illustrate this.</p>
-
-<p>In order to maximize readahead benefits and minimize disk seeks it would be nice to have the file index in the front of the file. So I changed our zip layout from</p>
-
-<p><entry1><entry2>&#8230;<entryN><central directory><end of central directory></p>
-
-<p>to</p>
-
-<p><offset of the last entry read on startup><central directory><end of central directory><entry1><entry2>&#8230;<entryN><end of central directory></p>
-
-<p>So all I did was change the offset in <end of central directory> to always be 4 (it can&#8217;t be 0 because anal zip programs balk at &#8220;NULL&#8221; central directory offsets). Then I added a second identical <end of central directory> entry to keep the the rule that the central directory is always followed by one. I also used the extra space forced upon me by overly vigilant zip programs to store a number indicating how much data we can preread on startup.</p>
-
-<p>This yielded a 2-3x reduction in disk io over an unoptimized omnijar. This is on top of a >30-100x reduction achieved by going from naked files to omnijar.</p>
-
-<p>The downside of my interpretation of the zip spec is that some zip programs expect zip files to be more rigid than the spec allows. Older versions of Firefox, Microsoft zip support in windows, WinRAR, unix zip programs, etc accept my optimized jars. 7zip, broken antivirus (it&#8217;s a security risk to be overly picky) <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=595473">fail</a>.</p>
-
-<p>Trivia: this isn&#8217;t the first time we got tripped up by picky zip reading code. For example, the Android apk reader irritatingly insists at having a zip entry at byte zero of an Android package. This means that one can&#8217;t use apks to do the Android equivalent of self-extracting .exe files on Windows. Michael Wu is writing a custom library loader to deal with that :)</p>
-
-<p><strong>Optimization #4: More Omnijar</strong></p>
-
-<p>Feeling that omnijar wasn&#8217;t awesome enough, Michael Wu went ahead and <a href="http://blog.mozilla.org/mwu/2010/09/10/extensions-now-installed-packed/">omnijared extensions</a>. Most extensions will no longer need to be unpacked from xpi files. This also means that extension authors can opt to use the optimized jar format above to further speed up Firefox startup.</p>
-
-<p><strong>Other jar optimizations</strong></p>
-
-<p>Switching to jars via<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=520309"> startup cache</a> will allow us to further <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=562406">optimize</a> our first startup. There is option of halving our jar IO further by actually making use of that readahead integer I added to optimized jars.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/13/">&larr; Older</a>
@@ -647,6 +625,10 @@ Click on &#8220;IO Counts&#8221; or &#8220;Hard faults&#8221; graph, select &#82
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/03/27/snappy-number-55-snappy-evolution/">Snappy #55: Snappy Evolution</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/03/26/snappy-number-54-snappy-discussion-in-paris/">Snappy #54: Snappy Discussion in Paris</a>
       </li>
     
@@ -660,10 +642,6 @@ Click on &#8220;IO Counts&#8221; or &#8220;Hard faults&#8221; graph, select &#82
     
       <li class="post">
         <a href="/blog/2013/03/08/snappy-number-52/">Snappy #52</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/02/22/snappy-number-51-smoothing-tab-animations/">Snappy #51: Smoothing Tab Animations</a>
       </li>
     
   </ul>

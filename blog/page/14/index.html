@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="I landed the mozilla::services bug around the same time as Gavin announced the Services.jsm equivalent. Services.jsm came a pleasant surprise to me, &hellip;">
+  <meta name="description" content="I have been able to get precise filed-backed page fault logging(systemtap on Linux, xperf on Windows) for a while. It is incredibly useful to see &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,74 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/05/24/teethig-troubles-assigning-blame-for-pagefaults/">Teething Troubles: Assigning Blame for Pagefaults</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-05-24T03:52:22-07:00" pubdate data-updated="true">May 24<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I have been able to get precise filed-backed page fault logging(systemtap on Linux, xperf on Windows) for a while. It is incredibly useful to see exactly how Firefox is being loaded from disk. From there one I deduce what is causing the IO, try to make improvements and measure if I accomplished anything.</p>
+
+<p>Unfortunately, a mere IO log requires a lot of pondering of why IO is happening. It would be so much easier if one could just get a report of every IO operation + an application backtrace to easily identify the cause. I was having trouble figuring out why some of my optimizations were not having the impact I expected, so i embarked on adding a backtrace to my log.</p>
+
+<p><strong>XPerf Fail</strong> I fed <a href="https://developer.mozilla.org/En/Profiling_with_Xperf">xperf</a> my Firefox symbols hoping this would plop stack traces next to my faults, but no such luck. It records backtraces in just about every probe, except for the &#8220;hard faults&#8221; probe I care about. I wonder if a custom perf probe could log what I want.</p>
+
+<p><strong>Perf Fail</strong></p>
+
+<p>Some prominent kernel hackers have long been complaining about OProfile/SystemTap/NIH performance monitoring tools. They finally produced a <a href="http://git.kernel.org/?p=linux/kernel/git/torvalds/linux-2.6.git;a=tree;f=tools/perf;h=3f4245bfe10b67348c5cd41606f3fdc0396cbbea;hb=7e125f7b9cbfce4101191b8076d606c517a73066">perf</a> tool (It&#8217;s like they tried to make it hard to google for. It does not have a <a href="https://perf.wiki.kernel.org/index.php/Main_Page">proper</a> website; Real men read the source and skim LKML archives) to do profiling the Linux way(tm). I might be wrong, but so far it appears to be a functional equivalent of Microsoft&#8217;s xperf minus the nice UI.</p>
+
+<p>Turned out that my Fedora 2.6.32 perf implementation is too buggy to even log pagefaults. Apparently this works in the current Linus kernels. I&#8217;m not completely sure, but looks like even if xperf pagefault logging worked, it&#8217;s pretty neutered. It does not appear that it can log file offsets next to pagefaults, nor stacks.</p>
+
+<p>I think perf could be fixed to log io and accompanying userspace backtraces. There are some talented folks contributing to it. However I think that the pre-canned analysis model sucks. It is useful for building sophisticated versions of top, but when you really need to dig into what&#8217;s causing a particular issue, it really sucks to be restricted by what the developers foresaw as useful.</p>
+
+<p><strong>SystemTap</strong></p>
+
+<p>As awesome as the kernel side of <a href="http://sourceware.org/systemtap/">SystemTap</a> is, I keep running into userspace bugs and limitations. Getting userspace stacks for large collections of large libraries that Firefox relies on has been a systemtap-bug-finding affair. I can occasionally get useful userspace tracks for userspace probes, but apparently recording a userspace stack from a kernel probe is a hard problem that SystemTap devs haven&#8217;t fully addressed yet.</p>
+
+<p>Luckily SystemTap provides a uaddr() function which appears to get correct addresses from my kernel probes(which is way more than the other tools offer). Unfortunately usymname() fails to resolve those addresses.</p>
+
+<p>As a workaround, Jim Blandy suggested turning off <a href="http://gcc.gnu.org/wiki/Randomization">address-space randomization</a> so I can log uaddr() and resolve the values in gdb. I&#8217;ve been manually printing this with gdb&#8217;s &#8220;p/a <addr>&#8221; command until recently.</p>
+
+<p><strong>Success?</strong></p>
+
+<p>Then it dawned on me that I can use python gdb-scripting to automatically post-process the log. So now with a combination of a <a href="http://hg.mozilla.org/users/tglek_mozilla.com/startup/file/74e2f62fe64c/kernelio.stp">systemtap io logging script</a> and a hacky <a href="http://hg.mozilla.org/users/tglek_mozilla.com/startup/file/74e2f62fe64c/gdb_resolve.py">gdb python script</a> I can produce logs like <a href="http://people.mozilla.com/~tglek/startup/pagefault_blame.txt">this</a>.</p>
+
+<p>I still don&#8217;t have backtraces, but at least now I have the name of the function that&#8217;s causing trouble. This is surprisingly useful already. One can now easily tell how much of startup is being wasted on relocations(dlopen() in a prelinked binary!). Another obvious one is the <a href="http://sourceware.org/bugzilla/show_bug.cgi?id=11618">harm</a> of single-page COW faults to zero .bss (memset entries in the log). Turns out <a href="http://gcc.gnu.org/bugzilla/show_bug.cgi?id=44236">sprinkling</a> initializers all over the binary is a bad idea. Looks like there are significant performance wins to be had with a bit of &#8216;easy&#8217; compiler/linker hacking.</p>
+
+<p>All of the above problems are really obvious and would&#8217;ve been fixed a long time ago if it was easier to get at this information. Unfortunately, there is still a lot of room for improvement in developer tools<strong>.</strong></p>
+
+<p><strong>Update:</strong></p>
+
+<p>Sounds like I can use addr2line instead of gdb.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -676,60 +744,6 @@ In the longer term some fixes for madvise() should land in both runtime and comp
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2010/03/23/when-in-trouble-draw-a-picture/">When in Trouble, Draw a Picture</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-03-23T08:12:52-07:00" pubdate data-updated="true">Mar 23<span>rd</span>, 2010</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><strong>Graphs</strong></p>
-
-<p><em>Note: the following graphs broke on the nightlies this week. I would appreciate help with reducing this to a proper testcase. They work fine on older nightlies and released versions of Firefox. Non-spidermonkey JS engines wont work as they don&#8217;t support <a href="https://developer.mozilla.org/en/New_in_JavaScript_1.7#Destructuring_assignment">destructuring assignment</a> and other goodies.</em></p>
-
-<p>Once I graphed my file-access logs, most of my problems became clear. Here is the <a href="http://people.mozilla.org/~tglek/startup/systemtap_graphs/visualize.html#original.data.html">first</a> graph(<a href="http://people.mozilla.org/~tglek/startup/systemtap_graphs/orig.png">screenshot</a>). The y-axis is time; once you click on a square, x-axis is the file offset. One can clearly see that libxul (4th rectangle) is a big chunk of our io. It&#8217;s also clear that initially the file is being accessed in the begining and near the end. One can also see that there is a some &#8220;backwards&#8221; io. It&#8217;s ugly stuff.</p>
-
-<p>I first saw this picture on Friday evening, I spent the last 2 days trying to make libxul.so load less stupidly. <a href="http://people.mozilla.org/~tglek/startup/systemtap_graphs/visualize.html?#madvise.hack.html">Here</a> is a graph(<a href="http://people.mozilla.org/~tglek/startup/systemtap_graphs/madvise1.png">screenshot</a>) from a hack I tried this morning (approach b in the <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=554421">bug</a>) . The top is still stupid, but near the bottom, libxul is being read in a much more efficient manner (>50% less io).</p>
-
-<p>This <a href="http://people.mozilla.org/~tglek/startup/systemtap_graphs/visualize.html??#madvise_ahead.html">graph</a> is from a lunch-time hack(approach c). IO is being spread across two processes so it&#8217;s evading my systemtap script for  now. Fortunately, &#8220;approach c&#8221; also shaved off a second of my startup time, so I know the libxul graph would&#8217;ve been real pretty.</p>
-
-<p>What follows is a story of how I ended up graphing stuff; more on lessons learned later&#8230;</p>
-
-<p><strong>Story</strong></p>
-
-<p>Last week I was about to give up and live with a <a href="http://taras.glek.net/blog/2010/03/05/mirror-mirror-on-the-wall-why-is-my-binary-slow/">meager</a> 10% win on libxul.so cold startup. I just couldn&#8217;t squeeze any more useful ideas out of my timing and io logs. I reached out to Jim Blandy, who confirmed that things seemed to be working as expected (unlike me, Jim actually knows this stuff).</p>
-
-<p>Upon hearing of my quest, surprising number of people strongly suggested that I chat with <a href="http://people.gnome.org/~michael/blog/">Michael Meeks</a>. He was digging around in the binary cesspool for OpenOffice recently and asked many of the same questions. We had a fun conversation, where Michael proved me wrong. I said I couldn&#8217;t imagine a useful way to graph the file io logs. In response Michel, dug up this <a href="http://people.gnome.org/~michael/blog/">beauty</a>. He built it with a <a href="http://live.gnome.org/iogrind">fun</a> mix of valgrind + c#.</p>
-
-<p>Feeling massive diagram envy, I decided that I had to get an interactive graph of my <a href="http://taras.glek.net/blog/2009/10/23/studying-library-io-systemtap-style/">SystemTap</a> data. A brief Google search revealed that <a href="http://raphaeljs.com/">RaphaelJS</a> would be awesome for my needs (the most <a href="http://www.youtube.com/watch?v=4pXfHLUlZf4">j***worthy</a> vector gfx library ever). After many happy hours of messing with with pretty graphics and colours, the ugly truth emerged (hint: it&#8217;s about the linker/kernel relationship). More on that soon.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/15/">&larr; Older</a>
@@ -747,6 +761,10 @@ In the longer term some fixes for madvise() should land in both runtime and comp
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/03/27/snappy-number-55-snappy-evolution/">Snappy #55: Snappy Evolution</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/03/26/snappy-number-54-snappy-discussion-in-paris/">Snappy #54: Snappy Discussion in Paris</a>
       </li>
     
@@ -760,10 +778,6 @@ In the longer term some fixes for madvise() should land in both runtime and comp
     
       <li class="post">
         <a href="/blog/2013/03/08/snappy-number-52/">Snappy #52</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/02/22/snappy-number-51-smoothing-tab-animations/">Snappy #51: Smoothing Tab Animations</a>
       </li>
     
   </ul>

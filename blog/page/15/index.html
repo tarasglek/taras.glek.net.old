@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Dietrich blogged a &#8220;wake up and smell the startup&#8221; executive overview of startup issues caused by our extension practices. This post is a &hellip;">
+  <meta name="description" content="Graphs Note: the following graphs broke on the nightlies this week. I would appreciate help with reducing this to a proper testcase. They work fine &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,60 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/03/23/when-in-trouble-draw-a-picture/">When in Trouble, Draw a Picture</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-03-23T08:12:52-07:00" pubdate data-updated="true">Mar 23<span>rd</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><strong>Graphs</strong></p>
+
+<p><em>Note: the following graphs broke on the nightlies this week. I would appreciate help with reducing this to a proper testcase. They work fine on older nightlies and released versions of Firefox. Non-spidermonkey JS engines wont work as they don&#8217;t support <a href="https://developer.mozilla.org/en/New_in_JavaScript_1.7#Destructuring_assignment">destructuring assignment</a> and other goodies.</em></p>
+
+<p>Once I graphed my file-access logs, most of my problems became clear. Here is the <a href="http://people.mozilla.org/~tglek/startup/systemtap_graphs/visualize.html#original.data.html">first</a> graph(<a href="http://people.mozilla.org/~tglek/startup/systemtap_graphs/orig.png">screenshot</a>). The y-axis is time; once you click on a square, x-axis is the file offset. One can clearly see that libxul (4th rectangle) is a big chunk of our io. It&#8217;s also clear that initially the file is being accessed in the begining and near the end. One can also see that there is a some &#8220;backwards&#8221; io. It&#8217;s ugly stuff.</p>
+
+<p>I first saw this picture on Friday evening, I spent the last 2 days trying to make libxul.so load less stupidly. <a href="http://people.mozilla.org/~tglek/startup/systemtap_graphs/visualize.html?#madvise.hack.html">Here</a> is a graph(<a href="http://people.mozilla.org/~tglek/startup/systemtap_graphs/madvise1.png">screenshot</a>) from a hack I tried this morning (approach b in the <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=554421">bug</a>) . The top is still stupid, but near the bottom, libxul is being read in a much more efficient manner (>50% less io).</p>
+
+<p>This <a href="http://people.mozilla.org/~tglek/startup/systemtap_graphs/visualize.html??#madvise_ahead.html">graph</a> is from a lunch-time hack(approach c). IO is being spread across two processes so it&#8217;s evading my systemtap script for  now. Fortunately, &#8220;approach c&#8221; also shaved off a second of my startup time, so I know the libxul graph would&#8217;ve been real pretty.</p>
+
+<p>What follows is a story of how I ended up graphing stuff; more on lessons learned later&#8230;</p>
+
+<p><strong>Story</strong></p>
+
+<p>Last week I was about to give up and live with a <a href="http://taras.glek.net/blog/2010/03/05/mirror-mirror-on-the-wall-why-is-my-binary-slow/">meager</a> 10% win on libxul.so cold startup. I just couldn&#8217;t squeeze any more useful ideas out of my timing and io logs. I reached out to Jim Blandy, who confirmed that things seemed to be working as expected (unlike me, Jim actually knows this stuff).</p>
+
+<p>Upon hearing of my quest, surprising number of people strongly suggested that I chat with <a href="http://people.gnome.org/~michael/blog/">Michael Meeks</a>. He was digging around in the binary cesspool for OpenOffice recently and asked many of the same questions. We had a fun conversation, where Michael proved me wrong. I said I couldn&#8217;t imagine a useful way to graph the file io logs. In response Michel, dug up this <a href="http://people.gnome.org/~michael/blog/">beauty</a>. He built it with a <a href="http://live.gnome.org/iogrind">fun</a> mix of valgrind + c#.</p>
+
+<p>Feeling massive diagram envy, I decided that I had to get an interactive graph of my <a href="http://taras.glek.net/blog/2009/10/23/studying-library-io-systemtap-style/">SystemTap</a> data. A brief Google search revealed that <a href="http://raphaeljs.com/">RaphaelJS</a> would be awesome for my needs (the most <a href="http://www.youtube.com/watch?v=4pXfHLUlZf4">j***worthy</a> vector gfx library ever). After many happy hours of messing with with pretty graphics and colours, the ugly truth emerged (hint: it&#8217;s about the linker/kernel relationship). More on that soon.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -658,54 +712,6 @@ What am I testing? I am measuring the time between invoking the browser until a 
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/12/17/javascript-dom/">JavaScript DOM</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-12-17T07:43:01-08:00" pubdate data-updated="true">Dec 17<span>th</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I filed<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=533874"> bug 533874</a> to expose the JavaScript AST to JS, but turns out I need to explain why it&#8217;s important to expose the JavaScript AST. So lets start from the beginning.</p>
-
-<p>My name is Taras and I like to wrestle useful information out of tools that do not think to offer it. I firmly believe that writing/maintaining code is more difficult than it should be. I think the current organization of compilers is partially responsible for it.</p>
-
-<p><strong>Related Prior Work </strong>Some groups at Mozilla have realized that inspection and refactoring of code are tasks that will often consume as many people as can be thrown at it so there has to be a better way. That better way is through tools: get computers to do things that are difficult for humans. We do that a lot for other kinds of tasks, but not so much for computers. For example, when was the last something you googled something using telnet? Yet our tools for presenting and analyzing code are about as sophisticated as telnet. For some reason it is easier to find some random piece of information on the web than it is to find what code implements a function that is being called from my code.</p>
-
-<p>As the original author, I think <a href="https://developer.mozilla.org/En/Dehydra">Dehydra</a>, <a href="https://developer.mozilla.org/en/Treehydra">Treehydra</a> on top of the GCC plugin <a href="http://gcc.gnu.org/wiki/GCC_PluginAPI">API</a> give us a pretty reasonable way to extract useful information out of our C++ code. I feel lost and confused without Dave&#8217;s <a href="http://australia.proximity.on.ca/dxr/">DXR</a>, the JS team routinely breaks (and fixes) invariants in the JS engine and we&#8217;ve been able to wipe out certain classes of bugs (ie code patterns that cause them) mozilla-wide. I&#8217;m looking forward to reducing the footprint of Mozilla by deleting <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=457262">more</a> dead code.</p>
-
-<p><strong>JavaScript Needs</strong> My efforts so far have focused on C++ because it is finicky language and developers need all the help they can get with it. I think we need to the same thing for JavaScript. I think there is a lot of useful information in JavaScript code that is burried and hard to get to. <a href="http://quetzalcoatal.blogspot.com/">Joshua Cranmer</a> broke new ground in building <a href="https://developer.mozilla.org/en/JSHydra">JSHydra</a> on top of SpiderMonkey. This way one can parse JavaScript in exact same way as Spidermonkey sees it (something that can only be approximated with other approaches). I think we should offer the ability to analyze js code within Spidermonkey. Unfortunately, he is a busy student so he doesn&#8217;t have the time to develop JSHydra this to the next level. <strong> How Would JavaScript Developers Benefit?</strong> Currently we have jshydra deployed on AMO to scan javascript for potential issues to make the reviewer&#8217;s job more productive. Dave Humphrey is working away on integrating JSHydra into DXR so we can have semantic navigation of JavaScript: what components are implemented JavaScript, wouldn&#8217;t it be nice to know who calls certain methods(including javascript callsites), etc. Gandalf has a cool idea where he needs to be able to extract translatable strings out of JetPacks. I believe JetPack people in general would like to be able to analyze JS code more.</p>
-
-<p>I think it&#8217;s clear that the common trend in all these tasks is to turn an opaque text blob into something that can be easily navigated programatically. Wouldn&#8217;t it suck to not to be able to walk the DOM for HTML? Why is it ok to accept that handicap for the essense of all programs?</p>
-
-<p><strong>How Should This Be Solved?</strong> I don&#8217;t know for sure, but my friend Jim Blandy, came up with a good suggestion. We already have eval/uneval in SpiderMonkey. it would be really cool to extend uneval to produce a iteratable data structure instead of a text blob. So I filed a <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=533874">bug 533874</a> on this, and this my explanation of why I think that would be a very empowering feature to expose ASTs in JavaScript.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/16/">&larr; Older</a>
@@ -723,6 +729,10 @@ What am I testing? I am measuring the time between invoking the browser until a 
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/03/27/snappy-number-55-snappy-evolution/">Snappy #55: Snappy Evolution</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/03/26/snappy-number-54-snappy-discussion-in-paris/">Snappy #54: Snappy Discussion in Paris</a>
       </li>
     
@@ -736,10 +746,6 @@ What am I testing? I am measuring the time between invoking the browser until a 
     
       <li class="post">
         <a href="/blog/2013/03/08/snappy-number-52/">Snappy #52</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/02/22/snappy-number-51-smoothing-tab-animations/">Snappy #51: Smoothing Tab Animations</a>
       </li>
     
   </ul>

@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="I expected to a slow week, but there was a surprising amount of progress. I  take this as further evidence that having managers  go on vacation does &hellip;">
+  <meta name="description" content="I have been working under assumption that the browser gets less snappy as more tabs are opened. This increases the chances of having an ill-behaved &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,44 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/01/11/call-for-snappy-help-looking-for-a-lots-of-tabs-sessions-with-lag/">Call for Snappy Help: Looking for a Lots-of-tabs Sessions With Lag</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-01-11T02:59:02-08:00" pubdate data-updated="true">Jan 11<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I have been working under assumption that the browser gets less snappy as more tabs are opened. This increases the chances of having an ill-behaved website in the background. An ill-behaved tab (or a couple of them) can in theory ruin scrolling, typing, clicking, etc in active tabs. However I do not have anything behind anecdotal evidence on this. There are bugs on specific websites in bugzilla, but it would be nice to get them mixed into a realistic set of tabs.</p>
+
+<p>Would someone be willing to contribute a list of webpages they use often that cause Firefox to lag (maybe a session restore file?)? I am a low-tab person myself, so I can&#8217;t easily reproduce this. Please make sure that Firefox is slow with your list of tabs even when all addons are disabled, include a description of slowness encountered.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -499,58 +537,6 @@ It is ridiculous in our recent faster release cycle if a patch takes half (or mo
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011/12/01/introducing-project-snappy/">Introducing Project Snappy</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-12-01T08:15:39-08:00" pubdate data-updated="true">Dec 1<span>st</span>, 2011</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Two weeks ago I started project <a href="https://wiki.mozilla.org/Performance/Snappy">Snappy</a>. The purpose of the meeting is to help us focus on eradicating jarring pauses in Firefox.</p>
-
-<p>Today we had our second meeting (<a href="https://wiki.mozilla.org/Performance/Snappy/2011-12-01">notes</a>).  A surprising amount of work has happened between the first and second meeting:</p>
-
-<ul>
-<li><a href="https://bugzilla.mozilla.org/buglist.cgi?quicksearch=chromehang&amp;list_id=1813678">Chromehang </a>was briefly turned on. This converted browser stalls of >30seconds into crashes. This showed that a number of issues are worse than previously assumed</li>
-<li>We are about to start <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=699051">tracking</a> slow SQL queries via telemetry</li>
-<li>Even though <a href="http://www.w3.org/TR/IndexedDB">IndexedDB</a> is the new hotness, existing websites use the evil old DOM Storage API. This API is not asynchronous and degrades browser performance. The workaround is to <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=704933">tell</a> the backend to use async IO.
-Just like MemShrink, Snappy bugs fall into three categories:</li>
-<li>P1: Should be fixed ASAP</li>
-<li>P2: Should be fixed as soon as developers have cycles for it</li>
-<li>P3: Everything else
-Multiple people have asked whether Snappy is appropriate for bugs caught by Chromehang: ie should we focus on one-off long delays (ie font enumeration) or small delays that happen frequently (ie tab animations). After reflecting on this I decided that UI jank can be thought of as a risk of frustrating the user. Risk has a scientific definition: severity of event multiplied by probability.  Thus a long occasional pause during browsing is equivalent to a frequent short pause.</li>
-</ul>
-
-
-<p>For next week we plan to wrap up a <a href="http://benoitgirard.wordpress.com/2011/11/08/firefox-built-in-profiler/">profiler</a>, come up with a fix for cache io on startup/shutdown, look into submitting hang stacks in a less <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=706916">brutal way</a>.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/10/">&larr; Older</a>
@@ -568,6 +554,10 @@ Multiple people have asked whether Snappy is appropriate for bugs caught by Chro
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/03/27/snappy-number-55-snappy-evolution/">Snappy #55: Snappy Evolution</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/03/26/snappy-number-54-snappy-discussion-in-paris/">Snappy #54: Snappy Discussion in Paris</a>
       </li>
     
@@ -581,10 +571,6 @@ Multiple people have asked whether Snappy is appropriate for bugs caught by Chro
     
       <li class="post">
         <a href="/blog/2013/03/08/snappy-number-52/">Snappy #52</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/02/22/snappy-number-51-smoothing-tab-animations/">Snappy #51: Smoothing Tab Animations</a>
       </li>
     
   </ul>

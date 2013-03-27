@@ -4,7 +4,7 @@
   <title><![CDATA[All About Performance]]></title>
   <link href="http://taras.glek.net/atom.xml" rel="self"/>
   <link href="http://taras.glek.net/"/>
-  <updated>2013-03-26T06:26:15-07:00</updated>
+  <updated>2013-03-27T04:03:33-07:00</updated>
   <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -12,6 +12,8 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  
   
   
   <entry>
@@ -497,37 +499,6 @@ Omnijar readhead is next, in <a title="Use readahead for ordered jar files such 
 <p><strong>Blog</strong></p>
 
 <p>Thanks for the feedback on blogging platform alternatives. I turned on a better captcha plugin to deflect spam. A lot less spam gets through now (but I think it&#8217;s also preventing legitimate users from getting through). If you are having trouble commenting, use twitter for now.</p>
-]]></content>
-  </entry>
-  
-  
-  
-  <entry>
-    <title type="html"><![CDATA[Snappy #42]]></title>
-    <link href="http://taras.glek.net/blog/2012/10/26/snappy-42/"/>
-    <updated>2012-10-26T08:01:40-07:00</updated>
-    <id>http://taras.glek.net/blog/2012/10/26/snappy-42</id>
-    <content type="html"><![CDATA[<p>Vladan Djeric landed a probe to directly measure various DOM Local Storage overheads, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=802920">802920</a>, <a href="http://is.gd/BYJQkE">telemetry data</a>.</p>
-
-<p><strong>Frontend Speedups</strong></p>
-
-<p>I thought our frontend optimization people did not have spare cycles for snappy UI fixes due to other important projects atm, but they proved me wrong this week.</p>
-
-<p>Jared Wein landed bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=804968">804968</a> which fixes jank where our awesomebar popup would appear then disappear while typing in the location bar. We were flushing layout for the top and bottom result on each adjustment to the awesomebar results, those flushes weren&#8217;t necessary for each time, they are now skipped after the first pass in the browser session.</p>
-
-<p>Dão Gottwald landed <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=752376">bug 752376</a> which removes some expensive layout flushes when switching tabs if the user isn&#8217;t overflowing their tabbar.</p>
-
-<p>Dão also landed bug<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=715402"> 715402</a> which corrects certain initialization code to run after the Firefox is drawn. Previously this code would get delayed, but due to some undeterministic event madness it would still be likely to get scheduled to run before Firefox is drawn on the screen. This should result in 10% faster perceived startups in some cases.</p>
-
-<p><strong>Profiler-assisted Bug Reporting</strong></p>
-
-<p>I looked at bug<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=642257"> 642257</a> and gave up figuring out what causes the problem because I could not reproduce it. I asked the reporter to try to record a profile of the problem with the <a href="https://developer.mozilla.org/en-US/docs/Performance/Profiling_with_the_Built-in_Profiler">gecko profiler</a>. Within 2.5 hours of the profile being posted in the bug, Timothy Nikkel identified the problem and posted a patch for it.</p>
-
-<p>I&#8217;m very excited about this because the reporter has never used a profiler and yet on the first try helped fix a hard to reproduce bug. Thanks to a dedicated bug reporter, keen layout hackers and our new profiling infrastructure Flash in background tabs will no longer slow down our layout calculations. For many types of bugs identifying the problem is the hardest part, this is very promising.</p>
-
-<p><strong>Moving Blogs Soon</strong></p>
-
-<p>I will be moving to a new blog location as soon as I decide on a better blog setup. I&#8217;ve been irritated by Wordpress since I started at Mozilla in 2006. The volume of comment spam has increased exponentially this year. After 6 years of suffering a terrible UI, spam, slowness, lossyness, I&#8217;m ready to move on to a blogging service elsewhere. If you have any suggestions for blog providers, ping me on <a href="https://twitter.com/tarasglek">twitter</a> as I likely wont see your comment in the mountain of spam.</p>
 ]]></content>
   </entry>
   

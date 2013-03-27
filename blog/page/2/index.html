@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Introducing a new privacy-invasive method to help improve Firefox shutdown time. &#8230; the profiler will watch your browser for any performance &hellip;">
+  <meta name="description" content="Graphics In some cases Direct2D-accelerated drawing is slower than the non-accelerated path. Jeff Muizelaar fixed a severe gradient &#8216;hang&#8217 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,58 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/01/28/snappy-number-50-misc-speedups/">Snappy #50</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-01-28T16:00:00-08:00" pubdate data-updated="true">Jan 28<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3>Graphics</h3>
+
+<p>In some cases Direct2D-accelerated drawing is slower than the non-accelerated path. Jeff Muizelaar fixed a severe gradient &#8216;hang&#8217; in <a title="Avoid hitting D2D slow path when drawing radial gradients from css" href="https://bugzilla.mozilla.org/show_bug.cgi?id=823147">bug 823147</a>.</p>
+
+<p>Avi Halachmi diagnosed a significant menu performance issue in <a title="Menu items slow to paint/respond after peeking their sub-menu popups" href="https://bugzilla.mozilla.org/show_bug.cgi?id=832641">bug 832641</a>, this was promptly fixed by Matt Woodrow.</p>
+
+<h3>Misc Pauses</h3>
+
+<p>Vladan Djeric <a href="https://blog.mozilla.org/vdjeric/2013/01/24/add-on-performance-problems/">blogged</a> about top main-thread SQL issues contributed by addons. Vladan also produced a <a href="http://people.mozilla.com/~vdjeric/DecJanHangs.txt">chromehang</a> report for last 2 months.</p>
+
+<p>Ehsan Akhgari fixed a <em>chromehang</em> caused by leftover debug code: <a title="Multi-second hang during CollectNewLoadedModules" href="https://bugzilla.mozilla.org/show_bug.cgi?id=830765">bug 830765</a>.</p>
+
+<p>Justin Lebar fixed an issue where telemetry memory reporting code was accidentally triggering expensive &#8216;release memory to OS&#8217; operations: <a title="Extremely long pause while collecting telemetry information on the main thread" href="https://bugzilla.mozilla.org/show_bug.cgi?id=789975">bug 789975</a>.</p>
+
+<h3>Shutdown</h3>
+
+<p>Sometimes Firefox takes a long time to shutdown. We also have a timer that regularly triggers cycle collection. Olli Pettay disabled this timer during shutdown in <a title="Timer based CC occurring on shutdown" href="https://bugzilla.mozilla.org/show_bug.cgi?id=822849">bug 822849</a>.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -518,62 +570,6 @@ if (requestAnimationFrame)
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/10/26/snappy-42/">Snappy #42</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-10-26T08:01:40-07:00" pubdate data-updated="true">Oct 26<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Vladan Djeric landed a probe to directly measure various DOM Local Storage overheads, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=802920">802920</a>, <a href="http://is.gd/BYJQkE">telemetry data</a>.</p>
-
-<p><strong>Frontend Speedups</strong></p>
-
-<p>I thought our frontend optimization people did not have spare cycles for snappy UI fixes due to other important projects atm, but they proved me wrong this week.</p>
-
-<p>Jared Wein landed bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=804968">804968</a> which fixes jank where our awesomebar popup would appear then disappear while typing in the location bar. We were flushing layout for the top and bottom result on each adjustment to the awesomebar results, those flushes weren&#8217;t necessary for each time, they are now skipped after the first pass in the browser session.</p>
-
-<p>Dão Gottwald landed <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=752376">bug 752376</a> which removes some expensive layout flushes when switching tabs if the user isn&#8217;t overflowing their tabbar.</p>
-
-<p>Dão also landed bug<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=715402"> 715402</a> which corrects certain initialization code to run after the Firefox is drawn. Previously this code would get delayed, but due to some undeterministic event madness it would still be likely to get scheduled to run before Firefox is drawn on the screen. This should result in 10% faster perceived startups in some cases.</p>
-
-<p><strong>Profiler-assisted Bug Reporting</strong></p>
-
-<p>I looked at bug<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=642257"> 642257</a> and gave up figuring out what causes the problem because I could not reproduce it. I asked the reporter to try to record a profile of the problem with the <a href="https://developer.mozilla.org/en-US/docs/Performance/Profiling_with_the_Built-in_Profiler">gecko profiler</a>. Within 2.5 hours of the profile being posted in the bug, Timothy Nikkel identified the problem and posted a patch for it.</p>
-
-<p>I&#8217;m very excited about this because the reporter has never used a profiler and yet on the first try helped fix a hard to reproduce bug. Thanks to a dedicated bug reporter, keen layout hackers and our new profiling infrastructure Flash in background tabs will no longer slow down our layout calculations. For many types of bugs identifying the problem is the hardest part, this is very promising.</p>
-
-<p><strong>Moving Blogs Soon</strong></p>
-
-<p>I will be moving to a new blog location as soon as I decide on a better blog setup. I&#8217;ve been irritated by Wordpress since I started at Mozilla in 2006. The volume of comment spam has increased exponentially this year. After 6 years of suffering a terrible UI, spam, slowness, lossyness, I&#8217;m ready to move on to a blogging service elsewhere. If you have any suggestions for blog providers, ping me on <a href="https://twitter.com/tarasglek">twitter</a> as I likely wont see your comment in the mountain of spam.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -591,6 +587,10 @@ if (requestAnimationFrame)
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/03/27/snappy-number-55-snappy-evolution/">Snappy #55: Snappy Evolution</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/03/26/snappy-number-54-snappy-discussion-in-paris/">Snappy #54: Snappy Discussion in Paris</a>
       </li>
     
@@ -604,10 +604,6 @@ if (requestAnimationFrame)
     
       <li class="post">
         <a href="/blog/2013/03/08/snappy-number-52/">Snappy #52</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/02/22/snappy-number-51-smoothing-tab-animations/">Snappy #51: Smoothing Tab Animations</a>
       </li>
     
   </ul>

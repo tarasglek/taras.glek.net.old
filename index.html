@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Meeting In Paris Last week Snappy people met in Paris at IRILL. I like small venues because they encourage conversations. IRILL is one of the best &hellip;">
+  <meta name="description" content="The Snappy name will be retired in favor of Performance: we will be expanding our meta scope beyond desktop Firefox responsiveness. I think as a &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,66 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/03/27/snappy-number-55-snappy-evolution/">Snappy #55: Snappy Evolution</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-03-27T03:56:00-07:00" pubdate data-updated="true">Mar 27<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>The Snappy name will be retired in favor of Performance: we will be expanding our meta scope beyond desktop Firefox responsiveness.</p>
+
+<p>I think as a result of Snappy, Firefox is in a much happier performance place now. There are a big wins remaining, but we have tools and ideas on how to get there. We&#8217;ve come a long way from &#8220;how to make Firefox feel fast?&#8221; discussions in late 2011.</p>
+
+<p>Snappy has been a tricky meta-project because work has to happen across teams. While my Performance team has an exclusive commitment to performance, other teams have to context-switch between feature-work, platform-work, performance, etc. There are also team culture differences on internal vs external communication, planning, etc.</p>
+
+<p>Some of the projects are quite hard and require specialized expertise. This meant that we&#8217;d make a bunch of progress on a project (eg breakpad profiler backend) only to realize that we are blocked on someone we didn&#8217;t loop into the project right away (eg Ted). Ideally we will minimize chances of surprises like this in the future.</p>
+
+<p>Until recently my solution was to deal with this as a manager. I&#8217;d sync up with relevant managers about Snappy needs and try to get some Snappy bugs onto relevant team&#8217;s todo. This has worked out ok, but there were a few too many instances of unexpected delays due to shifting team priorities, miscommunication, general lag. My conclusion is that at a developer-driven organization like Mozilla heavy manager involvement on Snappy-type projects is a sign that we are doing it wrong. Developers should be adding performance goals to their team&#8217;s agenda.</p>
+
+<p>Last week we came up with a more developer-centric way to do performance work. I&#8217;ll still be around making sure things are moving forward, but from now one I&#8217;d like to see developers drive planning &amp; coordination on a per-project basis. I&#8217;ll introduce individual projects + their respective blogs as they start in the next couple of weeks.</p>
+
+<p>Irving Reid (addon-manager startup performance lead) summed up key mechanics of the new approach in an email. Thanks, Irving.</p>
+
+<h3>Irving&#8217;s Summary</h3>
+
+<p>Coming out of the Snappy work week, we decided to try and make performance projects a little more structured than they have been in the past; see <a href="http://lawrencemandel.com/2013/03/21/no-more-snappy-meetings-and-other-changes-from-the-snappy-team/">Lawrence&#8217;s post</a> for a summary.</p>
+
+<p>While not mentioned in Lawrence&#8217;s blog, one of the things Taras (if I recall correctly) suggested was to have a project kick-off meeting to get rough agreement on scope, responsibilities, and how we&#8217;re going to track progress. If everyone is happy with settling those questions over email, we can; I think we lose a little by not getting a chance to see and hear each other directly, but it is rather painful to get that scheduled in the current circumstances.</p>
+
+<p>In any case I wasn&#8217;t planning on delaying work until after the meeting could happen; it&#8217;s more about getting things as clear as we can, as early as we can.</p>
+
+<p>The current plan is for Felipe and I to do the patches, with me handling coordination and progress tracking as well. Everybody else is involved to make sure we&#8217;re going in the right direction, and help us over roadblocks.</p>
+
+<p>The progress tracking technique the Snappy team settled on last week was a combination of daily one-line updates using the <a href="http://teamstat.us/#browse/irc.mozilla.org/perf">status bot</a> in the #perf channel, and a blog post every two weeks summarizing overall progress. I&#8217;ll do the <a href="http://www.controlledflight.ca/category/mozilla/">blog posts</a>; depending on how things go I may do them weekly instead of biweekly.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -610,58 +670,6 @@ Omnijar readhead is next, in <a title="Use readahead for ordered jar files such 
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/01/28/snappy-number-50-misc-speedups/">Snappy #50</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-01-28T16:00:00-08:00" pubdate data-updated="true">Jan 28<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h3>Graphics</h3>
-
-<p>In some cases Direct2D-accelerated drawing is slower than the non-accelerated path. Jeff Muizelaar fixed a severe gradient &#8216;hang&#8217; in <a title="Avoid hitting D2D slow path when drawing radial gradients from css" href="https://bugzilla.mozilla.org/show_bug.cgi?id=823147">bug 823147</a>.</p>
-
-<p>Avi Halachmi diagnosed a significant menu performance issue in <a title="Menu items slow to paint/respond after peeking their sub-menu popups" href="https://bugzilla.mozilla.org/show_bug.cgi?id=832641">bug 832641</a>, this was promptly fixed by Matt Woodrow.</p>
-
-<h3>Misc Pauses</h3>
-
-<p>Vladan Djeric <a href="https://blog.mozilla.org/vdjeric/2013/01/24/add-on-performance-problems/">blogged</a> about top main-thread SQL issues contributed by addons. Vladan also produced a <a href="http://people.mozilla.com/~vdjeric/DecJanHangs.txt">chromehang</a> report for last 2 months.</p>
-
-<p>Ehsan Akhgari fixed a <em>chromehang</em> caused by leftover debug code: <a title="Multi-second hang during CollectNewLoadedModules" href="https://bugzilla.mozilla.org/show_bug.cgi?id=830765">bug 830765</a>.</p>
-
-<p>Justin Lebar fixed an issue where telemetry memory reporting code was accidentally triggering expensive &#8216;release memory to OS&#8217; operations: <a title="Extremely long pause while collecting telemetry information on the main thread" href="https://bugzilla.mozilla.org/show_bug.cgi?id=789975">bug 789975</a>.</p>
-
-<h3>Shutdown</h3>
-
-<p>Sometimes Firefox takes a long time to shutdown. We also have a timer that regularly triggers cycle collection. Olli Pettay disabled this timer during shutdown in <a title="Timer based CC occurring on shutdown" href="https://bugzilla.mozilla.org/show_bug.cgi?id=822849">bug 822849</a>.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -677,6 +685,10 @@ Omnijar readhead is next, in <a title="Use readahead for ordered jar files such 
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/03/27/snappy-number-55-snappy-evolution/">Snappy #55: Snappy Evolution</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/03/26/snappy-number-54-snappy-discussion-in-paris/">Snappy #54: Snappy Discussion in Paris</a>
       </li>
     
@@ -690,10 +702,6 @@ Omnijar readhead is next, in <a title="Use readahead for ordered jar files such 
     
       <li class="post">
         <a href="/blog/2013/03/08/snappy-number-52/">Snappy #52</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/02/22/snappy-number-51-smoothing-tab-animations/">Snappy #51: Smoothing Tab Animations</a>
       </li>
     
   </ul>

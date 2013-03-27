@@ -4,7 +4,7 @@
   <title><![CDATA[Category: snappy | All About Performance]]></title>
   <link href="http://taras.glek.net/blog/categories/snappy/atom.xml" rel="self"/>
   <link href="http://taras.glek.net/"/>
-  <updated>2013-03-26T06:26:15-07:00</updated>
+  <updated>2013-03-27T04:03:33-07:00</updated>
   <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -12,6 +12,39 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Snappy #55: Snappy Evolution]]></title>
+    <link href="http://taras.glek.net/blog/2013/03/27/snappy-number-55-snappy-evolution/"/>
+    <updated>2013-03-27T03:56:00-07:00</updated>
+    <id>http://taras.glek.net/blog/2013/03/27/snappy-number-55-snappy-evolution</id>
+    <content type="html"><![CDATA[The Snappy name will be retired in favor of Performance: we will be expanding our meta scope beyond desktop Firefox responsiveness.
+
+I think as a result of Snappy, Firefox is in a much happier performance place now. There are a big wins remaining, but we have tools and ideas on how to get there. We've come a long way from "how to make Firefox feel fast?" discussions in late 2011.
+
+Snappy has been a tricky meta-project because work has to happen across teams. While my Performance team has an exclusive commitment to performance, other teams have to context-switch between feature-work, platform-work, performance, etc. There are also team culture differences on internal vs external communication, planning, etc.
+
+Some of the projects are quite hard and require specialized expertise. This meant that we'd make a bunch of progress on a project (eg breakpad profiler backend) only to realize that we are blocked on someone we didn't loop into the project right away (eg Ted). Ideally we will minimize chances of surprises like this in the future.
+
+Until recently my solution was to deal with this as a manager. I'd sync up with relevant managers about Snappy needs and try to get some Snappy bugs onto relevant team's todo. This has worked out ok, but there were a few too many instances of unexpected delays due to shifting team priorities, miscommunication, general lag. My conclusion is that at a developer-driven organization like Mozilla heavy manager involvement on Snappy-type projects is a sign that we are doing it wrong. Developers should be adding performance goals to their team's agenda.
+
+Last week we came up with a more developer-centric way to do performance work. I'll still be around making sure things are moving forward, but from now one I'd like to see developers drive planning & coordination on a per-project basis. I'll introduce individual projects + their respective blogs as they start in the next couple of weeks.
+
+Irving Reid (addon-manager startup performance lead) summed up key mechanics of the new approach in an email. Thanks, Irving.
+
+###Irving's Summary
+
+Coming out of the Snappy work week, we decided to try and make performance projects a little more structured than they have been in the past; see [Lawrence's post](http://lawrencemandel.com/2013/03/21/no-more-snappy-meetings-and-other-changes-from-the-snappy-team/) for a summary.
+
+While not mentioned in Lawrence's blog, one of the things Taras (if I recall correctly) suggested was to have a project kick-off meeting to get rough agreement on scope, responsibilities, and how we're going to track progress. If everyone is happy with settling those questions over email, we can; I think we lose a little by not getting a chance to see and hear each other directly, but it is rather painful to get that scheduled in the current circumstances.
+
+In any case I wasn't planning on delaying work until after the meeting could happen; it's more about getting things as clear as we can, as early as we can.
+
+The current plan is for Felipe and I to do the patches, with me handling coordination and progress tracking as well. Everybody else is involved to make sure we're going in the right direction, and help us over roadblocks.
+
+The progress tracking technique the Snappy team settled on last week was a combination of daily one-line updates using the [status bot](http://teamstat.us/#browse/irc.mozilla.org/perf) in the #perf channel, and a blog post every two weeks summarizing overall progress. I'll do the [blog posts](http://www.controlledflight.ca/category/mozilla/); depending on how things go I may do them weekly instead of biweekly.
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Snappy #54: Snappy Discussion in Paris]]></title>
@@ -142,20 +175,6 @@ Due to web-like Firefox UI architecture most of these improvements will enable s
 Avi, Matthew Noorenberghe, Mike Conley are working on optimizing our next UI refresh: Australis. Australis is shaping up to be the most perf-tuned theme update we've done. See <a title="Australis tabs performance tracking" href="https://bugzilla.mozilla.org/show_bug.cgi?id=837885">bug 837885</a> for how performance is being tracked.
 
 As Avi's manager I found it trying to see weeks of perf-reporting work with no fixes to accompany it. I'm happy to see this investigation investment pay off and serve an example of importance of methodically studying performance before proceeding to optimization.
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Plugin Hang UI On Aurora]]></title>
-    <link href="http://taras.glek.net/blog/2013/02/15/plugin-hang-ui-on-aurora/"/>
-    <updated>2013-02-15T16:51:00-08:00</updated>
-    <id>http://taras.glek.net/blog/2013/02/15/plugin-hang-ui-on-aurora</id>
-    <content type="html"><![CDATA[Aaron wrote a [great post](http://dblohm7.ca/blog/2013/02/15/plugin-hang-ui-on-aurora/) on of the new plugin killer UI and Windows magic involved in debugging it. 
-
-We need help testing the new functionality, please see the link above for details.
-
-Unfortunately, we are still waiting on <a title="Add Aaron Klotz's blog to Planet Mozilla" href="https://bugzilla.mozilla.org/show_bug.cgi?id=814095">bug 814095</a> to get his blog syndicated to planet.
-
 ]]></content>
   </entry>
   

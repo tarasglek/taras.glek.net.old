@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Jeff Muizelaar may not have cut tab switch times in half in my last update. The overhead moved to a later part of the process that we were not &hellip;">
+  <meta name="description" content="Vladan Djeric landed a probe to directly measure various DOM Local Storage overheads, bug 802920, telemetry data. Frontend Speedups I thought our &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,62 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/10/26/snappy-42/">Snappy #42</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-10-26T08:01:40-07:00" pubdate data-updated="true">Oct 26<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Vladan Djeric landed a probe to directly measure various DOM Local Storage overheads, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=802920">802920</a>, <a href="http://is.gd/BYJQkE">telemetry data</a>.</p>
+
+<p><strong>Frontend Speedups</strong></p>
+
+<p>I thought our frontend optimization people did not have spare cycles for snappy UI fixes due to other important projects atm, but they proved me wrong this week.</p>
+
+<p>Jared Wein landed bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=804968">804968</a> which fixes jank where our awesomebar popup would appear then disappear while typing in the location bar. We were flushing layout for the top and bottom result on each adjustment to the awesomebar results, those flushes weren&#8217;t necessary for each time, they are now skipped after the first pass in the browser session.</p>
+
+<p>Dão Gottwald landed <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=752376">bug 752376</a> which removes some expensive layout flushes when switching tabs if the user isn&#8217;t overflowing their tabbar.</p>
+
+<p>Dão also landed bug<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=715402"> 715402</a> which corrects certain initialization code to run after the Firefox is drawn. Previously this code would get delayed, but due to some undeterministic event madness it would still be likely to get scheduled to run before Firefox is drawn on the screen. This should result in 10% faster perceived startups in some cases.</p>
+
+<p><strong>Profiler-assisted Bug Reporting</strong></p>
+
+<p>I looked at bug<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=642257"> 642257</a> and gave up figuring out what causes the problem because I could not reproduce it. I asked the reporter to try to record a profile of the problem with the <a href="https://developer.mozilla.org/en-US/docs/Performance/Profiling_with_the_Built-in_Profiler">gecko profiler</a>. Within 2.5 hours of the profile being posted in the bug, Timothy Nikkel identified the problem and posted a patch for it.</p>
+
+<p>I&#8217;m very excited about this because the reporter has never used a profiler and yet on the first try helped fix a hard to reproduce bug. Thanks to a dedicated bug reporter, keen layout hackers and our new profiling infrastructure Flash in background tabs will no longer slow down our layout calculations. For many types of bugs identifying the problem is the hardest part, this is very promising.</p>
+
+<p><strong>Moving Blogs Soon</strong></p>
+
+<p>I will be moving to a new blog location as soon as I decide on a better blog setup. I&#8217;ve been irritated by Wordpress since I started at Mozilla in 2006. The volume of comment spam has increased exponentially this year. After 6 years of suffering a terrible UI, spam, slowness, lossyness, I&#8217;m ready to move on to a blogging service elsewhere. If you have any suggestions for blog providers, ping me on <a href="https://twitter.com/tarasglek">twitter</a> as I likely wont see your comment in the mountain of spam.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -564,64 +620,6 @@ We spent most of the meeting discussing bug <a href="https://bugzilla.mozilla.or
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/08/16/snappy-36/">Snappy #36</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-08-16T07:24:19-07:00" pubdate data-updated="true">Aug 16<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><strong>Misc</strong></p>
-
-<p>I have been using dates to mark passage of time in the Snappy project. I think I&#8217;ll switch to a simple counter instead. We are ~36 updates into this project.</p>
-
-<p><strong>Blogging</strong></p>
-
-<p>Ludovic Hirlimann <a href="http://sietch-tabr.tumblr.com/post/29404692899/firefox-cache-and-spotlight">blogged</a> about how spotlight spends a lot of time indexing the Firefox network &#8216;Cache&#8217; directory (known problem, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=718910">718910</a>). If you experience this problem and would like to see it fixed, please comment in the bug if the <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=718910#c13">suggested remedy</a> helps.</p>
-
-<p>Tim Taubert <a href="http://timtaubert.de/blog/2012/08/snappy-fixing-new-tab-page-performance-regressions/">wrote</a> about reducing new-tab jank. I mention Tim a lot in these updates. He takes on a lot of interesting bugs in Firefox frontend. Hopefully he&#8217;ll make a habit out of blogging about his work.</p>
-
-<p><strong>Networking</strong></p>
-
-<p>Nick Hurley landed a change to reduce our maximum cache size to 350 megabytes. In order to avoid excessive disk IO traffic old cache size of 1 gigabyte remains in effect until the cache is reset. See bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=709297">709297</a> and Nick&#8217;s <a href="http://todesschaf.org/posts/2012/07/25/cache-usage-results.html">blog post</a> for more details. Progress is also being made on <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=777328">bug 777328</a> so we can move towards not blowing away our cache 10-20% of the time.</p>
-
-<p>Michal Novotny is proceeding with incrementally reducing cache-caused jank that&#8217;s due to holding a lock on the main thread while doing IO on a background thread. He also removing a multitude of synchronous necko APIs, see <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=695399">bug 695399</a>.</p>
-
-<p>Patrick McManus is removing synchronous proxy-related code, see <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=766973">bug 766973</a> for the DNS-related bit. Turns out our proxy code also does all kinds of synchronous operations when detecting proxy configuration, etc. This is being worked on, but hasn&#8217;t been filed yet.</p>
-
-<p>I usually try to highlight work that has already landed, but in this case it is important to point out that the Necko team is working hard on addressing significant problems in the networking code. These problems are tricky and will take a while to fix. The team is relatively new and is still discovering hidden surprises in their codebase.</p>
-
-<p><strong>Profiler</strong></p>
-
-<p>Benoit Girard posted a <a href="http://dl.dropbox.com/u/10523664/Screenshots/5p.png">preview </a>of view-source in the profiler. This will be handy for figuring out where performance problems lay, especially in JS files that have been preprocessed (our JS preprocessor does not try to keep the line numbers sane).</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/4/">&larr; Older</a>
@@ -639,6 +637,10 @@ We spent most of the meeting discussing bug <a href="https://bugzilla.mozilla.or
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/03/27/snappy-number-55-snappy-evolution/">Snappy #55: Snappy Evolution</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/03/26/snappy-number-54-snappy-discussion-in-paris/">Snappy #54: Snappy Discussion in Paris</a>
       </li>
     
@@ -652,10 +654,6 @@ We spent most of the meeting discussing bug <a href="https://bugzilla.mozilla.or
     
       <li class="post">
         <a href="/blog/2013/03/08/snappy-number-52/">Snappy #52</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/02/22/snappy-number-51-smoothing-tab-animations/">Snappy #51: Smoothing Tab Animations</a>
       </li>
     
   </ul>

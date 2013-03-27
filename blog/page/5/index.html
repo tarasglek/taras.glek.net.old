@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="We have an intern working on an analysis tool to analyze how other Windows applications/services affect Firefox startup. If you run Windows and you &hellip;">
+  <meta name="description" content="Necko team is busy squashing main-thread waits, see bug 765665, bug 766973. Ehsan Akhgari turned on frame pointers on nightly channel: bug 764216. &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,62 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/07/02/snappy-june-21-28/">Snappy June 21, 28</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-07-02T07:06:24-07:00" pubdate data-updated="true">Jul 2<span>nd</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Necko team is busy squashing main-thread waits, see <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=765665">bug 765665</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=766973">bug 766973</a>.</p>
+
+<p>Ehsan Akhgari turned on frame pointers on nightly channel: bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=764216">764216</a>. This means that one can now use the <a href="https://developer.mozilla.org/en/Performance/Profiling_with_the_Built-in_Profiler#Running%20the%20profiler">built-in profiler</a> on nightly builds. The main purpose behind the change was to collect more chromehang data(long Firefox UI stalls). Vlad Djeric lowered the chromehang reporting threshold to 5 seconds: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=763124">bug 763124</a>. We are waiting on metrics to separate out chromehang reporting from telemetry pings: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=763116">bug 763116</a>.</p>
+
+<p>Nathan Froyd is making heroic progress on teaching our events to queue so they can be prioritized: bug <a href="http://bugzilla.mozilla.org/show_bug.cgi?id=715376">715376</a>.</p>
+
+<p>Tim Taubert is working to reproduce a tab animation regression in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=752837">bug 752837</a>. He also taking over making Firefox themes less of a performance pig in<strong> </strong><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=650968">bug 650968</a> .</p>
+
+<p>We had great success with eliciting data on slow startups in Nicholas Chaim&#8217;s <a href="http://nchaim-moz2012.tumblr.com/post/25647745019/slow-startup-logging-add-on">blog post</a>.  We confirmed that external processes can affect Firefox startup (we had evidence for this) and that we can detect those situations (great work Nicholas!). It will be a hard slog before we can bolt a pretty UI to the extension + integrate system diagnostics into Firefox. In the meantime I recommend that <a href="http://support.mozilla.org/en-US/home">SUMO</a> people start suggesting this extension to diagnose slow Firefox installs. Nicholas is working on a revision of the extension that records slow-IO-caused-startup situations on a server so we prioritize + turn these into detectable fingerprints.</p>
+
+<p>William McCloskey fixed a nasty GC regression which caused GCs to run too often: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=768282">bug 768282</a>. Andrew McCreight sped up cycle collection when closing tabs: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=754495">bug 754495</a>. Olli Pettay enabled freeing DOM nodes directly (bypassing cycle-collection) when setting .innerHtml of non-empty DOM elements see <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=730639">bug 730639</a>.</p>
+
+<p><strong>PS</strong></p>
+
+<p>&#8220;The Performance of Open Source Applications&#8221; book is looking for <a href="http://www.aosabook.org/blog/2012/06/the-performance-of-open-source-applications/">contributors</a>. Would be cool if someone snuck some Mozilla wisdom in there.</p>
+
+<p>Sorry for skipping the snappy update last week. These posts take a lot more effort than is reasonable and I needed to direct it at my talk last week. You can see my <a href="http://velocityconf.com/velocity2012">Velocity</a> slides <a href="http://people.mozilla.com/~tglek/velocity2012/">here</a>.</p>
+
+<p>At least one person objected to the strong language used in the presentation (ie &#8220;dom local storage sucks&#8221;). I chose this language to emphasize the fact this isn&#8217;t a feature where one gets to weigh upsides vs downsides because the downsides are so severe. Most of the positive data on this is coming from what I believe to be unrepresentative benchmarks. I have not seen any other data points similar in quality to those reported by our <a href="https://metrics.mozilla.com/data/">telemetry</a>.</p>
+
+<p>Btw, Jan Varga is close to removing our IndexedDB prompt(bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=758357">758357</a>), opening up IndexedDB as an alternative to DOM Local Storage(<a href="http://taras.glek.net/blog/2012/03/16/localstorage-pageload-perf/">which sucks</a>).</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -522,56 +578,6 @@ if (requestAnimationFrame)
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/05/14/snappy-may-10-suspending-activity-in-background-tabs/">Snappy, May 10: Suspending Activity in Background Tabs</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-05-14T03:06:52-07:00" pubdate data-updated="true">May 14<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Tim landed a fix to avoid setTimeout()s when handling tab clicks: bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=743877">743877</a>. This should significantly improve our tab strip responsiveness.</p>
-
-<p>Incremental GC is making progress towards being turned on by default again: bugs <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=750959">750959</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=752098">752098</a>.</p>
-
-<p>There was also progress on cancellable SQL (bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=722243">722243</a>). This should result in faster shutdown.</p>
-
-<p>Progress was made towards fixing cache locking, bug <a href="http://bugzilla.mozilla.org/show_bug.cgi?id=722034">722034</a>.</p>
-
-<p>Lawrence posted a <a href="http://hacks.mozilla.org/2012/05/getting-snappy-performance-optimisations-in-firefox-13/">summary</a> of snappy work that went into Firefox 13.</p>
-
-<p><strong>LagBlock Plus</strong></p>
-
-<p>Some of the lag in Firefox is caused by background tabs processing timeouts <a href="http://taras.glek.net/blog/2012/04/18/web-2-0-a-collection-of-settimeouts/">willy-nilly</a>. We are working on teaching Firefox to cope with overactive background tabs in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=715376">715376</a>. The plan is to allow Firefox to throttle/group background events, especially in tabs that are CPU hogs.</p>
-
-<p>To help us along, the author of Adblock Plus <a href="http://adblockplus.org/blog/preventing-background-tabs-from-wasting-your-computer-s-resources">released</a> an experimental addon that freezes activity in background tabs. Since this addon halts all background tab activity, it is a useful gauge of baseline performance that we&#8217;ll try to get asymptotically close to. It is also helpful for isolating responsiveness issues that are not caused by background tabs.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/6/">&larr; Older</a>
@@ -589,6 +595,10 @@ if (requestAnimationFrame)
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/03/27/snappy-number-55-snappy-evolution/">Snappy #55: Snappy Evolution</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/03/26/snappy-number-54-snappy-discussion-in-paris/">Snappy #54: Snappy Discussion in Paris</a>
       </li>
     
@@ -602,10 +612,6 @@ if (requestAnimationFrame)
     
       <li class="post">
         <a href="/blog/2013/03/08/snappy-number-52/">Snappy #52</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/02/22/snappy-number-51-smoothing-tab-animations/">Snappy #51: Smoothing Tab Animations</a>
       </li>
     
   </ul>

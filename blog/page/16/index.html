@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Rooter - British pronunciation of router. This is post describes the hardware in my Atom router.I wanted a low power x86 router. There a number of &hellip;">
+  <meta name="description" content="I filed bug 533874 to expose the JavaScript AST to JS, but turns out I need to explain why it&#8217;s important to expose the JavaScript AST. So lets &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,54 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/12/17/javascript-dom/">JavaScript DOM</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-17T07:43:01-08:00" pubdate data-updated="true">Dec 17<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I filed<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=533874"> bug 533874</a> to expose the JavaScript AST to JS, but turns out I need to explain why it&#8217;s important to expose the JavaScript AST. So lets start from the beginning.</p>
+
+<p>My name is Taras and I like to wrestle useful information out of tools that do not think to offer it. I firmly believe that writing/maintaining code is more difficult than it should be. I think the current organization of compilers is partially responsible for it.</p>
+
+<p><strong>Related Prior Work </strong>Some groups at Mozilla have realized that inspection and refactoring of code are tasks that will often consume as many people as can be thrown at it so there has to be a better way. That better way is through tools: get computers to do things that are difficult for humans. We do that a lot for other kinds of tasks, but not so much for computers. For example, when was the last something you googled something using telnet? Yet our tools for presenting and analyzing code are about as sophisticated as telnet. For some reason it is easier to find some random piece of information on the web than it is to find what code implements a function that is being called from my code.</p>
+
+<p>As the original author, I think <a href="https://developer.mozilla.org/En/Dehydra">Dehydra</a>, <a href="https://developer.mozilla.org/en/Treehydra">Treehydra</a> on top of the GCC plugin <a href="http://gcc.gnu.org/wiki/GCC_PluginAPI">API</a> give us a pretty reasonable way to extract useful information out of our C++ code. I feel lost and confused without Dave&#8217;s <a href="http://australia.proximity.on.ca/dxr/">DXR</a>, the JS team routinely breaks (and fixes) invariants in the JS engine and we&#8217;ve been able to wipe out certain classes of bugs (ie code patterns that cause them) mozilla-wide. I&#8217;m looking forward to reducing the footprint of Mozilla by deleting <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=457262">more</a> dead code.</p>
+
+<p><strong>JavaScript Needs</strong> My efforts so far have focused on C++ because it is finicky language and developers need all the help they can get with it. I think we need to the same thing for JavaScript. I think there is a lot of useful information in JavaScript code that is burried and hard to get to. <a href="http://quetzalcoatal.blogspot.com/">Joshua Cranmer</a> broke new ground in building <a href="https://developer.mozilla.org/en/JSHydra">JSHydra</a> on top of SpiderMonkey. This way one can parse JavaScript in exact same way as Spidermonkey sees it (something that can only be approximated with other approaches). I think we should offer the ability to analyze js code within Spidermonkey. Unfortunately, he is a busy student so he doesn&#8217;t have the time to develop JSHydra this to the next level. <strong> How Would JavaScript Developers Benefit?</strong> Currently we have jshydra deployed on AMO to scan javascript for potential issues to make the reviewer&#8217;s job more productive. Dave Humphrey is working away on integrating JSHydra into DXR so we can have semantic navigation of JavaScript: what components are implemented JavaScript, wouldn&#8217;t it be nice to know who calls certain methods(including javascript callsites), etc. Gandalf has a cool idea where he needs to be able to extract translatable strings out of JetPacks. I believe JetPack people in general would like to be able to analyze JS code more.</p>
+
+<p>I think it&#8217;s clear that the common trend in all these tasks is to turn an opaque text blob into something that can be easily navigated programatically. Wouldn&#8217;t it suck to not to be able to walk the DOM for HTML? Why is it ok to accept that handicap for the essense of all programs?</p>
+
+<p><strong>How Should This Be Solved?</strong> I don&#8217;t know for sure, but my friend Jim Blandy, came up with a good suggestion. We already have eval/uneval in SpiderMonkey. it would be really cool to extend uneval to produce a iteratable data structure instead of a text blob. So I filed a <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=533874">bug 533874</a> on this, and this my explanation of why I think that would be a very empowering feature to expose ASTs in JavaScript.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -754,54 +802,6 @@ Bring on Atom! :D</div>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/08/27/moving-files-into-jars/">Moving Files Into JARs</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-08-27T03:40:09-07:00" pubdate data-updated="true">Aug 27<span>th</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Moving files into jars reduces amount of seeks on startup, and has miscellaneous other performance/organization benefits. I added resource://gre-resources/ which maps to jar:toolkit.jar!/res/.</p>
-
-<p>To move a file into a jar:</p>
-
-<ol>
-<li>Add a jar.mn entry.</li>
-<li>Remove existing references to the file in Makefile.in, packages-static files</li>
-<li>Add file to the removed-files.in list of dead files</li>
-<li>Update urls refering to the file in the source. Sometimes one has to switch from using file streams and filenames to using channels and URIs. This is the hard part.</li>
-<li>Set your bug as blocking bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=513027">513027</a>.
-For an example see <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=508421">bug 508421</a>.</li>
-</ol>
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/17/">&larr; Older</a>
@@ -819,6 +819,10 @@ For an example see <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=508421"
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/03/27/snappy-number-55-snappy-evolution/">Snappy #55: Snappy Evolution</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/03/26/snappy-number-54-snappy-discussion-in-paris/">Snappy #54: Snappy Discussion in Paris</a>
       </li>
     
@@ -832,10 +836,6 @@ For an example see <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=508421"
     
       <li class="post">
         <a href="/blog/2013/03/08/snappy-number-52/">Snappy #52</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/02/22/snappy-number-51-smoothing-tab-animations/">Snappy #51: Smoothing Tab Animations</a>
       </li>
     
   </ul>

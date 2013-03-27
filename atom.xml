@@ -4,7 +4,7 @@
   <title><![CDATA[All About Performance]]></title>
   <link href="http://taras.glek.net/atom.xml" rel="self"/>
   <link href="http://taras.glek.net/"/>
-  <updated>2013-03-26T06:26:15-07:00</updated>
+  <updated>2013-03-27T04:03:33-07:00</updated>
   <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -12,6 +12,39 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Snappy #55: Snappy Evolution]]></title>
+    <link href="http://taras.glek.net/blog/2013/03/27/snappy-number-55-snappy-evolution/"/>
+    <updated>2013-03-27T03:56:00-07:00</updated>
+    <id>http://taras.glek.net/blog/2013/03/27/snappy-number-55-snappy-evolution</id>
+    <content type="html"><![CDATA[<p>The Snappy name will be retired in favor of Performance: we will be expanding our meta scope beyond desktop Firefox responsiveness.</p>
+
+<p>I think as a result of Snappy, Firefox is in a much happier performance place now. There are a big wins remaining, but we have tools and ideas on how to get there. We&#8217;ve come a long way from &#8220;how to make Firefox feel fast?&#8221; discussions in late 2011.</p>
+
+<p>Snappy has been a tricky meta-project because work has to happen across teams. While my Performance team has an exclusive commitment to performance, other teams have to context-switch between feature-work, platform-work, performance, etc. There are also team culture differences on internal vs external communication, planning, etc.</p>
+
+<p>Some of the projects are quite hard and require specialized expertise. This meant that we&#8217;d make a bunch of progress on a project (eg breakpad profiler backend) only to realize that we are blocked on someone we didn&#8217;t loop into the project right away (eg Ted). Ideally we will minimize chances of surprises like this in the future.</p>
+
+<p>Until recently my solution was to deal with this as a manager. I&#8217;d sync up with relevant managers about Snappy needs and try to get some Snappy bugs onto relevant team&#8217;s todo. This has worked out ok, but there were a few too many instances of unexpected delays due to shifting team priorities, miscommunication, general lag. My conclusion is that at a developer-driven organization like Mozilla heavy manager involvement on Snappy-type projects is a sign that we are doing it wrong. Developers should be adding performance goals to their team&#8217;s agenda.</p>
+
+<p>Last week we came up with a more developer-centric way to do performance work. I&#8217;ll still be around making sure things are moving forward, but from now one I&#8217;d like to see developers drive planning &amp; coordination on a per-project basis. I&#8217;ll introduce individual projects + their respective blogs as they start in the next couple of weeks.</p>
+
+<p>Irving Reid (addon-manager startup performance lead) summed up key mechanics of the new approach in an email. Thanks, Irving.</p>
+
+<h3>Irving&#8217;s Summary</h3>
+
+<p>Coming out of the Snappy work week, we decided to try and make performance projects a little more structured than they have been in the past; see <a href="http://lawrencemandel.com/2013/03/21/no-more-snappy-meetings-and-other-changes-from-the-snappy-team/">Lawrence&#8217;s post</a> for a summary.</p>
+
+<p>While not mentioned in Lawrence&#8217;s blog, one of the things Taras (if I recall correctly) suggested was to have a project kick-off meeting to get rough agreement on scope, responsibilities, and how we&#8217;re going to track progress. If everyone is happy with settling those questions over email, we can; I think we lose a little by not getting a chance to see and hear each other directly, but it is rather painful to get that scheduled in the current circumstances.</p>
+
+<p>In any case I wasn&#8217;t planning on delaying work until after the meeting could happen; it&#8217;s more about getting things as clear as we can, as early as we can.</p>
+
+<p>The current plan is for Felipe and I to do the patches, with me handling coordination and progress tracking as well. Everybody else is involved to make sure we&#8217;re going in the right direction, and help us over roadblocks.</p>
+
+<p>The progress tracking technique the Snappy team settled on last week was a combination of daily one-line updates using the <a href="http://teamstat.us/#browse/irc.mozilla.org/perf">status bot</a> in the #perf channel, and a blog post every two weeks summarizing overall progress. I&#8217;ll do the <a href="http://www.controlledflight.ca/category/mozilla/">blog posts</a>; depending on how things go I may do them weekly instead of biweekly.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Snappy #54: Snappy Discussion in Paris]]></title>
@@ -566,35 +599,6 @@ Omnijar readhead is next, in <a title="Use readahead for ordered jar files such 
 <p><strong>Blog</strong></p>
 
 <p>Thanks for the feedback on blogging platform alternatives. I turned on a better captcha plugin to deflect spam. A lot less spam gets through now (but I think it&#8217;s also preventing legitimate users from getting through). If you are having trouble commenting, use twitter for now.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Snappy #42]]></title>
-    <link href="http://taras.glek.net/blog/2012/10/26/snappy-42/"/>
-    <updated>2012-10-26T08:01:40-07:00</updated>
-    <id>http://taras.glek.net/blog/2012/10/26/snappy-42</id>
-    <content type="html"><![CDATA[<p>Vladan Djeric landed a probe to directly measure various DOM Local Storage overheads, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=802920">802920</a>, <a href="http://is.gd/BYJQkE">telemetry data</a>.</p>
-
-<p><strong>Frontend Speedups</strong></p>
-
-<p>I thought our frontend optimization people did not have spare cycles for snappy UI fixes due to other important projects atm, but they proved me wrong this week.</p>
-
-<p>Jared Wein landed bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=804968">804968</a> which fixes jank where our awesomebar popup would appear then disappear while typing in the location bar. We were flushing layout for the top and bottom result on each adjustment to the awesomebar results, those flushes weren&#8217;t necessary for each time, they are now skipped after the first pass in the browser session.</p>
-
-<p>Dão Gottwald landed <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=752376">bug 752376</a> which removes some expensive layout flushes when switching tabs if the user isn&#8217;t overflowing their tabbar.</p>
-
-<p>Dão also landed bug<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=715402"> 715402</a> which corrects certain initialization code to run after the Firefox is drawn. Previously this code would get delayed, but due to some undeterministic event madness it would still be likely to get scheduled to run before Firefox is drawn on the screen. This should result in 10% faster perceived startups in some cases.</p>
-
-<p><strong>Profiler-assisted Bug Reporting</strong></p>
-
-<p>I looked at bug<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=642257"> 642257</a> and gave up figuring out what causes the problem because I could not reproduce it. I asked the reporter to try to record a profile of the problem with the <a href="https://developer.mozilla.org/en-US/docs/Performance/Profiling_with_the_Built-in_Profiler">gecko profiler</a>. Within 2.5 hours of the profile being posted in the bug, Timothy Nikkel identified the problem and posted a patch for it.</p>
-
-<p>I&#8217;m very excited about this because the reporter has never used a profiler and yet on the first try helped fix a hard to reproduce bug. Thanks to a dedicated bug reporter, keen layout hackers and our new profiling infrastructure Flash in background tabs will no longer slow down our layout calculations. For many types of bugs identifying the problem is the hardest part, this is very promising.</p>
-
-<p><strong>Moving Blogs Soon</strong></p>
-
-<p>I will be moving to a new blog location as soon as I decide on a better blog setup. I&#8217;ve been irritated by Wordpress since I started at Mozilla in 2006. The volume of comment spam has increased exponentially this year. After 6 years of suffering a terrible UI, spam, slowness, lossyness, I&#8217;m ready to move on to a blogging service elsewhere. If you have any suggestions for blog providers, ping me on <a href="https://twitter.com/tarasglek">twitter</a> as I likely wont see your comment in the mountain of spam.</p>
 ]]></content>
   </entry>
   

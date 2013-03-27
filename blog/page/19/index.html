@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="LWN published an article about a tool that does refactoring of C code. Guess what, it&#8217;s yet another tool on top of a crappy C-parser that will &hellip;">
+  <meta name="description" content="When I wrote the initial prototype of Dehydra I pondered how long it would take before it&#8217;s adopted by security guys. Unfortunately, until now &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,44 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/02/16/security-with-dehydra/">Security With Dehydra</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-02-16T08:36:38-08:00" pubdate data-updated="true">Feb 16<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>When I wrote the initial prototype of Dehydra I pondered how long it would take before it&#8217;s adopted by security guys. Unfortunately, until now take-up has been non-existent. Grep and Perl still seem to rule in that community even though the plain text approach restricts the range of possible security scans.</p>
+
+<p>Normally I would be tempted to rant on how grep is convenient yet limiting. However Ben Kurtz <a href="http://www.awgh.org/?p=73">discovered Dehydra for security scans</a> and did a great job explaining the issues involved. Thanks to Georgi for linking me to Ben&#8217;s post.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -595,44 +633,6 @@ I&#8217;m sure most people reading this will go: &#8220;Wait a minute, this is u
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2008/09/08/must_flow_throughlabel/">MUST_FLOW_THROUGH(&#8220;label&#8221;)</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-09-08T03:54:57-07:00" pubdate data-updated="true">Sep 8<span>th</span>, 2008</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Some time ago, Igor mentioned that there is code in SpiderMonkey that pleads to the programmer that from a certain point in a function code must flow through a label(ie a finalizer block). <a href="http://developer.mozilla.org/en/docs/Treehydra">Treehydra</a> made it to possible to turn that weak plea into an error message when static <a href="http://developer.mozilla.org/En/Building_with_static_checking">checking is enabled</a>. See the <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=432917">bug</a> for more details. My favourite static analyses are all about turning informal &#8220;gurantees&#8221; into angry compiler complaints.</p>
-
-<p>This is my first static analysis that landed in the mozilla-central tree. It&#8217;s also the simplest one and may be a decent starting point for solving similar problems. I&#8217;d be cool to see this particular feature utilized outside of SpiderMonkey. Unlike human-powered code-inspection, it excels at finding accidental early returns covered up by macros.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/20/">&larr; Older</a>
@@ -650,6 +650,10 @@ I&#8217;m sure most people reading this will go: &#8220;Wait a minute, this is u
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/03/27/snappy-number-55-snappy-evolution/">Snappy #55: Snappy Evolution</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/03/26/snappy-number-54-snappy-discussion-in-paris/">Snappy #54: Snappy Discussion in Paris</a>
       </li>
     
@@ -663,10 +667,6 @@ I&#8217;m sure most people reading this will go: &#8220;Wait a minute, this is u
     
       <li class="post">
         <a href="/blog/2013/03/08/snappy-number-52/">Snappy #52</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/02/22/snappy-number-51-smoothing-tab-animations/">Snappy #51: Smoothing Tab Animations</a>
       </li>
     
   </ul>

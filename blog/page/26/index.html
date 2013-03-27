@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Dehydra does a form of basic symbolic execution now. It&#8217;s enough to avoid the unfeasable branches. It enabled me to add known_zero() and &hellip;">
+  <meta name="description" content="Squash If you are working on any C++ refactoring, especially if it involves function calls, spans multiple files or feels like you need a compiler in &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,57 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2007/04/02/automated-code-refactoring/">Automated Code Refactoring</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-04-02T04:29:12-07:00" pubdate data-updated="true">Apr 2<span>nd</span>, 2007</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><strong>Squash </strong></p>
+
+<p>If you are working on any C++ refactoring, especially if it involves function calls, spans multiple files or feels like you need a compiler in your head to help you, drop me a note to see if <a href="http://wiki.mozilla.org/Squash">squash</a> can help. Squash provides a great deal of control over the refactoring process because it is not tied to a particular IDE and can be customized to accommodate for special cases.</p>
+
+<p>On Friday, two squash-produced patches landed:</p>
+
+<ol>
+<li>A <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=376042">212K patch</a> to rename nsIFrame::GetPresContext to PresContext. It took a couple of minutes to produce a patch for mac &amp; linux, and then some manual labour to complete it so it builds on Windows too. Unfortunately, Microsoft C++ is not yet supported by Oink. Windows-specific code will require magnitudes more of human labour until such support is contributed.</li>
+<li>A much simpler patch to calls to <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=375878">remove uses of the deprecated ::Recycle()</a>. This took a few minutes once I added support for renaming global functions to squash.
+<strong>Dehydra</strong></li>
+</ol>
+
+
+<p>C++ support in dehydra is coming along splendidly. I started working on cross-function analysis support. Currently my goal is to allow the user to build callgraphs of Mozilla. The first application of that is going to be dead code detection.</p>
+
+<p>In the meantime, contact me if you are looking for patterns in the code that grep wont help with : control flow-sensitive code, type &amp; syntax-aware matching, API misuse, etc. Dehydra can probably help.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -776,55 +827,9 @@ At the source level squash renames the class part of function definitions along 
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2006/12/05/static-analysis/">Static Analysis</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2006-12-05T01:50:38-08:00" pubdate data-updated="true">Dec 5<span>th</span>, 2006</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><strong>Introduction</strong></p>
-
-<p>My name is Taras Glek. I have been tasked with working on static analysis tools to automate <a href="http://wiki.mozilla.org/Gecko:DeCOMtamination">deCOMtamination</a>, verify code, etc.</p>
-
-<p><strong>Progress</strong></p>
-
-<p>C++ is a hard language to parse and no static analysis can be done before Mozilla source code be represented as an abstract syntax tree. My first step was to get the Mozilla trunk parsing with <a href="http://www.cs.berkeley.edu/~smcpeak/elkhound/">Elsa</a>. With a small fix, Elsa now parses all files needed to build Firefox with -DNS_DISABLE_LITERAL_TEMPLATE (Elsa&#8217;s template support is incomplete).</p>
-
-<p>Now that code parses we can move to the next step of writing tools that can analyze the Mozilla AST. These would prove certain parts of code correct or do source-to-source transformations such as the planned <a href="http://weblogs.mozillazine.org/roadmap/archives/2006/11/oinkbased_patch_generation.html">patch tool</a>. More applications of static analysis <a href="http://wiki.mozilla.org/Static_Analysis">here</a>. DeCOMtamination of the Gecko core is a time consuming task and is the main candidate for static analysis. I started formalizing the broad tasks collectively referred to as DeCOMtamination into an <a href="http://wiki.mozilla.org/Gecko:DeCOMtamination_Algorithm">algorithm</a> that could be implemented. I am prototyping the analysis in O&#8217;Caml using the <a href="http://www.cs.ru.nl/~tews/olmar/">Olmar</a> binding to Elsa. O&#8217;Caml is a great language to this task because it has a lot of <a href="http://flint.cs.yale.edu/cs421/case-for-ml.html">features</a> for writing compilers and it allows me to load and traverse parts of the AST in an interactive console which greatly speeds up development. I am currently able to process class declarations, graph the class hierarchy into a giant pseudo-UML class diagram and am working on an ability to move class members up from the implementation class into the interface class while adding forward declarations, etc.</p>
-
-<p>Additionally I am involved in garbage collection related analysis that prevents unsafe uses of the garbage collection API and improving LXR precision and functionality via feeding it data from Elsa/Olmar.</p>
-
-<p><strong>Update:</strong> This mini-<a href="http://glek.net:8080/~taras/presentation.pdf">presentation</a> should clarify some of the reasons why we are doing deCOMtamination.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
+    
+      <a class="prev" href="/blog/page/27/">&larr; Older</a>
     
     <a href="/blog/archives">Blog Archives</a>
     
@@ -837,6 +842,10 @@ At the source level squash renames the class part of function definitions along 
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/03/27/snappy-number-55-snappy-evolution/">Snappy #55: Snappy Evolution</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/03/26/snappy-number-54-snappy-discussion-in-paris/">Snappy #54: Snappy Discussion in Paris</a>
@@ -852,10 +861,6 @@ At the source level squash renames the class part of function definitions along 
     
       <li class="post">
         <a href="/blog/2013/03/08/snappy-number-52/">Snappy #52</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/02/22/snappy-number-51-smoothing-tab-animations/">Snappy #51: Smoothing Tab Animations</a>
       </li>
     
   </ul>

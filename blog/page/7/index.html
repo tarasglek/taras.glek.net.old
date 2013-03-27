@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Our baby girl was born recently. We had the house heat off while we stayed at the birth center.Because we live in the future, we were able to to &hellip;">
+  <meta name="description" content="I recently got rid of an old Pioneer receiver in favour of a tiny Class D amplifier. The class D amp is more efficient, sounds better and is &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,43 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/04/04/powering-speakers-etc-with-bike-dynamo/">Powering Speakers, Etc With a Bike Dynamo</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-04-04T22:15:00-07:00" pubdate data-updated="true">Apr 4<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><div class='post'>
+I recently got rid of an old Pioneer receiver in favour of a tiny Class D amplifier. The class D amp is more efficient, sounds better and is approximately 10x cheaper. Did I mention, it&#8217;s tiny?<br /><br />While shopping for a variable voltage regulator for a power supply I discovered that EBay sells fun-looking <a href="http://www.ebay.com/itm/3-5-28V-to-1-25-26V-DC-DC-Converter-Boost-Buck-Step-Up-Step-Down-Voltage-Module-/260978204562?pt=LH_DefaultDomain_0&amp;hash=item3cc3835f92">1.5V-26V regulators.</a>..for $10. I&#8217;ve been eyeing the Busch + Müller E-WERK universal power supply(up to 13.5V) for a while now, but those sell for $110. It&#8217;s no fun spending a hundred bucks on a bike accessory that may not prove useful. I had no choice but to buy the EBay regulator.<br /><br />As my first experiment I tried powering a 12V MR16 light&#8230; it worked, but flickered like mad. A fat capacitor on the regulated side calmed the flicker. Great, now I can use indoor lights to illuminate my outdoor bike rides.<br /><br />Next I tried a 1-meter 12V LED strip, the strip uses a lot less current than the light bulb so it was quite happy.<br /><br />Then I wondered&#8230;could I power decent speakers using dynamo power? $8 <a href="http://www.ebay.com/itm/ws/eBayISAPI.dll?ViewItem&amp;item=220950831774&amp;ssPageName=ADME:L:OU:US:1123">ebay amp</a> later&#8230;yes I can! <br /><div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/-Li9MPsIIXjI/T30nOwQeECI/AAAAAAAADCg/Ftik9IGKLlQ/s1600/IMGP4964.JPG" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="212" src="http://1.bp.blogspot.com/-Li9MPsIIXjI/T30nOwQeECI/AAAAAAAADCg/Ftik9IGKLlQ/s320/IMGP4964.JPG" width="320" /></a></div>Recipe: dynamo -&gt; rectifier bridge -&gt; high voltage smoothing capacitors -&gt; regulator -&gt; 16V 0.1F cap -&gt; (optional voltmeter) -&gt; ta2024 amp -&gt; speaker[s]<br /><br />By the way, do not buy this ta2024 amp, spend a few dollars extra and get a board with proper audio in. I had to desolder the weirdo 3pin connector and solder on a home-made audio cable. It also comes with extremely crappy capacitors and crappy terminals for remaining connections (vs decent stuff on the $14 ta204 amp).<br /><br />I think this voltage regulator will prove very handy for bike touring + camping. Should be especially fun once I combine the dynamo with a 3.5W solar panel. Buck/boost will prove very handy indeed.</div>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -604,83 +641,6 @@ Bill landed incremental GC this week, bug <a href="https://bugzilla.mozilla.org/
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/02/22/psa-dom-local-storage-considered-harmful/">PSA: DOM Local Storage Considered Harmful</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-02-22T09:39:39-08:00" pubdate data-updated="true">Feb 22<span>nd</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Recently there have been a number of blog posts on optimizations possible via <a href="https://developer.mozilla.org/en/DOM/Storage#Storage_location_and_clearing_the_data">Local StorageAPI</a>. When Microsoft, Google, Amazon and a number of others aggressively adopt a new feature, people notice.</p>
-
-<p>The optimization is to use Local Storage to reduce network requests and/or payload size. This should result in a more responsive experience for the user&#8230; except when it doesn&#8217;t.</p>
-
-<p>This strategy can backfire because:</p>
-
-<ul>
-<li>Local Storage is a synchronous API</li>
-<li>Local Storage does IO
-Disk IO is particularly problematic because it&#8217;s non-deterministic for a multitude of reasons. A simple disk operation can take anywhere from zero milliseconds to a few seconds. Browsers cope with this by preloading the entire Local Storage key/value store into memory on first request. While testing a website the developer is likely to <em>frequently</em> reload the same page multiple times. This means that the relevant disk IO is very likely to be cached in the os file cache.</li>
-</ul>
-
-
-<p>Now consider the case of a user turning on their computer, firing up the browser and going to an optimized site:</p>
-
-<ol>
-<li>The webpage starts to load</li>
-<li>Data is read in from Local Storage</li>
-<li><em>Webpage completely freezes for a few seconds while the browser populates Local Storage key/value store</em>.
-This freeze can last anywhere from a few milliseconds on an unburdened computer to dozens of seconds on a computer with stock Windows settings (AntiVirus, Windows Indexing Service, etc). Firefox, Chrome, Safari suffer this fate to various degrees.</li>
-</ol>
-
-
-<p>Local Storage has the following costs:</p>
-
-<ol>
-<li>It can take a long unresponsive while to read in maximum allowable 5megs of data</li>
-<li>This data is then in memory for the lifetime of the webpage session wasting memory. Imagine if every one of your tabs decided to do this.</li>
-<li>LS is persistent. My profile has 0.5MB of meebo.com data that will haunt me forever even though meebo is long gone from my history.
-<strong>What should webdevs do instead?</strong></li>
-</ol>
-
-
-<p>Cry, rely on browser cache. There are no viable alternative at the moment. <a href="https://developer.mozilla.org/en/IndexedDB">IndexedDB </a>is complex, requires user to approve it and isn&#8217;t widely implemented. WebSQL is all about bringing SQLite problems we&#8217;ve been studying and fixing within Firefox to every single webpage.</p>
-
-<p>My best guess is that we&#8217;ll end up with webdevs using convenience libraries built on top of IndexedDB. We will likely add promptless operation to IndexedDB.</p>
-
-<p>We have already made Local Storage hurt less, we have a plan to make it relatively painless, but it will always degrade user experience when compared to something like IndexedDB.</p>
-
-<p><strong>Are there any other convenient APIs with terrible complications?</strong></p>
-
-<p>Of course, see <a href="http://blogs.msdn.com/b/wer/archive/2011/08/03/why-you-should-use-xmlhttprequest-asynchronously.aspx">sync XHR</a>.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/8/">&larr; Older</a>
@@ -698,6 +658,10 @@ This freeze can last anywhere from a few milliseconds on an unburdened computer 
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/03/27/snappy-number-55-snappy-evolution/">Snappy #55: Snappy Evolution</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/03/26/snappy-number-54-snappy-discussion-in-paris/">Snappy #54: Snappy Discussion in Paris</a>
       </li>
     
@@ -711,10 +675,6 @@ This freeze can last anywhere from a few milliseconds on an unburdened computer 
     
       <li class="post">
         <a href="/blog/2013/03/08/snappy-number-52/">Snappy #52</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/02/22/snappy-number-51-smoothing-tab-animations/">Snappy #51: Smoothing Tab Animations</a>
       </li>
     
   </ul>
