@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="I filed bug 533874 to expose the JavaScript AST to JS, but turns out I need to explain why it&#8217;s important to expose the JavaScript AST. So lets &hellip;">
+  <meta name="description" content="I did some digging to figure out if one can setup cold-startup testing in Windows 7 without nasty hacks. My conclusion is: sorta-kinda. The Good - &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,108 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/01/04/windows-7-startup-exploration/">Windows 7 Startup Exploration</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-01-04T03:28:49-08:00" pubdate data-updated="true">Jan 4<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I did some digging to figure out if one can setup cold-startup testing in Windows 7 without nasty hacks. My conclusion is: sorta-kinda.</p>
+
+<p><strong>The Good - Most of the Ingredients Are Present </strong></p>
+
+<p>I haven&#8217;t actively used Windows since pre-XP days. It looks like it has come a long way since then: there is now a decent interactive shell, all kinds of settings/services can be controlled from the commandline and there is even sudo-like functionality.</p>
+
+<p>PowerShell takes inspiration from the korn shell and throws in .net which allows for much nicer &#8220;shell programming&#8221; than the dominant bash shell.</p>
+
+<p>mountvol is a terrible equivalent to mount in linux - but it exists, so I&#8217;m happy.</p>
+
+<p>NTFS junctions are frustrating equivalents to links in a unix filesystem.</p>
+
+<p><strong>The Bad</strong></p>
+
+<p>The essential ability to completely flush filesystem caches isn&#8217;t there. This isn&#8217;t quite as embarrassing as it seems as Mac OS X&#8217;s purge command does not flush the page cache (resulting in mmapped files not purged from cache), so technically OS X has the same limitation and only Linux gets it right.</p>
+
+<p><strong>The Ugly Workaround</strong></p>
+
+<p>After much brainstorming we figured out that we can clear all relevant caches on Mac OS X by putting files that we care about on a separate partition and mounting/unmounting it for every measurement.</p>
+
+<p>Ridiculously, Windows is &#8220;smarter&#8221; than that and appears to cache stuff per-drive, such that mounting/unmounting a partition has no effect on the cache. The best workaround I could come up with involves putting the said partition onto a USB disk and unplugging it in-between unmount/mount testing cycle.</p>
+
+<p><strong>Windows 7 Startup Recipe</strong></p>
+
+<p>1) Set up junctions for the 2 profile directories to point to the USB partition, unzip firefox onto that partition.</p>
+
+<p>2)</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$old = (get-location)
+</span><span class='line'>$mountpoint = $env:userprofile + "\cold"
+</span><span class='line'># magic name given by running mountvol
+</span><span class='line'>$drive = "\\?\Volume{885d5bc3-e918-11de-a4e5-002268e3077c}\"
+</span><span class='line'># Based on http://poshcode.org/696 + fiddling with UAC settings to avoid prompts
+</span><span class='line'>sudo mountvol $mountpoint $drive
+</span><span class='line'># Mountvol doesn't seem to block until drive is mounted
+</span><span class='line'>sleep 1
+</span><span class='line'>#mountvol
+</span><span class='line'>cd $mountpoint\firefox
+</span><span class='line'>echo (pwd)
+</span><span class='line'># The following command shows PowerShell awesomeness
+</span><span class='line'># based on [Vlad's approach](http://blog.vlad1.com/2009/07/28/measuring-startup/)
+</span><span class='line'>./firefox.exe -no-remote "file://$(pwd)\startup.html#$([Int64](([DateTime]::utcnow - (new-object DateTime 1970,1,1)).ticks/10000))"
+</span><span class='line'>cd $old
+</span><span class='line'># I haven't yet figured out how to wait on firefox.exe to finish
+</span><span class='line'>sleep 10
+</span><span class='line'>sudo mountvol $mountpoint /d</span></code></pre></td></tr></table></div></figure>
+
+
+<p>3) Unplug USB drive</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -762,46 +864,6 @@ Bring on Atom! :D</div>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/09/18/enforcing-inheritance-rules/">Enforcing Inheritance Rules</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-09-18T03:01:48-07:00" pubdate data-updated="true">Sep 18<span>th</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>While writing C++ sometimes one wishes that one could squeeze a little more out of the type system. In this particular case, Zack Weinberg (layout-refactorer extraordinaire), wanted to make sure that certain methods always get overridden in derived classes. Unfortunately, in that particular design, those methods were not pure-virtual. At this point most C++ hackers would cry a little and move on without any compiler assistance.</p>
-
-<p>Instead of crying, Zack added a NS_MUST_OVERRIDE attribute to methods along with a matching <a href="https://developer.mozilla.org/En/Dehydra">Dehydra</a> script. See the <a href="http://hg.mozilla.org/mozilla-central/file/2047ed35d947/xpcom/analysis/must-override.js">source code</a> and the <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=512726">bug</a> for how simple it can be to extend C++ with a useful new check.</p>
-
-<p>Nothing makes me happier than seeing developers land big code changes and accompany them with compiler checks instead of relying on programming folklore to maintain important invariants.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/17/">&larr; Older</a>
@@ -819,6 +881,10 @@ Bring on Atom! :D</div>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/04/05/mozilla-tech-on-reddit/">Mozilla Tech on Reddit</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/03/27/snappy-number-55-snappy-evolution/">Snappy #55: Snappy Evolution</a>
       </li>
     
@@ -832,10 +898,6 @@ Bring on Atom! :D</div>
     
       <li class="post">
         <a href="/blog/2013/03/11/living-with-octopress/">Blogging with Octopress</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/03/08/snappy-number-52/">Snappy #52</a>
       </li>
     
   </ul>

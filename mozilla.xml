@@ -4,7 +4,7 @@
   <title><![CDATA[All About Performance]]></title>
   <link href="http://taras.glek.net/atom.xml" rel="self"/>
   <link href="http://taras.glek.net/"/>
-  <updated>2013-03-29T07:29:08-07:00</updated>
+  <updated>2013-04-05T20:23:44-07:00</updated>
   <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -12,6 +12,23 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  
+  <entry>
+    <title type="html"><![CDATA[Mozilla Tech on Reddit]]></title>
+    <link href="http://taras.glek.net/blog/2013/04/05/mozilla-tech-on-reddit/"/>
+    <updated>2013-04-05T20:02:00-07:00</updated>
+    <id>http://taras.glek.net/blog/2013/04/05/mozilla-tech-on-reddit</id>
+    <content type="html"><![CDATA[<p>I posted earlier about <a href="planet%20mozilla%20being%20obsolete">/blog/2013/02/15/is-planet-mozilla-obsolete/</a>. To move forward, we need to experiment with some alternatives. Mozilla contributor, <a href="https://twitter.com/djco">@djco</a>, setup a <a href="http://www.reddit.com/r/MozillaTech/">reddit feed</a> so we can up-vote technical content and down-vote the rest.</p>
+
+<p>I know a number of good people who stopped reading and posting on planet because of irrelevant, offensive, etc content. Please give the reddit feed a try. Maybe once we get enough people moderating, we&#8217;ll encourage more quality content.</p>
+
+<p>I am not suggesting that people stop posting pictures of their cats, dictionary entries on planet. I only want to filter that out so I can have a satisfying technical feed.</p>
+
+<p>Please try out the <a href="http://www.reddit.com/r/MozillaTech/">reddit feed</a> and let <a href="https://twitter.com/tarasglek">me</a> and <a href="https://twitter.com/djco">Dirkjan</a> know if it works for you. We are open to other suggestions too.</p>
+]]></content>
+  </entry>
+  
   
   
   <entry>
@@ -497,41 +514,6 @@ Omnijar readhead is next, in <a title="Use readahead for ordered jar files such 
 <p>Workweeks are a more about communication than getting code landed, so it is impressive that Jeff, Matt and their reviewers managed to diagnose, fix, review, land such significant optimizations in a couple of days. My laptop of pain feels much faster already.</p>
 
 <p>In the coming weeks expect to see smoother tab switching, smoother animations, lower profiling overhead as we work through issues discussed during the workweek.</p>
-]]></content>
-  </entry>
-  
-  
-  
-  <entry>
-    <title type="html"><![CDATA[Snappy #43: Big improvements: faster startup? Smoother tabstrip!]]></title>
-    <link href="http://taras.glek.net/blog/2012/11/05/snappy-43-big-improvements-faster-startup-smoother-tabstrip/"/>
-    <updated>2012-11-05T09:22:03-08:00</updated>
-    <id>http://taras.glek.net/blog/2012/11/05/snappy-43-big-improvements-faster-startup-smoother-tabstrip</id>
-    <content type="html"><![CDATA[<p>Our median startup performance (as measured by <a href="https://metrics.mozilla.com/data/content/pentaho-cdf-dd/Render?solution=metrics2&amp;path=%2Ftelemetry&amp;file=telemetryEvolution.wcdf&amp;bookmarkState={%22impl%22%3A%22client%22%2C%22params%22%3A{%22referenceDate%22%3A%222012-11-05%22%2C%22appNameParameter%22%3A%22[Application].[Firefox]%22%2C%22osParameter%22%3A%22[OS].[WINNT]%22%2C%22channelParameter%22%3A%22[Channel].[nightly]%22%2C%22reasonParameter%22%3A%22[Reason].[idle-daily]%22%2C%22histogramParameter%22%3A%22[Histogram].[SIMPLE_MEASURES_FIRSTPAINT]%22%2C%22histogramPopupTools%22%3A%22%22%2C%22duplicateHistogram%22%3A%22%23duplicateHistogram%22%2C%22medianButtonParam%22%3A1%2C%22scatterChart%22%3A%22%22}}">SIMPLE_MEASURES_FIRST_PAINT</a>) improved between 20%-25% at the end of Firefox 18 cycle (~Oct 26). Strangely most of the speedup seems to have come from a 50% speedup in library loading (measured by <a href="https://metrics.mozilla.com/data/content/pentaho-cdf-dd/Render?solution=metrics2&amp;path=%2Ftelemetry&amp;file=telemetryEvolution.wcdf&amp;bookmarkState={%22impl%22%3A%22client%22%2C%22params%22%3A{%22referenceDate%22%3A%222012-11-05%22%2C%22appNameParameter%22%3A%22[Application].[Firefox]%22%2C%22osParameter%22%3A%22[OS].[WINNT]%22%2C%22channelParameter%22%3A%22[Channel].[nightly]%22%2C%22reasonParameter%22%3A%22[Reason].[saved-session]%22%2C%22histogramParameter%22%3A%22[Histogram].[SIMPLE_MEASURES_MAIN]%22%2C%22histogramPopupTools%22%3A%22%22%2C%22duplicateHistogram%22%3A%22%23duplicateHistogram%22%2C%22medianButtonParam%22%3A1%2C%22scatterChart%22%3A%22%22}}">SIMPLE_MEASURES_MAIN</a>).</p>
-
-<p><a href="http://taras.glek.net/assets/images/2012-11-05-snappy-43-big-improvements-faster-startup-smoother-tabstrip/startup2025.png"><img src="http://taras.glek.net/assets/images/2012-11-05-snappy-43-big-improvements-faster-startup-smoother-tabstrip/startup2025.png" alt="" /></a></p>
-
-<p><strong>Tab-strip</strong></p>
-
-<p>Bas Schouten landed <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=805831">bug 805831</a> which should further speed up tab-strip drawing when 2d-acceleration is used. Neil Deakin fixed <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=792296">bug 792296</a> and <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=752376">bug 752376</a>.</p>
-
-<p>We spent a lot of time focusing on tab smoothness recently. We still have a long way to go, but I checked telemetry data and the improvements are staggering. In the picture below I&#8217;m comparing tab closing animation(<a href="https://metrics.mozilla.com/data/content/pentaho-cdf-dd/Render?solution=metrics2&amp;path=%2Ftelemetry&amp;file=telemetryHistogram.wcdf&amp;bookmarkState={%22impl%22%3A%22client%22%2C%22params%22%3A{%22startDate%22%3A%222012-10-06%22%2C%22endDate%22%3A%222012-11-04%22%2C%22appVersion%22%3A%22%22%2C%22appName%22%3A%22Firefox%22%2C%22arch%22%3A%22%22%2C%22OS%22%3A%22WINNT%22%2C%22version%22%3A%226.1%22%2C%22channel%22%3A%22nightly%22%2C%22reason%22%3A%22idle-daily%22%2C%22appBuildID%22%3A%22%22%2C%22fromPlatformBuildID%22%3A%22%22%2C%22toPlatformBuildID%22%3A%22%22%2C%22excludeParam%22%3A%22%22%2C%22measure%22%3A%22FX_TAB_ANIM_CLOSE_MS%22%2C%22histogramCompareParam%22%3A%22appVersion%22%2C%22histogramVariablesParam%22%3A%2217.0a1%2C18.0a1%2C19.0a1%22%2C%22platformBuildIDMode%22%3A%22LATEST%22%2C%22platformBuildIDTopCount%22%3A%2230%22%2C%22conditionsStatistic%22%3A%22%23conditionsStatistic%22%2C%22submissionsParameter%22%3A[[134541]]}}">FX_TAB_ANIM_CLOSE</a>) between 17, 18, 19. In the picture below there should be 0 entries to the right of 154(that&#8217;s our problematic performance tail). In 2.5 months, we went from having almost 20% of our tab animations taking > 400ms to complete to ~3%.</p>
-
-<p><a href="http://taras.glek.net/assets/images/2012-11-05-snappy-43-big-improvements-faster-startup-smoother-tabstrip/fx_anim_tab_close1.png"><img src="http://taras.glek.net/assets/images/2012-11-05-snappy-43-big-improvements-faster-startup-smoother-tabstrip/fx_anim_tab_close1.png" alt="" /></a></p>
-
-<p>In addition to median perf improving, tab animations are now much less likely to vary in duration, etc. This required fixes in layout, gfx, frontend code. It&#8217;s really great to see a cross-team effort producing tangible results. It&#8217;s too bad that our analysis infrastructure makes it so hard to pinpoint specific changes that contributed most to an improvement like this.</p>
-
-<p><strong>Misc</strong></p>
-
-<p>Matt Woodrow improve performance of a periodic table demo in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=806256">806256</a>. However, performance is still poor on some types of machines, so I filed bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=808838">808838</a>.</p>
-
-<p>Dão Gottwald landed bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=756313">756313</a> which is similarly to his work in last Snappy update postphones doing content work until Firefox chrome is painted.</p>
-
-<p>Benoit Girard changed the <a href="https://addons.mozilla.org/en-us/firefox/addon/gecko-profiler/">profiler </a>so it now updates the url as the treeview is being navigated. This makes it much easier to discuss what we are seeing in the profile.</p>
-
-<p><strong>Blog</strong></p>
-
-<p>Thanks for the feedback on blogging platform alternatives. I turned on a better captcha plugin to deflect spam. A lot less spam gets through now (but I think it&#8217;s also preventing legitimate users from getting through). If you are having trouble commenting, use twitter for now.</p>
 ]]></content>
   </entry>
   

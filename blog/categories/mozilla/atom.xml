@@ -4,7 +4,7 @@
   <title><![CDATA[Category: mozilla | All About Performance]]></title>
   <link href="http://taras.glek.net/blog/categories/mozilla/atom.xml" rel="self"/>
   <link href="http://taras.glek.net/"/>
-  <updated>2013-03-29T07:29:08-07:00</updated>
+  <updated>2013-04-05T20:23:44-07:00</updated>
   <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -12,6 +12,21 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Mozilla Tech on Reddit]]></title>
+    <link href="http://taras.glek.net/blog/2013/04/05/mozilla-tech-on-reddit/"/>
+    <updated>2013-04-05T20:02:00-07:00</updated>
+    <id>http://taras.glek.net/blog/2013/04/05/mozilla-tech-on-reddit</id>
+    <content type="html"><![CDATA[I posted earlier about [/blog/2013/02/15/is-planet-mozilla-obsolete/](planet mozilla being obsolete). To move forward, we need to experiment with some alternatives. Mozilla contributor, [@djco](https://twitter.com/djco), setup a [reddit feed](http://www.reddit.com/r/MozillaTech/) so we can up-vote technical content and down-vote the rest.
+
+I know a number of good people who stopped reading and posting on planet because of irrelevant, offensive, etc content. Please give the reddit feed a try. Maybe once we get enough people moderating, we'll encourage more quality content.
+
+I am not suggesting that people stop posting pictures of their cats, dictionary entries on planet. I only want to filter that out so I can have a satisfying technical feed.
+
+Please try out the [reddit feed](http://www.reddit.com/r/MozillaTech/) and let [me](https://twitter.com/tarasglek) and [Dirkjan](https://twitter.com/djco) know if it works for you. We are open to other suggestions too.
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Snappy #55: Snappy Evolution]]></title>
@@ -150,31 +165,6 @@ One of the worst parts about my old wordpress blog was the amount of UI one had 
 If anyone is interested, you can download it [here](http://people.mozilla.org/~tglek/bugzilla.rb) until I clean up my octopress git repository.
 
 Overall I like Octopress and I recommend the octopress/github combo to every developer who is looking to setup a blog. It saves a lot of time and as long as one can deal with lack of unit testing and Ruby, it's great.
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Snappy #52]]></title>
-    <link href="http://taras.glek.net/blog/2013/03/08/snappy-number-52/"/>
-    <updated>2013-03-08T16:58:00-08:00</updated>
-    <id>http://taras.glek.net/blog/2013/03/08/snappy-number-52</id>
-    <content type="html"><![CDATA[###Frontend
-
-####Help-Wanted:
-
-Avi Halachmi [needs your help](http://avih.github.com/blog/2013/02/28/slow-touchpad-scroll-in-firefox/) comparing scrolling behavior between browsers.
-
-####Australis
-
-Mike Conley [blogged](http://mikeconley.ca/blog/2013/03/01/australis-curvy-tabs-more-progress/) that Australis performance is now on-par with current theme on low-end hardware.
-
-
-###Startup
-
-Aaron Klotz landed {%bug 845907%}. This gives us a consistent way to warm IO caches. This functionality can easily backfire if we end preloading data that does not get used. Uses of readahead should always be accompanied with telemetry to verify it performs as expected. {%Bug 810454%} is the first user of readahead API, it landed with A/B testing telemetry.
-Omnijar readhead is next, in {%bug 810151%}. It results in ~60% drop in omni.ja startup read time on Windows on Aaron's machine.
-
- 
 ]]></content>
   </entry>
   

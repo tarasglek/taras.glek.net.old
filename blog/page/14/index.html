@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="I have been able to get precise filed-backed page fault logging(systemtap on Linux, xperf on Windows) for a while. It is incredibly useful to see &hellip;">
+  <meta name="description" content="This post is a result of debugging bug 561842. Turns out one needs to go far beyond lumping libraries together to reap startup benefits. I made a pdf &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,87 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/05/27/startup-backward-constructors/">Startup: Backward Constructors</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-05-27T09:35:20-07:00" pubdate data-updated="true">May 27<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><em>This post is a result of debugging <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=561842">bug 561842</a>. Turns out one needs to go far beyond lumping libraries together to reap startup benefits.</em></p>
+
+<p>I made a <a href="http://hg.mozilla.org/users/tglek_mozilla.com/startup/raw-file/ca994a12e2a8/xulanatomy.pdf">pdf</a> to illustrate the cost centers of loading libxul.so (the essence of Firefox).</p>
+
+<p>With <a href="http://taras.glek.net/blog/2010/04/07/icegrind-valgrind-plugin-for-optimizing-cold-startup/">Icegrind</a> I demonstrated that better binary layout can significantly improve application startup. However I still didn&#8217;t have a breakdown of reasons of why loading binaries is so damn inefficient. That&#8217;s what the above pdf is about.</p>
+
+<p>Loading libxul consists of 4 major phases:</p>
+
+<ol>
+<li>Runtime linker setup: mapping segments in, zeroing .bss, loading dependent libraries, etc</li>
+<li>Runtime linker relocations.</li>
+<li>Library intializers.</li>
+<li>main() and the rest of application code runs
+I blogged about 1, 2, 4, this post is about #3.</li>
+</ol>
+
+
+<p><strong>Library Initializers?</strong></p>
+
+<p><a href="http://people.gnome.org/~michael/">Michael Meeks</a> pointed me at the funny backwards IO pattern in his IO logs. I even <a href="http://taras.glek.net/blog/2010/03/24/linux-why-loading-binaries-from-disk-sucks/">made fun</a> of how by default libxul.so is read mostly via backwards IO. Once I <a href="http://taras.glek.net/blog/2010/05/24/teethig-troubles-assigning-blame-for-pagefaults/">assigned</a> userspace symbols to my pagefault log, it became clear that the backwards IO pattern was entirely due to library initializers. C++ compiler generates code that runs on library initialization to initialize globals and run relevant C++ constructors. In C one can assign a &#8220;constructor&#8221; GNU attribute to a function to participate in this mayhem.</p>
+
+<p><strong>Running Backwards?</strong></p>
+
+<p>Ian Lance Taylor clued me in on why these things run backwards.When one links the program, the object files are laid out sequentially. Static libraries are specified after the code that depends on them. Once an object is linked, the easiest way to make sure that libraries are initialized before their users is to invoke initializers backwards. The list of initializers is stored in the .ctors section and they loaded by libgcc.</p>
+
+<p>In Mozilla (and likely other C++ codebases) these global initializers are more or less evenly scattered throughout the codebase. By the time main() is run, most of the program has been paged in an unfortunately inefficient manner.</p>
+
+<p><strong>Run Faster Please?</strong></p>
+
+<p>The most interesting part about all this that the compiling toolchain can make a rather precise guess at how a large part of the initial program execution is going to go. To test this theory I wrote my best Mozilla <a href="https://bugzilla.mozilla.org/attachment.cgi?id=447253&amp;action=edit">patch</a> ever.</p>
+
+<p>One can place a function near the beginning of the library file and another one at the end (with a &#8220;constructor&#8221; attribute). The function at the end runs first and it can figure out the approximate range of memory that will need to be paged in and madvise() it. This results in a 5x reduction in libxul pagefaults. Unfortunately since constructors execute backwards and readahead forwards, the constructor execution stalls to wait for readahead, so the speedup is rather hard to detect.</p>
+
+<p><strong>Run Forward Faster!</strong></p>
+
+<p>Depressed about my hack failing to make a dent in startup time I patched gcc to run initializers in a forward order (and reversed the function-placement logic in above patch). Now readahead happened in the same direction as library initialization and my Firefox started 30% faster! I wrapped this up into a standalone <a href="http://people.mozilla.com/~tglek/startup/ctors.diff">gcc patch</a> (speed up any bloated C++ startup with a simple change to the compiler!). Note this hack reverses the library initialization order discussed above, this happens to not be a problem for Mozilla.</p>
+
+<p><strong>Conclusion: Order Matters! </strong></p>
+
+<p>The linker can reverse the per-library initializers such that initializers run forward, but cross-library dependencies are honoured. That in itself isn&#8217;t enough to boost startup without cleverer readahead on the kernel side (or application-side hacks).</p>
+
+<p>It&#8217;s weird to have initializers page in most of the binary. An interesting optimization would to have the compiler transitively mark functions reached by library initialization and place those in a .text.initializers section. Then one could have the linker group the initializers together.</p>
+
+<p><strong>Plans</strong></p>
+
+<p>I haven&#8217;t made up my mind on how to proceed. This madvise() hack + a simple linker patch could be deployed more easily than icegrind. This hack also appears to be as performant as a static firefox build + icegrind (due to inadequate kernel readahead without madvise()). Icegrid + libxul.so isn&#8217;t quite as efficient. I have a feeling that we&#8217;ll end up with a combination of icegrind + some form the initializer madvise() hack.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -665,85 +746,6 @@ Additionally, proper binary reordering results in >2mb reduction in memory usage
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2010/03/24/linux-why-loading-binaries-from-disk-sucks/">Linux: Why Loading Binaries From Disk Sucks</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-03-24T08:47:28-07:00" pubdate data-updated="true">Mar 24<span>th</span>, 2010</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><em>Note: I am doing my measurements and experiments on Fedora 12, once I feel that I understand and can solve the problems on Linux, other operating systems will follow. The aim of this post is to document what I have learned about the mysterious process of loading programs from the filesystem perspective.</em></p>
-
-<p>A binary is broken up into segments. There are about half dozen different segments in an executable, but only two that matter here:</p>
-
-<ol>
-<li>A segment that mostly contains function-bodies and some const data. It&#8217;s mapped in read+execute mode</li>
-<li>A segment that contains variable initializers, GOT, PLT, lists of constructors/destructors, etc
-The compile-time linker composes segments out of sections that contain variable data, function bodies, etc. The run-time linker maps the segments into memory via <a href="http://en.wikipedia.org/wiki/Mmap">mmap</a>. It resolves references to data and code in dynamic libraries (eg relocation) via COW. IO happens when the program (on behalf of the run-time linker) is trying to access memory that hasn&#8217;t been read from disk yet. These interruptions are called page faults. They cause the kernel to interrupt the program to read in some multiple of pages (4096byte chunks) from disk. On my system, page faults trigger ﻿﻿131072byte (32 pages) reads.</li>
-</ol>
-
-
-<p>For a detailed explanation of how linkers work check out the guides written by experts. Out of the scant <a href="http://lambda-the-ultimate.org/node/3474">list</a> of literature on the subject, my &#8220;favourite&#8221; is Ulrich Drepper&#8217;s &#8220;How to Write Shared Libraries&#8221;. It actually explains things in terms of file offsets, not just virtual addresses.</p>
-
-<p>A common misconception is that mmap()-caused IO is free (because you don&#8217;t issue any explicit read() statements). IO via page faults is just another &#8220;API&#8221; for file-access, there is no reason for it to be free. Another misconception is that one has no control over IO-patterns triggered by mmap(). On Linux-like OSes one can use madvise(). (Windows is more limited, afaik one can only set io-pattern-flags on the filehandles).</p>
-
-<p><strong>Prelinking Fail </strong></p>
-
-<p>Having the run-time linker fix up the binary causes a huge amount of IO even before any application code gets executed. These faults are visible in the second graph in my <a href="http://taras.glek.net/blog/2010/03/23/when-in-trouble-draw-a-picture/">previous post</a>. The linker&#8217;s faults (pun intended) are the small green rectangles above the big ones. The graph clearly shows the huge relative cost of inefficient run-time linker memory prodding.</p>
-
-<p>Supposedly, this problem is largely solved by <a href="http://en.wikipedia.org/wiki/Prelink">prelinking</a>. I can&#8217;t confirm that as prelink does not work on Firefox on the systems that I can measure IO with SystemTap. This non-determinism is frustrating; we should figure out a way to warn to the user that the OS infrastructure failed them. ****</p>
-
-<p><strong>Post-linker Fail</strong></p>
-
-<p>Above IO patterns can be blamed on careless run-time linker behavior. IO after that can be attributed to lack of organization in the output of the compiler and the compile-time linker. Turns out that the layout of the .text section (where all of the function bodies lie) and to a smaller degree .data[, .bss, etc] sections(ie variable initializers) is completely unhelpful. For a good laugh look at how the official nightly libxul.so is read mostly through backwards io (<a href="http://people.mozilla.com/~tglek/startup/systemtap_graphs/visualize.html?#stock.io.html">graph link</a>).</p>
-
-<p><em><aside>The libxul.so graphs in the previous post did not exhibit this kind of insanity. I did my best to order functions based on chronological order of access (courtesy of my </em><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=549749"><em>valgrind hack</em></a><em>). Unfortunately, the chronological log is not deterministic. Someone suggested that statistical fudging via </em><a href="http://en.wikipedia.org/wiki/Markov_chain"><em>markov chains</em></a><em> will help. From the io patterns in the graph I&#8217;m guessing that io patterns detected by valgrind and those that actually happen diverge due to threading differences. Linux users that are interested in fast startup should pray to the GCC Santas to reorder binaries as part of Profile-Guided-Optimization.</aside></em> ****</p>
-
-<p><strong>Are Large Programs Screwed Out of Fast Startup?</strong></p>
-
-<p>Yes, but it doesn&#8217;t have to be this way. Turns out this utter disaster is caused by naive use of mmap() in the dynamic-linker. The second graph (previous post) shows, that even a late madvise call (delightfully nasty <a href="https://bugzilla.mozilla.org/attachment.cgi?id=434721&amp;action=edit">patch</a>) can significantly improve the situation. Specifying madvise(MADV_WILLNEED) causes individual faults to read in 2097152bytes (512 pages,  16x larger reads than default),  3x(10x if one counts only ones after madvise()) reduction in the number of total faults, saves about 1 second of startup.</p>
-
-<p>The basic trick is outlined as &#8220;approach c&#8221; in this <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=554421">bug</a>. My current thinking is to:</p>
-
-<ol>
-<li>use Jim Blandy&#8217;s executable-parsing library from breakpad(which is already in our build) to parse our binaries</li>
-<li>calculate what the dynamic linker will mmap() at runtime.</li>
-<li>have some firefox.sh-like native frontend mmap()/madvise() it with appropriate flags
-In the longer term some fixes for madvise() should land in both runtime and compile-time linkers.</li>
-</ol>
-
-
-<p><strong>Conclusion</strong></p>
-
-<p>It took me a long time to produce the above story from my runtime linker observations. As recently as December I had no idea what a runtime linker was or what linker segments, sections, etc were. I&#8217;d like to thank Valgrind authors, kind folks on #gcc and numerous individuals who helped me connect the pieces. The above is written to the best of my still-incomplete understanding; I will appreciate any corrections.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/15/">&larr; Older</a>
@@ -761,6 +763,10 @@ In the longer term some fixes for madvise() should land in both runtime and comp
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/04/05/mozilla-tech-on-reddit/">Mozilla Tech on Reddit</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/03/27/snappy-number-55-snappy-evolution/">Snappy #55: Snappy Evolution</a>
       </li>
     
@@ -774,10 +780,6 @@ In the longer term some fixes for madvise() should land in both runtime and comp
     
       <li class="post">
         <a href="/blog/2013/03/11/living-with-octopress/">Blogging with Octopress</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/03/08/snappy-number-52/">Snappy #52</a>
       </li>
     
   </ul>

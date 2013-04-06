@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Hydras I am close to landing a flow check. Turns out, it is super-easy to introduce new analyses into Mozilla due to a very nice build system hooks &hellip;">
+  <meta name="description" content="It seems that there is some confusion as to what pork is and how it&#8217;s related to oink and elsa. So here is my view of it. Pork is my set of &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,100 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2008/07/18/pork-mcpp-oink-and-elsawhats-going-on/">Pork, MCPP, Oink and Elsa&#8230;What&#8217;s Going On?</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-07-18T03:29:28-07:00" pubdate data-updated="true">Jul 18<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>It seems that there is some confusion as to what pork is and how it&#8217;s related to oink and elsa. So here is my view of it.</p>
+
+<p><a href="http://developer.mozilla.org/en/docs/Pork"><strong>Pork</strong></a> is my set of tools that use Elsa to rewrite sourcecode (mainly Mozilla code). Our use of Pork is solely for rewriting as it is not suited for <a href="http://developer.mozilla.org/en/docs/Dehydra">convenient</a> and <a href="http://developer.mozilla.org/en/docs/Treehydra">hardcore</a> analysis needs as much as the GCC based tools are.</p>
+
+<p><a href="http://mcpp.sf.net/">MCPP</a> is the secret sauce C preprocessor that makes C++ rewriting with Elsa possible by annotating preprocessed files with information to undo the lexical braindamage resulting from macro expansion.</p>
+
+<p><strong>Elsa</strong> is a awesome C++ parser. Awesome in that is can preserve more information regarding parsed code than any other C/C++ parser and it is easy to extend.</p>
+
+<p>We maintain our own version of Elsa within pork.</p>
+
+<p>I think our version of Elsa is the most up to date and most compatible with newer C++ features and headers used by newer GCC releases. We encourage other projects with C++ parsing/rewriting needs to collaborate with us. We will be parsing code with Elsa for a few years to come and it&#8217;s a lot of work to maintain a C++ parser by a single entity. I think elsa is a much better backend to build refactoring support onto than any other C++ parsing project out there right now.</p>
+
+<p><strong>The Messy Details</strong></p>
+
+<p>Now lets move on the more confusing parts: oink, oink-stack, and the oink mailing list.</p>
+
+<p><a href="http://www.cubewano.org/oink"><strong>oink</strong></a> consists of some static analysis tools and was meant to be a central place where all of the Elsa and Elsa-related development was supposed to happen. When people refer to oink, they usually mean the oink-stack which is a subversion meta repository that pulls in a dozen of subrepositoes(smbase, elkhound, elsa, oink(where static analysis tools live), etc).</p>
+
+<p>So when I started working on refactoring tools I was told that I should aim to have my tools added to oink, but there were some legal hassles to work out in the meantime so I cloned the oink-stack and developed my tools with minimal changes to oink-stack. This included various elsa extensions, bugfixes, etc.</p>
+
+<p>However, the little momentum that oink had has fizzled out due to various personality conflicts and various academics loosing interest. The code has been bitrotting for as long as I&#8217;ve been working at Mozilla.</p>
+
+<p>So the end result of oink is that we have pork which is a superset of oink. I&#8217;m not even sure if I mention the name pork anywhere in the sources. So pork at the moment means &#8220;Taras&#8217; continuation and extension of oink&#8221;. I am using the <a href="http://www.cubewano.org/lists/listinfo/oink-devel">oink mailing list</a> for any discussion on changes to Elsa/etc in hopes that at least some of the genius lurkers there will regain their interest in elsa.</p>
+
+<p><strong>Where do We Go From Here?</strong></p>
+
+<p>Onward! Due to the original authors vision of what C++ is and the state of C++ at the time Elsa was conceived, current pork code causes people to have many WTF moments (followed by banging head against keyboard) when they first start using it.</p>
+
+<p>The short version of my plan is:</p>
+
+<ul>
+<li>allow one to do &#8220;using namespace std&#8221; when using elsa</li>
+<li>Restructure pork repositories such that there are only 3 of them rather than 11 (elsa, elkhound, pork)</li>
+<li>get rid of the oink repository (those tools do not work for us)</li>
+<li>Make pork only consist of just my tools (with a sane build system) rather than be mixed into unmainted oink stuff</li>
+<li>Make pork compile with new compilers (GCC 4.3 and recent MSVC++)</li>
+<li>Keep track of this in a <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=438061">bug</a></li>
+<li>Clean up various misc things
+Some of you might ask &#8220;But Taras, why now, why not just keep doing what you&#8217;ve been doing?&#8221;. I was doing what I was doing because I had an overwhelming goal of devising a way to automate static analysis and refactoring of Mozilla on my shoulders and I wasn&#8217;t convinced that it was feasible. I had to learn to split my time between tool development and actually using the tools. Naturally I cut corners on tool development :)</li>
+</ul>
+
+
+<p>Since then slowly, but surely various awesome hackers have started doing rewrites and analyses themselves freeing me up to focus more on development. To make matters sweeter, various hackers have started submitting bugreports, fixes, ports to my tools. This gives me more time to focus on the big picture.</p>
+
+<p>Finally, I belive that automation of the sort we are doing at Mozilla is something that has been missing from open source development practices and it will catch on once people realize what they&#8217;ve been missing. Reducing those WTF moments will help people think positively.</p>
+
+<p><strong>Update:</strong></p>
+
+<p><em>Why three repositories instead of one?</em></p>
+
+<ol>
+<li>The three will be elkhound, elsa, pork</li>
+<li>elkhound is useful on it&#8217;s own</li>
+<li>elsa is too and other elsa users are likely to not care about Mozilla&#8217;s rewriting tools
+<em>I__s oink really dead?</em></li>
+</ol>
+
+
+<p>Yes. The maintainers have moved on to other projects. When they were maintaining oink, outside contributors couldn&#8217;t get their code upstream.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -525,54 +619,6 @@ if (requestAnimationFrame)
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2008/04/22/static-analyses-gadgets-of-mozilla-2-james-bonds/">Static Analyses: Gadgets of Mozilla 2 James Bonds</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-04-22T05:49:42-07:00" pubdate data-updated="true">Apr 22<span>nd</span>, 2008</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>When started on my static analysis quest just over a year ago. I imagined a perfect world in which I make tools and people use them to do awesome analyses. Since I did not want to be disappointed, I imagined this, but did not think it would come true.</p>
-
-<p>Now we are at a point where static analysis use is growing rapidly, most analyses are done by people other than me as lately I barely have time to work on actual analyses. Treehydra and dehydra now have users and are well on their way to being released, which is taking up most of my time. Some of the most notable happenings:</p>
-
-<ul>
-<li>Vlad Sukhoy appeared out of nowhere and <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=415289">ported Dehydra</a> to GCC 4.2 on OSX. This is exciting because it showed that the plugin system is portable between GCC release, and it&#8217;s the biggest patch from a non-core dev.</li>
-<li>We finished the paper on our static analysis work to be presented at the <a href="https://www.gccsummit.org/2008/summary.php">GCC summit</a>. I am looking forward to meeting developers that built the GCC features that made the *hydras practical.</li>
-<li>There is a lot finishing touches being done such that we can release Dehydra 0.9 and eventually 1.0. <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=423898">Bug</a>.</li>
-<li>Dave Mandelin implemented a proper testsuite for the *hydras. This is a massive step up from what we had before.</li>
-<li>There is a massive amount of Treehydra work going on. Looks like it is boldly going where no static analysis has gone before, even faster than Dehydra did. So far it looks like Treehydra is going to be a bigger deal than Dehydra could ever be. It is turning out to be a very potent combination of GCC for features and JavaScript for ease of use.
-I have elaborate plans on how to take over the world with static analysis, more on that later. In the meantime I&#8217;ve started compiling a <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=430328">tracking bug</a> of ongoing analyses for Moz 2.</li>
-</ul>
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/22/">&larr; Older</a>
@@ -590,6 +636,10 @@ I have elaborate plans on how to take over the world with static analysis, more 
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/04/05/mozilla-tech-on-reddit/">Mozilla Tech on Reddit</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/03/27/snappy-number-55-snappy-evolution/">Snappy #55: Snappy Evolution</a>
       </li>
     
@@ -603,10 +653,6 @@ I have elaborate plans on how to take over the world with static analysis, more 
     
       <li class="post">
         <a href="/blog/2013/03/11/living-with-octopress/">Blogging with Octopress</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/03/08/snappy-number-52/">Snappy #52</a>
       </li>
     
   </ul>

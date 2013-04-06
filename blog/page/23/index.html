@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Often there are two ways to write code. One way is to design an API and have code patterns adhere to how the API is supposed to be used. Another way &hellip;">
+  <meta name="description" content="Looks like pork is slowly going to get merged back into oink. This makes me happy as it will result in decreased merging headaches and gives more &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,48 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2007/12/28/recent-progress/">Recent Progress</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-12-28T05:39:45-08:00" pubdate data-updated="true">Dec 28<span>th</span>, 2007</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Looks like <a href="http://wiki.mozilla.org/Pork">pork</a> is slowly going to get merged back into oink. This makes me happy as it will result in decreased merging headaches and gives more visibility to my work outside of Mozilla. My elkhound changes are already in!</p>
+
+<p>Recently I added support for retaining gnu attributes to elsa and corresponding features dehydra and garburator. Now dehydra can verify things based on attributes and  garburator gained a way to rewrite special cases like classes that are always <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=409088">allocated on the stack</a>. Elsa still drops most attributes, but at least classes, methods and variable declarations are covered.</p>
+
+<p>I also spent a couple of days investigating gcc plugins. Turns out modifying gcc to support plugins is dead easy, but getting anything useful done in GCC requires a steep learning curve. I tried to find how to enumerate all of the toplevel declarations in the source, but I couldn&#8217;t find the correct global variable that corresponds to the toplevel scope(aka the Translation Unit?). I have a few more ideas of what to try next. Once I do that, it shouldn&#8217;t take much work to make a basic gcc-hosted version of dehydra. There is also a gcc plugin branch hosted in the gcc svn, but I can&#8217;t find any example code for it. It isn&#8217;t a big deal since none of the plugins I&#8217;ve seen mentioned venture outside of intra-function analyses.</p>
+
+<p>I am still pondering on how to tackle rewriting Mozilla to use exceptions. It is the key to improving overall readability/perf of Moz C++, but the logistics of writing the corresponding analyses+rewrites followed by a parallel manual correction step are still making my head spin. All I&#8217;m sure about is that the first step to exceptions would be to enable the OOM exceptions and do the corresponding exception safe analysis+rewrite.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -652,58 +694,6 @@ Checks 2 and 3 require the complete class hierachy of Mozilla so I finally made 
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2007/10/12/rewriting-tools-for-mozilla-2-moving-forward-as-planned/">Rewriting Tools for Mozilla 2: Moving Forward as Planned</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2007-10-12T08:31:35-07:00" pubdate data-updated="true">Oct 12<span>th</span>, 2007</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><strong>In the Beginning There Was a Void</strong></p>
-
-<p>Approximately a year ago, Brendan discussed with me the crazy possibility of rewriting most of the Mozilla code automatically to modernize the codebase. The benefits were huge. Gecko would use the C++ standard library to improve code readability and reducing size, XPCOM would be ripped out of the core to improve performance and decrease footprint, etc.</p>
-
-<p>It seemed like a good idea, but in reality no other giant C++ project has attempted this before so we were not sure of how realistic it was. I spent a year in a <a href="http://benjamin.smedbergs.us/blog/2007-10-11/dehydra-ftw/">lonely corner</a> of Mozilla trying to materialize the idea.</p>
-
-<p>Brendan &amp; Graydon pointed me to <a href="http://www.cs.berkeley.edu/~smcpeak/elkhound/sources/elsa/">elsa</a>, the C++ parser that supposedly could parse Mozilla. However, it turned out that it was only able to parse an old version of Mozilla and rejected the new source. One of the elsa maintainers even tried to convince us to it was not designed for source-to-source transformations and wouldn&#8217;t work that way.</p>
-
-<p>After I patched up elsa and started devising ways to use it for source rewriting I ran into more pain. After a few false starts, I realized that C++ in Mozilla is actually a mix of CPP and C++ and one can not rewrite C++ without dealing with the <a href="http://taras.glek.net/blog/2007/05/11/cpp-strikes-back/">mess that is macro expansion</a>. <a href="http://mcpp.sourceforge.net/">MCPP</a> was pointed out to me as a good starting point for hacking on a preprocessor. So I <a href="http://taras.glek.net/blog/2007/06/12/undoing-cpp-expansion-in-3-simple-steps.-say-hello-to-easier-c-rewriting./">designed</a> an inline log for macro expansion. To my surprise the maintainer of MCPP, Kiyoshi MATSUI, volunteered to implement the spec and thus saved me from a world of pain. (For which I am eternally grateful as I can&#8217;t imagine a more depressing pastime than working on the root of all evil: the C preprocessor).</p>
-
-<p>In parallel with Kiyoshi&#8217;s work I modified <a href="http://www.cs.berkeley.edu/~smcpeak/elkhound/">elkhound</a> &amp; elsa to make the C++ parser a lot more suitable for source transformations. I learned about LR &amp; GLR parsing and confirmed my suspicion that I don&#8217;t want to write parser generators for a living.</p>
-
-<p><strong>Happy Conclusion </strong></p>
-
-<p>All this work finally got us what we discussed last September: a framework for doing lots of <a href="http://wiki.mozilla.org/XPCOMGC/Stack_Pointers">boring code rewrites</a>.</p>
-
-<p>The first big Moz2 task is <a href="http://wiki.mozilla.org/XPCOMGC">switching</a> from reference counting to garbage collection. Today, <a href="http://taras.glek.net/blog/2007/09/12/garburator-another-day-another-rewrite-tool/">garburator</a> produced a <a href="http://people.mozilla.org/~tglek/garburator/nsgenerichtmlelement.diff">gigantic patch</a> for subset of the content/ module and all of the affected files compiled. Hopefully next week I&#8217;ll have a multi-megabyte patch for the whole of Mozilla that compiles and possibly runs.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/24/">&larr; Older</a>
@@ -721,6 +711,10 @@ Checks 2 and 3 require the complete class hierachy of Mozilla so I finally made 
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/04/05/mozilla-tech-on-reddit/">Mozilla Tech on Reddit</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/03/27/snappy-number-55-snappy-evolution/">Snappy #55: Snappy Evolution</a>
       </li>
     
@@ -734,10 +728,6 @@ Checks 2 and 3 require the complete class hierachy of Mozilla so I finally made 
     
       <li class="post">
         <a href="/blog/2013/03/11/living-with-octopress/">Blogging with Octopress</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/03/08/snappy-number-52/">Snappy #52</a>
       </li>
     
   </ul>

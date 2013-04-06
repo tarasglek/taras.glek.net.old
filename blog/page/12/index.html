@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="I always found sidepull brakes to be pathetic. The current generation of road brakes are much better than the old style mount-bike I&#8217;ve used &hellip;">
+  <meta name="description" content="A large proportion of our startup time is spent on loading the Firefox library(.dll, etc) files. This is true on all of our platforms. In my previous &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,46 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/03/10/start-faster-addon/">&#8220;Start Faster&#8221; Addon</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-03-10T08:24:13-08:00" pubdate data-updated="true">Mar 10<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>A large proportion of our startup time is spent on loading the Firefox library(.dll, etc) files. This is true on all of our platforms. In my <a href="http://taras.glek.net/blog/2011/02/09/magic-patch-that-doubles-windows-startup/">previous pos</a>t I thought I discovered a way to load the Firefox binaries more efficiently on Windows(bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=627591">627591</a>). Further testing revealed that to not be true in all cases and that the Windows Prefetch service was still killing our startup speed. Microsoft does not seem to provide a way to opt out of the Windows Prefetch &#8216;service&#8217;.</p>
+
+<p>There is a DIY way to opt out of prefetch by gaining Administrator privileges and deleting files out of the prefetch directory. Our is plan is to provide a Windows service to handle Firefox updates (bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=481815">481815</a>). Additionally the service would be able to do useful things like delete prefetch files, defragment Firefox databases(or at least help report on fragmentation levels). This is all tricky stuff.</p>
+
+<p>In the meantime, to test my theory I wrote a <a href="https://addons.mozilla.org/en-US/firefox/addon/startupservice/">test extension</a>. This is a restartless extension that adds a Windows service and a wrapper executable to significantly speed up Firefox startup after rebooting (oh the irony!). After installing the extension, &#8220;Faster Firefox&#8221; shortcut on the Desktop should result in up to 2x speed up in Firefox startup. This addon is a rough proof of concept to play with while I bake this functionality into Firefox. Comments, improvements are welcome. Note that launching Firefox by shortcuts other &#8220;Faster Firefox&#8221; is slower while this extension is installed (this will be fixed once preloading functionality is integrated into Firefox properly). This addon does not yet work on XP because I do not yet have an XP enviroment to test/develop in (patches are welcome).</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -541,73 +581,6 @@ This was a rare fix that resulted in seconds saved on crapware-loaded computers.
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2010/10/04/diagnosing-slow-startup/">Diagnosing Slow Startup</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-10-04T10:30:56-07:00" pubdate data-updated="true">Oct 4<span>th</span>, 2010</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I spent last week trying to reproduce slow startup on Windows. Some users were reporting >30 second startup, supernova_00 has been feeding me <a href="https://developer.mozilla.org/En/Profiling_with_Xperf">xperf</a> traces on IRC reproducing slow startups.</p>
-
-<p><strong>Startup Bugs</strong></p>
-
-<p>Turns out that if a website uses non-standard font names this can trigger Firefox to start parsing every single font on the system, freezing the browser in the meantime. Turns out facebook does this :(. This is now a blocker <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=600713">bug 600713</a>. This bug has the unfortunate effect of overshadowing any startup improvements in Firefox 4.</p>
-
-<p>We have some code to keep our databases in good shape by VACUUMing them. This is getting revamped in Firefox in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=541373">bug 541373</a>. In the meantime, for many current users performance suffers due to missing vacuums. If you are suffering from slow Firefox startup, and/or slow Awesomebar try this <a href="http://mozillalinks.org/wp/2009/08/vacuum-firefox-databases-for-better-performance-now-with-no-restart/">manual vacuum</a>. This helps in older Firefox releases, but in Firefox 4 this has the effect of supercharging the SQLite database performance by switching to <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=416330">32K pages</a>.</p>
-
-<p><strong>Scareware</strong></p>
-
-<p>Another fun discovery was the effect of anti-virus software(AVG in this case). Like an annoying pet, AVG has to have a sniff and fondle every file that Firefox opens on startup. Apparently this is a feature called on-demand scanning, yuck.</p>
-
-<p>But the fun doesn&#8217;t stop there, Windows has a wonderful <a href="http://en.wikipedia.org/wiki/Prefetcher">prefetch</a> mechanism that speeds up app startup. Unfortunately for supernova_00, \Windows\Prefetch just wouldn&#8217;t get populated with Firefox info, meaning that Windows wasn&#8217;t optimizing Firefox startup. Once I installed AVG, I ran into the same problem. Uninstalling AVG didn&#8217;t help. For whatever reason deleting every file in \Windows\Prefetch fixes that problem. For both of us prefetch got repopulated after being cleaned.</p>
-
-<p><strong>XPerf</strong></p>
-
-<p>Microsoft XPerf makes trivial to optimize cold startup. None of the other OSes have precanned analyses showing how much each individual file access is contributing to slow startup.</p>
-
-<p>If you have a startup problem, I&#8217;m much more likely to be able to reproduce it if the report comes with an xperf trace. To get xperf run the Microsoft Platform SDK <a href="http://www.microsoft.com/downloads/en/details.aspx?FamilyID=6b6c21d2-2006-4afa-9702-529fa782d63b&amp;displaylang=en">installer</a>, select &#8220;Windows Performance Toolkit&#8221;.</p>
-
-<p>To record an IO trace:</p>
-
-<ol>
-<li>Reboot</li>
-<li>run cmd.exe as Administrator</li>
-<li>xperf -on latency+FILE_IO+FILE_IO_INIT+DISK_IO</li>
-<li>run Firefox, reproduce the bug</li>
-<li>xperf -d report.etl</li>
-<li>Run xperf report.etl to view the report.
-Click on &#8220;IO Counts&#8221; or &#8220;Hard faults&#8221; graph, select &#8220;Summary Table&#8221;. &#8220;IO Time (ms)&#8221; is the interesting column there. To get an idea of the sequence of IO operations, export the summary table to .csv and load it in a spreadsheet/grep/whatever. Every Firefox developer should give xperf a try, addon authors are encouraged too.</li>
-</ol>
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/13/">&larr; Older</a>
@@ -625,6 +598,10 @@ Click on &#8220;IO Counts&#8221; or &#8220;Hard faults&#8221; graph, select &#82
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/04/05/mozilla-tech-on-reddit/">Mozilla Tech on Reddit</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/03/27/snappy-number-55-snappy-evolution/">Snappy #55: Snappy Evolution</a>
       </li>
     
@@ -638,10 +615,6 @@ Click on &#8220;IO Counts&#8221; or &#8220;Hard faults&#8221; graph, select &#82
     
       <li class="post">
         <a href="/blog/2013/03/11/living-with-octopress/">Blogging with Octopress</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/03/08/snappy-number-52/">Snappy #52</a>
       </li>
     
   </ul>

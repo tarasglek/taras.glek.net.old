@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="I recently got rid of an old Pioneer receiver in favour of a tiny Class D amplifier. The class D amp is more efficient, sounds better and is &hellip;">
+  <meta name="description" content="It is time to set goals for the next 3 months at Mozilla. A lot of them should be Snappy-related. As I mentioned before, we have made a lot of snappy &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,58 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/04/05/snappy-apr-5-snappy-goals-for-q2/">Snappy, Apr 5: Snappy Goals for Q2</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-04-05T06:16:19-07:00" pubdate data-updated="true">Apr 5<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>It is time to set goals for the next 3 months at Mozilla. A lot of them should be Snappy-related.</p>
+
+<p>As I mentioned before, we have made a lot of snappy progress lately. We identified a lot of problematic areas, fixed some of them and the end is in sight for others. It is extremely important that we maintain the current Snappy momentum, such that we can wrap up Snappy this year and move on to scaling Firefox on multiple cores, etc.</p>
+
+<p>The following <a href="https://wiki.mozilla.org/Platform/2012-Q2-Goals#Perf">platform goals</a> have been proposed:</p>
+
+<ul>
+<li>Graphics: More rendering off main thread (this work is split between graphics/layout), Fix GFX acceleration lag (not yet on wiki)</li>
+<li>Layout: More rendering off main thread (this work is split between graphics/layout), Invalidation via DisplayList Analysis</li>
+<li>Video: Off main thread rendering (not yet on wiki)</li>
+<li>DOM: Prevent [to a reasonable extent] background tabs from starving the main thread, Reduce CC pauses significantly when there are cycles to collect</li>
+<li>Perf Team: Async local storage via blocking pageload, Combine IndexedDB/LocalStorage quotas to allow indexeddb to remove prompt, provide js file api (in workers) for all supported platforms, Reorder xul.dll on windows to speed up startup, continue exit(0) progress</li>
+<li>Networking: Resolve listed high priority cache locking/async issues</li>
+<li>Firefox: Fix top three Snappy offenders - lightweight themes, add-on manager, main thread SQL (under discussion, not on wiki)
+We do a lot of work outside of our goal process, so above goals represent only the big ticket items that we&#8217;d like to see accomplished in the near future. There will be other snappy work going on too.</li>
+</ul>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -571,76 +623,6 @@ INSERT INTO webappsstore2_temp (scope, key, value, secure, owner) SELECT scope, 
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/02/27/snappy-feb-23rd/">Snappy, Feb 23rd</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-02-27T03:46:17-08:00" pubdate data-updated="true">Feb 27<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><strong>SUMO Problem investigation</strong></p>
-
-<p>There was an increase in negative feedback regarding Firefox 11 beta relative to Firefox 10 beta on <a href="http://blog.mozilla.org/sumo/about/">SUMO</a>.  Cheng and me will be analyzing SUMO reports to see if we can find a <em>concrete</em> regression or two in Firefox 11.</p>
-
-<p>(One of the reasons this update is late is because I was digging through our telemetry data looking for something to correlate with user reports)</p>
-
-<p><strong>Cycle Collector + GC</strong></p>
-
-<p>Olli and Jan cooked up (as part of MemShrink?) <a href="https://addons.mozilla.org/en-US/firefox/addon/cycle-collector-analyzer/">about:ccdump</a> addon for assist with finding leaks (bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=726346">726346</a>, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=728669">728669</a>). See Jan&#8217;s blog post for <a href="http://www.softwareishard.com/blog/planet-mozilla/hunting-zombie-memory-leaks-in-firefox/?utm_source=feedburner&amp;utm_medium=feed&amp;utm_campaign=Feed%3A+SoftwareIsHardPlanetMozilla+%28Software+is+hard+%C2%BB+Planet+Mozilla%29">more details</a>.</p>
-
-<p>Andrew is working on:</p>
-
-<ul>
-<li>reducing how often cycle collector runs in worst-case scenarios, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=710496">710496</a></li>
-<li>A fix that might increase the time between cyclecollector runs 10x, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=728460">728460</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=728547">728547</a></li>
-<li>Triggering GC from CC less often, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=727965">727965</a>
-Bill landed incremental GC this week, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=719492">719492</a>. Most users will not benefit from incremental GC until Bill finishes up handling frequent &#8220;corner cases&#8221; that end up disabling incremental GC.</li>
-</ul>
-
-
-<p><strong>DOM</strong></p>
-
-<p>Kyle is adding infrastructure to allow webpages to wait on <a href="http://taras.glek.net/blog/2012/02/22/psa-dom-local-storage-considered-harmful/">local storage</a> without blocking user interactions, see <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=729769">729769</a>.</p>
-
-<p><strong>Profiling</strong></p>
-
-<p>Vlad&#8217;s non-destructive chromehang got mostly r+ed, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=712109">712109</a>.</p>
-
-<p><strong>Frontend</strong></p>
-
-<p>Livemarks will soon be async, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=613588">613588</a>. What are livemarks? An example of a livemark is the bbc livefeed/folder that we used ship on the bookmarks toolbar. Turned out when we rewrote the UI to hide the bookmarks toolbar, the livemark was still alive and well, hogging the UI while doing disk IO. We took out the default livemark a few releases back, now the code is being converted so users with preexisting bbc livemark (or their own livemarks) don&#8217;t suffer accompanying browser lag.</p>
-
-<p><strong>Scrolling</strong></p>
-
-<p>Avi ported his smoothscroll logic to C++, Jared pushed it to the UX branch, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=206438">206438</a>. If you are interested in fluid scrolling, give it a try, play with acceleration prefs to help us find optimal values. Once this is done, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=629507">629507 </a>is next and then we get to tell the rest of the browser to not interrupt scrolling/etc in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=712478">712478</a>. If any readers are interested in helping desktop browsers catch up to mobile levels of responsiveness, this is area is a good place to contribute to.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/8/">&larr; Older</a>
@@ -658,6 +640,10 @@ Bill landed incremental GC this week, bug <a href="https://bugzilla.mozilla.org/
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/04/05/mozilla-tech-on-reddit/">Mozilla Tech on Reddit</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/03/27/snappy-number-55-snappy-evolution/">Snappy #55: Snappy Evolution</a>
       </li>
     
@@ -671,10 +657,6 @@ Bill landed incremental GC this week, bug <a href="https://bugzilla.mozilla.org/
     
       <li class="post">
         <a href="/blog/2013/03/11/living-with-octopress/">Blogging with Octopress</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/03/08/snappy-number-52/">Snappy #52</a>
       </li>
     
   </ul>

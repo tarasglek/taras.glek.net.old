@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="I have been working under assumption that the browser gets less snappy as more tabs are opened. This increases the chances of having an ill-behaved &hellip;">
+  <meta name="description" content="The most user facing fix has been discovery and removal of some sneaky cache IO on the main thread. Saptashi did some analysis on the impact of &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,50 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/01/12/snappy-jan12/">Snappy Jan12</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-01-12T07:21:03-08:00" pubdate data-updated="true">Jan 12<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>The most user facing fix has been <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=715774">discovery</a> and <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=716293">removal</a> of some sneaky cache IO on the main thread.</p>
+
+<p>Saptashi did some analysis on the impact of running sqlite in async mode on mobile. Turns out it&#8217;s only a win for DELETEs. Expect a blog post from him soon.</p>
+
+<p>Dave <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=715774#c3">discovered</a> that we sometimes wait on locks on the main thread.</p>
+
+<p>Jeff and Bas are looking into diagnosing when d2d causes a slowdown.</p>
+
+<p>There was discussion of 4x reduction in cycle collection times landing soon, focusing on having cycle collector run less, etc. Lots of work(chromehang, profiler, &#8230;) is continuing from last week.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -482,61 +526,6 @@ These files of the format: sql, count, average time per query.</li>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011/12/05/24-hour-reviews/">24-hour Reviews</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-12-05T08:51:10-08:00" pubdate data-updated="true">Dec 5<span>th</span>, 2011</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I would like to see Firefox developers switch to 24hour review turn-around times. Note that in my definition review turn-around means any of the following:</p>
-
-<ul>
-<li>r+/r-</li>
-<li>unset/reassign r? to someone else
-It is ridiculous in our recent faster release cycle if a patch takes half (or more) of the cycle loitering in the review queue. I believe that a shorter review cycle is the simplest way to accelerate Firefox evolution.</li>
-</ul>
-
-
-<p>I view fast review times as a matter of respect. Posting a patch usually requires a significant time/effort commitment, reviewers should act appropriately. There is no bigger buzzkill than having your work pushed back to the bottom of somebody&#8217;s TODO list like some annoying chore.</p>
-
-<p>As far as I can tell there are 3 main reasons* that lead to long review times:</p>
-
-<p>1) People like gavin, bz, dbaron having disproportionally high review loads. We need a process to hand-off patches to other reviewers. High-load people shouldn&#8217;t shy away from passing on the r? to someone else when possible. 2) Bugzilla-fobic people (like myself) loosing track of bugzilla r? requests due to not having bugzilla <a href="https://bugzilla.mozilla.org/editwhines.cgi">whines</a> setup. Bugzilla whines should be enabled by default. 3) Bad review habits.  I met a number of Mozilla developers that like to batch their reviews up and then do them all on a single weekday. Please stop, you are killing all kinds of coding momentum/fun/etc.Lets make it our policy to set aside time every day to clear the review queue.</p>
-
-<p>Clearly people with existing backlogs will take a while to catch up, but most MoCo employees should be capable of this. I have yet to hear a good reason against doing daily reviews.</p>
-
-<p>It has been a few months since I proposed this on <a href="http://groups.google.com/group/mozilla.dev.platform/browse_thread/thread/d563bf8329089a5/cdc47838866b0bea">dev.platform</a>.  I have tried to live by the 24hour rule, I think a few others tried this too. I find that morning bugzilla r? whines work best for me. I still occasionally loose track of a patch for a few days, but nobody is perfect. I think people appreciate fast reviews, but nobody thanked me yet.</p>
-
-<p><strong>Dec 6 Update</strong>: My goal is to have <em>some</em> response within 24hours with an ETA for next followup in the worst case.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/10/">&larr; Older</a>
@@ -554,6 +543,10 @@ It is ridiculous in our recent faster release cycle if a patch takes half (or mo
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/04/05/mozilla-tech-on-reddit/">Mozilla Tech on Reddit</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/03/27/snappy-number-55-snappy-evolution/">Snappy #55: Snappy Evolution</a>
       </li>
     
@@ -567,10 +560,6 @@ It is ridiculous in our recent faster release cycle if a patch takes half (or mo
     
       <li class="post">
         <a href="/blog/2013/03/11/living-with-octopress/">Blogging with Octopress</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/03/08/snappy-number-52/">Snappy #52</a>
       </li>
     
   </ul>

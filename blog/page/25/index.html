@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Back to Real Life Just over a month ago I ran into this problem. Before last month I hoped to never have to work on the C preprocessor or a parser &hellip;">
+  <meta name="description" content="New Tool: Prcheck - PRBool&#8217;s best friend Mozilla has a number boolean types and most of them are a form of an int. People expect them to behave &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,86 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2007/06/26/status-report-recent-work/">Status Report: Recent Work</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-06-26T04:08:52-07:00" pubdate data-updated="true">Jun 26<span>th</span>, 2007</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><strong>New Tool: Prcheck - PRBool&#8217;s best friend </strong></p>
+
+<p>Mozilla has a number boolean types and most of them are a form of an int. People expect them to behave like a bool, but since they can be assigned more than 1 value for true, this assumption can lead to bugs. Prcheck will mandate that prbools can only be assigned 1 or 0. Typically static checkers output errors, but prcheck outputs errors &amp; fixes for them in diff format so they can be fixed automatically. See <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=266048">this bug</a> for more info. I think the tool is almost complete. Hopefully, once the MCPP issues described below are addressed, I&#8217;ll have one giant patch to eliminate this problem.</p>
+
+<p><strong>MCPP Teething Troubles</strong></p>
+
+<p>Even in the open-source world there are some problems with vendor monoculture. For example we a single vendor providing the C++ compiler and one C preprocessor that is widely used. Even though MCPP is a portable preprocessor that can plug into multiple compilers, it still chokes on some GCCisms. Things are slowly changing and new open source compilers are on the horizon: I can&#8217;t wait.</p>
+
+<p>Additionally, since Mozilla is one of the largest projects to be preprocessed with MCPP, we found some scalability bugs in MCPP. The MCPP maintainer addressed those.</p>
+
+<p><strong>Elsa Backend Source Location Work - Works Well?</strong></p>
+
+<p>I am amazed, but hack &amp; slash approach to adding end-of-ast-node info to elkhound still seems to work correctly! It mostly required consulting wikipedia on LR &amp; GLR parsing algorithms to understand how to modify the data structures used in elkhound. I love the combination of Wikipedia and pretty &amp; easy to modify source code.</p>
+
+<p>The preprocessor undo-log appears to function exactly as intended too. That combined with the end-of-ast-node info means that I finally have the ability to easily cut&#8217;n&#8217;paste code to move it around programmatically. It basically makes the C/C++ pretty printer in oink obsolete for my purposes. This is cool because now I can output prettier source code AND rely on less oink C++ code to do so (ie no need to call the pretty printer[s]), so more refactoring tools could be written in higher level languages such as OCaml or JavaScript in the future.</p>
+
+<p><strong>Publishing My Oink Mods</strong></p>
+
+<p>I have been sending people tarballs on request, due to not being able to integrate my changes into the upstream svn repository. I tried a few svn2hg tools, but they didn&#8217;t work very well. <a href="http://cheeseshop.python.org/pypi/hgsvn/">hgsvn</a> is good enough to work for OpenJDK, so it might work for me. I&#8217;ll try to publish an hg repository of my work within the next week or two.</p>
+
+<p>I&#8217;m sorry for not doing this earlier, but it&#8217;s extremely time consuming to switch gears from coding oink stuff to trying to package it, especially due to all of the politics involved. Hopefully once the repository is easier to work with I&#8217;ll have more people sharing the oink worldload with me. Now that dust settled and the major missing pieces are either implemented or decided upon, a lot of exciting possibilities opened up.</p>
+
+<p><strong>libgcc</strong></p>
+
+<p>Another day, another piece of preprocessor trivia. Turned out there was an alternative to MCPP that I could have used: gcc&#8217;s libcpp. It is common knowledge that gcc uses an integrated preprocessor. It is not so well known that the preprocessor is factored out into what appears to be a mostly standalone library inside of gcc called libgcc. Google barely knows about it and there are no docs or other webpages pointing to it, so i missed it in my search.</p>
+
+<p>This could be a useful project, take libcpp turn it back into a standalone preprocessor and add the cpp undo log comments to it. The only downside of libgcc is that it is GPL which would normally be a pain for BSD-licensed projects, but by turning it back into a standalone tool there is no linking to to worry about.</p>
+
+<p>So if anyone finds implementing the macro-undo log with libgcc interesting, please feel free to do so :)</p>
+
+<p><strong>Random Rant on Parallels vs VMWare Fusion vs BootCamp vs 64bit Linux</strong></p>
+
+<p>I installed 64bit ubuntu on my MBP. Compilers &amp; other tools are ridiculously fast when running linux natively on core2duo. Due to some performance bugs that I can&#8217;t track down (shark isn&#8217;t working for and recently OSX&#8217;s gdb stopped working too) oink runs much faster on the linux side of the MBP. If any mac people want to profile oink on OSX, that&#8217;d be awesome. However OSX has some nice things (such as a display driver that works well and good battery life). I wish ati wasn&#8217;t such a pain with releasing specs for their cards so linux could support them properly. I hope the recent reverse engineered driver work stabilizes soon. So I figured it would be nice to access &amp; work on the linux partition from within OSX.</p>
+
+<p>I was pretty excited when I heard that Parallels 3 supports BootCamp. Problem was that nothing could see the bootcamp linux install. Turned the problem was caused because I used fdisk + refit to do the partitioning and turned on the bootable flag. To fix this I turned off the bootable flag on the linux partition using parted(which can sync the gpt partition table!) .</p>
+
+<p>Then I realized that Parallels has very slow disk access AND doesn&#8217;t do 64bit and doesn&#8217;t appear to support SMP.</p>
+
+<p>VMWare Fusion on the other hand supports bootcamp &amp; 64bit &amp; smp and appears to have much faster IO. However it lacks UI for accessing a linux bootcamp install or documentation. So here is the secret recipe to save time for others in my situation:</p>
+
+<p>1) Create a vmware disk for the bootcamp partition using vmware-rawdiskCreator in /Library/Application Support/VMware Fusion.</p>
+
+<p>2) Create a new machine, point at the file created in 1.</p>
+
+<p>Fusion&#8217;s performance is remarkable. Oink runs almost as fast as it does natively. Plus VMWare support the VMI interface in Linux which combined with a tickless kernel should make the virtualizing overhead minimal. Too bad Linux doesn&#8217;t have these features yet for amd64.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -743,48 +823,6 @@ The MCPP maintainer is almost done with 1. I have a prototype implementation of 
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2007/04/04/what-about-javascript-in-dehydra/">What About JavaScript in Dehydra?</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2007-04-04T09:44:04-07:00" pubdate data-updated="true">Apr 4<span>th</span>, 2007</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Most static analysis tools don&#8217;t let you script them. Oink is an example of that. Adding a new analysis requires extending an existing tool with a feature which may not fit in smoothly or writing a new tool in C++ with the corresponding boilerplate to handle command-line arguments, etc.</p>
-
-<p>At the other extreme lives UNO which has a DSL that is designed strictly for solving control-flow programs.</p>
-
-<p>I chose JavaScript for Dehydra to get the power of a full-blown (and memory safe) programming language while keeping JS&#8217;s view of the code under analysis as simple as possible. I think I got the C++/JS mix just right, the C++ codebase is growing slowly, yet I add JS scripts for any little task.</p>
-
-<p>Additionally JS came in handy for publishing the data on the web. I wrote a <a href="http://people.mozilla.org/~tglek/inheritance.js">script</a> to determine the class inheritance graph. Then I added a little prefix to the <a href="http://people.mozilla.org/~tglek/graph/examples/inheritance.js">file produced</a>, combined it with <a href="http://www.kylescholz.com/blog/projects/jsviz/">jsviz</a> and ended up with a really slow and unusable, but somewhat pretty <a href="http://people.mozilla.org/~tglek/graph/examples/classes.html">class browser</a>. This could evolve to be a rather neat way to supplement LXR.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/26/">&larr; Older</a>
@@ -802,6 +840,10 @@ The MCPP maintainer is almost done with 1. I have a prototype implementation of 
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/04/05/mozilla-tech-on-reddit/">Mozilla Tech on Reddit</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/03/27/snappy-number-55-snappy-evolution/">Snappy #55: Snappy Evolution</a>
       </li>
     
@@ -815,10 +857,6 @@ The MCPP maintainer is almost done with 1. I have a prototype implementation of 
     
       <li class="post">
         <a href="/blog/2013/03/11/living-with-octopress/">Blogging with Octopress</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/03/08/snappy-number-52/">Snappy #52</a>
       </li>
     
   </ul>

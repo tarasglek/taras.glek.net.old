@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Two weeks ago I started project Snappy. The purpose of the meeting is to help us focus on eradicating jarring pauses in Firefox. Today we had our &hellip;">
+  <meta name="description" content="I would like to see Firefox developers switch to 24hour review turn-around times. Note that in my definition review turn-around means any of the &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,61 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/12/05/24-hour-reviews/">24-hour Reviews</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-12-05T08:51:10-08:00" pubdate data-updated="true">Dec 5<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I would like to see Firefox developers switch to 24hour review turn-around times. Note that in my definition review turn-around means any of the following:</p>
+
+<ul>
+<li>r+/r-</li>
+<li>unset/reassign r? to someone else
+It is ridiculous in our recent faster release cycle if a patch takes half (or more) of the cycle loitering in the review queue. I believe that a shorter review cycle is the simplest way to accelerate Firefox evolution.</li>
+</ul>
+
+
+<p>I view fast review times as a matter of respect. Posting a patch usually requires a significant time/effort commitment, reviewers should act appropriately. There is no bigger buzzkill than having your work pushed back to the bottom of somebody&#8217;s TODO list like some annoying chore.</p>
+
+<p>As far as I can tell there are 3 main reasons* that lead to long review times:</p>
+
+<p>1) People like gavin, bz, dbaron having disproportionally high review loads. We need a process to hand-off patches to other reviewers. High-load people shouldn&#8217;t shy away from passing on the r? to someone else when possible. 2) Bugzilla-fobic people (like myself) loosing track of bugzilla r? requests due to not having bugzilla <a href="https://bugzilla.mozilla.org/editwhines.cgi">whines</a> setup. Bugzilla whines should be enabled by default. 3) Bad review habits.  I met a number of Mozilla developers that like to batch their reviews up and then do them all on a single weekday. Please stop, you are killing all kinds of coding momentum/fun/etc.Lets make it our policy to set aside time every day to clear the review queue.</p>
+
+<p>Clearly people with existing backlogs will take a while to catch up, but most MoCo employees should be capable of this. I have yet to hear a good reason against doing daily reviews.</p>
+
+<p>It has been a few months since I proposed this on <a href="http://groups.google.com/group/mozilla.dev.platform/browse_thread/thread/d563bf8329089a5/cdc47838866b0bea">dev.platform</a>.  I have tried to live by the 24hour rule, I think a few others tried this too. I find that morning bugzilla r? whines work best for me. I still occasionally loose track of a patch for a few days, but nobody is perfect. I think people appreciate fast reviews, but nobody thanked me yet.</p>
+
+<p><strong>Dec 6 Update</strong>: My goal is to have <em>some</em> response within 24hours with an ETA for next followup in the worst case.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -576,43 +631,6 @@ Above helps populate the Windows Prefetch in a less counter-productive way. Expl
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011/07/16/my-nas-is-smaller-than-yours/">My NAS Is Smaller Than Yours</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-07-16T19:29:00-07:00" pubdate data-updated="true">Jul 16<span>th</span>, 2011</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><div class='post'>
-<div class="separator" style="clear: both; text-align: center;"><a href="http://2.bp.blogspot.com/-NyjNccrtMm4/ThfcarpyIvI/AAAAAAAABT4/gYYcP66XgE8/s1600/IMGP4287.JPG" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" height="640" src="http://2.bp.blogspot.com/-NyjNccrtMm4/ThfcarpyIvI/AAAAAAAABT4/gYYcP66XgE8/s640/IMGP4287.JPG" width="424" /></a></div>&nbsp;I once <a href="/blog/2009/11/from-arms-and-mips.html">blogged</a> that ARM devices are useless and how one shouldn&#8217;t buy them cos they run weird forked kernels on weird bootloaders. I also blogged on how awesome and low power my <a href="/blog/2009/12/rooter-hardware.html">Atom box</a> was.<br /><br />Since then my Atom box died (probably the power supply), so faced with the option of rebuying various components until I find one that broke I decided that I&#8217;d rather forgo that. Instead I got an $40 Seagate Goflex.<br /><br />The atom box idled at 13W and maxed out around 20W, which was pretty impressive. Goflex can idle at 4W and maxes out at 7W. The 1ghz CPU is no x86 in speed, but it can keep up.<br /><br />Clever people developed a fully-featured Uboot bootloader for it so it takes care of that typical non-x86 suck. I opted to run  <a href="http://archlinuxarm.org/platforms/armv5/seagate-goflex-net">arch linux for arm</a> since Debian support isn&#8217;t particularly mature. In some ways Arch is better, it doesn&#8217;t play games with proprietary firmware and stays up to date better.<br /><br />So yeah with a $40 pricepoint, dual native sata, 4W idle even I will run ARM :)<br /><br /><i>Bonus:</i> In theory I should be able to run the static binaries I compile on the goflex on my android phones.</div>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/11/">&larr; Older</a>
@@ -630,6 +648,10 @@ Above helps populate the Windows Prefetch in a less counter-productive way. Expl
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/04/05/mozilla-tech-on-reddit/">Mozilla Tech on Reddit</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/03/27/snappy-number-55-snappy-evolution/">Snappy #55: Snappy Evolution</a>
       </li>
     
@@ -643,10 +665,6 @@ Above helps populate the Windows Prefetch in a less counter-productive way. Expl
     
       <li class="post">
         <a href="/blog/2013/03/11/living-with-octopress/">Blogging with Octopress</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/03/08/snappy-number-52/">Snappy #52</a>
       </li>
     
   </ul>

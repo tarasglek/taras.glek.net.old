@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Some time ago, Igor mentioned that there is code in SpiderMonkey that pleads to the programmer that from a certain point in a function code must flow &hellip;">
+  <meta name="description" content="Recently I dusted off outparamdel to see if I can get some refactorings landed. About a year ago, with the great QueryInterface outparamdelling &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,77 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2008/09/19/outparamdelling-this-way-comes/">Outparamdelling This Way Comes</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-09-19T07:06:08-07:00" pubdate data-updated="true">Sep 19<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Recently I dusted off outparamdel to see if I can get some refactorings landed. About a year ago, with the great QueryInterface outparamdelling experiment we ended up with a smaller binary footprint and tiny performance gain, but that never landed due to us not wanting to break compatability yet. Ever since, outparamdel has been patiently bitrotting within <a href="http://developer.mozilla.org/en/docs/Pork">Pork</a> waiting for the day it&#8217;s allowed to break APIs.</p>
+
+<p>Recently jst <a href="http://wiki.mozilla.org/Gecko:DeCOMtamination">listed</a> some private API candidates for deCOMtamination and I have been letting outparamdel loose on them for the past week. So far only one such <a href="http://hg.mozilla.org/mozilla-central/raw-rev/ec4733eb1bd8">change</a> has been committed, the rest are sitting in jst&#8217;s review queue. It&#8217;s exciting, as it&#8217;s the first ever application of outparamdel that didn&#8217;t get canned. For the whole list see the most recent bugs blocking my <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=430328">analysis metabug</a>.</p>
+
+<p>Cool part about these patches is that after various outparamdel special-casing and manual cleanup the line count is reduced by 10-30% while maintaining existing functionality!</p>
+
+<p>So far I haven&#8217;t touched much outside of content/, so if you know of any APIs that could have the outparam rotated into the return value, file some rewriting bugs against me.</p>
+
+<p><strong>Rewriting with Mercurial</strong></p>
+
+<p>Mercurial is now my favourite python program ever. It makes rewrites so easy. Here is my typical workflow:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>
+</span><span class='line'># Write an outparamdel input file specifying functions to rewrite..run outparamdel with pork-barrel to generate patch
+</span><span class='line'>hg qimport -f autopatch.diff && hg qpush && hg qref #make the patch nice and readable
+</span><span class='line'>hg qnew manual.diff #create a manual cleanup patch for cosmetic touchups and rewrites screwed up by macros#of course to submit patch for review, those two patches need to be combined
+</span><span class='line'>#do manual stuff
+</span><span class='line'>hg diff -r 19277 #produce a combined diff without loosing ability to edit each applied patch individually! For example, can regenerate the autopatch.diff with different outparamdel parameters or a bugfixed outparamdel. 19277 is a revision that has to be looked up with hg log, unfortunately there isn't a relative syntax to do hg diff -r "tip - 2"
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This is a huge improvement over the ad-hoc workflow prior to hg switch when I was prototyping my tools. CVS + quilt don&#8217;t hold a candle to a modern revision control system.</p>
+
+<p><strong>Prcheck</strong></p>
+
+<p>I also have been doing another round of <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=266048">prbool corrections</a>. Somehow I didn&#8217;t notice that the system stopped working due to the CVS->hg switch. Once again when reviving my nightly checker scripts, it was a pleasure to substitute all of the CVS hacks with mercurial commands.</p>
+
+<p>I am waiting for the few remaining largeish (ie 3-4 bugs per file) patches to land before I can start submitting whackamole bugs with a single prbool correction per module.</p>
+
+<p>It also seems that cairo and every other pre-C99 project have the same set of issues as Mozilla with their typedefed-int boolean types. Perhaps prcheck isn&#8217;t mozilla-specific at all.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -493,100 +564,6 @@ Both of these projects are interested in converging on a single codebase. It sou
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2008/07/18/pork-mcpp-oink-and-elsawhats-going-on/">Pork, MCPP, Oink and Elsa&#8230;What&#8217;s Going On?</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-07-18T03:29:28-07:00" pubdate data-updated="true">Jul 18<span>th</span>, 2008</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>It seems that there is some confusion as to what pork is and how it&#8217;s related to oink and elsa. So here is my view of it.</p>
-
-<p><a href="http://developer.mozilla.org/en/docs/Pork"><strong>Pork</strong></a> is my set of tools that use Elsa to rewrite sourcecode (mainly Mozilla code). Our use of Pork is solely for rewriting as it is not suited for <a href="http://developer.mozilla.org/en/docs/Dehydra">convenient</a> and <a href="http://developer.mozilla.org/en/docs/Treehydra">hardcore</a> analysis needs as much as the GCC based tools are.</p>
-
-<p><a href="http://mcpp.sf.net/">MCPP</a> is the secret sauce C preprocessor that makes C++ rewriting with Elsa possible by annotating preprocessed files with information to undo the lexical braindamage resulting from macro expansion.</p>
-
-<p><strong>Elsa</strong> is a awesome C++ parser. Awesome in that is can preserve more information regarding parsed code than any other C/C++ parser and it is easy to extend.</p>
-
-<p>We maintain our own version of Elsa within pork.</p>
-
-<p>I think our version of Elsa is the most up to date and most compatible with newer C++ features and headers used by newer GCC releases. We encourage other projects with C++ parsing/rewriting needs to collaborate with us. We will be parsing code with Elsa for a few years to come and it&#8217;s a lot of work to maintain a C++ parser by a single entity. I think elsa is a much better backend to build refactoring support onto than any other C++ parsing project out there right now.</p>
-
-<p><strong>The Messy Details</strong></p>
-
-<p>Now lets move on the more confusing parts: oink, oink-stack, and the oink mailing list.</p>
-
-<p><a href="http://www.cubewano.org/oink"><strong>oink</strong></a> consists of some static analysis tools and was meant to be a central place where all of the Elsa and Elsa-related development was supposed to happen. When people refer to oink, they usually mean the oink-stack which is a subversion meta repository that pulls in a dozen of subrepositoes(smbase, elkhound, elsa, oink(where static analysis tools live), etc).</p>
-
-<p>So when I started working on refactoring tools I was told that I should aim to have my tools added to oink, but there were some legal hassles to work out in the meantime so I cloned the oink-stack and developed my tools with minimal changes to oink-stack. This included various elsa extensions, bugfixes, etc.</p>
-
-<p>However, the little momentum that oink had has fizzled out due to various personality conflicts and various academics loosing interest. The code has been bitrotting for as long as I&#8217;ve been working at Mozilla.</p>
-
-<p>So the end result of oink is that we have pork which is a superset of oink. I&#8217;m not even sure if I mention the name pork anywhere in the sources. So pork at the moment means &#8220;Taras&#8217; continuation and extension of oink&#8221;. I am using the <a href="http://www.cubewano.org/lists/listinfo/oink-devel">oink mailing list</a> for any discussion on changes to Elsa/etc in hopes that at least some of the genius lurkers there will regain their interest in elsa.</p>
-
-<p><strong>Where do We Go From Here?</strong></p>
-
-<p>Onward! Due to the original authors vision of what C++ is and the state of C++ at the time Elsa was conceived, current pork code causes people to have many WTF moments (followed by banging head against keyboard) when they first start using it.</p>
-
-<p>The short version of my plan is:</p>
-
-<ul>
-<li>allow one to do &#8220;using namespace std&#8221; when using elsa</li>
-<li>Restructure pork repositories such that there are only 3 of them rather than 11 (elsa, elkhound, pork)</li>
-<li>get rid of the oink repository (those tools do not work for us)</li>
-<li>Make pork only consist of just my tools (with a sane build system) rather than be mixed into unmainted oink stuff</li>
-<li>Make pork compile with new compilers (GCC 4.3 and recent MSVC++)</li>
-<li>Keep track of this in a <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=438061">bug</a></li>
-<li>Clean up various misc things
-Some of you might ask &#8220;But Taras, why now, why not just keep doing what you&#8217;ve been doing?&#8221;. I was doing what I was doing because I had an overwhelming goal of devising a way to automate static analysis and refactoring of Mozilla on my shoulders and I wasn&#8217;t convinced that it was feasible. I had to learn to split my time between tool development and actually using the tools. Naturally I cut corners on tool development :)</li>
-</ul>
-
-
-<p>Since then slowly, but surely various awesome hackers have started doing rewrites and analyses themselves freeing me up to focus more on development. To make matters sweeter, various hackers have started submitting bugreports, fixes, ports to my tools. This gives me more time to focus on the big picture.</p>
-
-<p>Finally, I belive that automation of the sort we are doing at Mozilla is something that has been missing from open source development practices and it will catch on once people realize what they&#8217;ve been missing. Reducing those WTF moments will help people think positively.</p>
-
-<p><strong>Update:</strong></p>
-
-<p><em>Why three repositories instead of one?</em></p>
-
-<ol>
-<li>The three will be elkhound, elsa, pork</li>
-<li>elkhound is useful on it&#8217;s own</li>
-<li>elsa is too and other elsa users are likely to not care about Mozilla&#8217;s rewriting tools
-<em>I__s oink really dead?</em></li>
-</ol>
-
-
-<p>Yes. The maintainers have moved on to other projects. When they were maintaining oink, outside contributors couldn&#8217;t get their code upstream.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/21/">&larr; Older</a>
@@ -604,6 +581,10 @@ Some of you might ask &#8220;But Taras, why now, why not just keep doing what yo
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/04/05/mozilla-tech-on-reddit/">Mozilla Tech on Reddit</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/03/27/snappy-number-55-snappy-evolution/">Snappy #55: Snappy Evolution</a>
       </li>
     
@@ -617,10 +598,6 @@ Some of you might ask &#8220;But Taras, why now, why not just keep doing what yo
     
       <li class="post">
         <a href="/blog/2013/03/11/living-with-octopress/">Blogging with Octopress</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/03/08/snappy-number-52/">Snappy #52</a>
       </li>
     
   </ul>
