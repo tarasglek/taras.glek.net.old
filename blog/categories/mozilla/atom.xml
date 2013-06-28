@@ -4,7 +4,7 @@
   <title><![CDATA[Category: mozilla | All About Performance]]></title>
   <link href="http://taras.glek.net/blog/categories/mozilla/atom.xml" rel="self"/>
   <link href="http://taras.glek.net/"/>
-  <updated>2013-04-05T20:26:58-07:00</updated>
+  <updated>2013-06-28T17:08:59-04:00</updated>
   <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Mozilla Tech on Reddit]]></title>
     <link href="http://taras.glek.net/blog/2013/04/05/mozilla-tech-on-reddit/"/>
-    <updated>2013-04-05T20:02:00-07:00</updated>
+    <updated>2013-04-05T20:02:00-04:00</updated>
     <id>http://taras.glek.net/blog/2013/04/05/mozilla-tech-on-reddit</id>
     <content type="html"><![CDATA[I posted earlier about [planet mozilla being obsolete](/blog/2013/02/15/is-planet-mozilla-obsolete/). To move forward, we need to experiment with some alternatives. Mozilla contributor, [@djco](https://twitter.com/djco), setup a [reddit feed](http://www.reddit.com/r/MozillaTech/) so we can up-vote technical content and down-vote the rest.
 
@@ -31,7 +31,7 @@ Please try out the [reddit feed](http://www.reddit.com/r/MozillaTech/) and let [
   <entry>
     <title type="html"><![CDATA[Snappy #55: Snappy Evolution]]></title>
     <link href="http://taras.glek.net/blog/2013/03/27/snappy-number-55-snappy-evolution/"/>
-    <updated>2013-03-27T03:56:00-07:00</updated>
+    <updated>2013-03-27T03:56:00-04:00</updated>
     <id>http://taras.glek.net/blog/2013/03/27/snappy-number-55-snappy-evolution</id>
     <content type="html"><![CDATA[The Snappy name will be retired in favor of Performance: we will be expanding our meta scope beyond desktop Firefox responsiveness.
 
@@ -64,7 +64,7 @@ The progress tracking technique the Snappy team settled on last week was a combi
   <entry>
     <title type="html"><![CDATA[Snappy #54: Snappy Discussion in Paris]]></title>
     <link href="http://taras.glek.net/blog/2013/03/26/snappy-number-54-snappy-discussion-in-paris/"/>
-    <updated>2013-03-26T04:16:00-07:00</updated>
+    <updated>2013-03-26T04:16:00-04:00</updated>
     <id>http://taras.glek.net/blog/2013/03/26/snappy-number-54-snappy-discussion-in-paris</id>
     <content type="html"><![CDATA[###Meeting In Paris
 Last week Snappy people met in Paris at [IRILL](http://www.irill.org/about). I like small venues because they encourage conversations. IRILL is one of the best small work venues I've attended.
@@ -107,7 +107,7 @@ For a team activity we walked to the [Paris Catacombes](http://en.wikipedia.org/
   <entry>
     <title type="html"><![CDATA[snappy #53: Faster: Startup, Image Decoding, Touchpad Input. Smoother Animations]]></title>
     <link href="http://taras.glek.net/blog/2013/03/25/snappy-number-53-faster-startup/"/>
-    <updated>2013-03-25T06:25:00-07:00</updated>
+    <updated>2013-03-25T06:25:00-04:00</updated>
     <id>http://taras.glek.net/blog/2013/03/25/snappy-number-53-faster-startup</id>
     <content type="html"><![CDATA[### Responsiveness
 
@@ -143,7 +143,7 @@ Tim Taubert taught Firefox to warm up newtab connections on hover {%bug 790882%}
   <entry>
     <title type="html"><![CDATA[Blogging with Octopress]]></title>
     <link href="http://taras.glek.net/blog/2013/03/11/living-with-octopress/"/>
-    <updated>2013-03-11T16:58:00-07:00</updated>
+    <updated>2013-03-11T16:58:00-04:00</updated>
     <id>http://taras.glek.net/blog/2013/03/11/living-with-octopress</id>
     <content type="html"><![CDATA[A couple months ago I [switched](/blog/2012/12/17/hello-octopress/) to [Octopress](http://octopress.org). I now have some experience to share.
 

@@ -5,13 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Alternative to the Indignity of Dealing with the Error Console - All About Performance</title>
+  <title>GCC Summit - All About Performance</title>
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="The JavaScript error console is a relic from the Mozilla stone age. There are two problems with it: It lives in a separate window
-It is not helpful
-I &hellip;">
+  <meta name="description" content="Our presentation on Treehydra and Dehydra GCC plugins was received well at the summit. The big news is that FSF is working on license changes to &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -20,7 +18,7 @@ I &hellip;">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://taras.glek.net/blog/2011/10/18/alternative-to-the-indignity-of-dealing-with-the-error-console/">
+  <link rel="canonical" href="http://taras.glek.net/blog/2008/06/19/gcc-summit/">
   <link href="/favicon.png" rel="icon">
   <style>
 <!-- <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">-->
@@ -94,7 +92,7 @@ if (requestAnimationFrame)
   
   <header>
     
-      <h1 class="entry-title">Alternative to the Indignity of Dealing With the Error Console</h1>
+      <h1 class="entry-title">GCC Summit</h1>
     
     
       <p class="meta">
@@ -110,28 +108,18 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2011-10-18T23:56:09-07:00" pubdate data-updated="true">Oct 18<span>th</span>, 2011</time>
+<time datetime="2008-06-19T02:01:08-04:00" pubdate data-updated="true">Jun 19<span>th</span>, 2008</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>The JavaScript error console is a relic from the Mozilla stone age. There are two problems with it:</p>
+<div class="entry-content"><p>Our presentation on <a href="http://developer.mozilla.org/en/docs/Treehydra">Treehydra</a> and <a href="http://developer.mozilla.org/en/docs/Dehydra">Dehydra</a> GCC plugins was received well at the summit.</p>
 
-<ol>
-<li>It lives in a separate window</li>
-<li>It is not helpful
-I&#8217;ve been drooling over the new Firefox Web Console, but unfortunately it doesn&#8217;t have chrome privs [yet?] so it isn&#8217;t a replacement for the error console since it operates with privileges of the webpage displayed. Turns out I was 2 steps away from nirvana:</li>
-<li>Navigate to <a href="chrome://global/content/console.xul">chrome://global/content/console.xul</a>.</li>
-<li>Menu -> &#8220;Web Developer&#8221; -> &#8220;Web Console&#8221;
-Turns out that one can load a url with chrome privs (about:memory works too) and the web console becomes a very helpful [with autocompletion, less noise, etc) tool for typing Components.interfaces&#8230;</li>
-</ol>
+<p>The big news is that FSF is working on license changes to allow GPL-only GCC plugins. I&#8217;m looking forward to having our work be compatible with future GCC without any patching.</p>
 
-
-<p><strong>Update:</strong></p>
-
-<p>Scratchpad can also do this sans autocompletion, see Rob&#8217;s comment below.</p>
+<p>In a few minutes we&#8217;ll be having a meeting with users of other plugin frameworks to have an initial discussion on a common API. I&#8217;m working on forward porting my patches, so they can start getting reviewed ahead of license changes.</p>
 </div>
 
 
@@ -154,12 +142,12 @@ Turns out that one can load a url with chrome privs (about:memory works too) and
   
 
 
-<time datetime="2011-10-18T23:56:09-07:00" pubdate data-updated="true">Oct 18<span>th</span>, 2011</time>
+<time datetime="2008-06-19T02:01:08-04:00" pubdate data-updated="true">Jun 19<span>th</span>, 2008</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/mozilla/'>mozilla</a>
+    <a class='category' href='/blog/categories/dehydra/'>dehydra</a>, <a class='category' href='/blog/categories/mozilla/'>mozilla</a>, <a class='category' href='/blog/categories/treehydra/'>treehydra</a>
   
 </span>
 
@@ -168,7 +156,7 @@ Turns out that one can load a url with chrome privs (about:memory works too) and
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://taras.glek.net/blog/2011/10/18/alternative-to-the-indignity-of-dealing-with-the-error-console/" data-via="tarasglek" data-counturl="http://taras.glek.net/blog/2011/10/18/alternative-to-the-indignity-of-dealing-with-the-error-console/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://taras.glek.net/blog/2008/06/19/gcc-summit/" data-via="tarasglek" data-counturl="http://taras.glek.net/blog/2008/06/19/gcc-summit/" >Tweet</a>
   
   
   
@@ -177,10 +165,10 @@ Turns out that one can load a url with chrome privs (about:memory works too) and
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2011/10/10/misc/" title="Previous Post: Misc">&laquo; Misc</a>
+        <a class="basic-alignment left" href="/blog/2008/06/09/dehydra-09-its-alive/" title="Previous Post: Dehydra 0.9: It's alive!">&laquo; Dehydra 0.9: It's alive!</a>
       
       
-        <a class="basic-alignment right" href="/blog/2011/10/20/emacs-cmd-exe/" title="Next Post: Emacs > CMD.EXE">Emacs > CMD.EXE &raquo;</a>
+        <a class="basic-alignment right" href="/blog/2008/06/24/status-report-nearterm-plans-for-pork-dehydra/" title="Next Post: Status Report: Nearterm plans for Pork, Dehydra">Status Report: Nearterm plans for Pork, Dehydra &raquo;</a>
       
     </p>
   </footer>
@@ -201,6 +189,10 @@ Turns out that one can load a url with chrome privs (about:memory works too) and
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/06/28/new-performance-people/">New Performance People, Telemetry News</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/04/05/mozilla-tech-on-reddit/">Mozilla Tech on Reddit</a>
       </li>
     
@@ -214,10 +206,6 @@ Turns out that one can load a url with chrome privs (about:memory works too) and
     
       <li class="post">
         <a href="/blog/2013/03/25/snappy-number-53-faster-startup/">snappy #53: Faster: Startup, Image Decoding, Touchpad Input. Smoother Animations</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/03/11/living-with-octopress/">Blogging with Octopress</a>
       </li>
     
   </ul>
@@ -275,8 +263,8 @@ window._monitorContentLoaded = Date.now()
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://taras.glek.net/blog/2011/10/18/alternative-to-the-indignity-of-dealing-with-the-error-console/';
-        var disqus_url = 'http://taras.glek.net/blog/2011/10/18/alternative-to-the-indignity-of-dealing-with-the-error-console/';
+        var disqus_identifier = 'http://taras.glek.net/blog/2008/06/19/gcc-summit/';
+        var disqus_url = 'http://taras.glek.net/blog/2008/06/19/gcc-summit/';
         var disqus_script = 'embed.js';
       
     (function () {

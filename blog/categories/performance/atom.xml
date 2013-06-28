@@ -4,7 +4,7 @@
   <title><![CDATA[Category: performance | All About Performance]]></title>
   <link href="http://taras.glek.net/blog/categories/performance/atom.xml" rel="self"/>
   <link href="http://taras.glek.net/"/>
-  <updated>2013-04-05T20:26:58-07:00</updated>
+  <updated>2013-06-28T17:08:59-04:00</updated>
   <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[FOSDEM Anyone?]]></title>
     <link href="http://taras.glek.net/blog/2011/12/20/fosdem-anyone/"/>
-    <updated>2011-12-20T06:57:10-08:00</updated>
+    <updated>2011-12-20T09:57:10-05:00</updated>
     <id>http://taras.glek.net/blog/2011/12/20/fosdem-anyone</id>
     <content type="html"><![CDATA[Team Perf and a significant number of other Mozillians will be attending [FOSDEM](http://fosdem.org/2012/) this year. My team will be giving talks on android linkers, IO, toolchain stuff, other TBD stuff. This will be my first FOSDEM, I'm really excited about it. There are a lot of European open sourcers to meet that don't make it to this side of the pond much.  
   
@@ -29,7 +29,7 @@ Team perf & other snappy people (10+ people) plan to spend the week before FOSDE
   <entry>
     <title type="html"><![CDATA[Windows Sucks At Memory-Mapped IO During Startup]]></title>
     <link href="http://taras.glek.net/blog/2010/04/19/windows-sucks-at-memory-mapped-io-during-startup/"/>
-    <updated>2010-04-19T07:00:00-07:00</updated>
+    <updated>2010-04-19T10:00:00-04:00</updated>
     <id>http://taras.glek.net/blog/2010/04/19/windows-sucks-at-memory-mapped-io-during-startup</id>
     <content type="html"><![CDATA[Last week I learned about how Windows handles page faults backed by files (specifically xul.dll). I already knew that Linux was [suboptimal](http://taras.glek.net/blog/2010/04/12/squeezing-every-last-bit-of-performance-out-of-the-linux-toolchain/) in this area, perhaps the clever people at Redmond did better.  
   
@@ -67,7 +67,7 @@ People seem to prefer to comment on [reddit](http://www.reddit.com/r/programming
   <entry>
     <title type="html"><![CDATA[Studying Fennec Performance]]></title>
     <link href="http://taras.glek.net/blog/2009/06/26/studying-fennec-performance/"/>
-    <updated>2009-06-26T07:31:36-07:00</updated>
+    <updated>2009-06-26T10:31:36-04:00</updated>
     <id>http://taras.glek.net/blog/2009/06/26/studying-fennec-performance</id>
     <content type="html"><![CDATA[Working on Fennec performance N810 has been very educational. I have been learning more and more about performance profiling on crappy platforms. I define a platform as crap if it has poor development tools, limited OS or other significant limitations. Linux is a crappy platform in this case because it's running on ARM where oprofile barely does anything and there are no other performance tools for N810 (more modern ARM cpus should user-space perf counters and be more useful for instrumentation).  
   

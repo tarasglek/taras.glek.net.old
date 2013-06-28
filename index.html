@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="I posted earlier about planet mozilla being obsolete. To move forward, we need to experiment with some alternatives. Mozilla contributor, @djco, &hellip;">
+  <meta name="description" content="reddit/MozillaTech I like our make-planet-techy subreddit. Seems like articles that get rated as one would expect. I happily switched to reddit as my &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -95,6 +95,62 @@ if (requestAnimationFrame)
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2013/06/28/new-performance-people/">New Performance People, Telemetry News</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-28T16:52:00-04:00" pubdate data-updated="true">Jun 28<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>reddit/<a href="http://www.reddit.com/r/MozillaTech/">MozillaTech</a></h2>
+
+<p>I like our make-planet-techy subreddit. Seems like articles that get rated as one would expect. I happily switched to reddit as my primary way to consume planet mozilla. Redditors, keep up the good work!</p>
+
+<h2>Telemetry Dashboard</h2>
+
+<p>Our new telemetry <a href="http://telemetry-dash.mozilla.org/">dashboard</a> went live yesterday. It&#8217;s missing features, data, UX. However it is public, fast and hackable. It should evolve quickly.</p>
+
+<h2>New Blood</h2>
+
+<p><a href="http://mreid-moz.github.io/">Mark Reid</a> is our first server-side dev. His primary task is switching telemetry backend from hadoop to a custom telemetry server. New server infrastructure will enable a live dashboard (3-day delay atm) + ability to run queries in minutes rather than in hours.</p>
+
+<p><a href="http://randomkernels.wordpress.com">Dhaval Giani</a>, &#8220;the intern&#8221;, is our first kernel hacker. He&#8217;s working on helping land <a href="https://lwn.net/Articles/522135/">volatile memory</a> in the kernel. This feature will let Firefox safely consume more memory when memory is plentiful and use less in limited scenarios. Hopefully he&#8217;ll also add read-only file compression to ext4.</p>
+
+<p>Blogs linked above are in the please-add-to-planet queue. Expect them to spend a few weeks there. Please subscribe to their RSS feeds in meantime.</p>
+
+<h2>Investigating SQLite Performance via Telemetry</h2>
+
+<p>Years ago I tweaked our SQLite clients to use a larger page size. In my testing this seemed to achieve a speedup of 0.2-2x, see <a title="Suboptimal SQLite page size" href="https://bugzilla.mozilla.org/show_bug.cgi?id=416330">bug 416330</a>. Unfortunately, ~30% of our users are still on the old page size (<a title="Fix page_size of WAL databases" href="https://bugzilla.mozilla.org/show_bug.cgi?id=634374">bug 634374</a>). We used a <a href="https://github.com/mozilla/jydoop">jydoop</a> query to figure out if it&#8217;s worth developing a feature to convert these users over using two different (time spent <a href="https://github.com/mozilla/jydoop/blob/master/scripts/places4k.py">reading</a> &amp; time spent <a href="https://github.com/mozilla/jydoop/blob/master/scripts/places4k-slowsql.py">executing</a> a query) ways to measure performance differences. According to both methods there is a 4x reduction in sqlite IO waits with the larger page size, so we&#8217;ll be adding code to convert people over more aggressively.</p>
+
+<p>This was a cool investigation because it highlighted how much more confidence we have when making performance decisions now (due to telemetry) vs a few years ago.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2013/04/05/mozilla-tech-on-reddit/">Mozilla Tech on Reddit</a></h1>
     
     
@@ -111,7 +167,7 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2013-04-05T20:02:00-07:00" pubdate data-updated="true">Apr 5<span>th</span>, 2013</time>
+<time datetime="2013-04-05T20:02:00-04:00" pubdate data-updated="true">Apr 5<span>th</span>, 2013</time>
         
       </p>
     
@@ -153,7 +209,7 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2013-03-27T03:56:00-07:00" pubdate data-updated="true">Mar 27<span>th</span>, 2013</time>
+<time datetime="2013-03-27T03:56:00-04:00" pubdate data-updated="true">Mar 27<span>th</span>, 2013</time>
         
       </p>
     
@@ -213,7 +269,7 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2013-03-26T04:16:00-07:00" pubdate data-updated="true">Mar 26<span>th</span>, 2013</time>
+<time datetime="2013-03-26T04:16:00-04:00" pubdate data-updated="true">Mar 26<span>th</span>, 2013</time>
         
       </p>
     
@@ -284,7 +340,7 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2013-03-25T06:25:00-07:00" pubdate data-updated="true">Mar 25<span>th</span>, 2013</time>
+<time datetime="2013-03-25T06:25:00-04:00" pubdate data-updated="true">Mar 25<span>th</span>, 2013</time>
         
       </p>
     
@@ -346,7 +402,7 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2013-03-11T16:58:00-07:00" pubdate data-updated="true">Mar 11<span>th</span>, 2013</time>
+<time datetime="2013-03-11T16:58:00-04:00" pubdate data-updated="true">Mar 11<span>th</span>, 2013</time>
         
       </p>
     
@@ -406,7 +462,7 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2013-03-08T16:58:00-08:00" pubdate data-updated="true">Mar 8<span>th</span>, 2013</time>
+<time datetime="2013-03-08T16:58:00-05:00" pubdate data-updated="true">Mar 8<span>th</span>, 2013</time>
         
       </p>
     
@@ -455,7 +511,7 @@ Omnijar readhead is next, in <a title="Use readahead for ordered jar files such 
   
 
 
-<time datetime="2013-02-22T16:14:00-08:00" pubdate data-updated="true">Feb 22<span>nd</span>, 2013</time>
+<time datetime="2013-02-22T16:14:00-05:00" pubdate data-updated="true">Feb 22<span>nd</span>, 2013</time>
         
       </p>
     
@@ -513,7 +569,7 @@ Omnijar readhead is next, in <a title="Use readahead for ordered jar files such 
   
 
 
-<time datetime="2013-02-17T20:56:00-08:00" pubdate data-updated="true">Feb 17<span>th</span>, 2013</time>
+<time datetime="2013-02-17T20:56:00-05:00" pubdate data-updated="true">Feb 17<span>th</span>, 2013</time>
         
       </p>
     
@@ -593,7 +649,7 @@ Omnijar readhead is next, in <a title="Use readahead for ordered jar files such 
   
 
 
-<time datetime="2013-02-17T20:32:00-08:00" pubdate data-updated="true">Feb 17<span>th</span>, 2013</time>
+<time datetime="2013-02-17T20:32:00-05:00" pubdate data-updated="true">Feb 17<span>th</span>, 2013</time>
         
       </p>
     
@@ -607,46 +663,6 @@ Omnijar readhead is next, in <a title="Use readahead for ordered jar files such 
 <p>This computer idles at as low as 10W, max observed power usage is 46W. Suspend-to-RAM uses around 1W. Thanks to the fancy Intel motherboard + CPU + efficient laptop PSU, at full power the computer uses less power than most systems do at idle.</p>
 
 <p>It&#8217;s exciting that mighty desktop CPUs now use less power at idle that Atom CPUs from just 2 years ago. Too bad that Intel is the only retail vendor that optimizes their motherboards for power consumption. Especially too bad since they are quitting the motherboard market.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/02/15/plugin-hang-ui-on-aurora/">Plugin Hang UI on Aurora</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-02-15T16:51:00-08:00" pubdate data-updated="true">Feb 15<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Aaron wrote a <a href="http://dblohm7.ca/blog/2013/02/15/plugin-hang-ui-on-aurora/">great post</a> on of the new plugin killer UI and Windows magic involved in debugging it.</p>
-
-<p>We need help testing the new functionality, please see the link above for details.</p>
-
-<p>Unfortunately, we are still waiting on <a title="Add Aaron Klotz's blog to Planet Mozilla" href="https://bugzilla.mozilla.org/show_bug.cgi?id=814095">bug 814095</a> to get his blog syndicated to planet.</p>
 </div>
   
   
@@ -669,6 +685,10 @@ Omnijar readhead is next, in <a title="Use readahead for ordered jar files such 
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/06/28/new-performance-people/">New Performance People, Telemetry News</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/04/05/mozilla-tech-on-reddit/">Mozilla Tech on Reddit</a>
       </li>
     
@@ -682,10 +702,6 @@ Omnijar readhead is next, in <a title="Use readahead for ordered jar files such 
     
       <li class="post">
         <a href="/blog/2013/03/25/snappy-number-53-faster-startup/">snappy #53: Faster: Startup, Image Decoding, Touchpad Input. Smoother Animations</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/03/11/living-with-octopress/">Blogging with Octopress</a>
       </li>
     
   </ul>

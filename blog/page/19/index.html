@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="I love new programming toys and this week is a good one for those. Ever since I laid the foundations for Dehydra I&#8217;ve been dreaming of a world &hellip;">
+  <meta name="description" content="A couple of months ago Stuart casually asked me to investigate Fennec performance for moving about a page, zooming and loading pages in general. Beta &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -95,6 +95,59 @@ if (requestAnimationFrame)
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2009/03/18/fennec-beta-1-need-for-speed/">Fennec Beta 1 - Need for Speed</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-03-18T02:52:42-04:00" pubdate data-updated="true">Mar 18<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>A couple of months ago Stuart casually asked me to investigate Fennec performance for moving about a page, zooming and loading pages in general. Beta 1 contains the result of that:</p>
+
+<ul>
+<li>There is little to no hardware graphics acceleration on mobile arm device. That combined with low memory bandwidth results in painfully slow screen updates (10x slower than crappy gfx on the desktop?). The painting engine now works hard to skip redundant draws of the page.</li>
+<li>During loading pages or zooming Fennec now only draws the minimum required. In my testing complicated pages load 2-5 times faster. Zooming is now 5 times faster.</li>
+<li>There is less DOM querying now. Things like checking an element&#8217;s size can cause pages to reflow resulting in a less responsive UI</li>
+</ul>
+
+
+<p>Other performance highlights:</p>
+
+<ul>
+<li>Fennec now features a redesigned firstrun page which not only looks better, but also contributed to a 0.5second startup speedup. Overall Beta 1 should startup is almost a second quicker than the previous release</li>
+<li>The JavaScript JIT is now on by default providing a noticeable performance boost throughout Fennec.</li>
+</ul>
+
+
+<p>For more info on Fennec Beta 1 and where to get it see <a href="http://blog.pavlov.net/2009/03/17/fennec-1-beta-1/">Stuart&#8217;s blog</a>.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2009/02/19/quickfix-model-of-develoment/">Quickfix Model of Develoment</a></h1>
     
     
@@ -111,7 +164,7 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2009-02-19T03:20:51-08:00" pubdate data-updated="true">Feb 19<span>th</span>, 2009</time>
+<time datetime="2009-02-19T06:20:51-05:00" pubdate data-updated="true">Feb 19<span>th</span>, 2009</time>
         
       </p>
     
@@ -157,7 +210,7 @@ Now I&#8217;m sure that most of us would still run Emacs and other desktop edito
   
 
 
-<time datetime="2009-02-16T08:36:38-08:00" pubdate data-updated="true">Feb 16<span>th</span>, 2009</time>
+<time datetime="2009-02-16T11:36:38-05:00" pubdate data-updated="true">Feb 16<span>th</span>, 2009</time>
         
       </p>
     
@@ -195,7 +248,7 @@ Now I&#8217;m sure that most of us would still run Emacs and other desktop edito
   
 
 
-<time datetime="2009-01-28T16:17:47-08:00" pubdate data-updated="true">Jan 28<span>th</span>, 2009</time>
+<time datetime="2009-01-28T19:17:47-05:00" pubdate data-updated="true">Jan 28<span>th</span>, 2009</time>
         
       </p>
     
@@ -251,7 +304,7 @@ For any questions regarding Pork feel free to post on the <a href="https://lists
   
 
 
-<time datetime="2009-01-27T08:38:35-08:00" pubdate data-updated="true">Jan 27<span>th</span>, 2009</time>
+<time datetime="2009-01-27T11:38:35-05:00" pubdate data-updated="true">Jan 27<span>th</span>, 2009</time>
         
       </p>
     
@@ -293,7 +346,7 @@ For any questions regarding Pork feel free to post on the <a href="https://lists
   
 
 
-<time datetime="2009-01-13T11:17:49-08:00" pubdate data-updated="true">Jan 13<span>th</span>, 2009</time>
+<time datetime="2009-01-13T14:17:49-05:00" pubdate data-updated="true">Jan 13<span>th</span>, 2009</time>
         
       </p>
     
@@ -358,7 +411,7 @@ For any questions regarding Pork feel free to post on the <a href="https://lists
   
 
 
-<time datetime="2008-12-23T03:23:12-08:00" pubdate data-updated="true">Dec 23<span>rd</span>, 2008</time>
+<time datetime="2008-12-23T06:23:12-05:00" pubdate data-updated="true">Dec 23<span>rd</span>, 2008</time>
         
       </p>
     
@@ -424,7 +477,7 @@ For any questions regarding Pork feel free to post on the <a href="https://lists
   
 
 
-<time datetime="2008-11-07T07:58:08-08:00" pubdate data-updated="true">Nov 7<span>th</span>, 2008</time>
+<time datetime="2008-11-07T10:58:08-05:00" pubdate data-updated="true">Nov 7<span>th</span>, 2008</time>
         
       </p>
     
@@ -462,7 +515,7 @@ For any questions regarding Pork feel free to post on the <a href="https://lists
   
 
 
-<time datetime="2008-10-09T02:18:29-07:00" pubdate data-updated="true">Oct 9<span>th</span>, 2008</time>
+<time datetime="2008-10-09T05:18:29-04:00" pubdate data-updated="true">Oct 9<span>th</span>, 2008</time>
         
       </p>
     
@@ -513,7 +566,7 @@ For any questions regarding Pork feel free to post on the <a href="https://lists
   
 
 
-<time datetime="2008-10-07T08:53:44-07:00" pubdate data-updated="true">Oct 7<span>th</span>, 2008</time>
+<time datetime="2008-10-07T11:53:44-04:00" pubdate data-updated="true">Oct 7<span>th</span>, 2008</time>
         
       </p>
     
@@ -527,80 +580,6 @@ For any questions regarding Pork feel free to post on the <a href="https://lists
 <p>My protection: I use the try server to make sure that everything builds on supported platforms. On top of that every patch gets reviewed.</p>
 
 <p>Furthermore, I would like to point out that methods that aren&#8217;t called within Firefox are less likely to be tested and correct. So if one leaves code that should only be called from other projects, it&#8217;d be appropriate if we had some unit tests for it, which would flag the code as in-use. That would let us move to the next level and setup a tinderbox to detect dead code as soon as it is orphaned.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2008/09/26/living-dead-code/">Living Dead Code</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-09-26T03:58:37-07:00" pubdate data-updated="true">Sep 26<span>th</span>, 2008</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>The coolest part about my job is that I get to work on tasks that are cool, but typically are forever laid to rest in the would-be-cool-if-we-could-but-we-don&#8217;t-have-time-or-resources category. However as project code sizes increases, the usefulness/coolness ratio of static analysis grows and moves from would-be-cool, to nice-to-have to this-is-the-only-way. Now, I&#8217;m not sure where Mozilla lies on this scale, but I do know for sure that the giant codebase is an analysis treasure trove.</p>
-
-<p><strong>Dead Code Motivation </strong></p>
-
-<p>I have been talking about dead code detection in Mozilla for ages. As software changes, some pieces of code unintentially get left behind, but often there is no way to tell. It results in unnessary maintanance burden and increased footprint. In <a href="http://weblogs.mozillazine.org/roc/">roc</a>&#8217;s case randomly spotting dead methods may also involve a little IRC griping at me about not having any tools for it, even rudimentary ones. Between that and <a href="http://www.0xdeadbeef.com/weblog/?p=766">blizzard&#8217;s cheering</a> over reduced code size, I had no choice, but to give it a try once I had enough outparamdelling being reviewed.</p>
-
-<p><strong>Dead Code Results</strong></p>
-
-<p>First of, the approach described below seems to work well: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=457262">see bug</a> with initial results. Now I get a few thousand reported methods to inspect and refine the results.</p>
-
-<p><strong>Dead Code Approach</strong></p>
-
-<p>I&#8217;ve been pondering dead code detection since I&#8217;ve started working on this stuff. There are lots of ways to do it, but I finally settled on the dead-simplest one: method-level granularity. <a href="http://hg.mozilla.org/users/tglek_mozilla.com/deadlive/">Ingredients</a> are:</p>
-
-<ul>
-<li>Dehydra/Treehydra extraction JavaScript: Dehydra makes it easy to enumerate methods and class hierarchies. Treehydra makes it possible to extract every mention of a method from the code(except for <a href="http://mxr.mozilla.org/mozilla-central/source/content/events/src/nsEventListenerManager.cpp#206">pointers to virtual functions that were casted</a>&#8230;in that case we are left with vtable index and a type that the pointer was cast to). Additionally, Treehydra counts the number of AST nodes visited in every function body.</li>
-<li>Shell script to aggregate the result of processing Mozilla source. Gotta admit, perl&#8217;s hashtables give GNU sort -u a run for its money.</li>
-<li>Ocaml program to do the super-dumb algorithm. Classes with the same names, are assumed to be the same class. Method overloads are assumed to be a single method. All methods are assumed to be virtual. Every ClassType::FUNCTION_CALL call walks down to all children &amp; up through all the parents and marks the derived methods as called. Then all derivatives of scriptable XPIDL are filtered out and the uncalled methods are printed out. In order to find most exciting functions first, methods in the results are sorted by their AST count =D. <strong>Language Nerd Trivia:</strong> Why OCaml - because ADTs are no fun in other languages. Why is my OCaml so bad - because I lost the hang out if due to not writing anything it for the past 2 years.
-I&#8217;m sure most people reading this will go: &#8220;Wait a minute, this is unsound if you don&#8217;t see the virtual function pointers?&#8221;, to which I reply: &#8220;Once I nuke the method and mozilla compiles successfully, it&#8217;s sound&#8221;. In reality someone could make a puny GCC patch to preserve more data in virtual function pointer assignments.</li>
-</ul>
-
-
-<p>Since this is all in early stages there a bunch of things I don&#8217;t deal with: method overloads, constructors, destructors and overloaded operators&#8230;.and templates. All function bodies are scanned, but some function names are a pain to deal with or they aren&#8217;t straightforward function calls in GCC so they don&#8217;t participate in the dead/alive contest.</p>
-
-<p><strong>Where To Go From Here</strong></p>
-
-<p>Well, once we run out of dead code detected by the primitive caveman approach above, we&#8217;ll have to investigate less conservative approaches possibly involving abstract interpretation and callgraphs.</p>
-
-<p><strong>How To Get Involved in Screwing With Software Cost Models By Contributing Negative Line Counts </strong></p>
-
-<p>This project has a lot of places to help out:</p>
-
-<ul>
-<li>work through the dead method list, filing bugs accordingly and deleting any related code</li>
-<li>Extend the machinery to work on all non-static function</li>
-<li>Try this on your favourite large codebase.</li>
-<li>Write the virtual function pointer annotation patch :)</li>
-</ul>
-
 </div>
   
   
@@ -625,6 +604,10 @@ I&#8217;m sure most people reading this will go: &#8220;Wait a minute, this is u
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/06/28/new-performance-people/">New Performance People, Telemetry News</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/04/05/mozilla-tech-on-reddit/">Mozilla Tech on Reddit</a>
       </li>
     
@@ -638,10 +621,6 @@ I&#8217;m sure most people reading this will go: &#8220;Wait a minute, this is u
     
       <li class="post">
         <a href="/blog/2013/03/25/snappy-number-53-faster-startup/">snappy #53: Faster: Startup, Image Decoding, Touchpad Input. Smoother Animations</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/03/11/living-with-octopress/">Blogging with Octopress</a>
       </li>
     
   </ul>

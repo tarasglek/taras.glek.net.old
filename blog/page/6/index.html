@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Workweek The perf team + Lawrence held a snappy workweek at the Mozilla HQ last week. We spent most of the week meeting with various people involved &hellip;">
+  <meta name="description" content="Misc This was an unusual meeting for the Snappy project: everybody was in the same physical room (though someone dialed in 5min before the end). I &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -95,6 +95,68 @@ if (requestAnimationFrame)
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2012/05/21/snappy-may-17-physical-room-edition/">Snappy, May 17 - Physical Room Edition</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-05-21T07:10:23-04:00" pubdate data-updated="true">May 21<span>st</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><strong>Misc</strong></p>
+
+<p>This was an unusual meeting for the Snappy project: everybody was in the same physical room (though someone dialed in 5min before the end). I love the distributed nature of Mozilla, but it&#8217;s nice to have everybody in the same room for a change.</p>
+
+<p>Vlad did some super-slow-startup investigation. We have even more <a href="http://blog.mozilla.org/vdjeric/2012/05/17/looking-at-my-own-abouttelemetry-data/">evidence</a> that loading pages before the UI is up is a bad idea: bug 715402.</p>
+
+<p>Jet sped up browser chrome by converting SVG masks to clip-paths: bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=752918">752918</a>. With a name like that, how can he not work on performance bugs :)</p>
+
+<p>The necko team is looking for feedback on test builds that reduce cache-related pauses on the main thread. If you suffer from cache-related lag, give <a href="https://ftp.mozilla.org/pub/mozilla.org/firefox/try-builds/bsmith@mozilla.com-10b6ced92518/">these</a> a spin: bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=722034">722034</a>.</p>
+
+<p>Benoit made our profiling builds useful on Linux, Android (in addition to Windows, Mac64). Work is happening on extending our debug protocol with <a href="https://developer.mozilla.org/en/Performance/Profiling_with_the_Built-in_Profiler">profiling </a>abilities. Unfortunately I do not have bug #s to link to. The Windows symbol server is almost done with security review so it can be exposed to the web. For more profiler details see bugs: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=753588">753588</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=751355">751355</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=751355">751355</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=751034">751034</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=751779">751779</a>.</p>
+
+<p>Rafael is getting close to calling exit(0) in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=662444">662444</a>. Much work remains, it&#8217;ll be the most significant change since we embarked on this project almost a year ago. Our current application shutdown situation is not pretty.</p>
+
+<p><strong>GC/CC</strong></p>
+
+<p>Bill landed incremental GC again, it promptly bounced out: bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=735099">735099</a>.</p>
+
+<p>We now do compartmental GC more often: bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=716014">716014</a>.</p>
+
+<p>Andrew is working on reducing CC overhead (by 80% in his benchmark) when closing tabs: bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=754495">754495</a>.</p>
+
+<p><strong>LagBlock Plus</strong></p>
+
+<p>I&#8217;ve been running Wlad&#8217;s <a href="https://addons.mozilla.org/en-US/firefox/addon/suspend-background-tabs/">extension</a> for over a week now. The browser is so much more pleasant now. Background tabs used to make text-entry a painful process. Can&#8217;t wait until we can approach a similar level of responsiveness by scheduling background tab events more intelligently.</p>
+
+<p>I feel that letting tabs run out of control is a serious misfeature in the current web &#8216;architecture&#8217;. Modern OSes require background apps to suspend (ie Android, iOS). It is about time that browsers forced a similar behavior: ie bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=675539">675539</a>. Web developers should be given a way to request to run background tasks and users should be able to veto that.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2012/05/21/snappy-workweek/">Snappy Workweek</a></h1>
     
     
@@ -111,7 +173,7 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2012-05-21T02:53:14-07:00" pubdate data-updated="true">May 21<span>st</span>, 2012</time>
+<time datetime="2012-05-21T05:53:14-04:00" pubdate data-updated="true">May 21<span>st</span>, 2012</time>
         
       </p>
     
@@ -155,7 +217,7 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2012-05-14T03:06:52-07:00" pubdate data-updated="true">May 14<span>th</span>, 2012</time>
+<time datetime="2012-05-14T06:06:52-04:00" pubdate data-updated="true">May 14<span>th</span>, 2012</time>
         
       </p>
     
@@ -205,7 +267,7 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2012-05-03T07:23:13-07:00" pubdate data-updated="true">May 3<span>rd</span>, 2012</time>
+<time datetime="2012-05-03T10:23:13-04:00" pubdate data-updated="true">May 3<span>rd</span>, 2012</time>
         
       </p>
     
@@ -261,7 +323,7 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2012-05-01T09:57:33-07:00" pubdate data-updated="true">May 1<span>st</span>, 2012</time>
+<time datetime="2012-05-01T12:57:33-04:00" pubdate data-updated="true">May 1<span>st</span>, 2012</time>
         
       </p>
     
@@ -299,7 +361,7 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2012-04-26T08:43:50-07:00" pubdate data-updated="true">Apr 26<span>th</span>, 2012</time>
+<time datetime="2012-04-26T11:43:50-04:00" pubdate data-updated="true">Apr 26<span>th</span>, 2012</time>
         
       </p>
     
@@ -347,7 +409,7 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2012-04-19T07:47:40-07:00" pubdate data-updated="true">Apr 19<span>th</span>, 2012</time>
+<time datetime="2012-04-19T10:47:40-04:00" pubdate data-updated="true">Apr 19<span>th</span>, 2012</time>
         
       </p>
     
@@ -391,7 +453,7 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2012-04-18T09:13:19-07:00" pubdate data-updated="true">Apr 18<span>th</span>, 2012</time>
+<time datetime="2012-04-18T12:13:19-04:00" pubdate data-updated="true">Apr 18<span>th</span>, 2012</time>
         
       </p>
     
@@ -447,7 +509,7 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2012-04-16T06:45:17-07:00" pubdate data-updated="true">Apr 16<span>th</span>, 2012</time>
+<time datetime="2012-04-16T09:45:17-04:00" pubdate data-updated="true">Apr 16<span>th</span>, 2012</time>
         
       </p>
     
@@ -493,7 +555,7 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2012-04-10T02:51:01-07:00" pubdate data-updated="true">Apr 10<span>th</span>, 2012</time>
+<time datetime="2012-04-10T05:51:01-04:00" pubdate data-updated="true">Apr 10<span>th</span>, 2012</time>
         
       </p>
     
@@ -526,226 +588,6 @@ if (requestAnimationFrame)
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/04/05/snappy-april-5-change-in-meeting-format/">Snappy, April 5: Change in Meeting Format</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-04-05T06:52:12-07:00" pubdate data-updated="true">Apr 5<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Lawrence, thanks for posting <a href="http://lawrencemandel.com/tag/snappy/">snappy updates</a> while I was on leave.</p>
-
-<p>Snappy meetings have gotten a bit dull lately. There hasn&#8217;t been much arguing about what needs fixing, or much discussion, everybody gave status updates and was in agreement. Going forward we will do less status updating, except for major developments to save some energy for discussion.</p>
-
-<p>Discussion centered around personas&#8230;err themes <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=650968">murdering </a>firefox performance and goals for q2. Ehsan will post details how to reimplement themes. I made a separate <a href="http://taras.glek.net/blog/2012/04/05/snappy-apr-5-snappy-goals-for-q2/">post </a>about goals.</p>
-
-<p>Vlad raised a question on whether we should proceed with <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=722243">cancellable </a>SQL queries given SQLite limitations. SQLite can only cancel all outstanding queries, which requires us to track carefully what requests are outstanding and/or do some SQLite feature development. Consensus was that we should proceed to avoid embarrassing situations like reading the places database <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=684513">backwards </a>during shutdown.</p>
-
-<p>Lawrence also revamped the <a href="https://wiki.mozilla.org/Performance/Snappy/2012-04-05">meeting notes</a> to be more readable.  As an experiment I&#8217;m going to paste them in here. Let me know if you prefer my cherry-picking summaries from before.</p>
-
-<h1>Snappy Apr. 5 Minutes</h1>
-
-<ul>
-<li>Sample Q2 goals: <a href="https://wiki.mozilla.org/Performance/Snappy#Snappy_TODO">https://wiki.mozilla.org/Performance/Snappy#Snappy_TODO</a></li>
-<li>Chart showing Snappy bugs resolved in the last week <a href="https://wiki.mozilla.org/Performance/Snappy/Dashboard#Resolved_in_the_last_week">https://wiki.mozilla.org/Performance/Snappy/Dashboard#Resolved_in_the_last_week</a>.</li>
-<li>did anyone attend the Intel sessions?
-
-<ul>
-<li>might be useful information at the next profiling session</li>
-</ul>
-</li>
-</ul>
-
-
-<h2>Actions</h2>
-
-<p>No actions.</p>
-
-<h2>Incoming</h2>
-
-<ul>
-<li>hardware acceleration: i disabled hwa on all macs in my family, and Firefox has been noticeably snappier across multiple types of macs. related bugs: bug 600763, bug 721273, bug 721892. should have someone from perf team or gfx dig in and at least confirm.
-
-<ul>
-<li>Taras asked to put on gfx q2 goals</li>
-</ul>
-</li>
-</ul>
-
-
-<h2>Projects</h2>
-
-<h3>Persona slowness(ehsan?)</h3>
-
-<p>Results from the past week</p>
-
-<ul>
-<li>issues discovered with animated personas and those that heavily use svg and css</li>
-<li>Ehsan to summarize the issue in a blog/wiki</li>
-<li>look at moving image decoding off of the main thread</li>
-</ul>
-
-
-<h3>Mainthread+Slow SQL (gavin/taras/vlad)</h3>
-
-<p>Results from the past week</p>
-
-<ul>
-<li>Worked on cancellable sql (bug 722243), have to figure out if benefit from cancellable queries justifies additional locking</li>
-</ul>
-
-
-<p>Todo this week</p>
-
-<ul>
-<li>Ask SQLite guys about fine-grained cancels</li>
-</ul>
-
-
-<h3>Better DOM event/task scheduling - jst (telemetry)</h3>
-
-<p>Results from the past week</p>
-
-<ul>
-<li>starting to work on slowing down parser in background tabs</li>
-</ul>
-
-
-<h3>Super-slow-startup investigations - vlad, taras</h3>
-
-<p>Results from the past week</p>
-
-<ul>
-<li>Received batch of slow startup data from March</li>
-</ul>
-
-
-<h3>Startup optimizations - bbondy</h3>
-
-<p>Results from the past week</p>
-
-<ul>
-<li>bbondy: Bug 692255 - WIll have implemented super review comments for prefetch</li>
-</ul>
-
-
-<h3>Front-end - Dietrich/bbondy</h3>
-
-<p>Results from the past week</p>
-
-<ul>
-<li>Dashboard: <a href="https://wiki.mozilla.org/SnappyFrontEndDashboard">https://wiki.mozilla.org/SnappyFrontEndDashboard</a></li>
-<li>QA chrome leak testing - should most affect frontend <a href="https://wiki.mozilla.org/QA/Snappy/Chrome_Leak_Testing">https://wiki.mozilla.org/QA/Snappy/Chrome_Leak_Testing</a></li>
-<li>IE Migrator changes started landing, Safari coming soon after.</li>
-<li>Tim Taubert put up AreWeSmallYet, tracking changes in build size: <a href="http://arewesmallyet.com/">http://arewesmallyet.com/</a></li>
-</ul>
-
-
-<p>Todo this week</p>
-
-<ul>
-<li>telemetry for home tab vs session restored</li>
-<li>telemetry for # of tabs restored</li>
-<li>taras: investigate if startup cache/omnijar is still of benefit</li>
-</ul>
-
-
-<h3>Profiler - jrmuizel/BenWa/Ehsan (and more)</h3>
-
-<p>Todo this week</p>
-
-<ul>
-<li>There seems to be an issue with symbolication with latest SPS extension version</li>
-</ul>
-
-
-<h3>Nondestructive chromehang - vlad</h3>
-
-<p>Results from the past week</p>
-
-<ul>
-<li>Co-ordinate with Softronics QA people &amp; Moz privacy review</li>
-<li>bug 742008: Nightly profiling updates consistently failing</li>
-</ul>
-
-
-<p>Todo this week</p>
-
-<ul>
-<li>Integrate about-telemetry into Firefox as a bundled addon</li>
-<li>Add a pass through mode so local symbolication server can pass symbolication requests to remote server (e.g. local Firefox symbols + remote Windows system symbols)</li>
-</ul>
-
-
-<h3>Peptest - mcote</h3>
-
-<p>Results from the past week</p>
-
-<ul>
-<li>revision numbers, with links, now in peptest graphs as of March 30</li>
-<li>results keep coming in!</li>
-</ul>
-
-
-<h3>GC pause reduction - billm</h3>
-
-<p>Results from the past week</p>
-
-<ul>
-<li>bug 641025: incremental GC - disabled due to leaks</li>
-<li>investigating leaks due to incremental GC</li>
-<li>landed bug 716142 (allow multi-compartmental GCs), which enables:</li>
-<li>worked on bug 739899, to keep compartment creation from stopping incremental GC</li>
-<li>Multi compartment GCs should also enable scheduling smaller chunks of GC and CC.</li>
-</ul>
-
-
-<h3>CC pause reduction - smaug, mccr8 (meta bug 698919)</h3>
-
-<p>Results from the past week</p>
-
-<ul>
-<li>smaug worked on trying to reduce the impact of leaked documents on the CC</li>
-<li>mccr8 worked on bug 653191 (collapse SCCs of JS in CC graph)</li>
-<li>remove more stuff from the CC graph (bug 740185)</li>
-<li>QA is working on plan to test for leaked documents</li>
-</ul>
-
-
-<h4>bug710935 - measure lag in handling user input (needs owner)</h4>
-
-<ul>
-<li>bbondy: I&#8217;ll probably be starting on this next week, but if you have someone else please feel more than free to take :)</li>
-</ul>
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/7/">&larr; Older</a>
@@ -763,6 +605,10 @@ if (requestAnimationFrame)
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/06/28/new-performance-people/">New Performance People, Telemetry News</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/04/05/mozilla-tech-on-reddit/">Mozilla Tech on Reddit</a>
       </li>
     
@@ -776,10 +622,6 @@ if (requestAnimationFrame)
     
       <li class="post">
         <a href="/blog/2013/03/25/snappy-number-53-faster-startup/">snappy #53: Faster: Startup, Image Decoding, Touchpad Input. Smoother Animations</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/03/11/living-with-octopress/">Blogging with Octopress</a>
       </li>
     
   </ul>

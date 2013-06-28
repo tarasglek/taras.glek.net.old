@@ -4,7 +4,7 @@
   <title><![CDATA[Category: startup | All About Performance]]></title>
   <link href="http://taras.glek.net/blog/categories/startup/atom.xml" rel="self"/>
   <link href="http://taras.glek.net/"/>
-  <updated>2013-04-05T20:26:58-07:00</updated>
+  <updated>2013-06-28T17:08:59-04:00</updated>
   <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Firefox 7: Cheating the Operating System to Start Faster]]></title>
     <link href="http://taras.glek.net/blog/2011/09/20/firefox-7-cheating-the-operating-system-to-start-faster/"/>
-    <updated>2011-09-20T07:54:07-07:00</updated>
+    <updated>2011-09-20T10:54:07-04:00</updated>
     <id>http://taras.glek.net/blog/2011/09/20/firefox-7-cheating-the-operating-system-to-start-faster</id>
     <content type="html"><![CDATA[****Firefox 7 features improved startup speed. Our research has shown that most OSes are not capable of starting large programs efficiently (see my older blog entries). As a result, Firefox 7 will explicitly tell the OS to aggressively preload our xul.dll/libxul.so/XUL library before passing it on to the runtime linker. This marks the productization of the approach explored in "20-line patch that doubles Firefox startup" that got people so excited. See [bug 552864](https://bugzilla.mozilla.org/show_bug.cgi?id=552864) and dependent bugs for exciting technical details.  
   
@@ -40,7 +40,7 @@ Operating systems without counter-productive startup heuristics (ie Mac/Linux) w
   <entry>
     <title type="html"><![CDATA[Measuring Startup Speed Correctly]]></title>
     <link href="http://taras.glek.net/blog/2011/04/26/measuring-startup-speed-correctly/"/>
-    <updated>2011-04-26T07:34:02-07:00</updated>
+    <updated>2011-04-26T10:34:02-04:00</updated>
     <id>http://taras.glek.net/blog/2011/04/26/measuring-startup-speed-correctly</id>
     <content type="html"><![CDATA[Until recently our state of the art method for measuring startup was to subtract a timestamp passed via commandline from a 
 ```
@@ -65,7 +65,7 @@ This is why AMO's [complicated method](http://xulforge.com/blog/2011/04/testing-
   <entry>
     <title type="html"><![CDATA[Magic patch that halves Windows startup]]></title>
     <link href="http://taras.glek.net/blog/2011/02/09/magic-patch-that-doubles-windows-startup/"/>
-    <updated>2011-02-09T08:38:38-08:00</updated>
+    <updated>2011-02-09T11:38:38-05:00</updated>
     <id>http://taras.glek.net/blog/2011/02/09/magic-patch-that-doubles-windows-startup</id>
     <content type="html"><![CDATA[Internet as of late have been obsessing over magically short patches that improve performance _ times(probably as a result of LKML cgroups patch from a few weeks ago). So my work in [bug 627591](https://bugzilla.mozilla.org/show_bug.cgi?id=627591) got picked up in all kinds of news sources(mostly due to @limi's [manlove](http://twitter.com/#!/limi/status/28983240966541312)). Apparently all that internet fame is good for is getting script-kiddies to upload viruses as bugzilla attachments. Dear Internet, please do not interrupt me in the middle of an investigation.  
   
@@ -80,7 +80,7 @@ So now I need more reports to make sure the executable wrapper approach reliably
   <entry>
     <title type="html"><![CDATA[Faster Plugin Enumeration + Help Wanted]]></title>
     <link href="http://taras.glek.net/blog/2010/12/29/faster-plugin-enumeration-help-wanted/"/>
-    <updated>2010-12-29T09:08:47-08:00</updated>
+    <updated>2010-12-29T12:08:47-05:00</updated>
     <id>http://taras.glek.net/blog/2010/12/29/faster-plugin-enumeration-help-wanted</id>
     <content type="html"><![CDATA[In addition to slow [font enumeration](http://taras.glek.net/blog/), we were suffering from a similar problem: slow plugin enumeration. Just as with fonts, the plugin enumeration code is different on every platform. Unlike the font situation, plugin enumeration is done completely within our code(ie easy to fix).  
   
@@ -110,7 +110,7 @@ I have plans for vastly improving Firefox startup, but I need help to get there.
   <entry>
     <title type="html"><![CDATA[Rude Surprise: Startup Overhead of Windows Font APIs]]></title>
     <link href="http://taras.glek.net/blog/2010/12/21/rude-surprise-startup-overhead-of-windows-font-apis/"/>
-    <updated>2010-12-21T05:33:14-08:00</updated>
+    <updated>2010-12-21T08:33:14-05:00</updated>
     <id>http://taras.glek.net/blog/2010/12/21/rude-surprise-startup-overhead-of-windows-font-apis</id>
     <content type="html"><![CDATA[Imagine a typical Firefox user who starts their Windows computer in order to surf the web. First app they launch is Firefox 4. Turned out that on systems that support hardware-acceleration for 2D graphics, Firefox 4 takes minutes to startup. WTF? XPerf-aided investigation showed that, the Windows font enumeration code causes us to do 30x more disk IO (~300MB) than the rest of Firefox code.  
   

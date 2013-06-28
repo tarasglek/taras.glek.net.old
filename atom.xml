@@ -4,7 +4,7 @@
   <title><![CDATA[All About Performance]]></title>
   <link href="http://taras.glek.net/atom.xml" rel="self"/>
   <link href="http://taras.glek.net/"/>
-  <updated>2013-04-05T20:26:58-07:00</updated>
+  <updated>2013-06-28T17:08:59-04:00</updated>
   <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -14,9 +14,38 @@
 
   
   <entry>
+    <title type="html"><![CDATA[New Performance People, Telemetry News]]></title>
+    <link href="http://taras.glek.net/blog/2013/06/28/new-performance-people/"/>
+    <updated>2013-06-28T16:52:00-04:00</updated>
+    <id>http://taras.glek.net/blog/2013/06/28/new-performance-people</id>
+    <content type="html"><![CDATA[<h2>reddit/<a href="http://www.reddit.com/r/MozillaTech/">MozillaTech</a></h2>
+
+<p>I like our make-planet-techy subreddit. Seems like articles that get rated as one would expect. I happily switched to reddit as my primary way to consume planet mozilla. Redditors, keep up the good work!</p>
+
+<h2>Telemetry Dashboard</h2>
+
+<p>Our new telemetry <a href="http://telemetry-dash.mozilla.org/">dashboard</a> went live yesterday. It&#8217;s missing features, data, UX. However it is public, fast and hackable. It should evolve quickly.</p>
+
+<h2>New Blood</h2>
+
+<p><a href="http://mreid-moz.github.io/">Mark Reid</a> is our first server-side dev. His primary task is switching telemetry backend from hadoop to a custom telemetry server. New server infrastructure will enable a live dashboard (3-day delay atm) + ability to run queries in minutes rather than in hours.</p>
+
+<p><a href="http://randomkernels.wordpress.com">Dhaval Giani</a>, &#8220;the intern&#8221;, is our first kernel hacker. He&#8217;s working on helping land <a href="https://lwn.net/Articles/522135/">volatile memory</a> in the kernel. This feature will let Firefox safely consume more memory when memory is plentiful and use less in limited scenarios. Hopefully he&#8217;ll also add read-only file compression to ext4.</p>
+
+<p>Blogs linked above are in the please-add-to-planet queue. Expect them to spend a few weeks there. Please subscribe to their RSS feeds in meantime.</p>
+
+<h2>Investigating SQLite Performance via Telemetry</h2>
+
+<p>Years ago I tweaked our SQLite clients to use a larger page size. In my testing this seemed to achieve a speedup of 0.2-2x, see <a title="Suboptimal SQLite page size" href="https://bugzilla.mozilla.org/show_bug.cgi?id=416330">bug 416330</a>. Unfortunately, ~30% of our users are still on the old page size (<a title="Fix page_size of WAL databases" href="https://bugzilla.mozilla.org/show_bug.cgi?id=634374">bug 634374</a>). We used a <a href="https://github.com/mozilla/jydoop">jydoop</a> query to figure out if it&#8217;s worth developing a feature to convert these users over using two different (time spent <a href="https://github.com/mozilla/jydoop/blob/master/scripts/places4k.py">reading</a> &amp; time spent <a href="https://github.com/mozilla/jydoop/blob/master/scripts/places4k-slowsql.py">executing</a> a query) ways to measure performance differences. According to both methods there is a 4x reduction in sqlite IO waits with the larger page size, so we&#8217;ll be adding code to convert people over more aggressively.</p>
+
+<p>This was a cool investigation because it highlighted how much more confidence we have when making performance decisions now (due to telemetry) vs a few years ago.</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Mozilla Tech on Reddit]]></title>
     <link href="http://taras.glek.net/blog/2013/04/05/mozilla-tech-on-reddit/"/>
-    <updated>2013-04-05T20:02:00-07:00</updated>
+    <updated>2013-04-05T20:02:00-04:00</updated>
     <id>http://taras.glek.net/blog/2013/04/05/mozilla-tech-on-reddit</id>
     <content type="html"><![CDATA[<p>I posted earlier about <a href="http://taras.glek.net/blog/2013/02/15/is-planet-mozilla-obsolete/">planet mozilla being obsolete</a>. To move forward, we need to experiment with some alternatives. Mozilla contributor, <a href="https://twitter.com/djco">@djco</a>, setup a <a href="http://www.reddit.com/r/MozillaTech/">reddit feed</a> so we can up-vote technical content and down-vote the rest.</p>
 
@@ -31,7 +60,7 @@
   <entry>
     <title type="html"><![CDATA[Snappy #55: Snappy Evolution]]></title>
     <link href="http://taras.glek.net/blog/2013/03/27/snappy-number-55-snappy-evolution/"/>
-    <updated>2013-03-27T03:56:00-07:00</updated>
+    <updated>2013-03-27T03:56:00-04:00</updated>
     <id>http://taras.glek.net/blog/2013/03/27/snappy-number-55-snappy-evolution</id>
     <content type="html"><![CDATA[<p>The Snappy name will be retired in favor of Performance: we will be expanding our meta scope beyond desktop Firefox responsiveness.</p>
 
@@ -64,7 +93,7 @@
   <entry>
     <title type="html"><![CDATA[Snappy #54: Snappy Discussion in Paris]]></title>
     <link href="http://taras.glek.net/blog/2013/03/26/snappy-number-54-snappy-discussion-in-paris/"/>
-    <updated>2013-03-26T04:16:00-07:00</updated>
+    <updated>2013-03-26T04:16:00-04:00</updated>
     <id>http://taras.glek.net/blog/2013/03/26/snappy-number-54-snappy-discussion-in-paris</id>
     <content type="html"><![CDATA[<h3>Meeting In Paris</h3>
 
@@ -108,7 +137,7 @@
   <entry>
     <title type="html"><![CDATA[snappy #53: Faster: Startup, Image Decoding, Touchpad Input. Smoother Animations]]></title>
     <link href="http://taras.glek.net/blog/2013/03/25/snappy-number-53-faster-startup/"/>
-    <updated>2013-03-25T06:25:00-07:00</updated>
+    <updated>2013-03-25T06:25:00-04:00</updated>
     <id>http://taras.glek.net/blog/2013/03/25/snappy-number-53-faster-startup</id>
     <content type="html"><![CDATA[<h3>Responsiveness</h3>
 
@@ -143,7 +172,7 @@
   <entry>
     <title type="html"><![CDATA[Blogging with Octopress]]></title>
     <link href="http://taras.glek.net/blog/2013/03/11/living-with-octopress/"/>
-    <updated>2013-03-11T16:58:00-07:00</updated>
+    <updated>2013-03-11T16:58:00-04:00</updated>
     <id>http://taras.glek.net/blog/2013/03/11/living-with-octopress</id>
     <content type="html"><![CDATA[<p>A couple months ago I <a href="http://taras.glek.net/blog/2012/12/17/hello-octopress/">switched</a> to <a href="http://octopress.org">Octopress</a>. I now have some experience to share.</p>
 
@@ -176,7 +205,7 @@
   <entry>
     <title type="html"><![CDATA[Snappy #52]]></title>
     <link href="http://taras.glek.net/blog/2013/03/08/snappy-number-52/"/>
-    <updated>2013-03-08T16:58:00-08:00</updated>
+    <updated>2013-03-08T16:58:00-05:00</updated>
     <id>http://taras.glek.net/blog/2013/03/08/snappy-number-52</id>
     <content type="html"><![CDATA[<h3>Frontend</h3>
 
@@ -198,7 +227,7 @@ Omnijar readhead is next, in <a title="Use readahead for ordered jar files such 
   <entry>
     <title type="html"><![CDATA[Snappy #51: Smoothing Tab Animations]]></title>
     <link href="http://taras.glek.net/blog/2013/02/22/snappy-number-51-smoothing-tab-animations/"/>
-    <updated>2013-02-22T16:14:00-08:00</updated>
+    <updated>2013-02-22T16:14:00-05:00</updated>
     <id>http://taras.glek.net/blog/2013/02/22/snappy-number-51-smoothing-tab-animations</id>
     <content type="html"><![CDATA[<h3>Lack of Updates</h3>
 
@@ -229,7 +258,7 @@ Omnijar readhead is next, in <a title="Use readahead for ordered jar files such 
   <entry>
     <title type="html"><![CDATA[Router-Assisted Automatic Wake-on-LAN + Suspend]]></title>
     <link href="http://taras.glek.net/blog/2013/02/17/router-assisted-automatic-wake-on-lan-plus-suspend/"/>
-    <updated>2013-02-17T20:56:00-08:00</updated>
+    <updated>2013-02-17T20:56:00-05:00</updated>
     <id>http://taras.glek.net/blog/2013/02/17/router-assisted-automatic-wake-on-lan-plus-suspend</id>
     <content type="html"><![CDATA[<h2>The problem</h2>
 
@@ -282,7 +311,7 @@ Omnijar readhead is next, in <a title="Use readahead for ordered jar files such 
   <entry>
     <title type="html"><![CDATA[10W Intel i5 Desktop]]></title>
     <link href="http://taras.glek.net/blog/2013/02/17/10w-intel-i5-desktop/"/>
-    <updated>2013-02-17T20:32:00-08:00</updated>
+    <updated>2013-02-17T20:32:00-05:00</updated>
     <id>http://taras.glek.net/blog/2013/02/17/10w-intel-i5-desktop</id>
     <content type="html"><![CDATA[<p>I recently built a new computer for HTPC, NAS, etc duties. Last couple of times this ended up in disappointment due to noise, hardware quirks, power consumption.</p>
 
@@ -297,7 +326,7 @@ Omnijar readhead is next, in <a title="Use readahead for ordered jar files such 
   <entry>
     <title type="html"><![CDATA[Plugin Hang UI On Aurora]]></title>
     <link href="http://taras.glek.net/blog/2013/02/15/plugin-hang-ui-on-aurora/"/>
-    <updated>2013-02-15T16:51:00-08:00</updated>
+    <updated>2013-02-15T16:51:00-05:00</updated>
     <id>http://taras.glek.net/blog/2013/02/15/plugin-hang-ui-on-aurora</id>
     <content type="html"><![CDATA[<p>Aaron wrote a <a href="http://dblohm7.ca/blog/2013/02/15/plugin-hang-ui-on-aurora/">great post</a> on of the new plugin killer UI and Windows magic involved in debugging it.</p>
 
@@ -310,7 +339,7 @@ Omnijar readhead is next, in <a title="Use readahead for ordered jar files such 
   <entry>
     <title type="html"><![CDATA[Is Planet Mozilla Obsolete for Technical Content?]]></title>
     <link href="http://taras.glek.net/blog/2013/02/15/is-planet-mozilla-obsolete/"/>
-    <updated>2013-02-15T11:21:00-08:00</updated>
+    <updated>2013-02-15T11:21:00-05:00</updated>
     <id>http://taras.glek.net/blog/2013/02/15/is-planet-mozilla-obsolete</id>
     <content type="html"><![CDATA[<h2>Good Old Days</h2>
 
@@ -341,7 +370,7 @@ Omnijar readhead is next, in <a title="Use readahead for ordered jar files such 
   <entry>
     <title type="html"><![CDATA[Snappy #50]]></title>
     <link href="http://taras.glek.net/blog/2013/01/28/snappy-number-50-misc-speedups/"/>
-    <updated>2013-01-28T16:00:00-08:00</updated>
+    <updated>2013-01-28T16:00:00-05:00</updated>
     <id>http://taras.glek.net/blog/2013/01/28/snappy-number-50-misc-speedups</id>
     <content type="html"><![CDATA[<h3>Graphics</h3>
 
@@ -366,7 +395,7 @@ Omnijar readhead is next, in <a title="Use readahead for ordered jar files such 
   <entry>
     <title type="html"><![CDATA[Snappy #49: Help Firefox Shutdown Faster]]></title>
     <link href="http://taras.glek.net/blog/2013/01/21/snappy-number-49-help-firefox-shutdown-faster/"/>
-    <updated>2013-01-21T13:04:00-08:00</updated>
+    <updated>2013-01-21T13:04:00-05:00</updated>
     <id>http://taras.glek.net/blog/2013/01/21/snappy-number-49-help-firefox-shutdown-faster</id>
     <content type="html"><![CDATA[<hr />
 
@@ -380,7 +409,7 @@ Omnijar readhead is next, in <a title="Use readahead for ordered jar files such 
   <entry>
     <title type="html"><![CDATA[Snappy #48: Now With Faster Shutdown]]></title>
     <link href="http://taras.glek.net/blog/2013/01/10/snappy-number-48-now-with-faster-shutdown/"/>
-    <updated>2013-01-10T16:53:00-08:00</updated>
+    <updated>2013-01-10T16:53:00-05:00</updated>
     <id>http://taras.glek.net/blog/2013/01/10/snappy-number-48-now-with-faster-shutdown</id>
     <content type="html"><![CDATA[<h3>Huge Shutdown Improvement</h3>
 
@@ -414,7 +443,7 @@ Omnijar readhead is next, in <a title="Use readahead for ordered jar files such 
   <entry>
     <title type="html"><![CDATA[Snappy: 2012 Summary]]></title>
     <link href="http://taras.glek.net/blog/2013/01/04/snappy-2012-summary/"/>
-    <updated>2013-01-04T15:46:00-08:00</updated>
+    <updated>2013-01-04T15:46:00-05:00</updated>
     <id>http://taras.glek.net/blog/2013/01/04/snappy-2012-summary</id>
     <content type="html"><![CDATA[<p>2012 was an exciting year for Snappy. Turning &#8216;make it go faster&#8217; into a set of measurements and corresponding bugs to fix was hard. We learned a lot.</p>
 
@@ -501,7 +530,7 @@ Omnijar readhead is next, in <a title="Use readahead for ordered jar files such 
   <entry>
     <title type="html"><![CDATA[Making pages load faster]]></title>
     <link href="http://taras.glek.net/blog/2012/12/24/making-pages-load-faster/"/>
-    <updated>2012-12-24T21:44:00-08:00</updated>
+    <updated>2012-12-24T21:44:00-05:00</updated>
     <id>http://taras.glek.net/blog/2012/12/24/making-pages-load-faster</id>
     <content type="html"><![CDATA[<p>I am not a web developer. I often learn about modern web dev tricks/trends by noticing how they impact overall Firefox performance. I prefer learning about perf topics from well-written blog posts. Bryan of Google page speed team <a href="http://calendar.perfplanet.com/2012/make-your-mobile-pages-render-in-under-one-second/">blogged</a> on optimizing pageload speeds on mobile. The advice is good, but I have two minor warnings about it.</p>
 
@@ -514,7 +543,7 @@ Omnijar readhead is next, in <a title="Use readahead for ordered jar files such 
   <entry>
     <title type="html"><![CDATA[Snappy #45: The view from home]]></title>
     <link href="http://taras.glek.net/blog/2012/12/21/interesting-bugzilla-activity/"/>
-    <updated>2012-12-21T12:09:00-08:00</updated>
+    <updated>2012-12-21T12:09:00-05:00</updated>
     <id>http://taras.glek.net/blog/2012/12/21/interesting-bugzilla-activity</id>
     <content type="html"><![CDATA[<p>I&#8217;m out until January. However, I setup a <a href="http://taras.glek.net/blog/2012/12/17/hello-octopress/">new blog</a>, so why not test it with a snappy update.</p>
 
@@ -535,7 +564,7 @@ Omnijar readhead is next, in <a title="Use readahead for ordered jar files such 
   <entry>
     <title type="html"><![CDATA[Hello Octopress]]></title>
     <link href="http://taras.glek.net/blog/2012/12/17/hello-octopress/"/>
-    <updated>2012-12-17T17:10:00-08:00</updated>
+    <updated>2012-12-17T17:10:00-05:00</updated>
     <id>http://taras.glek.net/blog/2012/12/17/hello-octopress</id>
     <content type="html"><![CDATA[<p>I&#8217;m off work until January. I took this opportunity to partake in chores such as fixing a toilet and switching away from wordpress.</p>
 
@@ -559,28 +588,9 @@ Omnijar readhead is next, in <a title="Use readahead for ordered jar files such 
   <entry>
     <title type="html"><![CDATA[Coping with Flash hangs]]></title>
     <link href="http://taras.glek.net/blog/2012/11/26/coping-with-flash-hangs/"/>
-    <updated>2012-11-26T01:45:11-08:00</updated>
+    <updated>2012-11-26T04:45:11-05:00</updated>
     <id>http://taras.glek.net/blog/2012/11/26/coping-with-flash-hangs</id>
     <content type="html"><![CDATA[<p>Blocking calls into the Flash plugin can temporarily hang Firefox. This is a problem because sometimes the user would be happy to kill the plugin to access their webpage and at other times it&#8217;s the only way to get certain flash apps/games to load. If you suffer from flash-related hangs see Aaron&#8217;s <a href="http://dblohm7.ca/blog/2012/11/22/plugin-hang-user-interface-for-firefox/">blog post</a> for some builds to try. He is working a new <a href="https://wiki.mozilla.org/Features/Firefox/Windows_Plugin_Hang_UI">feature </a>to provide an option to kill hanging flash instances.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Snappy #44: Fixing tab switching in Vancouver]]></title>
-    <link href="http://taras.glek.net/blog/2012/11/16/snappy-44-fixing-tab-switching-in-vancouver/"/>
-    <updated>2012-11-16T10:06:41-08:00</updated>
-    <id>http://taras.glek.net/blog/2012/11/16/snappy-44-fixing-tab-switching-in-vancouver</id>
-    <content type="html"><![CDATA[<p>I joined our GFX+Layout teams for a workweek in Vancouver. Since profiling is most effective on slow machines, I brought along my trusty Acer  Aspire 722(slow 1.3ghz  CPU+ fast GPU) as my primary laptop. This hardware is great because the combination of a weak CPU + decent GPU means that if we accelerate things right the browser can perform quite well and if we don&#8217;t, things get really slow. (analogous situation exists when fast CPUs are matched with slow GPUs).</p>
-
-<p>In the beginning of the week I quickly demoed menu lag, slow gmail tab switching(<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=811472">811472</a>). Later in the week we looked at problematic Facebook tab switch times (<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=811474">811474</a>), Australis(see Matt&#8217;s <a href="http://matthew.noorenberghe.com/blog/2012/11/australis-tabs-where-are-you">post</a>) performance. By the end of the week tab switching improved by over 2x for both facebook and gmail. I don&#8217;t have exact figures because while we can measure general tab switch trends via telemetry, there isn&#8217;t a convenient way to do it on individual browsers yet. <em>Help wanted:</em> would be great if someone could do up a barebone addon to monitor tab switching in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=812381">812381</a>, we&#8217;ll fill in the rest.</p>
-
-<p>Jeff Muizelaar started out by speeding up checkbox drawing in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=809603">809603</a><strong>.</strong> Matt Woodrow sped up gmail by tweaking how we use layers in bugs <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=811927">811927</a>,  <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=811570">811570</a>.</p>
-
-<p>Matt made sure that we no longer draw layers with opacity of 0 in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=811831">811831</a>. Turns rendering lots of invisible text can be expensive.</p>
-
-<p>Workweeks are a more about communication than getting code landed, so it is impressive that Jeff, Matt and their reviewers managed to diagnose, fix, review, land such significant optimizations in a couple of days. My laptop of pain feels much faster already.</p>
-
-<p>In the coming weeks expect to see smoother tab switching, smoother animations, lower profiling overhead as we work through issues discussed during the workweek.</p>
 ]]></content>
   </entry>
   

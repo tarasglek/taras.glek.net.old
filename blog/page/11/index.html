@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="&nbsp;I once blogged that ARM devices are useless and how one shouldn&#8217;t buy them cos they run weird forked kernels on weird bootloaders. I &hellip;">
+  <meta name="description" content="Static analysis can be a very fun pastime. One gets to sift through giant codebases looking for interesting clues, what could be more fun? A couple &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -95,6 +95,58 @@ if (requestAnimationFrame)
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2011/08/03/effective-static-analysis/">Effective Static Analysis</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-08-03T16:27:54-04:00" pubdate data-updated="true">Aug 3<span>rd</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Static analysis can be a very fun pastime. One gets to sift through giant codebases looking for interesting clues, what could be more fun? A couple things qualify: a) static analysis accompanied by cool rewrites b) static analysis accompanied by cool visualizations.</p>
+
+<p><strong>Cool Rewrite</strong></p>
+
+<p>Michael Wu&#8217;s <a href="http://blog.mozilla.org/mwu/2011/07/28/the-twelve-booleans-of-mozilla/">boolcheck</a> tool is awesome. He wrote it to check that &#8220;typedef int&#8221; bools are really being used as booleans and aren&#8217;t perversely carrying integer values. The process of writing the tool is cool. As Michael is discovers bugs/disagreements stemming from setting &#8220;typedef bool PRBool&#8221;, he just adds another pattern to check for to the tool and never has to worry about that pattern again. I hope to see someone apply boolcheck to the linux kernel, GTK projects or anything else with int booleans. Some projects don&#8217;t have the luxury of switching to real bools, so they can continue using a static checker to make up for it.</p>
+
+<p><strong>Pretty Code</strong></p>
+
+<p>I&#8217;ve blogged about <a href="http://dxr.mozilla.org/clang/">DXR</a> many times. As of this week clang-based DXR is on par with the old Dehydra-based one. Callgraph, inheritance, etc queries now work. <a href="http://quetzalcoatal.blogspot.com/">Joshua</a> did an outstanding job gutting and rewriting the DXR backend this summer and is now going back to school. I&#8217;m extremely impressed with his work this summer. I didn&#8217;t think it was possible to get as far as he did.</p>
+
+<p>We are looking for more help with DXR. Please deploy it on your pet project, contribute plugins for various languages, simplify deployment, etc.</p>
+
+<p>Additionally, now that the backed is in a fairly decent shape, we are looking for someone to help us turn DXR into the slickest code browsing tool ever(we have some ideas <a href="https://wiki.mozilla.org/DXR_Future_Work_Plan">written down</a>). I&#8217;d like interactive graphs, various code visualizations, integration with bugzilla, etc. This needs a JSON-query frontend and a few other bits &amp; pieces to be implemented.</p>
+
+<p><strong>Interns Wanted</strong></p>
+
+<p>We would love to hire more static analysis interns. Are you student who dreams about making large codebases easy to grasp? Do you want to spend a few months making Control Flow Graphs behave? If that sounds like your calling: leave a comment, send me an email.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2011/07/16/my-nas-is-smaller-than-yours/">My NAS Is Smaller Than Yours</a></h1>
     
     
@@ -111,7 +163,7 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2011-07-16T19:29:00-07:00" pubdate data-updated="true">Jul 16<span>th</span>, 2011</time>
+<time datetime="2011-07-16T22:29:00-04:00" pubdate data-updated="true">Jul 16<span>th</span>, 2011</time>
         
       </p>
     
@@ -148,7 +200,7 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2011-07-01T04:48:33-07:00" pubdate data-updated="true">Jul 1<span>st</span>, 2011</time>
+<time datetime="2011-07-01T07:48:33-04:00" pubdate data-updated="true">Jul 1<span>st</span>, 2011</time>
         
       </p>
     
@@ -201,7 +253,7 @@ Since the branch point for Aurora is approaching in less than a week, I don&#821
   
 
 
-<time datetime="2011-06-30T05:07:20-07:00" pubdate data-updated="true">Jun 30<span>th</span>, 2011</time>
+<time datetime="2011-06-30T08:07:20-04:00" pubdate data-updated="true">Jun 30<span>th</span>, 2011</time>
         
       </p>
     
@@ -271,7 +323,7 @@ Since the branch point for Aurora is approaching in less than a week, I don&#821
   
 
 
-<time datetime="2011-06-27T04:26:12-07:00" pubdate data-updated="true">Jun 27<span>th</span>, 2011</time>
+<time datetime="2011-06-27T07:26:12-04:00" pubdate data-updated="true">Jun 27<span>th</span>, 2011</time>
         
       </p>
     
@@ -311,7 +363,7 @@ Since the branch point for Aurora is approaching in less than a week, I don&#821
   
 
 
-<time datetime="2011-06-22T07:06:14-07:00" pubdate data-updated="true">Jun 22<span>nd</span>, 2011</time>
+<time datetime="2011-06-22T10:06:14-04:00" pubdate data-updated="true">Jun 22<span>nd</span>, 2011</time>
         
       </p>
     
@@ -382,7 +434,7 @@ Since the branch point for Aurora is approaching in less than a week, I don&#821
   
 
 
-<time datetime="2011-06-01T05:03:47-07:00" pubdate data-updated="true">Jun 1<span>st</span>, 2011</time>
+<time datetime="2011-06-01T08:03:47-04:00" pubdate data-updated="true">Jun 1<span>st</span>, 2011</time>
         
       </p>
     
@@ -424,7 +476,7 @@ Since the branch point for Aurora is approaching in less than a week, I don&#821
   
 
 
-<time datetime="2011-05-14T11:55:00-07:00" pubdate data-updated="true">May 14<span>th</span>, 2011</time>
+<time datetime="2011-05-14T14:55:00-04:00" pubdate data-updated="true">May 14<span>th</span>, 2011</time>
         
       </p>
     
@@ -461,7 +513,7 @@ My phone is useful for doing GPSey things and staying connected. Unfortunately e
   
 
 
-<time datetime="2011-05-13T09:35:45-07:00" pubdate data-updated="true">May 13<span>th</span>, 2011</time>
+<time datetime="2011-05-13T12:35:45-04:00" pubdate data-updated="true">May 13<span>th</span>, 2011</time>
         
       </p>
     
@@ -517,7 +569,7 @@ My phone is useful for doing GPSey things and staying connected. Unfortunately e
   
 
 
-<time datetime="2011-04-26T07:34:02-07:00" pubdate data-updated="true">Apr 26<span>th</span>, 2011</time>
+<time datetime="2011-04-26T10:34:02-04:00" pubdate data-updated="true">Apr 26<span>th</span>, 2011</time>
         
       </p>
     
@@ -555,56 +607,6 @@ Our oldest startup benchmark, ts,Â  has been gathering wrong numbers all along.Â
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011/04/14/arguing-about-startup-communicating-performance/">Arguing About Startup: Communicating Performance</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-04-14T04:15:46-07:00" pubdate data-updated="true">Apr 14<span>th</span>, 2011</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Recently the addon team started working towards penalizing addons that penalize our startup. We have solid data shows that startup gets worse as more addons installed so the effort is justified. Justin published this picture to illustrate the problem: <img src="http://people.mozilla.com/~fligtar/performance/num-addons-med.png" alt="" /></p>
-
-<p>However some technical mistakes were made. Wladimir (AdBlock+ guy!) has been busy exposing them on his <a href="http://adblockplus.org/blog/the-wrong-way-of-allowing-users-to-make-informed-decisions">blog</a>. Thanks Wladimir! I spent a couple of years understanding Firefox startup, so I really appreciate Wladimir&#8217;s remarkable speed/quality in poking holes in AMO approach.</p>
-
-<p><strong>Rating Addon Performance</strong>****</p>
-
-<p>Wlad&#8217;s latest <a href="http://adblockplus.org/blog/the-wrong-way-of-allowing-users-to-make-informed-decisions">point</a> is regarding how addon impact is measured on warm startup with an empty profile. I agree that addon impact on warm startup with clean profile is going to be different from that of cold startup with a dirty real-world profile. I also agree that it is weird to primarily measure warm startup given that our data clearly indicates that most users are experiencing cold startup.</p>
-
-<p>However startup is an irritating multidimensional problem influenced by a large number of factors. Should we suck it up and let addons kill warm startup (and risk ruining firefox upgrade times, pissing off web developers)? How does one choose a typical dirty profile? Creating a &#8220;typical&#8221; dirty profile is a tough problem (ie due to privacy, disk fragmentation) and there is no reason to let clean profile performance be degraded.</p>
-
-<p>So an addon performance rating will not be perfect. Time added by addon during warm startup is the easiest starting point and is one of the more deterministic measures (Wlad&#8217;s blog says otherwise, but measuring other startup kinds have even more noise). This is no worse than choosing browsers based on their JavaScript benchmark performance.</p>
-
-<p>I think a much awesomer addon performance rating may be obtainable by clever statistics boffins by analyzing our aggregated startup data. Perhaps the Mozilla Metrics will make it a reality, but in the meantime we&#8217;ll have to make do with an imperfect approach.</p>
-
-<p><em><strong>Coming soon:</strong> Why is the measurement approach in Jorge&#8217;s <a href="http://xulforge.com/blog/2011/04/testing-add-on-startup-performance/">post</a> is overly complicated and somewhat incorrect.</em></p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/12/">&larr; Older</a>
@@ -622,6 +624,10 @@ Our oldest startup benchmark, ts,Â  has been gathering wrong numbers all along.Â
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/06/28/new-performance-people/">New Performance People, Telemetry News</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/04/05/mozilla-tech-on-reddit/">Mozilla Tech on Reddit</a>
       </li>
     
@@ -635,10 +641,6 @@ Our oldest startup benchmark, ts,Â  has been gathering wrong numbers all along.Â
     
       <li class="post">
         <a href="/blog/2013/03/25/snappy-number-53-faster-startup/">snappy #53: Faster: Startup, Image Decoding, Touchpad Input. Smoother Animations</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/03/11/living-with-octopress/">Blogging with Octopress</a>
       </li>
     
   </ul>

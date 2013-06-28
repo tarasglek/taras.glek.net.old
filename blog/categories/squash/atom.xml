@@ -4,7 +4,7 @@
   <title><![CDATA[Category: squash | All About Performance]]></title>
   <link href="http://taras.glek.net/blog/categories/squash/atom.xml" rel="self"/>
   <link href="http://taras.glek.net/"/>
-  <updated>2013-04-05T20:26:58-07:00</updated>
+  <updated>2013-06-28T17:08:59-04:00</updated>
   <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Dehydra, prcheck, squash - in mercurial]]></title>
     <link href="http://taras.glek.net/blog/2007/07/13/dehydra-prcheck-squash-in-mercurial/"/>
-    <updated>2007-07-13T01:54:08-07:00</updated>
+    <updated>2007-07-13T04:54:08-04:00</updated>
     <id>http://taras.glek.net/blog/2007/07/13/dehydra-prcheck-squash-in-mercurial</id>
     <content type="html"><![CDATA[**New Repository**  
   
@@ -59,7 +59,7 @@ oink uses svn-externals to aggregate the repositories into a single checkout. hg
   <entry>
     <title type="html"><![CDATA[Undoing CPP Expansion in 3 simple steps. Say "Hello" to easier C++ rewriting.]]></title>
     <link href="http://taras.glek.net/blog/2007/06/12/undoing-cpp-expansion-in-3-simple-steps-say-hello-to-easier-c-rewriting/"/>
-    <updated>2007-06-12T03:26:01-07:00</updated>
+    <updated>2007-06-12T06:26:01-04:00</updated>
     <id>http://taras.glek.net/blog/2007/06/12/undoing-cpp-expansion-in-3-simple-steps-say-hello-to-easier-c-rewriting</id>
     <content type="html"><![CDATA[This is incredibly exciting: I believe that I finally solved the messy and mind-numbingly boring CPP/C++ integration problem! Having code displaced or generated due to CPP-expansion should no longer be a fatal problem for [Squash](http://wiki.mozilla.org/Squash). I believe macro-expansion is (or was) the single biggest problem between me and large-scale automated refactoring of the Mozilla codebase.  
   
@@ -111,7 +111,7 @@ It took a lot to arrive at such a simple solution. I expect that all of my work 
   <entry>
     <title type="html"><![CDATA[CPP Strikes Back]]></title>
     <link href="http://taras.glek.net/blog/2007/05/11/cpp-strikes-back/"/>
-    <updated>2007-05-11T09:07:26-07:00</updated>
+    <updated>2007-05-11T12:07:26-04:00</updated>
     <id>http://taras.glek.net/blog/2007/05/11/cpp-strikes-back</id>
     <content type="html"><![CDATA[I have gotten used to dodging CPP-expansion issues by fudging column & line information until the position info in squash mostly matches the source positions in the original source code. That sufficed for rewriting declarations, but I have finally hit a brick wall.  
   
@@ -143,7 +143,7 @@ Instead of fighting an uphill fudging battle against CPP, I am going to have to 
   <entry>
     <title type="html"><![CDATA[Nicely rewriting outparams]]></title>
     <link href="http://taras.glek.net/blog/2007/05/10/nicely-rewriting-outparams/"/>
-    <updated>2007-05-10T07:52:07-07:00</updated>
+    <updated>2007-05-10T10:52:07-04:00</updated>
     <id>http://taras.glek.net/blog/2007/05/10/nicely-rewriting-outparams</id>
     <content type="html"><![CDATA[Automatic code rewriting business can be a little depressing sometimes. I tend to run into funny issues caused by CPP, oink limitations or just unpleasant-to-rewrite parts of C++. After banging my head against the wall due to all these issues I finally arrived at a workable approach for the easy part of the outparam rewrite.  
   
@@ -162,7 +162,7 @@ I think squash is now 50% feature complete with respect to outparam stuff. The o
   <entry>
     <title type="html"><![CDATA[Status Update: Outparam work]]></title>
     <link href="http://taras.glek.net/blog/2007/05/07/status-update-outparam-work/"/>
-    <updated>2007-05-07T02:58:43-07:00</updated>
+    <updated>2007-05-07T05:58:43-04:00</updated>
     <id>http://taras.glek.net/blog/2007/05/07/status-update-outparam-work</id>
     <content type="html"><![CDATA[**Squash Outparams**  
   

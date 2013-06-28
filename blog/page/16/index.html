@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="I did some digging to figure out if one can setup cold-startup testing in Windows 7 without nasty hacks. My conclusion is: sorta-kinda. The Good - &hellip;">
+  <meta name="description" content="Cool thing about static analysis is that you can ask painful-for-humans questions about your codebase AND have them answered. Here are two that got &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -95,6 +95,48 @@ if (requestAnimationFrame)
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2010/01/04/some-developers-manually-grope-around-in-the-dark/">Some Developers Manually Grope Around in the Dark</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-01-04T15:27:03-05:00" pubdate data-updated="true">Jan 4<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Cool thing about static analysis is that you can ask painful-for-humans questions about your codebase AND have them answered. Here are two that got answered by Ehren:</p>
+
+<p>Where do function bodies continue after return statements (ie obviously dead/broken code)? <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=535646">Bug 535646</a>.</p>
+
+<p>How many functions in Mozilla could/should be marked static? <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=536427">Bug 536427</a>.</p>
+
+<p>Awesome!</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2010/01/04/windows-7-startup-exploration/">Windows 7 Startup Exploration</a></h1>
     
     
@@ -111,7 +153,7 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2010-01-04T03:28:49-08:00" pubdate data-updated="true">Jan 4<span>th</span>, 2010</time>
+<time datetime="2010-01-04T06:28:49-05:00" pubdate data-updated="true">Jan 4<span>th</span>, 2010</time>
         
       </p>
     
@@ -213,7 +255,7 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2009-12-17T07:43:01-08:00" pubdate data-updated="true">Dec 17<span>th</span>, 2009</time>
+<time datetime="2009-12-17T10:43:01-05:00" pubdate data-updated="true">Dec 17<span>th</span>, 2009</time>
         
       </p>
     
@@ -261,7 +303,7 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2009-12-03T03:11:00-08:00" pubdate data-updated="true">Dec 3<span>rd</span>, 2009</time>
+<time datetime="2009-12-03T06:11:00-05:00" pubdate data-updated="true">Dec 3<span>rd</span>, 2009</time>
         
       </p>
     
@@ -298,7 +340,7 @@ Rooter - British pronunciation of router. This is post describes the hardware in
   
 
 
-<time datetime="2009-11-20T08:24:04-08:00" pubdate data-updated="true">Nov 20<span>th</span>, 2009</time>
+<time datetime="2009-11-20T11:24:04-05:00" pubdate data-updated="true">Nov 20<span>th</span>, 2009</time>
         
       </p>
     
@@ -340,7 +382,7 @@ Rooter - British pronunciation of router. This is post describes the hardware in
   
 
 
-<time datetime="2009-11-16T20:12:00-08:00" pubdate data-updated="true">Nov 16<span>th</span>, 2009</time>
+<time datetime="2009-11-16T23:12:00-05:00" pubdate data-updated="true">Nov 16<span>th</span>, 2009</time>
         
       </p>
     
@@ -385,7 +427,7 @@ Bring on Atom! :D</div>
   
 
 
-<time datetime="2009-11-06T09:27:53-08:00" pubdate data-updated="true">Nov 6<span>th</span>, 2009</time>
+<time datetime="2009-11-06T12:27:53-05:00" pubdate data-updated="true">Nov 6<span>th</span>, 2009</time>
         
       </p>
     
@@ -439,7 +481,7 @@ Bring on Atom! :D</div>
   
 
 
-<time datetime="2009-10-23T09:25:39-07:00" pubdate data-updated="true">Oct 23<span>rd</span>, 2009</time>
+<time datetime="2009-10-23T12:25:39-04:00" pubdate data-updated="true">Oct 23<span>rd</span>, 2009</time>
         
       </p>
     
@@ -753,7 +795,7 @@ Bring on Atom! :D</div>
   
 
 
-<time datetime="2009-10-20T14:24:36-07:00" pubdate data-updated="true">Oct 20<span>th</span>, 2009</time>
+<time datetime="2009-10-20T17:24:36-04:00" pubdate data-updated="true">Oct 20<span>th</span>, 2009</time>
         
       </p>
     
@@ -803,7 +845,7 @@ Bring on Atom! :D</div>
   
 
 
-<time datetime="2009-10-08T03:13:01-07:00" pubdate data-updated="true">Oct 8<span>th</span>, 2009</time>
+<time datetime="2009-10-08T06:13:01-04:00" pubdate data-updated="true">Oct 8<span>th</span>, 2009</time>
         
       </p>
     
@@ -819,44 +861,6 @@ Bring on Atom! :D</div>
 <p>Now that I&#8217;ve had my fill of almost a year&#8217;s worth of startup performance analysis, for the remainder of the year I plan to refocus on static analysis. My main goal is decent  C support on Dehydra(not to mention the ever elusive GCC 4.5 compatibility) and to facilitate a production-quality DXR.</p>
 
 <p>I&#8217;m hoping that we&#8217;ll end up with cool ways of dealing with the painful/slow boilerplate (bugs <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=520626">520626</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=516085">516085</a> and <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=517370">517370</a>)</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/09/30/corrupting-innocent-minds-with-gcc/">Corrupting Innocent Minds With GCC</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-09-30T10:32:38-07:00" pubdate data-updated="true">Sep 30<span>th</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Ever since the plugin branch landed in GCC, I have been itching to explore the application-specific optimization space that it opens up. It&#8217;s really hard to optimize code in the general case, but it&#8217;s relatively easy to optimize for something for specific use-cases. We can rely on API-specific static analysis in order to get rid of the API-imposed overheads at compile time. Let me repeat, we can get rid of some API-induced suck (OO frameworks  usually have a lot of it) without sacrificing any of the benefits.</p>
-
-<p>Unfortunally, I got busy working on, supposedly, more important stuff such as making Firefox startup quicker, so my<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=517370"> de-error-handling</a> and de-virtualizer (basically possible with LTO, but we can prove that certain classes will never be overloaded via dynamic linking) ideas had to be put on indefinite hold. Luckily, one of David Humphrey&#8217;s students decided to take on the first task, see his <a href="http://ehren.wordpress.com/2009/09/30/popping-my-gimples-a-plan/">blog post</a> here. I&#8217;m really psyched about this, few things that are cooler than cross-project open source work involving the most important open source projects of our time :)</p>
 </div>
   
   
@@ -881,6 +885,10 @@ Bring on Atom! :D</div>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/06/28/new-performance-people/">New Performance People, Telemetry News</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/04/05/mozilla-tech-on-reddit/">Mozilla Tech on Reddit</a>
       </li>
     
@@ -894,10 +902,6 @@ Bring on Atom! :D</div>
     
       <li class="post">
         <a href="/blog/2013/03/25/snappy-number-53-faster-startup/">snappy #53: Faster: Startup, Image Decoding, Touchpad Input. Smoother Animations</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/03/11/living-with-octopress/">Blogging with Octopress</a>
       </li>
     
   </ul>

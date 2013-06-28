@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Frontend Jared Wein discovered that our about:home was surprisingly expensive to load. He sped up the page by an estimated 30% in bug 765411. &hellip;">
+  <meta name="description" content="Testing We discussed setting up Eideticker, for desktop Firefox responsiveness testing. Andrew Halberstadt is making progress on a revised version of &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -95,6 +95,68 @@ if (requestAnimationFrame)
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2012/07/12/snappy-july-12-2012/">Snappy. July 12, 2012</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-07-12T11:30:52-04:00" pubdate data-updated="true">Jul 12<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><strong>Testing</strong></p>
+
+<p>We discussed setting up <a href="http://wrla.ch/blog/2012/06/mobile-firefox-measuring-how-a-browser-feels">Eideticker</a>, for desktop Firefox responsiveness testing.</p>
+
+<p>Andrew Halberstadt is making progress on a revised version of peptest. We are looking at loading talos pageset into individual tabs and tracking tab-switching</p>
+
+<p>We also discussed how QA can help in helping us confirm + narrow down regressions found by telemetry.</p>
+
+<p><strong>Necko</strong></p>
+
+<p>Necko guys are continuing to remove main thread DNS resolution, are integrating a custom DNS resolver. Last week they landed a bunch of <a href="https://metrics.mozilla.com/data/">telemetry</a> to help them play cache-lock-whack-a-mole: bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=763342">763342</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=767275">767275</a>.</p>
+
+<p><strong>Profiler</strong></p>
+
+<p>Our <a href="https://developer.mozilla.org/en/Performance/Profiling_with_the_Built-in_Profiler">profiler </a>should grok JavaScript now. See tomorrow&#8217;s nightly.</p>
+
+<p><strong>GC</strong></p>
+
+<p>Jon Coppeard put up a patch to do incremental sweeping. The cleanup phase of the GC is a major remaining continuous GC operation. This should help reduce remaining significant GC pauses.</p>
+
+<p><strong>Perf Team</strong></p>
+
+<p>Nicholas Chaim is almost done with setting a way to track main thread IO with XPerf in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=770317">770317</a>. We would like to track main thread network IO via xperf, but it&#8217;s not clear if xperf can report what thread IO operations happen on.</p>
+
+<p><strong>Slow Startup</strong></p>
+
+<p>Turns out Firefox validates some signed extensions on startup: bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=726125">726125</a>. I think we finally have a good explanation for some of the ridiculously slow startups we&#8217;ve been looking at. Yuck.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2012/07/09/snappy-update-for-week-of-july-5th/">Snappy Update for Week of July 5th</a></h1>
     
     
@@ -111,7 +173,7 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2012-07-09T07:49:31-07:00" pubdate data-updated="true">Jul 9<span>th</span>, 2012</time>
+<time datetime="2012-07-09T10:49:31-04:00" pubdate data-updated="true">Jul 9<span>th</span>, 2012</time>
         
       </p>
     
@@ -161,7 +223,7 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2012-07-02T07:06:24-07:00" pubdate data-updated="true">Jul 2<span>nd</span>, 2012</time>
+<time datetime="2012-07-02T10:06:24-04:00" pubdate data-updated="true">Jul 2<span>nd</span>, 2012</time>
         
       </p>
     
@@ -217,7 +279,7 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2012-06-25T03:07:06-07:00" pubdate data-updated="true">Jun 25<span>th</span>, 2012</time>
+<time datetime="2012-06-25T06:07:06-04:00" pubdate data-updated="true">Jun 25<span>th</span>, 2012</time>
         
       </p>
     
@@ -259,7 +321,7 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2012-06-18T07:00:34-07:00" pubdate data-updated="true">Jun 18<span>th</span>, 2012</time>
+<time datetime="2012-06-18T10:00:34-04:00" pubdate data-updated="true">Jun 18<span>th</span>, 2012</time>
         
       </p>
     
@@ -309,7 +371,7 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2012-06-14T07:51:24-07:00" pubdate data-updated="true">Jun 14<span>th</span>, 2012</time>
+<time datetime="2012-06-14T10:51:24-04:00" pubdate data-updated="true">Jun 14<span>th</span>, 2012</time>
         
       </p>
     
@@ -361,7 +423,7 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2012-06-11T09:13:36-07:00" pubdate data-updated="true">Jun 11<span>th</span>, 2012</time>
+<time datetime="2012-06-11T12:13:36-04:00" pubdate data-updated="true">Jun 11<span>th</span>, 2012</time>
         
       </p>
     
@@ -405,7 +467,7 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2012-06-04T02:38:08-07:00" pubdate data-updated="true">Jun 4<span>th</span>, 2012</time>
+<time datetime="2012-06-04T05:38:08-04:00" pubdate data-updated="true">Jun 4<span>th</span>, 2012</time>
         
       </p>
     
@@ -453,7 +515,7 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2012-05-29T03:31:59-07:00" pubdate data-updated="true">May 29<span>th</span>, 2012</time>
+<time datetime="2012-05-29T06:31:59-04:00" pubdate data-updated="true">May 29<span>th</span>, 2012</time>
         
       </p>
     
@@ -499,7 +561,7 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2012-05-22T02:34:51-07:00" pubdate data-updated="true">May 22<span>nd</span>, 2012</time>
+<time datetime="2012-05-22T05:34:51-04:00" pubdate data-updated="true">May 22<span>nd</span>, 2012</time>
         
       </p>
     
@@ -515,68 +577,6 @@ if (requestAnimationFrame)
 <p>DXR should be getting close to feature parity with MXR. Give it a try and let me know of any bugs/missing features you encounter (or submit a patch!). I realize that people have gotten used to various MXR quirks and that it can be stressful to switch to a new code indexer while trying to get stuff done, but MXR IS DEAD. We need to move on. Mozilla is complex, finding relevant code can take quite a while, especially for new contributors. Using a smarter indexer should save time, reduce frustration and free up a few developer-years to make Firefox better.</p>
 
 <p>We have lots of ideas for DXR, but first we need to ensure it is a suitable replacement for MXR. Take DXR for a spin!</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/05/21/snappy-may-17-physical-room-edition/">Snappy, May 17 - Physical Room Edition</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-05-21T04:10:23-07:00" pubdate data-updated="true">May 21<span>st</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><strong>Misc</strong></p>
-
-<p>This was an unusual meeting for the Snappy project: everybody was in the same physical room (though someone dialed in 5min before the end). I love the distributed nature of Mozilla, but it&#8217;s nice to have everybody in the same room for a change.</p>
-
-<p>Vlad did some super-slow-startup investigation. We have even more <a href="http://blog.mozilla.org/vdjeric/2012/05/17/looking-at-my-own-abouttelemetry-data/">evidence</a> that loading pages before the UI is up is a bad idea: bug 715402.</p>
-
-<p>Jet sped up browser chrome by converting SVG masks to clip-paths: bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=752918">752918</a>. With a name like that, how can he not work on performance bugs :)</p>
-
-<p>The necko team is looking for feedback on test builds that reduce cache-related pauses on the main thread. If you suffer from cache-related lag, give <a href="https://ftp.mozilla.org/pub/mozilla.org/firefox/try-builds/bsmith@mozilla.com-10b6ced92518/">these</a> a spin: bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=722034">722034</a>.</p>
-
-<p>Benoit made our profiling builds useful on Linux, Android (in addition to Windows, Mac64). Work is happening on extending our debug protocol with <a href="https://developer.mozilla.org/en/Performance/Profiling_with_the_Built-in_Profiler">profiling </a>abilities. Unfortunately I do not have bug #s to link to. The Windows symbol server is almost done with security review so it can be exposed to the web. For more profiler details see bugs: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=753588">753588</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=751355">751355</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=751355">751355</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=751034">751034</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=751779">751779</a>.</p>
-
-<p>Rafael is getting close to calling exit(0) in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=662444">662444</a>. Much work remains, it&#8217;ll be the most significant change since we embarked on this project almost a year ago. Our current application shutdown situation is not pretty.</p>
-
-<p><strong>GC/CC</strong></p>
-
-<p>Bill landed incremental GC again, it promptly bounced out: bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=735099">735099</a>.</p>
-
-<p>We now do compartmental GC more often: bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=716014">716014</a>.</p>
-
-<p>Andrew is working on reducing CC overhead (by 80% in his benchmark) when closing tabs: bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=754495">754495</a>.</p>
-
-<p><strong>LagBlock Plus</strong></p>
-
-<p>I&#8217;ve been running Wlad&#8217;s <a href="https://addons.mozilla.org/en-US/firefox/addon/suspend-background-tabs/">extension</a> for over a week now. The browser is so much more pleasant now. Background tabs used to make text-entry a painful process. Can&#8217;t wait until we can approach a similar level of responsiveness by scheduling background tab events more intelligently.</p>
-
-<p>I feel that letting tabs run out of control is a serious misfeature in the current web &#8216;architecture&#8217;. Modern OSes require background apps to suspend (ie Android, iOS). It is about time that browsers forced a similar behavior: ie bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=675539">675539</a>. Web developers should be given a way to request to run background tasks and users should be able to veto that.</p>
 </div>
   
   
@@ -601,6 +601,10 @@ if (requestAnimationFrame)
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/06/28/new-performance-people/">New Performance People, Telemetry News</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/04/05/mozilla-tech-on-reddit/">Mozilla Tech on Reddit</a>
       </li>
     
@@ -614,10 +618,6 @@ if (requestAnimationFrame)
     
       <li class="post">
         <a href="/blog/2013/03/25/snappy-number-53-faster-startup/">snappy #53: Faster: Startup, Image Decoding, Touchpad Input. Smoother Animations</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/03/11/living-with-octopress/">Blogging with Octopress</a>
       </li>
     
   </ul>

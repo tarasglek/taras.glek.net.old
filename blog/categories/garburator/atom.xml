@@ -4,7 +4,7 @@
   <title><![CDATA[Category: garburator | All About Performance]]></title>
   <link href="http://taras.glek.net/blog/categories/garburator/atom.xml" rel="self"/>
   <link href="http://taras.glek.net/"/>
-  <updated>2013-04-05T20:26:58-07:00</updated>
+  <updated>2013-06-28T17:08:59-04:00</updated>
   <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Recent Progress]]></title>
     <link href="http://taras.glek.net/blog/2007/12/28/recent-progress/"/>
-    <updated>2007-12-28T05:39:45-08:00</updated>
+    <updated>2007-12-28T08:39:45-05:00</updated>
     <id>http://taras.glek.net/blog/2007/12/28/recent-progress</id>
     <content type="html"><![CDATA[Looks like [pork](http://wiki.mozilla.org/Pork) is slowly going to get merged back into oink. This makes me happy as it will result in decreased merging headaches and gives more visibility to my work outside of Mozilla. My elkhound changes are already in!  
   
@@ -31,7 +31,7 @@ I am still pondering on how to tackle rewriting Mozilla to use exceptions. It is
   <entry>
     <title type="html"><![CDATA[Exceptions]]></title>
     <link href="http://taras.glek.net/blog/2007/12/19/exceptions/"/>
-    <updated>2007-12-19T07:26:30-08:00</updated>
+    <updated>2007-12-19T10:26:30-05:00</updated>
     <id>http://taras.glek.net/blog/2007/12/19/exceptions</id>
     <content type="html"><![CDATA[Often there are two ways to write code. One way is to design an API and have code patterns adhere to how the API is supposed to be used. Another way is to rely on language features to accomplish the same thing. Typically API-pattern approaches are chosen because compilers are too immature or just don't provide the necessary features. Sometimes compilers do catch up and the possibility of utilizing newer language features appears.  
   
@@ -67,7 +67,7 @@ For now I'm going let thrower rest in the pork hg repository while I try to make
   <entry>
     <title type="html"><![CDATA[Garburator works!]]></title>
     <link href="http://taras.glek.net/blog/2007/11/02/garburator-works/"/>
-    <updated>2007-11-02T09:02:15-07:00</updated>
+    <updated>2007-11-02T12:02:15-04:00</updated>
     <id>http://taras.glek.net/blog/2007/11/02/garburator-works</id>
     <content type="html"><![CDATA[A [few weeks](http://taras.glek.net/blog/2007/10/12/rewriting-tools-for-mozilla-2-moving-forward-as-planned/) ago I convinced myself that is possible to rewrite Mozilla to avoid COMPtrs on the stack. Since then I've changed my mind a few times and felt like I may not be able to get this rewrite working. However, after three or four false starts, I finally managed to work out a metal model of the stack nsCOMPtr usage. With a combination of automatic blacklisting of tricky code, manual demacroing and lots of help from [Benjamin](http://benjamin.smedbergs.us/) I got the generated 3.2MB patch to compile.  
   
@@ -82,7 +82,7 @@ I am happy that garburator works as it means I can go back to playing [outparamd
   <entry>
     <title type="html"><![CDATA[Rewriting Tools for Mozilla 2: Moving Forward as Planned]]></title>
     <link href="http://taras.glek.net/blog/2007/10/12/rewriting-tools-for-mozilla-2-moving-forward-as-planned/"/>
-    <updated>2007-10-12T08:31:35-07:00</updated>
+    <updated>2007-10-12T11:31:35-04:00</updated>
     <id>http://taras.glek.net/blog/2007/10/12/rewriting-tools-for-mozilla-2-moving-forward-as-planned</id>
     <content type="html"><![CDATA[**In the Beginning There Was a Void**  
   

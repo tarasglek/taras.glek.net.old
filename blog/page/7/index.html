@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="It is time to set goals for the next 3 months at Mozilla. A lot of them should be Snappy-related. As I mentioned before, we have made a lot of snappy &hellip;">
+  <meta name="description" content="Lawrence, thanks for posting snappy updates while I was on leave. Snappy meetings have gotten a bit dull lately. There hasn&#8217;t been much arguing &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -95,6 +95,226 @@ if (requestAnimationFrame)
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2012/04/05/snappy-april-5-change-in-meeting-format/">Snappy, April 5: Change in Meeting Format</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-04-05T09:52:12-04:00" pubdate data-updated="true">Apr 5<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Lawrence, thanks for posting <a href="http://lawrencemandel.com/tag/snappy/">snappy updates</a> while I was on leave.</p>
+
+<p>Snappy meetings have gotten a bit dull lately. There hasn&#8217;t been much arguing about what needs fixing, or much discussion, everybody gave status updates and was in agreement. Going forward we will do less status updating, except for major developments to save some energy for discussion.</p>
+
+<p>Discussion centered around personas&#8230;err themes <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=650968">murdering </a>firefox performance and goals for q2. Ehsan will post details how to reimplement themes. I made a separate <a href="http://taras.glek.net/blog/2012/04/05/snappy-apr-5-snappy-goals-for-q2/">post </a>about goals.</p>
+
+<p>Vlad raised a question on whether we should proceed with <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=722243">cancellable </a>SQL queries given SQLite limitations. SQLite can only cancel all outstanding queries, which requires us to track carefully what requests are outstanding and/or do some SQLite feature development. Consensus was that we should proceed to avoid embarrassing situations like reading the places database <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=684513">backwards </a>during shutdown.</p>
+
+<p>Lawrence also revamped the <a href="https://wiki.mozilla.org/Performance/Snappy/2012-04-05">meeting notes</a> to be more readable.  As an experiment I&#8217;m going to paste them in here. Let me know if you prefer my cherry-picking summaries from before.</p>
+
+<h1>Snappy Apr. 5 Minutes</h1>
+
+<ul>
+<li>Sample Q2 goals: <a href="https://wiki.mozilla.org/Performance/Snappy#Snappy_TODO">https://wiki.mozilla.org/Performance/Snappy#Snappy_TODO</a></li>
+<li>Chart showing Snappy bugs resolved in the last week <a href="https://wiki.mozilla.org/Performance/Snappy/Dashboard#Resolved_in_the_last_week">https://wiki.mozilla.org/Performance/Snappy/Dashboard#Resolved_in_the_last_week</a>.</li>
+<li>did anyone attend the Intel sessions?
+
+<ul>
+<li>might be useful information at the next profiling session</li>
+</ul>
+</li>
+</ul>
+
+
+<h2>Actions</h2>
+
+<p>No actions.</p>
+
+<h2>Incoming</h2>
+
+<ul>
+<li>hardware acceleration: i disabled hwa on all macs in my family, and Firefox has been noticeably snappier across multiple types of macs. related bugs: bug 600763, bug 721273, bug 721892. should have someone from perf team or gfx dig in and at least confirm.
+
+<ul>
+<li>Taras asked to put on gfx q2 goals</li>
+</ul>
+</li>
+</ul>
+
+
+<h2>Projects</h2>
+
+<h3>Persona slowness(ehsan?)</h3>
+
+<p>Results from the past week</p>
+
+<ul>
+<li>issues discovered with animated personas and those that heavily use svg and css</li>
+<li>Ehsan to summarize the issue in a blog/wiki</li>
+<li>look at moving image decoding off of the main thread</li>
+</ul>
+
+
+<h3>Mainthread+Slow SQL (gavin/taras/vlad)</h3>
+
+<p>Results from the past week</p>
+
+<ul>
+<li>Worked on cancellable sql (bug 722243), have to figure out if benefit from cancellable queries justifies additional locking</li>
+</ul>
+
+
+<p>Todo this week</p>
+
+<ul>
+<li>Ask SQLite guys about fine-grained cancels</li>
+</ul>
+
+
+<h3>Better DOM event/task scheduling - jst (telemetry)</h3>
+
+<p>Results from the past week</p>
+
+<ul>
+<li>starting to work on slowing down parser in background tabs</li>
+</ul>
+
+
+<h3>Super-slow-startup investigations - vlad, taras</h3>
+
+<p>Results from the past week</p>
+
+<ul>
+<li>Received batch of slow startup data from March</li>
+</ul>
+
+
+<h3>Startup optimizations - bbondy</h3>
+
+<p>Results from the past week</p>
+
+<ul>
+<li>bbondy: Bug 692255 - WIll have implemented super review comments for prefetch</li>
+</ul>
+
+
+<h3>Front-end - Dietrich/bbondy</h3>
+
+<p>Results from the past week</p>
+
+<ul>
+<li>Dashboard: <a href="https://wiki.mozilla.org/SnappyFrontEndDashboard">https://wiki.mozilla.org/SnappyFrontEndDashboard</a></li>
+<li>QA chrome leak testing - should most affect frontend <a href="https://wiki.mozilla.org/QA/Snappy/Chrome_Leak_Testing">https://wiki.mozilla.org/QA/Snappy/Chrome_Leak_Testing</a></li>
+<li>IE Migrator changes started landing, Safari coming soon after.</li>
+<li>Tim Taubert put up AreWeSmallYet, tracking changes in build size: <a href="http://arewesmallyet.com/">http://arewesmallyet.com/</a></li>
+</ul>
+
+
+<p>Todo this week</p>
+
+<ul>
+<li>telemetry for home tab vs session restored</li>
+<li>telemetry for # of tabs restored</li>
+<li>taras: investigate if startup cache/omnijar is still of benefit</li>
+</ul>
+
+
+<h3>Profiler - jrmuizel/BenWa/Ehsan (and more)</h3>
+
+<p>Todo this week</p>
+
+<ul>
+<li>There seems to be an issue with symbolication with latest SPS extension version</li>
+</ul>
+
+
+<h3>Nondestructive chromehang - vlad</h3>
+
+<p>Results from the past week</p>
+
+<ul>
+<li>Co-ordinate with Softronics QA people &amp; Moz privacy review</li>
+<li>bug 742008: Nightly profiling updates consistently failing</li>
+</ul>
+
+
+<p>Todo this week</p>
+
+<ul>
+<li>Integrate about-telemetry into Firefox as a bundled addon</li>
+<li>Add a pass through mode so local symbolication server can pass symbolication requests to remote server (e.g. local Firefox symbols + remote Windows system symbols)</li>
+</ul>
+
+
+<h3>Peptest - mcote</h3>
+
+<p>Results from the past week</p>
+
+<ul>
+<li>revision numbers, with links, now in peptest graphs as of March 30</li>
+<li>results keep coming in!</li>
+</ul>
+
+
+<h3>GC pause reduction - billm</h3>
+
+<p>Results from the past week</p>
+
+<ul>
+<li>bug 641025: incremental GC - disabled due to leaks</li>
+<li>investigating leaks due to incremental GC</li>
+<li>landed bug 716142 (allow multi-compartmental GCs), which enables:</li>
+<li>worked on bug 739899, to keep compartment creation from stopping incremental GC</li>
+<li>Multi compartment GCs should also enable scheduling smaller chunks of GC and CC.</li>
+</ul>
+
+
+<h3>CC pause reduction - smaug, mccr8 (meta bug 698919)</h3>
+
+<p>Results from the past week</p>
+
+<ul>
+<li>smaug worked on trying to reduce the impact of leaked documents on the CC</li>
+<li>mccr8 worked on bug 653191 (collapse SCCs of JS in CC graph)</li>
+<li>remove more stuff from the CC graph (bug 740185)</li>
+<li>QA is working on plan to test for leaked documents</li>
+</ul>
+
+
+<h4>bug710935 - measure lag in handling user input (needs owner)</h4>
+
+<ul>
+<li>bbondy: I&#8217;ll probably be starting on this next week, but if you have someone else please feel more than free to take :)</li>
+</ul>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2012/04/05/snappy-apr-5-snappy-goals-for-q2/">Snappy, Apr 5: Snappy Goals for Q2</a></h1>
     
     
@@ -111,7 +331,7 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2012-04-05T06:16:19-07:00" pubdate data-updated="true">Apr 5<span>th</span>, 2012</time>
+<time datetime="2012-04-05T09:16:19-04:00" pubdate data-updated="true">Apr 5<span>th</span>, 2012</time>
         
       </p>
     
@@ -147,7 +367,7 @@ We do a lot of work outside of our goal process, so above goals represent only t
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2012/04/04/powering-speakers-etc-with-bike-dynamo/">Powering Speakers, Etc With a Bike Dynamo</a></h1>
+      <h1 class="entry-title"><a href="/blog/2012/04/05/powering-speakers-etc-with-bike-dynamo/">Powering Speakers, Etc With a Bike Dynamo</a></h1>
     
     
       <p class="meta">
@@ -163,7 +383,7 @@ We do a lot of work outside of our goal process, so above goals represent only t
   
 
 
-<time datetime="2012-04-04T22:15:00-07:00" pubdate data-updated="true">Apr 4<span>th</span>, 2012</time>
+<time datetime="2012-04-05T01:15:00-04:00" pubdate data-updated="true">Apr 5<span>th</span>, 2012</time>
         
       </p>
     
@@ -200,7 +420,7 @@ I recently got rid of an old Pioneer receiver in favour of a tiny Class D amplif
   
 
 
-<time datetime="2012-03-29T18:06:00-07:00" pubdate data-updated="true">Mar 29<span>th</span>, 2012</time>
+<time datetime="2012-03-29T21:06:00-04:00" pubdate data-updated="true">Mar 29<span>th</span>, 2012</time>
         
       </p>
     
@@ -250,7 +470,7 @@ Awesome stuff, very cool.  Any tips for those of us who just bought a house and 
   
 
 
-<time datetime="2012-03-16T08:39:30-07:00" pubdate data-updated="true">Mar 16<span>th</span>, 2012</time>
+<time datetime="2012-03-16T11:39:30-04:00" pubdate data-updated="true">Mar 16<span>th</span>, 2012</time>
         
       </p>
     
@@ -324,7 +544,7 @@ Awesome stuff, very cool.  Any tips for those of us who just bought a house and 
   
 
 
-<time datetime="2012-03-16T03:26:51-07:00" pubdate data-updated="true">Mar 16<span>th</span>, 2012</time>
+<time datetime="2012-03-16T06:26:51-04:00" pubdate data-updated="true">Mar 16<span>th</span>, 2012</time>
         
       </p>
     
@@ -386,7 +606,7 @@ INSERT INTO webappsstore2_temp (scope, key, value, secure, owner) SELECT scope, 
   
 
 
-<time datetime="2012-03-14T08:27:53-07:00" pubdate data-updated="true">Mar 14<span>th</span>, 2012</time>
+<time datetime="2012-03-14T11:27:53-04:00" pubdate data-updated="true">Mar 14<span>th</span>, 2012</time>
         
       </p>
     
@@ -436,7 +656,7 @@ INSERT INTO webappsstore2_temp (scope, key, value, secure, owner) SELECT scope, 
   
 
 
-<time datetime="2012-03-09T07:53:00-08:00" pubdate data-updated="true">Mar 9<span>th</span>, 2012</time>
+<time datetime="2012-03-09T10:53:00-05:00" pubdate data-updated="true">Mar 9<span>th</span>, 2012</time>
         
       </p>
     
@@ -492,7 +712,7 @@ INSERT INTO webappsstore2_temp (scope, key, value, secure, owner) SELECT scope, 
   
 
 
-<time datetime="2012-03-07T06:12:18-08:00" pubdate data-updated="true">Mar 7<span>th</span>, 2012</time>
+<time datetime="2012-03-07T09:12:18-05:00" pubdate data-updated="true">Mar 7<span>th</span>, 2012</time>
         
       </p>
     
@@ -532,7 +752,7 @@ INSERT INTO webappsstore2_temp (scope, key, value, secure, owner) SELECT scope, 
   
 
 
-<time datetime="2012-03-05T08:09:45-08:00" pubdate data-updated="true">Mar 5<span>th</span>, 2012</time>
+<time datetime="2012-03-05T11:09:45-05:00" pubdate data-updated="true">Mar 5<span>th</span>, 2012</time>
         
       </p>
     
@@ -581,48 +801,6 @@ INSERT INTO webappsstore2_temp (scope, key, value, secure, owner) SELECT scope, 
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/03/01/24hour-code-reviews-still-aiming-for-it/">24hour Code Reviews: Still Aiming for It</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-03-01T06:32:17-08:00" pubdate data-updated="true">Mar 1<span>st</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I mainly review code written by team perf. You&#8217;d think a 6 person team would imply a fairly chill review queue. The team must&#8217;ve conspired to burn me out, for a few weeks I was spending half of my day reviewing patches. A few patches took >3 days to review. I think I even let a patch lapse for almost a week (don&#8217;t always have mental capacity to review linker code). Recently, my review inbox is often empty and recent patches have been &lt;10KB, I&#8217;m not falling behind anymore.</p>
-
-<p>My point is that 24hour reviews are not bounded by time. It&#8217;s an aspirational target. If you value time spent writing the patch, please review accordingly. Same goes for people requesting reviews, I&#8217;m a lot more likely to give you a quick review if your patches are broken up into reasonably small logical pieces.</p>
-
-<p>The 24hour-review-turn-around dream is still alive. I haven&#8217;t been making noise about it because I&#8217;m waiting on #metrics to provide us with hard review-latency data. I&#8217;m hoping my review turn-around is 24hours, but there is no easy way to find out atm.</p>
-
-<p>Thanks to everyone who adopted 24-hour review goal. I have noticed reviews flying by at a faster pace. One reviewer even let a team-perf patch jump to the front of his review in return for pushing on 24hour reviews.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/8/">&larr; Older</a>
@@ -640,6 +818,10 @@ INSERT INTO webappsstore2_temp (scope, key, value, secure, owner) SELECT scope, 
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/06/28/new-performance-people/">New Performance People, Telemetry News</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/04/05/mozilla-tech-on-reddit/">Mozilla Tech on Reddit</a>
       </li>
     
@@ -653,10 +835,6 @@ INSERT INTO webappsstore2_temp (scope, key, value, secure, owner) SELECT scope, 
     
       <li class="post">
         <a href="/blog/2013/03/25/snappy-number-53-faster-startup/">snappy #53: Faster: Startup, Image Decoding, Touchpad Input. Smoother Animations</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/03/11/living-with-octopress/">Blogging with Octopress</a>
       </li>
     
   </ul>

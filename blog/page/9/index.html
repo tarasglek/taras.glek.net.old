@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="The most user facing fix has been discovery and removal of some sneaky cache IO on the main thread. Saptashi did some analysis on the impact of &hellip;">
+  <meta name="description" content="Meeting notes. Network Cache Horrors Last week we discovered that our cache uses main thread locks to successfully block on off-main thread io. See ( &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -95,6 +95,66 @@ if (requestAnimationFrame)
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2012/01/20/snappy-january-19-brought-you-by-ironic-js/">Snappy, January 19: Brought You by Ironic JS</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-01-20T08:50:54-05:00" pubdate data-updated="true">Jan 20<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><a href="https://wiki.mozilla.org/Performance/Snappy/2012-01-19">Meeting notes</a>.</p>
+
+<p><strong>Network Cache Horrors</strong></p>
+
+<p><a href="http://taras.glek.net/blog/2012/01/12/snappy-jan12/">Last week</a> we discovered that our cache uses main thread locks to successfully block on off-main thread io. See (<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=695399">Bug 695399</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=717761">Bug 717761</a>). QA did an <a href="http://groups.google.com/group/mozilla.dev.tech.network/browse_thread/thread/6dfa3e6ebe80c336">experiment</a> which confirmed that our disk cache is performing poorly.</p>
+
+<p><strong>Flash Lag</strong></p>
+
+<p>We are looking into reports of flash lag, tracking <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=720000">Bug 720000</a>. Initial QA data shows a significant slowdown when page is first loaded and smaller slowdowns later. There are also long browser pauses when the flash container progress freezes.</p>
+
+<p><strong>Profiling</strong></p>
+
+<p>Vlad continued work on non-destructive chromehang, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=712109">Bug 712109</a>. Client-side is ready to land and he is wrapping up symbolification for the server-side.</p>
+
+<p><a href="https://developer.mozilla.org/en/Performance/Profiling_with_the_Built-in_Profiler">Interactivity profiler</a> is now able to collect stacks on 64-bit MacOS. Benoit is looking for contributors to add Windows, Linux support (<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=719536">Bug 719536)</a>. I highly encourage adventurous contributors to help out with that as it involves modifying some concise, straightforward, yet highly <a href="https://github.com/bgirard/Gecko-Profiler-Addon/blob/master/lib/symbolicate.js">ironic JavaScript</a>. We are also looking for help with the profiler UI. If you are a skilled addon/frontend person, see <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=719530">Bug 719530</a>.</p>
+
+<p>Jeff posted an early preview of about:jank <a href="http://people.mozilla.com/~jmuizelaar/aboutjank-0.1.xpi">addon</a>. He also working on measuring painting speed via telemetry. Note this addon is buggy and requires a very recent nightly.</p>
+
+<p>Last week I asked for some laggy session restore profiles. I&#8217;m behind on reproducing those(will be done today or next week). I&#8217;ve been in email contact with several of the commenters. I really appreciate the data gathered so far.</p>
+
+<p><strong>Snappy UX</strong></p>
+
+<p>Jared landed smooth scrolling, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=198964">Bug 198964</a>. He is now working on hooking it up to scrolling via scrollbar, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=710373">Bug 710373</a>. Up next: fixing fallout from turning on smooth scrolling, hooking it up to the refresh driver and tweaking scrolling physics.</p>
+
+<p>Marco landed inline autocomplete, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=566489">Bug 566489</a> and is now fixing fallout from that too.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2012/01/12/snappy-jan12/">Snappy Jan12</a></h1>
     
     
@@ -111,7 +171,7 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2012-01-12T07:21:03-08:00" pubdate data-updated="true">Jan 12<span>th</span>, 2012</time>
+<time datetime="2012-01-12T10:21:03-05:00" pubdate data-updated="true">Jan 12<span>th</span>, 2012</time>
         
       </p>
     
@@ -155,7 +215,7 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2012-01-11T02:59:02-08:00" pubdate data-updated="true">Jan 11<span>th</span>, 2012</time>
+<time datetime="2012-01-11T05:59:02-05:00" pubdate data-updated="true">Jan 11<span>th</span>, 2012</time>
         
       </p>
     
@@ -193,7 +253,7 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2012-01-05T06:07:36-08:00" pubdate data-updated="true">Jan 5<span>th</span>, 2012</time>
+<time datetime="2012-01-05T09:07:36-05:00" pubdate data-updated="true">Jan 5<span>th</span>, 2012</time>
         
       </p>
     
@@ -245,7 +305,7 @@ if (requestAnimationFrame)
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2012/01/04/future/">Future</a></h1>
+      <h1 class="entry-title"><a href="/blog/2012/01/05/future/">Future</a></h1>
     
     
       <p class="meta">
@@ -261,7 +321,7 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2012-01-04T21:42:00-08:00" pubdate data-updated="true">Jan 4<span>th</span>, 2012</time>
+<time datetime="2012-01-05T00:42:00-05:00" pubdate data-updated="true">Jan 5<span>th</span>, 2012</time>
         
       </p>
     
@@ -298,7 +358,7 @@ As people get older they gain clout, respect and other sorts of  undeserved cred
   
 
 
-<time datetime="2011-12-22T09:09:29-08:00" pubdate data-updated="true">Dec 22<span>nd</span>, 2011</time>
+<time datetime="2011-12-22T12:09:29-05:00" pubdate data-updated="true">Dec 22<span>nd</span>, 2011</time>
         
       </p>
     
@@ -338,7 +398,7 @@ As people get older they gain clout, respect and other sorts of  undeserved cred
   
 
 
-<time datetime="2011-12-22T06:42:22-08:00" pubdate data-updated="true">Dec 22<span>nd</span>, 2011</time>
+<time datetime="2011-12-22T09:42:22-05:00" pubdate data-updated="true">Dec 22<span>nd</span>, 2011</time>
         
       </p>
     
@@ -378,7 +438,7 @@ As people get older they gain clout, respect and other sorts of  undeserved cred
   
 
 
-<time datetime="2011-12-20T06:57:10-08:00" pubdate data-updated="true">Dec 20<span>th</span>, 2011</time>
+<time datetime="2011-12-20T09:57:10-05:00" pubdate data-updated="true">Dec 20<span>th</span>, 2011</time>
         
       </p>
     
@@ -418,7 +478,7 @@ As people get older they gain clout, respect and other sorts of  undeserved cred
   
 
 
-<time datetime="2011-12-16T08:31:05-08:00" pubdate data-updated="true">Dec 16<span>th</span>, 2011</time>
+<time datetime="2011-12-16T11:31:05-05:00" pubdate data-updated="true">Dec 16<span>th</span>, 2011</time>
         
       </p>
     
@@ -465,7 +525,7 @@ These files of the format: sql, count, average time per query.</li>
   
 
 
-<time datetime="2011-12-13T03:55:43-08:00" pubdate data-updated="true">Dec 13<span>th</span>, 2011</time>
+<time datetime="2011-12-13T06:55:43-05:00" pubdate data-updated="true">Dec 13<span>th</span>, 2011</time>
         
       </p>
     
@@ -473,52 +533,6 @@ These files of the format: sql, count, average time per query.</li>
 
 
   <div class="entry-content"><p><a href="http://blog.mozilla.org/vdjeric">Vladan</a> is working on adding slow SQL tracking to Telemetry, part of that has <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=699051">already landed</a>. He recently exposed this information via the <a href="https://addons.mozilla.org/en-US/firefox/addon/abouttelemetry/">about:telemetry</a> addon. We are working out a few remaining issues so we can <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=709406">send</a> this data to our telemetry servers. In the meantime <a href="https://addons.mozilla.org/en-US/firefox/addon/abouttelemetry/">install</a> the addon in your nightly builds (if you are upgrading from an older version, you need to restart Firefox) and check for yourself whether SQL is to blame for pauses in Firefox.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011/12/13/snappy-summary-for-dec-8/">Snappy Summary for Dec 8</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-12-13T02:55:47-08:00" pubdate data-updated="true">Dec 13<span>th</span>, 2011</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Our last meeting was last Thursday, at 11am PST (<a href="https://wiki.mozilla.org/Performance/Snappy/2011-12-08">meeting notes</a>). This blog post is late because of a combination of email disasters and travel.</p>
-
-<p>Cheng from the SUMO team mined SUMO inputs to see what our users are complaining most about. There were complaints about things were slow, unresponsive, frozen, etc. See meeting notes the complete blurb.</p>
-
-<p>The networking team has identified issues leading to slow <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=709297">shutdown</a> and <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=695003">startup</a>.</p>
-
-<p>Most of the the <a href="https://developer.mozilla.org/en/Performance/Profiling_with_the_Built-in_Profiler#Running%20the%20profiler">responsiveness profiler</a> landed.</p>
-
-<p>UX team provided an extensive list of Firefox features that needed tweaking, see meeting notes for details.  We are working on improving tab interactions and scrolling.</p>
-
-<p>I&#8217;ll post a beefier summary of plans/accomplishments next week.</p>
 </div>
   
   
@@ -543,6 +557,10 @@ These files of the format: sql, count, average time per query.</li>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/06/28/new-performance-people/">New Performance People, Telemetry News</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/04/05/mozilla-tech-on-reddit/">Mozilla Tech on Reddit</a>
       </li>
     
@@ -556,10 +574,6 @@ These files of the format: sql, count, average time per query.</li>
     
       <li class="post">
         <a href="/blog/2013/03/25/snappy-number-53-faster-startup/">snappy #53: Faster: Startup, Image Decoding, Touchpad Input. Smoother Animations</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/03/11/living-with-octopress/">Blogging with Octopress</a>
       </li>
     
   </ul>
