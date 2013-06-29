@@ -4,7 +4,7 @@
   <title><![CDATA[All About Performance]]></title>
   <link href="http://taras.glek.net/atom.xml" rel="self"/>
   <link href="http://taras.glek.net/"/>
-  <updated>2013-06-28T17:08:59-04:00</updated>
+  <updated>2013-06-29T12:44:53-04:00</updated>
   <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -13,6 +13,35 @@
   <generator uri="http://octopress.org/">Octopress</generator>
 
   
+  
+  <entry>
+    <title type="html"><![CDATA[New Performance People, Telemetry News]]></title>
+    <link href="http://taras.glek.net/blog/2013/06/28/new-performance-people/"/>
+    <updated>2013-06-28T16:52:00-04:00</updated>
+    <id>http://taras.glek.net/blog/2013/06/28/new-performance-people</id>
+    <content type="html"><![CDATA[<h2>reddit/<a href="http://www.reddit.com/r/MozillaTech/">MozillaTech</a></h2>
+
+<p>I like our make-planet-techy subreddit. Seems like articles that get rated as one would expect. I happily switched to reddit as my primary way to consume planet mozilla. Redditors, keep up the good work!</p>
+
+<h2>Telemetry Dashboard</h2>
+
+<p>Our new telemetry <a href="http://telemetry-dash.mozilla.org/">dashboard</a> went live yesterday. It&#8217;s missing features, data, UX. However it is public, fast and hackable. It should evolve quickly.</p>
+
+<h2>New Blood</h2>
+
+<p><a href="http://mreid-moz.github.io/">Mark Reid</a> is our first server-side dev. His primary task is switching telemetry backend from hadoop to a custom telemetry server. New server infrastructure will enable a live dashboard (3-day delay atm) + ability to run queries in minutes rather than in hours.</p>
+
+<p><a href="http://randomkernels.wordpress.com">Dhaval Giani</a>, &#8220;the intern&#8221;, is our first kernel hacker. He&#8217;s working on helping land <a href="https://lwn.net/Articles/522135/">volatile memory</a> in the kernel. This feature will let Firefox safely consume more memory when memory is plentiful and use less in limited scenarios. Hopefully he&#8217;ll also add read-only file compression to ext4.</p>
+
+<p>Blogs linked above are in the please-add-to-planet queue. Expect them to spend a few weeks there. Please subscribe to their RSS feeds in meantime.</p>
+
+<h2>Investigating SQLite Performance via Telemetry</h2>
+
+<p>Years ago I tweaked our SQLite clients to use a larger page size. In my testing this seemed to achieve a speedup of 0.2-2x, see <a title="Suboptimal SQLite page size" href="https://bugzilla.mozilla.org/show_bug.cgi?id=416330">bug 416330</a>. Unfortunately, ~30% of our users are still on the old page size (<a title="Fix page_size of WAL databases" href="https://bugzilla.mozilla.org/show_bug.cgi?id=634374">bug 634374</a>). We used a <a href="https://github.com/mozilla/jydoop">jydoop</a> query to figure out if it&#8217;s worth developing a feature to convert these users over using two different (time spent <a href="https://github.com/mozilla/jydoop/blob/master/scripts/places4k.py">reading</a> &amp; time spent <a href="https://github.com/mozilla/jydoop/blob/master/scripts/places4k-slowsql.py">executing</a> a query) ways to measure performance differences. According to both methods there is a 4x reduction in sqlite IO waits with the larger page size, so we&#8217;ll be adding code to convert people over more aggressively.</p>
+
+<p>This was a cool investigation because it highlighted how much more confidence we have when making performance decisions now (due to telemetry) vs a few years ago.</p>
+]]></content>
+  </entry>
   
   
   

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: mozilla | All About Performance]]></title>
   <link href="http://taras.glek.net/blog/categories/mozilla/atom.xml" rel="self"/>
   <link href="http://taras.glek.net/"/>
-  <updated>2013-06-28T17:08:59-04:00</updated>
+  <updated>2013-06-29T12:44:53-04:00</updated>
   <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -12,6 +12,34 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[New Performance People, Telemetry News]]></title>
+    <link href="http://taras.glek.net/blog/2013/06/28/new-performance-people/"/>
+    <updated>2013-06-28T16:52:00-04:00</updated>
+    <id>http://taras.glek.net/blog/2013/06/28/new-performance-people</id>
+    <content type="html"><![CDATA[reddit/[MozillaTech](http://www.reddit.com/r/MozillaTech/)
+--------------------------------
+I like our make-planet-techy subreddit. Seems like articles that get rated as one would expect. I happily switched to reddit as my primary way to consume planet mozilla. Redditors, keep up the good work!
+
+Telemetry Dashboard
+-------------------------------
+Our new telemetry [dashboard](http://telemetry-dash.mozilla.org/) went live yesterday. It's missing features, data, UX. However it is public, fast and hackable. It should evolve quickly.
+New Blood
+---------------
+[Mark Reid](http://mreid-moz.github.io/) is our first server-side dev. His primary task is switching telemetry backend from hadoop to a custom telemetry server. New server infrastructure will enable a live dashboard (3-day delay atm) + ability to run queries in minutes rather than in hours.
+
+[Dhaval Giani](http://randomkernels.wordpress.com), "the intern", is our first kernel hacker. He's working on helping land [volatile memory](https://lwn.net/Articles/522135/) in the kernel. This feature will let Firefox safely consume more memory when memory is plentiful and use less in limited scenarios. Hopefully he'll also add read-only file compression to ext4.
+
+Blogs linked above are in the please-add-to-planet queue. Expect them to spend a few weeks there. Please subscribe to their RSS feeds in meantime.
+ 
+Investigating SQLite Performance via Telemetry
+----------------------------------------------------------------------
+Years ago I tweaked our SQLite clients to use a larger page size. In my testing this seemed to achieve a speedup of 0.2-2x, see <a title="Suboptimal SQLite page size" href="https://bugzilla.mozilla.org/show_bug.cgi?id=416330">bug 416330</a>. Unfortunately, ~30% of our users are still on the old page size (<a title="Fix page_size of WAL databases" href="https://bugzilla.mozilla.org/show_bug.cgi?id=634374">bug 634374</a>). We used a [jydoop](https://github.com/mozilla/jydoop) query to figure out if it's worth developing a feature to convert these users over using two different (time spent [reading](https://github.com/mozilla/jydoop/blob/master/scripts/places4k.py) & time spent [executing](https://github.com/mozilla/jydoop/blob/master/scripts/places4k-slowsql.py) a query) ways to measure performance differences. According to both methods there is a 4x reduction in sqlite IO waits with the larger page size, so we'll be adding code to convert people over more aggressively.
+
+This was a cool investigation because it highlighted how much more confidence we have when making performance decisions now (due to telemetry) vs a few years ago.
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Mozilla Tech on Reddit]]></title>
@@ -98,7 +126,7 @@ Talks/discussions/notes (please leave a comment if I missed a talk):
 
 For a team activity we walked to the [Paris Catacombes](http://en.wikipedia.org/wiki/Catacombs_of_Paris). 
 
-{%img https://lh6.googleusercontent.com/-dUluprOFvY0/UUoRsBAC1oI/AAAAAAAAIj8/WjOYb7uHij4/s580/20130320_123837.jpg Relevance to writing software? Multi-million line codebases are boneyards of some kind%}
+<img src="https://lh6.googleusercontent.com/-dUluprOFvY0/UUoRsBAC1oI/AAAAAAAAIj8/WjOYb7uHij4/s580/20130320_123837.jpg" title="Relevance to writing software? Multi-million line codebases are boneyards of some kind" >
 
 
 ]]></content>
@@ -111,60 +139,32 @@ For a team activity we walked to the [Paris Catacombes](http://en.wikipedia.org/
     <id>http://taras.glek.net/blog/2013/03/25/snappy-number-53-faster-startup</id>
     <content type="html"><![CDATA[### Responsiveness
 
-Joe Drew taught Firefox to decode images on multiple threads. It took a mere 29 patches in {%bug 716140%}. This should speed up page-load and improve tab-switch times. This task was considered too hard a year ago when Snappy people were discussing potential improvements.
+Joe Drew taught Firefox to decode images on multiple threads. It took a mere 29 patches in <a title="Multithreaded image decoding" href="https://bugzilla.mozilla.org/show_bug.cgi?id=716140">bug 716140</a>. This should speed up page-load and improve tab-switch times. This task was considered too hard a year ago when Snappy people were discussing potential improvements.
 
-Masayuki Nakano improved Firefox scrolling responsiveness on modern touchpads in {%bug 829952%}. Dealing with scroll-events on Windows is a mess. It's nice when we make forward progress in this area.
+Masayuki Nakano improved Firefox scrolling responsiveness on modern touchpads in <a title="Scrolling using some high-resolution-scroll aware touchpads feels slow" href="https://bugzilla.mozilla.org/show_bug.cgi?id=829952">bug 829952</a>. Dealing with scroll-events on Windows is a mess. It's nice when we make forward progress in this area.
 
 
-Marco Bonardo fixed a mysterious cause of main thread IO I ran into in {%bug 830423%}. I ran into this issue because I compulsively navigate to `about:telemetry` in Firefox and look in 'Slow SQL Statements' and 'Browser Hang' sections. I encourage readers of this blog to check out that data whenever Firefox is under-performing.
+Marco Bonardo fixed a mysterious cause of main thread IO I ran into in <a title="Avoid repeated execution of expensive daysOfHistory query" href="https://bugzilla.mozilla.org/show_bug.cgi?id=830423">bug 830423</a>. I ran into this issue because I compulsively navigate to `about:telemetry` in Firefox and look in 'Slow SQL Statements' and 'Browser Hang' sections. I encourage readers of this blog to check out that data whenever Firefox is under-performing.
 
 ### Startup
 
-{%bug 810151%} + {%bug 810454%} - Aaron Klotz implemented omnijar + cookie readahead.
+<a title="Use readahead for ordered jar files such as omni.ja. Should be ~10% startup speedup" href="https://bugzilla.mozilla.org/show_bug.cgi?id=810151">bug 810151</a> + <a title="Use fadvise() to speed up cookie db load" href="https://bugzilla.mozilla.org/show_bug.cgi?id=810454">bug 810454</a> - Aaron Klotz implemented omnijar + cookie readahead.
 
-{%bug 648407%} - Mike Hommey folded libraries for faster startup. If I'm reading {%bug 852068%} correctly, Firefox now loads 7 fewer libraries on startup. My rough rule of thumb is that each (small) file adds ~30ms to spinning-disk startup so this should net >200ms in startup savings.
+<a title="Fold NSPR and NSS into mozjs (for Windows) or libxul (for other platforms)" href="https://bugzilla.mozilla.org/show_bug.cgi?id=648407">bug 648407</a> - Mike Hommey folded libraries for faster startup. If I'm reading <a title="Update removed-files after bug 648407" href="https://bugzilla.mozilla.org/show_bug.cgi?id=852068">bug 852068</a> correctly, Firefox now loads 7 fewer libraries on startup. My rough rule of thumb is that each (small) file adds ~30ms to spinning-disk startup so this should net >200ms in startup savings.
 
 Cumulative startup improvements are notoriously difficult to predict + measure, but I suspect that above changes should make for a >=10% speedup in Firefox 22 start over previous releases. We'll be watching telemetry data in the coming weeks.
 
 ###Smoothness
-{%bug 590422%} - Avi Halachmi is continuing on his quest to make Firefox animate smoothly. This is another tricky step towards smoother animations in Firefox. Since landing this, Avi already embarked on the next gecko-level animation smoothness improvement.
+<a title="Consider getting rid of the delay line filter stuff in timer thread" href="https://bugzilla.mozilla.org/show_bug.cgi?id=590422">bug 590422</a> - Avi Halachmi is continuing on his quest to make Firefox animate smoothly. This is another tricky step towards smoother animations in Firefox. Since landing this, Avi already embarked on the next gecko-level animation smoothness improvement.
 
-Marco Bonardo spotted some potential for contention in recent DOM Local Storage optimizations. Vladan Djeric landed corrections in {%bug 842852%}.
+Marco Bonardo spotted some potential for contention in recent DOM Local Storage optimizations. Vladan Djeric landed corrections in <a title="LocalStorage performance improvements" href="https://bugzilla.mozilla.org/show_bug.cgi?id=842852">bug 842852</a>.
 
 ###Throughput improvements
 
-Ehsan Akhgari reduced allocator contention in {%bug 733277%}.
+Ehsan Akhgari reduced allocator contention in <a title="Prevent firing timers from lock contention with the main thread" href="https://bugzilla.mozilla.org/show_bug.cgi?id=733277">bug 733277</a>.
 
-Tim Taubert taught Firefox to warm up newtab connections on hover {%bug 790882%}
+Tim Taubert taught Firefox to warm up newtab connections on hover <a title="[New Tab Page] Speculatively open connections for sites when hovering them" href="https://bugzilla.mozilla.org/show_bug.cgi?id=790882">bug 790882</a>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Blogging with Octopress]]></title>
-    <link href="http://taras.glek.net/blog/2013/03/11/living-with-octopress/"/>
-    <updated>2013-03-11T16:58:00-04:00</updated>
-    <id>http://taras.glek.net/blog/2013/03/11/living-with-octopress</id>
-    <content type="html"><![CDATA[A couple months ago I [switched](/blog/2012/12/17/hello-octopress/) to [Octopress](http://octopress.org). I now have some experience to share.
-
-Overall, my Octopress + Github + Disqus experience has been much better blogger, wordpress and livejournal past before it. I only wish I kept my old posts in HTML instead of converting them to markdown. When I was setting up my blog, I did not know that Octopress could render HTML.
-
-####RSS Bugs
-I learned not expect much from RSS. In addition to being hard to discover, the default category RSS is buggy. It interprets markdown twice [choking](https://github.com/imathis/octopress/issues/884#issuecomment-12178049) on some exciting Telemetry links in my archives. I had to restort to writing a custom mozilla category feed.
-
-The excerpt feature (`<!-- more -->`) does not work in RSS. To me that defeats the whole point of excerpts, who even reads blog homepages? I do not have time to fix this.
-
-####It's easy to make a mess
-I wanted to get rid of some octopress defaults like external CSS, external fonts, modify some layout. I found I could not restrict myself to only editing files in `_directories`. I think this means that switching to a new theme will be hard. I was lazy and ended up with my content in the same repo as the octopress source. I'll have to clean up my act before I can share my customizations.
-
-####Saving Time
-One of the worst parts about my old wordpress blog was the amount of UI one had to go through to create HTML links. My snappy updates have a lot of bugzilla links. I wrote an octopress extension to do most of the link work for me. Syntax looks like:
-```
-{%Bug ####%}, {%bug ####%}
-```
-If anyone is interested, you can download it [here](http://people.mozilla.org/~tglek/bugzilla.rb) until I clean up my octopress git repository.
-
-Overall I like Octopress and I recommend the octopress/github combo to every developer who is looking to setup a blog. It saves a lot of time and as long as one can deal with lack of unit testing and Ruby, it's great.
 ]]></content>
   </entry>
   
