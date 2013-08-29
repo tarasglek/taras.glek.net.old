@@ -4,7 +4,7 @@
   <title><![CDATA[Category: outparamdel | All About Performance]]></title>
   <link href="http://taras.glek.net/blog/categories/outparamdel/atom.xml" rel="self"/>
   <link href="http://taras.glek.net/"/>
-  <updated>2013-06-29T12:44:53-04:00</updated>
+  <updated>2013-08-29T15:57:21-07:00</updated>
   <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Semantic Rewriting of Code with Pork - A bitter recap]]></title>
     <link href="http://taras.glek.net/blog/2009/01/28/semantic-rewriting-of-code-with-pork-a-bitter-recap/"/>
-    <updated>2009-01-28T19:17:47-05:00</updated>
+    <updated>2009-01-28T16:17:47-08:00</updated>
     <id>http://taras.glek.net/blog/2009/01/28/semantic-rewriting-of-code-with-pork-a-bitter-recap</id>
     <content type="html"><![CDATA[LWN [published](http://lwn.net/Articles/315686/) an article about a tool that does refactoring of C code. Guess what, it's yet another tool on top of a crappy C-parser that will never grok C well or even hope to support C++. To my great disappointment the author was not aware of my work on Pork. Clearly I have failed in letting people know that complex C and C++ can be refactored with (somewhat raw, but powerful) open source tools.  
   
@@ -42,7 +42,7 @@ I find it depressing that the comments to the LWN article ended up being about l
   <entry>
     <title type="html"><![CDATA[Outparamdelling this way comes]]></title>
     <link href="http://taras.glek.net/blog/2008/09/19/outparamdelling-this-way-comes/"/>
-    <updated>2008-09-19T10:06:08-04:00</updated>
+    <updated>2008-09-19T07:06:08-07:00</updated>
     <id>http://taras.glek.net/blog/2008/09/19/outparamdelling-this-way-comes</id>
     <content type="html"><![CDATA[Recently I dusted off outparamdel to see if I can get some refactorings landed. About a year ago, with the great QueryInterface outparamdelling experiment we ended up with a smaller binary footprint and tiny performance gain, but that never landed due to us not wanting to break compatability yet. Ever since, outparamdel has been patiently bitrotting within [Pork](http://developer.mozilla.org/en/docs/Pork) waiting for the day it's allowed to break APIs.  
   
@@ -81,7 +81,7 @@ It also seems that cairo and every other pre-C99 project have the same set of is
   <entry>
     <title type="html"><![CDATA[Exceptions]]></title>
     <link href="http://taras.glek.net/blog/2007/12/19/exceptions/"/>
-    <updated>2007-12-19T10:26:30-05:00</updated>
+    <updated>2007-12-19T07:26:30-08:00</updated>
     <id>http://taras.glek.net/blog/2007/12/19/exceptions</id>
     <content type="html"><![CDATA[Often there are two ways to write code. One way is to design an API and have code patterns adhere to how the API is supposed to be used. Another way is to rely on language features to accomplish the same thing. Typically API-pattern approaches are chosen because compilers are too immature or just don't provide the necessary features. Sometimes compilers do catch up and the possibility of utilizing newer language features appears.  
   
@@ -117,7 +117,7 @@ For now I'm going let thrower rest in the pork hg repository while I try to make
   <entry>
     <title type="html"><![CDATA[Exceptional Circumstances]]></title>
     <link href="http://taras.glek.net/blog/2007/12/05/exceptional-circumstances/"/>
-    <updated>2007-12-05T09:23:38-05:00</updated>
+    <updated>2007-12-05T06:23:38-08:00</updated>
     <id>http://taras.glek.net/blog/2007/12/05/exceptional-circumstances</id>
     <content type="html"><![CDATA[My previous post on outparam rewriting [described](http://taras.glek.net/blog/2007/11/28/volume-of-refactoring-ahead/) the wealth of functions that can be rewritten. Unfortunately, most functions in Mozilla are declared in XPIDL interfaces.  
   
@@ -154,7 +154,7 @@ This is an exciting experiment. I look forward to reducing speculation on the ri
   <entry>
     <title type="html"><![CDATA[Volume of Refactoring Ahead]]></title>
     <link href="http://taras.glek.net/blog/2007/11/28/volume-of-refactoring-ahead/"/>
-    <updated>2007-11-28T12:53:42-05:00</updated>
+    <updated>2007-11-28T09:53:42-08:00</updated>
     <id>http://taras.glek.net/blog/2007/11/28/volume-of-refactoring-ahead</id>
     <content type="html"><![CDATA[In the previous post, I described the simple rewriting case that I am working on at the moment. Someone was quick to point out that the approach wouldn't work for all methods (XPIDL Arrays were the example). Indeed, anything more complicated than simple getters can't be rewritten to "Succeeded/Failed" pattern without switching to C++ exceptions. However, in the codebase the size of Mozilla there are several megabytes worth outparam getters to be rewritten.  
   

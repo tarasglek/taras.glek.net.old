@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Got some helpful comments on my previous post. madvise(WILLNEED) in ld.so Frank Ch. Eigler pointed out that other people have noticed the madvise/ &hellip;">
+  <meta name="description" content="There is a little bit of a disconnect between the kernel, the dynamic linker and compile-time linker. As I mentioned in my main &#8220;startup sucks &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -95,6 +95,46 @@ if (requestAnimationFrame)
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2010/03/29/linux-startup-inefficiency/">Linux Startup Inefficiency</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-03-29T06:11:02-07:00" pubdate data-updated="true">Mar 29<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>There is a little bit of a disconnect between the kernel, the dynamic linker and compile-time linker. As I mentioned in my main &#8220;startup sucks&#8221; <a href="http://taras.glek.net/blog/2010/03/24/linux-why-loading-binaries-from-disk-sucks/">post</a>: not-notifying the kernel of your patterns can kill performance, so can reading files backwards.</p>
+
+<p>Turns out that if the compile-time linker lays out files without considering <em>exactly</em> how they are read by the runtime linker, binaries will load slower. I filed a <a href="http://sourceware.org/bugzilla/show_bug.cgi?id=11447">bug</a> on that.</p>
+
+<p>Currently, SuSE appears to be leading in startup performance by shipping their glibc with the fadvise() patch (to load binaries from disk in bigger chunks). A <a href="http://sourceware.org/bugzilla/show_bug.cgi?id=11431">bug</a> is filed for this to get fixed in glibc, but in the meantime distributions should consider including SuSE&#8217;s patch (glibc-2.3.90-ld.so-madvise.diff) in their libc.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2010/03/25/madvise-prelink-update/">Madvise, Prelink Update</a></h1>
     
     
@@ -111,7 +151,7 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2010-03-25T07:09:25-04:00" pubdate data-updated="true">Mar 25<span>th</span>, 2010</time>
+<time datetime="2010-03-25T04:09:25-07:00" pubdate data-updated="true">Mar 25<span>th</span>, 2010</time>
         
       </p>
     
@@ -163,7 +203,7 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2010-03-24T11:47:28-04:00" pubdate data-updated="true">Mar 24<span>th</span>, 2010</time>
+<time datetime="2010-03-24T08:47:28-07:00" pubdate data-updated="true">Mar 24<span>th</span>, 2010</time>
         
       </p>
     
@@ -242,7 +282,7 @@ In the longer term some fixes for madvise() should land in both runtime and comp
   
 
 
-<time datetime="2010-03-23T11:12:52-04:00" pubdate data-updated="true">Mar 23<span>rd</span>, 2010</time>
+<time datetime="2010-03-23T08:12:52-07:00" pubdate data-updated="true">Mar 23<span>rd</span>, 2010</time>
         
       </p>
     
@@ -296,7 +336,7 @@ In the longer term some fixes for madvise() should land in both runtime and comp
   
 
 
-<time datetime="2010-03-11T06:20:35-05:00" pubdate data-updated="true">Mar 11<span>th</span>, 2010</time>
+<time datetime="2010-03-11T03:20:35-08:00" pubdate data-updated="true">Mar 11<span>th</span>, 2010</time>
         
       </p>
     
@@ -375,7 +415,7 @@ Note that this is a developer blog, so by &#8220;remedies&#8221; I meant &#8220;
   
 
 
-<time datetime="2010-03-05T12:48:25-05:00" pubdate data-updated="true">Mar 5<span>th</span>, 2010</time>
+<time datetime="2010-03-05T09:48:25-08:00" pubdate data-updated="true">Mar 5<span>th</span>, 2010</time>
         
       </p>
     
@@ -434,7 +474,7 @@ Additionally, it may be possible to benefit from linking with large page support
   
 
 
-<time datetime="2010-02-26T06:02:46-05:00" pubdate data-updated="true">Feb 26<span>th</span>, 2010</time>
+<time datetime="2010-02-26T03:02:46-08:00" pubdate data-updated="true">Feb 26<span>th</span>, 2010</time>
         
       </p>
     
@@ -470,7 +510,7 @@ Additionally, it may be possible to benefit from linking with large page support
   
 
 
-<time datetime="2010-02-19T06:28:51-05:00" pubdate data-updated="true">Feb 19<span>th</span>, 2010</time>
+<time datetime="2010-02-19T03:28:51-08:00" pubdate data-updated="true">Feb 19<span>th</span>, 2010</time>
         
       </p>
     
@@ -531,7 +571,7 @@ This results in 200ms faster startup my 7200rpm laptop harddrive which is about 
   
 
 
-<time datetime="2010-02-09T09:22:40-05:00" pubdate data-updated="true">Feb 9<span>th</span>, 2010</time>
+<time datetime="2010-02-09T06:22:40-08:00" pubdate data-updated="true">Feb 9<span>th</span>, 2010</time>
         
       </p>
     
@@ -573,7 +613,7 @@ This results in 200ms faster startup my 7200rpm laptop harddrive which is about 
   
 
 
-<time datetime="2010-01-21T12:24:03-05:00" pubdate data-updated="true">Jan 21<span>st</span>, 2010</time>
+<time datetime="2010-01-21T09:24:03-08:00" pubdate data-updated="true">Jan 21<span>st</span>, 2010</time>
         
       </p>
     
@@ -621,84 +661,6 @@ A whole lot more analyses in various states of completion can be tracked in the 
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2010/01/19/chromium-vs-minefield-cold-startup-performance-comparison/">Chromium vs Minefield: Cold Startup Performance Comparison</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-01-19T12:05:28-05:00" pubdate data-updated="true">Jan 19<span>th</span>, 2010</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><strong>Hunting Down Mythical &#8220;Slowness&#8221;</strong></p>
-
-<p>I recently met a developer who used Chromium instead of Firefox. Chromium&#8217;s superior startup speed was his reason for using it.This got me excited because said developer was running Linux, so it was relatively easy to measure cold startup and get a complete <a href="http://taras.glek.net/blog/2009/10/23/studying-library-io-systemtap-style/">IO breakdown</a>.</p>
-
-<p>Turned out Firefox took roughly 23 seconds to start. After much cursing about how I&#8217;ve never seen Firefox startup this slow, I eventually gave up on figuring out what&#8217;s slowing his startup and instead we measured Chromium startup. It also turned out to also be roughly 23 seconds. The super-slow hard drive made everything slow. Turned out Chromium&#8217;s superior startup was a myth in this case.</p>
-
-<p><strong>Measuring Startup</strong></p>
-
-<p>As a result of investigating the startup myth above, my kiwi coworkers encouraged me to post a comparison of Chrome/Firefox startup. I am at <a href="http://www.lca2010.org.nz/">linuxconf</a> at the moment so I did the comparison on my laptop.</p>
-
-<p>Laptop configuration:</p>
-
-<ul>
-<li>Intel(R) Core(TM)2 Duo CPU  L9400 running at 800Mhz to amplify any performance differences.</li>
-<li>HITACHI HTS722020K9SA00 harddrive for the user profile and browser binaries</li>
-<li>OCZ Vertex 30GB SSD for system libraries/configuration.</li>
-<li>Fedora 12, Minefield 20100119 tarball, chromium-4.0.285.0-0.1.20091230svn35370.fc12.i686</li>
-<li>sudo sync &amp;&amp; sudo sysctl -w vm.drop_caches=3 &amp;&amp; sudo sysctl -w vm.drop_caches=0 to clear the disk cache inbetween runs
-What am I testing? I am measuring the time between invoking the browser until a JavaScript snippet embedded within a basic webpage is executed (ie <a href="http://blog.vlad1.com/2009/07/28/measuring-startup/">Vlad&#8217;s approach</a>, with a slightly modified <a href="http://people.mozilla.com/~tglek/startup/startup.html">startup.html</a>). The above sysctl command clears disk caches, this creates a similar situation to when one turns on the computer and it hasn&#8217;t yet loaded all of the browser libraries from disk into memory. This is a blackbox approach to measuring how long it takes from clicking on the browser icon to get an interactive browser.</li>
-</ul>
-
-
-<p>Firefox commandline: firefox -profile /mnt/startup/profile/firefox  -no-remote file://<code>pwd</code>/startup.html#<code>python -c 'import time; print int(time.time() * 1000);'</code></p>
-
-<p>Chromium commandline: chromium-browser &#8211;user-data-dir=/mnt/startup/profile/chrome  file://<code>pwd</code>/startup.html#<code>python -c 'import time; print int(time.time() * 1000);'</code></p>
-
-<p>Both of these tests are done with an empty profile that was populated and has settled after running the browser a few times.</p>
-
-<p><strong>Results</strong></p>
-
-<p>The following numbers are milliseconds reported by the startup.html above.</p>
-
-<p>Running Chromium five times: 4685, 4168, 4222, 4197, 4232</p>
-
-<p>Running Minefield five times: 3155, 3273, 3352, 3311, 3322</p>
-
-<p>I picked Minefield because that&#8217;s the browser that I run and the codebase that I focus on. The linux Chromium channel seems to be the closest parallel to Minefield. I did not test on Windows because it is a bit of a <a href="http://taras.glek.net/blog/2010/01/04/windows-7-startup-exploration/">nightmare</a> to measure cold startup there.</p>
-
-<p><strong>Conclusion</strong></p>
-
-<p>On my system Minefield is around 30% faster at starting up with  an empty profile than Chromium (the difference is amplified by running the CPU at 800Mhz). For comparison of Minefield against older Firefox versions, see <a href="http://autonome.wordpress.com/2009/11/21/firefox-startup-performance-weekly-summary-11/">Dietrich&#8217;s post</a>.</p>
-
-<p>I suspect that there is a relatively small difference between the two browsers because we are running into the fundamental limitations of loading large applications into memory (<a href="http://taras.glek.net/blog/2009/10/20/large-apps-just-have-to-start-slow/">my rant</a>).</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/16/">&larr; Older</a>
@@ -716,6 +678,10 @@ What am I testing? I am measuring the time between invoking the browser until a 
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/08/28/telemetry-reboot/">Telemetry Reboot</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/06/28/new-performance-people/">New Performance People, Telemetry News</a>
       </li>
     
@@ -729,10 +695,6 @@ What am I testing? I am measuring the time between invoking the browser until a 
     
       <li class="post">
         <a href="/blog/2013/03/26/snappy-number-54-snappy-discussion-in-paris/">Snappy #54: Snappy Discussion in Paris</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/03/25/snappy-number-53-faster-startup/">snappy #53: Faster: Startup, Image Decoding, Touchpad Input. Smoother Animations</a>
       </li>
     
   </ul>

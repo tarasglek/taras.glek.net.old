@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Fennec Beta 1 - Need for Speed - All About Performance</title>
+  <title>GCC Summit - All About Performance</title>
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="A couple of months ago Stuart casually asked me to investigate Fennec performance for moving about a page, zooming and loading pages in general. Beta &hellip;">
+  <meta name="description" content="Our presentation on Treehydra and Dehydra GCC plugins was received well at the summit. The big news is that FSF is working on license changes to &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://taras.glek.net/blog/2009/03/18/fennec-beta-1-need-for-speed/">
+  <link rel="canonical" href="http://taras.glek.net/blog/2008/06/18/gcc-summit/">
   <link href="/favicon.png" rel="icon">
   <style>
 <!-- <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">-->
@@ -92,7 +92,7 @@ if (requestAnimationFrame)
   
   <header>
     
-      <h1 class="entry-title">Fennec Beta 1 - Need for Speed</h1>
+      <h1 class="entry-title">GCC Summit</h1>
     
     
       <p class="meta">
@@ -108,31 +108,18 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2009-03-18T02:52:42-04:00" pubdate data-updated="true">Mar 18<span>th</span>, 2009</time>
+<time datetime="2008-06-18T23:01:08-07:00" pubdate data-updated="true">Jun 18<span>th</span>, 2008</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>A couple of months ago Stuart casually asked me to investigate Fennec performance for moving about a page, zooming and loading pages in general. Beta 1 contains the result of that:</p>
+<div class="entry-content"><p>Our presentation on <a href="http://developer.mozilla.org/en/docs/Treehydra">Treehydra</a> and <a href="http://developer.mozilla.org/en/docs/Dehydra">Dehydra</a> GCC plugins was received well at the summit.</p>
 
-<ul>
-<li>There is little to no hardware graphics acceleration on mobile arm device. That combined with low memory bandwidth results in painfully slow screen updates (10x slower than crappy gfx on the desktop?). The painting engine now works hard to skip redundant draws of the page.</li>
-<li>During loading pages or zooming Fennec now only draws the minimum required. In my testing complicated pages load 2-5 times faster. Zooming is now 5 times faster.</li>
-<li>There is less DOM querying now. Things like checking an element&#8217;s size can cause pages to reflow resulting in a less responsive UI</li>
-</ul>
+<p>The big news is that FSF is working on license changes to allow GPL-only GCC plugins. I&#8217;m looking forward to having our work be compatible with future GCC without any patching.</p>
 
-
-<p>Other performance highlights:</p>
-
-<ul>
-<li>Fennec now features a redesigned firstrun page which not only looks better, but also contributed to a 0.5second startup speedup. Overall Beta 1 should startup is almost a second quicker than the previous release</li>
-<li>The JavaScript JIT is now on by default providing a noticeable performance boost throughout Fennec.</li>
-</ul>
-
-
-<p>For more info on Fennec Beta 1 and where to get it see <a href="http://blog.pavlov.net/2009/03/17/fennec-1-beta-1/">Stuart&#8217;s blog</a>.</p>
+<p>In a few minutes we&#8217;ll be having a meeting with users of other plugin frameworks to have an initial discussion on a common API. I&#8217;m working on forward porting my patches, so they can start getting reviewed ahead of license changes.</p>
 </div>
 
 
@@ -155,12 +142,12 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2009-03-18T02:52:42-04:00" pubdate data-updated="true">Mar 18<span>th</span>, 2009</time>
+<time datetime="2008-06-18T23:01:08-07:00" pubdate data-updated="true">Jun 18<span>th</span>, 2008</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/mozilla/'>mozilla</a>
+    <a class='category' href='/blog/categories/dehydra/'>dehydra</a>, <a class='category' href='/blog/categories/mozilla/'>mozilla</a>, <a class='category' href='/blog/categories/treehydra/'>treehydra</a>
   
 </span>
 
@@ -169,7 +156,7 @@ if (requestAnimationFrame)
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://taras.glek.net/blog/2009/03/18/fennec-beta-1-need-for-speed/" data-via="tarasglek" data-counturl="http://taras.glek.net/blog/2009/03/18/fennec-beta-1-need-for-speed/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://taras.glek.net/blog/2008/06/18/gcc-summit/" data-via="tarasglek" data-counturl="http://taras.glek.net/blog/2008/06/18/gcc-summit/" >Tweet</a>
   
   
   
@@ -178,10 +165,10 @@ if (requestAnimationFrame)
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2009/02/19/quickfix-model-of-develoment/" title="Previous Post: Quickfix Model of Develoment">&laquo; Quickfix Model of Develoment</a>
+        <a class="basic-alignment left" href="/blog/2008/06/09/dehydra-09-its-alive/" title="Previous Post: Dehydra 0.9: It's alive!">&laquo; Dehydra 0.9: It's alive!</a>
       
       
-        <a class="basic-alignment right" href="/blog/2009/03/31/nsresult-analysis/" title="Next Post: nsresult analysis">nsresult analysis &raquo;</a>
+        <a class="basic-alignment right" href="/blog/2008/06/24/status-report-nearterm-plans-for-pork-dehydra/" title="Next Post: Status Report: Nearterm plans for Pork, Dehydra">Status Report: Nearterm plans for Pork, Dehydra &raquo;</a>
       
     </p>
   </footer>
@@ -202,6 +189,10 @@ if (requestAnimationFrame)
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/08/28/telemetry-reboot/">Telemetry Reboot</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/06/28/new-performance-people/">New Performance People, Telemetry News</a>
       </li>
     
@@ -215,10 +206,6 @@ if (requestAnimationFrame)
     
       <li class="post">
         <a href="/blog/2013/03/26/snappy-number-54-snappy-discussion-in-paris/">Snappy #54: Snappy Discussion in Paris</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/03/25/snappy-number-53-faster-startup/">snappy #53: Faster: Startup, Image Decoding, Touchpad Input. Smoother Animations</a>
       </li>
     
   </ul>
@@ -276,8 +263,8 @@ window._monitorContentLoaded = Date.now()
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://taras.glek.net/blog/2009/03/18/fennec-beta-1-need-for-speed/';
-        var disqus_url = 'http://taras.glek.net/blog/2009/03/18/fennec-beta-1-need-for-speed/';
+        var disqus_identifier = 'http://taras.glek.net/blog/2008/06/18/gcc-summit/';
+        var disqus_url = 'http://taras.glek.net/blog/2008/06/18/gcc-summit/';
         var disqus_script = 'embed.js';
       
     (function () {

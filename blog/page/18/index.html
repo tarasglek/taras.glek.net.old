@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Are you are a developer who has been frustrated by the pathetic state of the art in code search engines and code browsing experience on the web? Have &hellip;">
+  <meta name="description" content="Python GDB Rocks! I wanted a non-painful way to figure out what&#8217;s causing bonus file IO. I&#8217;ve noticed that gtk likes to open files, but I &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -95,6 +95,87 @@ if (requestAnimationFrame)
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2009/07/01/python-gdb-logging-file-io/">Python GDB - Logging File IO</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-07-01T08:05:42-07:00" pubdate data-updated="true">Jul 1<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><strong>Python GDB Rocks!</strong></p>
+
+<p>I wanted a non-painful way to figure out what&#8217;s causing bonus file IO. I&#8217;ve noticed that gtk likes to open files, but I didn&#8217;t have the exact details. So I grabbed <a href="http://sourceware.org/gdb/wiki/PythonGdb">python gdb</a>, and with some tips on syscalls from gdb old-timers managed to produce a <a href="http://people.mozilla.com/~tglek/fennec/files.txt">report</a> to assign blame for open()ing files to relevant Mozilla functions.</p>
+
+<p>Other than the gdb-hating syscalls issue, achieving this was simple</p>
+
+<ol>
+<li>Compile python-enabled gdb(Next set of distribution releases should have it..I hope)</li>
+<li>Define a new gdb command in a python file. I called mine &#8220;taras&#8221; for lack of a better name.</li>
+<li>Set a breakpoint, attach your command to it. :</li>
+</ol>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>break open  
+</span><span class='line'>
+</span><span class='line'>source -p /path/to/your/script.py  
+</span><span class='line'>
+</span><span class='line'>command 1  
+</span><span class='line'>
+</span><span class='line'>taras  
+</span><span class='line'>
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+
+<ol>
+<li>Have the script walk the backtrace to figure out the filename and the last Mozilla function. Log the info, issue gdb continue command.</li>
+<li>Print out a report and profit:</li>
+</ol>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>python report()</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Here is my <a href="http://people.mozilla.com/~tglek/gdblog.py">script</a>. The only nasty part here is that I had to read the filename out of a register (i&#8217;m on amd64, on 32 it&#8217;d be $esi instead of $rdi) because gdb doesn&#8217;t deal well with system calls.</p>
+
+<p>I&#8217;ve never throught it would be this fun to use gdb. I always thought debuggers should be scriptable, thanks to <a href="http://tromey.com/blog/">Tom Tromey</a> (lots of gdb tutorials on Tom&#8217;s blog) and any others who finally made this a reality.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2009/06/29/dxr-the-most-impressive-code-navigation-tool-ever/">DXR: The Most Impressive Code Navigation Tool Ever</a></h1>
     
     
@@ -111,7 +192,7 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2009-06-29T05:19:16-04:00" pubdate data-updated="true">Jun 29<span>th</span>, 2009</time>
+<time datetime="2009-06-29T02:19:16-07:00" pubdate data-updated="true">Jun 29<span>th</span>, 2009</time>
         
       </p>
     
@@ -162,7 +243,7 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2009-06-26T10:31:36-04:00" pubdate data-updated="true">Jun 26<span>th</span>, 2009</time>
+<time datetime="2009-06-26T07:31:36-07:00" pubdate data-updated="true">Jun 26<span>th</span>, 2009</time>
         
       </p>
     
@@ -220,7 +301,7 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2009-06-25T11:32:57-04:00" pubdate data-updated="true">Jun 25<span>th</span>, 2009</time>
+<time datetime="2009-06-25T08:32:57-07:00" pubdate data-updated="true">Jun 25<span>th</span>, 2009</time>
         
       </p>
     
@@ -271,7 +352,7 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2009-06-17T07:22:53-04:00" pubdate data-updated="true">Jun 17<span>th</span>, 2009</time>
+<time datetime="2009-06-17T04:22:53-07:00" pubdate data-updated="true">Jun 17<span>th</span>, 2009</time>
         
       </p>
     
@@ -324,7 +405,7 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2009-05-14T17:06:59-04:00" pubdate data-updated="true">May 14<span>th</span>, 2009</time>
+<time datetime="2009-05-14T14:06:59-07:00" pubdate data-updated="true">May 14<span>th</span>, 2009</time>
         
       </p>
     
@@ -374,7 +455,7 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2009-05-11T06:55:14-04:00" pubdate data-updated="true">May 11<span>th</span>, 2009</time>
+<time datetime="2009-05-11T03:55:14-07:00" pubdate data-updated="true">May 11<span>th</span>, 2009</time>
         
       </p>
     
@@ -414,7 +495,7 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2009-04-30T09:51:35-04:00" pubdate data-updated="true">Apr 30<span>th</span>, 2009</time>
+<time datetime="2009-04-30T06:51:35-07:00" pubdate data-updated="true">Apr 30<span>th</span>, 2009</time>
         
       </p>
     
@@ -464,7 +545,7 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2009-04-23T06:19:14-04:00" pubdate data-updated="true">Apr 23<span>rd</span>, 2009</time>
+<time datetime="2009-04-23T03:19:14-07:00" pubdate data-updated="true">Apr 23<span>rd</span>, 2009</time>
         
       </p>
     
@@ -516,7 +597,7 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2009-04-15T09:37:23-04:00" pubdate data-updated="true">Apr 15<span>th</span>, 2009</time>
+<time datetime="2009-04-15T06:37:23-07:00" pubdate data-updated="true">Apr 15<span>th</span>, 2009</time>
         
       </p>
     
@@ -541,57 +622,6 @@ if (requestAnimationFrame)
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/03/31/nsresult-analysis/">Nsresult Analysis</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-03-31T10:16:18-04:00" pubdate data-updated="true">Mar 31<span>st</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>After I wrote <a href="http://taras.glek.net/blog/2008/11/07/enabling-prcheck-email-notifications/">prcheck</a>, I was surprised by the errors it found. I expected to find lots of cases of prbool variables having integers assigned into them. Indeed there were some of those, but the most frequent offenders were things like</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>
-</span><span class='line'>NS_ENSURE_SUCCESS(rv,rv);
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>in methods with a PRBool return value. In this case (and many similar  return values within macros) the function will likely do the opposite of what was intended if there is an error condition. Here is a less hypothetical <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=483589">example</a> in bugzilla.</p>
-
-<p>So I&#8217;m thinking that instead of porting the prbool analysis to <a href="https://developer.mozilla.org/en/Treehydra">Treehydra</a> (such that it&#8217;d based on a less buggy <a href="https://developer.mozilla.org/En/Pork">backend</a> and can be integrated into the build) it might be more interesting to ensure that nsresults do not mix with other integer types. That would catch all of the worst prbool offenders and possibly other nsresult misfortunes.</p>
-
-<p><em>Has anyone run into bugs like this that do not involve prbools?</em></p>
-
-<p>I suppose a general solution would be to define a lattice of typedefs with rules specifying which typedefs can be assigned to each other. This would make GCC distinguish certain typedefs as discrete and incompatible types. Thoughts?</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/19/">&larr; Older</a>
@@ -609,6 +639,10 @@ if (requestAnimationFrame)
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/08/28/telemetry-reboot/">Telemetry Reboot</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/06/28/new-performance-people/">New Performance People, Telemetry News</a>
       </li>
     
@@ -622,10 +656,6 @@ if (requestAnimationFrame)
     
       <li class="post">
         <a href="/blog/2013/03/26/snappy-number-54-snappy-discussion-in-paris/">Snappy #54: Snappy Discussion in Paris</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/03/25/snappy-number-53-faster-startup/">snappy #53: Faster: Startup, Image Decoding, Touchpad Input. Smoother Animations</a>
       </li>
     
   </ul>

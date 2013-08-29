@@ -9,7 +9,8 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Recently the addon team started working towards penalizing addons that penalize our startup. We have solid data shows that startup gets worse as more &hellip;">
+  <meta name="description" content="Until recently our state of the art method for measuring startup was to subtract a timestamp passed via commandline from a 1
+new Date() timestamp &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -95,6 +96,65 @@ if (requestAnimationFrame)
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2011/04/26/measuring-startup-speed-correctly/">Measuring Startup Speed Correctly</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-04-26T07:34:02-07:00" pubdate data-updated="true">Apr 26<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Until recently our state of the art method for measuring startup was to subtract a timestamp passed via commandline from a</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>new Date()</span></code></pre></td></tr></table></div></figure>
+
+
+<p>timestamp within a</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;script&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>tag. Vlad <a href="http://blog.vlad1.com/2009/07/28/measuring-startup/">pioneered</a> this approach, <a href="http://taras.glek.net/blog/2010/01/19/chromium-vs-minefield-cold-startup-performance-comparison/">me</a> and others adopted it.</p>
+
+<p>Turns out there are two problems with this approach:</p>
+
+<ol>
+<li>It is cumbersome, especially on Windows where there is no easy way to pass a timestamp via the commandline.</li>
+<li>It is wrong. Turns out that Firefox starts loading web pages before the UI is shown. One can&#8217;t be sure that the page being loaded is within a visible browser
+Our oldest startup benchmark, ts,  has been gathering wrong numbers all along.  This resulted in a class of perverse optimizations that decreased the ts number, but increased the time taken for UI to appear (ie <a href="http://bugzil.la/641691">bug 641691</a>). The new <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=612190">tpaint (bug 612190)</a> benchmark should should address this. On my machine measuring pageload vs paint-time results in a 50-100ms difference. See the <a href="http://graphs.allizom.org/graph.html#tests=[[83,1,1],[83,1,17],[83,1,12],[83,1,13],[83,1,14],[16,1,12]]&amp;sel=none&amp;displayrange=7&amp;datatype=running">graph server</a> for more data.</li>
+</ol>
+
+
+<p>This is why AMO&#8217;s <a href="http://xulforge.com/blog/2011/04/testing-add-on-startup-performance/">complicated method</a> of measuring startup is wrong. Please use our shiny new <a href="https://wiki.mozilla.org/Firefox/Projects/StartupPerformance/MeasuringStartup">about:startup</a> extension or if you absolutely want to avoid adding any overhead use <a href="https://developer.mozilla.org/en/XPCOM_Interface_Reference/nsIAppStartup_MOZILLA_2_0#getStartupInfo%28%29">getStartupInfo</a> API directly.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2011/04/14/arguing-about-startup-communicating-performance/">Arguing About Startup: Communicating Performance</a></h1>
     
     
@@ -111,7 +171,7 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2011-04-14T07:15:46-04:00" pubdate data-updated="true">Apr 14<span>th</span>, 2011</time>
+<time datetime="2011-04-14T04:15:46-07:00" pubdate data-updated="true">Apr 14<span>th</span>, 2011</time>
         
       </p>
     
@@ -161,7 +221,7 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2011-03-10T11:24:13-05:00" pubdate data-updated="true">Mar 10<span>th</span>, 2011</time>
+<time datetime="2011-03-10T08:24:13-08:00" pubdate data-updated="true">Mar 10<span>th</span>, 2011</time>
         
       </p>
     
@@ -201,7 +261,7 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2011-03-05T14:24:00-05:00" pubdate data-updated="true">Mar 5<span>th</span>, 2011</time>
+<time datetime="2011-03-05T11:24:00-08:00" pubdate data-updated="true">Mar 5<span>th</span>, 2011</time>
         
       </p>
     
@@ -235,7 +295,7 @@ Dude. You suffered and you suffered? No you didn&#39;t. Side pulls work pretty d
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2011/02/20/phone-mount-that-doesnt-suck/">Phone Mount That Doesn&#8217;t Suck</a></h1>
+      <h1 class="entry-title"><a href="/blog/2011/02/19/phone-mount-that-doesnt-suck/">Phone Mount That Doesn&#8217;t Suck</a></h1>
     
     
       <p class="meta">
@@ -251,7 +311,7 @@ Dude. You suffered and you suffered? No you didn&#39;t. Side pulls work pretty d
   
 
 
-<time datetime="2011-02-20T01:22:00-05:00" pubdate data-updated="true">Feb 20<span>th</span>, 2011</time>
+<time datetime="2011-02-19T22:22:00-08:00" pubdate data-updated="true">Feb 19<span>th</span>, 2011</time>
         
       </p>
     
@@ -288,7 +348,7 @@ This has been on a long quest, but I finally have my phone mounted on my bike th
   
 
 
-<time datetime="2011-02-09T11:38:38-05:00" pubdate data-updated="true">Feb 9<span>th</span>, 2011</time>
+<time datetime="2011-02-09T08:38:38-08:00" pubdate data-updated="true">Feb 9<span>th</span>, 2011</time>
         
       </p>
     
@@ -330,7 +390,7 @@ This has been on a long quest, but I finally have my phone mounted on my bike th
   
 
 
-<time datetime="2011-01-14T08:25:20-05:00" pubdate data-updated="true">Jan 14<span>th</span>, 2011</time>
+<time datetime="2011-01-14T05:25:20-08:00" pubdate data-updated="true">Jan 14<span>th</span>, 2011</time>
         
       </p>
     
@@ -414,7 +474,7 @@ Lots of people helped in getting this feature landed, but two people stand out. 
   
 
 
-<time datetime="2010-12-29T12:08:47-05:00" pubdate data-updated="true">Dec 29<span>th</span>, 2010</time>
+<time datetime="2010-12-29T09:08:47-08:00" pubdate data-updated="true">Dec 29<span>th</span>, 2010</time>
         
       </p>
     
@@ -474,7 +534,7 @@ This was a rare fix that resulted in seconds saved on crapware-loaded computers.
   
 
 
-<time datetime="2010-12-21T08:33:14-05:00" pubdate data-updated="true">Dec 21<span>st</span>, 2010</time>
+<time datetime="2010-12-21T05:33:14-08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2010</time>
         
       </p>
     
@@ -518,7 +578,7 @@ This was a rare fix that resulted in seconds saved on crapware-loaded computers.
   
 
 
-<time datetime="2010-11-30T06:14:20-05:00" pubdate data-updated="true">Nov 30<span>th</span>, 2010</time>
+<time datetime="2010-11-30T03:14:20-08:00" pubdate data-updated="true">Nov 30<span>th</span>, 2010</time>
         
       </p>
     
@@ -543,44 +603,6 @@ This was a rare fix that resulted in seconds saved on crapware-loaded computers.
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2010/11/23/of-linkers-and-avoiding-suck/">Of Linkers and Avoiding Suck</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-11-23T05:41:47-05:00" pubdate data-updated="true">Nov 23<span>rd</span>, 2010</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>There is a common fallacy that since linkers and compilers are written by really smart people, there aren&#8217;t any huge performance wins left in the toolchain. My theory is that the efficiency of any given codebase varies inversely with the number of people who tried to optimize it.</p>
-
-<p>I have long complained of suboptimal binaries generated from our code. Modern profiling tools such as <a href="http://taras.glek.net/blog/2009/10/23/studying-library-io-systemtap-style/">systemtap</a> and <a href="http://taras.glek.net/blog/2010/04/07/icegrind-valgrind-plugin-for-optimizing-cold-startup/">icegrind</a> made this painfully obvious. Mike Hommey opted for actually doing something about it. What started as a simple ld.so hack grew into a<a href="http://glandium.org/blog/?p=1177"> badass binary-rewriting tool</a> (and the most interesting blog post I&#8217;ve read this year).</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/13/">&larr; Older</a>
@@ -598,6 +620,10 @@ This was a rare fix that resulted in seconds saved on crapware-loaded computers.
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/08/28/telemetry-reboot/">Telemetry Reboot</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/06/28/new-performance-people/">New Performance People, Telemetry News</a>
       </li>
     
@@ -611,10 +637,6 @@ This was a rare fix that resulted in seconds saved on crapware-loaded computers.
     
       <li class="post">
         <a href="/blog/2013/03/26/snappy-number-54-snappy-discussion-in-paris/">Snappy #54: Snappy Discussion in Paris</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/03/25/snappy-number-53-faster-startup/">snappy #53: Faster: Startup, Image Decoding, Touchpad Input. Smoother Animations</a>
       </li>
     
   </ul>

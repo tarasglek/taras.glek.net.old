@@ -4,7 +4,7 @@
   <title><![CDATA[Category: pork | All About Performance]]></title>
   <link href="http://taras.glek.net/blog/categories/pork/atom.xml" rel="self"/>
   <link href="http://taras.glek.net/"/>
-  <updated>2013-06-29T12:44:53-04:00</updated>
+  <updated>2013-08-29T15:57:21-07:00</updated>
   <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[This Month In Static Analysis]]></title>
     <link href="http://taras.glek.net/blog/2009/08/03/this-month-in-static-analysis/"/>
-    <updated>2009-08-03T17:19:55-04:00</updated>
+    <updated>2009-08-03T14:19:55-07:00</updated>
     <id>http://taras.glek.net/blog/2009/08/03/this-month-in-static-analysis</id>
     <content type="html"><![CDATA[Lately I have been focusing on optimizing Fennec startup on a delightfully inadequate platform: Windows Mobile. More on fascinating startup, performance problems and solutions later. As a result I have been doing relatively little static analysis stuff.  
   
@@ -41,7 +41,7 @@ So while various Mozillians were pondering how awesome it would be to do inter-f
   <entry>
     <title type="html"><![CDATA[Dehydra & Pork Sources Moved]]></title>
     <link href="http://taras.glek.net/blog/2009/06/25/dehydra-pork-sources-moved/"/>
-    <updated>2009-06-25T11:32:57-04:00</updated>
+    <updated>2009-06-25T08:32:57-07:00</updated>
     <id>http://taras.glek.net/blog/2009/06/25/dehydra-pork-sources-moved</id>
     <content type="html"><![CDATA[I moved dehydra to a more official location, please update your scripts and hg settings. New dehydra url: http://hg.mozilla.org/rewriting-and-analysis/dehydra/  
   
@@ -61,7 +61,7 @@ hg clone http://hg.mozilla.org/rewriting-and-analysis/elsa pork/elsa
   <entry>
     <title type="html"><![CDATA[Semantic Rewriting of Code with Pork - A bitter recap]]></title>
     <link href="http://taras.glek.net/blog/2009/01/28/semantic-rewriting-of-code-with-pork-a-bitter-recap/"/>
-    <updated>2009-01-28T19:17:47-05:00</updated>
+    <updated>2009-01-28T16:17:47-08:00</updated>
     <id>http://taras.glek.net/blog/2009/01/28/semantic-rewriting-of-code-with-pork-a-bitter-recap</id>
     <content type="html"><![CDATA[LWN [published](http://lwn.net/Articles/315686/) an article about a tool that does refactoring of C code. Guess what, it's yet another tool on top of a crappy C-parser that will never grok C well or even hope to support C++. To my great disappointment the author was not aware of my work on Pork. Clearly I have failed in letting people know that complex C and C++ can be refactored with (somewhat raw, but powerful) open source tools.  
   
@@ -87,7 +87,7 @@ I find it depressing that the comments to the LWN article ended up being about l
   <entry>
     <title type="html"><![CDATA[Converging Elsa Strains]]></title>
     <link href="http://taras.glek.net/blog/2008/09/02/converging-elsa-strains/"/>
-    <updated>2008-09-02T04:39:45-04:00</updated>
+    <updated>2008-09-02T01:39:45-07:00</updated>
     <id>http://taras.glek.net/blog/2008/09/02/converging-elsa-strains</id>
     <content type="html"><![CDATA[One of the purposes of this blog is to inform people that while the original [Elsa author](http://www.cs.berkeley.edu/~smcpeak/elkhound/) is no longer actively developing it, Elsa is being used in production at Mozilla and is actively maintained within [Pork](http://developer.mozilla.org/en/docs/Pork).  
   
@@ -106,7 +106,7 @@ I love open source.
   <entry>
     <title type="html"><![CDATA[Meanwhile in a parallel universe]]></title>
     <link href="http://taras.glek.net/blog/2008/08/14/meanwhile-in-a-parallel-universe/"/>
-    <updated>2008-08-14T04:48:04-04:00</updated>
+    <updated>2008-08-14T01:48:04-07:00</updated>
     <id>http://taras.glek.net/blog/2008/08/14/meanwhile-in-a-parallel-universe</id>
     <content type="html"><![CDATA[Someone else is developing their own app-specific rewrite tools. In this case app-specific refers to [automating porting code](http://people.imendio.com/richard/gtk-rewriter/) from gtk2 to gtk3. The approach is similar in that patches are produced, but it doesn't look like a patch aggregating tool is written yet. Instead of the elsa/mcpp magic sauce, [clang](http://clang.llvm.org/) is being used, so this is limited to C at the moment.  
   

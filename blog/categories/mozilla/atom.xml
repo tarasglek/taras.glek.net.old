@@ -4,7 +4,7 @@
   <title><![CDATA[Category: mozilla | All About Performance]]></title>
   <link href="http://taras.glek.net/blog/categories/mozilla/atom.xml" rel="self"/>
   <link href="http://taras.glek.net/"/>
-  <updated>2013-06-29T12:44:53-04:00</updated>
+  <updated>2013-08-29T15:57:21-07:00</updated>
   <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[New Performance People, Telemetry News]]></title>
     <link href="http://taras.glek.net/blog/2013/06/28/new-performance-people/"/>
-    <updated>2013-06-28T16:52:00-04:00</updated>
+    <updated>2013-06-28T16:52:00-07:00</updated>
     <id>http://taras.glek.net/blog/2013/06/28/new-performance-people</id>
     <content type="html"><![CDATA[reddit/[MozillaTech](http://www.reddit.com/r/MozillaTech/)
 --------------------------------
@@ -44,7 +44,7 @@ This was a cool investigation because it highlighted how much more confidence we
   <entry>
     <title type="html"><![CDATA[Mozilla Tech on Reddit]]></title>
     <link href="http://taras.glek.net/blog/2013/04/05/mozilla-tech-on-reddit/"/>
-    <updated>2013-04-05T20:02:00-04:00</updated>
+    <updated>2013-04-05T20:02:00-07:00</updated>
     <id>http://taras.glek.net/blog/2013/04/05/mozilla-tech-on-reddit</id>
     <content type="html"><![CDATA[I posted earlier about [planet mozilla being obsolete](/blog/2013/02/15/is-planet-mozilla-obsolete/). To move forward, we need to experiment with some alternatives. Mozilla contributor, [@djco](https://twitter.com/djco), setup a [reddit feed](http://www.reddit.com/r/MozillaTech/) so we can up-vote technical content and down-vote the rest.
 
@@ -59,7 +59,7 @@ Please try out the [reddit feed](http://www.reddit.com/r/MozillaTech/) and let [
   <entry>
     <title type="html"><![CDATA[Snappy #55: Snappy Evolution]]></title>
     <link href="http://taras.glek.net/blog/2013/03/27/snappy-number-55-snappy-evolution/"/>
-    <updated>2013-03-27T03:56:00-04:00</updated>
+    <updated>2013-03-27T03:56:00-07:00</updated>
     <id>http://taras.glek.net/blog/2013/03/27/snappy-number-55-snappy-evolution</id>
     <content type="html"><![CDATA[The Snappy name will be retired in favor of Performance: we will be expanding our meta scope beyond desktop Firefox responsiveness.
 
@@ -92,7 +92,7 @@ The progress tracking technique the Snappy team settled on last week was a combi
   <entry>
     <title type="html"><![CDATA[Snappy #54: Snappy Discussion in Paris]]></title>
     <link href="http://taras.glek.net/blog/2013/03/26/snappy-number-54-snappy-discussion-in-paris/"/>
-    <updated>2013-03-26T04:16:00-04:00</updated>
+    <updated>2013-03-26T04:16:00-07:00</updated>
     <id>http://taras.glek.net/blog/2013/03/26/snappy-number-54-snappy-discussion-in-paris</id>
     <content type="html"><![CDATA[###Meeting In Paris
 Last week Snappy people met in Paris at [IRILL](http://www.irill.org/about). I like small venues because they encourage conversations. IRILL is one of the best small work venues I've attended.
@@ -135,7 +135,7 @@ For a team activity we walked to the [Paris Catacombes](http://en.wikipedia.org/
   <entry>
     <title type="html"><![CDATA[snappy #53: Faster: Startup, Image Decoding, Touchpad Input. Smoother Animations]]></title>
     <link href="http://taras.glek.net/blog/2013/03/25/snappy-number-53-faster-startup/"/>
-    <updated>2013-03-25T06:25:00-04:00</updated>
+    <updated>2013-03-25T06:25:00-07:00</updated>
     <id>http://taras.glek.net/blog/2013/03/25/snappy-number-53-faster-startup</id>
     <content type="html"><![CDATA[### Responsiveness
 

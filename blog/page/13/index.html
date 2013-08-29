@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Fragmentation: SQLite &amp; Friends I am happy to report that the SQLite fragmentation problem is now solved. I copied my profile a month ago, and my &hellip;">
+  <meta name="description" content="There is a common fallacy that since linkers and compilers are written by really smart people, there aren&#8217;t any huge performance wins left in &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -95,6 +95,44 @@ if (requestAnimationFrame)
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2010/11/23/of-linkers-and-avoiding-suck/">Of Linkers and Avoiding Suck</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-11-23T02:41:47-08:00" pubdate data-updated="true">Nov 23<span>rd</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>There is a common fallacy that since linkers and compilers are written by really smart people, there aren&#8217;t any huge performance wins left in the toolchain. My theory is that the efficiency of any given codebase varies inversely with the number of people who tried to optimize it.</p>
+
+<p>I have long complained of suboptimal binaries generated from our code. Modern profiling tools such as <a href="http://taras.glek.net/blog/2009/10/23/studying-library-io-systemtap-style/">systemtap</a> and <a href="http://taras.glek.net/blog/2010/04/07/icegrind-valgrind-plugin-for-optimizing-cold-startup/">icegrind</a> made this painfully obvious. Mike Hommey opted for actually doing something about it. What started as a simple ld.so hack grew into a<a href="http://glandium.org/blog/?p=1177"> badass binary-rewriting tool</a> (and the most interesting blog post I&#8217;ve read this year).</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2010/11/16/performance-progress/">Performance Update. Fragmentation: Mostly Fixed. GCC: Work-in-progress.</a></h1>
     
     
@@ -111,7 +149,7 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2010-11-16T10:14:02-05:00" pubdate data-updated="true">Nov 16<span>th</span>, 2010</time>
+<time datetime="2010-11-16T07:14:02-08:00" pubdate data-updated="true">Nov 16<span>th</span>, 2010</time>
         
       </p>
     
@@ -161,7 +199,7 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2010-10-04T13:30:56-04:00" pubdate data-updated="true">Oct 4<span>th</span>, 2010</time>
+<time datetime="2010-10-04T10:30:56-07:00" pubdate data-updated="true">Oct 4<span>th</span>, 2010</time>
         
       </p>
     
@@ -228,7 +266,7 @@ Click on &#8220;IO Counts&#8221; or &#8220;Hard faults&#8221; graph, select &#82
   
 
 
-<time datetime="2010-09-14T06:32:35-04:00" pubdate data-updated="true">Sep 14<span>th</span>, 2010</time>
+<time datetime="2010-09-14T03:32:35-07:00" pubdate data-updated="true">Sep 14<span>th</span>, 2010</time>
         
       </p>
     
@@ -300,7 +338,7 @@ Click on &#8220;IO Counts&#8221; or &#8220;Hard faults&#8221; graph, select &#82
   
 
 
-<time datetime="2010-09-09T10:06:11-04:00" pubdate data-updated="true">Sep 9<span>th</span>, 2010</time>
+<time datetime="2010-09-09T07:06:11-07:00" pubdate data-updated="true">Sep 9<span>th</span>, 2010</time>
         
       </p>
     
@@ -340,7 +378,7 @@ Click on &#8220;IO Counts&#8221; or &#8220;Hard faults&#8221; graph, select &#82
   
 
 
-<time datetime="2010-09-07T05:57:56-04:00" pubdate data-updated="true">Sep 7<span>th</span>, 2010</time>
+<time datetime="2010-09-07T02:57:56-07:00" pubdate data-updated="true">Sep 7<span>th</span>, 2010</time>
         
       </p>
     
@@ -402,7 +440,7 @@ To summarize: there are a lot of misleading stories floating around. I am always
   
 
 
-<time datetime="2010-08-15T13:17:00-04:00" pubdate data-updated="true">Aug 15<span>th</span>, 2010</time>
+<time datetime="2010-08-15T10:17:00-07:00" pubdate data-updated="true">Aug 15<span>th</span>, 2010</time>
         
       </p>
     
@@ -423,7 +461,7 @@ Turned on USB debugging, plugged phone into laptop, told NetworkManager to conne
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2010/08/11/androidsamsung/">Android/Samsung</a></h1>
+      <h1 class="entry-title"><a href="/blog/2010/08/10/androidsamsung/">Android/Samsung</a></h1>
     
     
       <p class="meta">
@@ -439,7 +477,7 @@ Turned on USB debugging, plugged phone into laptop, told NetworkManager to conne
   
 
 
-<time datetime="2010-08-11T01:08:00-04:00" pubdate data-updated="true">Aug 11<span>th</span>, 2010</time>
+<time datetime="2010-08-10T22:08:00-07:00" pubdate data-updated="true">Aug 10<span>th</span>, 2010</time>
         
       </p>
     
@@ -476,7 +514,7 @@ Turned on USB debugging, plugged phone into laptop, told NetworkManager to conne
   
 
 
-<time datetime="2010-07-30T08:56:17-04:00" pubdate data-updated="true">Jul 30<span>th</span>, 2010</time>
+<time datetime="2010-07-30T05:56:17-07:00" pubdate data-updated="true">Jul 30<span>th</span>, 2010</time>
         
       </p>
     
@@ -531,7 +569,7 @@ Turned on USB debugging, plugged phone into laptop, told NetworkManager to conne
   
 
 
-<time datetime="2010-07-22T10:55:44-04:00" pubdate data-updated="true">Jul 22<span>nd</span>, 2010</time>
+<time datetime="2010-07-22T07:55:44-07:00" pubdate data-updated="true">Jul 22<span>nd</span>, 2010</time>
         
       </p>
     
@@ -619,52 +657,6 @@ Turned on USB debugging, plugged phone into laptop, told NetworkManager to conne
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2010/07/14/my-startup-summary/">My Startup Summary</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-07-14T07:27:13-04:00" pubdate data-updated="true">Jul 14<span>th</span>, 2010</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I try to blog about interesting things I encounter while solving various issues in Mozilla. Some things are less bloggable than others. If this blog don&#8217;t fulfill your startup + static analysis needs you can follow my <a href="http://benjamin.smedbergs.us/weekly-updates.fcgi/user/tarasglek/posts">status</a> updates and <a href="http://twitter.com/crazyhackerdude">twitter</a>. For now here is a summary of various half-baked/inprogress work:</p>
-
-<ul>
-<li>I worked on <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=559964">upgrading</a> to GCC 4.5 which turned out to be a performance regression. While tracking down a workaround, I got into helping GCC guys help us by fixing gcc trunk&#8217;s LTO to work on Mozilla.</li>
-<li>I am also determined to see Firefox come out with a <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=561842">fat</a> libxul and not link to <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=577522">useless</a> to us libraries by default.</li>
-<li>I spent a lot of time figuring out why our sqlite io <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=572459">hurting</a>, ended up bumping block size to 32K. I am really hoping that Marco can <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=541373">deliver</a> VACUUM for all of the Firefox databases in time for Firefox 4.</li>
-<li>I refactored most of icegrind so in addition optimizing startup, it can also facilitate investigative work like <a href="http://glandium.org/blog/?p=1016">Mike Hommey </a>is doing.</li>
-<li>Posted a <a href="http://groups.google.com/group/mozilla.dev.platform/browse_thread/thread/abf60ad5fd03a708?pli=1">summary</a> on the evils of static initializers. Came across a Chrome <a href="http://comments.gmane.org/gmane.comp.web.chromium.devel/16789">equivalent</a> today.
-I plan to blog more on each of these subjects as they get closer to realization.</li>
-</ul>
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/14/">&larr; Older</a>
@@ -682,6 +674,10 @@ I plan to blog more on each of these subjects as they get closer to realization.
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/08/28/telemetry-reboot/">Telemetry Reboot</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/06/28/new-performance-people/">New Performance People, Telemetry News</a>
       </li>
     
@@ -695,10 +691,6 @@ I plan to blog more on each of these subjects as they get closer to realization.
     
       <li class="post">
         <a href="/blog/2013/03/26/snappy-number-54-snappy-discussion-in-paris/">Snappy #54: Snappy Discussion in Paris</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/03/25/snappy-number-53-faster-startup/">snappy #53: Faster: Startup, Image Decoding, Touchpad Input. Smoother Animations</a>
       </li>
     
   </ul>

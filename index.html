@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="reddit/MozillaTech I like our make-planet-techy subreddit. Seems like articles that get rated as one would expect. I happily switched to reddit as my &hellip;">
+  <meta name="description" content="A year ago I wrote 2 blog posts describing telemetry (post1, post2). What sucks about telemetry? The following aspects of performance made us unhappy &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -95,6 +95,75 @@ if (requestAnimationFrame)
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2013/08/28/telemetry-reboot/">Telemetry Reboot</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-28T15:54:00-07:00" pubdate data-updated="true">Aug 28<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>A year ago I wrote 2 blog posts describing telemetry (<a href="/blog/2012/07/25/telemetry-and-what-it-is-good-for-part-2-telemetry-achievements/">post1</a>, <a href="/blog/2012/07/25/telemetry-and-what-it-is-good-for-part-1-nuts-and-bolts/">post2</a>).</p>
+
+<h2>What sucks about telemetry?</h2>
+
+<p>The following aspects of performance made us unhappy with telemetry as deployed now: dashboard performance, effort required to add new dashboards/visualizations, data-gathering latency and slow ad-hoc queries on hadoop. Telemetry dashboards keep timing out, infrastructure keeps failing, this can&#8217;t be the way to drive Firefox performance improvements.</p>
+
+<h2>Telemetry Reboot</h2>
+
+<p>After a few months of soul-searching we ended up with a small group of people working on a replacement for current telemetry serverside. The goals are to minimize latency in the following dimensions:</p>
+
+<ul>
+<li>Serverside should be fast and robust. Slow dashboards are a good way to discourage their use.</li>
+<li>We should have extensive monitoring and alerting to notify us when data isn&#8217;t coming in (eg due to a bug in Firefox client code).</li>
+<li>Everything should be open source and easy to hack on. Outgoing telemetry infrastructure has an overly complicated software stack and code isn&#8217;t open source. This was a mistake.</li>
+<li>Fast ad-hoc queries</li>
+<li>Minimal submission->graphing latency. Currently it takes about 3 days between landing a piece of telemetry code and having that data show up in a dashboard. Takes about 7 to gather a useful amount of data. My goal is to eventually do live-histogram-aggregation so the data can be graphed as soon as it hits the server. This means we should be able to gather a useful amount of telemetry data within 3 days of landing a probe. Should we choose to switch to shipping hourly nightlies, telemetry would come back even faster :)</li>
+</ul>
+
+
+<h2>ETA</h2>
+
+<p>I expect to shut down old dashboards and cut over to the new server + dashboards on Oct 1. See the wiki for our next set of <a href="https://wiki.mozilla.org/Telemetry/Reboot">milestones</a>.</p>
+
+<p>We&#8217;ll be deploying the new telemetry backend on Amazon AWS. I&#8217;ll write a blog post about switching from a private cluster to AWS once we go live.</p>
+
+<p><a href="http://mreid-moz.github.io/">Mark</a> is working on our serverside. Mark started implementing the server in Python/Django, but Node.js turned out to be a much more potent platform in terms of amount of work needed to squeeze out good performance. You can find the current node <a href="https://github.com/mreid-moz/telemetry-server/blob/master/server/server.js">code</a> on github. I suspect we&#8217;ll be switching to a C/C++ HTTP receiver in the future to get another 2-3x increase in req/s performance. In the past we&#8217;ve run into servers having difficulty coping with increases in telemetry volume (submissions went up 10-fold when we added saved-session telemetry).</p>
+
+<p>At the moment we are looking at squeezing out the maximum possible requests per second out of node. If you have a background of that sort of thing feel free to try improving our code.</p>
+
+<p>I spent a lot of time thinking about how to write the fastest(+robustest) possible telemetry dashboard. I ended up writing a <a href="http://telemetry-dash.mozilla.org/">dashboard</a> (<a href="https://github.com/mozilla/telemetry-dashboard/">code</a>) based on static JSON. This approach is fast and should make dashboards easy to contribute to. <a href="http://xor.lonnen.com/">Chris</a> is working on making my prototype useful and usable. The dashboard is going to be going through a lot of refactoring in the near future. At the moment we use <a href="https://github.com/mozilla/jydoop">jydoop</a> to generate the dashboard JSON from hadoop (was easier to write a new query tool for hadoop than do a complex map/reduce in Java).</p>
+
+<h2>Summary</h2>
+
+<p>We will be cutting over to brand new telemetry infrastructure on Oct 1. There will be pain. If you have any questions or are interested in helping out ping us on IRC in <code>#telemetry</code>.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2013/06/28/new-performance-people/">New Performance People, Telemetry News</a></h1>
     
     
@@ -111,7 +180,7 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2013-06-28T16:52:00-04:00" pubdate data-updated="true">Jun 28<span>th</span>, 2013</time>
+<time datetime="2013-06-28T16:52:00-07:00" pubdate data-updated="true">Jun 28<span>th</span>, 2013</time>
         
       </p>
     
@@ -167,7 +236,7 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2013-04-05T20:02:00-04:00" pubdate data-updated="true">Apr 5<span>th</span>, 2013</time>
+<time datetime="2013-04-05T20:02:00-07:00" pubdate data-updated="true">Apr 5<span>th</span>, 2013</time>
         
       </p>
     
@@ -209,7 +278,7 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2013-03-27T03:56:00-04:00" pubdate data-updated="true">Mar 27<span>th</span>, 2013</time>
+<time datetime="2013-03-27T03:56:00-07:00" pubdate data-updated="true">Mar 27<span>th</span>, 2013</time>
         
       </p>
     
@@ -269,7 +338,7 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2013-03-26T04:16:00-04:00" pubdate data-updated="true">Mar 26<span>th</span>, 2013</time>
+<time datetime="2013-03-26T04:16:00-07:00" pubdate data-updated="true">Mar 26<span>th</span>, 2013</time>
         
       </p>
     
@@ -340,7 +409,7 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2013-03-25T06:25:00-04:00" pubdate data-updated="true">Mar 25<span>th</span>, 2013</time>
+<time datetime="2013-03-25T06:25:00-07:00" pubdate data-updated="true">Mar 25<span>th</span>, 2013</time>
         
       </p>
     
@@ -402,7 +471,7 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2013-03-11T16:58:00-04:00" pubdate data-updated="true">Mar 11<span>th</span>, 2013</time>
+<time datetime="2013-03-11T16:58:00-07:00" pubdate data-updated="true">Mar 11<span>th</span>, 2013</time>
         
       </p>
     
@@ -462,7 +531,7 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2013-03-08T16:58:00-05:00" pubdate data-updated="true">Mar 8<span>th</span>, 2013</time>
+<time datetime="2013-03-08T16:58:00-08:00" pubdate data-updated="true">Mar 8<span>th</span>, 2013</time>
         
       </p>
     
@@ -511,7 +580,7 @@ Omnijar readhead is next, in <a title="Use readahead for ordered jar files such 
   
 
 
-<time datetime="2013-02-22T16:14:00-05:00" pubdate data-updated="true">Feb 22<span>nd</span>, 2013</time>
+<time datetime="2013-02-22T16:14:00-08:00" pubdate data-updated="true">Feb 22<span>nd</span>, 2013</time>
         
       </p>
     
@@ -569,7 +638,7 @@ Omnijar readhead is next, in <a title="Use readahead for ordered jar files such 
   
 
 
-<time datetime="2013-02-17T20:56:00-05:00" pubdate data-updated="true">Feb 17<span>th</span>, 2013</time>
+<time datetime="2013-02-17T20:56:00-08:00" pubdate data-updated="true">Feb 17<span>th</span>, 2013</time>
         
       </p>
     
@@ -628,48 +697,6 @@ Omnijar readhead is next, in <a title="Use readahead for ordered jar files such 
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/02/17/10w-intel-i5-desktop/">10W Intel I5 Desktop</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-02-17T20:32:00-05:00" pubdate data-updated="true">Feb 17<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I recently built a new computer for HTPC, NAS, etc duties. Last couple of times this ended up in disappointment due to noise, hardware quirks, power consumption.</p>
-
-<p>Most important components are <a href="http://www.amazon.com/gp/product/B00840BACU/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=B00840BACU&amp;linkCode=as2&amp;tag=stuff05e-20">Intel DQ77KB motherboard</a>, <a href="http://www.amazon.com/gp/product/B0028Y4S9K?ie=UTF8&amp;camp=1789&amp;creativeASIN=B0028Y4S9K&amp;linkCode=xm2&amp;tag=stuff05e-20">Cooler Master TX3 cooler</a>, i5 3330S ebay CPU. The motherboard takes a DC power jack and has onboard voltage regulation. It can be powered by a cheap DELL laptop power supply. No need for a big noisy ATX power supply. The CPU cooler is obnoxiously large and quiet. I can&#8217;t hear the computer even while compiling Mozilla.</p>
-
-<p>This computer idles at as low as 10W, max observed power usage is 46W. Suspend-to-RAM uses around 1W. Thanks to the fancy Intel motherboard + CPU + efficient laptop PSU, at full power the computer uses less power than most systems do at idle.</p>
-
-<p>It&#8217;s exciting that mighty desktop CPUs now use less power at idle that Atom CPUs from just 2 years ago. Too bad that Intel is the only retail vendor that optimizes their motherboards for power consumption. Especially too bad since they are quitting the motherboard market.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -685,6 +712,10 @@ Omnijar readhead is next, in <a title="Use readahead for ordered jar files such 
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/08/28/telemetry-reboot/">Telemetry Reboot</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/06/28/new-performance-people/">New Performance People, Telemetry News</a>
       </li>
     
@@ -698,10 +729,6 @@ Omnijar readhead is next, in <a title="Use readahead for ordered jar files such 
     
       <li class="post">
         <a href="/blog/2013/03/26/snappy-number-54-snappy-discussion-in-paris/">Snappy #54: Snappy Discussion in Paris</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/03/25/snappy-number-53-faster-startup/">snappy #53: Faster: Startup, Image Decoding, Touchpad Input. Smoother Animations</a>
       </li>
     
   </ul>

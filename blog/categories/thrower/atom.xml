@@ -4,7 +4,7 @@
   <title><![CDATA[Category: thrower | All About Performance]]></title>
   <link href="http://taras.glek.net/blog/categories/thrower/atom.xml" rel="self"/>
   <link href="http://taras.glek.net/"/>
-  <updated>2013-06-29T12:44:53-04:00</updated>
+  <updated>2013-08-29T15:57:21-07:00</updated>
   <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Exceptions]]></title>
     <link href="http://taras.glek.net/blog/2007/12/19/exceptions/"/>
-    <updated>2007-12-19T10:26:30-05:00</updated>
+    <updated>2007-12-19T07:26:30-08:00</updated>
     <id>http://taras.glek.net/blog/2007/12/19/exceptions</id>
     <content type="html"><![CDATA[Often there are two ways to write code. One way is to design an API and have code patterns adhere to how the API is supposed to be used. Another way is to rely on language features to accomplish the same thing. Typically API-pattern approaches are chosen because compilers are too immature or just don't provide the necessary features. Sometimes compilers do catch up and the possibility of utilizing newer language features appears.  
   
@@ -52,7 +52,7 @@ For now I'm going let thrower rest in the pork hg repository while I try to make
   <entry>
     <title type="html"><![CDATA[Switching to Exceptions: Makes Head Spin]]></title>
     <link href="http://taras.glek.net/blog/2007/12/11/switching-to-exceptions-makes-head-spin/"/>
-    <updated>2007-12-11T07:10:19-05:00</updated>
+    <updated>2007-12-11T04:10:19-08:00</updated>
     <id>http://taras.glek.net/blog/2007/12/11/switching-to-exceptions-makes-head-spin</id>
     <content type="html"><![CDATA[**Typical**  
   
@@ -80,7 +80,7 @@ This is exciting stuff, but really hard, so if anyone has exciting problem solvi
   <entry>
     <title type="html"><![CDATA[Exceptional Circumstances]]></title>
     <link href="http://taras.glek.net/blog/2007/12/05/exceptional-circumstances/"/>
-    <updated>2007-12-05T09:23:38-05:00</updated>
+    <updated>2007-12-05T06:23:38-08:00</updated>
     <id>http://taras.glek.net/blog/2007/12/05/exceptional-circumstances</id>
     <content type="html"><![CDATA[My previous post on outparam rewriting [described](http://taras.glek.net/blog/2007/11/28/volume-of-refactoring-ahead/) the wealth of functions that can be rewritten. Unfortunately, most functions in Mozilla are declared in XPIDL interfaces.  
   

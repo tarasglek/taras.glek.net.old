@@ -4,7 +4,7 @@
   <title><![CDATA[Category: prbool | All About Performance]]></title>
   <link href="http://taras.glek.net/blog/categories/prbool/atom.xml" rel="self"/>
   <link href="http://taras.glek.net/"/>
-  <updated>2013-06-29T12:44:53-04:00</updated>
+  <updated>2013-08-29T15:57:21-07:00</updated>
   <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Semantic Rewriting of Code with Pork - A bitter recap]]></title>
     <link href="http://taras.glek.net/blog/2009/01/28/semantic-rewriting-of-code-with-pork-a-bitter-recap/"/>
-    <updated>2009-01-28T19:17:47-05:00</updated>
+    <updated>2009-01-28T16:17:47-08:00</updated>
     <id>http://taras.glek.net/blog/2009/01/28/semantic-rewriting-of-code-with-pork-a-bitter-recap</id>
     <content type="html"><![CDATA[LWN [published](http://lwn.net/Articles/315686/) an article about a tool that does refactoring of C code. Guess what, it's yet another tool on top of a crappy C-parser that will never grok C well or even hope to support C++. To my great disappointment the author was not aware of my work on Pork. Clearly I have failed in letting people know that complex C and C++ can be refactored with (somewhat raw, but powerful) open source tools.  
   
@@ -42,7 +42,7 @@ I find it depressing that the comments to the LWN article ended up being about l
   <entry>
     <title type="html"><![CDATA[Enabling prcheck email notifications]]></title>
     <link href="http://taras.glek.net/blog/2008/11/07/enabling-prcheck-email-notifications/"/>
-    <updated>2008-11-07T10:58:08-05:00</updated>
+    <updated>2008-11-07T07:58:08-08:00</updated>
     <id>http://taras.glek.net/blog/2008/11/07/enabling-prcheck-email-notifications</id>
     <content type="html"><![CDATA[I've been running my prbool checker with nightly notifications for about a year now. There are some false positivies, but mostly it picks up real bugs. The checker pulls the blame source to try to guess who is responsible for the error, but so far it has only been emailing me.  
   
@@ -53,7 +53,7 @@ I'm going to make it emailed the hg blamed person starting this weekend, so if y
   <entry>
     <title type="html"><![CDATA[Outparamdelling this way comes]]></title>
     <link href="http://taras.glek.net/blog/2008/09/19/outparamdelling-this-way-comes/"/>
-    <updated>2008-09-19T10:06:08-04:00</updated>
+    <updated>2008-09-19T07:06:08-07:00</updated>
     <id>http://taras.glek.net/blog/2008/09/19/outparamdelling-this-way-comes</id>
     <content type="html"><![CDATA[Recently I dusted off outparamdel to see if I can get some refactorings landed. About a year ago, with the great QueryInterface outparamdelling experiment we ended up with a smaller binary footprint and tiny performance gain, but that never landed due to us not wanting to break compatability yet. Ever since, outparamdel has been patiently bitrotting within [Pork](http://developer.mozilla.org/en/docs/Pork) waiting for the day it's allowed to break APIs.  
   
@@ -92,7 +92,7 @@ It also seems that cairo and every other pre-C99 project have the same set of is
   <entry>
     <title type="html"><![CDATA[Multiple Degrees of Correctness]]></title>
     <link href="http://taras.glek.net/blog/2007/10/04/multiple-degrees-of-correctness/"/>
-    <updated>2007-10-04T13:05:05-04:00</updated>
+    <updated>2007-10-04T10:05:05-07:00</updated>
     <id>http://taras.glek.net/blog/2007/10/04/multiple-degrees-of-correctness</id>
     <content type="html"><![CDATA[**Prcheck**  
   
@@ -113,7 +113,7 @@ While on vacation in Ukraine I finally got to try out GPRS Internet through my c
   <entry>
     <title type="html"><![CDATA[Superity Complex & Static Analysis]]></title>
     <link href="http://taras.glek.net/blog/2007/07/27/superity-complex-static-analysis/"/>
-    <updated>2007-07-27T10:57:23-04:00</updated>
+    <updated>2007-07-27T07:57:23-07:00</updated>
     <id>http://taras.glek.net/blog/2007/07/27/superity-complex-static-analysis</id>
     <content type="html"><![CDATA[It is always frustrating to see a compiler complain about something trivial. It is especially annoying since most of the trivial complaints are trivial to fix automatically (eg. superfluous semicolon).  
   

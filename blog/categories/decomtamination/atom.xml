@@ -4,7 +4,7 @@
   <title><![CDATA[Category: DeCOMtamination | All About Performance]]></title>
   <link href="http://taras.glek.net/blog/categories/decomtamination/atom.xml" rel="self"/>
   <link href="http://taras.glek.net/"/>
-  <updated>2013-06-29T12:44:53-04:00</updated>
+  <updated>2013-08-29T15:57:21-07:00</updated>
   <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Outparamdelling this way comes]]></title>
     <link href="http://taras.glek.net/blog/2008/09/19/outparamdelling-this-way-comes/"/>
-    <updated>2008-09-19T10:06:08-04:00</updated>
+    <updated>2008-09-19T07:06:08-07:00</updated>
     <id>http://taras.glek.net/blog/2008/09/19/outparamdelling-this-way-comes</id>
     <content type="html"><![CDATA[Recently I dusted off outparamdel to see if I can get some refactorings landed. About a year ago, with the great QueryInterface outparamdelling experiment we ended up with a smaller binary footprint and tiny performance gain, but that never landed due to us not wanting to break compatability yet. Ever since, outparamdel has been patiently bitrotting within [Pork](http://developer.mozilla.org/en/docs/Pork) waiting for the day it's allowed to break APIs.  
   
@@ -55,7 +55,7 @@ It also seems that cairo and every other pre-C99 project have the same set of is
   <entry>
     <title type="html"><![CDATA[Recent Progress]]></title>
     <link href="http://taras.glek.net/blog/2007/12/28/recent-progress/"/>
-    <updated>2007-12-28T08:39:45-05:00</updated>
+    <updated>2007-12-28T05:39:45-08:00</updated>
     <id>http://taras.glek.net/blog/2007/12/28/recent-progress</id>
     <content type="html"><![CDATA[Looks like [pork](http://wiki.mozilla.org/Pork) is slowly going to get merged back into oink. This makes me happy as it will result in decreased merging headaches and gives more visibility to my work outside of Mozilla. My elkhound changes are already in!  
   
@@ -70,7 +70,7 @@ I am still pondering on how to tackle rewriting Mozilla to use exceptions. It is
   <entry>
     <title type="html"><![CDATA[Switching to Exceptions: Makes Head Spin]]></title>
     <link href="http://taras.glek.net/blog/2007/12/11/switching-to-exceptions-makes-head-spin/"/>
-    <updated>2007-12-11T07:10:19-05:00</updated>
+    <updated>2007-12-11T04:10:19-08:00</updated>
     <id>http://taras.glek.net/blog/2007/12/11/switching-to-exceptions-makes-head-spin</id>
     <content type="html"><![CDATA[**Typical**  
   
@@ -98,7 +98,7 @@ This is exciting stuff, but really hard, so if anyone has exciting problem solvi
   <entry>
     <title type="html"><![CDATA[Exceptional Circumstances]]></title>
     <link href="http://taras.glek.net/blog/2007/12/05/exceptional-circumstances/"/>
-    <updated>2007-12-05T09:23:38-05:00</updated>
+    <updated>2007-12-05T06:23:38-08:00</updated>
     <id>http://taras.glek.net/blog/2007/12/05/exceptional-circumstances</id>
     <content type="html"><![CDATA[My previous post on outparam rewriting [described](http://taras.glek.net/blog/2007/11/28/volume-of-refactoring-ahead/) the wealth of functions that can be rewritten. Unfortunately, most functions in Mozilla are declared in XPIDL interfaces.  
   
@@ -135,7 +135,7 @@ This is an exciting experiment. I look forward to reducing speculation on the ri
   <entry>
     <title type="html"><![CDATA[Rewriting Tools for Mozilla 2: Moving Forward as Planned]]></title>
     <link href="http://taras.glek.net/blog/2007/10/12/rewriting-tools-for-mozilla-2-moving-forward-as-planned/"/>
-    <updated>2007-10-12T11:31:35-04:00</updated>
+    <updated>2007-10-12T08:31:35-07:00</updated>
     <id>http://taras.glek.net/blog/2007/10/12/rewriting-tools-for-mozilla-2-moving-forward-as-planned</id>
     <content type="html"><![CDATA[**In the Beginning There Was a Void**  
   

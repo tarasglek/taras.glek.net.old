@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Lawrence, thanks for posting snappy updates while I was on leave. Snappy meetings have gotten a bit dull lately. There hasn&#8217;t been much arguing &hellip;">
+  <meta name="description" content="As I mentioned before, I&#8217;ve been a manager for a year. I&#8217;ve focused solely on paper pushing for the past 6 months. Even though I love &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -95,6 +95,60 @@ if (requestAnimationFrame)
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2012/04/10/argh-at-our-unresponsive-tab-strip-settimeoutfoo-0-can-be-very-harmful/">ARGH at Our Unresponsive Tab Strip: setTimeout(foo, 0) Can Be Very Harmful</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-04-10T02:51:01-07:00" pubdate data-updated="true">Apr 10<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>As I mentioned before, I&#8217;ve been a manager for a year. I&#8217;ve focused solely on paper pushing for the past 6 months. Even though I love programming, it&#8217;s surprisingly enjoyable to merely tell others what to do :) However, as all technical managers find out, eventually one gets very bored without doing something technical. So here it goes&#8230;</p>
+
+<p><strong>Why The Frick Are My Tabs So Damn Laggy?</strong></p>
+
+<p>****I noticed that tab switching has become unbearable lately. I finally filed a bug and with Gavin&#8217;s help investigated the brokenness. Turned out that we <a href="http://mxr.mozilla.org/mozilla-central/source/toolkit/content/widgets/tabbox.xml#800">awesomely</a></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>setTimeout(do_stuff, 0)</span></code></pre></td></tr></table></div></figure>
+
+
+<p>in the mousedown handler (bug 743877). This means that I click on my tab, only to suggest to the browser to schedule an event to be handled some time in the future. The browser will also go ahead and flush the existing event queue before getting to handling my event. I measured lag anywhere from 30 to 160+milliseconds before the browser even started handling my click.</p>
+
+<p><em>This code is pretty ancient, why has tab switching gotten slow within the last few months?</em> Turns out we now take a tab thumbnail on every tabselect, which takes >100ms on my machine&#8230; We then carefully use async IO to store that image in our network disk cache. Unfortunately our cache uses locks in creative ways effectively making that code path synchronous (<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=723577">723577</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=723582">723582</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=722033">722033</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=722034">722034</a>). See <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=742594">742594</a> for thumbnail jank. Naturally, all of the above + cycle collection + garbage collection + etc gets scheduled right in the middle of handling tab switching :)</p>
+
+<p>Thanks to a strategically misplaced setTimeout, the browser currently can spend a very long time not responding to user input (seconds sometimes). I bet we have a quite a few places that &#8220;solve&#8221; problems with setTimeouts like above.</p>
+
+<p><strong>There is hope</strong></p>
+
+<p>See <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=743069">bug 743069</a> for some proof of concept patches on making tab switching more responsive. As far as I can see, there is no technical reason for us to not to have a buttery-smooth tab strip. Next steps are figuring out why XUL draws slowly, throttling other browser activity while interacting with tab strips, etc.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2012/04/05/snappy-april-5-change-in-meeting-format/">Snappy, April 5: Change in Meeting Format</a></h1>
     
     
@@ -111,7 +165,7 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2012-04-05T09:52:12-04:00" pubdate data-updated="true">Apr 5<span>th</span>, 2012</time>
+<time datetime="2012-04-05T06:52:12-07:00" pubdate data-updated="true">Apr 5<span>th</span>, 2012</time>
         
       </p>
     
@@ -331,7 +385,7 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2012-04-05T09:16:19-04:00" pubdate data-updated="true">Apr 5<span>th</span>, 2012</time>
+<time datetime="2012-04-05T06:16:19-07:00" pubdate data-updated="true">Apr 5<span>th</span>, 2012</time>
         
       </p>
     
@@ -367,7 +421,7 @@ We do a lot of work outside of our goal process, so above goals represent only t
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2012/04/05/powering-speakers-etc-with-bike-dynamo/">Powering Speakers, Etc With a Bike Dynamo</a></h1>
+      <h1 class="entry-title"><a href="/blog/2012/04/04/powering-speakers-etc-with-bike-dynamo/">Powering Speakers, Etc With a Bike Dynamo</a></h1>
     
     
       <p class="meta">
@@ -383,7 +437,7 @@ We do a lot of work outside of our goal process, so above goals represent only t
   
 
 
-<time datetime="2012-04-05T01:15:00-04:00" pubdate data-updated="true">Apr 5<span>th</span>, 2012</time>
+<time datetime="2012-04-04T22:15:00-07:00" pubdate data-updated="true">Apr 4<span>th</span>, 2012</time>
         
       </p>
     
@@ -420,7 +474,7 @@ I recently got rid of an old Pioneer receiver in favour of a tiny Class D amplif
   
 
 
-<time datetime="2012-03-29T21:06:00-04:00" pubdate data-updated="true">Mar 29<span>th</span>, 2012</time>
+<time datetime="2012-03-29T18:06:00-07:00" pubdate data-updated="true">Mar 29<span>th</span>, 2012</time>
         
       </p>
     
@@ -470,7 +524,7 @@ Awesome stuff, very cool.  Any tips for those of us who just bought a house and 
   
 
 
-<time datetime="2012-03-16T11:39:30-04:00" pubdate data-updated="true">Mar 16<span>th</span>, 2012</time>
+<time datetime="2012-03-16T08:39:30-07:00" pubdate data-updated="true">Mar 16<span>th</span>, 2012</time>
         
       </p>
     
@@ -544,7 +598,7 @@ Awesome stuff, very cool.  Any tips for those of us who just bought a house and 
   
 
 
-<time datetime="2012-03-16T06:26:51-04:00" pubdate data-updated="true">Mar 16<span>th</span>, 2012</time>
+<time datetime="2012-03-16T03:26:51-07:00" pubdate data-updated="true">Mar 16<span>th</span>, 2012</time>
         
       </p>
     
@@ -606,7 +660,7 @@ INSERT INTO webappsstore2_temp (scope, key, value, secure, owner) SELECT scope, 
   
 
 
-<time datetime="2012-03-14T11:27:53-04:00" pubdate data-updated="true">Mar 14<span>th</span>, 2012</time>
+<time datetime="2012-03-14T08:27:53-07:00" pubdate data-updated="true">Mar 14<span>th</span>, 2012</time>
         
       </p>
     
@@ -656,7 +710,7 @@ INSERT INTO webappsstore2_temp (scope, key, value, secure, owner) SELECT scope, 
   
 
 
-<time datetime="2012-03-09T10:53:00-05:00" pubdate data-updated="true">Mar 9<span>th</span>, 2012</time>
+<time datetime="2012-03-09T07:53:00-08:00" pubdate data-updated="true">Mar 9<span>th</span>, 2012</time>
         
       </p>
     
@@ -712,7 +766,7 @@ INSERT INTO webappsstore2_temp (scope, key, value, secure, owner) SELECT scope, 
   
 
 
-<time datetime="2012-03-07T09:12:18-05:00" pubdate data-updated="true">Mar 7<span>th</span>, 2012</time>
+<time datetime="2012-03-07T06:12:18-08:00" pubdate data-updated="true">Mar 7<span>th</span>, 2012</time>
         
       </p>
     
@@ -724,76 +778,6 @@ INSERT INTO webappsstore2_temp (scope, key, value, secure, owner) SELECT scope, 
 <p>There are multiple proposals on how to fix this situation. IMHO the most correct one is to have planet refocus on relevant content and add noise.mozilla.org for everything else. People who like noise can subscribe to that. Polite people with personal blogs already syndicate moz-tech-only parts of the blogs to planet, others have personal blogs. Arguments on marriage, definition of hate speech, far leftyness, funny cats, other memes really drain the will to live when I want to get work done.</p>
 
 <p>I do think we could use a better code of conduct for people deeply involved in the community. Open source is a bit too good with letting assholes get away with being assholes.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/03/05/snappy-march-1st/">Snappy: March 1st</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-03-05T11:09:45-05:00" pubdate data-updated="true">Mar 5<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><strong>SUMO Problem Investigation</strong></p>
-
-<p>Looks like increase in negative SUMO reports that I mentioned <a href="http://taras.glek.net/blog/2012/02/27/snappy-feb-23rd/">last time</a> was due to over-counting. There might be some networking regressions, but no general slowdown. Without solid data it&#8217;s hard to tell.</p>
-
-<p>In order to provide more context to make SUMO reports more useful to developers we are looking into allowing users to attach their telemetry data: bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=732522">732522</a>.</p>
-
-<p><strong>Work in Progress</strong></p>
-
-<p>There are few exciting landings to report this week, but there is a lot of exciting work going on.</p>
-
-<p>Nick is getting rid of main thread cache locks, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=723577">723577</a>. Limited initial testing indicates this can significantly improve Firefox responsiveness.</p>
-
-<p>Brian&#8217;s prefetch nuking bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=692255">692255 </a>is moving along. Interactivity profiling is also close to landing, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=710935">710935</a>.</p>
-
-<p>Dietrich is pushing automation changes to how we monitor startup so we can alter our startup sequence to show the main window sooner, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=715402">715402</a>.</p>
-
-<p>Vlad tweaked chromehang to work on all windows versions and is working on the serverside component with Benjamin, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=712109">712109</a>.</p>
-
-<p>I posted <a href="https://groups.google.com/forum/#!topic/mozilla.dev.platform/1fn0Vz20wu8">our plan</a> on shutting down Firefox efficiently, speak up if I missed an important detail. Rafael is working on this in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=662444">662444</a>.</p>
-
-<p>Jared has landed more of Avi&#8217;s smooth scrolling tweaks on the ux-branch, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=198964">198964</a>. Take the <a href="http://ftp.mozilla.org/pub/mozilla.org/firefox/nightly/latest-ux">ux nightlies</a> for a spin to try improved scrolling.</p>
-
-<p>Dietrich and Andrew are looking into massive CC pauses after resume, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=639262">639262</a>.</p>
-
-<p><strong>Landed</strong></p>
-
-<p>Async livemarks changes landed, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=613588">613588</a>. Macro is following up to fix any slowdown for livemark users.</p>
-
-<p>Nathan landed persistent telemetry, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=707320">707320</a>. It&#8217;s not quite working yet, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=732970">732970</a>.</p>
-
-<p><strong>Local Storage Discussion</strong></p>
-
-<p>Chris wrote a great <a href="http://hacks.mozilla.org/2012/03/there-is-no-simple-solution-for-local-storage/">post</a> on DOM Local Storage, the discussion is great. I did a <a href="http://taras.glek.net/blog/2012/02/22/psa-dom-local-storage-considered-harmful/">post</a> on this a few weeks ago.</p>
-
-<p>I have some raw data on exactly how slow DOM Local Storage is, I will post it once Xavier has time to yank data properly out of the cluster.</p>
 </div>
   
   
@@ -818,6 +802,10 @@ INSERT INTO webappsstore2_temp (scope, key, value, secure, owner) SELECT scope, 
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/08/28/telemetry-reboot/">Telemetry Reboot</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/06/28/new-performance-people/">New Performance People, Telemetry News</a>
       </li>
     
@@ -831,10 +819,6 @@ INSERT INTO webappsstore2_temp (scope, key, value, secure, owner) SELECT scope, 
     
       <li class="post">
         <a href="/blog/2013/03/26/snappy-number-54-snappy-discussion-in-paris/">Snappy #54: Snappy Discussion in Paris</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/03/25/snappy-number-53-faster-startup/">snappy #53: Faster: Startup, Image Decoding, Touchpad Input. Smoother Animations</a>
       </li>
     
   </ul>

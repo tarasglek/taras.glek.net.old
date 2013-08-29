@@ -4,7 +4,7 @@
   <title><![CDATA[Category: static-analysis | All About Performance]]></title>
   <link href="http://taras.glek.net/blog/categories/static-analysis/atom.xml" rel="self"/>
   <link href="http://taras.glek.net/"/>
-  <updated>2013-06-29T12:44:53-04:00</updated>
+  <updated>2013-08-29T15:57:21-07:00</updated>
   <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Give DXR a try]]></title>
     <link href="http://taras.glek.net/blog/2012/05/22/give-dxr-a-try/"/>
-    <updated>2012-05-22T05:34:51-04:00</updated>
+    <updated>2012-05-22T02:34:51-07:00</updated>
     <id>http://taras.glek.net/blog/2012/05/22/give-dxr-a-try</id>
     <content type="html"><![CDATA[At Mozilla we have a long history of using [MXR](http://mxr.mozilla.org/) for looking up and discussing source code. Unfortunately MXR is an unlovable mess of Perl and a crappy (in terms of performance and license) text indexing engine that is glimpse. It is dead because nobody wants to work on it.  
   
@@ -33,7 +33,7 @@ We have lots of ideas for DXR, but first we need to ensure it is a suitable repl
   <entry>
     <title type="html"><![CDATA[Effective Static Analysis]]></title>
     <link href="http://taras.glek.net/blog/2011/08/03/effective-static-analysis/"/>
-    <updated>2011-08-03T16:27:54-04:00</updated>
+    <updated>2011-08-03T13:27:54-07:00</updated>
     <id>http://taras.glek.net/blog/2011/08/03/effective-static-analysis</id>
     <content type="html"><![CDATA[Static analysis can be a very fun pastime. One gets to sift through giant codebases looking for interesting clues, what could be more fun? A couple things qualify: a) static analysis accompanied by cool rewrites b) static analysis accompanied by cool visualizations.  
   
@@ -58,7 +58,7 @@ We would love to hire more static analysis interns. Are you student who dreams a
   <entry>
     <title type="html"><![CDATA[Galois talk]]></title>
     <link href="http://taras.glek.net/blog/2010/06/09/galois-talk/"/>
-    <updated>2010-06-09T06:08:44-04:00</updated>
+    <updated>2010-06-09T03:08:44-07:00</updated>
     <id>http://taras.glek.net/blog/2010/06/09/galois-talk</id>
     <content type="html"><![CDATA[I was invited to present a [Galois tech talk](http://www.galois.com/blog/2010/06/03/tech-talk-large-scale-static-analysis-at-mozilla/) on Mozilla static analysis. It was really cool to give a talk locally to such an expert audience. I was surprised to discover a vibrant Programming Languages + Analysis community in Portland.  
   
@@ -77,7 +77,7 @@ There a few fixes that are about to land. I'm hoping that by the end of the week
   <entry>
     <title type="html"><![CDATA[Static Analysis Articles]]></title>
     <link href="http://taras.glek.net/blog/2010/02/09/static-analysis-articles/"/>
-    <updated>2010-02-09T09:22:40-05:00</updated>
+    <updated>2010-02-09T06:22:40-08:00</updated>
     <id>http://taras.glek.net/blog/2010/02/09/static-analysis-articles</id>
     <content type="html"><![CDATA[A really good [ACM article](http://cacm.acm.org/magazines/2010/2/69354-a-few-billion-lines-of-code-later/fulltext) about static analysis from Coverity's perspective has been making rounds in Mozilla. What struck me most was the following paragraph:_ _  
   
@@ -92,7 +92,7 @@ In other news, LCA 2010 was my favourite conference so far. I met a number of aw
   <entry>
     <title type="html"><![CDATA[State of Static Analysis At Mozilla]]></title>
     <link href="http://taras.glek.net/blog/2010/01/21/state-of-static-analysis-at-mozilla/"/>
-    <updated>2010-01-21T12:24:03-05:00</updated>
+    <updated>2010-01-21T09:24:03-08:00</updated>
     <id>http://taras.glek.net/blog/2010/01/21/state-of-static-analysis-at-mozilla</id>
     <content type="html"><![CDATA[Mozilla has static analyses built into the buildsystem that can be turned on with --with-static-checking= flag. The analyses live in [xpcom/analyses](http://mxr.mozilla.org/mozilla-central/source/xpcom/analyses) directory. The testcases (aka documentation) are in [xpcom/tests/static-checker](http://mxr.mozilla.org/mozilla-central/source/xpcom/tests/static-checker/). Analyses are implemented in either [Dehydra](https://developer.mozilla.org/En/Dehydra) or [Treehydra](https://developer.mozilla.org/en/Treehydra) and run within a patched GCC 4.3.  
   

@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Testing We discussed setting up Eideticker, for desktop Firefox responsiveness testing. Andrew Halberstadt is making progress on a revised version of &hellip;">
+  <meta name="description" content="For the in-progress work and minor changes that landed see non-meeting notes for this week. Jeff Muizelaar wrote an interesting blog post work &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -95,6 +95,54 @@ if (requestAnimationFrame)
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2012/07/23/snappy-july-19-telemetry-experiments/">Snappy, July 19: Telemetry Experiments</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-07-23T10:56:56-07:00" pubdate data-updated="true">Jul 23<span>rd</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>For the in-progress work and minor changes that landed see <a href="https://wiki.mozilla.org/Performance/Snappy/2012-07-19">non-meeting notes</a> for this week.</p>
+
+<p>Jeff Muizelaar wrote an interesting <a href="http://muizelaar.blogspot.ca/2012/07/what-happens-when-you-switch-to-gmail.html">blog post</a> work involved in a tab switch on Mac.</p>
+
+<p><strong>Windows Prefetch</strong>:<strong> Experimental Data vs Reality</strong></p>
+
+<p>I once discovered that <a href="http://en.wikipedia.org/wiki/Prefetcher">Windows Prefetch</a> can adversely affect application startup times, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=627591">627591</a>. Certain machines were showing performance to be much better with Windows prefetch disabled and using my &#8220;manual&#8221; dll preload code to warm up the cache. Manual dll preload is a win for loading large applications because it causes xul.dll to be read in sequentially rather than randomly via page-in (see my <a href="http://taras.glek.net/blog/2010/">blog posts</a> from 2010 for details of startup IO uglyness). Unfortunately Windows Prefetch + my preload code measured as a net regression. I found a weird API that seemed to return 0 when prefetch was broken and <a href="https://hg.mozilla.org/mozilla-central/rev/cc18551d5cc3#l1.19">guarded </a>preload on that.</p>
+
+<p>We have recently backed out above heuristic based on a telemetry study in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=757215">757215</a>. Perhaps this is why our startup numbers have started <a href="https://metrics.mozilla.com/data/content/pentaho-cdf-dd/Render?solution=metrics2&amp;path=%2Ftelemetry&amp;file=telemetryEvolution.wcdf&amp;bookmarkState={%22impl%22%3A%22client%22%2C%22params%22%3A{%22referenceDate%22%3A%222012-07-23%22%2C%22appNameParameter%22%3A%22[Application].[Firefox]%22%2C%22osParameter%22%3A%22[OS].[WINNT]%22%2C%22channelParameter%22%3A%22[Channel].[nightly]%22%2C%22reasonParameter%22%3A%22[Reason].[idle-daily]%22%2C%22histogramParameter%22%3A%22[Histogram].[SIMPLE_MEASURES_FIRSTPAINT]%22%2C%22histogramPopupTools%22%3A%22%22%2C%22duplicateHistogram%22%3A%22%23duplicateHistogram%22%2C%22medianButtonParam%22%3A0%2C%22scatterChart%22%3A%22%22}}">getting better</a> in Firefox 16?</p>
+
+<p>Brian Bondy setup a <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=764905">telemetry startup trial</a> to randomly delete prefetch, turn on dll preload. Last week Saptarshi Guha crunched some <a href="https://wiki.mozilla.org/Platform/Features/Telemetry">telemetry</a> numbers, see this <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=771745#c9">bugzilla comment</a>. Turned out Windows Prefetch is a huge win and dll preload is a tiny incremental improvement on top of that (rather than being a regression).</p>
+
+<p>Moral of the story is: <em>do not rely on manual performance testing for workloads involving large amounts of IO</em>. Simulating a &#8220;typical&#8221; Windows machine is extremely hard without getting noisy numbers. Effort is better spent on analyzing noisy real-world numbers and running experiments in the wild.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2012/07/12/snappy-july-12-2012/">Snappy. July 12, 2012</a></h1>
     
     
@@ -111,7 +159,7 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2012-07-12T11:30:52-04:00" pubdate data-updated="true">Jul 12<span>th</span>, 2012</time>
+<time datetime="2012-07-12T08:30:52-07:00" pubdate data-updated="true">Jul 12<span>th</span>, 2012</time>
         
       </p>
     
@@ -173,7 +221,7 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2012-07-09T10:49:31-04:00" pubdate data-updated="true">Jul 9<span>th</span>, 2012</time>
+<time datetime="2012-07-09T07:49:31-07:00" pubdate data-updated="true">Jul 9<span>th</span>, 2012</time>
         
       </p>
     
@@ -223,7 +271,7 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2012-07-02T10:06:24-04:00" pubdate data-updated="true">Jul 2<span>nd</span>, 2012</time>
+<time datetime="2012-07-02T07:06:24-07:00" pubdate data-updated="true">Jul 2<span>nd</span>, 2012</time>
         
       </p>
     
@@ -279,7 +327,7 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2012-06-25T06:07:06-04:00" pubdate data-updated="true">Jun 25<span>th</span>, 2012</time>
+<time datetime="2012-06-25T03:07:06-07:00" pubdate data-updated="true">Jun 25<span>th</span>, 2012</time>
         
       </p>
     
@@ -321,7 +369,7 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2012-06-18T10:00:34-04:00" pubdate data-updated="true">Jun 18<span>th</span>, 2012</time>
+<time datetime="2012-06-18T07:00:34-07:00" pubdate data-updated="true">Jun 18<span>th</span>, 2012</time>
         
       </p>
     
@@ -371,7 +419,7 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2012-06-14T10:51:24-04:00" pubdate data-updated="true">Jun 14<span>th</span>, 2012</time>
+<time datetime="2012-06-14T07:51:24-07:00" pubdate data-updated="true">Jun 14<span>th</span>, 2012</time>
         
       </p>
     
@@ -423,7 +471,7 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2012-06-11T12:13:36-04:00" pubdate data-updated="true">Jun 11<span>th</span>, 2012</time>
+<time datetime="2012-06-11T09:13:36-07:00" pubdate data-updated="true">Jun 11<span>th</span>, 2012</time>
         
       </p>
     
@@ -467,7 +515,7 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2012-06-04T05:38:08-04:00" pubdate data-updated="true">Jun 4<span>th</span>, 2012</time>
+<time datetime="2012-06-04T02:38:08-07:00" pubdate data-updated="true">Jun 4<span>th</span>, 2012</time>
         
       </p>
     
@@ -515,7 +563,7 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2012-05-29T06:31:59-04:00" pubdate data-updated="true">May 29<span>th</span>, 2012</time>
+<time datetime="2012-05-29T03:31:59-07:00" pubdate data-updated="true">May 29<span>th</span>, 2012</time>
         
       </p>
     
@@ -540,50 +588,6 @@ if (requestAnimationFrame)
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/05/22/give-dxr-a-try/">Give DXR a Try</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-05-22T05:34:51-04:00" pubdate data-updated="true">May 22<span>nd</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>At Mozilla we have a long history of using <a href="http://mxr.mozilla.org/">MXR</a> for looking up and discussing source code. Unfortunately MXR is an unlovable mess of Perl and a crappy (in terms of performance and license) text indexing engine that is glimpse. It is dead because nobody wants to work on it.</p>
-
-<p><a href="https://wiki.mozilla.org/DXR">DXR</a> is a semantically-aware successor to MXR. Semantic information is extracted from LLVM during compilation. This makes it possible to do searches like <a href="http://dxr.lanedo.com/search.cgi?tree=mozilla-central&amp;derived=nsIFile">derived:nsIFile</a>. DXR uses a modern Full Text Search engine for text searches, so it should be much faster than MXR. There is a test instance at <a href="http://dxr.lanedo.com/">dxr.mozilla.org</a>, please give it a try. The homepage lists sample searches you can do.</p>
-
-<p>DXR is written in Python. It uses an SQLite database + FTS index as a backend. Useful semantic information is extracted from the source via a Clang LLVM plugin. Checkout the <a href="https://github.com/mozilla/dxr/">source code</a> at github.</p>
-
-<p>DXR should be getting close to feature parity with MXR. Give it a try and let me know of any bugs/missing features you encounter (or submit a patch!). I realize that people have gotten used to various MXR quirks and that it can be stressful to switch to a new code indexer while trying to get stuff done, but MXR IS DEAD. We need to move on. Mozilla is complex, finding relevant code can take quite a while, especially for new contributors. Using a smarter indexer should save time, reduce frustration and free up a few developer-years to make Firefox better.</p>
-
-<p>We have lots of ideas for DXR, but first we need to ensure it is a suitable replacement for MXR. Take DXR for a spin!</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/6/">&larr; Older</a>
@@ -601,6 +605,10 @@ if (requestAnimationFrame)
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/08/28/telemetry-reboot/">Telemetry Reboot</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/06/28/new-performance-people/">New Performance People, Telemetry News</a>
       </li>
     
@@ -614,10 +622,6 @@ if (requestAnimationFrame)
     
       <li class="post">
         <a href="/blog/2013/03/26/snappy-number-54-snappy-discussion-in-paris/">Snappy #54: Snappy Discussion in Paris</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/03/25/snappy-number-53-faster-startup/">snappy #53: Faster: Startup, Image Decoding, Touchpad Input. Smoother Animations</a>
       </li>
     
   </ul>

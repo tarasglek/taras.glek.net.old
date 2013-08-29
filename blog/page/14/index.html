@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="I was invited to present a Galois tech talk on Mozilla static analysis. It was really cool to give a talk locally to such an expert audience. I was &hellip;">
+  <meta name="description" content="I try to blog about interesting things I encounter while solving various issues in Mozilla. Some things are less bloggable than others. If this blog &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -95,6 +95,52 @@ if (requestAnimationFrame)
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2010/07/14/my-startup-summary/">My Startup Summary</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-07-14T04:27:13-07:00" pubdate data-updated="true">Jul 14<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I try to blog about interesting things I encounter while solving various issues in Mozilla. Some things are less bloggable than others. If this blog don&#8217;t fulfill your startup + static analysis needs you can follow my <a href="http://benjamin.smedbergs.us/weekly-updates.fcgi/user/tarasglek/posts">status</a> updates and <a href="http://twitter.com/crazyhackerdude">twitter</a>. For now here is a summary of various half-baked/inprogress work:</p>
+
+<ul>
+<li>I worked on <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=559964">upgrading</a> to GCC 4.5 which turned out to be a performance regression. While tracking down a workaround, I got into helping GCC guys help us by fixing gcc trunk&#8217;s LTO to work on Mozilla.</li>
+<li>I am also determined to see Firefox come out with a <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=561842">fat</a> libxul and not link to <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=577522">useless</a> to us libraries by default.</li>
+<li>I spent a lot of time figuring out why our sqlite io <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=572459">hurting</a>, ended up bumping block size to 32K. I am really hoping that Marco can <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=541373">deliver</a> VACUUM for all of the Firefox databases in time for Firefox 4.</li>
+<li>I refactored most of icegrind so in addition optimizing startup, it can also facilitate investigative work like <a href="http://glandium.org/blog/?p=1016">Mike Hommey </a>is doing.</li>
+<li>Posted a <a href="http://groups.google.com/group/mozilla.dev.platform/browse_thread/thread/abf60ad5fd03a708?pli=1">summary</a> on the evils of static initializers. Came across a Chrome <a href="http://comments.gmane.org/gmane.comp.web.chromium.devel/16789">equivalent</a> today.
+I plan to blog more on each of these subjects as they get closer to realization.</li>
+</ul>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2010/06/09/galois-talk/">Galois Talk</a></h1>
     
     
@@ -111,7 +157,7 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2010-06-09T06:08:44-04:00" pubdate data-updated="true">Jun 9<span>th</span>, 2010</time>
+<time datetime="2010-06-09T03:08:44-07:00" pubdate data-updated="true">Jun 9<span>th</span>, 2010</time>
         
       </p>
     
@@ -157,7 +203,7 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2010-05-27T12:35:20-04:00" pubdate data-updated="true">May 27<span>th</span>, 2010</time>
+<time datetime="2010-05-27T09:35:20-07:00" pubdate data-updated="true">May 27<span>th</span>, 2010</time>
         
       </p>
     
@@ -238,7 +284,7 @@ I blogged about 1, 2, 4, this post is about #3.</li>
   
 
 
-<time datetime="2010-05-24T06:52:22-04:00" pubdate data-updated="true">May 24<span>th</span>, 2010</time>
+<time datetime="2010-05-24T03:52:22-07:00" pubdate data-updated="true">May 24<span>th</span>, 2010</time>
         
       </p>
     
@@ -306,7 +352,7 @@ I blogged about 1, 2, 4, this post is about #3.</li>
   
 
 
-<time datetime="2010-04-20T07:20:10-04:00" pubdate data-updated="true">Apr 20<span>th</span>, 2010</time>
+<time datetime="2010-04-20T04:20:10-07:00" pubdate data-updated="true">Apr 20<span>th</span>, 2010</time>
         
       </p>
     
@@ -346,7 +392,7 @@ I blogged about 1, 2, 4, this post is about #3.</li>
   
 
 
-<time datetime="2010-04-19T10:00:00-04:00" pubdate data-updated="true">Apr 19<span>th</span>, 2010</time>
+<time datetime="2010-04-19T07:00:00-07:00" pubdate data-updated="true">Apr 19<span>th</span>, 2010</time>
         
       </p>
     
@@ -411,7 +457,7 @@ People seem to prefer to comment on <a href="http://www.reddit.com/r/programming
   
 
 
-<time datetime="2010-04-12T11:16:08-04:00" pubdate data-updated="true">Apr 12<span>th</span>, 2010</time>
+<time datetime="2010-04-12T08:16:08-07:00" pubdate data-updated="true">Apr 12<span>th</span>, 2010</time>
         
       </p>
     
@@ -492,7 +538,7 @@ I think with all of the above combined, we could load apps like Firefox at near-
   
 
 
-<time datetime="2010-04-07T11:03:24-04:00" pubdate data-updated="true">Apr 7<span>th</span>, 2010</time>
+<time datetime="2010-04-07T08:03:24-07:00" pubdate data-updated="true">Apr 7<span>th</span>, 2010</time>
         
       </p>
     
@@ -556,7 +602,7 @@ I think with all of the above combined, we could load apps like Firefox at near-
   
 
 
-<time datetime="2010-04-05T08:36:01-04:00" pubdate data-updated="true">Apr 5<span>th</span>, 2010</time>
+<time datetime="2010-04-05T05:36:01-07:00" pubdate data-updated="true">Apr 5<span>th</span>, 2010</time>
         
       </p>
     
@@ -681,7 +727,7 @@ Additionally, proper binary reordering results in >2mb reduction in memory usage
   
 
 
-<time datetime="2010-03-31T16:17:48-04:00" pubdate data-updated="true">Mar 31<span>st</span>, 2010</time>
+<time datetime="2010-03-31T13:17:48-07:00" pubdate data-updated="true">Mar 31<span>st</span>, 2010</time>
         
       </p>
     
@@ -693,46 +739,6 @@ Additionally, proper binary reordering results in >2mb reduction in memory usage
 <p><a href="http://ehren.wordpress.com/">Ehren</a> just put my personal records to shame with a <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=556446">94KB patch</a> that got r+ed at breakneck speed. Best part is that he generates these by plucking off dead parts of the Mozilla callgraph via static analysis. I bet if he tried he could land 90KB patches every day. Way to go Ehren!</p>
 
 <p>I expect more good code deletions to make themselves known via this <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=457262">meta bug</a>.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2010/03/29/linux-startup-inefficiency/">Linux Startup Inefficiency</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-03-29T09:11:02-04:00" pubdate data-updated="true">Mar 29<span>th</span>, 2010</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>There is a little bit of a disconnect between the kernel, the dynamic linker and compile-time linker. As I mentioned in my main &#8220;startup sucks&#8221; <a href="http://taras.glek.net/blog/2010/03/24/linux-why-loading-binaries-from-disk-sucks/">post</a>: not-notifying the kernel of your patterns can kill performance, so can reading files backwards.</p>
-
-<p>Turns out that if the compile-time linker lays out files without considering <em>exactly</em> how they are read by the runtime linker, binaries will load slower. I filed a <a href="http://sourceware.org/bugzilla/show_bug.cgi?id=11447">bug</a> on that.</p>
-
-<p>Currently, SuSE appears to be leading in startup performance by shipping their glibc with the fadvise() patch (to load binaries from disk in bigger chunks). A <a href="http://sourceware.org/bugzilla/show_bug.cgi?id=11431">bug</a> is filed for this to get fixed in glibc, but in the meantime distributions should consider including SuSE&#8217;s patch (glibc-2.3.90-ld.so-madvise.diff) in their libc.</p>
 </div>
   
   
@@ -757,6 +763,10 @@ Additionally, proper binary reordering results in >2mb reduction in memory usage
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/08/28/telemetry-reboot/">Telemetry Reboot</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/06/28/new-performance-people/">New Performance People, Telemetry News</a>
       </li>
     
@@ -770,10 +780,6 @@ Additionally, proper binary reordering results in >2mb reduction in memory usage
     
       <li class="post">
         <a href="/blog/2013/03/26/snappy-number-54-snappy-discussion-in-paris/">Snappy #54: Snappy Discussion in Paris</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/03/25/snappy-number-53-faster-startup/">snappy #53: Faster: Startup, Image Decoding, Touchpad Input. Smoother Animations</a>
       </li>
     
   </ul>

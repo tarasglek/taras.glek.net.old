@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="The coolest part about my job is that I get to work on tasks that are cool, but typically are forever laid to rest in the would-be-cool-if-we-could- &hellip;">
+  <meta name="description" content="In my quest to rid Firefox of code that doesn&#8217;t do anything it is possible to screw up and delete a method that is only used by outside code. &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -95,6 +95,48 @@ if (requestAnimationFrame)
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2008/10/07/note-this-is-not-called-yet-its-just-a-placeholder-for-future-changes/">&#8220;NOTE: This Is Not Called YET. It&#8217;s Just a Placeholder for Future Changes.&#8221;</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-10-07T08:53:44-07:00" pubdate data-updated="true">Oct 7<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>In my quest to rid Firefox of code that doesn&#8217;t do anything it is possible to screw up and delete a method that is only used by outside code. So far, I&#8217;ve hit a <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=457302">component</a> that isn&#8217;t used in Firefox, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=457965">methods</a> that aren&#8217;t used in Firefox and methods that <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=458983">claim</a> someone is about to use them (with a timestamp from 8 years ago). That and I discovered some code only appears to be used from BeOS or OS/2 specific ifdefs.</p>
+
+<p>Not surprisingly, I had someone comment that I do some &#8220;dangerous shit&#8221;. Sure, I can see why someone would think that.</p>
+
+<p>My protection: I use the try server to make sure that everything builds on supported platforms. On top of that every patch gets reviewed.</p>
+
+<p>Furthermore, I would like to point out that methods that aren&#8217;t called within Firefox are less likely to be tested and correct. So if one leaves code that should only be called from other projects, it&#8217;d be appropriate if we had some unit tests for it, which would flag the code as in-use. That would let us move to the next level and setup a tinderbox to detect dead code as soon as it is orphaned.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2008/09/26/living-dead-code/">Living Dead Code</a></h1>
     
     
@@ -111,7 +153,7 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2008-09-26T06:58:37-04:00" pubdate data-updated="true">Sep 26<span>th</span>, 2008</time>
+<time datetime="2008-09-26T03:58:37-07:00" pubdate data-updated="true">Sep 26<span>th</span>, 2008</time>
         
       </p>
     
@@ -185,7 +227,7 @@ I&#8217;m sure most people reading this will go: &#8220;Wait a minute, this is u
   
 
 
-<time datetime="2008-09-19T10:06:08-04:00" pubdate data-updated="true">Sep 19<span>th</span>, 2008</time>
+<time datetime="2008-09-19T07:06:08-07:00" pubdate data-updated="true">Sep 19<span>th</span>, 2008</time>
         
       </p>
     
@@ -256,7 +298,7 @@ I&#8217;m sure most people reading this will go: &#8220;Wait a minute, this is u
   
 
 
-<time datetime="2008-09-08T06:54:57-04:00" pubdate data-updated="true">Sep 8<span>th</span>, 2008</time>
+<time datetime="2008-09-08T03:54:57-07:00" pubdate data-updated="true">Sep 8<span>th</span>, 2008</time>
         
       </p>
     
@@ -294,7 +336,7 @@ I&#8217;m sure most people reading this will go: &#8220;Wait a minute, this is u
   
 
 
-<time datetime="2008-09-03T10:09:53-04:00" pubdate data-updated="true">Sep 3<span>rd</span>, 2008</time>
+<time datetime="2008-09-03T07:09:53-07:00" pubdate data-updated="true">Sep 3<span>rd</span>, 2008</time>
         
       </p>
     
@@ -334,7 +376,7 @@ I&#8217;m sure most people reading this will go: &#8220;Wait a minute, this is u
   
 
 
-<time datetime="2008-09-02T04:39:45-04:00" pubdate data-updated="true">Sep 2<span>nd</span>, 2008</time>
+<time datetime="2008-09-02T01:39:45-07:00" pubdate data-updated="true">Sep 2<span>nd</span>, 2008</time>
         
       </p>
     
@@ -383,7 +425,7 @@ Both of these projects are interested in converging on a single codebase. It sou
   
 
 
-<time datetime="2008-08-14T04:48:04-04:00" pubdate data-updated="true">Aug 14<span>th</span>, 2008</time>
+<time datetime="2008-08-14T01:48:04-07:00" pubdate data-updated="true">Aug 14<span>th</span>, 2008</time>
         
       </p>
     
@@ -423,7 +465,7 @@ Both of these projects are interested in converging on a single codebase. It sou
   
 
 
-<time datetime="2008-08-13T11:55:50-04:00" pubdate data-updated="true">Aug 13<span>th</span>, 2008</time>
+<time datetime="2008-08-13T08:55:50-07:00" pubdate data-updated="true">Aug 13<span>th</span>, 2008</time>
         
       </p>
     
@@ -487,7 +529,7 @@ Both of these projects are interested in converging on a single codebase. It sou
   
 
 
-<time datetime="2008-08-11T10:49:28-04:00" pubdate data-updated="true">Aug 11<span>th</span>, 2008</time>
+<time datetime="2008-08-11T07:49:28-07:00" pubdate data-updated="true">Aug 11<span>th</span>, 2008</time>
         
       </p>
     
@@ -531,7 +573,7 @@ Both of these projects are interested in converging on a single codebase. It sou
   
 
 
-<time datetime="2008-08-04T14:40:28-04:00" pubdate data-updated="true">Aug 4<span>th</span>, 2008</time>
+<time datetime="2008-08-04T11:40:28-07:00" pubdate data-updated="true">Aug 4<span>th</span>, 2008</time>
         
       </p>
     
@@ -543,52 +585,6 @@ Both of these projects are interested in converging on a single codebase. It sou
 <p>It was great to see the South American guys again and to meet hordes of Europeans.</p>
 
 <p>The most exciting outcome of the summit in my neck of the static analysis woods is that DXR (a semantically aware successor to MXR) will be rewritten from scratch in Python. Another reason to rejoice is that a tracing spidermonkey should make Treehydra ridiculously fast without much (or any) effort on my part.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2008/07/25/pull-pork-with-care/">Pull Pork With Care</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-07-25T10:01:04-04:00" pubdate data-updated="true">Jul 25<span>th</span>, 2008</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I just committed the large giant change to bring down elsa&#8217;s namespace pollution to reasonable levels. Elsa code now is now using std::foo style, or using namespace std. As I mentioned before, Elsa&#8217;s string is now sm::string, a summary of how to perform similar renames is <a href="http://developer.mozilla.org/en/docs/Renaming_With_Pork">here</a>. The good news is that Pork will soon work out of the box with a modern toolchain.</p>
-
-<p>For the handful of porkers out there, you need to hg pull &amp; hg up all of the pork repositories. This has been a use-case in why splitting up a codebase into a billion repositories is a bad idea:</p>
-
-<p>a) Lovely, I have to do many commits instead of one</p>
-
-<p>b) To top it off, now my users will curse my name while updating whatever pork repository that interests them most.</p>
-
-<p>I feel like I&#8217;m going to throw up if I see any more C++ code diffs in the next 10minutes.</p>
-
-<p>In contrast, while rewriting things on the Mozilla-scale is a lot less feasible manually, it is very rewarding to automate. Gotta love big C++ codebases.</p>
 </div>
   
   
@@ -613,6 +609,10 @@ Both of these projects are interested in converging on a single codebase. It sou
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/08/28/telemetry-reboot/">Telemetry Reboot</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/06/28/new-performance-people/">New Performance People, Telemetry News</a>
       </li>
     
@@ -626,10 +626,6 @@ Both of these projects are interested in converging on a single codebase. It sou
     
       <li class="post">
         <a href="/blog/2013/03/26/snappy-number-54-snappy-discussion-in-paris/">Snappy #54: Snappy Discussion in Paris</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/03/25/snappy-number-53-faster-startup/">snappy #53: Faster: Startup, Image Decoding, Touchpad Input. Smoother Animations</a>
       </li>
     
   </ul>

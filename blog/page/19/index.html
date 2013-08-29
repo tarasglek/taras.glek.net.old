@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="A couple of months ago Stuart casually asked me to investigate Fennec performance for moving about a page, zooming and loading pages in general. Beta &hellip;">
+  <meta name="description" content="After I wrote prcheck, I was surprised by the errors it found. I expected to find lots of cases of prbool variables having integers assigned into &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -95,7 +95,7 @@ if (requestAnimationFrame)
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2009/03/18/fennec-beta-1-need-for-speed/">Fennec Beta 1 - Need for Speed</a></h1>
+      <h1 class="entry-title"><a href="/blog/2009/03/31/nsresult-analysis/">Nsresult Analysis</a></h1>
     
     
       <p class="meta">
@@ -111,7 +111,58 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2009-03-18T02:52:42-04:00" pubdate data-updated="true">Mar 18<span>th</span>, 2009</time>
+<time datetime="2009-03-31T07:16:18-07:00" pubdate data-updated="true">Mar 31<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>After I wrote <a href="http://taras.glek.net/blog/2008/11/07/enabling-prcheck-email-notifications/">prcheck</a>, I was surprised by the errors it found. I expected to find lots of cases of prbool variables having integers assigned into them. Indeed there were some of those, but the most frequent offenders were things like</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>
+</span><span class='line'>NS_ENSURE_SUCCESS(rv,rv);
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>in methods with a PRBool return value. In this case (and many similar  return values within macros) the function will likely do the opposite of what was intended if there is an error condition. Here is a less hypothetical <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=483589">example</a> in bugzilla.</p>
+
+<p>So I&#8217;m thinking that instead of porting the prbool analysis to <a href="https://developer.mozilla.org/en/Treehydra">Treehydra</a> (such that it&#8217;d based on a less buggy <a href="https://developer.mozilla.org/En/Pork">backend</a> and can be integrated into the build) it might be more interesting to ensure that nsresults do not mix with other integer types. That would catch all of the worst prbool offenders and possibly other nsresult misfortunes.</p>
+
+<p><em>Has anyone run into bugs like this that do not involve prbools?</em></p>
+
+<p>I suppose a general solution would be to define a lattice of typedefs with rules specifying which typedefs can be assigned to each other. This would make GCC distinguish certain typedefs as discrete and incompatible types. Thoughts?</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/03/17/fennec-beta-1-need-for-speed/">Fennec Beta 1 - Need for Speed</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-03-17T23:52:42-07:00" pubdate data-updated="true">Mar 17<span>th</span>, 2009</time>
         
       </p>
     
@@ -164,7 +215,7 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2009-02-19T06:20:51-05:00" pubdate data-updated="true">Feb 19<span>th</span>, 2009</time>
+<time datetime="2009-02-19T03:20:51-08:00" pubdate data-updated="true">Feb 19<span>th</span>, 2009</time>
         
       </p>
     
@@ -210,7 +261,7 @@ Now I&#8217;m sure that most of us would still run Emacs and other desktop edito
   
 
 
-<time datetime="2009-02-16T11:36:38-05:00" pubdate data-updated="true">Feb 16<span>th</span>, 2009</time>
+<time datetime="2009-02-16T08:36:38-08:00" pubdate data-updated="true">Feb 16<span>th</span>, 2009</time>
         
       </p>
     
@@ -248,7 +299,7 @@ Now I&#8217;m sure that most of us would still run Emacs and other desktop edito
   
 
 
-<time datetime="2009-01-28T19:17:47-05:00" pubdate data-updated="true">Jan 28<span>th</span>, 2009</time>
+<time datetime="2009-01-28T16:17:47-08:00" pubdate data-updated="true">Jan 28<span>th</span>, 2009</time>
         
       </p>
     
@@ -304,7 +355,7 @@ For any questions regarding Pork feel free to post on the <a href="https://lists
   
 
 
-<time datetime="2009-01-27T11:38:35-05:00" pubdate data-updated="true">Jan 27<span>th</span>, 2009</time>
+<time datetime="2009-01-27T08:38:35-08:00" pubdate data-updated="true">Jan 27<span>th</span>, 2009</time>
         
       </p>
     
@@ -346,7 +397,7 @@ For any questions regarding Pork feel free to post on the <a href="https://lists
   
 
 
-<time datetime="2009-01-13T14:17:49-05:00" pubdate data-updated="true">Jan 13<span>th</span>, 2009</time>
+<time datetime="2009-01-13T11:17:49-08:00" pubdate data-updated="true">Jan 13<span>th</span>, 2009</time>
         
       </p>
     
@@ -411,7 +462,7 @@ For any questions regarding Pork feel free to post on the <a href="https://lists
   
 
 
-<time datetime="2008-12-23T06:23:12-05:00" pubdate data-updated="true">Dec 23<span>rd</span>, 2008</time>
+<time datetime="2008-12-23T03:23:12-08:00" pubdate data-updated="true">Dec 23<span>rd</span>, 2008</time>
         
       </p>
     
@@ -477,7 +528,7 @@ For any questions regarding Pork feel free to post on the <a href="https://lists
   
 
 
-<time datetime="2008-11-07T10:58:08-05:00" pubdate data-updated="true">Nov 7<span>th</span>, 2008</time>
+<time datetime="2008-11-07T07:58:08-08:00" pubdate data-updated="true">Nov 7<span>th</span>, 2008</time>
         
       </p>
     
@@ -515,7 +566,7 @@ For any questions regarding Pork feel free to post on the <a href="https://lists
   
 
 
-<time datetime="2008-10-09T05:18:29-04:00" pubdate data-updated="true">Oct 9<span>th</span>, 2008</time>
+<time datetime="2008-10-09T02:18:29-07:00" pubdate data-updated="true">Oct 9<span>th</span>, 2008</time>
         
       </p>
     
@@ -545,48 +596,6 @@ For any questions regarding Pork feel free to post on the <a href="https://lists
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2008/10/07/note-this-is-not-called-yet-its-just-a-placeholder-for-future-changes/">&#8220;NOTE: This Is Not Called YET. It&#8217;s Just a Placeholder for Future Changes.&#8221;</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-10-07T11:53:44-04:00" pubdate data-updated="true">Oct 7<span>th</span>, 2008</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>In my quest to rid Firefox of code that doesn&#8217;t do anything it is possible to screw up and delete a method that is only used by outside code. So far, I&#8217;ve hit a <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=457302">component</a> that isn&#8217;t used in Firefox, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=457965">methods</a> that aren&#8217;t used in Firefox and methods that <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=458983">claim</a> someone is about to use them (with a timestamp from 8 years ago). That and I discovered some code only appears to be used from BeOS or OS/2 specific ifdefs.</p>
-
-<p>Not surprisingly, I had someone comment that I do some &#8220;dangerous shit&#8221;. Sure, I can see why someone would think that.</p>
-
-<p>My protection: I use the try server to make sure that everything builds on supported platforms. On top of that every patch gets reviewed.</p>
-
-<p>Furthermore, I would like to point out that methods that aren&#8217;t called within Firefox are less likely to be tested and correct. So if one leaves code that should only be called from other projects, it&#8217;d be appropriate if we had some unit tests for it, which would flag the code as in-use. That would let us move to the next level and setup a tinderbox to detect dead code as soon as it is orphaned.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/20/">&larr; Older</a>
@@ -604,6 +613,10 @@ For any questions regarding Pork feel free to post on the <a href="https://lists
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/08/28/telemetry-reboot/">Telemetry Reboot</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/06/28/new-performance-people/">New Performance People, Telemetry News</a>
       </li>
     
@@ -617,10 +630,6 @@ For any questions regarding Pork feel free to post on the <a href="https://lists
     
       <li class="post">
         <a href="/blog/2013/03/26/snappy-number-54-snappy-discussion-in-paris/">Snappy #54: Snappy Discussion in Paris</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/03/25/snappy-number-53-faster-startup/">snappy #53: Faster: Startup, Image Decoding, Touchpad Input. Smoother Animations</a>
       </li>
     
   </ul>

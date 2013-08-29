@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="New Repository Since I do not yet have write access to oink svn, I have been doing all of my development in ad-hoc repositories within the svn &hellip;">
+  <meta name="description" content="That other software company has a some brilliant people working on verifying their source code. Their approach is hardcore and seems quite good. &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -95,6 +95,59 @@ if (requestAnimationFrame)
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2007/07/13/pondering-prepost-conditions-to-enforce-software-correctness/">Pondering Pre/Post Conditions to Enforce Software Correctness</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-07-13T02:12:55-07:00" pubdate data-updated="true">Jul 13<span>th</span>, 2007</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>That other software company has a some brilliant people working on verifying their source code. Their approach is hardcore and seems quite good. Their recipe to robust C# (applying this to C is research-in-progress, C++ isn&#8217;t yet considered) code is:</p>
+
+<ul>
+<li>sprinkle pre/post-conditions for functions. Reduce annotation labour by additional rule inference</li>
+<li>dataflow analysis to verify type-system stuff like not-null annotations</li>
+<li>Abstract interpretation + model checker to enforce pre/post-conditions</li>
+<li><a href="http://research.microsoft.com/research/pubs/view.aspx?type=Technical%20Report&amp;id=923">BoogiePL</a> intermediate language. Anything can be accomplished by an awesomely named intermediate language!
+Resulting code runs fast has a lot fewer bugs than code without all this fancy machinery. Unfortunately, the benefits can only be reaped if a whole program gets annotated. Otherwise, the model checker gets frustrated. Essentially the language being checked is turned into another much safer (more boogie!) language. I&#8217;m looking forward to the day (that will never come) when all new C code is written this way.</li>
+</ul>
+
+
+<p>If adding these to source code makes you rewrite the whole program, wouldn&#8217;t it be easier to invent another low-level language that comes with safety by default?</p>
+
+<p>I am guessing that the dehydra method of checking for a relatively small number of application specific bugs is the most practical approach available and it will get us 60% towards Boogieing. Now that elsa has support for preprocessor macros it should be possible to specify non-formal pre/post-conditions to check for common errors. It&#8217;s merely a complicated question of defining what should be checked for.</p>
+
+<p>I don&#8217;t have the motivation to write/buy/adopt/integrate a formal tool like a model checker, but it seems that it&#8217;s possible to write application specific checks in JavaScript that can run circles around what most model checkers can do.</p>
+
+<p>That other company isn&#8217;t the only vendor working on this stuff. There <a href="http://www.cs.princeton.edu/~appel/cminor/">brilliant people</a> taking a somewhat different (and open source) approach.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2007/07/13/dehydra-prcheck-squash-in-mercurial/">Dehydra, Prcheck, Squash - in Mercurial</a></h1>
     
     
@@ -111,7 +164,7 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2007-07-13T04:54:08-04:00" pubdate data-updated="true">Jul 13<span>th</span>, 2007</time>
+<time datetime="2007-07-13T01:54:08-07:00" pubdate data-updated="true">Jul 13<span>th</span>, 2007</time>
         
       </p>
     
@@ -181,7 +234,7 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2007-06-26T07:08:52-04:00" pubdate data-updated="true">Jun 26<span>th</span>, 2007</time>
+<time datetime="2007-06-26T04:08:52-07:00" pubdate data-updated="true">Jun 26<span>th</span>, 2007</time>
         
       </p>
     
@@ -261,7 +314,7 @@ if (requestAnimationFrame)
   
 
 
-<time datetime="2007-06-19T08:51:23-04:00" pubdate data-updated="true">Jun 19<span>th</span>, 2007</time>
+<time datetime="2007-06-19T05:51:23-07:00" pubdate data-updated="true">Jun 19<span>th</span>, 2007</time>
         
       </p>
     
@@ -318,7 +371,7 @@ I&#8217;m not sure how much of these features I will work on, but they are relat
   
 
 
-<time datetime="2007-06-12T06:26:01-04:00" pubdate data-updated="true">Jun 12<span>th</span>, 2007</time>
+<time datetime="2007-06-12T03:26:01-07:00" pubdate data-updated="true">Jun 12<span>th</span>, 2007</time>
         
       </p>
     
@@ -411,7 +464,7 @@ The MCPP maintainer is almost done with 1. I have a prototype implementation of 
   
 
 
-<time datetime="2007-05-29T06:36:26-04:00" pubdate data-updated="true">May 29<span>th</span>, 2007</time>
+<time datetime="2007-05-29T03:36:26-07:00" pubdate data-updated="true">May 29<span>th</span>, 2007</time>
         
       </p>
     
@@ -538,7 +591,7 @@ The MCPP maintainer is almost done with 1. I have a prototype implementation of 
   
 
 
-<time datetime="2007-05-17T11:30:43-04:00" pubdate data-updated="true">May 17<span>th</span>, 2007</time>
+<time datetime="2007-05-17T08:30:43-07:00" pubdate data-updated="true">May 17<span>th</span>, 2007</time>
         
       </p>
     
@@ -622,7 +675,7 @@ The MCPP maintainer is almost done with 1. I have a prototype implementation of 
   
 
 
-<time datetime="2007-05-11T12:07:26-04:00" pubdate data-updated="true">May 11<span>th</span>, 2007</time>
+<time datetime="2007-05-11T09:07:26-07:00" pubdate data-updated="true">May 11<span>th</span>, 2007</time>
         
       </p>
     
@@ -686,7 +739,7 @@ The MCPP maintainer is almost done with 1. I have a prototype implementation of 
   
 
 
-<time datetime="2007-05-10T10:52:07-04:00" pubdate data-updated="true">May 10<span>th</span>, 2007</time>
+<time datetime="2007-05-10T07:52:07-07:00" pubdate data-updated="true">May 10<span>th</span>, 2007</time>
         
       </p>
     
@@ -730,7 +783,7 @@ The MCPP maintainer is almost done with 1. I have a prototype implementation of 
   
 
 
-<time datetime="2007-05-07T05:58:43-04:00" pubdate data-updated="true">May 7<span>th</span>, 2007</time>
+<time datetime="2007-05-07T02:58:43-07:00" pubdate data-updated="true">May 7<span>th</span>, 2007</time>
         
       </p>
     
@@ -788,71 +841,6 @@ The MCPP maintainer is almost done with 1. I have a prototype implementation of 
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2007/05/01/status-report/">Status Report</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2007-05-01T10:13:01-04:00" pubdate data-updated="true">May 1<span>st</span>, 2007</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><strong>Automated Analyses and Rewrites</strong></p>
-
-<p>Dehydra and Squash are now mature enough to assist with mundane tasks like renames and various kinds of tedious code inspection. If you ever suspect that part of the Mozilla hacking you are doing could be done by a tool, contact me to see if I have a suitable tool for you.</p>
-
-<p>Also, these tools are in no way limited to working with Mozilla source code. I would be happy to see people use them for other projects too.</p>
-
-<p><strong>Short-term Plans</strong></p>
-
-<p>For the next week or two I plan to focus on out-parameter rewriting and the Mozilla-wide C++ callgraph.</p>
-
-<p><strong>Mozilla-wide Callgraph</strong> This is proving to be a little painful. Things work for basic test-cases, but I am running into scalability issues with Mozilla (as expected). My current approach of serializing everything into a giant JSON graph blows the 32bit address space after a few hundred files. Even doing a Mozilla-wide inheritance graph causes out of memory errors, but that runs almost to competition. The best solution to this will be to break up the graph into as many smaller JSON files as possible and only load ones that are absolutely required into memory.</p>
-
-<p>The callgraph will be a useful starting point for many other useful analyses (dead code one is going to be lots of fun) and it&#8217;s a good test of dehydra&#8217;s scalability, but I have suspended work on it for a few days to focus on more productive tasks.</p>
-
-<p><strong>Out-parameter Rewriting</strong></p>
-
-<p>Due to XPCOM, Mozilla getters typically return an error code and a value via an out parameter. This requires checking the error code and likely propagating it at the callsite.</p>
-
-<p>For many places in the code there are performance and aesthetical reasons to stop using error codes. Brendan talks discusses some reasons <a href="http://weblogs.mozillazine.org/roadmap/archives/2006/10/mozilla_2.html">here</a>. This would be cool stuff, but switching to exceptions isn&#8217;t going to happen right away. However, I can already start working on my tools to assist with simpler cases (like <a href="http://www.google.com/codesearch?hl=en&amp;q=+nsBidiPresUtils::GetBidiEngine+show:kW5gzhxHJvU:iRn_dfI9xJY:Y5Gdp6b4NgE&amp;sa=N&amp;cd=1&amp;ct=rc&amp;cs_p=http://ftp.mozilla.org/pub/mozilla.org/mozilla/releases/mozilla1.7a/src/mozilla-source-1.7a.tar.bz2&amp;cs_f=mozilla/layout/base/src/nsBidiPresUtils.cpp#a0">nsBidiPresUtils::GetBidiEngine</a>?). I&#8217;m focusing on getters that return NS_OK/(some error) and a value and rewriting them to return NULL on error and non-NULL on success. This could be ready in time for Firefox 3. Once I&#8217;m done with the tool, I&#8217;ll just need someone to help me figure which functions are ok to simplify like that.</p>
-
-<p>I suspended work on out-param rewriting <a href="http://taras.glek.net/blog/2007/01/11/squash-progress-and-plans/">some time ago</a>. It was proving to be too complicated to do within squash. Now that I can use dehydra to verify the control flow graph, things are a lot simpler. Current plan is to have the <a href="http://people.mozilla.org/~tglek/outparams.js">dehydra script</a> produce a list of candidates for out-param surgery and have squash consume that list and produce the appropriate patches. Currently, the script works for some very simple cases and I am working on the squash side.</p>
-
-<p><strong>Smaller Tasks</strong></p>
-
-<ul>
-<li>Sayrer&#8217;s uninitialized member analysis: added more complete constructor support to dehyra, wrote a <a href="http://people.mozilla.org/~tglek/member-init.js">sample script</a> to get sayrer started. Fixed dehydra&#8217;s 64bit support. <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=378763">Bug 378763</a></li>
-<li>Made some squash-generated patches for bz, helped me find a bug in squash. <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=378780">Bug 378780</a></li>
-<li>Pushing squash upstream into oink. This is time consuming because it is a combination of legal and many minor technical issues. Dehydra will follow later.</li>
-</ul>
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/26/">&larr; Older</a>
@@ -870,6 +858,10 @@ The MCPP maintainer is almost done with 1. I have a prototype implementation of 
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/08/28/telemetry-reboot/">Telemetry Reboot</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/06/28/new-performance-people/">New Performance People, Telemetry News</a>
       </li>
     
@@ -883,10 +875,6 @@ The MCPP maintainer is almost done with 1. I have a prototype implementation of 
     
       <li class="post">
         <a href="/blog/2013/03/26/snappy-number-54-snappy-discussion-in-paris/">Snappy #54: Snappy Discussion in Paris</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/03/25/snappy-number-53-faster-startup/">snappy #53: Faster: Startup, Image Decoding, Touchpad Input. Smoother Animations</a>
       </li>
     
   </ul>
