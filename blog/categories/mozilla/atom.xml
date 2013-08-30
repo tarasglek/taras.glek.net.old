@@ -4,7 +4,7 @@
   <title><![CDATA[Category: mozilla | All About Performance]]></title>
   <link href="http://taras.glek.net/blog/categories/mozilla/atom.xml" rel="self"/>
   <link href="http://taras.glek.net/"/>
-  <updated>2013-08-29T15:57:21-07:00</updated>
+  <updated>2013-08-29T17:08:58-07:00</updated>
   <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -12,6 +12,45 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Telemetry Reboot]]></title>
+    <link href="http://taras.glek.net/blog/2013/08/28/telemetry-reboot/"/>
+    <updated>2013-08-28T15:54:00-07:00</updated>
+    <id>http://taras.glek.net/blog/2013/08/28/telemetry-reboot</id>
+    <content type="html"><![CDATA[A year ago I wrote 2 blog posts describing telemetry ([post1](/blog/2012/07/25/telemetry-and-what-it-is-good-for-part-2-telemetry-achievements/), [post2](/blog/2012/07/25/telemetry-and-what-it-is-good-for-part-1-nuts-and-bolts/)).
+
+What sucks about telemetry?
+---------------------------
+The following aspects of performance made us unhappy with telemetry as deployed now: dashboard performance, effort required to add new dashboards/visualizations, data-gathering latency and slow ad-hoc queries on hadoop. Telemetry dashboards keep timing out, infrastructure keeps failing, this can't be the way to drive Firefox performance improvements.
+
+Telemetry Reboot
+-----------------
+After a few months of soul-searching we ended up with a small group of people working on a replacement for current telemetry serverside. The goals are to minimize latency in the following dimensions:
+
+* Serverside should be fast and robust. Slow dashboards are a good way to discourage their use. 
+* We should have extensive monitoring and alerting to notify us when data isn't coming in (eg due to a bug in Firefox client code).
+* Everything should be open source and easy to hack on. Outgoing telemetry infrastructure has an overly complicated software stack and code isn't open source. This was a mistake.
+* Fast ad-hoc queries
+* Minimal submission->graphing latency. Currently it takes about 3 days between landing a piece of telemetry code and having that data show up in a dashboard. Takes about 7 to gather a useful amount of data. My goal is to eventually do live-histogram-aggregation so the data can be graphed as soon as it hits the server. This means we should be able to gather a useful amount of telemetry data within 3 days of landing a probe. Should we choose to switch to shipping hourly nightlies, telemetry would come back even faster :)
+
+ETA
+---
+I expect to shut down old dashboards and cut over to the new server + dashboards on Oct 1. See the wiki for our next set of [milestones](https://wiki.mozilla.org/Telemetry/Reboot).
+
+We'll be deploying the new telemetry backend on Amazon AWS. I'll write a blog post about switching from a private cluster to AWS once we go live.
+
+[Mark](http://mreid-moz.github.io/) is working on our serverside. Mark started implementing the server in Python/Django, but Node.js turned out to be a much more potent platform in terms of amount of work needed to squeeze out good performance. You can find the current node [code](https://github.com/mreid-moz/telemetry-server/blob/master/server/server.js) on github. I suspect we'll be switching to a C/C++ HTTP receiver in the future to get another 2-3x increase in req/s performance. In the past we've run into servers having difficulty coping with increases in telemetry volume (submissions went up 10-fold when we added saved-session telemetry).
+
+At the moment we are looking at squeezing out the maximum possible requests per second out of node. If you have a background of that sort of thing feel free to try improving our code.
+
+I spent a lot of time thinking about how to write the fastest(+robustest) possible telemetry dashboard. I ended up writing a [dashboard](http://telemetry-dash.mozilla.org/) ([code](https://github.com/mozilla/telemetry-dashboard/)) based on static JSON. This approach is fast and should make dashboards easy to contribute to. [Chris](http://xor.lonnen.com/) is working on making my prototype useful and usable. The dashboard is going to be going through a lot of refactoring in the near future. At the moment we use [jydoop](https://github.com/mozilla/jydoop) to generate the dashboard JSON from hadoop (was easier to write a new query tool for hadoop than do a complex map/reduce in Java).
+
+Summary
+-------
+We will be cutting over to brand new telemetry infrastructure on Oct 1. There will be pain. If you have any questions or are interested in helping out ping us on IRC in `#telemetry`.
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[New Performance People, Telemetry News]]></title>
@@ -128,42 +167,6 @@ For a team activity we walked to the [Paris Catacombes](http://en.wikipedia.org/
 
 <img src="https://lh6.googleusercontent.com/-dUluprOFvY0/UUoRsBAC1oI/AAAAAAAAIj8/WjOYb7uHij4/s580/20130320_123837.jpg" title="Relevance to writing software? Multi-million line codebases are boneyards of some kind" >
 
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[snappy #53: Faster: Startup, Image Decoding, Touchpad Input. Smoother Animations]]></title>
-    <link href="http://taras.glek.net/blog/2013/03/25/snappy-number-53-faster-startup/"/>
-    <updated>2013-03-25T06:25:00-07:00</updated>
-    <id>http://taras.glek.net/blog/2013/03/25/snappy-number-53-faster-startup</id>
-    <content type="html"><![CDATA[### Responsiveness
-
-Joe Drew taught Firefox to decode images on multiple threads. It took a mere 29 patches in <a title="Multithreaded image decoding" href="https://bugzilla.mozilla.org/show_bug.cgi?id=716140">bug 716140</a>. This should speed up page-load and improve tab-switch times. This task was considered too hard a year ago when Snappy people were discussing potential improvements.
-
-Masayuki Nakano improved Firefox scrolling responsiveness on modern touchpads in <a title="Scrolling using some high-resolution-scroll aware touchpads feels slow" href="https://bugzilla.mozilla.org/show_bug.cgi?id=829952">bug 829952</a>. Dealing with scroll-events on Windows is a mess. It's nice when we make forward progress in this area.
-
-
-Marco Bonardo fixed a mysterious cause of main thread IO I ran into in <a title="Avoid repeated execution of expensive daysOfHistory query" href="https://bugzilla.mozilla.org/show_bug.cgi?id=830423">bug 830423</a>. I ran into this issue because I compulsively navigate to `about:telemetry` in Firefox and look in 'Slow SQL Statements' and 'Browser Hang' sections. I encourage readers of this blog to check out that data whenever Firefox is under-performing.
-
-### Startup
-
-<a title="Use readahead for ordered jar files such as omni.ja. Should be ~10% startup speedup" href="https://bugzilla.mozilla.org/show_bug.cgi?id=810151">bug 810151</a> + <a title="Use fadvise() to speed up cookie db load" href="https://bugzilla.mozilla.org/show_bug.cgi?id=810454">bug 810454</a> - Aaron Klotz implemented omnijar + cookie readahead.
-
-<a title="Fold NSPR and NSS into mozjs (for Windows) or libxul (for other platforms)" href="https://bugzilla.mozilla.org/show_bug.cgi?id=648407">bug 648407</a> - Mike Hommey folded libraries for faster startup. If I'm reading <a title="Update removed-files after bug 648407" href="https://bugzilla.mozilla.org/show_bug.cgi?id=852068">bug 852068</a> correctly, Firefox now loads 7 fewer libraries on startup. My rough rule of thumb is that each (small) file adds ~30ms to spinning-disk startup so this should net >200ms in startup savings.
-
-Cumulative startup improvements are notoriously difficult to predict + measure, but I suspect that above changes should make for a >=10% speedup in Firefox 22 start over previous releases. We'll be watching telemetry data in the coming weeks.
-
-###Smoothness
-<a title="Consider getting rid of the delay line filter stuff in timer thread" href="https://bugzilla.mozilla.org/show_bug.cgi?id=590422">bug 590422</a> - Avi Halachmi is continuing on his quest to make Firefox animate smoothly. This is another tricky step towards smoother animations in Firefox. Since landing this, Avi already embarked on the next gecko-level animation smoothness improvement.
-
-Marco Bonardo spotted some potential for contention in recent DOM Local Storage optimizations. Vladan Djeric landed corrections in <a title="LocalStorage performance improvements" href="https://bugzilla.mozilla.org/show_bug.cgi?id=842852">bug 842852</a>.
-
-###Throughput improvements
-
-Ehsan Akhgari reduced allocator contention in <a title="Prevent firing timers from lock contention with the main thread" href="https://bugzilla.mozilla.org/show_bug.cgi?id=733277">bug 733277</a>.
-
-Tim Taubert taught Firefox to warm up newtab connections on hover <a title="[New Tab Page] Speculatively open connections for sites when hovering them" href="https://bugzilla.mozilla.org/show_bug.cgi?id=790882">bug 790882</a>
 
 ]]></content>
   </entry>
