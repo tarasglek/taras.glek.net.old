@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Python GDB Rocks! I wanted a non-painful way to figure out what&#8217;s causing bonus file IO. I&#8217;ve noticed that gtk likes to open files, but I &hellip;">
+  <meta name="description" content="With much pain I managed to convince a Vmware WinXP virtual machine to run in VirtualBox. At first it ran very sluggishly(>3 hours to do a build?), &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,46 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/07/14/virtualbox-rocks/">VirtualBox 3.0 Rocks</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-07-14T06:15:52-07:00" pubdate data-updated="true">Jul 14<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>With much pain I managed to convince a Vmware WinXP virtual machine to run in <a href="http://www.virtualbox.org/">VirtualBox</a>. At first it ran very sluggishly(>3 hours to do a build?), but after I turned off IO Apic stuff in Windows, it&#8217;s become disturbingly fast. It now takes 40minutes to build a wince fennec vs almost 80minutes it took on VMware server.</p>
+
+<p>VirtualBox&#8217;s disk throughput is phenomenal, in fact, this is the first time I&#8217;ve seen almost-native speed disk io in virtual machine. A benchmark I tried reported 45mb/s 4K read/writes (these were cached on the linux side).</p>
+
+<p>Unlike Vmware server, VirtualBox&#8217;s usb works without troubles, shared folders were easy to setup etc. It&#8217;s an awesome app, hope Sun/Oracle keeps it up.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -576,52 +616,6 @@ if (requestAnimationFrame)
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/04/15/misc-static-analysis-news-smmgcstatic-codecon-piglet/">Misc Static Analysis News: S/#mmgc/#static/, Codecon, Piglet, &#8230;</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-04-15T06:37:23-07:00" pubdate data-updated="true">Apr 15<span>th</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h1>static on irc.mozilla.org is now the correct irc channel for anything to do with static analysis.</h1>
-
-<p><strong>Codecon</strong> On Sunday, I will be presenting on <a href="https://developer.mozilla.org/En/Pork">Pork</a> at codecon. I have been meaning to attend <a href="http://www.codecon.org/">codecon</a> since the days when P2P was considered cool, was not able to make it until this year. It is a historical milestone for me. Codecon was how people at Mozilla first heard of Elsa, which is now the foundation of all our refactoring tools (it is also inherited baggage I get to maintain).</p>
-
-<p><strong>Piglet</strong></p>
-
-<p>I adopted <a href="http://hg.mozilla.org/users/tglek_mozilla.com/piglet">Piglet</a>, <a href="http://blog.mozilla.org/dmandelin/">Dave Mandelin</a>&#8217;s de-oinkification project, and imported it into hg. It feels really good to finally be able to do a make -j without disturbing people nearby with surprise explosions of foul language. I plan to move all relevant static analysis tools into piglet. After that I shall finally merge a dozen or so elsa repositories and end up with Pork consisting of elsa/ + piglet/.</p>
-
-<p><strong>Pork</strong>*</p>
-
-<p>Chris Jones is quietly working on making Pork magnitudes more useful to average developers. It&#8217;s exciting stuff and I&#8217;ll let him announce it when he&#8217;s ready. Between his work and <a href="http://vocamus.net/dave/">David Humphrey</a>&#8217;s DXR. I think we are finally going to make it easier to hack on Mozilla for a much wider audience than before.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/19/">&larr; Older</a>
@@ -639,6 +633,10 @@ if (requestAnimationFrame)
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/11/20/new-role-developer-productivity/">New Role: Developer Productivity</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/08/28/telemetry-reboot/">Telemetry Reboot</a>
       </li>
     
@@ -652,10 +650,6 @@ if (requestAnimationFrame)
     
       <li class="post">
         <a href="/blog/2013/03/27/snappy-number-55-snappy-evolution/">Snappy #55: Snappy Evolution</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/03/26/snappy-number-54-snappy-discussion-in-paris/">Snappy #54: Snappy Discussion in Paris</a>
       </li>
     
   </ul>

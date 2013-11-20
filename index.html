@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="A year ago I wrote 2 blog posts describing telemetry (post1, post2). What sucks about telemetry? The following aspects of performance made us unhappy &hellip;">
+  <meta name="description" content="New Role The performance part of my team is now lead by Vladan. They are doing usual performancy things with a focus on improving our &#8216;internal &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,69 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/11/20/new-role-developer-productivity/">New Role: Developer Productivity</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-11-20T13:44:00-08:00" pubdate data-updated="true">Nov 20<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>New Role</h2>
+
+<p>The performance part of my team is now lead by <a href="http://blog.mozilla.org/vdjeric/">Vladan</a>. They are doing usual performancy things with a focus on improving our &#8216;internal&#8217; benchmarks such as talos, TART + some upcoming power testing.</p>
+
+<p>I got a new task recently: developer productivity. I&#8217;m prioritizing tasks based on developer unproductivity. I have the following new stuff on my radar:</p>
+
+<ul>
+<li>slow build system for local builds</li>
+<li>long build/test times on our release automation</li>
+<li>bugzilla improvements (eg tracking review times, lack of pull reqs, etc)</li>
+</ul>
+
+
+<p>Expect to hear less Gecko and more web dev stuff out of me for the foreseable future. Note, this is a collaborative project. My team would not be able to accomplish any of the new goals as we are already above capacity. I&#8217;m mainly working on improving coordination and collaboration on existing projects. Let me know if you have ideas related to this dev productivity stuff.</p>
+
+<h2>Cost-Oriented Architecture</h2>
+
+<p>My main project for the remainder of this year is to maximize throughput per dollar spent on our release automation infrastructure. I&#8217;m focusing on computation that happens on Amazon EC2(because it&#8217;s easier than pricing out our own infrastructure). My goal is to be able to say &#8220;making improvement x will pay for itself in y time&#8221;. This is mainly management technique to make it easier to justify working on infrastructure.</p>
+
+<p>John posted some initial costing <a href="http://oduinn.com/blog/2013/11/20/the-financial-cost-of-a-checkin-part-1/">figures</a>. Rail is working on switching us over to Amazon Spot instances in <a title="Prepare infra to handle spot instances" href="https://bugzilla.mozilla.org/show_bug.cgi?id=935533">bug 935533</a>. I expect a 2-5x reduction in our AWS costs once Rail is done.</p>
+
+<p>I&#8217;d like to have a receipt attached to every job that executes on our build infrastructure. I hope this encourages devs to look into build/test inefficiencies.</p>
+
+<p>Keeping an eye on costs means we&#8217;ll be able to better reason about moving more workloads into the cloud. Cloud stuff is attractive because it allows us to give developers keys to AWS. They can deploy(in a low-friction manner) whatever they need to make their job easier while cost-monitoring ensures that things don&#8217;t get crazy.</p>
+
+<h2>Open Architecture</h2>
+
+<p>In theory, open source is about scratching own needs. In practice service owners (usually inadvertently) put up walls to contribution by depending on licensing requirements, poor documentation, vpns, obscure infrastructure, weird version control, etc. This then snowballs into something equivalent to closed source where &#8216;clients&#8217; have to ask for &#8216;features&#8217; from &#8216;owners&#8217;. This usually results in unhappy customers and overworked owners. This happened to Telemetry (see previous post) and is happening to a few of our tools. Expect improvements in this area.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -617,86 +680,6 @@ Omnijar readhead is next, in <a title="Use readahead for ordered jar files such 
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/02/17/router-assisted-automatic-wake-on-lan-plus-suspend/">Router-Assisted Automatic Wake-on-LAN + Suspend</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-02-17T20:56:00-08:00" pubdate data-updated="true">Feb 17<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h2>The problem</h2>
-
-<p>My <a href="/blog/2013/02/17/10w-intel-i5-desktop/">new computer</a> uses 10-46W of power while on, 1W while suspended. It replaced my softbricked (ArchLinux can burn in hell) <a href="/blog/2011/07/16/my-nas-is-smaller-than-yours/">arm computer</a> where power consumption ranged from 4-7W.</p>
-
-<p>The new computer is a backup target for my eyefi (via <a href="https://github.com/hacker/iii">iiid</a>), Android phone (via <a href="https://play.google.com/store/apps/details?id=eu.kowalczuk.rsync4android&amp;hl=en">rsync/ssh</a>), laptop (via rsync).</p>
-
-<p>For fun I decided to try to use suspend-to-RAM + Wake-on-LAN to minimize power usage to get this beefy x86 to use less power than the old ARM NAS (which could not unsuspend successfully).</p>
-
-<p>By default WOL is a pain. The eye-fi card uploads photos when the SLR camera is on. Android phone is configured to rsync stuff when it is plugged while connected to home wifi. It&#8217;s not convenient to navigate some UI to send a WOL packet (or push a power button) every time I need to perform a backup. Manually deciding when to suspend the machine is also no fun.</p>
-
-<h2>Automatic WOL</h2>
-
-<p>In an ideal world WOL would support waking up on IP traffic directed at the machine in question. Typically WOL either wakes up in response to WOL magic packets or ANY ethernet traffic(ugh!). <strong>Update</strong>: Turns out my nic supports directed wakeups, but the e1000e driver on Linux does not implement them.</p>
-
-<p>Luckily, ARP <code>who has x.x.x.x</code> queries are broadcast to whole network segment. So my <a href="http://en.wikipedia.org/wiki/Tomato_%28firmware%29">Tomato</a> router can help.</p>
-
-<p>This works as follows:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Android-phone: ARP: Who has 192.168.1.149
-</span><span class='line'>router: *sends WOL packet to NAS*
-</span><span class='line'>Server Unsuspend Script: 192.168.1.149 is at A:B:C:D:E:F</span></code></pre></td></tr></table></div></figure>
-
-
-<p>I wrote an arpwol program for this, I run it via</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>arpwake.mips br0 192.168.1.149 4C:72:B9:42:EA:97</span></code></pre></td></tr></table></div></figure>
-
-
-<p>It listens for arp looking for 192.168.1.149 and fires of a WOL.</p>
-
-<p>It takes 5 seconds for an ssh roundtrip to a sleeping server.</p>
-
-<h2>Auto-suspend</h2>
-
-<p>Once the server is awake, it is annoying to have to put it to sleep manually. I wrote a script to monitor <code>/var/log/auth.log</code> and auto-suspend when active ssh-session count reaches 0.</p>
-
-<h2>Conclusion</h2>
-
-<p>It great to have an x86 box idle at 1W while unused. Suspend to disk introduces extra latency without saving much more power (due to keeping WOL on).</p>
-
-<p>Please checkout the code on <a href="https://github.com/tarasglek/sleepyscripts">github</a>. WOL magic happens in <code>arpwake.c</code> and auto-suspend in <code>autosleep.py</code>.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -712,6 +695,10 @@ Omnijar readhead is next, in <a title="Use readahead for ordered jar files such 
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/11/20/new-role-developer-productivity/">New Role: Developer Productivity</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/08/28/telemetry-reboot/">Telemetry Reboot</a>
       </li>
     
@@ -725,10 +712,6 @@ Omnijar readhead is next, in <a title="Use readahead for ordered jar files such 
     
       <li class="post">
         <a href="/blog/2013/03/27/snappy-number-55-snappy-evolution/">Snappy #55: Snappy Evolution</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/03/26/snappy-number-54-snappy-discussion-in-paris/">Snappy #54: Snappy Discussion in Paris</a>
       </li>
     
   </ul>

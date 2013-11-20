@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="I work on static analysis by lamp-light and proudly cycle wearing Firefox imagery by daylight. Today I was pleased to discover that the flyer for the &hellip;">
+  <meta name="description" content="After writing a ton of docs and working through other Dehydra 0.9 blockers, I decided to cool off by doing some actual analyses. Before I get to that &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,54 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2008/05/27/treehydra-goes-push-and-pop/">Treehydra Goes Push and Pop</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-05-27T06:48:03-07:00" pubdate data-updated="true">May 27<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>After writing a ton of <a href="http://developer.mozilla.org/en/docs/Dehydra_Manual">docs</a> and working through other <a href="http://developer.mozilla.org/en/docs/Dehydra">Dehydra</a> <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=423898">0.9 blockers</a>, I decided to cool off by doing some actual analyses. Before I get to that, I&#8217;d like to say that the last big task is to setup a buildbot for Dehydra on Linux/OSX. Thanks to yet another awesome contribution from Vlad, that&#8217;s <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=430321">mostly done</a>.</p>
+
+<p>So I got working on <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=421934">GC-safety static analysis</a>. Originally we tried to define a complete spec before writing a single line of code. That turned to be a bad idea and resulted in a spec full of bugs. <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=432915">This time</a> we are defining the analysis incrementally and as a surprise reward, it already caught <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=435546">a bug</a>.</p>
+
+<p><strong>Pushing and Popping Our Way</strong></p>
+
+<p>SpiderMonkey has a lot of complex code doing applying Push/Pop-like operations on variables in a function-local manner. Examples of functions that this analysis would look at are: JS_PUSH_TEMP_ROOT/JS_POP_TEMP_ROOT and JS_LOCK/JS_UNLOCK. See <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=432915">bug</a> for more. Essentially, this will help with &#8220;code must flow through here&#8221; comments on &#8220;out:&#8221; goto labels that inhabit the SpiderMonkey source.</p>
+
+<p>This is an example of control-flow-sensitive analysis. It impossible without a compiler-like view of the code that <a href="http://developer.mozilla.org/en/docs/Treehydra">Treehydra</a> provides. It also helps to have a scalable algorithm to iterate the CFG. Luckily, David Mandelin wrote such a beast by implementing <a href="http://www.cs.cornell.edu/courses/cs711/2005fa/papers/dls-pldi02.pdf">ESP</a> for his <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=420933">outparam analysis</a>. David factored-out the ESP analysis and made it available for reuse. See esp_lock.js in the <a href="http://hg.mozilla.org/users/tglek_mozilla.com/dehydra-gcc/index.cgi/file/8f6914b2aaf9/test/">test suite</a> for an example of how to write control-flow sensitive analyses. locks_valid<em>.cc and locks_bad</em>.cc illustrate the code patterns that can be scanned for.</p>
+
+<p>So if you know of any further push/pop patterns in the rest of Moz that can be checked in this manner, leave a comment.</p>
+
+<p>PS. This is yet another account of Treehydra rocking the static analysis world. Exposing the slightly scary, but awesome GCC gutts via JavaScript allows one to perform precise static analyses in a civilized manner. What could be more fun?</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -566,64 +614,6 @@ I have elaborate plans on how to take over the world with static analysis, more 
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2008/01/25/dehydra-progress/">Dehydra Progress</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-01-25T09:39:30-08:00" pubdate data-updated="true">Jan 25<span>th</span>, 2008</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><a href="http://wiki.mozilla.org/Dehydra_GCC">GCC Dehydra</a> is evolving much faster than the Elsa version did and it is easier to use. Once I implemented virtual methods correctly, Joshua was able to <a href="http://quetzalcoatal.blogspot.com/2008/01/more-fun-and-games.html">do his thing</a> in no time at all. All it takes is a custom GCC (I&#8217;d love to see it packaged) and specifying plugin parameters in CXXFLAGS.</p>
-
-<p>Dehydra has some new tricks now like a tree representation of types (instead of a string) with full typedef support. Lisp remnants in GCC are getting a new life as JavaScript objects.</p>
-
-<p>I&#8217;m current working on exposing the full GCC tree structure in JavaScript so one could do any analysis they wanted in pure JS. Dynamically typed GCC tree nodes are great for that. I&#8217;m starting with middle-end GIMPLE representation so in theory one will be able to analyze anything gcc can compile (Java, C++, C, ObjC, ObjC++, FORTRAN?). Eventually this will be expanded to support frontend specific tree nodes to be able to look at code closer to the way it was written. Oh and I expect people will be able to script large parts of C++ -> JavaScript rewrites with Dehydra.</p>
-
-<p>In theory, one could make tree node conversion two way which would enable writing optimization passes in JS, but that would be silly.</p>
-
-<p><strong>What&#8217;s the point?</strong></p>
-
-<p>I want to be able to do <a href="http://wiki.mozilla.org/Exceptions">Exception-safety analysis</a> in pure JS. I want to enable <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=265084">unit checking </a>(thought typedefs and inline conversion functions) in pure JS.</p>
-
-<p>Additionally, Dehydra should be awesome for generating bindings. For example, I&#8217;ll be able use Dehydra to import GCC&#8217;s autogenerated enums to get string names for nodes.</p>
-
-<p>Also it will become easy to extract callgraphs and various other stats out of the code if they are accessible in JS. Eventually we&#8217;ll be switching Dehydra to Tamarin to do all of the above really really fast.</p>
-
-<p><strong>GCC Plugins</strong></p>
-
-<p>While I am messing with the GCC AST, Dave is working on utilizing GCC&#8217;s <a href="http://blog.mozilla.org/dmandelin/">control flow graphs</a> with a separate plugin. Eventually we&#8217;ll merge our work, but for now it&#8217;s nice to not step on each others toes while adding features to the compiler. Given how easy life is with plugins I am amazed that people chose to go uphill bothways and not collaborate on a plugin interface for their crazy GCC extensions. Yes, I&#8217;m looking at you: <a href="http://mygcc.free.fr/">mygcc</a> and <a href="http://www.gccxml.org/HTML/Index.html">gccxml</a>.</p>
-
-<p>Aren&#8217;t there <a href="http://www.eclipse.org/cdt/">IDEs</a> interested in making use of GCC internals too or is everybody interested in maintaining <a href="http://git.kernel.org/?p=devel/sparse/sparse.git;a=blob;f=expression.c;h=289927ac7c88eb5bffbbb450915a7b829394d5a0;hb=a02aeb329d5a8f9047c0b75b7e7f64ee2db3ffcf">yet another crappy C parser</a> like Linux&#8217;s Sparse tool?</p>
-
-<p>I&#8217;m looking forward to exploring the many ways we can reuse what&#8217;s in the compiler to empower developers for Mozilla 2.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/23/">&larr; Older</a>
@@ -641,6 +631,10 @@ I have elaborate plans on how to take over the world with static analysis, more 
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/11/20/new-role-developer-productivity/">New Role: Developer Productivity</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/08/28/telemetry-reboot/">Telemetry Reboot</a>
       </li>
     
@@ -654,10 +648,6 @@ I have elaborate plans on how to take over the world with static analysis, more 
     
       <li class="post">
         <a href="/blog/2013/03/27/snappy-number-55-snappy-evolution/">Snappy #55: Snappy Evolution</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/03/26/snappy-number-54-snappy-discussion-in-paris/">Snappy #54: Snappy Discussion in Paris</a>
       </li>
     
   </ul>

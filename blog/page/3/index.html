@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Blocking calls into the Flash plugin can temporarily hang Firefox. This is a problem because sometimes the user would be happy to kill the plugin to &hellip;">
+  <meta name="description" content="I&#8217;m off work until January. I took this opportunity to partake in chores such as fixing a toilet and switching away from wordpress. After &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,57 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/12/17/hello-octopress/">Hello Octopress</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-12-17T17:10:00-08:00" pubdate data-updated="true">Dec 17<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I&#8217;m off work until January. I took this opportunity to partake in chores such as fixing a toilet and switching away from wordpress.</p>
+
+<p>After suffering wordpress for half a decade I finally switched to a combination of Octopress + Disqus.</p>
+
+<p>It took:</p>
+
+<ul>
+<li>a few hours of tweaking the combination of <a href="https://github.com/thomasf/exitwp">exitwp.py</a>, html2text.py to convert my blog without busting links, images</li>
+<li>a few hours of decyphering octopress/github documentation to setup a website</li>
+<li>an hour to figure out where images should live (in <em>source/assets</em>)</li>
+</ul>
+
+
+<p>Thanks to everyone that suggested <a href="http://octopress.org/">Octopress</a>.</p>
+
+<p>Goodbye word-style wordpress bitchwork.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -560,64 +611,6 @@ if (requestAnimationFrame)
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/09/04/snappy-38/">Snappy #38: Responsiveness Fixes Galore</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-09-04T02:17:48-07:00" pubdate data-updated="true">Sep 4<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>End of summer is a tough time to make progress because a lot of people are on vacation. Surprisingly, Firefox got some good fixes in since the last update.</p>
-
-<p><strong>Less Slow Startups</strong></p>
-
-<p><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=726125">Bug 726125</a>: should get rid of a lot of super-slow startups. Due to an abstraction accident we ended up validating jars more eagerly than expected. Firefox would go on the net (on the main thread) to check the certificate every time a signed jar was opened. There are over 500 signed extensions on AMO with over 14million active users. See the following for background on the (now dead) feature that caused our jar code to go nuts: <a href="http://www.mozilla.org/projects/security/components/signed-scripts.html">signed scripts</a> and <a href="https://developer.mozilla.org/en-US/docs/Bypassing_Security_Restrictions_and_Signing_Code">note on removal of signed script</a> support. Thanks for Nicholas Chaim and Vladan Djeric for fixing this.</p>
-
-<p><strong>Less Proxy Lag (WIP)</strong></p>
-
-<p><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=769764#c5">Bug 769764</a>. We have received a lot of strange complaints about Firefox network performance that we could never reproduce. Turned out this was because none of us used proxies. Patrick McManus discovered a lot of synchronous proxy and DNS code in our network stack.</p>
-
-<p>Fix for this should also improve performance for people without proxies since proxy-autodetection code was also doing main thread IO. As a result all of us replacing sync APIs with async ones all of the existing proxy-related addons will have to be updated. Patrick is reaching out to addon authors to make sure addons are updated in time for the next release.</p>
-
-<p><strong>Less UI Repaint Lag</strong></p>
-
-<p><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=786421">Bug 786421</a>: Nightlies got unbearably slow for me recently. Turned out we ended continuously resizing + applying theme + redrawing invisible tooltips on every paint. Thanks for Timothy Nikkel for fixing this. This bug never affected anyone outside of the Nightly/Aurora testers, but it serves as yet another example of how the <a href="https://developer.mozilla.org/en-US/docs/Performance/Profiling_with_the_Built-in_Profiler">Gecko Profiler</a> makes it easier than ever to diagnose weird performance problems. The single biggest contribution anyone can do at the moment is to provide instructions of how to reproduce lag with accompanying profiler traces.</p>
-
-<p><strong>Less Gradient Lag</strong></p>
-
-<p><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=761393">Bug 761393</a>: Paul Adenot implemented a gradient cache. This was landed as a Telemetry experiment so we can determine what the optimal cache retention strategy is. We&#8217;ll be watching the relationship between GRADIENT_DURATION and GRADIENT_RETENTION_TIME in the coming weeks. Currently rendering gradients cause stalls in the GPU pipeline. In previous experiments we found out that most of the tab-switch rendering time in hardware-accelerated Firefox is spent rendering gradients :(. Gradients are hard to notice for casual users, but they are heavily used in our tab strip and on Google web properties.</p>
-
-<p><strong>MozCamp</strong></p>
-
-<p>I may not have a chance to post the next snappy update as I&#8217;ll be hopping on the plane to Warsaw right after our meeting. If you are attending MozCamp come to our <a href="https://wiki.mozilla.org/index.php?title=MozCampEU2012/Schedule/Desktopandmobile/All-About-Performance">&#8216;All About Performance&#8217; session</a>. Our goal for the talk is to significantly expand the pool of people who can diagnose Firefox (and web) performance problems.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/4/">&larr; Older</a>
@@ -635,6 +628,10 @@ if (requestAnimationFrame)
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/11/20/new-role-developer-productivity/">New Role: Developer Productivity</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/08/28/telemetry-reboot/">Telemetry Reboot</a>
       </li>
     
@@ -648,10 +645,6 @@ if (requestAnimationFrame)
     
       <li class="post">
         <a href="/blog/2013/03/27/snappy-number-55-snappy-evolution/">Snappy #55: Snappy Evolution</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/03/26/snappy-number-54-snappy-discussion-in-paris/">Snappy #54: Snappy Discussion in Paris</a>
       </li>
     
   </ul>

@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Vladan is working on adding slow SQL tracking to Telemetry, part of that has already landed. He recently exposed this information via the about: &hellip;">
+  <meta name="description" content="Meeting notes. Not much exciting new stuff happened this week. There was some progress on responsiveness profiler, snappy scrolling, dom storage. We &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,53 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/12/16/snappy-update-for-dec-15/">Snappy Update for Dec 15</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-12-16T08:31:05-08:00" pubdate data-updated="true">Dec 16<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><a href="https://wiki.mozilla.org/Performance/Snappy/2011-12-15">Meeting notes</a>.</p>
+
+<p>Not much exciting new stuff happened this week. There was some progress on responsiveness profiler, snappy scrolling, dom storage. We are starting investigations into reporting per-tab overhead, interruptable JavaScript, etc</p>
+
+<p>Slow (>100ms) SQL telemetry landed in Thursday&#8217;s nightly. Here are some preliminary results:</p>
+
+<ul>
+<li>Slow SQL on <a href="http://people.mozilla.org/~xstevens/telemetry/main-bycount.txt">UI thread</a> (ie blocking our UI)</li>
+<li>Slow SQL on <a href="http://people.mozilla.org/~xstevens/telemetry/other-bycount.txt">other threads</a> (harmless, but annoying)
+These files of the format: sql, count, average time per query.</li>
+</ul>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -523,60 +570,6 @@ Use the <a href="https://addons.mozilla.org/en-US/firefox/addon/abouttelemetry/"
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011/09/20/firefox-7-cheating-the-operating-system-to-start-faster/">Firefox 7: Cheating the Operating System to Start Faster</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-09-20T07:54:07-07:00" pubdate data-updated="true">Sep 20<span>th</span>, 2011</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>****Firefox 7 features improved startup speed. Our research has shown that most OSes are not capable of starting large programs efficiently (see my older blog entries). As a result, Firefox 7 will explicitly tell the OS to aggressively preload our xul.dll/libxul.so/XUL library before passing it on to the runtime linker. This marks the productization of the approach explored in &#8220;20-line patch that doubles Firefox startup&#8221; that got people so excited. See <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=552864">bug 552864</a> and dependent bugs for exciting technical details.</p>
-
-<p><strong>Do Not Try this at Home: Ugly Windows</strong></p>
-
-<p><em>Note: Windows Prefetch does everything possible to thwart exciting startup optimizations.</em> Above optimization only works when prefetch is disabled/broken (ie Firefox should be faster with Windows Prefetch off). See <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=627591#c158">this comment</a> on disabling prefetch for Firefox. Alternatively one may get Windows Prefetch to not slow down Firefox startup by the following magic incantation:</p>
-
-<ol>
-<li>Install Firefox (or delete the windows prefetch entry for existing Firefox 7)</li>
-<li>Reboot (Do not start Firefox after installation!)</li>
-<li>Start Firefox.
-Above helps populate the Windows Prefetch in a less counter-productive way. Explanation: on warm startup Windows Prefetch records irrelevant IO operations and blocks Firefox startup to preload files that Firefox accesses <em>after</em> startup.</li>
-</ol>
-
-
-<p>Note: the <a href="http://mxr.mozilla.org/mozilla-central/source/browser/app/nsBrowserApp.cpp#224">heuristic</a> that we use to detect Windows Prefetch will also prevent this optimization from kicking in on some exceptionally slow hard drives when prefetch is off. This is unfortunate as this optimization is most dramatic on exceptionally slow machines.</p>
-
-<p>According to our preliminary telemetry data, less than 25% of our Windows users have Windows Prefetch off and can benefit from vastly improved startup. We expect to improve this in future Firefox releases by scheduling a prefetch cleanup operation similar to the script in above bugzilla comment.</p>
-
-<p>Operating systems without counter-productive startup heuristics (ie Mac/Linux) will simply allow Firefox 7 to start faster.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/11/">&larr; Older</a>
@@ -594,6 +587,10 @@ Above helps populate the Windows Prefetch in a less counter-productive way. Expl
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/11/20/new-role-developer-productivity/">New Role: Developer Productivity</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/08/28/telemetry-reboot/">Telemetry Reboot</a>
       </li>
     
@@ -607,10 +604,6 @@ Above helps populate the Windows Prefetch in a less counter-productive way. Expl
     
       <li class="post">
         <a href="/blog/2013/03/27/snappy-number-55-snappy-evolution/">Snappy #55: Snappy Evolution</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/03/26/snappy-number-54-snappy-discussion-in-paris/">Snappy #54: Snappy Discussion in Paris</a>
       </li>
     
   </ul>

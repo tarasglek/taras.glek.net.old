@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="I recently built a new computer for HTPC, NAS, etc duties. Last couple of times this ended up in disappointment due to noise, hardware quirks, power &hellip;">
+  <meta name="description" content="The problem My new computer uses 10-46W of power while on, 1W while suspended. It replaced my softbricked (ArchLinux can burn in hell) arm computer &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,86 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/02/17/router-assisted-automatic-wake-on-lan-plus-suspend/">Router-Assisted Automatic Wake-on-LAN + Suspend</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-02-17T20:56:00-08:00" pubdate data-updated="true">Feb 17<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>The problem</h2>
+
+<p>My <a href="/blog/2013/02/17/10w-intel-i5-desktop/">new computer</a> uses 10-46W of power while on, 1W while suspended. It replaced my softbricked (ArchLinux can burn in hell) <a href="/blog/2011/07/16/my-nas-is-smaller-than-yours/">arm computer</a> where power consumption ranged from 4-7W.</p>
+
+<p>The new computer is a backup target for my eyefi (via <a href="https://github.com/hacker/iii">iiid</a>), Android phone (via <a href="https://play.google.com/store/apps/details?id=eu.kowalczuk.rsync4android&amp;hl=en">rsync/ssh</a>), laptop (via rsync).</p>
+
+<p>For fun I decided to try to use suspend-to-RAM + Wake-on-LAN to minimize power usage to get this beefy x86 to use less power than the old ARM NAS (which could not unsuspend successfully).</p>
+
+<p>By default WOL is a pain. The eye-fi card uploads photos when the SLR camera is on. Android phone is configured to rsync stuff when it is plugged while connected to home wifi. It&#8217;s not convenient to navigate some UI to send a WOL packet (or push a power button) every time I need to perform a backup. Manually deciding when to suspend the machine is also no fun.</p>
+
+<h2>Automatic WOL</h2>
+
+<p>In an ideal world WOL would support waking up on IP traffic directed at the machine in question. Typically WOL either wakes up in response to WOL magic packets or ANY ethernet traffic(ugh!). <strong>Update</strong>: Turns out my nic supports directed wakeups, but the e1000e driver on Linux does not implement them.</p>
+
+<p>Luckily, ARP <code>who has x.x.x.x</code> queries are broadcast to whole network segment. So my <a href="http://en.wikipedia.org/wiki/Tomato_%28firmware%29">Tomato</a> router can help.</p>
+
+<p>This works as follows:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Android-phone: ARP: Who has 192.168.1.149
+</span><span class='line'>router: *sends WOL packet to NAS*
+</span><span class='line'>Server Unsuspend Script: 192.168.1.149 is at A:B:C:D:E:F</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I wrote an arpwol program for this, I run it via</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>arpwake.mips br0 192.168.1.149 4C:72:B9:42:EA:97</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It listens for arp looking for 192.168.1.149 and fires of a WOL.</p>
+
+<p>It takes 5 seconds for an ssh roundtrip to a sleeping server.</p>
+
+<h2>Auto-suspend</h2>
+
+<p>Once the server is awake, it is annoying to have to put it to sleep manually. I wrote a script to monitor <code>/var/log/auth.log</code> and auto-suspend when active ssh-session count reaches 0.</p>
+
+<h2>Conclusion</h2>
+
+<p>It great to have an x86 box idle at 1W while unused. Suspend to disk introduces extra latency without saving much more power (due to keeping WOL on).</p>
+
+<p>Please checkout the code on <a href="https://github.com/tarasglek/sleepyscripts">github</a>. WOL magic happens in <code>arpwake.c</code> and auto-suspend in <code>autosleep.py</code>.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -517,57 +597,6 @@ if (requestAnimationFrame)
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/12/17/hello-octopress/">Hello Octopress</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-12-17T17:10:00-08:00" pubdate data-updated="true">Dec 17<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I&#8217;m off work until January. I took this opportunity to partake in chores such as fixing a toilet and switching away from wordpress.</p>
-
-<p>After suffering wordpress for half a decade I finally switched to a combination of Octopress + Disqus.</p>
-
-<p>It took:</p>
-
-<ul>
-<li>a few hours of tweaking the combination of <a href="https://github.com/thomasf/exitwp">exitwp.py</a>, html2text.py to convert my blog without busting links, images</li>
-<li>a few hours of decyphering octopress/github documentation to setup a website</li>
-<li>an hour to figure out where images should live (in <em>source/assets</em>)</li>
-</ul>
-
-
-<p>Thanks to everyone that suggested <a href="http://octopress.org/">Octopress</a>.</p>
-
-<p>Goodbye word-style wordpress bitchwork.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -585,6 +614,10 @@ if (requestAnimationFrame)
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/11/20/new-role-developer-productivity/">New Role: Developer Productivity</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/08/28/telemetry-reboot/">Telemetry Reboot</a>
       </li>
     
@@ -598,10 +631,6 @@ if (requestAnimationFrame)
     
       <li class="post">
         <a href="/blog/2013/03/27/snappy-number-55-snappy-evolution/">Snappy #55: Snappy Evolution</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/03/26/snappy-number-54-snappy-discussion-in-paris/">Snappy #54: Snappy Discussion in Paris</a>
       </li>
     
   </ul>

@@ -4,7 +4,7 @@
   <title><![CDATA[All About Performance]]></title>
   <link href="http://taras.glek.net/atom.xml" rel="self"/>
   <link href="http://taras.glek.net/"/>
-  <updated>2013-08-29T17:08:58-07:00</updated>
+  <updated>2013-11-20T14:58:33-08:00</updated>
   <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -12,6 +12,8 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  
   
   
   <entry>
@@ -557,8 +559,6 @@ Omnijar readhead is next, in <a title="Use readahead for ordered jar files such 
 <p>Vladimir Vukicevic landed <a title="requestAnimationFrame generates too short/long frames, especially at the beginning of animation" href="https://bugzilla.mozilla.org/show_bug.cgi?id=731974">bug 731974</a> which results in smoother browser animations and significantly improves the quality of tab-strip animations.</p>
 ]]></content>
   </entry>
-  
-  
   
   
 </feed>
