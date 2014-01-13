@@ -4,7 +4,7 @@
   <title><![CDATA[Category: mozilla | All About Performance]]></title>
   <link href="http://taras.glek.net/blog/categories/mozilla/atom.xml" rel="self"/>
   <link href="http://taras.glek.net/"/>
-  <updated>2013-11-20T14:58:33-08:00</updated>
+  <updated>2014-01-12T16:11:35-08:00</updated>
   <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -12,6 +12,41 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[New Role: Developer Productivity]]></title>
+    <link href="http://taras.glek.net/blog/2013/11/20/new-role-developer-productivity/"/>
+    <updated>2013-11-20T13:44:00-08:00</updated>
+    <id>http://taras.glek.net/blog/2013/11/20/new-role-developer-productivity</id>
+    <content type="html"><![CDATA[New Role
+--------
+The performance part of my team is now lead by [Vladan](http://blog.mozilla.org/vdjeric/). They are doing usual performancy things with a focus on improving our 'internal' benchmarks such as talos, TART + some upcoming power testing. 
+
+I got a new task recently: developer productivity. I'm prioritizing tasks based on developer unproductivity. I have the following new stuff on my radar:
+
+* slow build system for local builds
+* long build/test times on our release automation
+* bugzilla improvements (eg tracking review times, lack of pull reqs, etc)
+
+Expect to hear less Gecko and more web dev stuff out of me for the foreseable future. Note, this is a collaborative project. My team would not be able to accomplish any of the new goals as we are already above capacity. I'm mainly working on improving coordination and collaboration on existing projects. Let me know if you have ideas related to this dev productivity stuff.
+
+
+Cost-Oriented Architecture
+---------------------------
+My main project for the remainder of this year is to maximize throughput per dollar spent on our release automation infrastructure. I'm focusing on computation that happens on Amazon EC2(because it's easier than pricing out our own infrastructure). My goal is to be able to say "making improvement x will pay for itself in y time". This is mainly management technique to make it easier to justify working on infrastructure.
+
+John posted some initial costing [figures](http://oduinn.com/blog/2013/11/20/the-financial-cost-of-a-checkin-part-1/). Rail is working on switching us over to Amazon Spot instances in <a title="Prepare infra to handle spot instances" href="https://bugzilla.mozilla.org/show_bug.cgi?id=935533">bug 935533</a>. I expect a 2-5x reduction in our AWS costs once Rail is done.
+
+I'd like to have a receipt attached to every job that executes on our build infrastructure. I hope this encourages devs to look into build/test inefficiencies. 
+
+Keeping an eye on costs means we'll be able to better reason about moving more workloads into the cloud. Cloud stuff is attractive because it allows us to give developers keys to AWS. They can deploy(in a low-friction manner) whatever they need to make their job easier while cost-monitoring ensures that things don't get crazy.
+
+Open Architecture
+------------------
+In theory, open source is about scratching own needs. In practice service owners (usually inadvertently) put up walls to contribution by depending on licensing requirements, poor documentation, vpns, obscure infrastructure, weird version control, etc. This then snowballs into something equivalent to closed source where 'clients' have to ask for 'features' from 'owners'. This usually results in unhappy customers and overworked owners. This happened to Telemetry (see previous post) and is happening to a few of our tools. Expect improvements in this area.
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Telemetry Reboot]]></title>
@@ -125,49 +160,6 @@ In any case I wasn't planning on delaying work until after the meeting could hap
 The current plan is for Felipe and I to do the patches, with me handling coordination and progress tracking as well. Everybody else is involved to make sure we're going in the right direction, and help us over roadblocks.
 
 The progress tracking technique the Snappy team settled on last week was a combination of daily one-line updates using the [status bot](http://teamstat.us/#browse/irc.mozilla.org/perf) in the #perf channel, and a blog post every two weeks summarizing overall progress. I'll do the [blog posts](http://www.controlledflight.ca/category/mozilla/); depending on how things go I may do them weekly instead of biweekly.
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Snappy #54: Snappy Discussion in Paris]]></title>
-    <link href="http://taras.glek.net/blog/2013/03/26/snappy-number-54-snappy-discussion-in-paris/"/>
-    <updated>2013-03-26T04:16:00-07:00</updated>
-    <id>http://taras.glek.net/blog/2013/03/26/snappy-number-54-snappy-discussion-in-paris</id>
-    <content type="html"><![CDATA[###Meeting In Paris
-Last week Snappy people met in Paris at [IRILL](http://www.irill.org/about). I like small venues because they encourage conversations. IRILL is one of the best small work venues I've attended.
-
-Excellent Parisian food did not hurt :)
-
-###Workweek Presentations
-
-I was impressed by the number and quality of presentations this time. I suspect having a presentation-friendly venue helped.
-
-Talks/discussions/notes (please leave a comment if I missed a talk):
-
-* Gabriele Svelto: [Firefox OS Performance](http://people.mozilla.org/~tglek/paris2013/b2g_slides.pdf)
-* Benoit Girard: [profiler improvements](http://benoitgirard.wordpress.com/2013/03/25/profiler-snappy-work-week/)
-* Nathan Froyd + Avi Halachmi: [Talos flaws + improvements to focus on](http://blog.mozilla.org/nfroyd/2013/03/25/perf-workweek-talos-discussion/)
-* Nathan Froyd: [How Firefox Makes Your JavaScript Run Fast](http://people.mozilla.com/~nfroyd/paris-workweek-2013/)
-* Julian Seward: [Stack unwinding for Gecko Profiler](http://people.mozilla.org/~tglek/paris2013/sps_breakpad.pdf)
-* Julian Seward: ['Harmless' data races in Gecko](http://people.mozilla.org/~tglek/paris2013/data_races.pdf)
-* Marco: [SQLite pitfalls](http://mozilla.bonardo.net/paris2013/)
-* Vladan Djeric: [Firefox startup analysis](http://people.mozilla.com/~vdjeric/perfweek_paris2013/)
-* Vladan Djeric: [Chromehang prioritization etherpad](https://etherpad.mozilla.org/chromehangsMarch)
-* Vladan Djeric: [Flash-caused hangs whiteboard](http://people.mozilla.com/~vdjeric/flashDiscussionDiagram.JPG)
-* Jet: Shumway Demo
-* David Teller: Introduction to Promises, Task.jsm
-* Lawrence Mandel: Discussion on how to accomplish reviews faster. Lawrence will [blog](http://lawrencemandel.com/) notes on this soon.
-* Taras Glek + Lawrence Mandel: [Improving coordination + focus](http://lawrencemandel.com/2013/03/21/no-more-snappy-meetings-and-other-changes-from-the-snappy-team/)
-* Taras Glek: [Telemetry reboot plan + doing hadoop map/reduce in python](http://people.mozilla.org/~tglek/pydoop2013/)
-
-
-###Team Activity
-
-For a team activity we walked to the [Paris Catacombes](http://en.wikipedia.org/wiki/Catacombs_of_Paris). 
-
-<img src="https://lh6.googleusercontent.com/-dUluprOFvY0/UUoRsBAC1oI/AAAAAAAAIj8/WjOYb7uHij4/s580/20130320_123837.jpg" title="Relevance to writing software? Multi-million line codebases are boneyards of some kind" >
-
-
 ]]></content>
   </entry>
   

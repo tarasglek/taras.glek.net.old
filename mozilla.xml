@@ -4,7 +4,7 @@
   <title><![CDATA[All About Performance]]></title>
   <link href="http://taras.glek.net/atom.xml" rel="self"/>
   <link href="http://taras.glek.net/"/>
-  <updated>2013-11-20T14:58:33-08:00</updated>
+  <updated>2014-01-12T16:11:35-08:00</updated>
   <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -13,6 +13,42 @@
   <generator uri="http://octopress.org/">Octopress</generator>
 
   
+  
+  <entry>
+    <title type="html"><![CDATA[New Role: Developer Productivity]]></title>
+    <link href="http://taras.glek.net/blog/2013/11/20/new-role-developer-productivity/"/>
+    <updated>2013-11-20T13:44:00-08:00</updated>
+    <id>http://taras.glek.net/blog/2013/11/20/new-role-developer-productivity</id>
+    <content type="html"><![CDATA[<h2>New Role</h2>
+
+<p>The performance part of my team is now lead by <a href="http://blog.mozilla.org/vdjeric/">Vladan</a>. They are doing usual performancy things with a focus on improving our &#8216;internal&#8217; benchmarks such as talos, TART + some upcoming power testing.</p>
+
+<p>I got a new task recently: developer productivity. I&#8217;m prioritizing tasks based on developer unproductivity. I have the following new stuff on my radar:</p>
+
+<ul>
+<li>slow build system for local builds</li>
+<li>long build/test times on our release automation</li>
+<li>bugzilla improvements (eg tracking review times, lack of pull reqs, etc)</li>
+</ul>
+
+
+<p>Expect to hear less Gecko and more web dev stuff out of me for the foreseable future. Note, this is a collaborative project. My team would not be able to accomplish any of the new goals as we are already above capacity. I&#8217;m mainly working on improving coordination and collaboration on existing projects. Let me know if you have ideas related to this dev productivity stuff.</p>
+
+<h2>Cost-Oriented Architecture</h2>
+
+<p>My main project for the remainder of this year is to maximize throughput per dollar spent on our release automation infrastructure. I&#8217;m focusing on computation that happens on Amazon EC2(because it&#8217;s easier than pricing out our own infrastructure). My goal is to be able to say &#8220;making improvement x will pay for itself in y time&#8221;. This is mainly management technique to make it easier to justify working on infrastructure.</p>
+
+<p>John posted some initial costing <a href="http://oduinn.com/blog/2013/11/20/the-financial-cost-of-a-checkin-part-1/">figures</a>. Rail is working on switching us over to Amazon Spot instances in <a title="Prepare infra to handle spot instances" href="https://bugzilla.mozilla.org/show_bug.cgi?id=935533">bug 935533</a>. I expect a 2-5x reduction in our AWS costs once Rail is done.</p>
+
+<p>I&#8217;d like to have a receipt attached to every job that executes on our build infrastructure. I hope this encourages devs to look into build/test inefficiencies.</p>
+
+<p>Keeping an eye on costs means we&#8217;ll be able to better reason about moving more workloads into the cloud. Cloud stuff is attractive because it allows us to give developers keys to AWS. They can deploy(in a low-friction manner) whatever they need to make their job easier while cost-monitoring ensures that things don&#8217;t get crazy.</p>
+
+<h2>Open Architecture</h2>
+
+<p>In theory, open source is about scratching own needs. In practice service owners (usually inadvertently) put up walls to contribution by depending on licensing requirements, poor documentation, vpns, obscure infrastructure, weird version control, etc. This then snowballs into something equivalent to closed source where &#8216;clients&#8217; have to ask for &#8216;features&#8217; from &#8216;owners&#8217;. This usually results in unhappy customers and overworked owners. This happened to Telemetry (see previous post) and is happening to a few of our tools. Expect improvements in this area.</p>
+]]></content>
+  </entry>
   
   
   
