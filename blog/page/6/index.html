@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Frank and Jared are aiming to have the Australis theme up for review next week in bug 732583. There are no computed borders or gradients in the &hellip;">
+  <meta name="description" content="On Friday, the necko team finally landed a fix that makes cache less likely to freeze the UI thread during reads: bug 722034. Cache writes, other &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,54 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/06/04/snappy-may-31st-less-lag/">Snappy, May 31st - Less Lag</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-06-04T02:38:08-07:00" pubdate data-updated="true">Jun 4<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>On Friday, the necko team finally landed a fix that makes cache less likely to freeze the UI thread during reads: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=722034">bug 722034</a>. Cache writes, other less common cache use-cases remain problematic (tracked by bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=717761">717761</a>). Poor cache/main-thread interactions are one of the main causes of UI lag tracked by the Snappy project, so this is very exciting. Barring the need to backout, this fix will appear in Firefox 15.</p>
+
+<p><strong>Help Wanted:</strong> The necko team is looking for some help to determine the optimal disk cache size, please see <a href="http://todesschaf.org/posts/2012/06/04/cache-usage-and-you.html">Nick&#8217;s post</a>. We need users to install an extension and submit detailed stats on our cache lifecycle.</p>
+
+<p>There are various Firefox frontend fixes in progress: improving session restore (working towards <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=669603">669603</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=669034">669034</a>), FUEL (bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=750454">750454</a>),  search service (bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=722332">722332</a>) and the new theme (bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=732583">732583</a>). I will blog about these in more detail as they land.</p>
+
+<p>Bill landed turned on incremental GC again. Hopefully it will stay on in Firefox 15.</p>
+
+<p>Andrew is making progress on reducing CC pauses while closing tabs: bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=754495">754495</a>.</p>
+
+<p>Brian has instrumented our event loop to measure the extent of Firefox lag when responding to user events, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=759449">759449</a>. This is different than measuring general event-loop lag in that it focuses on lag that the user would actually notice. Look for  the EVENTLOOP_UI_LAG_EXP_MS histogram in our <a href="https://metrics.mozilla.com/data/">telemetry dashboard </a>(yes, we are the only browser vendor to make this sort of data public). This should help us track progress as we tweak heuristics to delay background processing during user interaction (eg bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=712478">712478</a>).</p>
+
+<p>Brian also landed a way to bypass the windows prefetch service via our privileged silent update service, see <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=692255">bug 692255</a>. In my testing prefetch is likely to prefetch too many files, slowing down startup for complex apps like Firefox. Hopefully we can do better with our own prefetch.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -522,62 +570,6 @@ if (requestAnimationFrame)
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/04/18/web-2-0-a-collection-of-settimeouts/">Web 2.0: A Collection of SetTimeouts</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-04-18T09:13:19-07:00" pubdate data-updated="true">Apr 18<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Earlier I <a href="http://taras.glek.net/blog/2012/04/10/argh-at-our-unresponsive-tab-strip-settimeoutfoo-0-can-be-very-harmful/">blogged </a>about terrible UI responsiveness resulting from a poorly placed setTimeout. I&#8217;ve long suspected that SetTimeouts are to blame for everything. Now with help of bz and sfink I have proof.</p>
-
-<p>Turns out webpages like to keep users entertained and spin setTimeout loops to poll the servers to synchronize news tickers, social networking shoe-ins, collaborative editing, etc. Most pages do this regardless of whether they are a background or a foreground tab. Firefox tries to mitigate this by not allowing background tabs to schedule setTimeouts &lt; 2seconds. Turns out this is a pretty weak defense.</p>
-
-<p>In my personal browsing: etherpad, twitter, zimbra burn through cpu cycles. See this bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=744470#c12">comment </a>for an example of setTimeout terrorism with less than 10 tabs. In Firefox these setTimeouts cause significant UI lag, but they will also eat your battery life, overheat your laptop, etc. I filed bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=715376">715376</a> to add functionality to cope with this.  The plan is to prioritize foreground tab activity and do exponential setTimeout decay on abusive background tabs. We basically have to write something similar to an OS scheduler. Ideally we&#8217;d also follow that up with unloading idle tabs, ie bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=675539">675539</a>.</p>
-
-<p>If you are curious about what tabs are abusing your browser my <a href="http://ftp.mozilla.org/pub/mozilla.org/firefox/try-builds/tglek@mozilla.com-520630fd738e">diagnostic builds</a> will be available on try in a few hours. Install a <a href="http://people.mozilla.com/~tglek/telemetry/ping.telemetry.xpi">modified </a>version of about:telemetry to see the report.</p>
-
-<p><strong>What should well-behaved web apps do?</strong></p>
-
-<p>You can detect when your tab becomes inactive via <a href="https://developer.mozilla.org/en/DOM/window.onblur">window.onblur</a>, then throttle or disable your page activity. I know using focus is suboptional for this. There is also a vendor-prefixed <a href="https://developer.mozilla.org/en/API/PageVisibility/Page_Visibility_API">visibility api</a> (thanks!).</p>
-
-<p>Now you know why your browser keeps your CPU wide awake :)</p>
-
-<p><em>Update:</em></p>
-
-<p>Wrote this post in a rush on the way out, thanks for the visibility links. I am aware that some webpages need to do work in the background. However that work should be as minimal as possible, this is often not the case.</p>
-
-<p><em>Project Idea:</em></p>
-
-<p>Would be nice if someone wrote an extension that goes through tabs and nukes any outstanding setTimeouts/XHRs/etc.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/7/">&larr; Older</a>
@@ -595,6 +587,10 @@ if (requestAnimationFrame)
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/02/06/cost-efficient-continious-integration/">Cost-Efficient Continious Integration</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/11/20/new-role-developer-productivity/">New Role: Developer Productivity</a>
       </li>
     
@@ -608,10 +604,6 @@ if (requestAnimationFrame)
     
       <li class="post">
         <a href="/blog/2013/04/05/mozilla-tech-on-reddit/">Mozilla Tech on Reddit</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/03/27/snappy-number-55-snappy-evolution/">Snappy #55: Snappy Evolution</a>
       </li>
     
   </ul>

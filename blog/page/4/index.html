@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="End of summer is a tough time to make progress because a lot of people are on vacation. Surprisingly, Firefox got some good fixes in since the last &hellip;">
+  <meta name="description" content="Last week a few of us attended MozCamp.EU in Warsaw. Me, Benoit &amp; Vlad presented a talk on performance work. Primary aim of our talk was to &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,46 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/09/17/moacamp-eu-in-warsaw/">MozCamp.EU in Warsaw</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-09-17T18:09:30-07:00" pubdate data-updated="true">Sep 17<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Last week a few of us attended MozCamp.EU in Warsaw. Me, Benoit &amp; Vlad presented a <a href="https://wiki.mozilla.org/MozCampEU2012/Schedule/Desktopandmobile/All-About-Performance">talk </a>on performance work. Primary aim of our talk was to inform our community about various performance tools that came to fruition of the past year and how to use them to investigate Firefox performance problems. Hopefully we&#8217;ll see a spike in bug reports with detailed performance information (profiler traces, telemetry histogram+chromehang excepts, etc).</p>
+
+<p>My favourite part of MozCamp was finally meeting some a couple of the impressive community contributors in person. I finally had the pleasure of literally buying beer to thank someone for cleaning up some nasty code. I hope some day we can do a developer-oriented MozCamp-like conference.</p>
+
+<p>My favourite talk was Anant &amp; Tim&#8217;s presentation on WebRTC. There is something incredibly attractive about having an encrypted, cross-browser, firewall-punching p2p implementation (realtime open video conferencing is a nice bonus). See Anant&#8217;s <a href="http://kix.in/2012/09/16/mozcamp-eu-2012-mobilize-mozilla/">blog post</a> for more details.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -540,54 +580,6 @@ See Bill&#8217;s comments in bug <a href="https://bugzilla.mozilla.org/show_bug.
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/07/25/telemetry-and-what-it-is-good-for-part-2-telemetry-achievements/">Telemetry and What It Is Good for: Part 2: Telemetry Achievements</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-07-25T08:55:21-07:00" pubdate data-updated="true">Jul 25<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>An inquisitive mind sent me an email with a pointed question:</p>
-
-<p>&#8220;Is there an example of someone who&#8217;s not you that had a burning question that would drive some sort of research or development activity and got it answered by telemetry?&#8221;</p>
-
-<p>I forwarded his email and got a pretty fun survey. See below for a slightly edited version of emails I got. In addition to positive experiences below, people had a lot of complains about the telemetry experience.</p>
-
-<p><em>Justin Lebar</em> Justin is probably the most vocal telemetry user who isn&#8217;t me. He <a href="http://jlebar.com/2012/5/30/A_ghost_story.html">blogged</a> about one of his more successful telemetry experiences. <em>Andrew McCreight</em> One telemetry stat I added is <a href="https://metrics.mozilla.com/data/content/pentaho-cdf-dd/Render?solution=metrics2&amp;path=%2Ftelemetry&amp;file=telemetryHistogram.wcdf&amp;bookmarkState={%22impl%22%3A%22client%22%2C%22params%22%3A{%22startDate%22%3A%222012-06-25%22%2C%22endDate%22%3A%222012-07-24%22%2C%22appVersion%22%3A%22%22%2C%22appName%22%3A%22Firefox%22%2C%22arch%22%3A%22%22%2C%22OS%22%3A%22%22%2C%22version%22%3A%22%22%2C%22channel%22%3A%22nightly%22%2C%22reason%22%3A%22idle-daily%22%2C%22appBuildID%22%3A%22%22%2C%22fromPlatformBuildID%22%3A%22%22%2C%22toPlatformBuildID%22%3A%22%22%2C%22excludeParam%22%3A%22%22%2C%22measure%22%3A%22CYCLE_COLLECTOR_NEED_GC%22%2C%22histogramCompareParam%22%3A%22appVersion%22%2C%22histogramVariablesParam%22%3A%22%22%2C%22platformBuildIDMode%22%3A%22LATEST%22%2C%22platformBuildIDTopCount%22%3A%2230%22%2C%22conditionsStatistic%22%3A%22%23conditionsStatistic%22%2C%22submissionsParameter%22%3A[[172394]]}}">CYCLE_COLLECTOR_NEED_GC</a>.  Sometimes a read barrier fails and we need to do a GC synchronously at the start of a CC, which is terrible for pause times.  Using telemetry, I confirmed my suspicion that this is very rare, and thus not worth trying to improve. Another state Olli added is <a href="https://metrics.mozilla.com/data/content/pentaho-cdf-dd/Render?solution=metrics2&amp;path=%2Ftelemetry&amp;file=telemetryEvolution.wcdf&amp;bookmarkState=%7B%22impl%22%3A%22client%22%2C%22params%22%3A%7B%22referenceDate%22%3A%222012-07-25%22%2C%22appNameParameter%22%3A%22%5BApplication%5D.%5BFirefox%5D%22%2C%22osParameter%22%3A%22%5BOS%5D.%5BWINNT%5D%22%2C%22channelParameter%22%3A%22%5BChannel%5D.%5Bnightly%5D%22%2C%22reasonParameter%22%3A%22%5BReason%5D.%5Bidle-daily%5D%22%2C%22histogramParameter%22%3A%22%5BHistogram%5D.%5BFORGET_SKIPPABLE_MAX%5D%22%2C%22histogramPopupTools%22%3A%22%22%2C%22duplicateHistogram%22%3A%22%23duplicateHistogram%22%2C%22medianButtonParam%22%3A0%2C%22scatterChart%22%3A%22%22%7D%7D">FORGET_SKIPPABLE_MAX</a>, which tracks the length of the CC cleanup phases we run.  As we made the cleanup more and more thorough, the times of these got longer and longer.  I think eventually this led Olli to try to fix the worst case cleanup phases, in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=747675">747675</a>.  He had this comment in there: &#8220;Based on the initial telemetry data, the patch doesn&#8217;t affect too much to the already low median times, but helps significantly with the worst 5%, so mean time decreases quite nicely.&#8221; Also, back around Firefox 13, Olli was using telemetry to observe the results of various CC optimizations, to assess their effectiveness, which he then used to decide whether or not to nominate various patches for landing on Aurora 12.  Telemetry let us see the reward part of the risk vs. reward tradeoff, and get some pretty big improvements into 12. Locally, I use <a href="https://addons.mozilla.org/en-US/firefox/addon/abouttelemetry/">about:telemetry</a> to get a sense of what the behavior on my local machine has been, but I suppose that doesn&#8217;t really fall under &#8220;telemetry&#8221; per se.  But it was quite useful during the Cycle Collector Crisis to see what CC behavior people had been seeing on their machines.</p>
-
-<p><em>Olli Pettay</em> Thanks Andrew, very accurate summary of what I&#8217;ve been doing I tend to look at CC telemetry data daily. I very rarely use the histogram, since evolution is more interesting to me. Especially median time and also how P75 and P95 evolve. (The focus in this Q is to get lower bad times, so we should manage to drop P75 and P95) I use also <a href="about:telemetry">about:telemetry</a> locally since I tend to run builds with some patch, and I want to see if they affect badly to CC or GC times.</p>
-
-<p><em>Taras</em> My blog is basically a collection of telemetry trivia :) I do not have testimonials from other people. However I heard that the silent-update team proved something about silent updates with telemetry, Necko team discovered that some optimizations were not, etc. I encourage other people who solved a problem with telemetry to either wrote a blog post or leave a comment.</p>
-
-<p>In part 3 I will cover flaws in the current Telemetry experience.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/5/">&larr; Older</a>
@@ -605,6 +597,10 @@ See Bill&#8217;s comments in bug <a href="https://bugzilla.mozilla.org/show_bug.
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/02/06/cost-efficient-continious-integration/">Cost-Efficient Continious Integration</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/11/20/new-role-developer-productivity/">New Role: Developer Productivity</a>
       </li>
     
@@ -618,10 +614,6 @@ See Bill&#8217;s comments in bug <a href="https://bugzilla.mozilla.org/show_bug.
     
       <li class="post">
         <a href="/blog/2013/04/05/mozilla-tech-on-reddit/">Mozilla Tech on Reddit</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/03/27/snappy-number-55-snappy-evolution/">Snappy #55: Snappy Evolution</a>
       </li>
     
   </ul>

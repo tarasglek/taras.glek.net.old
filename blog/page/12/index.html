@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Benchmarks Suck Mozilla has traditionally relied on [Talos, Sunspider, Kraken, etc] benchmarks to optimize Firefox. Unfortunately there are two &hellip;">
+  <meta name="description" content="My phone is useful for doing GPSey things and staying connected. Unfortunately expecting more than a day of use is unrealistic. So I set out on a &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,43 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/05/14/cheap-solar-power-for-my-phone/">Cheap Solar Power for My Phone</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-05-14T11:55:00-07:00" pubdate data-updated="true">May 14<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><div class='post'>
+My phone is useful for doing GPSey things and staying connected. Unfortunately expecting more than a day of use is unrealistic. So I set out on a quest for portable power. <br /><br />I spent way too much time choosing a dynamo hub, building a wheel, having a friend build a circuit so I could charge my phone while away from home. <br /><br />One day I was randomly surfing dealextreme/ebay and stumbled on something that was unbelievably awesome: cheapass solar power. Turns out a $25 solar panel and a spliced usb cable is enough.<br /><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://a7.sphotos.ak.fbcdn.net/hphotos-ak-snc6/229316_681609118926_122504458_36920657_6584253_n.jpg" imageanchor="1"><img border="0" height="540" src="http://a7.sphotos.ak.fbcdn.net/hphotos-ak-snc6/229316_681609118926_122504458_36920657_6584253_n.jpg" width="720" /></a></div><br />At this point the main benefit of a dynamo hub is that it works all year long(24x7 as long as I&#8217;m biking). Dynamo also has a benefit of being a bunch of metal that&#8217;s part of the bike. Attaching a solar panel will require some cleverness to avoid smashing it the first time the bike falls over. <br /><br />On the other hand the solar panel is light and will work great for camping while off the bike. It&#8217;s good to have options.<br /><b><br /></b><br /><b>Update:</b><br /><ul><li>I&#8217;ve had this for a while now. This solar panel is amazing. It is exactly as the seller claims: 5V and provides up to 700mA of current. There is a problem where if the panel gets in the shade, the current level drops off and stupid charging circutry on my Vibrant continues to try to charge. I documented it in this <a href="http://forum.xda-developers.com/showthread.php?p=15413618#post15413618">forum post</a>.</li><li><a href="http://cgi.ebay.com/ws/eBayISAPI.dll?ViewItem&amp;item=220768018461&amp;ssPageName=ADME:L:OU:US:1123">ebay listing</a> I bought this from.</li></ul></div>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -568,50 +605,6 @@ This was a rare fix that resulted in seconds saved on crapware-loaded computers.
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2010/12/21/rude-surprise-startup-overhead-of-windows-font-apis/">Rude Surprise: Startup Overhead of Windows Font APIs</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-12-21T05:33:14-08:00" pubdate data-updated="true">Dec 21<span>st</span>, 2010</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Imagine a typical Firefox user who starts their Windows computer in order to surf the web. First app they launch is Firefox 4. Turned out that on systems that support hardware-acceleration for 2D graphics, Firefox 4 takes minutes to startup. WTF? XPerf-aided investigation showed that, the Windows font enumeration code causes us to do 30x more disk IO (~300MB) than the rest of Firefox code.</p>
-
-<p>In order to hardware accelerate Firefox, we switched from GDI to using DirectWrite for font stuffs. Apparently, DirectWrite is a wonderful api, but the implementation has some teething issues. DirectWrite opens a connection to the Font Service (and starts it if it isn&#8217;t already running), however if service fails to respond DirectWrite proceeds to enumerate all of the system fonts on the client-side. This isn&#8217;t cool for multiple reasons: a) it is <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=602792">slow as hell</a> b) it causes Firefox to <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=617266">run out of memory</a>(installing IE9 helps!) sooner.  This means that currently Firefox 4 starts up a lot slower than 3.6. <a href="http://blog.mozilla.org/nattokirai/">John Daggett</a> is busy working on a workaround by using older GDI APIs to enumerate fonts. Firefox is one of the first popular Windows applications to switch to DirectWrite, so we get to suffer the consequences.</p>
-
-<p>Unfortunately it turns out that using Microsoft GDI APIs to <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=600713">enumerate fonts</a> still causes a significant amount of disk IO (~30-60MB), John plans to fix that next.</p>
-
-<p><strong>How Did We Miss This?</strong></p>
-
-<p>This bug came from a fundamental difference of how developers and users start Firefox. A developer will restart Firefox a dozen times an hour. This means we rarely get to observe true cold startup. Our tests only measure warm startup (because most operating systems make it difficult to test cold startup). Windows is also incredibly slow to develop on, so a lot of us test in a virtual machine to speed things up and avoid rebooting the computer all the time. This also makes observing cold startup hard. Fortunately xperf makes IO much easier to observe. We should deploy xperf on our <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=609111">test infrastructure</a> as soon as possible.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/13/">&larr; Older</a>
@@ -629,6 +622,10 @@ This was a rare fix that resulted in seconds saved on crapware-loaded computers.
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/02/06/cost-efficient-continious-integration/">Cost-Efficient Continious Integration</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/11/20/new-role-developer-productivity/">New Role: Developer Productivity</a>
       </li>
     
@@ -642,10 +639,6 @@ This was a rare fix that resulted in seconds saved on crapware-loaded computers.
     
       <li class="post">
         <a href="/blog/2013/04/05/mozilla-tech-on-reddit/">Mozilla Tech on Reddit</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/03/27/snappy-number-55-snappy-evolution/">Snappy #55: Snappy Evolution</a>
       </li>
     
   </ul>

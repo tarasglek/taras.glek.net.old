@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="So I&#8217;ve been trying to figure out how optimize disk IO startup. I looked into IO caused by libraries and turns out that apps with big libraries &hellip;">
+  <meta name="description" content="In my last blog post I expressed frustation with slowness induced by library IO. Then I went on a mission to measure it. I have been wanting to this &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,320 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/10/23/studying-library-io-systemtap-style/">Studying Library IO - SystemTap Style</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-10-23T09:25:39-07:00" pubdate data-updated="true">Oct 23<span>rd</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>In my last blog <a href="http://taras.glek.net/blog/2009/10/20/large-apps-just-have-to-start-slow/">post</a> I expressed frustation with slowness induced by library IO. Then I went on a mission to measure it. I have been wanting to this for a while, but I figured that only DTrace can get this info without recompiling my kernel. So I tried to build Mozilla under Slowlaris (but the linker got up to 3GB and then set there swapping, ensuring that the nickname is justified). Then I fired up DTrace on the mini, but ran screaming because it seemed like fbt DTrace provider refused to let me dereference structs (later Joel told me that I&#8217;m supposed to copy data explicitly <a href="http://blogs.sun.com/timf/entry/dtrace_saves_the_day_again">like here</a>).</p>
+
+<p>But while googling for a fbt workaround, I stumbled upon a DTrace/SystemTap comparision wiki. <a href="http://sourceware.org/systemtap/wiki">SystemTap</a>? The DTrace knockoff I have been hearing about? It works? This was a lightbulb moment where I realized that Linux was about to provide me with more information than I thought was possible.</p>
+
+<p>So here is the data I got out of it:</p>
+
+<p>Writing scripts in systemtap felt really natural after I figured out that pointers are to be dereferenced as arrays and what some of the error messages really meant. In the script I watch vfs_read() for io done via read() syscall, but it turns out that mmap() io actually happens via readahead. Here is the systemtap <a href="http://people.mozilla.com/~tglek/kernelio.stp">script</a>. I believe I accounted for all io. ext4_get_block (which seems to be the main function ext4 reads file data with) did not spend any time outside of that called by the functions I was tapping into.</p>
+
+<p>I haven&#8217;t had much time to draw too many conclusions out of the data, posting it as an example of systemtap use. libxul accounts for most io both in terms of bytes and time spent. We&#8217;ll be fixing that, not yet sure as to what strategy to employ for the rest of the libraries.</p>
+
+<p>SELECT file, sum(size) as bytesread, sum(time)/1000 as ms from startup  group by file order by bytesread desc ;</p>
+
+<pre><code>file                                   | bytesread | ms
+-------------------------------------------------------------------------+-----------+-----
+/home/taras/firefox/libxul.so/                                          |  19530240 | 103
+/usr/lib/libgtk-x11-2.0.so.0.1800.2/                                    |   3277312 |  15
+/home/taras/firefox/chrome/toolkit.jar/                                 |   2097152 |   8
+/home/taras/firefox/libmozjs.so/                                        |   1835520 |  36
+/home/taras/.mozilla/firefox/imph4tsg.default/XPC.mfasl/                |   1671168 |   3
+/home/taras/firefox/chrome/browser.jar/                                 |   1572864 |   5
+/usr/share/icons/gnome/icon-theme.cache/                                |   1441792 |   7
+/home/taras/firefox/libnss3.so/                                         |   1311232 |  18
+/usr/lib/libX11.so.6.3.0/                                               |   1049088 |   5
+/home/taras/.mozilla/firefox/imph4tsg.default/XUL.mfasl/                |    995328 |   2
+/usr/lib/libgnomeui-2.so.0.2400.1/                                      |    918016 |   3
+/usr/lib/libfreetype.so.6.3.20/                                         |    786944 |   3
+/home/taras/firefox/libsqlite3.so/                                      |    655872 |  10
+/usr/lib/libgconf-2.so.4.1.5/                                           |    655872 |   1
+/usr/lib/libbonoboui-2.so.0.0.0/                                        |    655872 |   2
+/usr/lib/libgdk-x11-2.0.so.0.1800.2/                                    |    655872 |   2
+/usr/lib/libcrypto.so.1.0.0/                                            |    655872 |   2
+/home/taras/firefox/chrome/en-US.jar/                                   |    655360 |   2
+/usr/lib/libORBit-2.so.0.1.0/                                           |    524800 |   2
+/lib/libasound.so.2.0.0/                                                |    524800 |  18
+/home/taras/firefox/libnspr4.so/                                        |    524800 |  17
+/usr/lib/libxml2.so.2.7.5/                                              |    524800 |   1
+/usr/lib/libbonobo-activation.so.4.0.0/                                 |    524800 |   1
+/usr/lib/libgnomecanvas-2.so.0.2600.0/                                  |    524800 |   1
+/usr/lib/libXt.so.6.0.0/                                                |    524800 |  14
+/lib/libgssapi_krb5.so.2.2/                                             |    524800 |   1
+/usr/lib/libatk-1.0.so.0.2809.1/                                        |    524800 |   2
+/home/taras/firefox/libnssckbi.so/                                      |    524800 |   6
+/usr/lib/libbonobo-2.so.0.0.0/                                          |    524800 |   1
+/usr/lib/libgnomevfs-2.so.0.2400.2/                                     |    524800 |   2
+/home/taras/firefox/libsmime3.so/                                       |    393728 |  15
+/usr/lib/libart_lgpl_2.so.2.3.20/                                       |    393728 |   1
+/usr/lib/libvorbis.so.0.4.3/                                            |    393728 |   1
+/home/taras/firefox/components/libbrowsercomps.so/                      |    393728 |  12
+/lib/libresolv-2.10.90.so/                                              |    393728 |   0
+/home/taras/firefox/libnssdbm3.so/                                      |    393728 |  15
+/home/taras/firefox/libfreebl3.so/                                      |    393728 |  13
+/home/taras/firefox/libssl3.so/                                         |    393728 |   8
+/usr/lib/libssl.so.1.0.0/                                               |    393728 |   1
+/lib/libkrb5.so.3.3/                                                    |    393728 |  24
+/lib/libglib-2.0.so.0.2200.2/                                           |    393728 |   1
+/usr/share/fonts/dejavu/DejaVuSans.ttf/                                 |    393216 |   1
+/home/taras/firefox/components/browser.xpt/                             |    378141 |   6
+/usr/lib/gtk-2.0/2.10.0/engines/libclearlooks.so/                       |    262656 |   1
+/lib/libexpat.so.1.5.2/                                                 |    262656 |   1
+/usr/lib/libfontconfig.so.1.4.3/                                        |    262656 |   0
+/home/taras/firefox/components/libimgicon.so/                           |    262656 |   1
+/lib/libkeyutils-1.2.so/                                                |    262656 |   0
+/usr/lib/libgnome-keyring.so.0.1.1/                                     |    262656 |   1
+/usr/lib/libgnome-2.so.0.2800.0/                                        |    262656 |   0
+/usr/lib/libXau.so.6.0.0/                                               |    262656 |   0
+/usr/lib/libXinerama.so.1.0.0/                                          |    262656 |   0
+/usr/lib/libXdamage.so.1.1.0/                                           |    262656 |   0
+/usr/lib/libXcomposite.so.1.0.0/                                        |    262656 |   0
+/usr/lib/libfam.so.0.0.0/                                               |    262656 |  22
+/home/taras/firefox/components/libdbusservice.so/                       |    262656 |  12
+/home/taras/firefox/components/libmozgnome.so/                          |    262656 |  11
+/usr/lib/libICE.so.6.3.0/                                               |    262656 |   1
+/home/taras/firefox/libnssutil3.so/                                     |    262656 |  22
+/usr/lib/libpangoft2-1.0.so.0.2600.0/                                   |    262656 |   0
+/lib/libk5crypto.so.3.1/                                                |    262656 |   1
+/home/taras/firefox/components/libbrowserdirprovider.so/                |    262656 |   9
+/home/taras/firefox/libsoftokn3.so/                                     |    262656 |  10
+/usr/lib/libxcb.so.1.1.0/                                               |    262656 |   1
+/home/taras/firefox/components/libnkgnomevfs.so/                        |    262656 |  14
+/home/taras/firefox/firefox-bin/                                        |    262547 |  13
+/usr/share/fonts/dejavu/DejaVuSerif.ttf/                                |    262144 |   0
+/home/taras/.mozilla/firefox/imph4tsg.default/compreg.dat/              |    147563 |   0
+/usr/share/X11/locale/locale.alias/                                     |    134322 |  18
+/lib/libc-2.10.90.so/                                                   |    132608 |   1
+/lib/libtinfo.so.5.7/                                                   |    132096 |   0
+/usr/lib/gio/modules/libgioremote-volume-monitor.so/                    |    131584 |   0
+/lib/libuuid.so.1.3.0/                                                  |    131584 |   0
+/usr/lib/libvorbisfile.so.3.3.2/                                        |    131584 |   0
+/lib/libkrb5support.so.0.1/                                             |    131584 |   0
+/usr/lib/libgvfscommon.so.0.0.0/                                        |    131584 |   0
+/lib/librt-2.10.90.so/                                                  |    131584 |   0
+/usr/lib/libavahi-common.so.3.5.1/                                      |    131584 |   0
+/usr/lib/libnotify.so.1.1.3/                                            |    131584 |   0
+/usr/lib/libavahi-glib.so.1.0.1/                                        |    131584 |   0
+/usr/lib/gio/modules/libgvfsdbus.so/                                    |    131584 |   0
+/usr/lib/libXcursor.so.1.0.2/                                           |    131584 |   0
+/usr/lib/libXi.so.6.1.0/                                                |    131584 |   3
+/usr/lib/libgailutil.so.18.0.1/                                         |    131584 |   0
+/usr/lib/libXrender.so.1.3.0/                                           |    131584 |   0
+/lib/libcap-ng.so.0.0.0/                                                |    131584 |   0
+/usr/lib/libSM.so.6.0.0/                                                |    131584 |   0
+/lib/libudev.so.0.4.2/                                                  |    131584 |   0
+/lib/libgmodule-2.0.so.0.2200.2/                                        |    131584 |   0
+/usr/lib/libXfixes.so.3.1.0/                                            |    131584 |   0
+/lib/libgobject-2.0.so.0.2200.2/                                        |    131584 |   0
+/usr/lib/libXrandr.so.2.2.0/                                            |    131584 |   1
+/lib/libgio-2.0.so.0.2200.2/                                            |    131584 |   1
+/lib/libpopt.so.0.0.0/                                                  |    131584 |   0
+/lib/libz.so.1.2.3/                                                     |    131584 |   0
+/usr/lib/libXext.so.6.4.0/                                              |    131584 |   0
+/usr/lib/libpangocairo-1.0.so.0.2600.0/                                 |    131584 |   0
+/usr/lib/libogg.so.0.6.0/                                               |    131584 |   0
+/usr/lib/libcairo.so.2.10800.8/                                         |    131584 |   0
+/usr/lib/libavahi-client.so.3.2.5/                                      |    131584 |   1
+/usr/lib/libtdb.so.1.1.5/                                               |    131584 |   0
+/usr/lib/libORBitCosNaming-2.so.0.1.0/                                  |    131584 |   0
+/usr/lib/libstdc++.so.6.0.13/                                           |    131584 |   1
+/lib/libgthread-2.0.so.0.2200.2/                                        |    131584 |   0
+/lib/libgcc_s-4.4.1-20091008.so.1/                                      |    131584 |   0
+/lib/libdbus-1.so.3.4.0/                                                |    131584 |   0
+/usr/lib/libcanberra-gtk.so.0.1.4/                                      |    131584 |   0
+/usr/lib/libpango-1.0.so.0.2600.0/                                      |    131584 |   0
+/usr/lib/libpng12.so.0.39.0/                                            |    131584 |   0
+/usr/lib/libltdl.so.7.2.0/                                              |    131584 |   0
+/usr/lib/gtk-2.0/modules/libcanberra-gtk-module.so/                     |    131584 |   0
+/lib/libnss_files-2.10.90.so/                                           |    131584 |   0
+/lib/libcom_err.so.2.1/                                                 |    131584 |   0
+/usr/lib/libcanberra.so.0.2.1/                                          |    131584 |   0
+/usr/lib/libdbus-glib-1.so.2.1.0/                                       |    131584 |   0
+/usr/lib/gtk-2.0/modules/libpk-gtk-module.so/                           |    131584 |   0
+/usr/lib/libpixman-1.so.0.16.2/                                         |    131584 |   0
+/usr/lib/libgdk_pixbuf-2.0.so.0.1800.2/                                 |    131584 |   0
+/home/taras/.fontconfig/3830d5c3ddfd5cd38a049b759396e72e-x86.cache-2/   |    131072 |   0
+/usr/lib/gconv/gconv-modules.cache/                                     |    131072 |   0
+/home/taras/.mozilla/firefox/imph4tsg.default/xpti.dat/                 |    101060 |  14
+/home/taras/firefox/greprefs.js/                                        |     74132 |  12
+/home/taras/.mozilla/firefox/imph4tsg.default/urlclassifier3.sqlite/    |     65832 |  85
+/home/taras/.mozilla/firefox/imph4tsg.default/places.sqlite/            |     53396 |  43
+/home/taras/firefox/defaults/pref/firefox.js/                           |     40803 |  17
+/usr/lib/gio/modules/libgiofam.so/                                      |     33280 |  13
+/usr/lib/gio/modules/libgiogconf.so/                                    |     33280 |  13
+/home/taras/firefox/libxpcom.so/                                        |     33280 |  13
+/usr/lib/gconv/UTF-16.so/                                               |     33280 |  16
+/usr/lib/libXss.so.1.0.0/                                               |     33280 |  14
+/home/taras/firefox/libplc4.so/                                         |     33280 |   5
+/home/taras/firefox/libplds4.so/                                        |     33280 |   0
+/usr/share/X11/locale/locale.dir/                                       |     32768 |  16
+/home/taras/firefox/run-mozilla.sh/                                     |     27368 |  12
+/usr/share/icons/hicolor/index.theme/                                   |     24293 |  25
+/home/taras/firefox/chrome/icons/default/default48.png/                 |     22164 |   1
+/home/taras/.mozilla/firefox/imph4tsg.default/cert8.db/                 |     16644 |  13
+/usr/share/icons/gnome/index.theme/                                     |     12657 |  41
+/home/taras/firefox/chrome/icons/default/default32.png/                 |     11964 |   1
+/home/taras/.mozilla/firefox/imph4tsg.default/search.json/              |     11392 |  14
+/usr/share/themes/Clearlooks/gtk-2.0/gtkrc/                             |     11287 |  18
+/etc/fonts/conf.avail/65-fonts-persian.conf/                            |      9880 |   1
+/dev/urandom/                                                           |      8468 |   4
+/home/taras/.mozilla/firefox/imph4tsg.default/secmod.db/                |      8452 |   1
+/usr/share/icons/Bluecurve/cursors/xterm/                               |      8192 |  12
+/usr/share/icons/Bluecurve/cursors/bottom_right_corner/                 |      8192 |   7
+/etc/fonts/conf.avail/65-nonlatin.conf/                                 |      7706 |   0
+/home/taras/firefox/firefox/                                            |      7695 |   0
+/etc/fonts/fonts.conf/                                                  |      5325 |  17
+/usr/share/locale/locale.alias/                                         |      5024 |   8
+/usr/share/icons/Mist/index.theme/                                      |      4771 |   7
+/home/taras/.mozilla/firefox/imph4tsg.default/key3.db/                  |      4356 |   1
+/home/taras/firefox/chrome/icons/default/default16.png/                 |      4332 |  21
+/usr/share/X11/locale/en_US.UTF-8/XLC_LOCALE/                           |      4287 |  12
+/proc/meminfo/                                                          |      4096 |   0
+/etc/fonts/conf.avail/30-metric-aliases.conf/                           |      3939 |   0
+/etc/passwd/                                                            |      3766 |   0
+/etc/gtk-2.0/i386-redhat-linux-gnu/gdk-pixbuf.loaders/                  |      3618 |  16
+/etc/pango/i386-redhat-linux-gnu/pango.modules/                         |      3452 |  16
+/home/taras/.mozilla/firefox/imph4tsg.default/content-prefs.sqlite/     |      3252 |   8
+/etc/fonts/conf.avail/25-unhint-nonlatin.conf/                          |      2941 |  12
+/etc/localtime/                                                         |      2899 |   0
+/home/taras/.mozilla/firefox/imph4tsg.default/permissions.sqlite/       |      2228 |   3
+/home/taras/.mozilla/firefox/imph4tsg.default/cookies.sqlite/           |      2212 |  15
+/home/taras/firefox/application.ini/                                    |      2128 |  18
+/etc/fonts/conf.avail/40-nonlatin.conf/                                 |      2069 |   0
+/usr/share/fontconfig/conf.avail/57-dejavu-sans.conf/                   |      2011 |   0
+/etc/fonts/conf.avail/45-latin.conf/                                    |      1837 |   0
+/home/taras/.mozilla/firefox/imph4tsg.default/prefs.js/                 |      1827 |  29
+/etc/nsswitch.conf/                                                     |      1734 |  20
+/etc/fonts/conf.avail/60-latin.conf/                                    |      1701 |   0
+/etc/fonts/conf.avail/90-synthetic.conf/                                |      1691 |   6
+/usr/share/fontconfig/conf.avail/57-dejavu-serif.conf/                  |      1649 |   0
+/lib/libdl-2.10.90.so/                                                  |      1536 |   0
+/usr/share/fontconfig/conf.avail/57-dejavu-sans-mono.conf/              |      1509 |   1
+/home/taras/firefox/chrome/toolkit.manifest/                            |      1418 |   8
+/usr/share/fontconfig/conf.avail/65-google-droid-sans.conf/             |      1403 |   0
+/home/taras/firefox/chrome/en-US.manifest/                              |      1251 |   0
+/usr/share/fontconfig/conf.avail/25-ttf-arphic-uming-bitmaps.conf/      |      1221 |  10
+/home/taras/firefox/defaults/pref/firefox-branding.js/                  |      1186 |  11
+/etc/fonts/conf.avail/30-urw-aliases.conf/                              |      1164 |   0
+/etc/fonts/conf.d/25-no-bitmap-fedora.conf/                             |      1160 |   0
+/etc/fonts/conf.avail/20-unhint-small-vera.conf/                        |      1157 |   0
+/home/taras/.mozilla/firefox/imph4tsg.default/formhistory.sqlite/       |      1156 |  14
+/usr/share/icons/Fedora/index.theme/                                    |      1128 |  32
+/usr/share/fontconfig/conf.avail/90-smc-fonts.conf/                     |      1094 |  15
+/usr/share/fontconfig/conf.avail/41-ttf-arphic-uming.conf/              |      1043 |   0
+/home/taras/firefox/chrome/browser.manifest/                            |       963 |   0
+/usr/share/fontconfig/conf.avail/64-ttf-arphic-uming.conf/              |       951 |   0
+/etc/fonts/conf.avail/20-fix-globaladvance.conf/                        |       912 |   0
+/usr/share/fontconfig/conf.avail/20-unhint-small-dejavu-sans-mono.conf/ |       866 |  20
+/home/taras/startup.html/                                               |       864 |  17
+/usr/share/fontconfig/conf.avail/20-unhint-small-dejavu-serif.conf/     |       858 |   0
+/usr/share/fontconfig/conf.avail/20-unhint-small-dejavu-sans.conf/      |       856 |   0
+/home/taras/.mozilla/firefox/imph4tsg.default/localstore.rdf/           |       850 |  11
+/home/taras/.mozilla/firefox/imph4tsg.default/sessionstore.js/          |       762 |  13
+/usr/share/fontconfig/conf.avail/65-ipa-pgothic.conf/                   |       705 |   8
+/lib/ld-2.10.90.so/                                                     |       704 |   0
+/etc/fonts/conf.avail/69-unifont.conf/                                  |       672 |   0
+/usr/share/fontconfig/conf.avail/75-ttf-arphic-ukai-select.conf/        |       611 |  22
+/etc/gtk-2.0/i386-redhat-linux-gnu/gtk.immodules/                       |       598 |  11
+/etc/fonts/conf.avail/49-sansserif.conf/                                |       545 |   0
+/usr/share/fontconfig/conf.avail/90-ttf-arphic-uming-embolden.conf/     |       541 |  14
+/usr/share/fontconfig/conf.avail/90-ttf-arphic-ukai-embolden.conf/      |       540 |   0
+/lib/libselinux.so.1/                                                   |       512 |   0
+/lib/libpthread-2.10.90.so/                                             |       512 |   0
+/lib/libutil-2.10.90.so/                                                |       512 |   0
+/lib/libm-2.10.90.so/                                                   |       512 |   0
+/usr/share/fontconfig/conf.avail/66-lohit-kashmiri@devanagari.conf/     |       488 |   0
+/usr/share/fontconfig/conf.avail/66-lohit-sindhi@devanagari.conf/       |       484 |   0
+/usr/share/fontconfig/conf.avail/66-lohit-maithili.conf/                |       478 |   3
+/usr/share/fontconfig/conf.avail/66-lohit-assamese.conf/                |       477 |  18
+/usr/share/fontconfig/conf.avail/66-lohit-gujarati.conf/                |       477 |   9
+/usr/share/fontconfig/conf.avail/66-lohit-konkani.conf/                 |       476 |  14
+/usr/share/fontconfig/conf.avail/66-lohit-bengali.conf/                 |       475 |  15
+/usr/share/fontconfig/conf.avail/66-lohit-marathi.conf/                 |       475 |   7
+/usr/share/fontconfig/conf.avail/66-lohit-kannada.conf/                 |       475 |   0
+/usr/share/fontconfig/conf.avail/66-lohit-punjabi.conf/                 |       475 |   0
+/proc/cpuinfo/                                                          |       474 |   0
+/usr/share/fontconfig/conf.avail/67-lohit-nepali.conf/                  |       473 |   0
+/usr/share/fontconfig/conf.avail/66-lohit-telugu.conf/                  |       473 |   1
+/usr/share/fontconfig/conf.avail/66-lohit-tamil.conf/                   |       471 |   0
+/usr/share/fontconfig/conf.avail/66-lohit-hindi.conf/                   |       471 |   0
+/usr/share/fontconfig/conf.avail/66-lohit-oriya.conf/                   |       471 |   0
+/bin/bash/                                                              |       403 |   0
+/usr/share/fontconfig/conf.avail/41-ttf-arphic-ukai.conf/               |       400 |   0
+/etc/gnome-vfs-2.0/modules/default-modules.conf/                        |       399 |   6
+/etc/fonts/conf.avail/80-delicious.conf/                                |       388 |   1
+/usr/share/fontconfig/conf.avail/25-ttf-arphic-uming-render.conf/       |       362 |   0
+/usr/share/fontconfig/conf.avail/25-ttf-arphic-ukai-render.conf/        |       361 |  18
+/usr/share/fontconfig/conf.avail/35-ttf-arphic-uming-aliases.conf/      |       353 |   0
+/usr/share/fontconfig/conf.avail/60-google-droid-sans-mono.conf/        |       345 |  16
+/usr/share/fontconfig/conf.avail/35-ttf-arphic-ukai-aliases.conf/       |       343 |   1
+/usr/share/fontconfig/conf.avail/61-stix.conf/                          |       332 |  10
+/usr/share/fontconfig/conf.avail/59-google-droid-serif.conf/            |       329 |   4
+/home/taras/firefox/defaults/pref/firefox-l10n.js/                      |       257 |   9
+/etc/fonts/conf.avail/50-user.conf/                                     |       245 |   0
+/home/taras/firefox/defaults/pref/reporter.js/                          |       205 |  16
+/etc/fonts/conf.avail/51-local.conf/                                    |       189 |   0
+/var/cache/fontconfig/0251a5afa6ac727a1e32b7d4d4aa7cf0-x86.cache-2/     |       160 |  15
+/home/taras/.mozilla/firefox/imph4tsg.default/compatibility.ini/        |       159 |  15
+/home/taras/.mozilla/firefox/imph4tsg.default/urlclassifierkey3.txt/    |       154 |  13
+/etc/hosts/                                                             |       147 |  13
+/home/taras/firefox/defaults/pref/channel-prefs.js/                     |       143 |   0
+/etc/resolv.conf/                                                       |       134 |  10
+/home/taras/firefox/platform.ini/                                       |       132 |   7
+/usr/share/gvfs/remote-volume-monitors/hal.monitor/                     |       123 |   0
+/usr/share/gvfs/remote-volume-monitors/gdu.monitor/                     |       123 |   7
+/usr/share/gvfs/remote-volume-monitors/gphoto2.monitor/                 |       115 |  32
+/home/taras/.mozilla/firefox/imph4tsg.default/extensions.ini/           |       112 |  12
+/home/taras/.mozilla/firefox/imph4tsg.default/extensions.cache/         |       106 |  14
+/etc/gtk-2.0/gtkrc/                                                     |        97 |  20
+/home/taras/.mozilla/firefox/profiles.ini/                              |        94 |  21
+/usr/share/themes/Default/gtk-2.0-key/gtkrc/                            |        82 |  20
+/home/taras/firefox/chrome/pippki.manifest/                             |        69 |   0
+/home/taras/firefox/browserconfig.properties/                           |        68 |  37
+/home/taras/.Xauthority/                                                |        52 |  13
+/var/lib/dbus/machine-id/                                               |        33 |  13
+/etc/host.conf/                                                         |        26 |  13
+/etc/gnome-vfs-2.0/modules/ssl-modules.conf/                            |        12 |   1
+/home/taras/.mozilla/firefox/Crash Reports/InstallTime20091022031207/   |        10 |  22
+/home/taras/.mozilla/firefox/Crash Reports/LastCrash/                   |        10 |   1
+/home/taras/.mozilla/firefox/imph4tsg.default/cookies.sqlite-journal/   |         5 |   1
+(263 rows)
+</code></pre>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -527,44 +841,6 @@ For an example see <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=508421"
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/07/21/those-crazy-comm-central-guys/">Those Crazy Comm-central Guys&#8230;</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-07-21T02:54:42-07:00" pubdate data-updated="true">Jul 21<span>st</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>When it comes to taking on crazy tasks involving disguising code, you can always count on Joshua. This time Joshua has gone deep in <a href="https://developer.mozilla.org/En/Pork">Pork</a> territory to do a very impressive rewrite (one that would not be even close to possible with anything other than Elsa-based tools) and he is blogging about it. He posted the <a href="http://quetzalcoatal.blogspot.com/2009/07/guide-to-pork-part-1.html">first installment</a> of his rewriting-with-Pork guide.</p>
-
-<p>Still on the subject on mad csc-entist Joshua: Andrew Sutherland has finally gotten sick of crappy JS documentation tools and took matters into his own hands thanks to Joshua&#8217;s JSHydra tool. Checkout his <a href="http://www.visophyte.org/blog/2009/07/20/doccelerator-javascript-documentation-via-jshydra-into-couchdb-with-an-ajax-ui/">blog post</a> on how the documentation world will be a better place thanks to being able to build tools on top of <em>the JavaScript parser</em>.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/18/">&larr; Older</a>
@@ -582,6 +858,10 @@ For an example see <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=508421"
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/02/06/cost-efficient-continious-integration/">Cost-Efficient Continious Integration</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/11/20/new-role-developer-productivity/">New Role: Developer Productivity</a>
       </li>
     
@@ -595,10 +875,6 @@ For an example see <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=508421"
     
       <li class="post">
         <a href="/blog/2013/04/05/mozilla-tech-on-reddit/">Mozilla Tech on Reddit</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/03/27/snappy-number-55-snappy-evolution/">Snappy #55: Snappy Evolution</a>
       </li>
     
   </ul>

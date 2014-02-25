@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Open Source projects are often like parallel worlds. People reach the same conclusions, attempt similar solutions and are typically blissfully &hellip;">
+  <meta name="description" content="I&#8217;ve been running my prbool checker with nightly notifications for about a year now. There are some false positivies, but mostly it picks up &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,44 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2008/11/07/enabling-prcheck-email-notifications/">Enabling Prcheck Email Notifications</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-11-07T07:58:08-08:00" pubdate data-updated="true">Nov 7<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I&#8217;ve been running my prbool checker with nightly notifications for about a year now. There are some false positivies, but mostly it picks up real bugs. The checker pulls the blame source to try to guess who is responsible for the error, but so far it has only been emailing me.</p>
+
+<p>I&#8217;m going to make it emailed the hg blamed person starting this weekend, so if you commit something and get an email from me complaining about it don&#8217;t take it too personally. Hopefully this will keep the amount of new detectable prbool bugs at 0. If you do get an email and decide you don&#8217;t want to get these in the future, please complain and we&#8217;ll try to come up with a better notification solution.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -559,50 +597,6 @@ Both of these projects are interested in converging on a single codebase. It sou
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2008/08/11/oink-testsuite-within-pork-passes/">Oink Testsuite Within Pork Passes</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-08-11T07:49:28-07:00" pubdate data-updated="true">Aug 11<span>th</span>, 2008</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I have never enjoyed the theory behind software engineering. It seems particularly depressing as it can be summarized as: &#8220;What can we learn from past software development experience in order to not repeat old mistakes such that we can come up with newer and shinier mistakes?&#8221;.</p>
-
-<p>For that reason I haven&#8217;t been able to stick to any particular software development doctrine (paired, test-driven, OO, SOA, etc) and instead taken shortcuts to whatever is practical at the time.</p>
-
-<p>One unfortunate result of such neglect is that the oink test suite ended up not being utilized. I tried it a couple of times while starting out with oink and it failed in many cumbersome ways. However, as pork evolved out of oink, I learned more about the &#8220;architecture&#8221; behind it, I fixed a couple of the issues that were causing funny make errors.</p>
-
-<p>However one giant bug remained. Turned out other people were able to run the original oink testsuite, but not the equivalent one in pork. Fearing that I somehow screwed up Elsa, I spent way too long investigating the failure only to learn it wasn&#8217;t my <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=444805">fault</a>. Pork users: rejoice, the testsuite should run as expected now.</p>
-
-<p>PS. I may not be a SENG believer, but I do think that open source + good version control + testsuites result in better software.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/21/">&larr; Older</a>
@@ -620,6 +614,10 @@ Both of these projects are interested in converging on a single codebase. It sou
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/02/06/cost-efficient-continious-integration/">Cost-Efficient Continious Integration</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/11/20/new-role-developer-productivity/">New Role: Developer Productivity</a>
       </li>
     
@@ -633,10 +631,6 @@ Both of these projects are interested in converging on a single codebase. It sou
     
       <li class="post">
         <a href="/blog/2013/04/05/mozilla-tech-on-reddit/">Mozilla Tech on Reddit</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/03/27/snappy-number-55-snappy-evolution/">Snappy #55: Snappy Evolution</a>
       </li>
     
   </ul>

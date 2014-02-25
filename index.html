@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="New Role The performance part of my team is now lead by Vladan. They are doing usual performancy things with a focus on improving our &#8216;internal &hellip;">
+  <meta name="description" content="As of a few weeks ago, Chris AtLee and his half of Mozilla Release engineering report to me. We are working on drastically improving efficiency of &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,108 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/02/06/cost-efficient-continious-integration/">Cost-Efficient Continious Integration</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-02-06T13:16:00-08:00" pubdate data-updated="true">Feb 6<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>As of a few weeks ago, Chris AtLee and his half of Mozilla Release engineering report to me.</p>
+
+<p>We are working on drastically improving efficiency of our continuous integration infrastructure.</p>
+
+<p>For 2014 our focus is on cost-efficiency, developer efficiency is also a priority. Mozilla has a few thousand (around 3000, including various ARM boards) real machines dedicated to building &amp; testing our products. There are an additional ~500-1000 virtual machines on Amazon EC2. We have been spending around ~$115K per month for Amazon AWS infra for the past 4 months (e.g. Linux/B2G/Android builds &amp; unit tests. Linux perf tests run on real hw). It&#8217;s harder to get numbers for our internal costs, but a conservative estimate would be to  assume that Amazon AWS is 1/3rd of our spend given that we test Windows, Mac, Android, etc in-house.</p>
+
+<p>Number of c-i hours goes up with every month, so it is crucial to get a grip on our infrastructure efficiency in terms of cost per job.</p>
+
+<p>My cloud target is to get our current Amazon EC2 workload to under $30K/month by the end of the year. This will give us room to move Mac builds, and Windows unit-tests + compiles into the cloud.</p>
+
+<p>Where to save money?
+One can break down the c-i process into 3+1 distinct optimization areas:</p>
+
+<ol>
+<li>Building &amp; Testing Workloads</li>
+<li>Scheduling Logic</li>
+<li>Provisioning Bare Metal or Virtual Machines</li>
+<li>Reporting</li>
+</ol>
+
+
+<p>Items 1-3 are ordered in terms of dependencies where in theory #1 does not care how it&#8217;s scheduled or what machines it&#8217;s run on(#3).  #3 is what we get billed for and it is largely a result of #1 and #2.</p>
+
+<p>#4 is mainly a human cost in that we don&#8217;t have a lot of insight into how efficiently our jobs run. Making our systems more transparent should make optimization easier.</p>
+
+<p>In terms of work:</p>
+
+<ol>
+<li>We made great progress with reducing build times in 2013. Compilation is the biggest contributor to our EC2 bill. We have more work to do there. We&#8217;ll focus on optimizing tests to run more efficiently once build costs are on-par in cost terms.</li>
+<li>The way we use Buildbot results in a lot of idle-time on machines. There is a lot of room for improvements via containerization, running more jobs in parallel. We are looking at potentially replacing Buildbot with a simpler and more cloud-friendly framework (TaskCluster).</li>
+<li>We saved $30K in January by tweaking what kind of EC2 nodes we use. We switched to more cost-efficient ondemand nodes (m3.xlarge -> c3.xlarge, m1.medium -> m3.medium) and started running try jobs and tests on EC2 spot nodes.</li>
+</ol>
+
+
+<h3>Moving to Public Clouds</h3>
+
+<p>We will be moving all of our Mac/Win/Linux (other than perf-testing) infrastructure into the cloud. Windows, Linux and most of Mac builds and tests should run on hardware outside of  Mozilla data-centers by the end of 2014. Cloud infra like EC2 is expensive for inefficient workloads. We will be optimizing workloads locally until they can run on a public cloud in a cost-efficient manner (eg VMs with little idle capacity or redundant tasks).
+I expect cloud infra to save Mozilla developer time and money.</p>
+
+<h3>Private Cloud Functionality</h3>
+
+<p>For obvious reasons, we are stuck doing performance tests and many Mac workloads on our bare metal. Unfortunately suitable bare metal public clouds do not exist yet.
+We would like to approach EC2-like engineering efficiencies by reconfiguring machines in our data center as a private bare metal cloud based on OpenStack. We will be replacing bugzilla+human  intervention with APIs for reimaging, slave  loans, etc.
+Ideally all of our pc, mac, arm onsite,offsite hardware would be controlled by the same API.
+I hope that in addition to making our hardware ops happier, opening up machine configuration via self-serve access control will greatly increase our ability to iterate on improving machine configurations, bringing new configurations online, etc.</p>
+
+<h3>Spot workloads</h3>
+
+<p>Amazon&#8217;s spot infra (http://aws.amazon.com/ec2/purchasing-options/spot-instances/)  is a great idea for minimizing idle time on machines.
+I would like to have spot workloads in public and private clouds. Try and fuzzing deal well with being interrupted and soaking up spare capacity.</p>
+
+<h3>Developers with keys</h3>
+
+<p>The releng team is small. Unless you have a critical request, expect us to hear a &#8220;no, we are too busy&#8221; followed by &#8220;but here are the keys to our test public/private clouds, go do what you want and we&#8217;ll help you deploy it&#8221;. I hope that Mozilla developers will appreciate not having to block on busy intermediaries and help themselves.</p>
+
+<p>My strategy is largely inspired by this <a href="http://www.youtube.com/watch?v=1LRSS29SH44">Forrester analysis</a>. Infrastructure devop teams should strive to enable other teams to self-serve. Our role is to help developers do things right, not to be gatekeepers or do work that developers find unsatisfying.</p>
+
+<h3>How to Get Involved</h3>
+
+<p>In 2014 I&#8217;d like to move our c-i from a 90s-style architecture with a few modern cloud components to a modern cloud-oriented architecture. The following areas might be fun to help with:</p>
+
+<ul>
+<li>We need to be more data-driven. Need to process, visualize and correlate various logs to direct optimization decisions. We have build logs, buildbot logs, AWS usage logs, AWS Spot price logs, etc.</li>
+<li>Bare metal virtualization with OpenStack for Mac, Windows, ARM boards is an open problem</li>
+<li>Containerizing builds, tests via Docker/LXC.</li>
+</ul>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -622,64 +724,6 @@ Omnijar readhead is next, in <a title="Use readahead for ordered jar files such 
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/02/22/snappy-number-51-smoothing-tab-animations/">Snappy #51: Smoothing Tab Animations</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-02-22T16:14:00-08:00" pubdate data-updated="true">Feb 22<span>nd</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h3>Lack of Updates</h3>
-
-<p>I skipped a Snappy update two-weeks ago (did anyone notice?) due to not having any completed work to report. Snappy has not stagnated, we have big projects inflight see this week&#8217;s <a href="https://wiki.mozilla.org/Performance/Snappy/2013-02-21">notes</a> for some details.</p>
-
-<h3>Tab Smoothness</h3>
-
-<p>I usually do not cover in-flight work in Snappy updates and expect individual developers to blog about stuff they are working on. However, Avi Halachmi has delayed blogging to focus on quickly advancing Firefox performance, an exception had to me made.</p>
-
-<p>Avi has been investigating tab smoothness since December. His approach relies on detailed instrumentation + sending captured data via Telemetry. This culminated in some exciting bug activity this week:</p>
-
-<ul>
-<li><a title="Add telemetry probes for tab animation smoothness" href="https://bugzilla.mozilla.org/show_bug.cgi?id=828097">bug 828097</a> According to Telemetry, Firefox tab animations are quite smooth (due to recent improvements like <a title="requestAnimationFrame generates too short/long frames, especially at the beginning of animation" href="https://bugzilla.mozilla.org/show_bug.cgi?id=731974">bug 731974</a>) iff one has the newtab thumbnail feature disabled (via button in top right of the page).</li>
-<li><a title="Newtab page slows down tab-open animation" href="https://bugzilla.mozilla.org/show_bug.cgi?id=843853">bug 843853</a> was filed to fix above performance hit ASAP.</li>
-<li><a title="Cache GradientStops instead of gfxPatterns" href="https://bugzilla.mozilla.org/show_bug.cgi?id=838758">bug 838758</a> 20-25% tab animation speedup on Direct2D-accelerated systems.</li>
-<li><a title="Refresh driver may re-target the same timestamp" href="https://bugzilla.mozilla.org/show_bug.cgi?id=842967">bug 842967</a>, <a title="Consider getting rid of the delay line filter stuff in timer thread" href="https://bugzilla.mozilla.org/show_bug.cgi?id=590422">bug 590422</a> improve animation scheduling.</li>
-</ul>
-
-
-<p>Due to web-like Firefox UI architecture most of these improvements will enable smoother website perf.</p>
-
-<p>Avi, Matthew Noorenberghe, Mike Conley are working on optimizing our next UI refresh: Australis. Australis is shaping up to be the most perf-tuned theme update we&#8217;ve done. See <a title="Australis tabs performance tracking" href="https://bugzilla.mozilla.org/show_bug.cgi?id=837885">bug 837885</a> for how performance is being tracked.</p>
-
-<p>As Avi&#8217;s manager I found it trying to see weeks of perf-reporting work with no fixes to accompany it. I&#8217;m happy to see this investigation investment pay off and serve an example of importance of methodically studying performance before proceeding to optimization.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -695,6 +739,10 @@ Omnijar readhead is next, in <a title="Use readahead for ordered jar files such 
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/02/06/cost-efficient-continious-integration/">Cost-Efficient Continious Integration</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/11/20/new-role-developer-productivity/">New Role: Developer Productivity</a>
       </li>
     
@@ -708,10 +756,6 @@ Omnijar readhead is next, in <a title="Use readahead for ordered jar files such 
     
       <li class="post">
         <a href="/blog/2013/04/05/mozilla-tech-on-reddit/">Mozilla Tech on Reddit</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/03/27/snappy-number-55-snappy-evolution/">Snappy #55: Snappy Evolution</a>
       </li>
     
   </ul>

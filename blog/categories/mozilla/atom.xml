@@ -4,7 +4,7 @@
   <title><![CDATA[Category: mozilla | All About Performance]]></title>
   <link href="http://taras.glek.net/blog/categories/mozilla/atom.xml" rel="self"/>
   <link href="http://taras.glek.net/"/>
-  <updated>2014-01-12T16:11:35-08:00</updated>
+  <updated>2014-02-25T15:08:50-08:00</updated>
   <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -12,6 +12,68 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Cost-Efficient Continious Integration]]></title>
+    <link href="http://taras.glek.net/blog/2014/02/06/cost-efficient-continious-integration/"/>
+    <updated>2014-02-06T13:16:00-08:00</updated>
+    <id>http://taras.glek.net/blog/2014/02/06/cost-efficient-continious-integration</id>
+    <content type="html"><![CDATA[As of a few weeks ago, Chris AtLee and his half of Mozilla Release engineering report to me.
+
+We are working on drastically improving efficiency of our continuous integration infrastructure. 
+
+For 2014 our focus is on cost-efficiency, developer efficiency is also a priority. Mozilla has a few thousand (around 3000, including various ARM boards) real machines dedicated to building & testing our products. There are an additional ~500-1000 virtual machines on Amazon EC2. We have been spending around ~$115K per month for Amazon AWS infra for the past 4 months (e.g. Linux/B2G/Android builds & unit tests. Linux perf tests run on real hw). It's harder to get numbers for our internal costs, but a conservative estimate would be to  assume that Amazon AWS is 1/3rd of our spend given that we test Windows, Mac, Android, etc in-house. 
+
+Number of c-i hours goes up with every month, so it is crucial to get a grip on our infrastructure efficiency in terms of cost per job.
+
+My cloud target is to get our current Amazon EC2 workload to under $30K/month by the end of the year. This will give us room to move Mac builds, and Windows unit-tests + compiles into the cloud.
+ 
+Where to save money?
+One can break down the c-i process into 3+1 distinct optimization areas:
+
+1. Building & Testing Workloads
+2. Scheduling Logic
+3. Provisioning Bare Metal or Virtual Machines
+4. Reporting
+
+Items 1-3 are ordered in terms of dependencies where in theory #1 does not care how it's scheduled or what machines it's run on(#3).  #3 is what we get billed for and it is largely a result of #1 and #2.
+
+\#4 is mainly a human cost in that we don't have a lot of insight into how efficiently our jobs run. Making our systems more transparent should make optimization easier.
+
+In terms of work:
+
+1. We made great progress with reducing build times in 2013. Compilation is the biggest contributor to our EC2 bill. We have more work to do there. We'll focus on optimizing tests to run more efficiently once build costs are on-par in cost terms.
+2. The way we use Buildbot results in a lot of idle-time on machines. There is a lot of room for improvements via containerization, running more jobs in parallel. We are looking at potentially replacing Buildbot with a simpler and more cloud-friendly framework (TaskCluster).
+3. We saved $30K in January by tweaking what kind of EC2 nodes we use. We switched to more cost-efficient ondemand nodes (m3.xlarge -> c3.xlarge, m1.medium -> m3.medium) and started running try jobs and tests on EC2 spot nodes.
+
+### Moving to Public Clouds
+We will be moving all of our Mac/Win/Linux (other than perf-testing) infrastructure into the cloud. Windows, Linux and most of Mac builds and tests should run on hardware outside of  Mozilla data-centers by the end of 2014. Cloud infra like EC2 is expensive for inefficient workloads. We will be optimizing workloads locally until they can run on a public cloud in a cost-efficient manner (eg VMs with little idle capacity or redundant tasks).
+I expect cloud infra to save Mozilla developer time and money.
+
+### Private Cloud Functionality
+For obvious reasons, we are stuck doing performance tests and many Mac workloads on our bare metal. Unfortunately suitable bare metal public clouds do not exist yet.
+We would like to approach EC2-like engineering efficiencies by reconfiguring machines in our data center as a private bare metal cloud based on OpenStack. We will be replacing bugzilla+human  intervention with APIs for reimaging, slave  loans, etc. 
+Ideally all of our pc, mac, arm onsite,offsite hardware would be controlled by the same API. 
+I hope that in addition to making our hardware ops happier, opening up machine configuration via self-serve access control will greatly increase our ability to iterate on improving machine configurations, bringing new configurations online, etc.
+
+### Spot workloads
+Amazon's spot infra (http://aws.amazon.com/ec2/purchasing-options/spot-instances/)  is a great idea for minimizing idle time on machines.
+I would like to have spot workloads in public and private clouds. Try and fuzzing deal well with being interrupted and soaking up spare capacity. 
+
+### Developers with keys
+The releng team is small. Unless you have a critical request, expect us to hear a "no, we are too busy" followed by "but here are the keys to our test public/private clouds, go do what you want and we'll help you deploy it". I hope that Mozilla developers will appreciate not having to block on busy intermediaries and help themselves.  
+
+My strategy is largely inspired by this [Forrester analysis](http://www.youtube.com/watch?v=1LRSS29SH44). Infrastructure devop teams should strive to enable other teams to self-serve. Our role is to help developers do things right, not to be gatekeepers or do work that developers find unsatisfying.
+
+### How to Get Involved
+
+In 2014 I'd like to move our c-i from a 90s-style architecture with a few modern cloud components to a modern cloud-oriented architecture. The following areas might be fun to help with:
+
+* We need to be more data-driven. Need to process, visualize and correlate various logs to direct optimization decisions. We have build logs, buildbot logs, AWS usage logs, AWS Spot price logs, etc. 
+* Bare metal virtualization with OpenStack for Mac, Windows, ARM boards is an open problem
+* Containerizing builds, tests via Docker/LXC.
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[New Role: Developer Productivity]]></title>
@@ -127,39 +189,6 @@ I know a number of good people who stopped reading and posting on planet because
 I am not suggesting that people stop posting pictures of their cats, dictionary entries on planet. I only want to filter that out so I can have a satisfying technical feed.
 
 Please try out the [reddit feed](http://www.reddit.com/r/MozillaTech/) and let [me](https://twitter.com/tarasglek) and [Dirkjan](https://twitter.com/djco) know if it works for you. We are open to other suggestions too.
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Snappy #55: Snappy Evolution]]></title>
-    <link href="http://taras.glek.net/blog/2013/03/27/snappy-number-55-snappy-evolution/"/>
-    <updated>2013-03-27T03:56:00-07:00</updated>
-    <id>http://taras.glek.net/blog/2013/03/27/snappy-number-55-snappy-evolution</id>
-    <content type="html"><![CDATA[The Snappy name will be retired in favor of Performance: we will be expanding our meta scope beyond desktop Firefox responsiveness.
-
-I think as a result of Snappy, Firefox is in a much happier performance place now. There are a big wins remaining, but we have tools and ideas on how to get there. We've come a long way from "how to make Firefox feel fast?" discussions in late 2011.
-
-Snappy has been a tricky meta-project because work has to happen across teams. While my Performance team has an exclusive commitment to performance, other teams have to context-switch between feature-work, platform-work, performance, etc. There are also team culture differences on internal vs external communication, planning, etc.
-
-Some of the projects are quite hard and require specialized expertise. This meant that we'd make a bunch of progress on a project (eg breakpad profiler backend) only to realize that we are blocked on someone we didn't loop into the project right away (eg Ted). Ideally we will minimize chances of surprises like this in the future.
-
-Until recently my solution was to deal with this as a manager. I'd sync up with relevant managers about Snappy needs and try to get some Snappy bugs onto relevant team's todo. This has worked out ok, but there were a few too many instances of unexpected delays due to shifting team priorities, miscommunication, general lag. My conclusion is that at a developer-driven organization like Mozilla heavy manager involvement on Snappy-type projects is a sign that we are doing it wrong. Developers should be adding performance goals to their team's agenda.
-
-Last week we came up with a more developer-centric way to do performance work. I'll still be around making sure things are moving forward, but from now one I'd like to see developers drive planning & coordination on a per-project basis. I'll introduce individual projects + their respective blogs as they start in the next couple of weeks.
-
-Irving Reid (addon-manager startup performance lead) summed up key mechanics of the new approach in an email. Thanks, Irving.
-
-###Irving's Summary
-
-Coming out of the Snappy work week, we decided to try and make performance projects a little more structured than they have been in the past; see [Lawrence's post](http://lawrencemandel.com/2013/03/21/no-more-snappy-meetings-and-other-changes-from-the-snappy-team/) for a summary.
-
-While not mentioned in Lawrence's blog, one of the things Taras (if I recall correctly) suggested was to have a project kick-off meeting to get rough agreement on scope, responsibilities, and how we're going to track progress. If everyone is happy with settling those questions over email, we can; I think we lose a little by not getting a chance to see and hear each other directly, but it is rather painful to get that scheduled in the current circumstances.
-
-In any case I wasn't planning on delaying work until after the meeting could happen; it's more about getting things as clear as we can, as early as we can.
-
-The current plan is for Felipe and I to do the patches, with me handling coordination and progress tracking as well. Everybody else is involved to make sure we're going in the right direction, and help us over roadblocks.
-
-The progress tracking technique the Snappy team settled on last week was a combination of daily one-line updates using the [status bot](http://teamstat.us/#browse/irc.mozilla.org/perf) in the #perf channel, and a blog post every two weeks summarizing overall progress. I'll do the [blog posts](http://www.controlledflight.ca/category/mozilla/); depending on how things go I may do them weekly instead of biweekly.
 ]]></content>
   </entry>
   
