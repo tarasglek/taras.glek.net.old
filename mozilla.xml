@@ -4,7 +4,7 @@
   <title><![CDATA[All About Performance]]></title>
   <link href="http://taras.glek.net/atom.xml" rel="self"/>
   <link href="http://taras.glek.net/"/>
-  <updated>2014-02-25T15:08:50-08:00</updated>
+  <updated>2014-03-01T09:50:28-08:00</updated>
   <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -15,7 +15,7 @@
   
   
   <entry>
-    <title type="html"><![CDATA[Cost-Efficient Continious Integration]]></title>
+    <title type="html"><![CDATA[Cost-Efficient Continuous Integration]]></title>
     <link href="http://taras.glek.net/blog/2014/02/06/cost-efficient-continious-integration/"/>
     <updated>2014-02-06T13:16:00-08:00</updated>
     <id>http://taras.glek.net/blog/2014/02/06/cost-efficient-continious-integration</id>
