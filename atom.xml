@@ -4,7 +4,7 @@
   <title><![CDATA[All About Performance]]></title>
   <link href="http://taras.glek.net/atom.xml" rel="self"/>
   <link href="http://taras.glek.net/"/>
-  <updated>2014-03-05T18:43:21-08:00</updated>
+  <updated>2014-03-05T18:47:42-08:00</updated>
   <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -26,7 +26,7 @@
 
 <h3>Spot Everything</h3>
 
-<p>we spent 2014 retrofitting our c-i architecture to cope with failure so we can run more of our workload on spot nodes.</p>
+<p>We spent 2014 retrofitting our c-i architecture to cope with failure so we can run more of our workload on spot nodes.</p>
 
 <p>On our January AWS bill we were 30% more cost-efficient. This was accomplished late in the month, we managed to have the bill not go up to cope with a higher-than-ever load.
 For February we were aiming to drop the bill to under $80K.
