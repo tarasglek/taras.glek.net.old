@@ -4,7 +4,7 @@
   <title><![CDATA[Category: mozilla | All About Performance]]></title>
   <link href="http://taras.glek.net/blog/categories/mozilla/atom.xml" rel="self"/>
   <link href="http://taras.glek.net/"/>
-  <updated>2014-03-01T09:50:28-08:00</updated>
+  <updated>2014-03-05T18:43:21-08:00</updated>
   <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -12,6 +12,75 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[More &amp; Faster C-I for Less on AWS]]></title>
+    <link href="http://taras.glek.net/blog/2014/03/05/more-and-faster-c-i-for-less-on-aws/"/>
+    <updated>2014-03-05T18:22:00-08:00</updated>
+    <id>http://taras.glek.net/blog/2014/03/05/more-and-faster-c-i-for-less-on-aws</id>
+    <content type="html"><![CDATA[### Amazon Pricing - Expensive or Cheap?
+Amazon ondemand nodes are fantastic for rapid iteration, but using them in production is expensive naivety. It is expensive for Amazon to maintain spare capacity to allow customers to launch any of the wide variety of nodes they offer ondemand. Forecasing demand at Amazon scale can't be easy. As a result, Amazon recommends that customers buy reserves with an upfront payment then pay a discounted rate after. This is brilliant as it shifts the capacity-planning burden to each customer. This would net us a 60% discount if we we could forecast our AWS usage perfectly.
+
+Fortunately Amazon also has a spot-pricing model. Spot prices can be 70-90% lower than ondemand (we've also seen them 50% higher). The downside is that Amazon can kill these nodes at any point and node availability is limited compared to ondemand. Given that Amazon competition can't match spot prices, Amazon might be selling their unused ondemand capacity at cost. I doubt that anyone smaller than Amazon can maintain their own hardware with salaried ops for less than Amazon's spot prices.
+
+### Spot Everything
+
+we spent 2014 retrofitting our c-i architecture to cope with failure so we can run more of our workload on spot nodes.
+
+On our January AWS bill we were 30% more cost-efficient. This was accomplished late in the month, we managed to have the bill not go up to cope with a higher-than-ever load.
+For February we were aiming to drop the bill to under $80K. 
+The following is a summary of where we are.
+
+### Provisioning
+
+* We now run the majority of our workload on Amazon spot nodes. Ondemand:spot ratio is between 2:1 and 7:1. Note we still pay more for ondemand portion of our bill because ondemand is a lot more expensive
+* At $74,389.03, our Feb bill is 36% lower than Jan.
+* Our current AWS spending per job is approximately half of what we paid in December
+* We now bid on a range of AWS node types to maximize node availability and minimize price. This results in  >=50% lower spot bill. We now run a portion of our workload on 2x-faster VMs when cheaper spot machine types are not available.
+
+### Scheduling
+
+* Our AWS scheduler ramps up slower now to avoid temporary overprovisioning. Note the improvement on the right side of the graph (tall & narrow  spikes are bad)
+
+![catlee's graph](http://people.mozilla.org/~catlee/sattap/296cb846.png)
+
+### Monitoring
+
+* We are evaluating [hostedgraphite.com](http://hostedgraphite.com/) for monitoring our efficiency. It's nice to have someone offer a well-supported open-source-compatible solution that can cope with 30K+ of metrics our 1000s of VMs generate.
+
+![](/assets/images/spotinstances.png "Spot Instance Types Used for C-I")
+
+![](/assets/images/spotprice.png "Approximate Spot Prices")
+
+
+### Workload Improvements
+
+* Halved Linux Firefox and Android try build time via a shared [S3 object cache](http://glandium.org/blog/?p=3201)
+* Halved B2G builds via [jacuzzis](http://atlee.ca/blog/posts/initial-jacuzzi-results.html)
+
+### Mozilla Data Center plans for March
+
+Amazon S3 is cheap, fast and robust. EC2 is incredibly flexible. Both are great for quickly iterating on cool ideas. Unfortunately most of our infrastructure runs on physical machines. We need to improve our non-elastic inhouse capacity with what we learned in the cloud:
+
+* Use a shared object cache for Windows/Mac builds. This should more than double Windows build speed. The plan is to use Ceph for S3-compatible shared object storage.
+* Get OpenStack bare metal virtualization working so we could move as fast there as we do in EC2
+
+### Cloud Plans for March
+
+* Eliminate EBS usage for faster builds, 10% lower EC2 bill. Amazon EBS is the antithesis of cost-effectiveness.
+* Deploy more jacuzzis for faster builds, less EC2 instances
+* Run more things on spot, switch to cheaper ondemand nodes, maybe buy some reserves
+* Bid on an even wider variety of spot nodes
+* Probably wont hit another 30% reduction, focusing on technical debt, better metrics, etc
+* Containerization of Linux builds
+
+### Conclusion
+
+Cloud APIs make cost-oriented architectures fun. Batch nature of c-i is a great match for spot.
+
+In general, spot is a brilliant design pattern, I intend to implement spot workloads on our own infra. It's too bad other cloud vendors do not offer anything comparable.
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Cost-Efficient Continuous Integration]]></title>
@@ -174,21 +243,6 @@ Investigating SQLite Performance via Telemetry
 Years ago I tweaked our SQLite clients to use a larger page size. In my testing this seemed to achieve a speedup of 0.2-2x, see <a title="Suboptimal SQLite page size" href="https://bugzilla.mozilla.org/show_bug.cgi?id=416330">bug 416330</a>. Unfortunately, ~30% of our users are still on the old page size (<a title="Fix page_size of WAL databases" href="https://bugzilla.mozilla.org/show_bug.cgi?id=634374">bug 634374</a>). We used a [jydoop](https://github.com/mozilla/jydoop) query to figure out if it's worth developing a feature to convert these users over using two different (time spent [reading](https://github.com/mozilla/jydoop/blob/master/scripts/places4k.py) & time spent [executing](https://github.com/mozilla/jydoop/blob/master/scripts/places4k-slowsql.py) a query) ways to measure performance differences. According to both methods there is a 4x reduction in sqlite IO waits with the larger page size, so we'll be adding code to convert people over more aggressively.
 
 This was a cool investigation because it highlighted how much more confidence we have when making performance decisions now (due to telemetry) vs a few years ago.
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Mozilla Tech on Reddit]]></title>
-    <link href="http://taras.glek.net/blog/2013/04/05/mozilla-tech-on-reddit/"/>
-    <updated>2013-04-05T20:02:00-07:00</updated>
-    <id>http://taras.glek.net/blog/2013/04/05/mozilla-tech-on-reddit</id>
-    <content type="html"><![CDATA[I posted earlier about [planet mozilla being obsolete](/blog/2013/02/15/is-planet-mozilla-obsolete/). To move forward, we need to experiment with some alternatives. Mozilla contributor, [@djco](https://twitter.com/djco), setup a [reddit feed](http://www.reddit.com/r/MozillaTech/) so we can up-vote technical content and down-vote the rest.
-
-I know a number of good people who stopped reading and posting on planet because of irrelevant, offensive, etc content. Please give the reddit feed a try. Maybe once we get enough people moderating, we'll encourage more quality content.
-
-I am not suggesting that people stop posting pictures of their cats, dictionary entries on planet. I only want to filter that out so I can have a satisfying technical feed.
-
-Please try out the [reddit feed](http://www.reddit.com/r/MozillaTech/) and let [me](https://twitter.com/tarasglek) and [Dirkjan](https://twitter.com/djco) know if it works for you. We are open to other suggestions too.
 ]]></content>
   </entry>
   

@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="On Friday, the necko team finally landed a fix that makes cache less likely to freeze the UI thread during reads: bug 722034. Cache writes, other &hellip;">
+  <meta name="description" content="Notes. Justin&#8217;s FUEL fix will help add-ons avoid leaks and shutdown hangs: bug 750454. Jared plans to start landing Australis tab strip (738491 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,50 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/06/11/snappy-june-7/">Snappy, June 7</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-06-11T09:13:36-07:00" pubdate data-updated="true">Jun 11<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><a href="https://wiki.mozilla.org/Performance/Snappy/2012-06-07">Notes</a>.</p>
+
+<p>Justin&#8217;s FUEL fix will help add-ons avoid leaks and shutdown hangs: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=750454">bug 750454</a>.</p>
+
+<p>Jared plans to start landing Australis tab strip (<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=738491">738491</a>) on <a href="http://ftp.mozilla.org/pub/mozilla.org/firefox/nightly/latest-ux/">UX branch</a> this week. Australis is our new, faster UI theme.</p>
+
+<p>We landed a cache locking fix recently (<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=722034">722034</a>), but telemetry is now showing a regression (<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=761736">761736</a>), so this will likely be backed out and reworked.</p>
+
+<p>Vladan <a href="http://blog.mozilla.org/vdjeric/2012/06/08/cache-plugin-font-operations-most-common-in-chrome-hang-reports/">blogged</a> about first results from our non-destructive chromehang. Last year we briefly caused our nightly to crash if it hung for over 30seconds, which got us a lot of useful data (and some of the initial snappy bugs). This piggybacked on our crash-handling infrastructure so it was a very effective experiment (a bit brutal though). Vladan spent time this year working on plumbing to get the same sort of data non-destructively. As a result we are looking to <a href="https://groups.google.com/forum/?fromgroups#!topic/mozilla.dev.platform/UENmwUOFCkU">turn on frame pointers</a> in nightly builds and dial down hang detection to 5 seconds (bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=763124">763124</a>).</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -526,50 +570,6 @@ if (requestAnimationFrame)
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/04/19/snappy-april-19/">Snappy, April 19</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-04-19T07:47:40-07:00" pubdate data-updated="true">Apr 19<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>At 15 minutes, this might&#8217;ve been our shortest meeting yet (<a href="https://wiki.mozilla.org/Performance/Snappy/2012-04-19">notes</a>).</p>
-
-<p>Most of the work happened in <a href="https://wiki.mozilla.org/Performance/Snappy/2012-04-19#Front-end_-_Dietrich">frontend stuff</a>. Most notable improvements are reduced screenshot overhead (by taking less screenshots, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=744152">744152</a>) and a brand new IE migrator (a step towards fully async places API, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=710895">710895</a>).</p>
-
-<p>Work resumed on making peptest return more <a href="https://wiki.mozilla.org/Performance/Snappy/2012-04-19#peptest_-_mcote">consistent </a>results.</p>
-
-<p>The necko team decided to take a more involved approach to solve our cache locking(bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=722034">722034</a>) which means the fix will land later than we originally hoped for.</p>
-
-<p>My little investigation into setTimeout <a href="http://taras.glek.net/blog/2012/04/18/web-2-0-a-collection-of-settimeouts/">overhead</a> exposed more overhead than I expected. After our regularly scheduled snappy meeting, we had a follow up meeting to spec out how to change our event handling to cope with this (bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=715376">715376</a>). Our best people are on this :) I asked for someone to prototype an extension to suspend background tab activity, sounds like  Wladimir of adblockplus might lend a hand.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/7/">&larr; Older</a>
@@ -587,6 +587,10 @@ if (requestAnimationFrame)
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/03/05/more-and-faster-c-i-for-less-on-aws/">More &amp; Faster C-I for Less on AWS</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/02/06/cost-efficient-continious-integration/">Cost-Efficient Continuous Integration</a>
       </li>
     
@@ -600,10 +604,6 @@ if (requestAnimationFrame)
     
       <li class="post">
         <a href="/blog/2013/06/28/new-performance-people/">New Performance People, Telemetry News</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/04/05/mozilla-tech-on-reddit/">Mozilla Tech on Reddit</a>
       </li>
     
   </ul>

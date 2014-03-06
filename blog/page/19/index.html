@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="I wrote Fennecmark to automate some of the tasks that I did manually while doing performance debugging. I tried to capture some of the &#8220; &hellip;">
+  <meta name="description" content="I feel strange working on GCC-specific stuff and then discussing it on planet mozilla as mozilla work. However, without GCC, Dehydra and Treehydra &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,56 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/04/30/gcc-rant-progress/">GCC Rant + Progress</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-04-30T06:51:35-07:00" pubdate data-updated="true">Apr 30<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I feel strange working on GCC-specific stuff and then discussing it on planet mozilla as mozilla work. However, without GCC, Dehydra and Treehydra would not be half as awesome (much less feasible even). The power of open source is that it allows us to leverage the entire open source ecosystem to achieve specific goals. When open source projects combine their efforts, not even the biggest software companies can compete as cross-project goals would be incredibly expensive and unpleasant otherwise.</p>
+
+<p>Occasionally, it is very frustrating to see people treat open source software as immutable and independent black boxes. In my personal experience, the browser and the compiler are viewed as finished products and therefore it is OK to bitch and complain about them. That&#8217;s frustrating because the same users could be channeling that energy in a more positive way by reporting bugs, contributing code/documentation, etc.</p>
+
+<p>Sometimes these rants result in rather comical conclusions: Ingo&#8217;s <a href="http://lwn.net/Articles/328685/">rant</a> is priceless. My perspective on this:</p>
+
+<ul>
+<li>what have Linux kernel devs done to help GCC help them?</li>
+<li><flame>Sparse is a deadend. Writing compiler code in C is silly, writing analysis code in C is sillier (and frustrating and limiting). Taking a crappy parser and bolting a crappy compiler backend onto it will result in bigger pile of crap :) Given how smart kernel devs are, they sure like wasting their time on crappy solutions in crappy languages.</flame></li>
+<li>Wouldn&#8217;t it be cool if instead of complaining these talented people wrote a GCC plugin to do what they want?
+<strong>GCC Plugin Progress</strong></li>
+</ul>
+
+
+<p>I finally landed the massively boring and annoying <a href="http://hg.mozilla.org/users/tglek_mozilla.com/gcc-moz-plugin-mq/file/24bbb11d7346/gty.diff">GTY patch</a>. I can barely believe that the patch went in so smoothly without excess complaining from GCC devs. From GCC perspective it&#8217;s merely a cosmetic cleanup that affects a large number of headers. For us it enables <a href="https://developer.mozilla.org/en/Treehydra">Treehydra</a> to be generated via <a href="https://developer.mozilla.org/En/Dehydra">Dehydra</a> with little manual effort. It basically makes Treehydra possible without patching GCC. I have another 3-4 patches that need to land before trunk GCC can run the hydras out of the box. Those are mainly localized bugfixes and cleanups so I fully expect them to go in and for GCC 4.5 to rock my world. Once GCC 4.5 ships. analyzing code will depend on a trivial matter of apt-getting(or equivalent) the hydras and specifying the analysis flags on the GCC commandline!</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -539,72 +589,6 @@ For any questions regarding Pork feel free to post on the <a href="https://lists
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2008/12/23/fennec-a2-performance/">Fennec A2 - Performance</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-12-23T03:23:12-08:00" pubdate data-updated="true">Dec 23<span>rd</span>, 2008</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><strong>Static Analysis vs Performance</strong></p>
-
-<p>Two months ago I got the feeling that I gotta take a break from static analysis and do something that obviously affects Firefox at runtime. Luckily that coincided with ramp-up on Fennec performance work.</p>
-
-<p>I find that I enjoy fixing existing code a lot more than other sorts of programming, so I was extremely happy to switch focus from the static analysis way of fixing code to my other favourite: optimization. Both are peculiar programming endeavours because after a bunch of gruntwork the program ends up doing the exact same thing as before, but better.</p>
-
-<p>In static analysis I focus more on how different pieces fit together, whereas in an optimization I get to focus on what various pieces are trying to achieve so I learned a lot more random Mozilla mysteries.</p>
-
-<p><strong>Fennec</strong></p>
-
-<p>Fennec is pure joy to optimize because it runs in such a constrained Linux environment (compared to desktop Linux). Things seem to happen roughly 10x slower on the arm processor than on my core2duo laptop. Thus performance details that are hard to spot on the desktop almost trivial to discover.</p>
-
-<p>There is no hard drive seeks to introduce unpleasant surprise latency. This simplifies things a lot - there is a lot less variance between hot and cold start on <a href="http://en.wikipedia.org/wiki/Nokia_N810">n810</a> than on hard drived desktop.</p>
-
-<p>Unfortunately the N810 linux environment also leaves a lot to be desired. Compiling stuff is a chore. It turns out the oprofile produces nonsense results when a compiler of <a href="https://wiki.mozilla.org/Mobile/Build/cs2007q3">recent</a> vintage is used (ancient one cant really compile Mozilla).</p>
-
-<p>I had a lot of fun digging deep into Mozilla code and dealing with <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=465128">mischievous</a> timestamps, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=465556">misbehaving</a> caches and <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=466877">rude</a> GC interruptions. All this was done using <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=470116">stone-age</a> instrumentation techniques on N810.</p>
-
-<p>Mark Finkle blogged some <a href="http://starkravingfinkle.org/blog/2008/12/fennec-alpha2-performance/">details</a> on Fennec Alpha2 performance. Alpha2 is magnitudes faster than Alpha1, I expect more of the same in subsequent releases.</p>
-
-<p><strong>Software Improvements That  Santa Claus Should Get Me </strong></p>
-
-<p>Even though <a href="http://oprofile.sourceforge.net/news/">oprofile</a> is useless on N810, one can get a pretty good idea of what the performance issues are from running it on x86. OProfile is a little rough to use, but I&#8217;ve learned to love it when sugared with <a href="http://code.google.com/p/jrfonseca/wiki/Gprof2Dot">gprof2dot</a> and <a href="http://code.google.com/p/jrfonseca/wiki/XDot">xdot</a>. It&#8217;s great for locating places in the code to stick printf()s into.</p>
-
-<p>OProfile has taught me that what I really want is Dtrace (or some knockoff) running on n810.</p>
-
-<p>Also, I really hate how embedded Linux takes away one of coolest things about Desktop Linux: ability to compile own kernel. I haven&#8217;t been able to get a more modern kernel to run on N810 which means I can&#8217;t try a newer version of oprofile or the new omap high res timers. I would also like to get a working image of N810 under qemu, but success has avoided me there too.</p>
-
-<p><strong>Static Stuff</strong></p>
-
-<p>Unfortunately I found that can&#8217;t effectively work on static analysis stuff without giving it my full and undivided attention. Right now I&#8217;m hoping to set aside time to focus on writing a more general dead code finder and catch up on other misc things sometime in Janurary or February.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/20/">&larr; Older</a>
@@ -622,6 +606,10 @@ For any questions regarding Pork feel free to post on the <a href="https://lists
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/03/05/more-and-faster-c-i-for-less-on-aws/">More &amp; Faster C-I for Less on AWS</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/02/06/cost-efficient-continious-integration/">Cost-Efficient Continuous Integration</a>
       </li>
     
@@ -635,10 +623,6 @@ For any questions regarding Pork feel free to post on the <a href="https://lists
     
       <li class="post">
         <a href="/blog/2013/06/28/new-performance-people/">New Performance People, Telemetry News</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/04/05/mozilla-tech-on-reddit/">Mozilla Tech on Reddit</a>
       </li>
     
   </ul>

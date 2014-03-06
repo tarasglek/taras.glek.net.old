@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="I have never enjoyed the theory behind software engineering. It seems particularly depressing as it can be summarized as: &#8220;What can we learn &hellip;">
+  <meta name="description" content="New Static Analysis Toys I have been catching up on my backlog of little bugs, here are some of the most notable ones. Benjamin has been pushing the &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,70 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2008/08/13/this-week-in-the-static-analysis-corner/">This Week in the Static Analysis Corner</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-08-13T08:55:50-07:00" pubdate data-updated="true">Aug 13<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><strong>New Static Analysis Toys</strong></p>
+
+<p>I have been catching up on my backlog of little bugs, here are some of the most notable ones.</p>
+
+<p>Benjamin has been pushing the limits of what Dehydra can do for his DXR prototype which resulted in a couple of cool new features with one <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=449075">new feature</a> breaking backwards compatibility. Sorry about that, it is for the greater good.</p>
+
+<p>Dehydra now processes <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=449428">more declarations</a>.</p>
+
+<p>Dehydra uses JavaScript prototypes to <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=447679">distinguish</a> between types and declarations.</p>
+
+<p>Treehydra is now built by <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=437524">default</a> when building with a plugin-enabled compiler.</p>
+
+<p>Treehydra now exposes the C++ frontend&#8217;s verbose and as-close-as-gcc-gets-to-written-code syntax tree via <a href="https://bugzilla.mozilla.org/attachment.cgi?id=332230">process_cp_pre_genericize</a>. Access to the early C++ AST should make it easier to automatically translate a certain class of C++ functions into JavaScript.</p>
+
+<p>Coming soon: buildbot setup for Dehydra along with autobuilt debian packages.</p>
+
+<p>Also, Benjamin&#8217;s GSoC student, Bo Yang, has been doing some awesome work making our static analysis toolchain work on mingw. In my mind, Bo sealed his awesomeness in not only getting Mozilla to build under mingw yet again, but also by fixing a couple of exciting compiler bugs on Win32.</p>
+
+<p><strong>Path to 1.0</strong></p>
+
+<p>For more information on these and other developments see the Dehydra 1.0 <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=437502">tracking bug</a>.</p>
+
+<p>I am not yet sure what the next release of Dehydra will be. My giant GTY patch to GCC is still awaiting review in a GCC developer&#8217;s inbox. Depending on whether that gets accepted I&#8217;ll continue releasing Dehydra 0.9.x with the current GCC patchset or delay a 1.0 release to work on getting the GCC plugin API reviewed and more or less finalized.</p>
+
+<p><strong>Plans for Near Future</strong></p>
+
+<p>I think I figured out the missing pieces needed to make outparamdel&#8217;s deCOMtamination patches acceptable, will work on that next. I&#8217;ll be continuing to clean up pork to be more developer-friendly. After the recent unhappyness involving bisection 10separate repositories at once, I&#8217;ve decided to merge pork into one giant repository and if someone just wants a couple smaller of pieces, those should be proken up at the package management level.</p>
+
+<p>Additionally, I would like to start landing the SpiderMonkey analyses soon.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -570,46 +634,6 @@ Some of you might ask &#8220;But Taras, why now, why not just keep doing what yo
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2008/06/18/gcc-summit/">GCC Summit</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-06-18T23:01:08-07:00" pubdate data-updated="true">Jun 18<span>th</span>, 2008</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Our presentation on <a href="http://developer.mozilla.org/en/docs/Treehydra">Treehydra</a> and <a href="http://developer.mozilla.org/en/docs/Dehydra">Dehydra</a> GCC plugins was received well at the summit.</p>
-
-<p>The big news is that FSF is working on license changes to allow GPL-only GCC plugins. I&#8217;m looking forward to having our work be compatible with future GCC without any patching.</p>
-
-<p>In a few minutes we&#8217;ll be having a meeting with users of other plugin frameworks to have an initial discussion on a common API. I&#8217;m working on forward porting my patches, so they can start getting reviewed ahead of license changes.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/22/">&larr; Older</a>
@@ -627,6 +651,10 @@ Some of you might ask &#8220;But Taras, why now, why not just keep doing what yo
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/03/05/more-and-faster-c-i-for-less-on-aws/">More &amp; Faster C-I for Less on AWS</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/02/06/cost-efficient-continious-integration/">Cost-Efficient Continuous Integration</a>
       </li>
     
@@ -640,10 +668,6 @@ Some of you might ask &#8220;But Taras, why now, why not just keep doing what yo
     
       <li class="post">
         <a href="/blog/2013/06/28/new-performance-people/">New Performance People, Telemetry News</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/04/05/mozilla-tech-on-reddit/">Mozilla Tech on Reddit</a>
       </li>
     
   </ul>

@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Two weeks ago I finally listened to Graydon and spent some quality time playing with UNO and reading the paper on it. UNO provides a simple DSL &hellip;">
+  <meta name="description" content="It is difficult to follow error messages from control-flow analyzing tools. After struggling to visualize what I was debugging, I added a a native &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,54 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2007/02/07/dotting-pretty-graphs/">Dotting Pretty Graphs</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-02-07T06:36:23-08:00" pubdate data-updated="true">Feb 7<span>th</span>, 2007</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>It is difficult to follow error messages from control-flow analyzing tools. After struggling to visualize what I was debugging, I added a a native JavaScript function to graph the CFG and display the current path through it.</p>
+
+<p>Now debugging control flow errors is as easy as looking at a (sometimes giant) <a href="http://people.mozilla.com/~tglek/cfg.png">picture</a> of <a href="http://lxr.mozilla.org/mozilla/source/js/src/jsarray.c#492">this function</a>. The red represents the current flow and gray indicates flows that the script deemed correct.</p>
+
+<p><strong>Recipe</strong></p>
+
+<p>In this example I am checking that control flows through a particular point in the code (from line 1128 into line 1200). Since dos only deals with variables I added variables that it can match to the AST.</p>
+
+<p>I added DFLOW_START to line 1127, DFLOW_STOP to line 1200 and produced my .i files with make CC=&#8221;gcc -DFLOW_START=&#8217;{int <strong>flow_start;}&#8217; -DFLOW_STOP=&#8217;{int </strong>flow_start=1;}&#8217;&#8221; jsarray.i</p>
+
+<p>Then I ran dos with the tiny analysis script: ./dos -dos-javascript <a href="http://people.mozilla.com/~tglek/ensure_out.js">ensure_out.js</a> -o-lang GNU_C ~/work/ff-build/js/src/jsarray.i</p>
+
+<p><strong>Future Work</strong> This should allow function-local dead code detection. Once dos is mature enough for function-local CFG traversals it will be interesting(but challenging) to try to expand this to detect dead functions or classes in Mozilla.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -594,6 +642,10 @@ At the source level squash renames the class part of function definitions along 
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/03/05/more-and-faster-c-i-for-less-on-aws/">More &amp; Faster C-I for Less on AWS</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/02/06/cost-efficient-continious-integration/">Cost-Efficient Continuous Integration</a>
       </li>
     
@@ -607,10 +659,6 @@ At the source level squash renames the class part of function definitions along 
     
       <li class="post">
         <a href="/blog/2013/06/28/new-performance-people/">New Performance People, Telemetry News</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/04/05/mozilla-tech-on-reddit/">Mozilla Tech on Reddit</a>
       </li>
     
   </ul>

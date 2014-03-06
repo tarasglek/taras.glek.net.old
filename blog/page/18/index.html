@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="When it comes to taking on crazy tasks involving disguising code, you can always count on Joshua. This time Joshua has gone deep in Pork territory to &hellip;">
+  <meta name="description" content="Turns out that if someone compromises a merchant that you shop with, such as bikenashbar.com, then they are entitled to your money as long as they &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,42 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/07/22/chasewamu-fraud-friendlyness/">Chase/WaMu Fraud-friendlyness</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-07-22T01:09:24-07:00" pubdate data-updated="true">Jul 22<span>nd</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Turns out that if someone compromises a merchant that you shop with, such as bikenashbar.com, then they are entitled to your money as long as they can show to the bank that they have your billing/shipping information. According to Chase it&#8217;s not fraud if they steal your address along with the card number.  I recommend that people use a bank that protects their customer&#8217;s finances, one that isn&#8217;t called <a href="http://chase.com/">Chase</a>.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -552,56 +588,6 @@ if (requestAnimationFrame)
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/04/30/gcc-rant-progress/">GCC Rant + Progress</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-04-30T06:51:35-07:00" pubdate data-updated="true">Apr 30<span>th</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I feel strange working on GCC-specific stuff and then discussing it on planet mozilla as mozilla work. However, without GCC, Dehydra and Treehydra would not be half as awesome (much less feasible even). The power of open source is that it allows us to leverage the entire open source ecosystem to achieve specific goals. When open source projects combine their efforts, not even the biggest software companies can compete as cross-project goals would be incredibly expensive and unpleasant otherwise.</p>
-
-<p>Occasionally, it is very frustrating to see people treat open source software as immutable and independent black boxes. In my personal experience, the browser and the compiler are viewed as finished products and therefore it is OK to bitch and complain about them. That&#8217;s frustrating because the same users could be channeling that energy in a more positive way by reporting bugs, contributing code/documentation, etc.</p>
-
-<p>Sometimes these rants result in rather comical conclusions: Ingo&#8217;s <a href="http://lwn.net/Articles/328685/">rant</a> is priceless. My perspective on this:</p>
-
-<ul>
-<li>what have Linux kernel devs done to help GCC help them?</li>
-<li><flame>Sparse is a deadend. Writing compiler code in C is silly, writing analysis code in C is sillier (and frustrating and limiting). Taking a crappy parser and bolting a crappy compiler backend onto it will result in bigger pile of crap :) Given how smart kernel devs are, they sure like wasting their time on crappy solutions in crappy languages.</flame></li>
-<li>Wouldn&#8217;t it be cool if instead of complaining these talented people wrote a GCC plugin to do what they want?
-<strong>GCC Plugin Progress</strong></li>
-</ul>
-
-
-<p>I finally landed the massively boring and annoying <a href="http://hg.mozilla.org/users/tglek_mozilla.com/gcc-moz-plugin-mq/file/24bbb11d7346/gty.diff">GTY patch</a>. I can barely believe that the patch went in so smoothly without excess complaining from GCC devs. From GCC perspective it&#8217;s merely a cosmetic cleanup that affects a large number of headers. For us it enables <a href="https://developer.mozilla.org/en/Treehydra">Treehydra</a> to be generated via <a href="https://developer.mozilla.org/En/Dehydra">Dehydra</a> with little manual effort. It basically makes Treehydra possible without patching GCC. I have another 3-4 patches that need to land before trunk GCC can run the hydras out of the box. Those are mainly localized bugfixes and cleanups so I fully expect them to go in and for GCC 4.5 to rock my world. Once GCC 4.5 ships. analyzing code will depend on a trivial matter of apt-getting(or equivalent) the hydras and specifying the analysis flags on the GCC commandline!</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/19/">&larr; Older</a>
@@ -619,6 +605,10 @@ if (requestAnimationFrame)
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/03/05/more-and-faster-c-i-for-less-on-aws/">More &amp; Faster C-I for Less on AWS</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/02/06/cost-efficient-continious-integration/">Cost-Efficient Continuous Integration</a>
       </li>
     
@@ -632,10 +622,6 @@ if (requestAnimationFrame)
     
       <li class="post">
         <a href="/blog/2013/06/28/new-performance-people/">New Performance People, Telemetry News</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/04/05/mozilla-tech-on-reddit/">Mozilla Tech on Reddit</a>
       </li>
     
   </ul>

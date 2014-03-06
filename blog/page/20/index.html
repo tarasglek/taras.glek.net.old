@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="I&#8217;ve been running my prbool checker with nightly notifications for about a year now. There are some false positivies, but mostly it picks up &hellip;">
+  <meta name="description" content="Static Analysis vs Performance Two months ago I got the feeling that I gotta take a break from static analysis and do something that obviously &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,72 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2008/12/23/fennec-a2-performance/">Fennec A2 - Performance</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-12-23T03:23:12-08:00" pubdate data-updated="true">Dec 23<span>rd</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><strong>Static Analysis vs Performance</strong></p>
+
+<p>Two months ago I got the feeling that I gotta take a break from static analysis and do something that obviously affects Firefox at runtime. Luckily that coincided with ramp-up on Fennec performance work.</p>
+
+<p>I find that I enjoy fixing existing code a lot more than other sorts of programming, so I was extremely happy to switch focus from the static analysis way of fixing code to my other favourite: optimization. Both are peculiar programming endeavours because after a bunch of gruntwork the program ends up doing the exact same thing as before, but better.</p>
+
+<p>In static analysis I focus more on how different pieces fit together, whereas in an optimization I get to focus on what various pieces are trying to achieve so I learned a lot more random Mozilla mysteries.</p>
+
+<p><strong>Fennec</strong></p>
+
+<p>Fennec is pure joy to optimize because it runs in such a constrained Linux environment (compared to desktop Linux). Things seem to happen roughly 10x slower on the arm processor than on my core2duo laptop. Thus performance details that are hard to spot on the desktop almost trivial to discover.</p>
+
+<p>There is no hard drive seeks to introduce unpleasant surprise latency. This simplifies things a lot - there is a lot less variance between hot and cold start on <a href="http://en.wikipedia.org/wiki/Nokia_N810">n810</a> than on hard drived desktop.</p>
+
+<p>Unfortunately the N810 linux environment also leaves a lot to be desired. Compiling stuff is a chore. It turns out the oprofile produces nonsense results when a compiler of <a href="https://wiki.mozilla.org/Mobile/Build/cs2007q3">recent</a> vintage is used (ancient one cant really compile Mozilla).</p>
+
+<p>I had a lot of fun digging deep into Mozilla code and dealing with <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=465128">mischievous</a> timestamps, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=465556">misbehaving</a> caches and <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=466877">rude</a> GC interruptions. All this was done using <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=470116">stone-age</a> instrumentation techniques on N810.</p>
+
+<p>Mark Finkle blogged some <a href="http://starkravingfinkle.org/blog/2008/12/fennec-alpha2-performance/">details</a> on Fennec Alpha2 performance. Alpha2 is magnitudes faster than Alpha1, I expect more of the same in subsequent releases.</p>
+
+<p><strong>Software Improvements That  Santa Claus Should Get Me </strong></p>
+
+<p>Even though <a href="http://oprofile.sourceforge.net/news/">oprofile</a> is useless on N810, one can get a pretty good idea of what the performance issues are from running it on x86. OProfile is a little rough to use, but I&#8217;ve learned to love it when sugared with <a href="http://code.google.com/p/jrfonseca/wiki/Gprof2Dot">gprof2dot</a> and <a href="http://code.google.com/p/jrfonseca/wiki/XDot">xdot</a>. It&#8217;s great for locating places in the code to stick printf()s into.</p>
+
+<p>OProfile has taught me that what I really want is Dtrace (or some knockoff) running on n810.</p>
+
+<p>Also, I really hate how embedded Linux takes away one of coolest things about Desktop Linux: ability to compile own kernel. I haven&#8217;t been able to get a more modern kernel to run on N810 which means I can&#8217;t try a newer version of oprofile or the new omap high res timers. I would also like to get a working image of N810 under qemu, but success has avoided me there too.</p>
+
+<p><strong>Static Stuff</strong></p>
+
+<p>Unfortunately I found that can&#8217;t effectively work on static analysis stuff without giving it my full and undivided attention. Right now I&#8217;m hoping to set aside time to focus on writing a more general dead code finder and catch up on other misc things sometime in Janurary or February.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -533,70 +599,6 @@ Both of these projects are interested in converging on a single codebase. It sou
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2008/08/13/this-week-in-the-static-analysis-corner/">This Week in the Static Analysis Corner</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-08-13T08:55:50-07:00" pubdate data-updated="true">Aug 13<span>th</span>, 2008</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><strong>New Static Analysis Toys</strong></p>
-
-<p>I have been catching up on my backlog of little bugs, here are some of the most notable ones.</p>
-
-<p>Benjamin has been pushing the limits of what Dehydra can do for his DXR prototype which resulted in a couple of cool new features with one <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=449075">new feature</a> breaking backwards compatibility. Sorry about that, it is for the greater good.</p>
-
-<p>Dehydra now processes <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=449428">more declarations</a>.</p>
-
-<p>Dehydra uses JavaScript prototypes to <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=447679">distinguish</a> between types and declarations.</p>
-
-<p>Treehydra is now built by <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=437524">default</a> when building with a plugin-enabled compiler.</p>
-
-<p>Treehydra now exposes the C++ frontend&#8217;s verbose and as-close-as-gcc-gets-to-written-code syntax tree via <a href="https://bugzilla.mozilla.org/attachment.cgi?id=332230">process_cp_pre_genericize</a>. Access to the early C++ AST should make it easier to automatically translate a certain class of C++ functions into JavaScript.</p>
-
-<p>Coming soon: buildbot setup for Dehydra along with autobuilt debian packages.</p>
-
-<p>Also, Benjamin&#8217;s GSoC student, Bo Yang, has been doing some awesome work making our static analysis toolchain work on mingw. In my mind, Bo sealed his awesomeness in not only getting Mozilla to build under mingw yet again, but also by fixing a couple of exciting compiler bugs on Win32.</p>
-
-<p><strong>Path to 1.0</strong></p>
-
-<p>For more information on these and other developments see the Dehydra 1.0 <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=437502">tracking bug</a>.</p>
-
-<p>I am not yet sure what the next release of Dehydra will be. My giant GTY patch to GCC is still awaiting review in a GCC developer&#8217;s inbox. Depending on whether that gets accepted I&#8217;ll continue releasing Dehydra 0.9.x with the current GCC patchset or delay a 1.0 release to work on getting the GCC plugin API reviewed and more or less finalized.</p>
-
-<p><strong>Plans for Near Future</strong></p>
-
-<p>I think I figured out the missing pieces needed to make outparamdel&#8217;s deCOMtamination patches acceptable, will work on that next. I&#8217;ll be continuing to clean up pork to be more developer-friendly. After the recent unhappyness involving bisection 10separate repositories at once, I&#8217;ve decided to merge pork into one giant repository and if someone just wants a couple smaller of pieces, those should be proken up at the package management level.</p>
-
-<p>Additionally, I would like to start landing the SpiderMonkey analyses soon.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/21/">&larr; Older</a>
@@ -614,6 +616,10 @@ Both of these projects are interested in converging on a single codebase. It sou
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/03/05/more-and-faster-c-i-for-less-on-aws/">More &amp; Faster C-I for Less on AWS</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/02/06/cost-efficient-continious-integration/">Cost-Efficient Continuous Integration</a>
       </li>
     
@@ -627,10 +633,6 @@ Both of these projects are interested in converging on a single codebase. It sou
     
       <li class="post">
         <a href="/blog/2013/06/28/new-performance-people/">New Performance People, Telemetry News</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/04/05/mozilla-tech-on-reddit/">Mozilla Tech on Reddit</a>
       </li>
     
   </ul>

@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Automatic code rewriting business can be a little depressing sometimes. I tend to run into funny issues caused by CPP, oink limitations or just &hellip;">
+  <meta name="description" content="I have gotten used to dodging CPP-expansion issues by fudging column &amp; line information until the position info in squash mostly matches the &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,70 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2007/05/11/cpp-strikes-back/">CPP Strikes Back</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-05-11T09:07:26-07:00" pubdate data-updated="true">May 11<span>th</span>, 2007</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I have gotten used to dodging CPP-expansion issues by fudging column &amp; line information until the position info in squash mostly matches the source positions in the original source code. That sufficed for rewriting declarations, but I have finally hit a brick wall.</p>
+
+<p><strong>CPP Fun</strong></p>
+
+<p>I got as far with call-site outparam rewriting as <a href="http://people.mozilla.org/~tglek/outparams.May11.diff">this patch</a>. It demonstrates an interesting flaw.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>@@ -8297,1 +8297,1 @@
+</span><span class='line'>-  GetInsertionPoint(parentFrame, nsnull, &insertionPoint, &multiple);
+</span><span class='line'>+  insertionPoint = GetInsertionPoint(parentFrame, &insertionPoint, &multiple);
+</span><span class='line'>@@ -8346,1 +8346,1 @@
+</span><span class='line'>-          GetInsertionPoint(parentFrame, child, &insertionPoint);
+</span><span class='line'>+          insertionPoint = GetInsertionPoint(parentFrame, child);</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Due to macro expansion, nsnull contracts to 0 such that the .i file has &amp;insertionpoint positioned right in the middle of nsnull (in the .cpp file). So when squash trims the param including the surrounding commas, it ends up removing the wrong parameter.</p>
+
+<p><strong>Elsa Limitation</strong></p>
+
+<p>I have mentioned lack of end-of-ast-node position information in Elsa. It also lacks start-of-ast-node information for most expressions. This makes selectively rewriting source code rather difficult.</p>
+
+<p><strong>Plan</strong></p>
+
+<p>Instead of fighting an uphill fudging battle against CPP, I am going to have to suspend outparam rewriting yet again to work on better position information and integrating a preprocessor into elsa. This is unfortunate because I was looking forward to finally doing something more sophisticated than renames. Now my elsa fork is going to grow even bigger before I get commit access.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -608,54 +672,6 @@ For the above to work will also need support for a user-correctable/suggestable 
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2007/02/07/dotting-pretty-graphs/">Dotting Pretty Graphs</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2007-02-07T06:36:23-08:00" pubdate data-updated="true">Feb 7<span>th</span>, 2007</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>It is difficult to follow error messages from control-flow analyzing tools. After struggling to visualize what I was debugging, I added a a native JavaScript function to graph the CFG and display the current path through it.</p>
-
-<p>Now debugging control flow errors is as easy as looking at a (sometimes giant) <a href="http://people.mozilla.com/~tglek/cfg.png">picture</a> of <a href="http://lxr.mozilla.org/mozilla/source/js/src/jsarray.c#492">this function</a>. The red represents the current flow and gray indicates flows that the script deemed correct.</p>
-
-<p><strong>Recipe</strong></p>
-
-<p>In this example I am checking that control flows through a particular point in the code (from line 1128 into line 1200). Since dos only deals with variables I added variables that it can match to the AST.</p>
-
-<p>I added DFLOW_START to line 1127, DFLOW_STOP to line 1200 and produced my .i files with make CC=&#8221;gcc -DFLOW_START=&#8217;{int <strong>flow_start;}&#8217; -DFLOW_STOP=&#8217;{int </strong>flow_start=1;}&#8217;&#8221; jsarray.i</p>
-
-<p>Then I ran dos with the tiny analysis script: ./dos -dos-javascript <a href="http://people.mozilla.com/~tglek/ensure_out.js">ensure_out.js</a> -o-lang GNU_C ~/work/ff-build/js/src/jsarray.i</p>
-
-<p><strong>Future Work</strong> This should allow function-local dead code detection. Once dos is mature enough for function-local CFG traversals it will be interesting(but challenging) to try to expand this to detect dead functions or classes in Mozilla.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/27/">&larr; Older</a>
@@ -673,6 +689,10 @@ For the above to work will also need support for a user-correctable/suggestable 
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/03/05/more-and-faster-c-i-for-less-on-aws/">More &amp; Faster C-I for Less on AWS</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/02/06/cost-efficient-continious-integration/">Cost-Efficient Continuous Integration</a>
       </li>
     
@@ -686,10 +706,6 @@ For the above to work will also need support for a user-correctable/suggestable 
     
       <li class="post">
         <a href="/blog/2013/06/28/new-performance-people/">New Performance People, Telemetry News</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/04/05/mozilla-tech-on-reddit/">Mozilla Tech on Reddit</a>
       </li>
     
   </ul>

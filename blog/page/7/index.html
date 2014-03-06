@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Earlier I blogged about terrible UI responsiveness resulting from a poorly placed setTimeout. I&#8217;ve long suspected that SetTimeouts are to blame &hellip;">
+  <meta name="description" content="At 15 minutes, this might&#8217;ve been our shortest meeting yet (notes). Most of the work happened in frontend stuff. Most notable improvements are &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,50 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/04/19/snappy-april-19/">Snappy, April 19</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-04-19T07:47:40-07:00" pubdate data-updated="true">Apr 19<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>At 15 minutes, this might&#8217;ve been our shortest meeting yet (<a href="https://wiki.mozilla.org/Performance/Snappy/2012-04-19">notes</a>).</p>
+
+<p>Most of the work happened in <a href="https://wiki.mozilla.org/Performance/Snappy/2012-04-19#Front-end_-_Dietrich">frontend stuff</a>. Most notable improvements are reduced screenshot overhead (by taking less screenshots, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=744152">744152</a>) and a brand new IE migrator (a step towards fully async places API, bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=710895">710895</a>).</p>
+
+<p>Work resumed on making peptest return more <a href="https://wiki.mozilla.org/Performance/Snappy/2012-04-19#peptest_-_mcote">consistent </a>results.</p>
+
+<p>The necko team decided to take a more involved approach to solve our cache locking(bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=722034">722034</a>) which means the fix will land later than we originally hoped for.</p>
+
+<p>My little investigation into setTimeout <a href="http://taras.glek.net/blog/2012/04/18/web-2-0-a-collection-of-settimeouts/">overhead</a> exposed more overhead than I expected. After our regularly scheduled snappy meeting, we had a follow up meeting to spec out how to change our event handling to cope with this (bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=715376">715376</a>). Our best people are on this :) I asked for someone to prototype an extension to suspend background tab activity, sounds like  Wladimir of adblockplus might lend a hand.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -741,56 +785,6 @@ INSERT INTO webappsstore2_temp (scope, key, value, secure, owner) SELECT scope, 
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/03/14/abouttelemetry-diff-mode-search/">About:telemetry: Diff Mode + Search</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-03-14T08:27:53-07:00" pubdate data-updated="true">Mar 14<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><a href="/assets/images/2012-03-14-abouttelemetry-diff-mode-search/telemetry.png"><img src="/assets/images/2012-03-14-abouttelemetry-diff-mode-search/telemetry.png" alt="" /></a></p>
-
-<p>I cleaned up about:telemetry to be a bit less of a hack. It mostly generates charts using proper DOM manipulations now, so should be easier to contribute to.</p>
-
-<p><strong>Diff Mode</strong></p>
-
-<p>Now that we have a few hundred histograms in telemetry, it&#8217;s become a chore to figure out if something changed. I added a &#8216;Diff&#8217; button which re-polls telemetry since last telemetry-page-load/diff-press and highlights buckets with new activity in red. This is useful for cases when you see lag in the browser, but have no idea what&#8217;s causing it (sort of like <a href="https://addons.mozilla.org/en-US/firefox/addon/aboutjank/">about:jank</a>). This turns histogram bars red when stuff changed. Unfortunately one still needs a pretty intimate knowledge of the browser to figure out if any of the histograms are related to observed lag.</p>
-
-<p><strong>Search</strong></p>
-
-<p>I added a little input box to make finding relevant histograms quicker.</p>
-
-<p><strong>Help Wanted</strong></p>
-
-<p>If you find any bugs or have improvements to contribute, see <a href="https://github.com/tarasglek/about-telemetry">the source</a>. The updated addon is in the AMO review queue, in the meantime you can jump the queue via <a href="https://addons.mozilla.org/firefox/downloads/file/146870/abouttelemetry-0.11-tb+fx.xpi?src=devhub">this link</a>.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/8/">&larr; Older</a>
@@ -808,6 +802,10 @@ INSERT INTO webappsstore2_temp (scope, key, value, secure, owner) SELECT scope, 
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/03/05/more-and-faster-c-i-for-less-on-aws/">More &amp; Faster C-I for Less on AWS</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/02/06/cost-efficient-continious-integration/">Cost-Efficient Continuous Integration</a>
       </li>
     
@@ -821,10 +819,6 @@ INSERT INTO webappsstore2_temp (scope, key, value, secure, owner) SELECT scope, 
     
       <li class="post">
         <a href="/blog/2013/06/28/new-performance-people/">New Performance People, Telemetry News</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/04/05/mozilla-tech-on-reddit/">Mozilla Tech on Reddit</a>
       </li>
     
   </ul>

@@ -4,7 +4,7 @@
   <title><![CDATA[All About Performance]]></title>
   <link href="http://taras.glek.net/atom.xml" rel="self"/>
   <link href="http://taras.glek.net/"/>
-  <updated>2014-03-01T09:50:28-08:00</updated>
+  <updated>2014-03-05T18:43:21-08:00</updated>
   <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -12,6 +12,95 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  
+  <entry>
+    <title type="html"><![CDATA[More &amp; Faster C-I for Less on AWS]]></title>
+    <link href="http://taras.glek.net/blog/2014/03/05/more-and-faster-c-i-for-less-on-aws/"/>
+    <updated>2014-03-05T18:22:00-08:00</updated>
+    <id>http://taras.glek.net/blog/2014/03/05/more-and-faster-c-i-for-less-on-aws</id>
+    <content type="html"><![CDATA[<h3>Amazon Pricing - Expensive or Cheap?</h3>
+
+<p>Amazon ondemand nodes are fantastic for rapid iteration, but using them in production is expensive naivety. It is expensive for Amazon to maintain spare capacity to allow customers to launch any of the wide variety of nodes they offer ondemand. Forecasing demand at Amazon scale can&#8217;t be easy. As a result, Amazon recommends that customers buy reserves with an upfront payment then pay a discounted rate after. This is brilliant as it shifts the capacity-planning burden to each customer. This would net us a 60% discount if we we could forecast our AWS usage perfectly.</p>
+
+<p>Fortunately Amazon also has a spot-pricing model. Spot prices can be 70-90% lower than ondemand (we&#8217;ve also seen them 50% higher). The downside is that Amazon can kill these nodes at any point and node availability is limited compared to ondemand. Given that Amazon competition can&#8217;t match spot prices, Amazon might be selling their unused ondemand capacity at cost. I doubt that anyone smaller than Amazon can maintain their own hardware with salaried ops for less than Amazon&#8217;s spot prices.</p>
+
+<h3>Spot Everything</h3>
+
+<p>we spent 2014 retrofitting our c-i architecture to cope with failure so we can run more of our workload on spot nodes.</p>
+
+<p>On our January AWS bill we were 30% more cost-efficient. This was accomplished late in the month, we managed to have the bill not go up to cope with a higher-than-ever load.
+For February we were aiming to drop the bill to under $80K.
+The following is a summary of where we are.</p>
+
+<h3>Provisioning</h3>
+
+<ul>
+<li>We now run the majority of our workload on Amazon spot nodes. Ondemand:spot ratio is between 2:1 and 7:1. Note we still pay more for ondemand portion of our bill because ondemand is a lot more expensive</li>
+<li>At $74,389.03, our Feb bill is 36% lower than Jan.</li>
+<li>Our current AWS spending per job is approximately half of what we paid in December</li>
+<li>We now bid on a range of AWS node types to maximize node availability and minimize price. This results in  >=50% lower spot bill. We now run a portion of our workload on 2x-faster VMs when cheaper spot machine types are not available.</li>
+</ul>
+
+
+<h3>Scheduling</h3>
+
+<ul>
+<li>Our AWS scheduler ramps up slower now to avoid temporary overprovisioning. Note the improvement on the right side of the graph (tall &amp; narrow  spikes are bad)</li>
+</ul>
+
+
+<p><img src="http://people.mozilla.org/~catlee/sattap/296cb846.png" alt="catlee's graph" /></p>
+
+<h3>Monitoring</h3>
+
+<ul>
+<li>We are evaluating <a href="http://hostedgraphite.com/">hostedgraphite.com</a> for monitoring our efficiency. It&#8217;s nice to have someone offer a well-supported open-source-compatible solution that can cope with 30K+ of metrics our 1000s of VMs generate.</li>
+</ul>
+
+
+<p><img src="http://taras.glek.net/assets/images/spotinstances.png" title="Spot Instance Types Used for C-I" alt="" /></p>
+
+<p><img src="http://taras.glek.net/assets/images/spotprice.png" title="Approximate Spot Prices" alt="" /></p>
+
+<h3>Workload Improvements</h3>
+
+<ul>
+<li>Halved Linux Firefox and Android try build time via a shared <a href="http://glandium.org/blog/?p=3201">S3 object cache</a></li>
+<li>Halved B2G builds via <a href="http://atlee.ca/blog/posts/initial-jacuzzi-results.html">jacuzzis</a></li>
+</ul>
+
+
+<h3>Mozilla Data Center plans for March</h3>
+
+<p>Amazon S3 is cheap, fast and robust. EC2 is incredibly flexible. Both are great for quickly iterating on cool ideas. Unfortunately most of our infrastructure runs on physical machines. We need to improve our non-elastic inhouse capacity with what we learned in the cloud:</p>
+
+<ul>
+<li>Use a shared object cache for Windows/Mac builds. This should more than double Windows build speed. The plan is to use Ceph for S3-compatible shared object storage.</li>
+<li>Get OpenStack bare metal virtualization working so we could move as fast there as we do in EC2</li>
+</ul>
+
+
+<h3>Cloud Plans for March</h3>
+
+<ul>
+<li>Eliminate EBS usage for faster builds, 10% lower EC2 bill. Amazon EBS is the antithesis of cost-effectiveness.</li>
+<li>Deploy more jacuzzis for faster builds, less EC2 instances</li>
+<li>Run more things on spot, switch to cheaper ondemand nodes, maybe buy some reserves</li>
+<li>Bid on an even wider variety of spot nodes</li>
+<li>Probably wont hit another 30% reduction, focusing on technical debt, better metrics, etc</li>
+<li>Containerization of Linux builds</li>
+</ul>
+
+
+<h3>Conclusion</h3>
+
+<p>Cloud APIs make cost-oriented architectures fun. Batch nature of c-i is a great match for spot.</p>
+
+<p>In general, spot is a brilliant design pattern, I intend to implement spot workloads on our own infra. It&#8217;s too bad other cloud vendors do not offer anything comparable.</p>
+]]></content>
+  </entry>
+  
   
   
   <entry>
@@ -632,21 +721,6 @@ Omnijar readhead is next, in <a title="Use readahead for ordered jar files such 
 <h1>2013</h1>
 
 <p>2012 was a good warm-up. We spent a substantial part of the year on tooling. If everything goes right, that should pay off in the coming year.</p>
-]]></content>
-  </entry>
-  
-  
-  
-  <entry>
-    <title type="html"><![CDATA[Making pages load faster]]></title>
-    <link href="http://taras.glek.net/blog/2012/12/24/making-pages-load-faster/"/>
-    <updated>2012-12-24T21:44:00-08:00</updated>
-    <id>http://taras.glek.net/blog/2012/12/24/making-pages-load-faster</id>
-    <content type="html"><![CDATA[<p>I am not a web developer. I often learn about modern web dev tricks/trends by noticing how they impact overall Firefox performance. I prefer learning about perf topics from well-written blog posts. Bryan of Google page speed team <a href="http://calendar.perfplanet.com/2012/make-your-mobile-pages-render-in-under-one-second/">blogged</a> on optimizing pageload speeds on mobile. The advice is good, but I have two minor warnings about it.</p>
-
-<p>Suggestion to use <code>requestAnimationFrame</code> to delay loading resources is a good one. There is a gotcha: if you do something expensive in the requestAnimationFrame handler, it&#8217;ll delay your first page draw (requestAnimationFrame fires as the browser prepares to paint. It&#8217;s an ok place to start network requests, etc). If you do something expensive, use a chained requestAnimationFrame. Firefox recently started using a similar trick to display the UI faster in <a title="Wait until chrome is painted before executing code not critical to making the initial window visible" href="https://bugzilla.mozilla.org/show_bug.cgi?id=715402">bug 715402</a>.</p>
-
-<p>The suggestion to split up stylesheets is also good, but risky. I&#8217;ve seen this before, but I did not understand why websites sprinkled <code>&lt;link rel="stylesheet"&gt;</code> throughout the page bodies. This can significantly degrade pageload times by causing redundant page restyles and reflows. Reflows can take hundreds of milliseconds on slow mobile devices, doing them multiple times is bad. Make sure to run your pages through a <a href="http://anton.kovalyov.net/2012/12/17/firefox-profiler/">profiler</a> (or time the difference between relevant requestAnimationFrame callbacks). I saw a bad case of this in <a title="huffingtonpost loads up to 50% slower in Firefox than in opera" href="https://bugzilla.mozilla.org/show_bug.cgi?id=718864">bug 718864</a>.</p>
 ]]></content>
   </entry>
   

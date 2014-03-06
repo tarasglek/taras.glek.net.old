@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="An inquisitive mind sent me an email with a pointed question: &#8220;Is there an example of someone who&#8217;s not you that had a burning question &hellip;">
+  <meta name="description" content="See raw notes for details on mid-flight snappy work. Checkout the SPS Profiler! SPS Gecko Profiler has gotten a lot of praise this week on #perf. If &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,64 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/07/26/snappy-july-26-go-try-the-gecko-profiler/">Snappy, July 26: Go Try the Gecko Profiler!</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-07-26T08:43:17-07:00" pubdate data-updated="true">Jul 26<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>See raw <a href="https://wiki.mozilla.org/Performance/Snappy/2012-07-26">notes</a> for details on mid-flight snappy work.</p>
+
+<p><strong>Checkout the SPS Profiler</strong>!</p>
+
+<p><a href="https://developer.mozilla.org/en/Performance/Profiling_with_the_Built-in_Profiler">SPS Gecko Profiler</a> has gotten a lot of praise this week on #perf. If you ever wonder the hell Firefox is doing with your CPU, give the profiler a try. For the past couple of weeks it has been able to label stacks with JS, URLs and even favicons. It&#8217;s likely that Mozilla may have shipped the world&#8217;s first profiler to feature favicons.</p>
+
+<p>Having JS support is nice, it lead to the first 2 snappy addon bugs: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=777266">777266</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=777397">777397</a>. I documented how to act on addon responsiveness issues in the <a href="https://wiki.mozilla.org/Performance/Snappy#Snappy_Addons">snappy wiki</a>.</p>
+
+<p>Whether you develop web pages, addons or are a core gecko hacker, the profiler may make the performance-analysis part of your life much more pleasant. Update: Benoit Girard <a href="http://benoitgirard.wordpress.com/2012/07/27/javascript-profiling-with-the-gecko-profiler-and-js-anti-pattern/">wrote</a> about the new profiler features.</p>
+
+<p><strong>Things To Not Do On Startup </strong></p>
+
+<p>Blair McBride did some <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=726125#c16">digging</a>, there may be 15million users with signed extensions which can cause Firefox to do network IO (ie stall for a long time) on startup.</p>
+
+<p>Brian Bondy landed a fix to lower IO priority of nuking our cache: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=773518">773518</a>. According to telemetry, 10-20% of startups feature cache nuking. It take a while to blow away 1GB of files on startup. Brian used telemetry to investigate causes for cache purges in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=774146">774146</a>. Based on this data, Brian will begin tackling what may be the oldest snappy bug so far: bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=105843">105843</a>. For more details on our cache see Nick Hurley&#8217;s <a href="http://todesschaf.org/posts/2012/07/25/cache-usage-results.html">blog post</a> (also see his link to a similar blog post from a Chrome person).</p>
+
+<p><strong>More Responsive Tabs</strong></p>
+
+<p>Tim Taubert made our new tab animation more pleasant in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=716108">716108</a>. Tim also landed a fix to halve jank caused by thumbnail capture in bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=774811">774811</a>, this should result in better tab-switching experience. Stay tuned for more developer attention in this area.</p>
+
+<p><strong>GC</strong></p>
+
+<p>Jon Coppeard enabled incremental sweeping: bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=729760">729760</a>. This should result in slightly smaller GC pauses.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -573,50 +631,6 @@ In part 2 I&#8217;ll discuss how various people at Mozilla use Telemetry.</li>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/06/11/snappy-june-7/">Snappy, June 7</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-06-11T09:13:36-07:00" pubdate data-updated="true">Jun 11<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><a href="https://wiki.mozilla.org/Performance/Snappy/2012-06-07">Notes</a>.</p>
-
-<p>Justin&#8217;s FUEL fix will help add-ons avoid leaks and shutdown hangs: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=750454">bug 750454</a>.</p>
-
-<p>Jared plans to start landing Australis tab strip (<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=738491">738491</a>) on <a href="http://ftp.mozilla.org/pub/mozilla.org/firefox/nightly/latest-ux/">UX branch</a> this week. Australis is our new, faster UI theme.</p>
-
-<p>We landed a cache locking fix recently (<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=722034">722034</a>), but telemetry is now showing a regression (<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=761736">761736</a>), so this will likely be backed out and reworked.</p>
-
-<p>Vladan <a href="http://blog.mozilla.org/vdjeric/2012/06/08/cache-plugin-font-operations-most-common-in-chrome-hang-reports/">blogged</a> about first results from our non-destructive chromehang. Last year we briefly caused our nightly to crash if it hung for over 30seconds, which got us a lot of useful data (and some of the initial snappy bugs). This piggybacked on our crash-handling infrastructure so it was a very effective experiment (a bit brutal though). Vladan spent time this year working on plumbing to get the same sort of data non-destructively. As a result we are looking to <a href="https://groups.google.com/forum/?fromgroups#!topic/mozilla.dev.platform/UENmwUOFCkU">turn on frame pointers</a> in nightly builds and dial down hang detection to 5 seconds (bug <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=763124">763124</a>).</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/6/">&larr; Older</a>
@@ -634,6 +648,10 @@ In part 2 I&#8217;ll discuss how various people at Mozilla use Telemetry.</li>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/03/05/more-and-faster-c-i-for-less-on-aws/">More &amp; Faster C-I for Less on AWS</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/02/06/cost-efficient-continious-integration/">Cost-Efficient Continuous Integration</a>
       </li>
     
@@ -647,10 +665,6 @@ In part 2 I&#8217;ll discuss how various people at Mozilla use Telemetry.</li>
     
       <li class="post">
         <a href="/blog/2013/06/28/new-performance-people/">New Performance People, Telemetry News</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/04/05/mozilla-tech-on-reddit/">Mozilla Tech on Reddit</a>
       </li>
     
   </ul>

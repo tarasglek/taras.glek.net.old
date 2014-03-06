@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="As of a few weeks ago, Chris AtLee and his half of Mozilla Release engineering report to me. We are working on drastically improving efficiency of &hellip;">
+  <meta name="description" content="Amazon Pricing - Expensive or Cheap? Amazon ondemand nodes are fantastic for rapid iteration, but using them in production is expensive naivety. It &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,120 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/03/05/more-and-faster-c-i-for-less-on-aws/">More &amp; Faster C-I for Less on AWS</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-03-05T18:22:00-08:00" pubdate data-updated="true">Mar 5<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3>Amazon Pricing - Expensive or Cheap?</h3>
+
+<p>Amazon ondemand nodes are fantastic for rapid iteration, but using them in production is expensive naivety. It is expensive for Amazon to maintain spare capacity to allow customers to launch any of the wide variety of nodes they offer ondemand. Forecasing demand at Amazon scale can&#8217;t be easy. As a result, Amazon recommends that customers buy reserves with an upfront payment then pay a discounted rate after. This is brilliant as it shifts the capacity-planning burden to each customer. This would net us a 60% discount if we we could forecast our AWS usage perfectly.</p>
+
+<p>Fortunately Amazon also has a spot-pricing model. Spot prices can be 70-90% lower than ondemand (we&#8217;ve also seen them 50% higher). The downside is that Amazon can kill these nodes at any point and node availability is limited compared to ondemand. Given that Amazon competition can&#8217;t match spot prices, Amazon might be selling their unused ondemand capacity at cost. I doubt that anyone smaller than Amazon can maintain their own hardware with salaried ops for less than Amazon&#8217;s spot prices.</p>
+
+<h3>Spot Everything</h3>
+
+<p>we spent 2014 retrofitting our c-i architecture to cope with failure so we can run more of our workload on spot nodes.</p>
+
+<p>On our January AWS bill we were 30% more cost-efficient. This was accomplished late in the month, we managed to have the bill not go up to cope with a higher-than-ever load.
+For February we were aiming to drop the bill to under $80K.
+The following is a summary of where we are.</p>
+
+<h3>Provisioning</h3>
+
+<ul>
+<li>We now run the majority of our workload on Amazon spot nodes. Ondemand:spot ratio is between 2:1 and 7:1. Note we still pay more for ondemand portion of our bill because ondemand is a lot more expensive</li>
+<li>At $74,389.03, our Feb bill is 36% lower than Jan.</li>
+<li>Our current AWS spending per job is approximately half of what we paid in December</li>
+<li>We now bid on a range of AWS node types to maximize node availability and minimize price. This results in  >=50% lower spot bill. We now run a portion of our workload on 2x-faster VMs when cheaper spot machine types are not available.</li>
+</ul>
+
+
+<h3>Scheduling</h3>
+
+<ul>
+<li>Our AWS scheduler ramps up slower now to avoid temporary overprovisioning. Note the improvement on the right side of the graph (tall &amp; narrow  spikes are bad)</li>
+</ul>
+
+
+<p><img src="http://people.mozilla.org/~catlee/sattap/296cb846.png" alt="catlee's graph" /></p>
+
+<h3>Monitoring</h3>
+
+<ul>
+<li>We are evaluating <a href="http://hostedgraphite.com/">hostedgraphite.com</a> for monitoring our efficiency. It&#8217;s nice to have someone offer a well-supported open-source-compatible solution that can cope with 30K+ of metrics our 1000s of VMs generate.</li>
+</ul>
+
+
+<p><img src="/assets/images/spotinstances.png" title="Spot Instance Types Used for C-I" alt="" /></p>
+
+<p><img src="/assets/images/spotprice.png" title="Approximate Spot Prices" alt="" /></p>
+
+<h3>Workload Improvements</h3>
+
+<ul>
+<li>Halved Linux Firefox and Android try build time via a shared <a href="http://glandium.org/blog/?p=3201">S3 object cache</a></li>
+<li>Halved B2G builds via <a href="http://atlee.ca/blog/posts/initial-jacuzzi-results.html">jacuzzis</a></li>
+</ul>
+
+
+<h3>Mozilla Data Center plans for March</h3>
+
+<p>Amazon S3 is cheap, fast and robust. EC2 is incredibly flexible. Both are great for quickly iterating on cool ideas. Unfortunately most of our infrastructure runs on physical machines. We need to improve our non-elastic inhouse capacity with what we learned in the cloud:</p>
+
+<ul>
+<li>Use a shared object cache for Windows/Mac builds. This should more than double Windows build speed. The plan is to use Ceph for S3-compatible shared object storage.</li>
+<li>Get OpenStack bare metal virtualization working so we could move as fast there as we do in EC2</li>
+</ul>
+
+
+<h3>Cloud Plans for March</h3>
+
+<ul>
+<li>Eliminate EBS usage for faster builds, 10% lower EC2 bill. Amazon EBS is the antithesis of cost-effectiveness.</li>
+<li>Deploy more jacuzzis for faster builds, less EC2 instances</li>
+<li>Run more things on spot, switch to cheaper ondemand nodes, maybe buy some reserves</li>
+<li>Bid on an even wider variety of spot nodes</li>
+<li>Probably wont hit another 30% reduction, focusing on technical debt, better metrics, etc</li>
+<li>Containerization of Linux builds</li>
+</ul>
+
+
+<h3>Conclusion</h3>
+
+<p>Cloud APIs make cost-oriented architectures fun. Batch nature of c-i is a great match for spot.</p>
+
+<p>In general, spot is a brilliant design pattern, I intend to implement spot workloads on our own infra. It&#8217;s too bad other cloud vendors do not offer anything comparable.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -675,55 +789,6 @@ I would like to have spot workloads in public and private clouds. Try and fuzzin
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/03/08/snappy-number-52/">Snappy #52</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-03-08T16:58:00-08:00" pubdate data-updated="true">Mar 8<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h3>Frontend</h3>
-
-<h4>Help-Wanted:</h4>
-
-<p>Avi Halachmi <a href="http://avih.github.com/blog/2013/02/28/slow-touchpad-scroll-in-firefox/">needs your help</a> comparing scrolling behavior between browsers.</p>
-
-<h4>Australis</h4>
-
-<p>Mike Conley <a href="http://mikeconley.ca/blog/2013/03/01/australis-curvy-tabs-more-progress/">blogged</a> that Australis performance is now on-par with current theme on low-end hardware.</p>
-
-<h3>Startup</h3>
-
-<p>Aaron Klotz landed <a title="Generic readahead functions" href="https://bugzilla.mozilla.org/show_bug.cgi?id=845907">bug 845907</a>. This gives us a consistent way to warm IO caches. This functionality can easily backfire if we end preloading data that does not get used. Uses of readahead should always be accompanied with telemetry to verify it performs as expected. <a title="Use fadvise() to speed up cookie db load" href="https://bugzilla.mozilla.org/show_bug.cgi?id=810454">Bug 810454</a> is the first user of readahead API, it landed with A/B testing telemetry.
-Omnijar readhead is next, in <a title="Use readahead for ordered jar files such as omni.ja. Should be ~10% startup speedup" href="https://bugzilla.mozilla.org/show_bug.cgi?id=810151">bug 810151</a>. It results in ~60% drop in omni.ja startup read time on Windows on Aaron&#8217;s machine.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -739,6 +804,10 @@ Omnijar readhead is next, in <a title="Use readahead for ordered jar files such 
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/03/05/more-and-faster-c-i-for-less-on-aws/">More &amp; Faster C-I for Less on AWS</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/02/06/cost-efficient-continious-integration/">Cost-Efficient Continuous Integration</a>
       </li>
     
@@ -752,10 +821,6 @@ Omnijar readhead is next, in <a title="Use readahead for ordered jar files such 
     
       <li class="post">
         <a href="/blog/2013/06/28/new-performance-people/">New Performance People, Telemetry News</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/04/05/mozilla-tech-on-reddit/">Mozilla Tech on Reddit</a>
       </li>
     
   </ul>

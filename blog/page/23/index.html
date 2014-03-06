@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="David Mandelin has been going through Pork fixing bugs and now it is almost working with GCC4. Prior to Dave&#8217;s involvement people would run &hellip;">
+  <meta name="description" content="I have not blogged recently because I have been busy working on a rather fancy new mode for Dehydra. Turned out it is indeed possible to use &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,50 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2008/03/03/random-news-in-the-dehydra-corner/">Random News in the Dehydra Corner</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-03-03T10:05:31-08:00" pubdate data-updated="true">Mar 3<span>rd</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I have not blogged recently because I have been busy working on a rather fancy new mode for <a href="http://wiki.mozilla.org/Dehydra_GCC">Dehydra</a>. Turned out it is indeed possible to use JavaScript to walk and generate code to automagically convert thousands of recursive C structures into corresponding JS Objects. Now dehydra will have two modes: a simple pattern matcher that is easy to get started with and a hardcore mode for compiler geeks capable of advanced analyses. More on this later, for now subscribe to <a href="https://lists.mozilla.org/listinfo/dev-static-analysis">static analysis</a> mailing list for more information.</p>
+
+<p>Turns out that I&#8217;m not the first person to <a href="https://sourceforge.net/forum/forum.php?thread_id=1685933&amp;forum_id=624529">embed</a> SpiderMonkey into GCC.</p>
+
+<p>I have gotten in touch with two different GCC plugin projects. Seems that other projects are more academic in nature and still in the early design/development stages.</p>
+
+<p>In constrast, Dehydra efforts are driven by existing unmet needs. In two months we went from having a crazy idea about using GCC for static analysis to having Benjamin <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=419622">integrate</a> support for Dehydra checks into the moz 2 development repository to be run in a tinderbox.</p>
+
+<p>I am also excited to see that people are discovering that Dehydra can be used to explore the codebase. We are not quite at the stage where one can interactively query the codebase from an ajax UI, but we are making <a href="http://blog.mozilla.org/dmandelin/2008/02/14/dtrace-c-mysteries-solved/">steps</a> in the right direction. As part of this trend, dehydra documentation is starting to migrate to MDC.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -587,50 +631,6 @@ Usually stage 3 is a few times harder than 2. For garburator rewriting got reall
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2007/11/28/volume-of-refactoring-ahead/">Volume of Refactoring Ahead</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2007-11-28T09:53:42-08:00" pubdate data-updated="true">Nov 28<span>th</span>, 2007</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>In the previous post, I described the simple rewriting case that I am working on at the moment. Someone was quick to point out that the approach wouldn&#8217;t work for all methods (XPIDL Arrays were the example). Indeed, anything more complicated than simple getters can&#8217;t be rewritten to &#8220;Succeeded/Failed&#8221; pattern without switching to C++ exceptions. However, in the codebase the size of Mozilla there are several megabytes worth outparam getters to be rewritten.</p>
-
-<p>Currently my wimpy little <a href="http://hg.mozilla.org/oink/?file/0ab46e97549e/dehydra_scripts/outparams.js">outparams.js</a> script identifies 100 methods that can be rewritten by outparamdel without any manual intervention. However doing a search for ::Get with a ** parameter yields over 2700 candidates, of which most look like they can be rewritten. Reason for the laughable detection rate is that the detection script currently refuses to flag methods that are defined in XPIDL interface or are implemented by more than one class. Soon the script will make heavier use of the class hierarchy and we will probably change XPIDL to support more efficient getters.</p>
-
-<p><strong>Complete Class Hierarchy</strong></p>
-
-<p>I finally managed to convince Dehydra to serialize the Mozilla class hierarchy into JSON files without running out of virtual memory. This will generate lots of input for refactoring and analysis tools. All kinds of <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=405855">interesting stats</a> can be produced with <a href="http://hg.mozilla.org/oink/?file/0ab46e97549e/dehydra_scripts/find_single_impl.js">simple scripts</a>. Generating the index is relatively <a href="http://wiki.mozilla.org/index.php?title=DeHydra#Capturing_the_Moz_Class_Hierarchy">straightforward</a>. It would be awesome if someone could figure out how to expose this data as a web app. Since there is so much being loaded incrementally, I don&#8217;t see how one can keep things simple but use an asynchronous API.</p>
-
-<p>In the coming months, I am looking forward to extending this to be a complete callgraph to find dead code and other fun data.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/24/">&larr; Older</a>
@@ -648,6 +648,10 @@ Usually stage 3 is a few times harder than 2. For garburator rewriting got reall
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/03/05/more-and-faster-c-i-for-less-on-aws/">More &amp; Faster C-I for Less on AWS</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/02/06/cost-efficient-continious-integration/">Cost-Efficient Continuous Integration</a>
       </li>
     
@@ -661,10 +665,6 @@ Usually stage 3 is a few times harder than 2. For garburator rewriting got reall
     
       <li class="post">
         <a href="/blog/2013/06/28/new-performance-people/">New Performance People, Telemetry News</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/04/05/mozilla-tech-on-reddit/">Mozilla Tech on Reddit</a>
       </li>
     
   </ul>
