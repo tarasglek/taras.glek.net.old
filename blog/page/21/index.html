@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="New Static Analysis Toys I have been catching up on my backlog of little bugs, here are some of the most notable ones. Benjamin has been pushing the &hellip;">
+  <meta name="description" content="Someone else is developing their own app-specific rewrite tools. In this case app-specific refers to automating porting code from gtk2 to gtk3. The &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,46 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2008/08/14/meanwhile-in-a-parallel-universe/">Meanwhile in a Parallel Universe</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-08-14T01:48:04-07:00" pubdate data-updated="true">Aug 14<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Someone else is developing their own app-specific rewrite tools. In this case app-specific refers to <a href="http://people.imendio.com/richard/gtk-rewriter/">automating porting code</a> from gtk2 to gtk3. The approach is similar in that patches are produced, but it doesn&#8217;t look like a patch aggregating tool is written yet. Instead of the elsa/mcpp magic sauce, <a href="http://clang.llvm.org/">clang</a> is being used, so this is limited to C at the moment.</p>
+
+<p>KDE folks are behind in automated code rewrites arms race, perhaps the trolls should try some <a href="http://developer.mozilla.org/en/docs/Pork">pork</a> to accelerate KDE3->4 transition :)</p>
+
+<p>All kidding aside, it is awesome to see that less-manual-labour-through-compiler-assisted-refactoring approach is gaining mindshare.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -574,66 +614,6 @@ Some of you might ask &#8220;But Taras, why now, why not just keep doing what yo
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2008/06/24/status-report-nearterm-plans-for-pork-dehydra/">Status Report: Nearterm Plans for Pork, Dehydra</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-06-24T06:36:19-07:00" pubdate data-updated="true">Jun 24<span>th</span>, 2008</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><a href="http://developer.mozilla.org/en/docs/Pork"><strong>Pork</strong></a></p>
-
-<p>I planned to release Pork 1.0 for a while now. The tools work great, even if all the love is going to the GCC-based toolchain. However, after hearing grumpy comments from a certain coworker about the uglyness of the oink build system it dawned on me that it&#8217;s rather mean to release such a mess and call it 1.0.</p>
-
-<p>So I think I&#8217;ll release Pork 0.9 in the current state, so I can focus on near term GCC toolchain work. Pork in the current form means <a href="http://danielwilkerson.com/oink/">oink stack</a> + my refactoring tools + changes to elsa and other libs to support C/C++ refactoring needs.</p>
-
-<p>This will be followed up by Pork 1.0. 1.0 will involve changes to the build system to get rid of oink(we only use the oink build system and rarely use oink API). To put this another way: I don&#8217;t expect any functionality changes between 0.9 and 1.0 other than an improved build system to make it easier to get started with writing new tools.</p>
-
-<p><strong>Pork - Future</strong></p>
-
-<p>I am pretty happy with Pork as it is. I think we&#8217;ve taken Elsa as far as it&#8217;ll let us go. The only realistic improvement on the Pork side may be to have Dehydra generate a JS binding to Elsa&#8217;s extensive AST to make rewriting stuff easier. However, I&#8217;m not sure if that&#8217;s worth the effort nor that a C++ AST will reflect into JavaScript as well as GCC GIMPLE.</p>
-
-<p><em>Preprocessing</em></p>
-
-<p>On the other hand, something needs to be done about the main ingradient that makes Pork tick: MCPP. MCPP does a lovely job of annotating what the C preprocessor is doing, but configuring GCC to use a foreign preprocessor is a giant hassle and making sure it works correctly is troublesome. At the GCC summit, <a href="http://tromey.com/blog/">Tom</a> gave me an idea on how similar functionality can be added to GCC directly by extending the include backtrace with macro expansions. Not only would such integration simplify Pork setup and increase Pork&#8217;s operating speed, but it is also a clean way to expose preprocessor constructs to the AST presented in De/Treehydra. It should allow for more preprocessor awareness directly in analysis stage of refactoring instead of only in the final rewriting stage as is currently done. As a side-effect, GCC would gain better error messages too.</p>
-
-<p>So while this isn&#8217;t going to affect Pork directly, it will simplify the lives of Pork users while opening new analysis frontiers. Even though I hate working on preprocessor stuff, I think this work will need to happen sometime in the near future.</p>
-
-<p><a href="Dehydra">The Hydras</a></p>
-
-<p>Dehydra 0.9 has been out for a while, I planned to release 1.0 soon after unless there are major flaws discovered in the API. The situation changed at the GCC summit. The fact that FSF reversed their stance on GCC plugins means that we should be concentrating on getting the plugin stuff reviewed.</p>
-
-<p>So in the near term I&#8217;m forward porting the plugin stuff to trunk GCC, then I&#8217;ll be generalize the plugin API to suit at least one other GCC plugin user that we met with at the summit. The downside is that I don&#8217;t want to release Dehydra 1.0 and immediately break the plugin API. The upside is that the new API should be more general and more minimalistic and will likely be close to what will eventually become an official plugin API.</p>
-
-<p><em>Summary</em>: In my mind Dehydra and Pork are 1.0 quality, but I want to future-proof them a little bit before calling them 1.0.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/22/">&larr; Older</a>
@@ -651,6 +631,10 @@ Some of you might ask &#8220;But Taras, why now, why not just keep doing what yo
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/05/07/the-rise-and-fall-of-special-snowflake-infrastructure/">Demise of Special Snowflake Infrastructure</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/03/05/more-and-faster-c-i-for-less-on-aws/">More &amp; Faster C-I for Less on AWS</a>
       </li>
     
@@ -664,10 +648,6 @@ Some of you might ask &#8220;But Taras, why now, why not just keep doing what yo
     
       <li class="post">
         <a href="/blog/2013/08/28/telemetry-reboot/">Telemetry Reboot</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/06/28/new-performance-people/">New Performance People, Telemetry News</a>
       </li>
     
   </ul>

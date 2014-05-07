@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Amazon Pricing - Expensive or Cheap? Amazon ondemand nodes are fantastic for rapid iteration, but using them in production is expensive naivety. It &hellip;">
+  <meta name="description" content="TLDR I&#8217;ve been running one of our Releng(C-I) teams since January. My specialty is to optimize $stuff at Mozilla. My team is full of like- &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,80 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/05/07/the-rise-and-fall-of-special-snowflake-infrastructure/">Demise of Special Snowflake Infrastructure</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-05-07T15:30:00-07:00" pubdate data-updated="true">May 7<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h4>TLDR</h4>
+
+<p>I&#8217;ve been running one of our Releng(C-I) teams since January. My specialty is to optimize $stuff at Mozilla. My team is full of like-minded people.</p>
+
+<p>Here is a short summary of what various tools people have done this year:</p>
+
+<ul>
+<li>Get 4x better value for each <a href="http://vps.glek.net/cost.png">dollar</a> spent on Amazon AWS (so we can use it for more stuff)</li>
+<li>Sped up build times: <a href="/assets/images/try2014may.png">try</a>, <a href="/assets/images/inbound2014may.png">inbound</a> (values in seconds)</li>
+<li>wrote a new pull-request review tool on top of reviewboard. See <a href="https://groups.google.com/forum/#!forum/mozilla-code-review">mailing list</a>. Bugzilla guys are standing it up for testing</li>
+<li>Setup <a href="http://ask.mozilla.org">http://ask.mozilla.org</a> for knowledge transfer</li>
+</ul>
+
+
+<h4>Long Story: Put up or Shut up</h4>
+
+<p>Our infrastructure is an awful artifact of the project roots and people working on it going back to the 90s. Buildbot made sense when running on a dozen computers, it makes less sense on 5000. Building our own issue tracker(sadly bugzilla is still competitive), version control hosting made sense when alternatives were worse. However, the world moved on and we ended up with a dead evolutionary branch (rooted in the 90s!) of a lot of these technologies. Things are often slow, because of either lack of ownership or wrong ownership(eg management fail).</p>
+
+<p>It hurts to see new people join and ask &#8220;why are you guys such special snowflakes?&#8221;, it also hurts to see our elders reply &#8220;because Mozilla is different&#8221;. Everyone working with me is sick of our infrastructure. We have our best people working days (and often weekends to get us out of the mess we are in).</p>
+
+<p>Instead of lamenting about the situation we dug ourselves into, we are working hard on getting out of the hole, presenting PoCs, etc.</p>
+
+<p>Here are some things being worked on atm:</p>
+
+<ul>
+<li>Faster builds: the goal with builds is to get them to as fast as possible. We&#8217;ll halve our build times a few times this year. 2 people are on this fulltime with part-time help from others. Most of these wins will happen on our infrastructure, however our local builds will also be best in class.</li>
+<li>Efficient, cloud-oriented, modern flexible job C-I system: <a href="http://taskcluster.net">taskcluster.net</a>, <a href="http://lightsofapollo.github.io/">blog</a>. This will cut latency during scheduling, test execution and be mostly self-serve.</li>
+<li>Moving everything we can move into the public cloud, running rest as a private OpenStack bare metal cloud. The plan is to offload private parts to public clouds as soon as viable(mac, bare metal, etc) options appear on market.</li>
+<li>Excellent review tools: in addition to setting up reviewboard, we&#8217;ll support a proper github pull req flow without CVS-style-everybody-can-commit-to-TRUNK artifacts</li>
+<li>Everything is being designed with self-serve operation in mind. The idea is that if someone is sick of something they have all the APIs they need to do something about it, or they can shut up. Historically obtuseness of a lot of our infra prevented this.</li>
+<li><a href="http://glandium.org/blog/?p=3235">sccache</a>(eg multimachine ccache). This now works as a ccache replacement on Windows in addition to being a big speedup on our infra.</li>
+</ul>
+
+
+<p>Note I spend a lot of time evaluating alternatives (ninja, phabricator, github, etc) before embarking on projects. Sometimes it&#8217;s easier to fix existing infra, other times it&#8217;s better to switch tools. We&#8217;ll try to use 3rd-party infrastructure where possible because domain experts are usually better at what they do. For example, it&#8217;s unbeliably hard to stand up something on our infrastructure vs calling APIs on Amazon (eg hours of dev vs months of meetings).</p>
+
+<p>It&#8217;s a lot of work to drag our infrastructure out of the late 1990s. Our mission is to eradicate/outsource/rewrite crappy infrastructure. We know what needs to happen and how to get there by the end of the year.</p>
+
+<p>PS. I expect to see dev blogposts about their work.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -729,66 +803,6 @@ I would like to have spot workloads in public and private clouds. Try and fuzzin
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/03/11/living-with-octopress/">Blogging With Octopress</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-03-11T16:58:00-07:00" pubdate data-updated="true">Mar 11<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>A couple months ago I <a href="/blog/2012/12/17/hello-octopress/">switched</a> to <a href="http://octopress.org">Octopress</a>. I now have some experience to share.</p>
-
-<p>Overall, my Octopress + Github + Disqus experience has been much better blogger, wordpress and livejournal past before it. I only wish I kept my old posts in HTML instead of converting them to markdown. When I was setting up my blog, I did not know that Octopress could render HTML.</p>
-
-<h4>RSS Bugs</h4>
-
-<p>I learned not expect much from RSS. In addition to being hard to discover, the default category RSS is buggy. It interprets markdown twice <a href="https://github.com/imathis/octopress/issues/884#issuecomment-12178049">choking</a> on some exciting Telemetry links in my archives. I had to restort to writing a custom mozilla category feed.</p>
-
-<p>The excerpt feature (<code>&lt;!-- more --&gt;</code>) does not work in RSS. To me that defeats the whole point of excerpts, who even reads blog homepages? I do not have time to fix this.</p>
-
-<h4>It&#8217;s easy to make a mess</h4>
-
-<p>I wanted to get rid of some octopress defaults like external CSS, external fonts, modify some layout. I found I could not restrict myself to only editing files in <code>_directories</code>. I think this means that switching to a new theme will be hard. I was lazy and ended up with my content in the same repo as the octopress source. I&#8217;ll have to clean up my act before I can share my customizations.</p>
-
-<h4>Saving Time</h4>
-
-<p>One of the worst parts about my old wordpress blog was the amount of UI one had to go through to create HTML links. My snappy updates have a lot of bugzilla links. I wrote an octopress extension to do most of the link work for me. Syntax looks like:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>{%Bug ####%}, {%bug ####%}</span></code></pre></td></tr></table></div></figure>
-
-
-<p>If anyone is interested, you can download it <a href="http://people.mozilla.org/~tglek/bugzilla.rb">here</a> until I clean up my octopress git repository.</p>
-
-<p>Overall I like Octopress and I recommend the octopress/github combo to every developer who is looking to setup a blog. It saves a lot of time and as long as one can deal with lack of unit testing and Ruby, it&#8217;s great.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -804,6 +818,10 @@ I would like to have spot workloads in public and private clouds. Try and fuzzin
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/05/07/the-rise-and-fall-of-special-snowflake-infrastructure/">Demise of Special Snowflake Infrastructure</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/03/05/more-and-faster-c-i-for-less-on-aws/">More &amp; Faster C-I for Less on AWS</a>
       </li>
     
@@ -817,10 +835,6 @@ I would like to have spot workloads in public and private clouds. Try and fuzzin
     
       <li class="post">
         <a href="/blog/2013/08/28/telemetry-reboot/">Telemetry Reboot</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/06/28/new-performance-people/">New Performance People, Telemetry News</a>
       </li>
     
   </ul>

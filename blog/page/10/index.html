@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Work is continuing from last week: jank profiler, DOM storage fixes, font enumeration and SQL telemetry analysis. This was the last Snappy meeting of &hellip;">
+  <meta name="description" content="One of the challenges of a growing organization is that people become managers and have less time for coding. A scary proportion of module owners are &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,46 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/12/22/growing-reviewers/">Growing Reviewers</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-12-22T09:09:29-08:00" pubdate data-updated="true">Dec 22<span>nd</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>One of the challenges of a growing organization is that people become managers and have less time for coding. A scary proportion of module owners are managers now.</p>
+
+<p>We were discussing this with Dietrich and he came up with a really simple solution: module owner&#8217;s entire team should be able to review patches for that module. Obviously new people can&#8217;t review every little detail, for those they can pass the buck to their manager(and learn in the process). I really like the new <a href="http://groups.google.com/group/mozilla.dev.apps.firefox/browse_thread/thread/9c6072c52cc5165c/fbc124d0fbe8782a?pli=1">Firefox review policy</a> of having a large set of candidates for reviews who have an option of passing the patch along.</p>
+
+<p>Perhaps bugzilla can change r?:taras queries into r?:taras+his+team and do this automagically.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -491,56 +531,6 @@ I found it really useful to use Optiloader. <br />https://github.com/WestfW/Opti
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011/10/18/alternative-to-the-indignity-of-dealing-with-the-error-console/">Alternative to the Indignity of Dealing With the Error Console</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-10-18T23:56:09-07:00" pubdate data-updated="true">Oct 18<span>th</span>, 2011</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>The JavaScript error console is a relic from the Mozilla stone age. There are two problems with it:</p>
-
-<ol>
-<li>It lives in a separate window</li>
-<li>It is not helpful
-I&#8217;ve been drooling over the new Firefox Web Console, but unfortunately it doesn&#8217;t have chrome privs [yet?] so it isn&#8217;t a replacement for the error console since it operates with privileges of the webpage displayed. Turns out I was 2 steps away from nirvana:</li>
-<li>Navigate to <a href="chrome://global/content/console.xul">chrome://global/content/console.xul</a>.</li>
-<li>Menu -> &#8220;Web Developer&#8221; -> &#8220;Web Console&#8221;
-Turns out that one can load a url with chrome privs (about:memory works too) and the web console becomes a very helpful [with autocompletion, less noise, etc) tool for typing Components.interfaces&#8230;</li>
-</ol>
-
-
-<p><strong>Update:</strong></p>
-
-<p>Scratchpad can also do this sans autocompletion, see Rob&#8217;s comment below.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/11/">&larr; Older</a>
@@ -558,6 +548,10 @@ Turns out that one can load a url with chrome privs (about:memory works too) and
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/05/07/the-rise-and-fall-of-special-snowflake-infrastructure/">Demise of Special Snowflake Infrastructure</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/03/05/more-and-faster-c-i-for-less-on-aws/">More &amp; Faster C-I for Less on AWS</a>
       </li>
     
@@ -571,10 +565,6 @@ Turns out that one can load a url with chrome privs (about:memory works too) and
     
       <li class="post">
         <a href="/blog/2013/08/28/telemetry-reboot/">Telemetry Reboot</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/06/28/new-performance-people/">New Performance People, Telemetry News</a>
       </li>
     
   </ul>

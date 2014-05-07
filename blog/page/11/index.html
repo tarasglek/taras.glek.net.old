@@ -9,7 +9,9 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Linux Plumbers A few of us attend LinuxPlumbers last month, I gave talk. Basic summary: kernel + toolchain could add a few straight-forward features &hellip;">
+  <meta name="description" content="The JavaScript error console is a relic from the Mozilla stone age. There are two problems with it: It lives in a separate window
+It is not helpful
+I &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +91,56 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/10/18/alternative-to-the-indignity-of-dealing-with-the-error-console/">Alternative to the Indignity of Dealing With the Error Console</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-10-18T23:56:09-07:00" pubdate data-updated="true">Oct 18<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>The JavaScript error console is a relic from the Mozilla stone age. There are two problems with it:</p>
+
+<ol>
+<li>It lives in a separate window</li>
+<li>It is not helpful
+I&#8217;ve been drooling over the new Firefox Web Console, but unfortunately it doesn&#8217;t have chrome privs [yet?] so it isn&#8217;t a replacement for the error console since it operates with privileges of the webpage displayed. Turns out I was 2 steps away from nirvana:</li>
+<li>Navigate to <a href="chrome://global/content/console.xul">chrome://global/content/console.xul</a>.</li>
+<li>Menu -> &#8220;Web Developer&#8221; -> &#8220;Web Console&#8221;
+Turns out that one can load a url with chrome privs (about:memory works too) and the web console becomes a very helpful [with autocompletion, less noise, etc) tool for typing Components.interfaces&#8230;</li>
+</ol>
+
+
+<p><strong>Update:</strong></p>
+
+<p>Scratchpad can also do this sans autocompletion, see Rob&#8217;s comment below.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -589,77 +641,6 @@ Since the branch point for Aurora is approaching in less than a week, I don&#821
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011/06/22/developers-how-to-submit-telemetry-data/">Developers: How to Submit Telemetry Data</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-06-22T07:06:14-07:00" pubdate data-updated="true">Jun 22<span>nd</span>, 2011</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Telemetry is a way to gather stats about Firefox. Currently histograms are the main mechanism by which to gather data. There are 3 histogram types currently supported: exponential, linear and boolean. Exponential+linear histograms can accumulate numbers between 0 and a user-defined integer maximum, they differ in bucket size increments. Boolean histograms are meant to store 0 or 1.</p>
-
-<p><strong>Steps to Add a New Metric</strong></p>
-
-<p>1) Add a histogram definition to <a href="http://mxr.mozilla.org/mozilla-central/source/toolkit/components/telemetry/TelemetryHistograms.h">TelemetryHistograms.h</a> specifying a histogram id, parameters and a description. For example HISTOGRAM(MYHGRAM, 1, 10000, 50, EXPONENTIAL, &#8220;Time (ms) taken by shiny new metric&#8221;) defines a MYHGRAM histogram with a minimum value of 1, maximum 10000 and 50 buckets that grow exponentially with the description specifying units as milliseconds. 2a) C++:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>
-</span><span class='line'>#include &lt;mozilla/Telemetry.h&gt;</span></code></pre></td></tr></table></div></figure>
-
-
-<p>&#8230;. Telemetry::Accumulate(Telemetry::MYHGRAM, <some interestin integer value goes here>)</p>
-
-<p>2b) JS:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>
-</span><span class='line'>Telemetry = Cc["@mozilla.org/base/telemetry;1"].getService(Ci.nsITelemetry)
-</span><span class='line'>var h = Telemetry.getHistogramById("MYHGRAM");
-</span><span class='line'>h.Add(&lt;some interesting value goes here&gt;);
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>3) Install <a href="https://addons.mozilla.org/en-US/firefox/addon/abouttelemetry/">about:telemetry</a> addon, go to about:telemetry to check that the chosen histogram type and parameters summarize your data in a useful way.</p>
-
-<p>4) Commit and wait for results to come in. <strong>FAQ</strong> <em>Q: What about those UMA</em>* macros?_ A: Don&#8217;t use them. I added TelemetryHistograms.h so telemetry can be easily reviewed by security and privacy police. It also avoids a few pitfalls such as accidentally initializing the same histogram with different parameters, etc.</p>
-
-<p><em>Q: When will telemetry be deployed?</em> A: We will land the <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=652657">UI</a> to turn it on as soon as an updated <a href="http://www.mozilla.com/en-US/legal/privacy/firefox.html">privacy policy</a> is <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=664845">posted</a>. It should show up in nightly builds by the end of the week.</p>
-
-<p><em>Q: How do I access the gathered telemetry data?</em> A: TBD. Data is stored on metrics server, we will figure this out soon.</p>
-
-<p><em>Q: What about addons?</em> A: TBD. At the moment addons are free to inspect telemetry data in their browser. We haven&#8217;t decided on a process to let addon authors add new probes and access stats. For now, addons should not participate in telemetry.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/12/">&larr; Older</a>
@@ -677,6 +658,10 @@ Since the branch point for Aurora is approaching in less than a week, I don&#821
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/05/07/the-rise-and-fall-of-special-snowflake-infrastructure/">Demise of Special Snowflake Infrastructure</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/03/05/more-and-faster-c-i-for-less-on-aws/">More &amp; Faster C-I for Less on AWS</a>
       </li>
     
@@ -690,10 +675,6 @@ Since the branch point for Aurora is approaching in less than a week, I don&#821
     
       <li class="post">
         <a href="/blog/2013/08/28/telemetry-reboot/">Telemetry Reboot</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/06/28/new-performance-people/">New Performance People, Telemetry News</a>
       </li>
     
   </ul>
