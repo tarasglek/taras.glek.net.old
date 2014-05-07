@@ -4,7 +4,7 @@
   <title><![CDATA[Category: mozilla | All About Performance]]></title>
   <link href="http://taras.glek.net/blog/categories/mozilla/atom.xml" rel="self"/>
   <link href="http://taras.glek.net/"/>
-  <updated>2014-05-07T16:19:24-07:00</updated>
+  <updated>2014-05-07T16:52:01-07:00</updated>
   <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -12,6 +12,47 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Demise of Special Snowflake Infrastructure]]></title>
+    <link href="http://taras.glek.net/blog/2014/05/07/the-rise-and-fall-of-special-snowflake-infrastructure/"/>
+    <updated>2014-05-07T15:30:00-07:00</updated>
+    <id>http://taras.glek.net/blog/2014/05/07/the-rise-and-fall-of-special-snowflake-infrastructure</id>
+    <content type="html"><![CDATA[#### TLDR
+
+I've been running one of our Releng(C-I) teams since January. My specialty is to optimize $stuff at Mozilla. My team is full of like-minded people.
+
+Here is a short summary of what various tools people have done this year:
+
+* Get 4x better value for each [dollar](http://vps.glek.net/cost.png) spent on Amazon AWS (so we can use it for more stuff)
+* Sped up build times: [try](/assets/images/try2014may.png), [inbound](/assets/images/inbound2014may.png) (values in seconds)
+* wrote a new pull-request review tool on top of reviewboard. See [mailing list](https://groups.google.com/forum/#!forum/mozilla-code-review). Bugzilla guys are standing it up for testing
+* Setup [http://ask.mozilla.org](http://ask.mozilla.org) for knowledge transfer
+
+#### Long Story: Put up or Shut up
+
+Our infrastructure is an awful artifact of the project roots and people working on it going back to the 90s. Buildbot made sense when running on a dozen computers, it makes less sense on 5000. Building our own issue tracker(sadly bugzilla is still competitive), version control hosting made sense when alternatives were worse. However, the world moved on and we ended up with a dead evolutionary branch (rooted in the 90s!) of a lot of these technologies. Things are often slow, because of either lack of ownership or wrong ownership(eg management fail).
+
+It hurts to see new people join and ask "why are you guys such special snowflakes?", it also hurts to see our elders reply "because Mozilla is different". Everyone working with me is sick of our infrastructure. We have our best people working days (and often weekends to get us out of the mess we are in).
+
+Instead of lamenting about the situation we dug ourselves into, we are working hard on getting out of the hole, presenting PoCs, etc.
+
+Here are some things being worked on atm:
+
+* Faster builds: the goal with builds is to get them to as fast as possible. We'll halve our build times a few times this year. 2 people are on this fulltime with part-time help from others. Most of these wins will happen on our infrastructure, however our local builds will also be best in class.
+* Efficient, cloud-oriented, modern flexible job C-I system: [taskcluster.net](http://taskcluster.net), [blog](http://lightsofapollo.github.io/). This will cut latency during scheduling, test execution and be mostly self-serve.
+* Moving everything we can move into the public cloud, running rest as a private OpenStack bare metal cloud. The plan is to offload private parts to public clouds as soon as viable(mac, bare metal, etc) options appear on market.
+* Excellent review tools: in addition to setting up reviewboard, we'll support a proper github pull req flow without CVS-style-everybody-can-commit-to-TRUNK artifacts
+* Everything is being designed with self-serve operation in mind. The idea is that if someone is sick of something they have all the APIs they need to do something about it, or they can shut up. Historically obtuseness of a lot of our infra prevented this.
+* [sccache](http://glandium.org/blog/?p=3235)(eg multimachine ccache). This now works as a ccache replacement on Windows in addition to being a big speedup on our infra.
+
+Note I spend a lot of time evaluating alternatives (ninja, phabricator, github, etc) before embarking on projects. Sometimes it's easier to fix existing infra, other times it's better to switch tools. We'll try to use 3rd-party infrastructure where possible because domain experts are usually better at what they do. For example, it's unbeliably hard to stand up something on our infrastructure vs calling APIs on Amazon (eg hours of dev vs months of meetings).
+
+It's a lot of work to drag our infrastructure out of the late 1990s. Our mission is to eradicate/outsource/rewrite crappy infrastructure. We know what needs to happen and how to get there by the end of the year.
+
+PS. I expect to see dev blogposts about their work.
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[More &amp; Faster C-I for Less on AWS]]></title>
@@ -215,34 +256,6 @@ I spent a lot of time thinking about how to write the fastest(+robustest) possib
 Summary
 -------
 We will be cutting over to brand new telemetry infrastructure on Oct 1. There will be pain. If you have any questions or are interested in helping out ping us on IRC in `#telemetry`.
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[New Performance People, Telemetry News]]></title>
-    <link href="http://taras.glek.net/blog/2013/06/28/new-performance-people/"/>
-    <updated>2013-06-28T16:52:00-07:00</updated>
-    <id>http://taras.glek.net/blog/2013/06/28/new-performance-people</id>
-    <content type="html"><![CDATA[reddit/[MozillaTech](http://www.reddit.com/r/MozillaTech/)
---------------------------------
-I like our make-planet-techy subreddit. Seems like articles that get rated as one would expect. I happily switched to reddit as my primary way to consume planet mozilla. Redditors, keep up the good work!
-
-Telemetry Dashboard
--------------------------------
-Our new telemetry [dashboard](http://telemetry-dash.mozilla.org/) went live yesterday. It's missing features, data, UX. However it is public, fast and hackable. It should evolve quickly.
-New Blood
----------------
-[Mark Reid](http://mreid-moz.github.io/) is our first server-side dev. His primary task is switching telemetry backend from hadoop to a custom telemetry server. New server infrastructure will enable a live dashboard (3-day delay atm) + ability to run queries in minutes rather than in hours.
-
-[Dhaval Giani](http://randomkernels.wordpress.com), "the intern", is our first kernel hacker. He's working on helping land [volatile memory](https://lwn.net/Articles/522135/) in the kernel. This feature will let Firefox safely consume more memory when memory is plentiful and use less in limited scenarios. Hopefully he'll also add read-only file compression to ext4.
-
-Blogs linked above are in the please-add-to-planet queue. Expect them to spend a few weeks there. Please subscribe to their RSS feeds in meantime.
- 
-Investigating SQLite Performance via Telemetry
-----------------------------------------------------------------------
-Years ago I tweaked our SQLite clients to use a larger page size. In my testing this seemed to achieve a speedup of 0.2-2x, see <a title="Suboptimal SQLite page size" href="https://bugzilla.mozilla.org/show_bug.cgi?id=416330">bug 416330</a>. Unfortunately, ~30% of our users are still on the old page size (<a title="Fix page_size of WAL databases" href="https://bugzilla.mozilla.org/show_bug.cgi?id=634374">bug 634374</a>). We used a [jydoop](https://github.com/mozilla/jydoop) query to figure out if it's worth developing a feature to convert these users over using two different (time spent [reading](https://github.com/mozilla/jydoop/blob/master/scripts/places4k.py) & time spent [executing](https://github.com/mozilla/jydoop/blob/master/scripts/places4k-slowsql.py) a query) ways to measure performance differences. According to both methods there is a 4x reduction in sqlite IO waits with the larger page size, so we'll be adding code to convert people over more aggressively.
-
-This was a cool investigation because it highlighted how much more confidence we have when making performance decisions now (due to telemetry) vs a few years ago.
 ]]></content>
   </entry>
   
