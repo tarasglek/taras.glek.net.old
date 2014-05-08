@@ -4,7 +4,7 @@
   <title><![CDATA[All About Performance]]></title>
   <link href="http://taras.glek.net/atom.xml" rel="self"/>
   <link href="http://taras.glek.net/"/>
-  <updated>2014-05-07T16:52:01-07:00</updated>
+  <updated>2014-05-07T17:13:47-07:00</updated>
   <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -23,7 +23,7 @@
 
 <p>I&#8217;ve been running one of our Releng(C-I) teams since January. My specialty is to optimize $stuff at Mozilla. My team is full of like-minded people.</p>
 
-<p>Here is a short summary of what various tools people have done this year:</p>
+<p>Here is a short summary of various improvements done this year:</p>
 
 <ul>
 <li>Get 4x better value for each <a href="http://vps.glek.net/cost.png">dollar</a> spent on Amazon AWS (so we can use it for more stuff)</li>
