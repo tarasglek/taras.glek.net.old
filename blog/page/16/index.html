@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="The Dehydra installation instructions got to the point where they were more confusing than helpful. I spent this morning cutting out irrelevant crud &hellip;">
+  <meta name="description" content="In an earlier post I described my Fiji hack: how to use some nasty instrumentation to spit out ld scripts to speed up cold startup. This week I tried &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,65 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/03/05/mirror-mirror-on-the-wall-why-is-my-binary-slow/">Mirror, Mirror on the Wall, Why Is My Binary Slow?</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-03-05T09:48:25-08:00" pubdate data-updated="true">Mar 5<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>In an <a href="http://taras.glek.net/blog/2010/02/19/teaching-ld-to-optimize-binaries-for-startup/">earlier</a> post I described my Fiji hack: how to use some nasty instrumentation to spit out ld scripts to speed up cold startup. This week I tried to extract more data out of the binary to lay it out even better. Trouble is that even if one lays out functions perfectly, they load data for things like variable initializers which will cause more IO.</p>
+
+<p>A very clever friend suggested that I can write a valgrind plugin that can detect data accesses and function access and write the linker input files in one step. So with much hand-holding I hacked a sample valgrind plugin to do what I <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=549749">want</a>. Unfortunately, my binaries ended up not being significantly faster(if at all) than the Fiji ones. They also ended up 20% bigger.</p>
+
+<p>Fortunately, the GCC devs were able to point out my linker mistakes and pointed me at a <a href="http://sourceware.org/ml/binutils/2010-03/msg00050.html">linker patch</a> that does what I want without linker scripts(and has less binary-bloating side-effects). Unfortunately, that just confirmed that the speedup I was looking for wasn&#8217;t hiding behind data symbols. So I am going to have to sit down with my <a href="http://taras.glek.net/blog/2009/10/23/studying-library-io-systemtap-style/">io tracing script </a>and study what the heck is going on.</p>
+
+<p><strong>Cool Things I Learned</strong></p>
+
+<p>In the process of helping me, GCC people namedropped some compiler flags that may prove very helpful:</p>
+
+<ul>
+<li>-freorder-blocks-and-partition: Apparently this breaks up functions into hot/cold parts and gives them different section names so they can be moved around at link time.</li>
+<li>-fno-common, -fno-zero-initialized-in-bss should go well with my favourites: -ffunction-sections -fdata-sections
+Additionally, it may be possible to benefit from linking with large page support. I have some doubts about that.</li>
+</ul>
+
+
+<p>I did learn about some cool GNU Gold flags:</p>
+
+<ul>
+<li>&#8211;compress-debug-sections=zlib: Most of the overhead of linking a development libxul.so is writing out a near gig of debug data</li>
+<li>&#8211;icf: Identical code folding, I think that matches the deduplication feature found in the ms linker. Saves 5% on my libxul.so</li>
+</ul>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -605,48 +664,6 @@ Rooter - British pronunciation of router. This is post describes the hardware in
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/11/20/dehydra-testsuite-passes-on-gcc-4-5/">Dehydra Testsuite Passes on GCC 4.5</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-11-20T08:24:04-08:00" pubdate data-updated="true">Nov 20<span>th</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I spent couple of days fixing the remaining test-suite failures on GCC 4.5 trunk for <a href="https://developer.mozilla.org/En/Dehydra">Dehydra</a>. Since the last time I looked into this, GCC went from crashing all over the place to only crashing if I did something bad. It was nice to discover that as a result of switching to 4.5 Dehydra users will get saner .isExplicit behavior and more precise location info.</p>
-
-<p>Treehydra will take more work due to me <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=510190">misunderstanding</a> GTY annotations.</p>
-
-<p>By the way, I am really grateful for all of the people who contributed GCC 4.5 fixes so far. You guys have been a big help in getting Dehydra testsuite to 100% on 4.5. Looks like I will meet my goals to finish De+Treehydra by the end of the year in time for GCC 4.5 release and my &#8220;Introducing Dehydra to the Developer World&#8221;-type talk at <a href="http://www.lca2010.org.nz/programme/schedule/view_talk/50151?day=thursday">LinuxConf.au.nz 2010</a>.</p>
-
-<p><strong>Startup</strong> I reduced my focus on startup speed at the moment to catch up on Dehydra. I plan to work on reducing xpconnect overhead during startup next, ie more of <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=512584">this bug</a>.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/17/">&larr; Older</a>
@@ -664,6 +681,10 @@ Rooter - British pronunciation of router. This is post describes the hardware in
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/05/09/how-amazon-ec2-got-15x-cheaper-in-6-months/">How Mozilla Amazon EC2 Usage Got 15X Cheaper in 6 Months</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/05/07/the-rise-and-fall-of-special-snowflake-infrastructure/">Demise of Special Snowflake Infrastructure</a>
       </li>
     
@@ -677,10 +698,6 @@ Rooter - British pronunciation of router. This is post describes the hardware in
     
       <li class="post">
         <a href="/blog/2013/11/20/new-role-developer-productivity/">New Role: Developer Productivity</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/08/28/telemetry-reboot/">Telemetry Reboot</a>
       </li>
     
   </ul>

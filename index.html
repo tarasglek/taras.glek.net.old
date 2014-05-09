@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="TLDR I&#8217;ve been running one of our Releng(C-I) teams since January. My specialty is to optimize $stuff at Mozilla. My team is full of like- &hellip;">
+  <meta name="description" content="I started getting familiar with Mozilla continuous integration infrastructure in September. I&#8217;ve been particularly focused on the cloud part of &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,68 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/05/09/how-amazon-ec2-got-15x-cheaper-in-6-months/">How Mozilla Amazon EC2 Usage Got 15X Cheaper in 6 Months</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-05-09T15:48:00-07:00" pubdate data-updated="true">May 9<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I started getting familiar with Mozilla continuous integration infrastructure in September. I&#8217;ve been particularly focused on the cloud part of that.</p>
+
+<p>Thinking was that Amazon can take care of buying, managing hw so we can focus on higher level workloads. In theory this allows us to move faster and possibly lets us do more with less people. We have a lot of improvements to make to our C-I process, API-driven nature of Amazon EC2 was the obvious way to iterate quickly.</p>
+
+<p>Our September Amazon bill was $136K. About $84K was that was spent on 150K hours of m3.xlarge virtual machines used for compilation. This did not feel cheap. We paid ondemand rates due to a combination of difficulty of forecasting the perfect mix of Amazon reserved instances and pain of getting over 1 million dollars for upfront reservations approved.
+Then the following happened:</p>
+
+<p><strong>September</strong>: $0.450/hour m3.xlarge was the most cost-effective instance Amazon had to offer.</p>
+
+<p><strong>October</strong>: I&#8217;m pushing for us to start using <a href="https://aws.amazon.com/ec2/purchasing-options/spot-instances/">spot</a> instances, as they seem to be 5x cheaper. Downside is that spot nodes get terminated by Amazon if there is insufficient capacity vs our bid price. Investigations into spot &amp; some work to switch starts. There is a lot of uncertainty about how often our jobs will get killed.</p>
+
+<p><strong>December</strong>: Amazon starts offering $0.300 c3.xlarge instances, but these require upgrading our ami images. Work to switch to c3.xlarge starts.</p>
+
+<p><strong>February</strong>: We start switching to c3.xlarge, pocketing a 33% ondemand reduction vs m3.xlarge. We also start running m3.xlarge on spot. We end up paying around $0.15 for the mix of c3/m3 nodes we are running on spot. Turns out Amazon spot bidding API does not try to pick the cheapest AvailabilityZone for us. We also see about 3-4% of our spot jobs get killed.</p>
+
+<p><strong>March</strong>: We switch the majority of our workload to spot, come up with a trivial spot bidding <a href="https://github.com/tarasglek/spotbidagent/">algo</a>. c3.xlarge now costs $0.068, but we can also bid on m3.xlarge, m3.2xlarge, c3.2xlarge depending on market prices. Our kill rates drop closer to 0.3%</p>
+
+<p><strong>April</strong>: Amazon spot prices drop by 50%, c3.xlarge/m3.xlarge now cost around $0.035. Amazon seems to have increased capacity, spot instances are almost never killed. There are still inefficiencies to deal with (EBS costs us as much as EC2), but cost is no longer our primary concern.</p>
+
+<p>In September, we paid for ~150,000 hours of m3.xlarge. In April we paid for 190,000(even though our builds got about 2x faster) hours of a mix of compilation-friendly instance types(4-8Xeon cores, 8-16GB of RAM). 190000hours/730.5hours-per-month=260machines. We have around to 100-400 Amazon builders operating at any given time depending on how many Mozilla developers are awake.</p>
+
+<p>This is interesting because $0.035 x 730.5hours = $25.57. According to the Dell website that&#8217;s identical to a 36month lease of a $900 quadcore Xeon server. At $0.035/hour we could still buy some types of hardware for less than we are paying to Amazon, but we&#8217;d have no money left to provision &amp; power the machines on.</p>
+
+<p>Releng engineers did a great job retrofitting our infra to save Mozilla money, it was nice of Amazon to help out by repeatedly droppping prices during the same period. I&#8217;m now confident that using Amazon spot instances is the most operationally efficient way to do C-I. I doubt Amazon will let us cut our price by 15x over 8month period again, but I hope they keep up the regular 30-50% price cuts :)</p>
+
+<p>Amazon cost explorer provides for a dramatic visualization:
+<img src="/assets/images/cost.png" alt="Our AWS bill" /></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -741,68 +803,6 @@ I would like to have spot workloads in public and private clouds. Try and fuzzin
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/03/25/snappy-number-53-faster-startup/">Snappy #53: Faster: Startup, Image Decoding, Touchpad Input. Smoother Animations</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-03-25T06:25:00-07:00" pubdate data-updated="true">Mar 25<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h3>Responsiveness</h3>
-
-<p>Joe Drew taught Firefox to decode images on multiple threads. It took a mere 29 patches in <a title="Multithreaded image decoding" href="https://bugzilla.mozilla.org/show_bug.cgi?id=716140">bug 716140</a>. This should speed up page-load and improve tab-switch times. This task was considered too hard a year ago when Snappy people were discussing potential improvements.</p>
-
-<p>Masayuki Nakano improved Firefox scrolling responsiveness on modern touchpads in <a title="Scrolling using some high-resolution-scroll aware touchpads feels slow" href="https://bugzilla.mozilla.org/show_bug.cgi?id=829952">bug 829952</a>. Dealing with scroll-events on Windows is a mess. It&#8217;s nice when we make forward progress in this area.</p>
-
-<p>Marco Bonardo fixed a mysterious cause of main thread IO I ran into in <a title="Avoid repeated execution of expensive daysOfHistory query" href="https://bugzilla.mozilla.org/show_bug.cgi?id=830423">bug 830423</a>. I ran into this issue because I compulsively navigate to <code>about:telemetry</code> in Firefox and look in &#8216;Slow SQL Statements&#8217; and &#8216;Browser Hang&#8217; sections. I encourage readers of this blog to check out that data whenever Firefox is under-performing.</p>
-
-<h3>Startup</h3>
-
-<p><a title="Use readahead for ordered jar files such as omni.ja. Should be ~10% startup speedup" href="https://bugzilla.mozilla.org/show_bug.cgi?id=810151">bug 810151</a> + <a title="Use fadvise() to speed up cookie db load" href="https://bugzilla.mozilla.org/show_bug.cgi?id=810454">bug 810454</a> - Aaron Klotz implemented omnijar + cookie readahead.</p>
-
-<p><a title="Fold NSPR and NSS into mozjs (for Windows) or libxul (for other platforms)" href="https://bugzilla.mozilla.org/show_bug.cgi?id=648407">bug 648407</a> - Mike Hommey folded libraries for faster startup. If I&#8217;m reading <a title="Update removed-files after bug 648407" href="https://bugzilla.mozilla.org/show_bug.cgi?id=852068">bug 852068</a> correctly, Firefox now loads 7 fewer libraries on startup. My rough rule of thumb is that each (small) file adds ~30ms to spinning-disk startup so this should net >200ms in startup savings.</p>
-
-<p>Cumulative startup improvements are notoriously difficult to predict + measure, but I suspect that above changes should make for a >=10% speedup in Firefox 22 start over previous releases. We&#8217;ll be watching telemetry data in the coming weeks.</p>
-
-<h3>Smoothness</h3>
-
-<p><a title="Consider getting rid of the delay line filter stuff in timer thread" href="https://bugzilla.mozilla.org/show_bug.cgi?id=590422">bug 590422</a> - Avi Halachmi is continuing on his quest to make Firefox animate smoothly. This is another tricky step towards smoother animations in Firefox. Since landing this, Avi already embarked on the next gecko-level animation smoothness improvement.</p>
-
-<p>Marco Bonardo spotted some potential for contention in recent DOM Local Storage optimizations. Vladan Djeric landed corrections in <a title="LocalStorage performance improvements" href="https://bugzilla.mozilla.org/show_bug.cgi?id=842852">bug 842852</a>.</p>
-
-<h3>Throughput improvements</h3>
-
-<p>Ehsan Akhgari reduced allocator contention in <a title="Prevent firing timers from lock contention with the main thread" href="https://bugzilla.mozilla.org/show_bug.cgi?id=733277">bug 733277</a>.</p>
-
-<p>Tim Taubert taught Firefox to warm up newtab connections on hover <a title="[New Tab Page] Speculatively open connections for sites when hovering them" href="https://bugzilla.mozilla.org/show_bug.cgi?id=790882">bug 790882</a></p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -818,6 +818,10 @@ I would like to have spot workloads in public and private clouds. Try and fuzzin
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/05/09/how-amazon-ec2-got-15x-cheaper-in-6-months/">How Mozilla Amazon EC2 Usage Got 15X Cheaper in 6 Months</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/05/07/the-rise-and-fall-of-special-snowflake-infrastructure/">Demise of Special Snowflake Infrastructure</a>
       </li>
     
@@ -831,10 +835,6 @@ I would like to have spot workloads in public and private clouds. Try and fuzzin
     
       <li class="post">
         <a href="/blog/2013/11/20/new-role-developer-productivity/">New Role: Developer Productivity</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/08/28/telemetry-reboot/">Telemetry Reboot</a>
       </li>
     
   </ul>

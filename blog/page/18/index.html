@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Lately I have been focusing on optimizing Fennec startup on a delightfully inadequate platform: Windows Mobile. More on fascinating startup, &hellip;">
+  <meta name="description" content="When I originally started at Mozilla, I only knew the people who interviewed me. But I quickly discovered beltzner when he uttered a sacrilegious &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,55 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/08/14/there-is-nothing-exciting-about-filesystems/">There Is Nothing Exciting About Filesystems</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-08-14T07:22:22-07:00" pubdate data-updated="true">Aug 14<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>When I originally started at Mozilla, I only knew the people who interviewed me. But I quickly discovered beltzner when he uttered a sacrilegious statement that went something like: &#8220;&#8230;.. nothing could be as boring as filesystems&#8230;.&#8221;. Mike Beltzner is one of my favourite characters at Mozilla for his ability to speak his mind, but this quote has troubled me greatly. How can one not care about filesystems? Linux&#8217;s ability to do file stuff efficiently makes it magnitudes faster than other operating systems. Plan 9&#8217;s file-system-centric layout proved that OSes don&#8217;t have to consist of a series of poorly named and categorized system calls. In fact, a clean file layout allows many awesome optimizations. ZFS is one of the few things keeping Solaris relevant. HFS+ is one of the things keeping OSX from being fast.</p>
+
+<p>Being a Linux user, I was disappointed by the pointlessness of optimizing application IO. Sure we inefficiently open tons of files on startup, sure we hit the filesystem 10-100x more than we could, why would one optimize when there when there is no more than a few percent of startup being take up by terrible io patterns?</p>
+
+<p><strong>Excitingly Crappy Filesystems</strong></p>
+
+<p>Luckily Firefox runs on OSX and we are making it run on WinCE. I was delighted to discover that on wince* we paid 1-5ms per file existence check, modification date, size, etc. I was shocked to see that the throughput while reading certain files could be expressed in bytes per second (most crappy flash media seems to be able to pull in >1mb/s).  This brought upon switching our<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=504864"> jar io to mmap</a>, <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=468011">amalgamating</a> jar files, moving more <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=508421">files into jars</a>, etc. I&#8217;ll blog about the details later. My basic idea is that we can utilize jar files as &#8220;controlled filesystem environments&#8221; to deal with having to run on crappy OSes with exceptionally bad filesystems. OSes such as OSX where file IO is barely faster than that of a WinCE phone.</p>
+
+<p>Beltzner, wouldn&#8217;t it be exciting if OSes like Mac OSX had file systems worth being excited about?</p>
+
+<ul>
+<li>MS likes to use puns for their product names</li>
+</ul>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -550,56 +599,6 @@ if (requestAnimationFrame)
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/05/14/gcc-45-dehydra-is-a-go-and-other-updates/">GCC 4.5 + Dehydra Is a Go and Other Updates</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-05-14T14:06:59-07:00" pubdate data-updated="true">May 14<span>th</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I finally landed the remaining GCC patches needed to get a useful <a href="https://developer.mozilla.org/En/Dehydra">Dehydra</a> without any of that gcc-patching pain!</p>
-
-<p>This week I also got some nice contributions from a contributor with a masterplan.</p>
-
-<p>Overall I expect cool things to happen once GCC 4.5 ships with plugin support. It&#8217;ll open up a jar of whoopass like C++ has not seen before.</p>
-
-<p><strong>Dehydra Docs</strong></p>
-
-<p>Benjamin redid the <a href="http://benjamin.smedbergs.us/blog/">Dehydra</a> documentation, it should be easier than ever to get started.</p>
-
-<p><strong>Static Analysis in Mozilla</strong></p>
-
-<p>Slowly but surely we are gathering static analysis momentum. More and more developers are pausing and thinking &#8220;I need to make sure this code has an analysis to go with it because there is no way I can prove it correct, time to write a <a href="https://developer.mozilla.org/en/Treehydra">Treehydra</a> script&#8230;or ask someone else to make one for me&#8221;. This mindset is important for being able to introduce complex changes in a controlled manner.</p>
-
-<p>On the refactoring side, things are held up a little by API compatibility. Perhaps multi-process stuff will shake things up. However, nothing can hold <a href="https://blog.mozilla.org/cjones/">Chris</a> up from letting his piglet/porky gremlins chew through locking code.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/19/">&larr; Older</a>
@@ -617,6 +616,10 @@ if (requestAnimationFrame)
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/05/09/how-amazon-ec2-got-15x-cheaper-in-6-months/">How Mozilla Amazon EC2 Usage Got 15X Cheaper in 6 Months</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/05/07/the-rise-and-fall-of-special-snowflake-infrastructure/">Demise of Special Snowflake Infrastructure</a>
       </li>
     
@@ -630,10 +633,6 @@ if (requestAnimationFrame)
     
       <li class="post">
         <a href="/blog/2013/11/20/new-role-developer-productivity/">New Role: Developer Productivity</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/08/28/telemetry-reboot/">Telemetry Reboot</a>
       </li>
     
   </ul>

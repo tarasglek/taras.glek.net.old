@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Telemetry is a way to gather stats about Firefox. Currently histograms are the main mechanism by which to gather data. There are 3 histogram types &hellip;">
+  <meta name="description" content="Telemetry went live in Firefox Nightly builds over the weekend. Everyone who wants to contribute to making Firefox better now has an easy new way: &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,46 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/06/27/telemetry-is-on-in-nightly-firefox-builds/">Telemetry Is on in Nightly Firefox Builds</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-06-27T04:26:12-07:00" pubdate data-updated="true">Jun 27<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Telemetry went live in Firefox Nightly builds over the weekend. Everyone who wants to contribute to making Firefox better now has an easy new way: opt-in to telemetry. There are two ways to opt in: A) Click yes when prompted to report performance B) Enable it by going to Options/Preferences, then Advanced/General tab</p>
+
+<p><a href="/assets/images/2011-06-27-telemetry-is-on-in-nightly-firefox-builds/Optimized-out.jpg"><img src="/assets/images/2011-06-27-telemetry-is-on-in-nightly-firefox-builds/Optimized-out.jpg" alt="" /></a></p>
+
+<p>You can check on the data collected by installing my <a href="https://addons.mozilla.org/en-US/firefox/addon/abouttelemetry/">about:telemetry</a> extension.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -532,48 +572,6 @@ This has been on a long quest, but I finally have my phone mounted on my bike th
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011/02/09/magic-patch-that-doubles-windows-startup/">Magic Patch That Halves Windows Startup</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-02-09T08:38:38-08:00" pubdate data-updated="true">Feb 9<span>th</span>, 2011</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Internet as of late have been obsessing over magically short patches that improve performance _ times(probably as a result of LKML cgroups patch from a few weeks ago). So my work in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=627591">bug 627591</a> got picked up in all kinds of news sources(mostly due to @limi&#8217;s <a href="http://twitter.com/#!/limi/status/28983240966541312">manlove</a>). Apparently all that internet fame is good for is getting script-kiddies to upload viruses as bugzilla attachments. Dear Internet, please do not interrupt me in the middle of an investigation.</p>
-
-<p>To crux of the optimization lies in trading waiting for random io for fast sequential IO. Turned out that my patch worked great if windows prefetch wasn&#8217;t trying to help (ie firefox ran faster without prefetch on my test systems). With prefetch on, the patch was either a smaller win or a downright loss. When I dug in deeper, it turned that the Windows Prefetch helpfully spends 3-6 seconds doing IO before any Firefox code gets to run. It also doesn&#8217;t read in a very clever pattern, resulting in a very small speed up for Firefox, but preventing my exciting optimization.</p>
-
-<p>So I curled up into my defeated fetal position and pondered on how would I prevent Windows Prefetch from being so &#8220;helpful&#8221;. One way would be to <a href="http://taras.glek.net/blog/2010/10/04/diagnosing-slow-startup/">install</a> some crapware to cripple prefetch (kidding!), another way is to do the sequential IO in a separate executable(ala<a href="http://glandium.org/blog/?p=1719"> run-mozilla.sh</a> on Unix). This way Windows doesn&#8217;t try to do insane amounts of IO before my preloading logic gets to run. This seems to work (see wrapper.exe talk in the bug) and has potential to double Firefox startup times. It&#8217;s also ugly as sin, but if that&#8217;s what it takes&#8230;</p>
-
-<p>So now I need more reports to make sure the executable wrapper approach reliably/significantly speeds up cold(post-reboot) startup. Then we can make a decision on how to integrate this into Firefox. But until we have all the data, please don&#8217;t jump to conclusions on what will and wont make Firefox 2x faster.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/13/">&larr; Older</a>
@@ -591,6 +589,10 @@ This has been on a long quest, but I finally have my phone mounted on my bike th
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/05/09/how-amazon-ec2-got-15x-cheaper-in-6-months/">How Mozilla Amazon EC2 Usage Got 15X Cheaper in 6 Months</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/05/07/the-rise-and-fall-of-special-snowflake-infrastructure/">Demise of Special Snowflake Infrastructure</a>
       </li>
     
@@ -604,10 +606,6 @@ This has been on a long quest, but I finally have my phone mounted on my bike th
     
       <li class="post">
         <a href="/blog/2013/11/20/new-role-developer-productivity/">New Role: Developer Productivity</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/08/28/telemetry-reboot/">Telemetry Reboot</a>
       </li>
     
   </ul>

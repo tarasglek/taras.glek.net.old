@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Magic of GCC PGO On Friday I finally got gold to produce a prelinkable static binary(bug). I also got around to trying out GCC profile-guided- &hellip;">
+  <meta name="description" content="Last week I learned about how Windows handles page faults backed by files (specifically xul.dll). I already knew that Linux was suboptimal in this &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,71 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/04/19/windows-sucks-at-memory-mapped-io-during-startup/">Windows Sucks at Memory-Mapped IO During Startup</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-04-19T07:00:00-07:00" pubdate data-updated="true">Apr 19<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Last week I learned about how Windows handles page faults backed by files (specifically xul.dll). I already knew that Linux was <a href="http://taras.glek.net/blog/2010/04/12/squeezing-every-last-bit-of-performance-out-of-the-linux-toolchain/">suboptimal</a> in this area, perhaps the clever people at Redmond did better.</p>
+
+<p>Shaver pointed me at <a href="https://developer.mozilla.org/En/Profiling_with_Xperf">xperf</a>, which is sort of like the new Linux perf tools. Xperf rocks in that it can capture the relevant data and it can export it as .csv.</p>
+
+<p>Even with profile-guided-optimization Windows causes 3x as much IO in xul.dll than linux does on libxul.so. That&#8217;s especially interesting given that xul.dll is one-third smaller on Windows. Here is the <a href="http://people.mozilla.com/~tglek/startup/systemtap_graphs/visualize.html?#../win7/noprefetch.csv.html">graph</a>. PGO isn&#8217;t helping on Windows as much as it can help on Linux because MSVC PGO doesn&#8217;t do the equivalent of GCC&#8217;s -freorder-blocks-and-partition (unless I missed something in the docs).</p>
+
+<p>With the Windows <a href="http://en.wikipedia.org/wiki/Prefetcher">prefetcher</a>, there were 4x less xul.dll IOs (graph <a href="http://people.mozilla.com/~tglek/startup/systemtap_graphs/visualize.html?#../win7/prefetch.csv.html">here</a>). Unfortunately, the prefetcher can&#8217;t figure out that the whole xul.dll should be paged in and we still end up with an excess of random IO.</p>
+
+<p><strong>Why?</strong></p>
+
+<p>When a page fault occurs, Windows goes to read the page from the file and reads a little extra (just like any other sane OS) assuming that there will be more IO nearby. Unfortunately the gods of virtual memory at Microsoft decided that for every page fault, only 7 extra pages should read. So reads occur in 32K chunks (vs 128K in Linux, which is still too small). To make matters worse, segments mapped in as data only read in 3 extra pages (ie 16K chunks).</p>
+
+<p>This is funny in a sad way. Reading in 32K chunks is supposed to minimize ram usage (which makes no bloody sense when Win7 officially requires 1GB of RAM). As a result of being so thrifty on easy-to-evict file cache, windows ends up doing 4x as much file IO as Linux. The 16K reads are particularly funny as one can see the result of that misoptimization in the string of puny reads on the top right of the graphs.</p>
+
+<p><strong>Surely There is an API like madvise()</strong> On Posix systems madvise() can be used to influence the caching behavior of the OS. fadvise() is another such call for IO based on filehandles. For example, Firefox fastload files are now madvise()ed such that they are read in a single 2mb chunk on startup. Unfortunately, it appears that Windows has no such APIs so one is stuck with pathetically small reads.</p>
+
+<p>At first, I thought that, passing FILE_FLAG_SEQUENTIAL_SCAN when opening the file handle will work like a crappy fadvise()-equivalent. Turns out that mmaping files completely bypasses the Windows Cache Manager, so that flag just gets ignored.</p>
+
+<p>So as far as I can tell the only way to convince Windows to not read stuff in stupidly small chunks is to mmap() everything we care about using large pages. Unfortunately that comes with some significant costs.</p>
+
+<p>We are going to try to <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=553721">order</a> the binaries better which should halve the amount of page faults.</p>
+
+<p><strong>Can Windows Do Anything Better?</strong></p>
+
+<p>Yes. The &#8220;Unix way&#8221; of breaking up everything into a billion libraries and configuration files results in 10x more files being read on startup on Linux vs Windows. Just because Linux can read individual libraries 4x faster, doesn&#8217;t mean that IO becomes free.</p>
+
+<p>Presently, in ideal conditions, Firefox starts up 30-50% faster on Windows. The Windows Prefetcher hack sweeps a lot of Windows suck under the carpet, but Microsoft has a lot of room for improvement.</p>
+
+<p><strong>Update:</strong><br/>
+People seem to prefer to comment on <a href="http://www.reddit.com/r/programming/comments/bu2do/windows_sucks_at_memorymapped_io_during_startup/">reddit</a>. If you want me to not miss your comment, make sure you comment here.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -704,65 +769,6 @@ Note that this is a developer blog, so by &#8220;remedies&#8221; I meant &#8220;
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2010/03/05/mirror-mirror-on-the-wall-why-is-my-binary-slow/">Mirror, Mirror on the Wall, Why Is My Binary Slow?</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-03-05T09:48:25-08:00" pubdate data-updated="true">Mar 5<span>th</span>, 2010</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>In an <a href="http://taras.glek.net/blog/2010/02/19/teaching-ld-to-optimize-binaries-for-startup/">earlier</a> post I described my Fiji hack: how to use some nasty instrumentation to spit out ld scripts to speed up cold startup. This week I tried to extract more data out of the binary to lay it out even better. Trouble is that even if one lays out functions perfectly, they load data for things like variable initializers which will cause more IO.</p>
-
-<p>A very clever friend suggested that I can write a valgrind plugin that can detect data accesses and function access and write the linker input files in one step. So with much hand-holding I hacked a sample valgrind plugin to do what I <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=549749">want</a>. Unfortunately, my binaries ended up not being significantly faster(if at all) than the Fiji ones. They also ended up 20% bigger.</p>
-
-<p>Fortunately, the GCC devs were able to point out my linker mistakes and pointed me at a <a href="http://sourceware.org/ml/binutils/2010-03/msg00050.html">linker patch</a> that does what I want without linker scripts(and has less binary-bloating side-effects). Unfortunately, that just confirmed that the speedup I was looking for wasn&#8217;t hiding behind data symbols. So I am going to have to sit down with my <a href="http://taras.glek.net/blog/2009/10/23/studying-library-io-systemtap-style/">io tracing script </a>and study what the heck is going on.</p>
-
-<p><strong>Cool Things I Learned</strong></p>
-
-<p>In the process of helping me, GCC people namedropped some compiler flags that may prove very helpful:</p>
-
-<ul>
-<li>-freorder-blocks-and-partition: Apparently this breaks up functions into hot/cold parts and gives them different section names so they can be moved around at link time.</li>
-<li>-fno-common, -fno-zero-initialized-in-bss should go well with my favourites: -ffunction-sections -fdata-sections
-Additionally, it may be possible to benefit from linking with large page support. I have some doubts about that.</li>
-</ul>
-
-
-<p>I did learn about some cool GNU Gold flags:</p>
-
-<ul>
-<li>&#8211;compress-debug-sections=zlib: Most of the overhead of linking a development libxul.so is writing out a near gig of debug data</li>
-<li>&#8211;icf: Identical code folding, I think that matches the deduplication feature found in the ms linker. Saves 5% on my libxul.so</li>
-</ul>
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/16/">&larr; Older</a>
@@ -780,6 +786,10 @@ Additionally, it may be possible to benefit from linking with large page support
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/05/09/how-amazon-ec2-got-15x-cheaper-in-6-months/">How Mozilla Amazon EC2 Usage Got 15X Cheaper in 6 Months</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/05/07/the-rise-and-fall-of-special-snowflake-infrastructure/">Demise of Special Snowflake Infrastructure</a>
       </li>
     
@@ -793,10 +803,6 @@ Additionally, it may be possible to benefit from linking with large page support
     
       <li class="post">
         <a href="/blog/2013/11/20/new-role-developer-productivity/">New Role: Developer Productivity</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/08/28/telemetry-reboot/">Telemetry Reboot</a>
       </li>
     
   </ul>

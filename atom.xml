@@ -4,7 +4,7 @@
   <title><![CDATA[All About Performance]]></title>
   <link href="http://taras.glek.net/atom.xml" rel="self"/>
   <link href="http://taras.glek.net/"/>
-  <updated>2014-05-07T17:13:47-07:00</updated>
+  <updated>2014-05-09T16:04:44-07:00</updated>
   <id>http://taras.glek.net/</id>
   <author>
     <name><![CDATA[Taras Glek]]></name>
@@ -12,6 +12,41 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[How Mozilla Amazon EC2 Usage Got 15X Cheaper in 6 Months]]></title>
+    <link href="http://taras.glek.net/blog/2014/05/09/how-amazon-ec2-got-15x-cheaper-in-6-months/"/>
+    <updated>2014-05-09T15:48:00-07:00</updated>
+    <id>http://taras.glek.net/blog/2014/05/09/how-amazon-ec2-got-15x-cheaper-in-6-months</id>
+    <content type="html"><![CDATA[<p>I started getting familiar with Mozilla continuous integration infrastructure in September. I&#8217;ve been particularly focused on the cloud part of that.</p>
+
+<p>Thinking was that Amazon can take care of buying, managing hw so we can focus on higher level workloads. In theory this allows us to move faster and possibly lets us do more with less people. We have a lot of improvements to make to our C-I process, API-driven nature of Amazon EC2 was the obvious way to iterate quickly.</p>
+
+<p>Our September Amazon bill was $136K. About $84K was that was spent on 150K hours of m3.xlarge virtual machines used for compilation. This did not feel cheap. We paid ondemand rates due to a combination of difficulty of forecasting the perfect mix of Amazon reserved instances and pain of getting over 1 million dollars for upfront reservations approved.
+Then the following happened:</p>
+
+<p><strong>September</strong>: $0.450/hour m3.xlarge was the most cost-effective instance Amazon had to offer.</p>
+
+<p><strong>October</strong>: I&#8217;m pushing for us to start using <a href="https://aws.amazon.com/ec2/purchasing-options/spot-instances/">spot</a> instances, as they seem to be 5x cheaper. Downside is that spot nodes get terminated by Amazon if there is insufficient capacity vs our bid price. Investigations into spot &amp; some work to switch starts. There is a lot of uncertainty about how often our jobs will get killed.</p>
+
+<p><strong>December</strong>: Amazon starts offering $0.300 c3.xlarge instances, but these require upgrading our ami images. Work to switch to c3.xlarge starts.</p>
+
+<p><strong>February</strong>: We start switching to c3.xlarge, pocketing a 33% ondemand reduction vs m3.xlarge. We also start running m3.xlarge on spot. We end up paying around $0.15 for the mix of c3/m3 nodes we are running on spot. Turns out Amazon spot bidding API does not try to pick the cheapest AvailabilityZone for us. We also see about 3-4% of our spot jobs get killed.</p>
+
+<p><strong>March</strong>: We switch the majority of our workload to spot, come up with a trivial spot bidding <a href="https://github.com/tarasglek/spotbidagent/">algo</a>. c3.xlarge now costs $0.068, but we can also bid on m3.xlarge, m3.2xlarge, c3.2xlarge depending on market prices. Our kill rates drop closer to 0.3%</p>
+
+<p><strong>April</strong>: Amazon spot prices drop by 50%, c3.xlarge/m3.xlarge now cost around $0.035. Amazon seems to have increased capacity, spot instances are almost never killed. There are still inefficiencies to deal with (EBS costs us as much as EC2), but cost is no longer our primary concern.</p>
+
+<p>In September, we paid for ~150,000 hours of m3.xlarge. In April we paid for 190,000(even though our builds got about 2x faster) hours of a mix of compilation-friendly instance types(4-8Xeon cores, 8-16GB of RAM). 190000hours/730.5hours-per-month=260machines. We have around to 100-400 Amazon builders operating at any given time depending on how many Mozilla developers are awake.</p>
+
+<p>This is interesting because $0.035 x 730.5hours = $25.57. According to the Dell website that&#8217;s identical to a 36month lease of a $900 quadcore Xeon server. At $0.035/hour we could still buy some types of hardware for less than we are paying to Amazon, but we&#8217;d have no money left to provision &amp; power the machines on.</p>
+
+<p>Releng engineers did a great job retrofitting our infra to save Mozilla money, it was nice of Amazon to help out by repeatedly droppping prices during the same period. I&#8217;m now confident that using Amazon spot instances is the most operationally efficient way to do C-I. I doubt Amazon will let us cut our price by 15x over 8month period again, but I hope they keep up the regular 30-50% price cuts :)</p>
+
+<p>Amazon cost explorer provides for a dramatic visualization:
+<img src="http://taras.glek.net/assets/images/cost.png" alt="Our AWS bill" /></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Demise of Special Snowflake Infrastructure]]></title>
@@ -690,40 +725,6 @@ Omnijar readhead is next, in <a title="Use readahead for ordered jar files such 
 
 <blockquote><p>&#8230; the profiler will watch your browser for any performance hiccups and will automatically send a detailed bug report for the Performance team to fix!</p><footer><strong>Benoit Girard</strong> <cite><a href='http://benoitgirard.wordpress.com/2013/01/18/is-your-shutdown-slow-turn-on-the-performance-reporter/'>benoitgirard.wordpress.com/2013/&hellip;</a></cite></footer></blockquote>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Snappy #48: Now With Faster Shutdown]]></title>
-    <link href="http://taras.glek.net/blog/2013/01/10/snappy-number-48-now-with-faster-shutdown/"/>
-    <updated>2013-01-10T16:53:00-08:00</updated>
-    <id>http://taras.glek.net/blog/2013/01/10/snappy-number-48-now-with-faster-shutdown</id>
-    <content type="html"><![CDATA[<h3>Huge Shutdown Improvement</h3>
-
-<p>After a couple weeks worth of telemetry data confirmed that Olli Pettay sped up shutdown by an epic >=30%: <a title="Don't run CC during shutdown" href="https://bugzilla.mozilla.org/show_bug.cgi?id=818739">bug 818739</a>, <a href="http://tinyurl.com/abo6uek">telemetry link</a>.</p>
-
-<h3>Memory Management</h3>
-
-<p>Olli and Andrew McCreight continued with reducing CC pauses:</p>
-
-<ul>
-<li><a title="Try to postpone triggering CC if we're in middle of GC handling" href="https://bugzilla.mozilla.org/show_bug.cgi?id=820378">bug 820378</a>: Delay CC if we&#8217;re in the middle of a GC, to allow async CC prep</li>
-<li><a title="Improve CanSkipWrappedJS" href="https://bugzilla.mozilla.org/show_bug.cgi?id=827471">bug 827471</a>: Remove more wrapped JS from the CC graph</li>
-<li><a title="[CC] don't add JSContexts that have no children to the cycle collector graph" href="https://bugzilla.mozilla.org/show_bug.cgi?id=705371">bug 705371</a>: Remove pointless JSContexts from the CC graph</li>
-<li><a title="Mark the script of live nsXULPrototypeScript black during GC" href="https://bugzilla.mozilla.org/show_bug.cgi?id=785493">bug 785493</a>: Reduce size of steady state cycle collector graph by about 80%</li>
-<li><a title="Add telemetry for prep work done for cycle collection" href="https://bugzilla.mozilla.org/show_bug.cgi?id=821371">bug 821371</a>: Include prep work in cycle collector pause time telemetry</li>
-</ul>
-
-
-<h3>Misc</h3>
-
-<p>Vladan landed <a title="Move LocalStorage writes off the main thread" href="https://bugzilla.mozilla.org/show_bug.cgi?id=807021">bug 807021</a>. Firefox should now handle DOM Local Storage writes without janking.</p>
-
-<h3>Startup</h3>
-
-<p>David Teller made search service metadata loading/migration async: <a title="nsIBrowserSearchService should load metadata asynchronously" href="https://bugzilla.mozilla.org/show_bug.cgi?id=760036">bug 760036</a>. David also made session-store loading async: <a title="session file should be read on a background thread" href="https://bugzilla.mozilla.org/show_bug.cgi?id=532150">bug 532150</a>.</p>
-
-<p>Aaron Klotz landed a telemetry probe to measure how often the &#8216;Firefox is running but not responding&#8217; dialog is encountered on attempted startup: <a title="telemetry on what proportion of attempted firefox startups result in 'firefox is running and not responding'" href="https://bugzilla.mozilla.org/show_bug.cgi?id=815418">bug 815418</a>. This will help us decide on whether (or when) to add functionality to kill unresponsive Firefox instances.</p>
 ]]></content>
   </entry>
   

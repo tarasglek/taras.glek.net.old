@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="How well are you packing your structs? Arpad asked that question with an awesome Dehydra script and came up with an interesting list. GCC 4.3.3 Is &hellip;">
+  <meta name="description" content="I finally landed the remaining GCC patches needed to get a useful Dehydra without any of that gcc-patching pain! This week I also got some nice &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,56 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/05/14/gcc-45-dehydra-is-a-go-and-other-updates/">GCC 4.5 + Dehydra Is a Go and Other Updates</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-05-14T14:06:59-07:00" pubdate data-updated="true">May 14<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I finally landed the remaining GCC patches needed to get a useful <a href="https://developer.mozilla.org/En/Dehydra">Dehydra</a> without any of that gcc-patching pain!</p>
+
+<p>This week I also got some nice contributions from a contributor with a masterplan.</p>
+
+<p>Overall I expect cool things to happen once GCC 4.5 ships with plugin support. It&#8217;ll open up a jar of whoopass like C++ has not seen before.</p>
+
+<p><strong>Dehydra Docs</strong></p>
+
+<p>Benjamin redid the <a href="http://benjamin.smedbergs.us/blog/">Dehydra</a> documentation, it should be easier than ever to get started.</p>
+
+<p><strong>Static Analysis in Mozilla</strong></p>
+
+<p>Slowly but surely we are gathering static analysis momentum. More and more developers are pausing and thinking &#8220;I need to make sure this code has an analysis to go with it because there is no way I can prove it correct, time to write a <a href="https://developer.mozilla.org/en/Treehydra">Treehydra</a> script&#8230;or ask someone else to make one for me&#8221;. This mindset is important for being able to introduce complex changes in a controlled manner.</p>
+
+<p>On the refactoring side, things are held up a little by API compatibility. Perhaps multi-process stuff will shake things up. However, nothing can hold <a href="https://blog.mozilla.org/cjones/">Chris</a> up from letting his piglet/porky gremlins chew through locking code.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -522,48 +572,6 @@ For any questions regarding Pork feel free to post on the <a href="https://lists
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/01/27/gcc-plugins-are-a-go/">GCC Plugins Are a Go!</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-01-27T08:38:35-08:00" pubdate data-updated="true">Jan 27<span>th</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>The nice folks at FSF <a href="http://gcc.gnu.org/ml/gcc-announce/2009/msg00000.html">allowed</a> GCC have plugins. In a couple of GCC releases, Dehydra(4.5 if we are lucky) will work with distribution GCCs. Of course the API is yet to be decided on, but we have been coordinating with authors of other GCC plugin efforts to ensure that the final API meets reasonable needs.</p>
-
-<p>In the future enabling static analysis checks will involve little more than specifying &#8211;with-static-checking in your Mozilla build!</p>
-
-<p><strong>JSHydra</strong></p>
-
-<p>The other breakthrough news is that Joshua Cranmer has been working on hooking up a *hydra style API to the Spidermonkey parser. This resulted in <a href="http://quetzalcoatal.blogspot.com/2009/01/jshydra.html">JSHydra</a>. Ability to look into JavaScript has been sorely missing from our stack, so this is extremely exciting.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/20/">&larr; Older</a>
@@ -581,6 +589,10 @@ For any questions regarding Pork feel free to post on the <a href="https://lists
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/05/09/how-amazon-ec2-got-15x-cheaper-in-6-months/">How Mozilla Amazon EC2 Usage Got 15X Cheaper in 6 Months</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/05/07/the-rise-and-fall-of-special-snowflake-infrastructure/">Demise of Special Snowflake Infrastructure</a>
       </li>
     
@@ -594,10 +606,6 @@ For any questions regarding Pork feel free to post on the <a href="https://lists
     
       <li class="post">
         <a href="/blog/2013/11/20/new-role-developer-productivity/">New Role: Developer Productivity</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/08/28/telemetry-reboot/">Telemetry Reboot</a>
       </li>
     
   </ul>

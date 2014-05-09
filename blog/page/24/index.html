@@ -9,7 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="Over at LWN there is an article on GCC plugins. It touches onto how it would be useful to implement static analysis tools as GCC plugins. It does not &hellip;">
+  <meta name="description" content="My previous post on outparam rewriting described the wealth of functions that can be rewritten. Unfortunately, most functions in Mozilla are declared &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,6 +89,70 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2007/12/05/exceptional-circumstances/">Exceptional Circumstances</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-12-05T06:23:38-08:00" pubdate data-updated="true">Dec 5<span>th</span>, 2007</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>My previous post on outparam rewriting <a href="http://taras.glek.net/blog/2007/11/28/volume-of-refactoring-ahead/">described</a> the wealth of functions that can be rewritten. Unfortunately, most functions in Mozilla are declared in XPIDL interfaces.</p>
+
+<p>I have been convinced that my plan to rewrite xpidlgen to avoid outparameters wont be possible because most XPIDLinterfaces can be implemented by JavaScript in a few different ways. That is problematic because in addition to return values, JavaScript can also have an exception thrown at any point and have that converted to an nsresult error code by XPConnect. That means that the getters implemented in JavaScript are not in the set of functions that only return NS_OK+outparam/someerror. I wouldn&#8217;t be at all disappointed if someone proved me wrong here.</p>
+
+<p><strong>nsexception</strong></p>
+
+<p>There is one other way to rid the code of outparameters (including getter_AddRefs and friends). Time to face my greatest reluctance: rewriting Mozilla to use exceptions. Brendan has been talking about it for a long time, but I have been skeptical until now, mostly due to the complexity of rewriting that much code. However, I have more confidence in rewriting huge amounts of code now since the XPCOMGC rewrite which touched most functions in Mozilla without too much trouble (in relative terms).</p>
+
+<p><strong>Motivation</strong></p>
+
+<p>There are some obvious benefits to be gained from switching to exceptions other than a reduction in code-size (and footprint?) and having code that looks more like common C++.</p>
+
+<p>We would like to modify tamarin to use C++ exceptions such that an exception thrown from JavaScript would unroll the mixed C++/JS stack. This would simplify and enable significant optimizations for XPConnect.</p>
+
+<p>I am dreaming of JITed marshaling code for C++->JS calls and having a low level FFI interface(ie being able to call most C/C++ methods <a href="http://starkravingfinkle.org/blog/2007/09/hello-js-ctypes-goodbye-binary-components/">directly</a>) on the JavaScript side such that tracing JIT could automatically optimize common XPConnect calls. This an exciting area and there are lots of details to be worked out, so I&#8217;d love to see some feedback (or better yet proof of concept code!) on this.</p>
+
+<p><strong>The Plan</strong> - Rewriting</p>
+
+<p>I have started implementing thrower (I am not a great namer), a tool for converting various code patterns involving nsresult into something that uses an nsexception wrapper.</p>
+
+<p>Since this rewrite requires a lot more scanning for code patterns I added an elsa feature to allow pattern matching on AST nodes in C++ (also using exceptions). Since there are lot of patterns to transform, for documentation I will be writing many minimal testcases documenting(and testing) exactly what gets rewritten. Any interested parties are welcome to contribute Mozilla error handling patterns as testcases.</p>
+
+<p><strong>Verifying the Result </strong></p>
+
+<p>Just like in the XPCOMGC rewrite, code will have to be scanned to verify that it fits in the &#8220;new world order&#8221;. Unlike XPCOMGC, there are additional flow-sensitive issues to scan for to ensure that the code is thread-safe. The scans are at a lower level than dehydra currently works at, so it&#8217;s a perfect opportunity to either extend dehydra or write the new tool.</p>
+
+<p>It would be especially cool to implement the code analysis tool as a <a href="http://taras.glek.net/blog/2007/11/29/gcc-plugins-under-my-xmas-tree/">gcc plugin</a>.  Sean Callanan&#8217;s &#8220;Extending GCC with Modular GIMPLE Optimizations&#8221; paper in the <a href="http://ols2006.108.redhat.com/2007/GCC-Reprints/GCC2007-Proceedings.pdf">GCC summit proceedings</a> should be an excellent starting point.</p>
+
+<p>This is an exciting experiment. I look forward to reducing speculation on the risks/benefits of switching the codebase to use exceptions with some concrete data.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -602,98 +666,6 @@ Checks 2 and 3 require the complete class hierachy of Mozilla so I finally made 
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2007/09/10/automatic-decomtamination-roadmap-for-automated-refactorings/">Automatic DeCOMtamination: Roadmap for Automated Refactorings</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2007-09-10T11:26:36-07:00" pubdate data-updated="true">Sep 10<span>th</span>, 2007</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>This is an update on the ongoing <a href="http://wiki.mozilla.org/Gecko:DeCOMtamination">deCOMtamination</a> work from the automated rewriting perspective. I think it&#8217;s pretty exciting that Mozilla is the first large-scale C++ project to attempt automated large scale source code cleanups and optimizations. I think the tools are finally getting mature enough for the job.</p>
-
-<p>The downside is that there isn&#8217;t a published roadmap of what we are planning to achieve with deCOMtamination as we are still in the planning stages. The upside is that there is still time for any interested parties to think up the next great improvement on how things are done, <a href="http://taras.glek.net/blog/2007/07/13/dehydra-prcheck-squash-in-mercurial/">checkout</a> the refactoring toolchain and either extend an existing tool or implement a new one.</p>
-
-<p>Below is a list of things that I plan to have working in the near future. The idea is to try to implement various optimizations that would be impractical(or impossible?) to do manually and see if they yield the expected performance and code quality benefits.</p>
-
-<p><strong>Step 1: Outparam Elimination</strong></p>
-
-<p>QueryInterface() and other ok/fail methods have a redundant nsresult value which can be eliminated without changing any logic in the code. The QueryInterface() rewrite is my first serious tree-wide refactoring attempt. QueryInterface() is probably the most well known and frequently-used method within Mozilla. It also one of the most CPP-encumbered methods in the tree, so it made for a good test of my CPP-aware elsa work.</p>
-
-<p>The <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=391275">getting code to compile</a> phase is over. Currently Benjamin is working on getting the modified code to run which requires XPConnect changes, debugging the manually-rewritten macros and verifying that the generated patch is correct.</p>
-
-<p>The next step will be to eliminate local nsresult variables in the callees when they are used to store &amp; check return values of QueryInteface(). This is basically a make-resulting-source-look-prettier optimization.</p>
-
-<p>I hope to measure a speed-up and slight footprint decrease with the new QueryInterface call.</p>
-
-<p><strong>Step 2: Try Mozilla Without Reference Counting?</strong></p>
-
-<p>In my mind the most exciting part of Moz2 is Tamarin. Few things are cooler than an elegant JIT VM.</p>
-
-<p>Tamarin comes with a modern <a href="http://developer.mozilla.org/en/docs/MMgc">garbage collector</a>.</p>
-
-<p>The goal of this rewrite is to aid <a href="http://blog.mozilla.org/jorendorff/">Jason</a> and <a href="http://benjamin.smedbergs.us/">Benjamin</a> with switching XPCOM from reference counting to garbage collection. This might end up in gigantic patches to rid the stack of nsCOMPtr objects. This might be hard as it will be affecting a lot of code and might reveal more shortcomings in <a href="http://taras.glek.net/blog/2007/08/30/pork-the-brave-new-world/">my version</a> of elsa and MCPP. <a href="http://wiki.mozilla.org/XPCOMGC">Details</a> are in the wiki.</p>
-
-<p><strong>Step 3: Try C++ Exceptions</strong></p>
-
-<p>This is the most ambitious rewrite I know of for Mozilla 2. It&#8217;s similar to step 1 in that the goal is to eliminate outparameters and nsresult error codes, except in this case it would happen for all functions. Brendan <a href="http://weblogs.mozillazine.org/roadmap/archives/2006/02/fresh_xpcom_thinking.html">mentioned</a> this is in his blog.</p>
-
-<p>The idea is that exceptions in Mozilla happen in exceptional circumstances, thus most of the time the return value will be NS_OK and the outparameter will have something valid in it. So we should rewrite all methods that return nsresult to return the outparameter value through the return value and have the errors thrown as exceptions.</p>
-
-<p>In the simplest case this would involve rewriting return statements into throw statements and rewrite callers to use try/catch. Instead of</p>
-
-<p>rv = bla(&amp;outparam)&#8230;if(rv == foo) .. else if(rv == boo) return rv</p>
-
-<p>the code would be</p>
-
-<p>try{ outparam=bla() } catch(foo) {&#8230;} catch(boo) {throw boo}</p>
-
-<p>Note this is still inefficient since the code would be manually unrolling the stack instead of letting the exceptions do that. So the next iteration of the rewrite would get rid of the</p>
-
-<p>catch(boo) {throw boo}</p>
-
-<p>code to streamline the execution path. Ideally this would provide a significant reduction of footprint (due to getting rid of the error propagation code) and provide a speed boost.</p>
-
-<p>However, there are a lot of issues that need to be solved. How to ensure that the C++ code is exception-safe (everything has destructors to do appropriate cleanup)? How to deal with the case of the stack being a mix of platform C, C++, JavaScript, Python, etc? Most runtimes are not aware of C++ exceptions.</p>
-
-<p><strong>Infrastructure Work</strong></p>
-
-<p>Unfortunately, not all of the automated refactoring work is about exciting rewrites. Elsa is still tied to the stone-age gcc 3.4 as it can&#8217;t yet process C++ headers from the newer gcc releases due to template complexity.</p>
-
-<p>There is also work that needs to be done to get OSX supported as well as Linux by elsa &amp; mcpp. I think very little work remains there.</p>
-
-<p>Another big issue is getting elsa/mcpp to work on Windows. This may involve teaching elsa about the Microsoft windows flavour of C++ or getting Mozilla to reliably build with mingw and merely teaching elsa about mingw&#8217;s flavour of windows C++.</p>
-
-<p>There is also an issue of maturity. Mozilla is probably the biggest codebase to make use of elsa and mcpp, so there are teething issues to solve. Having said that, the current version of MCPP in svn should be able to compile Mozilla. Elsa can process all of Mozilla with a small patch to two files attached in the QueryInterface() bug.</p>
-
-<p>Overall I&#8217;m doing less and less infrastructure work as time goes by, hopefully the tools will mostly just work from now on.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/25/">&larr; Older</a>
@@ -711,6 +683,10 @@ Checks 2 and 3 require the complete class hierachy of Mozilla so I finally made 
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/05/09/how-amazon-ec2-got-15x-cheaper-in-6-months/">How Mozilla Amazon EC2 Usage Got 15X Cheaper in 6 Months</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/05/07/the-rise-and-fall-of-special-snowflake-infrastructure/">Demise of Special Snowflake Infrastructure</a>
       </li>
     
@@ -724,10 +700,6 @@ Checks 2 and 3 require the complete class hierachy of Mozilla so I finally made 
     
       <li class="post">
         <a href="/blog/2013/11/20/new-role-developer-productivity/">New Role: Developer Productivity</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/08/28/telemetry-reboot/">Telemetry Reboot</a>
       </li>
     
   </ul>

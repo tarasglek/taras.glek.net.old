@@ -9,8 +9,7 @@
   <meta name="author" content="Taras Glek">
 
   
-  <meta name="description" content="I got tagged by Benjamin, so I better comply and get my blog memed. Rules Link back to your original tagger and list the rules in your post.
-Share &hellip;">
+  <meta name="description" content="The nice folks at FSF allowed GCC have plugins. In a couple of GCC releases, Dehydra(4.5 if we are lucky) will work with distribution GCCs. Of course &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -90,6 +89,48 @@ if (requestAnimationFrame)
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/01/27/gcc-plugins-are-a-go/">GCC Plugins Are a Go!</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-01-27T08:38:35-08:00" pubdate data-updated="true">Jan 27<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>The nice folks at FSF <a href="http://gcc.gnu.org/ml/gcc-announce/2009/msg00000.html">allowed</a> GCC have plugins. In a couple of GCC releases, Dehydra(4.5 if we are lucky) will work with distribution GCCs. Of course the API is yet to be decided on, but we have been coordinating with authors of other GCC plugin efforts to ensure that the final API meets reasonable needs.</p>
+
+<p>In the future enabling static analysis checks will involve little more than specifying &#8211;with-static-checking in your Mozilla build!</p>
+
+<p><strong>JSHydra</strong></p>
+
+<p>The other breakthrough news is that Joshua Cranmer has been working on hooking up a *hydra style API to the Spidermonkey parser. This resulted in <a href="http://quetzalcoatal.blogspot.com/2009/01/jshydra.html">JSHydra</a>. Ability to look into JavaScript has been sorely missing from our stack, so this is extremely exciting.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -576,55 +617,6 @@ I&#8217;m sure most people reading this will go: &#8220;Wait a minute, this is u
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2008/09/02/converging-elsa-strains/">Converging Elsa Strains</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-09-02T01:39:45-07:00" pubdate data-updated="true">Sep 2<span>nd</span>, 2008</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>One of the purposes of this blog is to inform people that while the original <a href="http://www.cs.berkeley.edu/~smcpeak/elkhound/">Elsa author</a> is no longer actively developing it, Elsa is being used in production at Mozilla and is actively maintained within <a href="http://developer.mozilla.org/en/docs/Pork">Pork</a>.</p>
-
-<p>Recently two previously unknown to me Elsa forks have come to my attention via comments on my blog. Both of these are extrimely cool and something we have been wanting:</p>
-
-<ul>
-<li><a href="http://ellcc.org/">ellcc</a> C (and soon C++) compiler via Elsa + LLVM. I&#8217;ve heard of attempts to get this to work before, but this looks like it is much further along than similar efforts.</li>
-<li>Alex Telia&#8217;s souped up elsa with parser error recovery and an integrated C preprocessor among other awesomeness. See <a href="http://taras.glek.net/blog/2008/06/30/pork-09-in-the-wild/#comment-18303">this comment</a> for more details. Some of <a href="http://www.win.tue.nl/~lvoinea/VCN.html">these tools</a> are built on this Elsa fork.
-Both of these projects are interested in converging on a single codebase. It sounds like Alex&#8217;s work will be ready for merging soon.</li>
-</ul>
-
-
-<p>I love open source.</p>
-
-<p><strong>I&#8217;m Back</strong> <img src="http://photos-e.ak.facebook.com/photos-ak-sf2p/v323/152/124/53600064/s53600064_30661500_3965.jpg" alt="" /> Some might&#8217;ve noticed that I disappeared off the net for two weeks. I have a good excuse: I was getting married.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/21/">&larr; Older</a>
@@ -642,6 +634,10 @@ Both of these projects are interested in converging on a single codebase. It sou
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/05/09/how-amazon-ec2-got-15x-cheaper-in-6-months/">How Mozilla Amazon EC2 Usage Got 15X Cheaper in 6 Months</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/05/07/the-rise-and-fall-of-special-snowflake-infrastructure/">Demise of Special Snowflake Infrastructure</a>
       </li>
     
@@ -655,10 +651,6 @@ Both of these projects are interested in converging on a single codebase. It sou
     
       <li class="post">
         <a href="/blog/2013/11/20/new-role-developer-productivity/">New Role: Developer Productivity</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/08/28/telemetry-reboot/">Telemetry Reboot</a>
       </li>
     
   </ul>
