@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Performance and other thoughts</title>
-    <link>http://taras.glek.net/</link>
-    <description>Recent content on Performance and other thoughts</description>
+    <title>Posts on Performance and other thoughts</title>
+    <link>http://taras.glek.net/post/</link>
+    <description>Recent content in Posts on Performance and other thoughts</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Sun, 20 Nov 2016 13:36:22 -0800</lastBuildDate>
-    <atom:link href="http://taras.glek.net/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://taras.glek.net/post/index.xml" rel="self" type="application/rss+xml" />
     
       
         
