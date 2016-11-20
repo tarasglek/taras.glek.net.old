@@ -56,6 +56,8 @@
 
 &lt;p&gt;This means that irrespective of the graphics cores, CPU cores, your phone is going to suck as much as random write perf&amp;hellip; This sort of barely-acceptable performance will quickly turn into a &amp;ldquo;My phone is too laggy, I need to upgrade&amp;rdquo; as NAND perf deteriorates.&lt;/p&gt;
 
+&lt;p&gt;Instead of burying random-write-4k performance (or not doing that test at all), reviews should expose that front-and-center. Ideally they would also fill up the phone to 80% to match a realistic usecase.&lt;/p&gt;
+
 &lt;p&gt;There is atleast one phone vendor who gets it. Motorola G4 is &lt;a href=&#34;http://www.anandtech.com/show/10514/the-motorola-moto-g4-and-g4-plus-review/3&#34;&gt;7x better&lt;/a&gt; than the flagships. Surprisingly my $60 ZTE ZMax Pro phone is also 2-3x better than the flagships.&lt;/p&gt;
 
 &lt;p&gt;If you know people who run hardware review websites. Please tell them to focus on random-write-4k performance as predictor of jank/lag/frustration.&lt;/p&gt;
