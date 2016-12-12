@@ -80,7 +80,7 @@ Phone reviewers should be more vigilant and shame poorly-implemented devices. I 
 &lt;p&gt;&lt;strong&gt;Updates&lt;/strong&gt;&lt;/p&gt;
 
 &lt;ol&gt;
-&lt;li&gt;I&amp;rsquo;m confusing UI changing state. Android animation framework does not run on same thread as IO. Disregard 16.6ms section&lt;/li&gt;
+&lt;li&gt;I&amp;rsquo;m confusing UI state transitions with UI animations. Android animation framework does not run on same thread as IO. Disregard 16.6ms section&lt;/li&gt;
 &lt;/ol&gt;
 </description>
           </item>
