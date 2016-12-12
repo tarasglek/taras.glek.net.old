@@ -63,7 +63,7 @@ Just for kicks I took a USB hard-drive, formatted it with f2fs and applied same 
 &lt;/ul&gt;
 
 &lt;p&gt;The key option is &lt;code&gt;nobarrier&lt;/code&gt;.
-This effectively makes fsync() a no-op. See &lt;a href=&#34;http://xfs.org/index.php/XFS_FAQ&#34;&gt;XFS FAQ&lt;/a&gt; for the best description of &lt;em&gt;nobarrier&lt;/em&gt; feature. This is where most of the performance difference comes from.
+This effectively makes fsync() a no-op and explains most of the difference in performance. See &lt;a href=&#34;http://xfs.org/index.php/XFS_FAQ&#34;&gt;XFS FAQ&lt;/a&gt; for the best description of &lt;em&gt;nobarrier&lt;/em&gt; feature. This is where most of the performance difference comes from.
 Moto-Z is either awesome and implemented a RAM-cache solution for cellphones, or they are betting on excellent crash-recovery abilities of f2fs or they are really brave on behalf of users. Even if they didn&amp;rsquo;t implement battery-backed-RAM-cache for their NAND and that f2fs isn&amp;rsquo;t overly horrible at recovering from crashes this is probably still the right choice. As a user, I&amp;rsquo;m much happier to have a long-lasting phone that might forget a couple of seconds of data than a device that has to be trashed after a year of use.&lt;/p&gt;
 
 &lt;p&gt;If anyone has root on Pixel and Moto-Z, would be interesting to see if underlying block devices perform differently. I suspect they are very similar and that Motorola differentiates entirely in software.&lt;/p&gt;
