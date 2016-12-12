@@ -6,8 +6,76 @@
     <description>Recent content in Posts on Performance and other thoughts</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 20 Nov 2016 13:36:22 -0800</lastBuildDate>
+    <lastBuildDate>Sun, 11 Dec 2016 16:33:49 -0800</lastBuildDate>
     <atom:link href="http://taras.glek.net/post/index.xml" rel="self" type="application/rss+xml" />
+    
+      
+        
+          <item>
+            <title>Why Google Pixel lags 10x worse than Moto Z</title>
+            <link>http://taras.glek.net/post/Moto-Z-has-10x-less-lag-than-pixel/</link>
+            <pubDate>Sun, 11 Dec 2016 16:33:49 -0800</pubDate>
+            
+            <guid>http://taras.glek.net/post/Moto-Z-has-10x-less-lag-than-pixel/</guid>
+            <description>
+&lt;figure &gt;
+    
+        &lt;img src=&#34;http://taras.glek.net/images/moto-z-vs-pixel/moto-z-pixel-latency.png&#34; /&gt;
+    
+    
+&lt;/figure&gt;
+
+
+&lt;p&gt;In my previous post I made an argument that a modern phone is only as fast as the slowest component: ability of NAND to handle &lt;a href=&#34;http://taras.glek.net/post/Laggy-phones-and-misleading-benchmarks/&#34;&gt;4k writes&lt;/a&gt;.
+I decided to compare two Android flagships on the opposite ends of
+random-write-4k benchmark spectrum: &lt;a href=&#34;http://amzn.to/2hkMchI&#34;&gt;Moto Z&lt;/a&gt; vs &lt;a href=&#34;http://amzn.to/2grbBJB&#34;&gt;Google Pixel&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;I wrote a little fio &lt;a href=&#34;https://github.com/tarasglek/fio/blob/master/termux/fill.py&#34;&gt;benchmark driver&lt;/a&gt; to fill all available device storage with random 4k writes, print perf stats along the way. Idea is to run the benchmark on &lt;code&gt;/data/&lt;/code&gt;
+partition, then fill all available space by writing to &lt;code&gt;/storage/emulated/0&lt;/code&gt;, then do another round of testing on &lt;code&gt;/data&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;The chart above has p50 (50% IOs complete under X), p90 and p99 numbers for both devices. Moto Z median value is around &lt;code&gt;0.5ms&lt;/code&gt;, Pixel is 7x that at &lt;code&gt;3.3ms&lt;/code&gt;. Difference widens for p90.&lt;/p&gt;
+
+&lt;p&gt;On mobile phones 16.67ms is a magic number. That&amp;rsquo;s the amount of time one has to update screen at buttery-smooth 60FPS.
+Optimistically, one can roughly translate each data-persistence operation on Android into at-least 2 sequential random writes (best-case WAL SQLite mode).
+So if an app is saving a single piece of data, expect 6.6ms to be eaten up
+ by IO on Pixel and when your device is busy, expect that number to rise quickly.&lt;/p&gt;
+
+&lt;p&gt;Note this is best-case performance for these devices, I expect performance to degrade as they age. Expect Pixel to drop frames or stutter as it ages. Pixel performs relatively
+poorly in this test.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;How Motorola Smoked Google by ~10x at Storage Perf&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;I spent a few days poking around the filesystems while developing my benchmark experiment.
+Motorola (division of Lenovo) has bravely gone above and beyond stock Android to reduce storage lag. They got Moto-Z to performing close to high-end laptop SSDs.&lt;/p&gt;
+
+&lt;p&gt;How did Motorola do this? Answers were hiding in &lt;code&gt;/proc/mounts&lt;/code&gt; file.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;/storage/emulated/0&lt;/code&gt;: Google added a &lt;a href=&#34;https://source.android.com/devices/storage/&#34;&gt;weird&lt;/a&gt; permission model for the common storage pool on Android. In a fit of either lazyness or rushing to
+meet some PM deadlines for features no users asked for: they wrote a passthrough &lt;code&gt;fuse&lt;/code&gt; filesystem to enforce cross-app-file-sharing. This means that on the Pixel every user IO gets a round-trip back into user-space before hitting the NAND. &lt;a href=&#34;https://github.com/libfuse/libfuse&#34;&gt;Fuse&lt;/a&gt; burns more CPU and slows down IO by up to 30%. I love fuse for things like sshfs, but this is a terrible application of it.
+Motorola thought a little harder and replaced the nasty fuse hack with &lt;code&gt;esdfs&lt;/code&gt;(&lt;a href=&#34;https://github.com/vadimtk/moto-x-kernel/tree/master/fs/esdfs&#34;&gt;fork&lt;/a&gt; of &lt;a href=&#34;http://wrapfs.filesystems.org/&#34;&gt;wrapfs&lt;/a&gt;).&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;/data&lt;/code&gt;: Pixel uses the traditional &lt;code&gt;ext4&lt;/code&gt; Linux filesystem. Moto-Z opted for &lt;code&gt;f2fs&lt;/code&gt;.
+f2fs is a new filesystem developed by Samsung. It&amp;rsquo;s amazing, read the &lt;a href=&#34;https://www.usenix.org/conference/fast15/technical-sessions/presentation/lee&#34;&gt;paper &amp;amp; watch preso&lt;/a&gt;. They drove development of the filesystem specifically by Twitter/FB/etc workloads captured from the phone.
+It does many neat things, but the thing it does best is avoid fsync write-amplification. F2FS flags fsyncs via block metadata instead of doing a full checkpoint.
+This means fsync requires 50%-less write operations than ext4 (interestingly competing filesystems like BTRFS have even higher fsync write amplification than ext4). I think the tradeoff is slightly slower recovery times. &lt;em&gt;f2fs nets Moto-Z a 2x speed-up and 2x increase in NAND lifespan&lt;/em&gt;. Expect Moto-Z to age much better than Pixel.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;nobarrier&lt;/code&gt;: Moto-Z has a very interesting mount option soup for mounting f2fs: &lt;code&gt;rw,seclabel,nosuid,nodev,noatime,nodiratime,background_gc=on,discard,user_xattr,inline_xattr,acl,inline_data,nobarrier,extent_cache,active_logs=6&lt;/code&gt;.
+Just for kicks I took a USB hard-drive, formatted it with f2fs and applied same mount options. Suddenly the &lt;em&gt;hard drive&lt;/em&gt; was 2x faster than the Pixel, WTF?&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The key option is &lt;code&gt;nobarrier&lt;/code&gt;.
+This effectively makes fsync() a no-op. See &lt;a href=&#34;http://xfs.org/index.php/XFS_FAQ&#34;&gt;XFS FAQ&lt;/a&gt; for the best description of &lt;em&gt;nobarrier&lt;/em&gt; feature. This is where most of the performance difference comes from.
+Moto-Z is either awesome and implemented a RAM-cache solution for cellphones, or they are betting on excellent crash-recovery abilities of f2fs or they are really brave on behalf of users. Even if they didn&amp;rsquo;t implement battery-backed-RAM-cache for their NAND and that f2fs isn&amp;rsquo;t overly horrible at recovering from crashes this is probably still the right choice. As a user, I&amp;rsquo;m much happier to have a long-lasting phone that might forget a couple of seconds of data than a device that has to be trashed after a year of use.&lt;/p&gt;
+
+&lt;p&gt;If anyone has root on Pixel and Moto-Z, would be interesting to see if underlying block devices perform differently. I suspect they are very similar and that Motorola differentiates entirely in software.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Conclusion&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Android OEMs like Motorola/Samsung(f2fs authors) are improving Android performance while Google finds ways to slow stuff down. &lt;a href=&#34;http://amzn.to/2hkMchI&#34;&gt;Moto Z&lt;/a&gt; and a few other recent Androids have drastically reduced lags. Next time you are shopping, try to avoid buying devices that will age poorly.
+Phone reviewers should be more vigilant and shame poorly-implemented devices. I won&amp;rsquo;t be recommending the Pixel to any family members.&lt;/p&gt;
+</description>
+          </item>
+        
+      
     
       
         
