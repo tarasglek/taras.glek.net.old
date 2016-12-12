@@ -81,7 +81,7 @@ Moto-Z is either awesome and implemented a RAM-cache solution for cellphones, or
 &lt;p&gt;&lt;strong&gt;Updates&lt;/strong&gt;&lt;/p&gt;
 
 &lt;ol&gt;
-&lt;li&gt;I&amp;rsquo;m confusing UI state transitions with UI animations. Android animation framework does not run on same thread as IO. Disregard 16.6ms section&lt;/li&gt;
+&lt;li&gt;I&amp;rsquo;m confusing UI state transitions with UI animations. Android animation framework does not run on main thread. Disregard 16.6ms section&lt;/li&gt;
 &lt;/ol&gt;
 </description>
           </item>
