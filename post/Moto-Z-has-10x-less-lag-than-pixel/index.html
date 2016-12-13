@@ -132,7 +132,7 @@ Moto-Z is either awesome and implemented a RAM-cache solution for cellphones, or
 <ol>
 <li><p>I&rsquo;m confusing UI state transitions with UI animations. Android animation framework does not run on main thread. Disregard 16.6ms section</p></li>
 
-<li><p>I&rsquo;m not sure how <code>nobarrier</code> was deemed safe. One could theorize that Motorola spent time QAing failure scenarios. In a follow-up twitter discussion, Android engineers made a solid case that this is likely a hack. Reasoning being that if Motorola made nobarrier a no-op in hw, it wouldn&rsquo;t be needed in sw (eg <a href="http://oss.sgi.com/archives/xfs/2015-12/msg00281.html">this email</a>)</p></li>
+<li><p>In a follow-up twitter discussion, Android engineers made a solid case that this is likely a hack. Reasoning being that if Motorola made nobarrier a no-op in hw, it wouldn&rsquo;t be needed in sw (eg <a href="http://oss.sgi.com/archives/xfs/2015-12/msg00281.html">this email</a>). It&rsquo;s unclear how <code>nobarrier</code> was deemed safe. One could theorize that Motorola spent time QAing failure scenarios.</p></li>
 
 <li><p>I&rsquo;m still hoping that an Android vendor will implement battery-backed-RAM-cache to solve the write-4k-bottleneck</p></li>
 </ol>
