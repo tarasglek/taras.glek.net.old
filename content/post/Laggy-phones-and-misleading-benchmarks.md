@@ -1,78 +1,19 @@
-<!DOCTYPE html>
-<html class="no-js" lang="en-us" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
++++
+date = "2016-11-12T12:16:32-08:00"
+title = "Laggy phones and misleading benchmarks"
+draft = false
 
-    <meta name="description" content="Laggy phones and misleading benchmarks">
-    <meta name="author" content="Taras Glek">
++++
 
-    <meta name="keyword" content="">
-    <link rel="shortcut icon" href="/favicon.ico">
-
-    <title>Laggy phones and misleading benchmarks &middot; Performance and other thoughts</title>
-
-   	
-    
-        <link rel="stylesheet" href="http://taras.glek.net//css/theme/default.css">
-    
-
-    <link rel="stylesheet" href="http://taras.glek.net//css/font-awesome.min.css">
-
-   	
-   	<link rel="stylesheet" href="http://taras.glek.net//css/style.css">
-
-
-    
-    <script src="http://taras.glek.net//js/jquery.min-2.1.4.js"></script>
-    <script src="http://taras.glek.net//js/bootstrap.min-3.3.5.js"></script>
-
-    
-    <link href="" rel="alternate" type="application/rss+xml" title="Performance and other thoughts" />
-</head>
-<body lang="en">
-    
-    <div class="container">
-    <div class="row">
-        <div class="navbar navbar-default " role="navigation">
-            <div class="navbar-header">
-                <a class="navbar-brand" href="http://taras.glek.net/">Performance and other thoughts</a>
-            </div>
-            <div class="navbar-collapse collapse navbar-responsive-collapse">
-                <ul class="nav navbar-nav navbar-right">
-                    <li><a href="http://taras.glek.net/">Home</a></li>
-                    <li><a href="http://taras.glek.net//post/">Blog</a></li>
-                    
-                </ul>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-
-<div class="container">
-	<div class="row">
-		<div class="col-md-offset-1 col-md-10">
-			<h3>Laggy phones and misleading benchmarks</h3>
-				<span class="label label-primary">Sun, Nov 20, 2016</span> in 
-				 using tags
-				
-			</small>
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-md-offset-1 col-md-10">
-			<br>
-			<p>TLDR: You can predict degree of unresponsiveness of a phone via random-write-4k benchmarks. I wish review websites would fill phones to 80-90% prior to running the benchmark, especially on smaller-capacity phones where users are more likely to run out of space.</p>
+TLDR: You can predict degree of unresponsiveness of a phone via random-write-4k benchmarks. I wish review websites would fill phones to 80-90% prior to running the benchmark, especially on smaller-capacity phones where users are more likely to run out of space.
 
 <p><strong>SQLite vs Phone NAND</strong></p>
 
-<p>I&rsquo;ve long held a theory that Android lag is almost directly determined by slowness induced by SQLite transactions. This weekend, while researching phones for a family member, I found some supporting evidence.</p>
+<p>I’ve long held a theory that Android lag is almost directly determined by slowness induced by SQLite transactions. This weekend, while researching phones for a family member, I found some supporting evidence.</p>
 
 <p>I was employed to analyze Firefox performance at Mozilla. Most of the time I focused on IO performance as my niche. This was relatively easy because desktop OSes (especially Windows with XPerf and Linux being open source) are very open to developers. Unfortunately as a hobbyist I have less chances to figure out why my phones are slow. None of my phones have root, let alone an unlocked bootloader (eg no ability to recompile the kernel with IO tracing functionality).</p>
 
-<p>In the past I verified that all of my phones that got super-laggy were exhibiting single-digit-per-second write-random-4k benchmarks. However until now I couldn&rsquo;t point at SQLite is the main driver of IO on Android.</p>
+<p>In the past I verified that all of my phones that got super-laggy were exhibiting single-digit-per-second write-random-4k benchmarks. However until now I couldn’t point at SQLite is the main driver of IO on Android.</p>
 
 <p>To trace IOs on Android one has to recompile the kernel or at-least have root to run something like <a href="https://github.com/nowsecure/fsmon">fsmon</a> to observe high level IO.
  I was able to run fsmon on my rooted Android TV box and overserve that most of the IO occurred in SQLite databases.</p>
@@ -97,11 +38,11 @@
 
 <p><strong>Conclusion</strong></p>
 
-<p>A core principle of performance engineering is that a system is only as fast as the slowest bottleneck. In this particular case the bottleneck is hit very frequently, so seemingly users don&rsquo;t get to benefit from fancy CPUs much.</p>
+<p>A core principle of performance engineering is that a system is only as fast as the slowest bottleneck. In this particular case the bottleneck is hit very frequently, so seemingly users don’t get to benefit from fancy CPUs much.</p>
 
 <p>Interestingly, unlike with CPU perf, there is no correlation between random writes and price of the phone. Random 4k writes on modern flagship hw are very slow compared to any other metric. IPhone 7 struggles to do over <a href="http://www.anandtech.com/show/10685/the-iphone-7-and-iphone-7-plus-review/4">2MB/s</a>. Google Pixel struggles to get above <a href="http://www.anandtech.com/show/9972/the-google-pixel-c-review/3">2MB/s</a> too.</p>
 
-<p>This means that irrespective of the graphics cores, CPU cores, your phone is going to suck as much as random write perf&hellip; This sort of barely-acceptable performance will quickly turn into a &ldquo;My phone is too laggy, I need to upgrade&rdquo; as NAND perf deteriorates.</p>
+<p>This means that irrespective of the graphics cores, CPU cores, your phone is going to suck as much as random write perf… This sort of barely-acceptable performance will quickly turn into a “My phone is too laggy, I need to upgrade” as NAND perf deteriorates.</p>
 
 <p>Instead of burying random-write-4k performance (or not doing that test at all), reviews should expose that front-and-center. Ideally they would also fill up the phone to 80% to match a realistic usecase.</p>
 
@@ -112,42 +53,3 @@
 <p><a href="https://www.reddit.com/r/Android/comments/5e3rbu/laggy_phones_and_misleading_benchmarks/">Comments/Reddit</a></p>
 
 <p><a href="https://news.ycombinator.com/item?id=13001753">Comments/HackerNews</a></p>
-
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-md-12">
-			<hr>
-		</div>
-	</div>
-</div>
-
-    <div class="container">
-        <div class="row col-md-12">
-            <footer>
-                <div class="pull-left">
-                    <p>
-                    </p>
-                </div>
-
-                
-                <div class="pull-right">
-                    
-                    
-                    
-                        <a href="https://twitter.com/tarasglek" target="_blank">
-                        <i class="fa fa-twitter-square fa-2x"></i></a>
-                    
-                    
-                    
-                    
-                    
-                </div>
-            </footer>
-        </div>
-    </div>
-
-    
-    </body>
-</html>
-
