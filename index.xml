@@ -1,30 +1,21 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Performance and other thoughts</title>
-    <link>http://taras.glek.net/</link>
-    <description>Recent content on Performance and other thoughts</description>
+    <title>Taras&#39; blog on perf and other stuff</title>
+    <link>http://taras.glek.net/index.xml</link>
+    <description>Recent content on Taras&#39; blog on perf and other stuff</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 11 Dec 2016 16:33:49 -0800</lastBuildDate>
+    <lastBuildDate>Sun, 11 Dec 2016 12:17:23 -0800</lastBuildDate>
     <atom:link href="http://taras.glek.net/index.xml" rel="self" type="application/rss+xml" />
     
+    <item>
+      <title>Why Google Pixel lags 10x more than Moto Z</title>
+      <link>http://taras.glek.net/post/Moto-Z-has-10x-less-lag-than-pixel/</link>
+      <pubDate>Sun, 11 Dec 2016 12:17:23 -0800</pubDate>
       
-        
-          <item>
-            <title>Why Google Pixel lags 10x more than Moto Z</title>
-            <link>http://taras.glek.net/post/Moto-Z-has-10x-less-lag-than-pixel/</link>
-            <pubDate>Sun, 11 Dec 2016 16:33:49 -0800</pubDate>
-            
-            <guid>http://taras.glek.net/post/Moto-Z-has-10x-less-lag-than-pixel/</guid>
-            <description>
-&lt;figure &gt;
-    
-        &lt;img src=&#34;http://taras.glek.net/images/moto-z-vs-pixel/moto-z-pixel-latency.png&#34; /&gt;
-    
-    
-&lt;/figure&gt;
-
+      <guid>http://taras.glek.net/post/Moto-Z-has-10x-less-lag-than-pixel/</guid>
+      <description>&lt;p&gt;&lt;img src=&#34;http://taras.glek.net/images/moto-z-vs-pixel/moto-z-pixel-latency.png&#34; alt=&#34;Alt text&#34; title=&#34;Optional title&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;In my previous post I made an argument that a modern phone is only as fast as the slowest component: ability of NAND to handle &lt;a href=&#34;http://taras.glek.net/post/Laggy-phones-and-misleading-benchmarks/&#34;&gt;4k writes&lt;/a&gt;.
 I decided to compare two Android flagships on the opposite ends of
@@ -35,7 +26,7 @@ partition, then fill all available space by writing to &lt;code&gt;/storage/emul
 
 &lt;p&gt;The chart above has p50 (50% IOs complete under X), p90 and p99 numbers for both devices. Moto Z median value is around &lt;code&gt;0.5ms&lt;/code&gt;, Pixel is 7x that at &lt;code&gt;3.3ms&lt;/code&gt;. Difference widens for p90.&lt;/p&gt;
 
-&lt;p&gt;On mobile phones 16.67ms is a magic number. That&amp;rsquo;s the amount of time one has to update screen at buttery-smooth 60FPS.
+&lt;p&gt;On mobile phones 16.67ms is a magic number. That’s the amount of time one has to update screen at buttery-smooth 60FPS.
 Optimistically, one can roughly translate each data-persistence operation on Android into at-least 2 sequential random writes (best-case WAL SQLite mode).
 So if an app is saving a single piece of data, expect 6.6ms to be eaten up
  by IO on Pixel and when your device is busy, expect that number to rise quickly.&lt;/p&gt;
@@ -55,7 +46,7 @@ Motorola (division of Lenovo) has bravely gone above and beyond stock Android to
 meet some PM deadlines for features no users asked for: they wrote a passthrough &lt;code&gt;fuse&lt;/code&gt; filesystem to enforce cross-app-file-sharing. This means that on the Pixel every user IO gets a round-trip back into user-space before hitting the NAND. &lt;a href=&#34;https://github.com/libfuse/libfuse&#34;&gt;Fuse&lt;/a&gt; burns more CPU and slows down IO by up to 30%. I love fuse for things like sshfs, but this is a terrible application of it.
 Motorola thought a little harder and replaced the nasty fuse hack with &lt;code&gt;esdfs&lt;/code&gt;(&lt;a href=&#34;https://github.com/vadimtk/moto-x-kernel/tree/master/fs/esdfs&#34;&gt;fork&lt;/a&gt; of &lt;a href=&#34;http://wrapfs.filesystems.org/&#34;&gt;wrapfs&lt;/a&gt;).&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;/data&lt;/code&gt;: Pixel uses the traditional &lt;code&gt;ext4&lt;/code&gt; Linux filesystem. Moto-Z opted for &lt;code&gt;f2fs&lt;/code&gt;.
-f2fs is a new filesystem developed by Samsung. It&amp;rsquo;s amazing, read the &lt;a href=&#34;https://www.usenix.org/conference/fast15/technical-sessions/presentation/lee&#34;&gt;paper &amp;amp; watch preso&lt;/a&gt;. They drove development of the filesystem specifically by Twitter/FB/etc workloads captured from the phone.
+f2fs is a new filesystem developed by Samsung. It’s amazing, read the &lt;a href=&#34;https://www.usenix.org/conference/fast15/technical-sessions/presentation/lee&#34;&gt;paper &amp;amp; watch preso&lt;/a&gt;. They drove development of the filesystem specifically by Twitter/FB/etc workloads captured from the phone.
 It does many neat things, but the thing it does best is avoid fsync write-amplification. F2FS flags fsyncs via block metadata instead of doing a full checkpoint.
 This means fsync requires 50%-less write operations than ext4 (interestingly competing filesystems like BTRFS have even higher fsync write amplification than ext4). I think the tradeoff is slightly slower recovery times. &lt;em&gt;f2fs nets Moto-Z a 2x speed-up and 2x increase in NAND lifespan&lt;/em&gt;. Expect Moto-Z to age much better than Pixel.&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;nobarrier&lt;/code&gt;: Moto-Z has a very interesting mount option soup for mounting f2fs: &lt;code&gt;rw,seclabel,nosuid,nodev,noatime,nodiratime,background_gc=on,discard,user_xattr,inline_xattr,acl,inline_data,nobarrier,extent_cache,active_logs=6&lt;/code&gt;.
@@ -64,7 +55,7 @@ Just for kicks I took a USB hard-drive, formatted it with f2fs and applied same 
 
 &lt;p&gt;The key option is &lt;code&gt;nobarrier&lt;/code&gt;.
 This effectively makes fsync() a no-op and explains most of the difference in performance. See &lt;a href=&#34;http://xfs.org/index.php/XFS_FAQ&#34;&gt;XFS FAQ&lt;/a&gt; for the best description of &lt;em&gt;nobarrier&lt;/em&gt; feature. This is where most of the performance difference comes from.
-Moto-Z is either awesome and implemented a RAM-cache solution for cellphones, or they are betting on excellent crash-recovery abilities of f2fs or they are really brave on behalf of users. Even if they didn&amp;rsquo;t implement battery-backed-RAM-cache for their NAND and that f2fs isn&amp;rsquo;t overly horrible at recovering from crashes this is probably still the right choice. As a user, I&amp;rsquo;m much happier to have a long-lasting phone that might forget a couple of seconds of data than a device that has to be trashed after a year of use.&lt;/p&gt;
+Moto-Z is either awesome and implemented a RAM-cache solution for cellphones, or they are betting on excellent crash-recovery abilities of f2fs or they are really brave on behalf of users. Even if they didn’t implement battery-backed-RAM-cache for their NAND and that f2fs isn’t overly horrible at recovering from crashes this is probably still the right choice. As a user, I’m much happier to have a long-lasting phone that might forget a couple of seconds of data than a device that has to be trashed after a year of use.&lt;/p&gt;
 
 &lt;p&gt;If anyone has root on Pixel and Moto-Z, would be interesting to see if underlying block devices perform differently. I suspect they are very similar and that Motorola differentiates entirely in software.&lt;/p&gt;
 
@@ -72,9 +63,9 @@ Moto-Z is either awesome and implemented a RAM-cache solution for cellphones, or
 
 &lt;p&gt;Android OEMs like Motorola/Samsung (f2fs authors) are improving Android performance. &lt;a href=&#34;http://amzn.to/2hkMchI&#34;&gt;Moto Z&lt;/a&gt; and a few other recent Androids have drastically reduced storage lag. Next time you are shopping, try to avoid buying devices that will slow down to point of being unusable as NAND wears out (ala Nexus 7, Nexus 6). I doubt anyone would spot the difference between a brand new Pixel and Moto-Z. However after a year of use, the difference should be stark.&lt;/p&gt;
 
-&lt;p&gt;Phone reviewers should be more vigilant and shame poorly-implemented devices. I won&amp;rsquo;t be recommending the Pixel to any family members.&lt;/p&gt;
+&lt;p&gt;Phone reviewers should be more vigilant and shame poorly-implemented devices. I won’t be recommending the Pixel to any family members.&lt;/p&gt;
 
-&lt;p&gt;I&amp;rsquo;m not recommending people buy Moto Z. WIFI/cell reception seems worse on Z than Pixel. Camera is worse too.&lt;/p&gt;
+&lt;p&gt;I’m not recommending people buy Moto Z. WIFI/cell reception seems worse on Z than Pixel. Camera is worse too.&lt;/p&gt;
 
 &lt;p&gt;&lt;a href=&#34;https://news.ycombinator.com/item?id=13155894&#34;&gt;Comments/HackerNews&lt;/a&gt;&lt;/p&gt;
 
@@ -83,34 +74,30 @@ Moto-Z is either awesome and implemented a RAM-cache solution for cellphones, or
 &lt;p&gt;&lt;strong&gt;Updates&lt;/strong&gt;&lt;/p&gt;
 
 &lt;ol&gt;
-&lt;li&gt;&lt;p&gt;I&amp;rsquo;m confusing UI state transitions with UI animations. Android animation framework does not run on main thread. Disregard 16.6ms section&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;I’m confusing UI state transitions with UI animations. Android animation framework does not run on main thread. Disregard 16.6ms section&lt;/p&gt;&lt;/li&gt;
 
-&lt;li&gt;&lt;p&gt;In a follow-up twitter discussion, Android engineers made a solid case that this is likely a hack. If Motorola made nobarrier a no-op in hw, it wouldn&amp;rsquo;t be needed in sw (eg &lt;a href=&#34;http://oss.sgi.com/archives/xfs/2015-12/msg00281.html&#34;&gt;this email&lt;/a&gt;). It&amp;rsquo;s unclear how &lt;code&gt;nobarrier&lt;/code&gt; was deemed safe. One could theorize that Motorola spent time QAing failure scenarios.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;In a follow-up twitter discussion, Android engineers made a solid case that this is likely a hack. If Motorola made nobarrier a no-op in hw, it wouldn’t be needed in sw (eg &lt;a href=&#34;http://oss.sgi.com/archives/xfs/2015-12/msg00281.html&#34;&gt;this email&lt;/a&gt;). It’s unclear how &lt;code&gt;nobarrier&lt;/code&gt; was deemed safe. One could theorize that Motorola spent time QAing failure scenarios.&lt;/p&gt;&lt;/li&gt;
 
-&lt;li&gt;&lt;p&gt;I&amp;rsquo;m still hoping that an Android vendor will implement battery-backed-RAM-cache to solve the write-4k-bottleneck. Moto-Z can be considered a &lt;em&gt;risky&lt;/em&gt; prototype of what storage performance should be like. Will be interesting to see if my prediction of Pixel aging worse than Z come true. I doubt write-4k is a bottleneck in any android workload on the Moto-Z.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;I’m still hoping that an Android vendor will implement battery-backed-RAM-cache to solve the write-4k-bottleneck. Moto-Z can be considered a &lt;em&gt;risky&lt;/em&gt; prototype of what storage performance should be like. Will be interesting to see if my prediction of Pixel aging worse than Z come true. I doubt write-4k is a bottleneck in any android workload on the Moto-Z.&lt;/p&gt;&lt;/li&gt;
 &lt;/ol&gt;
 </description>
-          </item>
-        
-      
+    </item>
     
+    <item>
+      <title>Laggy phones and misleading benchmarks</title>
+      <link>http://taras.glek.net/post/Laggy-phones-and-misleading-benchmarks/</link>
+      <pubDate>Sat, 12 Nov 2016 12:16:32 -0800</pubDate>
       
-        
-          <item>
-            <title>Laggy phones and misleading benchmarks</title>
-            <link>http://taras.glek.net/post/Laggy-phones-and-misleading-benchmarks/</link>
-            <pubDate>Sun, 20 Nov 2016 13:36:22 -0800</pubDate>
-            
-            <guid>http://taras.glek.net/post/Laggy-phones-and-misleading-benchmarks/</guid>
-            <description>&lt;p&gt;TLDR: You can predict degree of unresponsiveness of a phone via random-write-4k benchmarks. I wish review websites would fill phones to 80-90% prior to running the benchmark, especially on smaller-capacity phones where users are more likely to run out of space.&lt;/p&gt;
+      <guid>http://taras.glek.net/post/Laggy-phones-and-misleading-benchmarks/</guid>
+      <description>&lt;p&gt;TLDR: You can predict degree of unresponsiveness of a phone via random-write-4k benchmarks. I wish review websites would fill phones to 80-90% prior to running the benchmark, especially on smaller-capacity phones where users are more likely to run out of space.&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;SQLite vs Phone NAND&lt;/strong&gt;&lt;/p&gt;
 
-&lt;p&gt;I&amp;rsquo;ve long held a theory that Android lag is almost directly determined by slowness induced by SQLite transactions. This weekend, while researching phones for a family member, I found some supporting evidence.&lt;/p&gt;
+&lt;p&gt;I’ve long held a theory that Android lag is almost directly determined by slowness induced by SQLite transactions. This weekend, while researching phones for a family member, I found some supporting evidence.&lt;/p&gt;
 
 &lt;p&gt;I was employed to analyze Firefox performance at Mozilla. Most of the time I focused on IO performance as my niche. This was relatively easy because desktop OSes (especially Windows with XPerf and Linux being open source) are very open to developers. Unfortunately as a hobbyist I have less chances to figure out why my phones are slow. None of my phones have root, let alone an unlocked bootloader (eg no ability to recompile the kernel with IO tracing functionality).&lt;/p&gt;
 
-&lt;p&gt;In the past I verified that all of my phones that got super-laggy were exhibiting single-digit-per-second write-random-4k benchmarks. However until now I couldn&amp;rsquo;t point at SQLite is the main driver of IO on Android.&lt;/p&gt;
+&lt;p&gt;In the past I verified that all of my phones that got super-laggy were exhibiting single-digit-per-second write-random-4k benchmarks. However until now I couldn’t point at SQLite is the main driver of IO on Android.&lt;/p&gt;
 
 &lt;p&gt;To trace IOs on Android one has to recompile the kernel or at-least have root to run something like &lt;a href=&#34;https://github.com/nowsecure/fsmon&#34;&gt;fsmon&lt;/a&gt; to observe high level IO.
  I was able to run fsmon on my rooted Android TV box and overserve that most of the IO occurred in SQLite databases.&lt;/p&gt;
@@ -135,11 +122,11 @@ Moto-Z is either awesome and implemented a RAM-cache solution for cellphones, or
 
 &lt;p&gt;&lt;strong&gt;Conclusion&lt;/strong&gt;&lt;/p&gt;
 
-&lt;p&gt;A core principle of performance engineering is that a system is only as fast as the slowest bottleneck. In this particular case the bottleneck is hit very frequently, so seemingly users don&amp;rsquo;t get to benefit from fancy CPUs much.&lt;/p&gt;
+&lt;p&gt;A core principle of performance engineering is that a system is only as fast as the slowest bottleneck. In this particular case the bottleneck is hit very frequently, so seemingly users don’t get to benefit from fancy CPUs much.&lt;/p&gt;
 
 &lt;p&gt;Interestingly, unlike with CPU perf, there is no correlation between random writes and price of the phone. Random 4k writes on modern flagship hw are very slow compared to any other metric. IPhone 7 struggles to do over &lt;a href=&#34;http://www.anandtech.com/show/10685/the-iphone-7-and-iphone-7-plus-review/4&#34;&gt;2MB/s&lt;/a&gt;. Google Pixel struggles to get above &lt;a href=&#34;http://www.anandtech.com/show/9972/the-google-pixel-c-review/3&#34;&gt;2MB/s&lt;/a&gt; too.&lt;/p&gt;
 
-&lt;p&gt;This means that irrespective of the graphics cores, CPU cores, your phone is going to suck as much as random write perf&amp;hellip; This sort of barely-acceptable performance will quickly turn into a &amp;ldquo;My phone is too laggy, I need to upgrade&amp;rdquo; as NAND perf deteriorates.&lt;/p&gt;
+&lt;p&gt;This means that irrespective of the graphics cores, CPU cores, your phone is going to suck as much as random write perf… This sort of barely-acceptable performance will quickly turn into a “My phone is too laggy, I need to upgrade” as NAND perf deteriorates.&lt;/p&gt;
 
 &lt;p&gt;Instead of burying random-write-4k performance (or not doing that test at all), reviews should expose that front-and-center. Ideally they would also fill up the phone to 80% to match a realistic usecase.&lt;/p&gt;
 
@@ -151,9 +138,7 @@ Moto-Z is either awesome and implemented a RAM-cache solution for cellphones, or
 
 &lt;p&gt;&lt;a href=&#34;https://news.ycombinator.com/item?id=13001753&#34;&gt;Comments/HackerNews&lt;/a&gt;&lt;/p&gt;
 </description>
-          </item>
-        
-      
+    </item>
     
   </channel>
 </rss>

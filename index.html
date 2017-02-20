@@ -1,288 +1,197 @@
 <!DOCTYPE html>
-<html class="no-js" lang="en-us" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html lang="en">
 
-    <meta name="description" content="Performance and other thoughts">
-    <meta name="author" content="Taras Glek">
+  <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
-    <meta name="keyword" content="">
-    <link rel="shortcut icon" href="/favicon.ico">
+  <title>Taras&#39; blog on perf and other stuff</title>
+  
+  <meta name="author" content="Taras Glek"/>
+  <meta name="generator" content="Hugo 0.18.1" />
+  
 
-    <title>Performance and other thoughts</title>
+  <link rel="alternate" href="http://taras.glek.net/index.xml" type="application/rss+xml" title="Taras&#39; blog on perf and other stuff">
 
-   	
-    
-        <link rel="stylesheet" href="http://taras.glek.net//css/theme/default.css">
-    
-
-    <link rel="stylesheet" href="http://taras.glek.net//css/font-awesome.min.css">
-
-   	
-   	<link rel="stylesheet" href="http://taras.glek.net//css/style.css">
-
-
-    
-    <script src="http://taras.glek.net//js/jquery.min-2.1.4.js"></script>
-    <script src="http://taras.glek.net//js/bootstrap.min-3.3.5.js"></script>
-
-    
-    <link href="http://taras.glek.net/index.xml" rel="alternate" type="application/rss+xml" title="Performance and other thoughts" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="http://taras.glek.net//css/bootstrap.min.css" />
+  <link rel="stylesheet" href="http://taras.glek.net//css/main.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" />
+  <link rel="stylesheet" href="http://taras.glek.net//css/pygment_highlights.css" />
+  <link rel="stylesheet" href="http://taras.glek.net/css/highlight.min.css">
+  
+  
+  <meta property="og:title" content="Taras&#39; blog on perf and other stuff" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="/" />
+  <meta property="og:image" content="/" />
+  
 </head>
-<body lang="en">
-    
-    <div class="container">
-    <div class="row">
-        <div class="navbar navbar-default " role="navigation">
-            <div class="navbar-header">
-                <a class="navbar-brand" href="http://taras.glek.net/">Performance and other thoughts</a>
-            </div>
-            <div class="navbar-collapse collapse navbar-responsive-collapse">
-                <ul class="nav navbar-nav navbar-right">
-                    <li><a href="http://taras.glek.net/">Home</a></li>
-                    <li><a href="http://taras.glek.net//post/">Blog</a></li>
-                    
-                </ul>
-            </div>
-        </div>
+
+
+  <body>
+
+    <nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="http://taras.glek.net/">Taras&#39; blog on perf and other stuff</a>
     </div>
-</div>
 
+    <div class="collapse navbar-collapse" id="main-navbar">
+      <ul class="nav navbar-nav navbar-right">
+      
+      </ul>
+    </div>
 
-
-    <div class="container">
-        
-        
-            	
-		
-			<div class="row">
-				
-				<div class="col-md-offset-1 col-md-10">
-					<h3><a href="http://taras.glek.net/post/Moto-Z-has-10x-less-lag-than-pixel/">Why Google Pixel lags 10x more than Moto Z</a></h3>
-						<small><span class="label label-primary">
-							
-								Sun, Dec 11, 2016
-							</span>
-							
-							
-					</small>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-md-offset-1 col-md-10">
-					<br>
-					
-						
-<figure >
-    
-        <img src="/images/moto-z-vs-pixel/moto-z-pixel-latency.png" />
-    
-    
-</figure>
-
-
-<p>In my previous post I made an argument that a modern phone is only as fast as the slowest component: ability of NAND to handle <a href="/post/Laggy-phones-and-misleading-benchmarks/">4k writes</a>.
-I decided to compare two Android flagships on the opposite ends of
-random-write-4k benchmark spectrum: <a href="http://amzn.to/2hkMchI">Moto Z</a> vs <a href="http://amzn.to/2grbBJB">Google Pixel</a>.</p>
-
-<p>I wrote a little fio <a href="https://github.com/tarasglek/fio/blob/master/termux/fill.py">benchmark driver</a> to fill all available device storage with random 4k writes, print perf stats along the way. Idea is to run the benchmark on <code>/data/</code>
-partition, then fill all available space by writing to <code>/storage/emulated/0</code>, then do another round of testing on <code>/data</code>.</p>
-
-<p>The chart above has p50 (50% IOs complete under X), p90 and p99 numbers for both devices. Moto Z median value is around <code>0.5ms</code>, Pixel is 7x that at <code>3.3ms</code>. Difference widens for p90.</p>
-
-<p>On mobile phones 16.67ms is a magic number. That&rsquo;s the amount of time one has to update screen at buttery-smooth 60FPS.
-Optimistically, one can roughly translate each data-persistence operation on Android into at-least 2 sequential random writes (best-case WAL SQLite mode).
-So if an app is saving a single piece of data, expect 6.6ms to be eaten up
- by IO on Pixel and when your device is busy, expect that number to rise quickly.</p>
-
-<p>Note this is best-case performance for these devices, I expect performance to degrade as they age. Expect Pixel to drop frames or stutter as it ages. Pixel performs relatively
-poorly in this test.</p>
-
-<p><strong>How Motorola Smoked Google by ~10x at Storage Perf</strong></p>
-
-<p>I spent a few days poking around the filesystems while developing my benchmark experiment.
-Motorola (division of Lenovo) has bravely gone above and beyond stock Android to reduce storage lag. They got Moto-Z to performing close to high-end laptop SSDs.</p>
-
-<p>How did Motorola do this? Answers were hiding in <code>/proc/mounts</code> file.</p>
-
-<ul>
-<li><code>/storage/emulated/0</code>: Google added a <a href="https://source.android.com/devices/storage/">weird</a> permission model for the common storage pool on Android. In a fit of either lazyness or rushing to
-meet some PM deadlines for features no users asked for: they wrote a passthrough <code>fuse</code> filesystem to enforce cross-app-file-sharing. This means that on the Pixel every user IO gets a round-trip back into user-space before hitting the NAND. <a href="https://github.com/libfuse/libfuse">Fuse</a> burns more CPU and slows down IO by up to 30%. I love fuse for things like sshfs, but this is a terrible application of it.
-Motorola thought a little harder and replaced the nasty fuse hack with <code>esdfs</code>(<a href="https://github.com/vadimtk/moto-x-kernel/tree/master/fs/esdfs">fork</a> of <a href="http://wrapfs.filesystems.org/">wrapfs</a>).</li>
-<li><code>/data</code>: Pixel uses the traditional <code>ext4</code> Linux filesystem. Moto-Z opted for <code>f2fs</code>.
-f2fs is a new filesystem developed by Samsung. It&rsquo;s amazing, read the <a href="https://www.usenix.org/conference/fast15/technical-sessions/presentation/lee">paper &amp; watch preso</a>. They drove development of the filesystem specifically by Twitter/FB/etc workloads captured from the phone.
-It does many neat things, but the thing it does best is avoid fsync write-amplification. F2FS flags fsyncs via block metadata instead of doing a full checkpoint.
-This means fsync requires 50%-less write operations than ext4 (interestingly competing filesystems like BTRFS have even higher fsync write amplification than ext4). I think the tradeoff is slightly slower recovery times. <em>f2fs nets Moto-Z a 2x speed-up and 2x increase in NAND lifespan</em>. Expect Moto-Z to age much better than Pixel.</li>
-<li><code>nobarrier</code>: Moto-Z has a very interesting mount option soup for mounting f2fs: <code>rw,seclabel,nosuid,nodev,noatime,nodiratime,background_gc=on,discard,user_xattr,inline_xattr,acl,inline_data,nobarrier,extent_cache,active_logs=6</code>.
-Just for kicks I took a USB hard-drive, formatted it with f2fs and applied same mount options. Suddenly the <em>hard drive</em> was 2x faster than the Pixel, WTF?</li>
-</ul>
-
-<p>The key option is <code>nobarrier</code>.
-This effectively makes fsync() a no-op and explains most of the difference in performance. See <a href="http://xfs.org/index.php/XFS_FAQ">XFS FAQ</a> for the best description of <em>nobarrier</em> feature. This is where most of the performance difference comes from.
-Moto-Z is either awesome and implemented a RAM-cache solution for cellphones, or they are betting on excellent crash-recovery abilities of f2fs or they are really brave on behalf of users. Even if they didn&rsquo;t implement battery-backed-RAM-cache for their NAND and that f2fs isn&rsquo;t overly horrible at recovering from crashes this is probably still the right choice. As a user, I&rsquo;m much happier to have a long-lasting phone that might forget a couple of seconds of data than a device that has to be trashed after a year of use.</p>
-
-<p>If anyone has root on Pixel and Moto-Z, would be interesting to see if underlying block devices perform differently. I suspect they are very similar and that Motorola differentiates entirely in software.</p>
-
-<p><strong>Conclusion</strong></p>
-
-<p>Android OEMs like Motorola/Samsung (f2fs authors) are improving Android performance. <a href="http://amzn.to/2hkMchI">Moto Z</a> and a few other recent Androids have drastically reduced storage lag. Next time you are shopping, try to avoid buying devices that will slow down to point of being unusable as NAND wears out (ala Nexus 7, Nexus 6). I doubt anyone would spot the difference between a brand new Pixel and Moto-Z. However after a year of use, the difference should be stark.</p>
-
-<p>Phone reviewers should be more vigilant and shame poorly-implemented devices. I won&rsquo;t be recommending the Pixel to any family members.</p>
-
-<p>I&rsquo;m not recommending people buy Moto Z. WIFI/cell reception seems worse on Z than Pixel. Camera is worse too.</p>
-
-<p><a href="https://news.ycombinator.com/item?id=13155894">Comments/HackerNews</a></p>
-
-<p><a href="https://www.reddit.com/r/Android/comments/5htkmk/why_google_pixel_lags_10x_more_than_moto_z/">Comments/Reddit</a></p>
-
-<p><strong>Updates</strong></p>
-
-<ol>
-<li><p>I&rsquo;m confusing UI state transitions with UI animations. Android animation framework does not run on main thread. Disregard 16.6ms section</p></li>
-
-<li><p>In a follow-up twitter discussion, Android engineers made a solid case that this is likely a hack. If Motorola made nobarrier a no-op in hw, it wouldn&rsquo;t be needed in sw (eg <a href="http://oss.sgi.com/archives/xfs/2015-12/msg00281.html">this email</a>). It&rsquo;s unclear how <code>nobarrier</code> was deemed safe. One could theorize that Motorola spent time QAing failure scenarios.</p></li>
-
-<li><p>I&rsquo;m still hoping that an Android vendor will implement battery-backed-RAM-cache to solve the write-4k-bottleneck. Moto-Z can be considered a <em>risky</em> prototype of what storage performance should be like. Will be interesting to see if my prediction of Pixel aging worse than Z come true. I doubt write-4k is a bottleneck in any android workload on the Moto-Z.</p></li>
-</ol>
-
-					
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-md-12">
-					<hr>
-				</div>
-			</div>
-		
-	
-
-        
-            	
-		
-			<div class="row">
-				
-				<div class="col-md-offset-1 col-md-10">
-					<h3><a href="http://taras.glek.net/post/Laggy-phones-and-misleading-benchmarks/">Laggy phones and misleading benchmarks</a></h3>
-						<small><span class="label label-primary">
-							
-								Sun, Nov 20, 2016
-							</span>
-							
-							
-					</small>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-md-offset-1 col-md-10">
-					<br>
-					
-						<p>TLDR: You can predict degree of unresponsiveness of a phone via random-write-4k benchmarks. I wish review websites would fill phones to 80-90% prior to running the benchmark, especially on smaller-capacity phones where users are more likely to run out of space.</p>
-
-<p><strong>SQLite vs Phone NAND</strong></p>
-
-<p>I&rsquo;ve long held a theory that Android lag is almost directly determined by slowness induced by SQLite transactions. This weekend, while researching phones for a family member, I found some supporting evidence.</p>
-
-<p>I was employed to analyze Firefox performance at Mozilla. Most of the time I focused on IO performance as my niche. This was relatively easy because desktop OSes (especially Windows with XPerf and Linux being open source) are very open to developers. Unfortunately as a hobbyist I have less chances to figure out why my phones are slow. None of my phones have root, let alone an unlocked bootloader (eg no ability to recompile the kernel with IO tracing functionality).</p>
-
-<p>In the past I verified that all of my phones that got super-laggy were exhibiting single-digit-per-second write-random-4k benchmarks. However until now I couldn&rsquo;t point at SQLite is the main driver of IO on Android.</p>
-
-<p>To trace IOs on Android one has to recompile the kernel or at-least have root to run something like <a href="https://github.com/nowsecure/fsmon">fsmon</a> to observe high level IO.
- I was able to run fsmon on my rooted Android TV box and overserve that most of the IO occurred in SQLite databases.</p>
-
-<p><em>For some reason Android does not default to using WAL journaling mode for SQLite which would make it use 2x-less IOPS.</em></p>
-
-<p><strong>Nested Journalling Magnifies Cost of SQLite IO</strong></p>
-
-<p>In addition to fsmon stats, I found a great <a href="http://esos.hanyang.ac.kr/files/publication/conferences/international/On%20the%20IO%20characteristics%20of%20the%20SQLite%20Transactions.pdf">paper</a> on how SQLite accounts for 90% of Android IO and how it amplifies every write transaction by ~4x by the time it hits the underlying storage (eg 1commit ~= 4 fsyncs). It also shows how a 100 bytes of SQL data translates into 64KB of block writes.</p>
-
-<p>Basic premise of the paper is that SQLite journaling is amplified by ext4 filesystem journal resulting in extreme badness. One is tempted to assume that it is further amplified by the GC on the EMMC NAND controller :)</p>
-
-<p>I actually think the paper is overly optimistic in focusing on length of time taken by a single SQLite transaction. In reality one is likely to wait on more than one transaction due to having to update multiple databases or poorly written code (common problem with ORMs).</p>
-
-<p>Combine above data with the fact that Phone NAND is the only component that gets consistently slower as your phone ages. Memory cells wear out and NAND garbage collector slows as the phone fills up to 80-90% of storage capacity. Note one can briefly regain better system performance by doing a full reset.</p>
-
-<p><strong>Bad Android IO Patterns</strong></p>
-
-<p>SQLite is the default way of persisting structured data on Android. Android <a href="https://developer.android.com/training/basics/data-storage/databases.html">documentation</a> seems to default to showing how to do SQLite IO on main thread (<a href="http://hvasconcelos.github.io/articles/Offloading-work-from-the-UI-Thread">explanation</a>). This means that Android apps are often waiting on reading and writing to NAND instead of responding to user input.</p>
-
-<p>Even if most of the IO happens on a background thread, the mechanics of IO dispatch and low queue depths in consumer-grade environments mean that even if there is a large off-main-thread/background IO infront small IO on main thread, small IO. will take a long time to complete. If one is lucky and only runs apps without main thread IO on Android,there will still be the problem of waiting for long IOs.</p>
-
-<p><strong>Conclusion</strong></p>
-
-<p>A core principle of performance engineering is that a system is only as fast as the slowest bottleneck. In this particular case the bottleneck is hit very frequently, so seemingly users don&rsquo;t get to benefit from fancy CPUs much.</p>
-
-<p>Interestingly, unlike with CPU perf, there is no correlation between random writes and price of the phone. Random 4k writes on modern flagship hw are very slow compared to any other metric. IPhone 7 struggles to do over <a href="http://www.anandtech.com/show/10685/the-iphone-7-and-iphone-7-plus-review/4">2MB/s</a>. Google Pixel struggles to get above <a href="http://www.anandtech.com/show/9972/the-google-pixel-c-review/3">2MB/s</a> too.</p>
-
-<p>This means that irrespective of the graphics cores, CPU cores, your phone is going to suck as much as random write perf&hellip; This sort of barely-acceptable performance will quickly turn into a &ldquo;My phone is too laggy, I need to upgrade&rdquo; as NAND perf deteriorates.</p>
-
-<p>Instead of burying random-write-4k performance (or not doing that test at all), reviews should expose that front-and-center. Ideally they would also fill up the phone to 80% to match a realistic usecase.</p>
-
-<p>There is atleast one phone vendor who gets it. Motorola G4 is <a href="http://www.anandtech.com/show/10514/the-motorola-moto-g4-and-g4-plus-review/3">7x better</a> than the flagships. Surprisingly my $60 ZTE ZMax Pro phone is also 2-3x better than the flagships.</p>
-
-<p>If you know people who run hardware review websites, please ask them to focus on random-write-4k performance as predictor of jank/lag/frustration.</p>
-
-<p><a href="https://www.reddit.com/r/Android/comments/5e3rbu/laggy_phones_and_misleading_benchmarks/">Comments/Reddit</a></p>
-
-<p><a href="https://news.ycombinator.com/item?id=13001753">Comments/HackerNews</a></p>
-
-					
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-md-12">
-					<hr>
-				</div>
-			</div>
-		
-	
-
-        
+	<div class="avatar-container">
+	  <div class="avatar-img-border">
+      
+	  </div>
 	</div>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="text-center">
-                    
-    
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <hr>
-            </div>
-        </div>
-    </div>
-    <div class="container">
-        <div class="row col-md-12">
-            <footer>
-                <div class="pull-left">
-                    <p>
-                    </p>
-                </div>
 
+  </div>
+</nav>
+
+
+    <header class="header-section ">
+      <div class="intro-header no-img">
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+              <div class="page-heading">
+                <h1>Taras&#39; blog on perf and other stuff</h1>
                 
-                <div class="pull-right">
-                    
-                    
-                    
-                        <a href="https://twitter.com/tarasglek" target="_blank">
-                        <i class="fa fa-twitter-square fa-2x"></i></a>
-                    
-                    
-                    
-                    
-                    
-                        <a href="http://taras.glek.net/index.xml" target="_blank">
-                        <i class="fa fa-rss-square fa-2x"></i></a>
-                    
-                </div>
-            </footer>
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
+    </header>
+
+
+    <div role="main" class="container">
+      <div class="row">
+        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+          <div class="posts-list">
+            
+            
+            <article class="post-preview">
+              <a href="http://taras.glek.net/post/Moto-Z-has-10x-less-lag-than-pixel/">
+          	  <h2 class="post-title">Why Google Pixel lags 10x more than Moto Z</h2>
+          	
+          	    
+              </a>
+
+              <p class="post-meta">
+                Posted on December 11, 2016
+              </p>
+            
+              <div class="post-entry">
+                In my previous post I made an argument that a modern phone is only as fast as the slowest component: ability of NAND to handle 4k writes. I decided to compare two Android flagships on the opposite ends of random-write-4k benchmark spectrum: Moto Z vs Google Pixel.
+I wrote a little fio benchmark driver to fill all available device storage with random 4k writes, print perf stats along the way. Idea is to run the benchmark on /data/ partition, then fill all available space by writing to /storage/emulated/0, then do another round of testing on /data.
+          	  <a href="http://taras.glek.net/post/Moto-Z-has-10x-less-lag-than-pixel/" class="post-read-more">[Read&nbsp;More]</a>
+              </div>
+            
+             </article>
+            
+            <article class="post-preview">
+              <a href="http://taras.glek.net/post/Laggy-phones-and-misleading-benchmarks/">
+          	  <h2 class="post-title">Laggy phones and misleading benchmarks</h2>
+          	
+          	    
+              </a>
+
+              <p class="post-meta">
+                Posted on November 12, 2016
+              </p>
+            
+              <div class="post-entry">
+                TLDR: You can predict degree of unresponsiveness of a phone via random-write-4k benchmarks. I wish review websites would fill phones to 80-90% prior to running the benchmark, especially on smaller-capacity phones where users are more likely to run out of space.
+SQLite vs Phone NAND
+I’ve long held a theory that Android lag is almost directly determined by slowness induced by SQLite transactions. This weekend, while researching phones for a family member, I found some supporting evidence.
+          	  <a href="http://taras.glek.net/post/Laggy-phones-and-misleading-benchmarks/" class="post-read-more">[Read&nbsp;More]</a>
+              </div>
+            
+             </article>
+            
+          </div>
+
+          
+        </div>
+      </div>
     </div>
 
-    
-    </body>
-</html>
+    <footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <ul class="list-inline text-center footer-links">
+          
+          
+		      
+          <li>
+            <a href="https://twitter.com/tarasglek" title="Twitter">
+              <span class="fa-stack fa-lg">
+                <i class="fa fa-circle fa-stack-2x"></i>
+                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+              </span>
+            </a>
+          </li>
+          
+		      
+		      
+	    	  
+          
+          
 
+    		  <li>
+      			<a href="http://taras.glek.net/index.xml" title="RSS">
+      			  <span class="fa-stack fa-lg">
+        				<i class="fa fa-circle fa-stack-2x"></i>
+        				<i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+      			  </span>
+      			</a>
+    		  </li>		
+
+        </ul>
+        <p class="credits copyright text-muted">
+    	  Taras Glek
+    	  &nbsp;&bull;&nbsp;
+    	  2016
+    		  
+    	  
+    	  &nbsp;&bull;&nbsp;
+    	  <a href="http://taras.glek.net/">Taras&#39; blog on perf and other stuff</a>
+    	  
+  	    </p>
+  	    
+    	<p class="credits theme-by text-muted">
+          <a href="http://gohugo.io">Hugo v0.18.1</a> powered &nbsp;&bull;&nbsp; Theme by <a href="http://deanattali.com/beautiful-jekyll/">beautiful-jekyll</a> adapted to <a href="https://github.com/1138-4EB/beautifulhugo">Beautiful Hugo</a>
+          
+    	</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="http://taras.glek.net//js/jquery-1.11.2.min.js"></script>
+<script src="http://taras.glek.net//js/bootstrap.min.js"></script>
+<script src="http://taras.glek.net//js/main.js"></script>
+<script src="http://taras.glek.net/js/highlight.min.js"></script>
+<script>
+  hljs.initHighlightingOnLoad();
+</script>
+
+
+
+
+  </body>
+</html>

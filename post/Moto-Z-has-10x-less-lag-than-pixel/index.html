@@ -1,77 +1,101 @@
 <!DOCTYPE html>
-<html class="no-js" lang="en-us" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html lang="en">
 
-    <meta name="description" content="Why Google Pixel lags 10x more than Moto Z">
-    <meta name="author" content="Taras Glek">
+  <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
-    <meta name="keyword" content="">
-    <link rel="shortcut icon" href="/favicon.ico">
+  <title>Why Google Pixel lags 10x more than Moto Z</title>
+  
+  <meta name="author" content="Taras Glek"/>
+  <meta name="generator" content="Hugo 0.18.1" />
+  
 
-    <title>Why Google Pixel lags 10x more than Moto Z &middot; Performance and other thoughts</title>
+  <link rel="alternate" href="http://taras.glek.net/index.xml" type="application/rss+xml" title="Taras&#39; blog on perf and other stuff">
 
-   	
-    
-        <link rel="stylesheet" href="http://taras.glek.net//css/theme/default.css">
-    
-
-    <link rel="stylesheet" href="http://taras.glek.net//css/font-awesome.min.css">
-
-   	
-   	<link rel="stylesheet" href="http://taras.glek.net//css/style.css">
-
-
-    
-    <script src="http://taras.glek.net//js/jquery.min-2.1.4.js"></script>
-    <script src="http://taras.glek.net//js/bootstrap.min-3.3.5.js"></script>
-
-    
-    <link href="" rel="alternate" type="application/rss+xml" title="Performance and other thoughts" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="http://taras.glek.net//css/bootstrap.min.css" />
+  <link rel="stylesheet" href="http://taras.glek.net//css/main.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" />
+  <link rel="stylesheet" href="http://taras.glek.net//css/pygment_highlights.css" />
+  <link rel="stylesheet" href="http://taras.glek.net/css/highlight.min.css">
+  
+  
+  <meta property="og:title" content="Why Google Pixel lags 10x more than Moto Z" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="/post/Moto-Z-has-10x-less-lag-than-pixel/" />
+  <meta property="og:image" content="/" />
+  
 </head>
-<body lang="en">
-    
-    <div class="container">
-    <div class="row">
-        <div class="navbar navbar-default " role="navigation">
-            <div class="navbar-header">
-                <a class="navbar-brand" href="http://taras.glek.net/">Performance and other thoughts</a>
-            </div>
-            <div class="navbar-collapse collapse navbar-responsive-collapse">
-                <ul class="nav navbar-nav navbar-right">
-                    <li><a href="http://taras.glek.net/">Home</a></li>
-                    <li><a href="http://taras.glek.net//post/">Blog</a></li>
-                    
-                </ul>
-            </div>
-        </div>
+
+
+  <body>
+
+    <nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="http://taras.glek.net/">Taras&#39; blog on perf and other stuff</a>
     </div>
-</div>
 
+    <div class="collapse navbar-collapse" id="main-navbar">
+      <ul class="nav navbar-nav navbar-right">
+      
+      </ul>
+    </div>
 
-
-<div class="container">
-	<div class="row">
-		<div class="col-md-offset-1 col-md-10">
-			<h3>Why Google Pixel lags 10x more than Moto Z</h3>
-				<span class="label label-primary">Sun, Dec 11, 2016</span> in 
-				 using tags
-				
-			</small>
-		</div>
+	<div class="avatar-container">
+	  <div class="avatar-img-border">
+      
+	  </div>
 	</div>
-	<div class="row">
-		<div class="col-md-offset-1 col-md-10">
-			<br>
-			
-<figure >
-    
-        <img src="/images/moto-z-vs-pixel/moto-z-pixel-latency.png" />
-    
-    
-</figure>
 
+  </div>
+</nav>
+
+
+    <div role="main" class="container main-content">
+
+      
+
+
+
+  
+
+  <header class="header-section ">
+  
+  <div class="intro-header no-img">
+      <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <div class="post-heading">
+          <h1>Why Google Pixel lags 10x more than Moto Z</h1>
+      
+      
+      
+      <span class="post-meta">Posted on December 11, 2016</span>
+      
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+  </header>
+
+	  
+      
+        <div class="container">
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+      <article role="main" class="blog-post">
+          <p><img src="/images/moto-z-vs-pixel/moto-z-pixel-latency.png" alt="Alt text" title="Optional title" /></p>
 
 <p>In my previous post I made an argument that a modern phone is only as fast as the slowest component: ability of NAND to handle <a href="/post/Laggy-phones-and-misleading-benchmarks/">4k writes</a>.
 I decided to compare two Android flagships on the opposite ends of
@@ -82,7 +106,7 @@ partition, then fill all available space by writing to <code>/storage/emulated/0
 
 <p>The chart above has p50 (50% IOs complete under X), p90 and p99 numbers for both devices. Moto Z median value is around <code>0.5ms</code>, Pixel is 7x that at <code>3.3ms</code>. Difference widens for p90.</p>
 
-<p>On mobile phones 16.67ms is a magic number. That&rsquo;s the amount of time one has to update screen at buttery-smooth 60FPS.
+<p>On mobile phones 16.67ms is a magic number. That’s the amount of time one has to update screen at buttery-smooth 60FPS.
 Optimistically, one can roughly translate each data-persistence operation on Android into at-least 2 sequential random writes (best-case WAL SQLite mode).
 So if an app is saving a single piece of data, expect 6.6ms to be eaten up
  by IO on Pixel and when your device is busy, expect that number to rise quickly.</p>
@@ -102,7 +126,7 @@ Motorola (division of Lenovo) has bravely gone above and beyond stock Android to
 meet some PM deadlines for features no users asked for: they wrote a passthrough <code>fuse</code> filesystem to enforce cross-app-file-sharing. This means that on the Pixel every user IO gets a round-trip back into user-space before hitting the NAND. <a href="https://github.com/libfuse/libfuse">Fuse</a> burns more CPU and slows down IO by up to 30%. I love fuse for things like sshfs, but this is a terrible application of it.
 Motorola thought a little harder and replaced the nasty fuse hack with <code>esdfs</code>(<a href="https://github.com/vadimtk/moto-x-kernel/tree/master/fs/esdfs">fork</a> of <a href="http://wrapfs.filesystems.org/">wrapfs</a>).</li>
 <li><code>/data</code>: Pixel uses the traditional <code>ext4</code> Linux filesystem. Moto-Z opted for <code>f2fs</code>.
-f2fs is a new filesystem developed by Samsung. It&rsquo;s amazing, read the <a href="https://www.usenix.org/conference/fast15/technical-sessions/presentation/lee">paper &amp; watch preso</a>. They drove development of the filesystem specifically by Twitter/FB/etc workloads captured from the phone.
+f2fs is a new filesystem developed by Samsung. It’s amazing, read the <a href="https://www.usenix.org/conference/fast15/technical-sessions/presentation/lee">paper &amp; watch preso</a>. They drove development of the filesystem specifically by Twitter/FB/etc workloads captured from the phone.
 It does many neat things, but the thing it does best is avoid fsync write-amplification. F2FS flags fsyncs via block metadata instead of doing a full checkpoint.
 This means fsync requires 50%-less write operations than ext4 (interestingly competing filesystems like BTRFS have even higher fsync write amplification than ext4). I think the tradeoff is slightly slower recovery times. <em>f2fs nets Moto-Z a 2x speed-up and 2x increase in NAND lifespan</em>. Expect Moto-Z to age much better than Pixel.</li>
 <li><code>nobarrier</code>: Moto-Z has a very interesting mount option soup for mounting f2fs: <code>rw,seclabel,nosuid,nodev,noatime,nodiratime,background_gc=on,discard,user_xattr,inline_xattr,acl,inline_data,nobarrier,extent_cache,active_logs=6</code>.
@@ -111,7 +135,7 @@ Just for kicks I took a USB hard-drive, formatted it with f2fs and applied same 
 
 <p>The key option is <code>nobarrier</code>.
 This effectively makes fsync() a no-op and explains most of the difference in performance. See <a href="http://xfs.org/index.php/XFS_FAQ">XFS FAQ</a> for the best description of <em>nobarrier</em> feature. This is where most of the performance difference comes from.
-Moto-Z is either awesome and implemented a RAM-cache solution for cellphones, or they are betting on excellent crash-recovery abilities of f2fs or they are really brave on behalf of users. Even if they didn&rsquo;t implement battery-backed-RAM-cache for their NAND and that f2fs isn&rsquo;t overly horrible at recovering from crashes this is probably still the right choice. As a user, I&rsquo;m much happier to have a long-lasting phone that might forget a couple of seconds of data than a device that has to be trashed after a year of use.</p>
+Moto-Z is either awesome and implemented a RAM-cache solution for cellphones, or they are betting on excellent crash-recovery abilities of f2fs or they are really brave on behalf of users. Even if they didn’t implement battery-backed-RAM-cache for their NAND and that f2fs isn’t overly horrible at recovering from crashes this is probably still the right choice. As a user, I’m much happier to have a long-lasting phone that might forget a couple of seconds of data than a device that has to be trashed after a year of use.</p>
 
 <p>If anyone has root on Pixel and Moto-Z, would be interesting to see if underlying block devices perform differently. I suspect they are very similar and that Motorola differentiates entirely in software.</p>
 
@@ -119,9 +143,9 @@ Moto-Z is either awesome and implemented a RAM-cache solution for cellphones, or
 
 <p>Android OEMs like Motorola/Samsung (f2fs authors) are improving Android performance. <a href="http://amzn.to/2hkMchI">Moto Z</a> and a few other recent Androids have drastically reduced storage lag. Next time you are shopping, try to avoid buying devices that will slow down to point of being unusable as NAND wears out (ala Nexus 7, Nexus 6). I doubt anyone would spot the difference between a brand new Pixel and Moto-Z. However after a year of use, the difference should be stark.</p>
 
-<p>Phone reviewers should be more vigilant and shame poorly-implemented devices. I won&rsquo;t be recommending the Pixel to any family members.</p>
+<p>Phone reviewers should be more vigilant and shame poorly-implemented devices. I won’t be recommending the Pixel to any family members.</p>
 
-<p>I&rsquo;m not recommending people buy Moto Z. WIFI/cell reception seems worse on Z than Pixel. Camera is worse too.</p>
+<p>I’m not recommending people buy Moto Z. WIFI/cell reception seems worse on Z than Pixel. Camera is worse too.</p>
 
 <p><a href="https://news.ycombinator.com/item?id=13155894">Comments/HackerNews</a></p>
 
@@ -130,48 +154,97 @@ Moto-Z is either awesome and implemented a RAM-cache solution for cellphones, or
 <p><strong>Updates</strong></p>
 
 <ol>
-<li><p>I&rsquo;m confusing UI state transitions with UI animations. Android animation framework does not run on main thread. Disregard 16.6ms section</p></li>
+<li><p>I’m confusing UI state transitions with UI animations. Android animation framework does not run on main thread. Disregard 16.6ms section</p></li>
 
-<li><p>In a follow-up twitter discussion, Android engineers made a solid case that this is likely a hack. If Motorola made nobarrier a no-op in hw, it wouldn&rsquo;t be needed in sw (eg <a href="http://oss.sgi.com/archives/xfs/2015-12/msg00281.html">this email</a>). It&rsquo;s unclear how <code>nobarrier</code> was deemed safe. One could theorize that Motorola spent time QAing failure scenarios.</p></li>
+<li><p>In a follow-up twitter discussion, Android engineers made a solid case that this is likely a hack. If Motorola made nobarrier a no-op in hw, it wouldn’t be needed in sw (eg <a href="http://oss.sgi.com/archives/xfs/2015-12/msg00281.html">this email</a>). It’s unclear how <code>nobarrier</code> was deemed safe. One could theorize that Motorola spent time QAing failure scenarios.</p></li>
 
-<li><p>I&rsquo;m still hoping that an Android vendor will implement battery-backed-RAM-cache to solve the write-4k-bottleneck. Moto-Z can be considered a <em>risky</em> prototype of what storage performance should be like. Will be interesting to see if my prediction of Pixel aging worse than Z come true. I doubt write-4k is a bottleneck in any android workload on the Moto-Z.</p></li>
+<li><p>I’m still hoping that an Android vendor will implement battery-backed-RAM-cache to solve the write-4k-bottleneck. Moto-Z can be considered a <em>risky</em> prototype of what storage performance should be like. Will be interesting to see if my prediction of Pixel aging worse than Z come true. I doubt write-4k is a bottleneck in any android workload on the Moto-Z.</p></li>
 </ol>
 
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-md-12">
-			<hr>
-		</div>
-	</div>
+      </article>
+
+      <ul class="pager blog-pager">
+        
+        <li class="previous">
+          <a href="http://taras.glek.net/post/Laggy-phones-and-misleading-benchmarks/" data-toggle="tooltip" data-placement="top" title="Laggy phones and misleading benchmarks">&larr; Previous Post</a>
+        </li>
+        
+        
+      </ul>
+
+      
+
+    </div>
+  </div>
 </div>
 
-    <div class="container">
-        <div class="row col-md-12">
-            <footer>
-                <div class="pull-left">
-                    <p>
-                    </p>
-                </div>
+      
 
-                
-                <div class="pull-right">
-                    
-                    
-                    
-                        <a href="https://twitter.com/tarasglek" target="_blank">
-                        <i class="fa fa-twitter-square fa-2x"></i></a>
-                    
-                    
-                    
-                    
-                    
-                </div>
-            </footer>
-        </div>
     </div>
 
-    
-    </body>
-</html>
+    <footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <ul class="list-inline text-center footer-links">
+          
+          
+		      
+          <li>
+            <a href="https://twitter.com/tarasglek" title="Twitter">
+              <span class="fa-stack fa-lg">
+                <i class="fa fa-circle fa-stack-2x"></i>
+                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+              </span>
+            </a>
+          </li>
+          
+		      
+		      
+	    	  
+          
+          
 
+    		  <li>
+      			<a href="http://taras.glek.net/index.xml" title="RSS">
+      			  <span class="fa-stack fa-lg">
+        				<i class="fa fa-circle fa-stack-2x"></i>
+        				<i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+      			  </span>
+      			</a>
+    		  </li>		
+
+        </ul>
+        <p class="credits copyright text-muted">
+    	  Taras Glek
+    	  &nbsp;&bull;&nbsp;
+    	  2016
+    		  
+    	  
+    	  &nbsp;&bull;&nbsp;
+    	  <a href="http://taras.glek.net/">Taras&#39; blog on perf and other stuff</a>
+    	  
+  	    </p>
+  	    
+    	<p class="credits theme-by text-muted">
+          <a href="http://gohugo.io">Hugo v0.18.1</a> powered &nbsp;&bull;&nbsp; Theme by <a href="http://deanattali.com/beautiful-jekyll/">beautiful-jekyll</a> adapted to <a href="https://github.com/1138-4EB/beautifulhugo">Beautiful Hugo</a>
+          
+    	</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="http://taras.glek.net//js/jquery-1.11.2.min.js"></script>
+<script src="http://taras.glek.net//js/bootstrap.min.js"></script>
+<script src="http://taras.glek.net//js/main.js"></script>
+<script src="http://taras.glek.net/js/highlight.min.js"></script>
+<script>
+  hljs.initHighlightingOnLoad();
+</script>
+
+
+
+
+  </body>
+</html>
