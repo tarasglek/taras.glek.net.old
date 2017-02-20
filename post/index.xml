@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Posts on Taras&#39; blog on perf and other stuff</title>
+    <title>Posts on Perf and other stuff</title>
     <link>http://taras.glek.net/post/index.xml</link>
-    <description>Recent content in Posts on Taras&#39; blog on perf and other stuff</description>
+    <description>Recent content in Posts on Perf and other stuff</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Sun, 11 Dec 2016 12:17:23 -0800</lastBuildDate>
