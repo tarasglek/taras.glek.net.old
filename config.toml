@@ -1,3 +1,8 @@
 languageCode = "en-us"
-title = "Taras' blog on perf and other stuff"
+title = "Perf and other stuff"
 baseurl = "http://taras.glek.net/"
+theme = "beautifulhugo"
+
+[Author]
+  name = "Taras Glek"
+  twitter = "tarasglek"
