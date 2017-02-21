@@ -1,3 +1,4 @@
+set -e -x
 hugo
 cp public/index.xml public/atom.xml
-cd public && git commit -a -m update && git push
+cd public && git add * && git commit -a -m update && git push
