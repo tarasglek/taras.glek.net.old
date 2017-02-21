@@ -37,7 +37,7 @@ writes immediately and multiple consecutive writes can become parallel writes. T
 &lt;li&gt;&lt;p&gt;Linux used default to &amp;lsquo;async&amp;rsquo; behavior on hard drives by leaving the write-cache on. OSX does this by default. More details in this &lt;a href=&#34;http://blog.httrack.com/blog/2013/11/15/everything-you-always-wanted-to-know-about-fsync/&#34;&gt;blog post&lt;/a&gt;. It might be reasonable for consumer devices to default to what databases used to default to. Phones have an advantage here as they are more likely to have an office-backup on some cloud service.&lt;/p&gt;&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;p&gt;I think it&amp;rsquo;s cool to see this sort of experimentation happening in quest for market share. It would be nice if power users had the option to flip on &lt;code&gt;nobarrier&lt;/code&gt; F2FS on every phone.&lt;/p&gt;
+&lt;p&gt;I think it&amp;rsquo;s cool to see this sort of experimentation happening in quest for market share. It would be nice if power users had the option to flip on &lt;code&gt;nobarrier&lt;/code&gt; + F2FS on every phone.&lt;/p&gt;
 
 &lt;p&gt;I would love to see what sort of testing data Moto has on this.&lt;/p&gt;
 
