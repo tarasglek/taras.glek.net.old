@@ -10,7 +10,7 @@
     <atom:link href="http://taras.glek.net/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
-      <title>Motorola bet on faster IO vs increased corruption risk</title>
+      <title>Motorola bet on faster IO, increasing risk of data-corruptions</title>
       <link>http://taras.glek.net/post/Followup-on-Pixel-vs-Moto:fsync/</link>
       <pubDate>Mon, 20 Feb 2017 10:54:24 +0200</pubDate>
       
