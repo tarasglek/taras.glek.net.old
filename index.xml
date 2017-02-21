@@ -19,8 +19,6 @@
 
 &lt;p&gt;I am really thankful for the [small percentage of] thoughtful feedback I received.&lt;/p&gt;
 
-&lt;p&gt;There were some helpful commenters on hackernews and twitter that helped explain what&amp;rsquo;s going on.&lt;/p&gt;
-
 &lt;ol&gt;
 &lt;li&gt;&lt;p&gt;Turns out Motorola uses the F2FS + &lt;code&gt;nobarrier&lt;/code&gt; mount option to speed up writes to NAND. &lt;strong&gt;&lt;code&gt;nobarrier&lt;/code&gt; does not turn fsync is a no-op.&lt;/strong&gt;
 It schedules writes to NAND without waiting for completion. As a result, apps appear to complete
@@ -42,6 +40,8 @@ writes immediately and multiple consecutive writes can become parallel writes. T
 &lt;p&gt;I think it&amp;rsquo;s cool to see this sort of experimentation happening in quest for market share. It would be nice if power users had the option to flip on &lt;code&gt;nobarrier&lt;/code&gt; F2FS on every phone.&lt;/p&gt;
 
 &lt;p&gt;I would love to see what sort of testing data Moto has on this.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://twitter.com/tarasglek/status/833835542487846912&#34;&gt;Comment on Twitter&lt;/a&gt;&lt;/p&gt;
 </description>
     </item>
     
