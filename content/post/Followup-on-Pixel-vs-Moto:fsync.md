@@ -1,7 +1,7 @@
 +++
 date = "2017-02-20T10:54:24+02:00"
 subtitle = ""
-title = "Google safety vs risky Moto performance"
+title = "Motorola bet on faster IO, increasing risk of data-corruptions"
 bigimg = ""
 draft = false
 
@@ -9,8 +9,6 @@ draft = false
 I need to follow up on my [blog post](/post/Moto-Z-has-10x-less-lag-than-pixel/) re Pixel lagging more than Moto Z. Sorry about the click-baity title of the previous blog, but that was a way to get noticed and get some help.
 
 I am really thankful for the [small percentage of] thoughtful feedback I received.
-
-There were some helpful commenters on hackernews and twitter that helped explain what's going on.
 
 1. Turns out Motorola uses the F2FS + `nobarrier` mount option to speed up writes to NAND. **`nobarrier` does not turn fsync is a no-op.**
 It schedules writes to NAND without waiting for completion. As a result, apps appear to complete 
@@ -28,6 +26,8 @@ writes immediately and multiple consecutive writes can become parallel writes. T
 
 7. Linux used default to 'async' behavior on hard drives by leaving the write-cache on. OSX does this by default. More details in this [blog post](http://blog.httrack.com/blog/2013/11/15/everything-you-always-wanted-to-know-about-fsync/). It might be reasonable for consumer devices to default to what databases used to default to. Phones have an advantage here as they are more likely to have an office-backup on some cloud service.
 
-I think it's cool to see this sort of experimentation happening in quest for market share. It would be nice if power users had the option to flip on `nobarrier` F2FS on every phone.
+I think it's cool to see this sort of experimentation happening in quest for market share. It would be nice if power users had the option to flip on `nobarrier` + F2FS on every phone.
 
 I would love to see what sort of testing data Moto has on this.
+
+[Comment on Twitter](https://twitter.com/tarasglek/status/833835542487846912)
