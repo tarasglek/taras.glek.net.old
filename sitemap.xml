@@ -2,6 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://taras.glek.net/post/Followup-on-Pixel-vs-Moto:fsync/</loc>
+    <lastmod>2017-02-20T10:54:24+02:00</lastmod>
+  </url>
+  
+  <url>
     <loc>http://taras.glek.net/post/Moto-Z-has-10x-less-lag-than-pixel/</loc>
     <lastmod>2016-12-11T12:17:23-08:00</lastmod>
   </url>
@@ -13,13 +18,13 @@
   
   <url>
     <loc>http://taras.glek.net/</loc>
-    <lastmod>2016-12-11T12:17:23-08:00</lastmod>
+    <lastmod>2017-02-20T10:54:24+02:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>http://taras.glek.net/post/</loc>
-    <lastmod>2016-12-11T12:17:23-08:00</lastmod>
+    <lastmod>2017-02-20T10:54:24+02:00</lastmod>
     <priority>0</priority>
   </url>
   

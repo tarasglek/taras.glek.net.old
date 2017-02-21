@@ -6,8 +6,44 @@
     <description>Recent content in Posts on Perf and other stuff</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 11 Dec 2016 12:17:23 -0800</lastBuildDate>
+    <lastBuildDate>Mon, 20 Feb 2017 10:54:24 +0200</lastBuildDate>
     <atom:link href="http://taras.glek.net/post/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Google safety vs risky Moto performance</title>
+      <link>http://taras.glek.net/post/Followup-on-Pixel-vs-Moto:fsync/</link>
+      <pubDate>Mon, 20 Feb 2017 10:54:24 +0200</pubDate>
+      
+      <guid>http://taras.glek.net/post/Followup-on-Pixel-vs-Moto:fsync/</guid>
+      <description>&lt;p&gt;I need to follow up on my &lt;a href=&#34;http://taras.glek.net/post/Moto-Z-has-10x-less-lag-than-pixel/&#34;&gt;blog post&lt;/a&gt; re Pixel lagging more than Moto Z. Sorry about the click-baity title of the previous blog, but that was a way to get noticed and get some help.&lt;/p&gt;
+
+&lt;p&gt;I am really thankful for the [small percentage of] thoughtful feedback I received.&lt;/p&gt;
+
+&lt;p&gt;There were some helpful commenters on hackernews and twitter that helped explain what&amp;rsquo;s going on.&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;Turns out Motorola uses the F2FS + &lt;code&gt;nobarrier&lt;/code&gt; mount option to speed up writes to NAND. &lt;strong&gt;&lt;code&gt;nobarrier&lt;/code&gt; does not turn fsync is a no-op.&lt;/strong&gt;
+It schedules writes to NAND without waiting for completion. As a result, apps appear to complete
+writes immediately and multiple consecutive writes can become parallel writes. This is awesome for performance and possibly for NAND longevity.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;All Moto phones since 2014 release of Moto X (developed under Google ownership) use &amp;lsquo;this one neat trick&amp;rsquo;.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;fsync() is used to request durability and ordering from the file system. &lt;code&gt;nobarrier&lt;/code&gt; means that in an event one has to recover from a crash, one can&amp;rsquo;t be sure any IO was committed or that it was committed in right order.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;F2FS is a log-structured file system that usually appends on writes (eg no overwrites). During normal operation, it&amp;rsquo;s more likely than [overwriting] ext4 to recover to a consistent state after a crash (possibly losing most recent writes). However it switches to inline-overwrites as it becomes full. I think that implies read-modify-write: corruption of older data.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;F2FS has no notion of sequence of write operations, so if sequential fsync() operations become parallel, NAND writes complete in wrong order and there is a crash&amp;hellip;This will cause nearly-impossible to catch corruption in SQLite and other apps that rely on a certain write ordering.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Apparently Moto did a lot of testing (under Google ownership!) and made a calculated risk here. F2FS authors were initially skeptical, but added support for &lt;code&gt;nobarrier&lt;/code&gt; based on Moto testing feedback.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Linux used default to &amp;lsquo;async&amp;rsquo; behavior on hard drives by leaving the write-cache on. OSX does this by default. More details in this &lt;a href=&#34;http://blog.httrack.com/blog/2013/11/15/everything-you-always-wanted-to-know-about-fsync/&#34;&gt;blog post&lt;/a&gt;. It might be reasonable for consumer devices to default to what databases used to default to. Phones have an advantage here as they are more likely to have an office-backup on some cloud service.&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;I think it&amp;rsquo;s cool to see this sort of experimentation happening in quest for market share. It would be nice if power users had the option to flip on &lt;code&gt;nobarrier&lt;/code&gt; F2FS on every phone.&lt;/p&gt;
+
+&lt;p&gt;I would love to see what sort of testing data Moto has on this.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Why Google Pixel lags 10x more than Moto Z</title>
