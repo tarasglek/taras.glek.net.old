@@ -4,5 +4,5 @@ baseurl = "http://taras.glek.net/"
 theme = "beautifulhugo"
 
 [Author]
-  name = "Taras Glek"
-  twitter = "tarasglek"
+   name = "Taras Glek"
+   twitter = "tarasglek"
